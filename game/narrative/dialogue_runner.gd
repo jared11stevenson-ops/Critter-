@@ -81,6 +81,7 @@ func play_data(id: String, d: Dictionary, pause: bool = true) -> bool:
 	if active:
 		return false
 	dialogue_id = id
+	sync_derived_flags()
 	_lines = d.get("lines", [])
 	_labels.clear()
 	for i in _lines.size():
@@ -98,6 +99,12 @@ func play_data(id: String, d: Dictionary, pause: bool = true) -> bool:
 	Events.dialogue_started.emit(id)
 	_step()
 	return true
+
+## Flags the Lead's dialogue gates on that are derived from other state.
+static func sync_derived_flags() -> void:
+	var has_spec := not GameState.specimens.is_empty()
+	if bool(GameState.get_flag("has_specimen", false)) != has_spec:
+		GameState.set_flag("has_specimen", has_spec)
 
 func is_running(id: String = "") -> bool:
 	return active and (id == "" or id == dialogue_id)

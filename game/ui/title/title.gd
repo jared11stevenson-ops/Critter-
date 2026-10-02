@@ -60,9 +60,11 @@ func _ready() -> void:
 	_menu.add_child(ng)
 	var st := UiKit.button("Settings", Vector2(380, 88), 32)
 	st.pressed.connect(_settings)
+	st.name = "Settings"
 	_menu.add_child(st)
 	var cr := UiKit.button("Credits", Vector2(380, 88), 32)
 	cr.pressed.connect(_credits)
+	cr.name = "Credits"
 	_menu.add_child(cr)
 	(cont if has_progress else ng).grab_focus.call_deferred()
 	var ver := UiKit.label("v%s · vertical slice" % str(ProjectSettings.get_setting("application/config/version", "0.0.0")), 22, UiKit.PARCHMENT.darkened(0.3), "ui")
@@ -219,3 +221,11 @@ func _close_dialog() -> void:
 	if _confirm:
 		_confirm.queue_free()
 		_confirm = null
+
+# ---------------- QA ----------------
+func qa_press(button_name: String) -> void:
+	var b := find_child(button_name, true, false) as Button
+	if b and not b.disabled:
+		b.pressed.emit()
+	else:
+		push_warning("[QA] title button %s missing/disabled" % button_name)
