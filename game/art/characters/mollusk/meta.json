@@ -1,0 +1,29 @@
+{
+ "height_m": 2.2,
+ "views": [
+  "front",
+  "side",
+  "back"
+ ],
+ "px": {
+  "front": [
+   556,
+   505
+  ],
+  "side": [
+   111,
+   281
+  ],
+  "back": [
+   182,
+   283
+  ]
+ },
+ "feet_y_px": 505,
+ "source": {
+  "front": "hero illustration (3/4 front)",
+  "side": "turnaround SIDE (mirrored to face right)",
+  "back": "turnaround BACK"
+ },
+ "sheet": "mollusk_sheet.png"
+}

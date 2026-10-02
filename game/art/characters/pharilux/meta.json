@@ -1,0 +1,29 @@
+{
+ "height_m": 2.6,
+ "views": [
+  "front",
+  "side",
+  "back"
+ ],
+ "px": {
+  "front": [
+   394,
+   511
+  ],
+  "side": [
+   207,
+   263
+  ],
+  "back": [
+   171,
+   236
+  ]
+ },
+ "feet_y_px": 511,
+ "source": {
+  "front": "hero illustration",
+  "side": "turnaround SIDE (faces right)",
+  "back": "turnaround BACK"
+ },
+ "sheet": "pharilux_sheet.png"
+}
