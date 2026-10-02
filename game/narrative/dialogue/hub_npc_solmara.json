@@ -1,0 +1,26 @@
+{
+ "id": "hub_npc_solmara",
+ "lines": [
+  {
+   "who": "solmara",
+   "expr": "default",
+   "text": "Handler. The tides here are very small. Pipes. Valves. Pumps."
+  },
+  {
+   "who": "solmara",
+   "expr": "default",
+   "text": "Your plumbers are magnificent."
+  },
+  {
+   "who": "solmara",
+   "expr": "default",
+   "text": "You are smiling. Is that a threat display? Mara says no. Mara is not always correct."
+  },
+  {
+   "who": "solmara",
+   "expr": "default",
+   "text": "Your Moon. It is not in the wrong orbit. The relationship is displaced. There is a missing return.",
+   "if": "rr_complete"
+  }
+ ]
+}

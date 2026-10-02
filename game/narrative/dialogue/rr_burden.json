@@ -1,0 +1,27 @@
+{
+ "id": "rr_burden",
+ "lines": [
+  {
+   "who": "narration",
+   "text": "Somewhere below, the drill bites deep. The Span lurches."
+  },
+  {
+   "who": "aruun",
+   "expr": "rage",
+   "text": "Handler — it's going! I can hold it!"
+  },
+  {
+   "who": "cigarra",
+   "expr": "shocked",
+   "text": "Aruun, your shell —"
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "Move! I'll carry this part!"
+  },
+  {
+   "event": "start_burden"
+  }
+ ]
+}

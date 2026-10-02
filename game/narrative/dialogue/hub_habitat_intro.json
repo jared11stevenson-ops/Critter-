@@ -1,0 +1,21 @@
+{
+ "id": "hub_habitat_intro",
+ "lines": [
+  {
+   "who": "mara",
+   "expr": "focused",
+   "text": "Four slots: Substrate, Symbiont, Climate, Anchor. Your scan data tells you what it needs."
+  },
+  {
+   "who": "mara",
+   "expr": "neutral",
+   "text": "Wrong pieces stress the resident. The better the Habitat, the healthier and more behaviourally complex it becomes."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "If my bridge design is in the catalogue, it's free. I don't charge for load paths.",
+   "if": "ochre_span_braced"
+  }
+ ]
+}

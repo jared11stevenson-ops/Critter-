@@ -1,0 +1,75 @@
+{
+ "id": "hub_hook",
+ "lines": [
+  {
+   "who": "narration",
+   "text": "Later. The Common Table. Aruun sets something down very carefully."
+  },
+  {
+   "who": "mara",
+   "expr": "annoyed",
+   "text": "We said don't touch it."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "I didn't. It followed."
+  },
+  {
+   "who": "narration",
+   "text": "A sliver of Thoughtstone, smaller than a thumbnail. It turns on the tabletop until it points at Morrow. Then it stops."
+  },
+  {
+   "who": "mara",
+   "expr": "focused",
+   "text": "Thoughtstone near Morrow aligns its internal structure toward it. We've seen it in the lab. Never in the field."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "And nobody cuts Morrow open to find out why. Morrow is not a sample."
+  },
+  {
+   "who": "cigarra",
+   "expr": "focused",
+   "text": "I tried reading it. It has too many futures. Every one of them is pointing the same way."
+  },
+  {
+   "who": "mara",
+   "expr": "neutral",
+   "text": "Mineral. Organism. Network. Memory medium. Or something without a human category."
+  },
+  {
+   "who": "comms:dexter",
+   "expr": "amused",
+   "text": "Mara. Handler. Lovely work out there. One more thing before you pretend not to answer."
+  },
+  {
+   "who": "comms:dexter",
+   "expr": "serious",
+   "text": "Your rock turned. Ours did too. Every sample in my lab, the same second. Call me when you want to compare notes."
+  },
+  {
+   "who": "mara",
+   "expr": "tired",
+   "text": "...He's going to be impossible about this."
+  },
+  {
+   "who": "cigarra",
+   "expr": "happy",
+   "text": "He was always going to be. That one I didn't need the crown for."
+  },
+  {
+   "who": "narration",
+   "text": "MYSTERY LOGGED — THOUGHTSTONE."
+  },
+  {
+   "set": {
+    "slice_complete": true
+   }
+  },
+  {
+   "event": "slice_end"
+  }
+ ]
+}

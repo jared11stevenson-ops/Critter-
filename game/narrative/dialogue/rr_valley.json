@@ -1,0 +1,20 @@
+{
+ "id": "rr_valley",
+ "lines": [
+  {
+   "who": "cigarra",
+   "expr": "focused",
+   "text": "Skitter mites. Six — no, four — no, six. The futures keep counting differently."
+  },
+  {
+   "who": "aruun",
+   "expr": "amused",
+   "text": "Then I'll count with Morrow."
+  },
+  {
+   "who": "comms:mara",
+   "expr": "focused",
+   "text": "Handler — scan before you swing. Know what you're hitting."
+  }
+ ]
+}

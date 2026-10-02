@@ -1,0 +1,33 @@
+{
+ "id": "hub_npc_mollusk",
+ "lines": [
+  {
+   "who": "mollusk",
+   "expr": "calm",
+   "text": "Ah. The new Handler. Slow down. ...No, truly. Most people move like the next second is free."
+  },
+  {
+   "who": "mollusk",
+   "expr": "focused",
+   "text": "Every second is borrowed. Move someone. Brace something. Choose. Act. Don't admire the miracle — use it.",
+   "if_not": "rr_complete"
+  },
+  {
+   "who": "mollusk",
+   "expr": "serene",
+   "text": "Aruun held a bridge again. Tell him I'm proud. Do not tell him I said proud.",
+   "if": "ochre_span_braced"
+  },
+  {
+   "who": "mollusk",
+   "expr": "calm",
+   "text": "Some things don't break. They just take longer. That bridge is taking longer.",
+   "if": "ochre_span_failing"
+  },
+  {
+   "who": "mollusk",
+   "expr": "curious",
+   "text": "Have you seen the new forklift in Bay Four? Don't answer. I'm going to go look at it again."
+  }
+ ]
+}

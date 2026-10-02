@@ -1,0 +1,20 @@
+{
+ "id": "rr_marker_stone",
+ "lines": [
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "An Old Road marker. The same symbols turn up continents apart."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "Nobody remembers who carved it. The stone remembers being read, though."
+  },
+  {
+   "who": "comms:mara",
+   "expr": "focused",
+   "text": "Logging it. Ruined causeways, dead trade languages... Critter's peoples have connected and forgotten each other many times."
+  }
+ ]
+}

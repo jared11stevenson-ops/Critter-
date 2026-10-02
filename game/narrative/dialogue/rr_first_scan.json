@@ -1,0 +1,20 @@
+{
+ "id": "rr_first_scan",
+ "lines": [
+  {
+   "who": "comms:mara",
+   "expr": "neutral",
+   "text": "That's your scanner. Wildlife, Sapient, Sacred, Resource, Dominion Asset. The label matters more than the health bar."
+  },
+  {
+   "who": "comms:mara",
+   "expr": "focused",
+   "text": "Anything wild and weakened can be contained and brought home. Anything sapient — never."
+  },
+  {
+   "set": {
+    "first_scan_done": true
+   }
+  }
+ ]
+}

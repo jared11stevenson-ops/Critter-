@@ -1,0 +1,35 @@
+{
+ "id": "rr_arrival",
+ "lines": [
+  {
+   "who": "comms:mara",
+   "expr": "focused",
+   "text": "Handler, read me? You're through. Vitals show the Tilt — that's normal. Give it a second."
+  },
+  {
+   "who": "cigarra",
+   "expr": "unhinged",
+   "text": "Everything is very close and very far. I love it. I hate it. Mostly love."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "The Red Reaches. Smell the iron in the dust."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "The Ochre Span is east, past the fracture valley."
+  },
+  {
+   "who": "comms:mara",
+   "expr": "neutral",
+   "text": "Follow the valley floor east. I'm watching your telemetry."
+  },
+  {
+   "set": {
+    "arrived_rr": true
+   }
+  }
+ ]
+}
