@@ -1,0 +1,77 @@
+{
+ "id": "rr_waystation",
+ "lines": [
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "A Spanwright waystation. Wells. Shade. A place to mend rope."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "My teacher said infrastructure succeeds when people stop noticing the danger it protects them from."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "Did you understand that when he said it?"
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "No. I understood it at Red Span."
+  },
+  {
+   "who": "cigarra",
+   "expr": "neutral",
+   "text": "...Eleven minutes."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Thousands crossed. Hundreds didn't."
+  },
+  {
+   "who": "cigarra",
+   "expr": "focused",
+   "text": "Here's a thing I don't usually do: ask before I look. Can I look at how we fight together?"
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Look."
+  },
+  {
+   "who": "cigarra",
+   "expr": "shocked",
+   "text": "Oh. You leave openings on purpose. For whoever's beside you."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "For whoever carries the next part."
+  },
+  {
+   "who": "cigarra",
+   "expr": "happy",
+   "text": "Then when I see where they'll be standing — you put Morrow there."
+  },
+  {
+   "event": "unlock_combo"
+  },
+  {
+   "set": {
+    "combo_unlocked": true
+   }
+  },
+  {
+   "who": "narration",
+   "text": "COMBO UNLOCKED — PROBABLE IMPACT. During Cigarra's Premonition, Aruun's Gravity Pull lands where she saw it would."
+  },
+  {
+   "who": "comms:mara",
+   "expr": "neutral",
+   "text": "One more thing. The grazers east of you are a keystone herd. Their droppings seed the lichen that holds that plateau together. Please don't."
+  }
+ ]
+}

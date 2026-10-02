@@ -1,0 +1,56 @@
+{
+ "id": "hub_npc_bramvex",
+ "lines": [
+  {
+   "who": "bramvex",
+   "expr": "default",
+   "text": "Handler. How many exits does this hall have?"
+  },
+  {
+   "choice": [
+    {
+     "text": "Three?",
+     "goto": "b_wrong"
+    },
+    {
+     "text": "I haven't counted.",
+     "goto": "b_honest"
+    }
+   ]
+  },
+  {
+   "label": "b_wrong"
+  },
+  {
+   "who": "bramvex",
+   "expr": "default",
+   "text": "Five. Two of them are vents. Count them. Every room, every time."
+  },
+  {
+   "goto": "b_end"
+  },
+  {
+   "label": "b_honest"
+  },
+  {
+   "who": "bramvex",
+   "expr": "default",
+   "text": "Honest. Good. Now count. Every room, every time."
+  },
+  {
+   "label": "b_end"
+  },
+  {
+   "who": "bramvex",
+   "expr": "default",
+   "text": "If Cigarra improvises, let her. I leave deliberate gaps in my plans for her now. Someone named them. I regret it.",
+   "if_not": "rr_complete"
+  },
+  {
+   "who": "bramvex",
+   "expr": "default",
+   "text": "You brought both of them back. That's the job. The rest is paperwork.",
+   "if": "rr_complete"
+  }
+ ]
+}

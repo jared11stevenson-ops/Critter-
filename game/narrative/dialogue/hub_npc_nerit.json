@@ -1,0 +1,26 @@
+{
+ "id": "hub_npc_nerit",
+ "lines": [
+  {
+   "who": "nerit",
+   "expr": "default",
+   "text": "This hall has eleven cameras and nowhere to be unseen."
+  },
+  {
+   "who": "nerit",
+   "expr": "default",
+   "text": "So I made one corner where light forgets to go. You're welcome to sit in it. Nobody has to watch you there."
+  },
+  {
+   "who": "nerit",
+   "expr": "default",
+   "text": "Your physicists say my darkness is simply removed photons. They're describing the result, not the process."
+  },
+  {
+   "who": "nerit",
+   "expr": "default",
+   "text": "You keep measuring light because you are afraid to measure absence.",
+   "if": "rr_complete"
+  }
+ ]
+}

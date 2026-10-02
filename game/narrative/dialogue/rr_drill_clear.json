@@ -1,0 +1,15 @@
+{
+ "id": "rr_drill_clear",
+ "lines": [
+  {
+   "who": "comms:mara",
+   "expr": "neutral",
+   "text": "Site's quiet. The drill core runs east — straight under the Ochre Span."
+  },
+  {
+   "set": {
+    "drill_clear": true
+   }
+  }
+ ]
+}

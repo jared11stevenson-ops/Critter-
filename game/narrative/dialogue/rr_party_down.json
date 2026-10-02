@@ -1,0 +1,10 @@
+{
+ "id": "rr_party_down",
+ "lines": [
+  {
+   "who": "comms:mara",
+   "expr": "focused",
+   "text": "Vitals critical — pulling you back to the last safe point. Breathe."
+  }
+ ]
+}

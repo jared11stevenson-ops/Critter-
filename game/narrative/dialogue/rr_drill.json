@@ -1,0 +1,20 @@
+{
+ "id": "rr_drill",
+ "lines": [
+  {
+   "who": "comms:mara",
+   "expr": "focused",
+   "text": "That's the drill site. Dominion survey drones — and Handler, look at those beetles."
+  },
+  {
+   "who": "aruun",
+   "expr": "aggressive",
+   "text": "Plate beetles don't charge. They graze."
+  },
+  {
+   "who": "cigarra",
+   "expr": "focused",
+   "text": "Something is singing at them. Scan one."
+  }
+ ]
+}

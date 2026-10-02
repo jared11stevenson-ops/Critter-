@@ -1,0 +1,149 @@
+{
+ "id": "hub_intro",
+ "lines": [
+  {
+   "who": "narration",
+   "text": "Terrarium One. It began as a laboratory containing ecosystems. It became an ecosystem containing laboratories."
+  },
+  {
+   "who": "mara",
+   "expr": "focused",
+   "text": "Handler. Welcome to the Common. Your certification is still warm, so I'll keep this simple."
+  },
+  {
+   "who": "mara",
+   "expr": "neutral",
+   "text": "Six hours ago the seismographs on our Red Reaches Gate started singing. Something is shaking the foundations of the Ochre Span."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "A Spanwright crossing. Older than anyone's records. Built in the same tradition as the Red Span."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "The tradition that failed."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "Translation: he's going. He decided before you walked in. I saw that one without even trying."
+  },
+  {
+   "who": "mara",
+   "expr": "annoyed",
+   "text": "There's a licensed extraction operation in the valley. Thoughtstone prospecting. The permit is Dominion-backed."
+  },
+  {
+   "who": "cigarra",
+   "expr": "focused",
+   "text": "The signature on the permit is Dexter Mane's. His decisions are loud. Very sharp branches."
+  },
+  {
+   "who": "mara",
+   "expr": "tired",
+   "text": "Dexter does nothing by accident. That's the problem."
+  },
+  {
+   "choice": [
+    {
+     "text": "Aruun, I'd be glad to have you with me.",
+     "goto": "c_aruun",
+     "trust": {
+      "aruun": 5
+     }
+    },
+    {
+     "text": "Why does one bridge matter this much?",
+     "goto": "c_bridge",
+     "trust": {
+      "aruun": 3
+     }
+    },
+    {
+     "text": "Cigarra — can you see how this goes?",
+     "goto": "c_oracle",
+     "trust": {
+      "cigarra": -2
+     }
+    }
+   ]
+  },
+  {
+   "label": "c_aruun"
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Glad isn't required. Careful is."
+  },
+  {
+   "goto": "rules"
+  },
+  {
+   "label": "c_bridge"
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "In the Reaches, strength means the burden you can accept without forcing it onto someone weaker."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "A bridge is that idea, in stone. When it fails, it fails on the people who trusted it."
+  },
+  {
+   "goto": "rules"
+  },
+  {
+   "label": "c_oracle"
+  },
+  {
+   "who": "cigarra",
+   "expr": "annoyed",
+   "text": "No. And if I could, I wouldn't tell you. A future seen is a future touched."
+  },
+  {
+   "who": "cigarra",
+   "expr": "happy",
+   "text": "Ask me what's likely. That's cheaper. For both of us."
+  },
+  {
+   "label": "rules"
+  },
+  {
+   "who": "mara",
+   "expr": "focused",
+   "text": "Ground rules. These two are partners, not equipment. You don't order them. You ask, and you'd better be right."
+  },
+  {
+   "who": "mara",
+   "expr": "neutral",
+   "text": "Dangerous wildlife can come home under Wild Containment. Anything that might be a person — you scan, you talk, you leave it be."
+  },
+  {
+   "who": "cigarra",
+   "expr": "happy",
+   "text": "She means me. She always means me."
+  },
+  {
+   "who": "mara",
+   "expr": "soft",
+   "text": "I mean everyone, Cigarra."
+  },
+  {
+   "who": "mara",
+   "expr": "focused",
+   "text": "The Gate is tuned to the Red Reaches. First descents hit hard — we call it the Tilt. Breathe through it."
+  },
+  {
+   "event": "briefing_done"
+  },
+  {
+   "who": "narration",
+   "text": "Tap the GATE when you're ready to descend."
+  }
+ ]
+}

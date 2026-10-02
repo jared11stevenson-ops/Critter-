@@ -1,0 +1,25 @@
+{
+ "id": "rr_valley_clear",
+ "lines": [
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Mites strip mineral crust off the rock. Annoying. Not evil."
+  },
+  {
+   "who": "cigarra",
+   "expr": "happy",
+   "text": "You're kind to things that bite you."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Everything bites something."
+  },
+  {
+   "set": {
+    "valley_clear": true
+   }
+  }
+ ]
+}

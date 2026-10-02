@@ -1,0 +1,25 @@
+{
+ "id": "rr_boulder",
+ "lines": [
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "Thoughtstone vein. Cracked straight through."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Morrow wants it. ...Morrow always wants it."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "Morrow 'wants'?"
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "I don't call Morrow property. Swap to me. A Reaching Strike will open it."
+  }
+ ]
+}

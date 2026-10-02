@@ -1,0 +1,86 @@
+{
+ "id": "hub_debrief",
+ "lines": [
+  {
+   "who": "narration",
+   "text": "The Common. Hours later. The Tilt has almost faded."
+  },
+  {
+   "who": "mara",
+   "expr": "soft",
+   "text": "Seismographs on the Reaches went quiet an hour ago. The Ochre Span is holding.",
+   "if": "ochre_span_braced"
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Holding is the job.",
+   "if": "ochre_span_braced"
+  },
+  {
+   "who": "mara",
+   "expr": "curious",
+   "text": "The Dominion filed a complaint. Forty pages. I'm framing page twelve.",
+   "if": "ochre_span_braced"
+  },
+  {
+   "who": "mara",
+   "expr": "tired",
+   "text": "The Dominion contract paid out. Supply lines are full for a month. The Span's sensors are... noisy.",
+   "if": "ochre_span_failing"
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Bridges don't fail all at once. They fail when everyone stops listening.",
+   "if": "ochre_span_failing"
+  },
+  {
+   "who": "cigarra",
+   "expr": "annoyed",
+   "text": "He's going to go back out there. I've seen it from four directions.",
+   "if": "ochre_span_failing"
+  },
+  {
+   "who": "mara",
+   "expr": "neutral",
+   "text": "Ecology flagged a disturbed grazer herd near the waystation. It will recover. Slowly.",
+   "if": "grazers_harmed"
+  },
+  {
+   "who": "mara",
+   "expr": "soft",
+   "text": "And the plate beetles walked away from the drill site on their own. That's the outcome I'll be quoting.",
+   "if": "beetles_calmed"
+  },
+  {
+   "who": "mara",
+   "expr": "focused",
+   "text": "Now. You brought life home with you. That makes it ours to keep alive."
+  },
+  {
+   "who": "mara",
+   "expr": "neutral",
+   "text": "We also pulled a dust grazer off the drill perimeter — Protective Extraction. It's stressed. It needs a Habitat.",
+   "if_not": "has_specimen"
+  },
+  {
+   "who": "mara",
+   "expr": "focused",
+   "text": "Habitats aren't cages. They're medicine. Soil, microbes, light, symbionts, a tuned Scale Anchor."
+  },
+  {
+   "who": "mara",
+   "expr": "neutral",
+   "text": "Get the chain right and it lives. Get it wrong and it won't. Habitat Wing's open."
+  },
+  {
+   "set": {
+    "debriefed": true
+   }
+  },
+  {
+   "event": "open_habitat"
+  }
+ ]
+}

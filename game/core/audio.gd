@@ -81,10 +81,10 @@ func music(track: String, fade: float = 1.5) -> void:
 	_music_current = track
 	var incoming := _music_b if _music_a.playing else _music_a
 	var outgoing := _music_a if incoming == _music_b else _music_b
-	var t := create_tween().set_parallel(true)
 	if outgoing.playing:
+		var t := create_tween()
 		t.tween_property(outgoing, "volume_db", -60.0, fade)
-		t.chain().tween_callback(outgoing.stop)
+		t.tween_callback(outgoing.stop)
 	if track == "":
 		return
 	var s := _load("res://game/audio/music/" + track)

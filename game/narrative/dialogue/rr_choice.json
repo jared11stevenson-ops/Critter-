@@ -1,0 +1,65 @@
+{
+ "id": "rr_choice",
+ "lines": [
+  {
+   "who": "comms:dexter",
+   "expr": "neutral",
+   "text": "Right. The honest version. That cache funds the next ten expeditions. Medicine. Materials. Gate research."
+  },
+  {
+   "who": "comms:dexter",
+   "expr": "amused",
+   "text": "Leave it for my recovery team and your Terrarium will be very, very well supplied."
+  },
+  {
+   "who": "comms:mara",
+   "expr": "focused",
+   "text": "Or you brace the foundation. Aruun's way. The Span stays up. The Dominion gets nothing — and remembers."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "It isn't my choice, Handler. Burden Architecture: build so that if one part fails, the rest survives."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "With that Thoughtstone, this foundation holds for a very long time."
+  },
+  {
+   "who": "cigarra",
+   "expr": "neutral",
+   "text": "I'm not looking at this one. Some choices should be made without me touching them."
+  },
+  {
+   "choice": [
+    {
+     "text": "Brace the foundation. The Span stays.",
+     "goto": "repair"
+    },
+    {
+     "text": "Hand the cache to the Dominion contract.",
+     "goto": "extract"
+    }
+   ]
+  },
+  {
+   "label": "repair"
+  },
+  {
+   "event": "choice_repair"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "extract"
+  },
+  {
+   "event": "choice_extract"
+  },
+  {
+   "end": true
+  }
+ ]
+}

@@ -1,0 +1,25 @@
+{
+ "id": "rr_pylons_done",
+ "lines": [
+  {
+   "who": "narration",
+   "text": "The ringing stops. One by one, the beetles lower their plates and wander back toward the lichen."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Good. They were never the enemy."
+  },
+  {
+   "set": {
+    "beetles_calmed": true
+   }
+  },
+  {
+   "trust": {
+    "aruun": 3,
+    "cigarra": 2
+   }
+  }
+ ]
+}

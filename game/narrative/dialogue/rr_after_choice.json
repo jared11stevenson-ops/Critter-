@@ -1,0 +1,78 @@
+{
+ "id": "rr_after_choice",
+ "lines": [
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "Morrow. Anchor.",
+   "if": "ochre_span_braced"
+  },
+  {
+   "who": "narration",
+   "text": "Aruun drives the Thoughtstone into the cracked foundation. The stone knits. The Span settles with a sound like a held breath let go.",
+   "if": "ochre_span_braced"
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "A structure should sacrifice itself before it sacrifices the people inside it. This one won't have to.",
+   "if": "ochre_span_braced"
+  },
+  {
+   "who": "comms:dexter",
+   "expr": "irritated",
+   "text": "...Noted. Genuinely. Enjoy your bridge.",
+   "if": "ochre_span_braced"
+  },
+  {
+   "who": "narration",
+   "text": "Dominion recovery lines lower from the rim and haul the cache away. The foundation groans.",
+   "if": "ochre_span_failing"
+  },
+  {
+   "who": "aruun",
+   "expr": "aggressive",
+   "text": "It'll stand a season. Maybe two.",
+   "if": "ochre_span_failing"
+  },
+  {
+   "who": "comms:dexter",
+   "expr": "genuine",
+   "text": "You made the useful choice. I know it doesn't feel like it. It rarely does.",
+   "if": "ochre_span_failing"
+  },
+  {
+   "who": "cigarra",
+   "expr": "annoyed",
+   "text": "He says that a lot. I've seen him say it a lot.",
+   "if": "ochre_span_failing"
+  },
+  {
+   "who": "narration",
+   "text": "On the ground, a sliver of Thoughtstone turns slowly on its own — until it points at Morrow."
+  },
+  {
+   "event": "thoughtstone_align"
+  },
+  {
+   "who": "cigarra",
+   "expr": "shocked",
+   "text": "Aruun. That rock just turned."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "...Morrow isn't surprised."
+  },
+  {
+   "who": "comms:mara",
+   "expr": "focused",
+   "text": "Log it. Don't touch it. Exfil beacon is up — come home."
+  },
+  {
+   "set": {
+    "rr_complete": true
+   }
+  }
+ ]
+}

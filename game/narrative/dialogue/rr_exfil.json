@@ -1,0 +1,13 @@
+{
+ "id": "rr_exfil",
+ "lines": [
+  {
+   "who": "comms:mara",
+   "expr": "soft",
+   "text": "Bringing you up. Brace for the Tilt."
+  },
+  {
+   "event": "exfil"
+  }
+ ]
+}

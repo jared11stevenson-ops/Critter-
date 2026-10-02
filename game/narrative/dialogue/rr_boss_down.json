@@ -1,0 +1,19 @@
+{
+ "id": "rr_boss_down",
+ "lines": [
+  {
+   "who": "narration",
+   "text": "The drill winds down. Beneath it, a cache of raw Thoughtstone lies exposed, humming against the cracked foundation."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "There. That's what they were digging for."
+  },
+  {
+   "set": {
+    "boss_defeated": true
+   }
+  }
+ ]
+}
