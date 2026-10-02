@@ -1,0 +1,71 @@
+{
+ "id": "hub_intro",
+ "lines": [
+  {
+   "who": "mara",
+   "expr": "focused",
+   "text": "Handler. Welcome to the Common. Mind the table. It used to be a Habitat wall."
+  },
+  {
+   "who": "mara",
+   "expr": "neutral",
+   "text": "A Dominion permit is drilling for Thoughtstone in the Red Reaches. The vibration is shaking the Ochre Span — a Spanwright crossing older than anyone's records."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Bridges are not monuments. They are promises. Someone is breaking this one."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "Dexter Mane's name is on the permit. His decisions branch like lightning. I want to see where this one lands."
+  },
+  {
+   "who": "mara",
+   "expr": "focused",
+   "text": "Survey the Reaches, understand what's there, and keep the Span standing. The Gate is yours when you're ready."
+  },
+  {
+   "choice": [
+    {
+     "text": "We go now. Open the Gate.",
+     "trust": {
+      "aruun": 2
+     }
+    },
+    {
+     "text": "Cigarra — what do you see?",
+     "goto": "cig"
+    }
+   ]
+  },
+  {
+   "goto": "end"
+  },
+  {
+   "label": "cig"
+  },
+  {
+   "who": "cigarra",
+   "expr": "unhinged",
+   "text": "A rope. A boulder. Something big that drills. And one blank spot I can't read at all. Fun!"
+  },
+  {
+   "trust": {
+    "cigarra": 2
+   }
+  },
+  {
+   "label": "end"
+  },
+  {
+   "who": "narration",
+   "expr": "default",
+   "text": "Mara marks the Gate as cleared for descent."
+  },
+  {
+   "event": "briefing_done"
+  }
+ ]
+}

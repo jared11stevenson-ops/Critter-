@@ -1,0 +1,15 @@
+{
+ "id": "hub_npc_scarlith",
+ "lines": [
+  {
+   "who": "scarlith",
+   "expr": "default",
+   "text": "Everything ferments eventually, Handler. Even reputations."
+  },
+  {
+   "who": "scarlith",
+   "expr": "default",
+   "text": "Salvage? I buy. I sell. I never ask where."
+  }
+ ]
+}

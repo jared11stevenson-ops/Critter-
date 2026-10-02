@@ -772,7 +772,7 @@ func _start_boss() -> void:
 		return
 	boss.activate()
 	hud.set_boss(boss)
-	cam.set_framing(boss.global_position + Vector3(-6, 0, 0), 1.4)
+	cam.set_framing(boss.global_position + Vector3(-2, 0, 0), 1.45)
 	Audio.music("boss")
 	_update_objective()
 
@@ -961,6 +961,12 @@ func qa_kill_all(radius: float = 40.0) -> void:
 		if is_instance_valid(e) and e.alive and not e.passive and e.global_position.distance_to(l.global_position) < radius:
 			e.receive_hit({"amount": 99999.0, "source": l, "can_crit": false, "feel": false, "ignore_invuln": true})
 
+func qa_kill_species(sp: String) -> void:
+	var l := party.get_leader()
+	for e in field.enemies.duplicate():
+		if is_instance_valid(e) and e.alive and e.species_id == sp and not (e is VentWeakpoint):
+			e.receive_hit({"amount": 99999.0, "source": l, "can_crit": false, "feel": false, "ignore_invuln": true})
+
 func qa_damage_boss(frac: float) -> void:
 	if boss and boss.active:
 		boss._transition_t = 0.0
@@ -968,6 +974,34 @@ func qa_damage_boss(frac: float) -> void:
 
 func qa_skip_dialogue() -> void:
 	runner.skip_all()
+
+var _qa_auto := false
+var _qa_choice := 0
+var _qa_delay := 0.6
+
+## QA: auto-advance every dialogue after `delay` real seconds, picking choice `choice`.
+func qa_auto_dialogue(on: bool, choice: int = 0, delay: float = 0.6) -> void:
+	_qa_auto = on
+	_qa_choice = choice
+	_qa_delay = delay
+	if on and not runner.started.is_connected(_qa_on_started):
+		runner.started.connect(_qa_on_started)
+	if on and runner.active:
+		_qa_on_started(runner.dialogue_id)
+
+func _qa_on_started(_id: String) -> void:
+	if not _qa_auto:
+		return
+	await get_tree().create_timer(_qa_delay, true, false, true).timeout
+	var guard := 0
+	while runner.active and guard < 200:
+		guard += 1
+		if runner._waiting == "choice":
+			runner.choose(mini(_qa_choice, runner._choices.size() - 1))
+		elif runner._waiting == "advance":
+			runner.advance()
+		else:
+			break
 
 func qa_choose(i: int) -> void:
 	runner.choose(i)
@@ -978,6 +1012,12 @@ func qa_scan() -> void:
 func qa_interact() -> void:
 	if not _active_interact.is_empty():
 		(_active_interact["act"] as Callable).call()
+
+func qa_debug() -> void:
+	var l := party.get_leader()
+	print("[QA] leader ", l.char_id, " pos ", l.global_position, " cam ", cam.global_position, " rot ", cam.rotation_degrees, " vp ", get_viewport().get_visible_rect().size, " fps ", Engine.get_frames_per_second(), " paused ", get_tree().paused, " dlg ", runner.active, " ", runner.dialogue_id, " boxvis ", runner.box.visible)
+	if terrain.has_method("surface_at"):
+		print("[QA] terrain h ", terrain.height_at(2, 6), " surf ", terrain.surface_at(2, 6), " col ", terrain._color_for(2, 6, 0.0))
 
 func qa_log_flags() -> void:
 	var keys := ["briefed", "arrived_rr", "valley_clear", "first_scan_done", "rope_dropped", "combo_unlocked", "grazers_harmed",

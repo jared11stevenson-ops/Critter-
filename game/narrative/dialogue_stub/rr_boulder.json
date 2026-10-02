@@ -1,0 +1,15 @@
+{
+ "id": "rr_boulder",
+ "lines": [
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "Cracked Thoughtstone blocking the pass. Morrow can reach through it."
+  },
+  {
+   "who": "cigarra",
+   "expr": "neutral",
+   "text": "Reaching Strike. Aim it at the crack."
+  }
+ ]
+}

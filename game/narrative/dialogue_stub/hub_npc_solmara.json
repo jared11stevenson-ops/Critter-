@@ -1,0 +1,15 @@
+{
+ "id": "hub_npc_solmara",
+ "lines": [
+  {
+   "who": "solmara",
+   "expr": "default",
+   "text": "The tides here are wrong. Your Moon... is very quiet."
+  },
+  {
+   "who": "solmara",
+   "expr": "default",
+   "text": "Ask me about it when you are ready for a question without an answer."
+  }
+ ]
+}

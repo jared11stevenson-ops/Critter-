@@ -108,20 +108,23 @@ func _build_environment() -> void:
 	sm.sun_angle_max = 30.0
 	sky.sky_material = sm
 	env.sky = sky
-	env.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
-	env.ambient_light_energy = 0.5
+	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	env.ambient_light_color = Color("#a08070")
+	env.ambient_light_energy = 0.55
 	env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+	env.tonemap_exposure = 0.9
 	env.fog_enabled = true
+	env.fog_density = 0.0025
 	env.fog_light_color = Color("#d9a27a")
 	env.fog_density = 0.004
-	env.glow_enabled = true
+	env.glow_enabled = false
 	env.glow_intensity = 0.5
 	we.environment = env
 	add_child(we)
 	var sun := DirectionalLight3D.new()
 	sun.rotation_degrees = Vector3(-52, -35, 0)
 	sun.light_color = Color("#ffe2bf")
-	sun.light_energy = 1.25
+	sun.light_energy = 0.8
 	sun.shadow_enabled = true
 	sun.directional_shadow_max_distance = 60.0
 	add_child(sun)
@@ -132,9 +135,9 @@ func _color_for(x: float, z: float, h: float) -> Color:
 	var s := surface_at(x, z)
 	match s:
 		"stone":
-			return Color("#b98d64").lerp(Color("#a07650"), 0.5 + 0.5 * sin(x * 0.7) * sin(z * 0.6))
+			return Color("#9c7352").lerp(Color("#86603f"), 0.5 + 0.5 * sin(x * 0.7) * sin(z * 0.6))
 		"dirt":
-			return Color("#c4683f").lerp(Color("#a8532f"), 0.5 + 0.5 * sin(x * 0.3 + z * 0.2))
+			return Color("#a8553a").lerp(Color("#8e4129"), 0.5 + 0.5 * sin(x * 0.3 + z * 0.2))
 	# mesa cliffs: strata bands
 	var band := 0.5 + 0.5 * sin(h * 2.2)
 	var c := Color("#9c3f25").lerp(Color("#d07a45"), band)
@@ -198,6 +201,7 @@ func _build_ground() -> void:
 	var mi := MeshInstance3D.new()
 	mi.name = "TerrainMesh"
 	mi.mesh = mesh
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	var mat := StandardMaterial3D.new()
 	mat.vertex_color_use_as_albedo = true
 	mat.vertex_color_is_srgb = true
@@ -220,8 +224,8 @@ func _tri(st: SurfaceTool, a: Vector3, b: Vector3, c: Vector3) -> void:
 	st.set_color(col)
 	st.set_normal(n)
 	st.add_vertex(a)
-	st.add_vertex(c)
 	st.add_vertex(b)
+	st.add_vertex(c)
 
 func _toon(col: Color) -> StandardMaterial3D:
 	var m := StandardMaterial3D.new()

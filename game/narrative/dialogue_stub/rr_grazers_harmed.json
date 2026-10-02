@@ -1,0 +1,15 @@
+{
+ "id": "rr_grazers_harmed",
+ "lines": [
+  {
+   "who": "cigarra",
+   "expr": "shocked",
+   "text": "Stop! Those are Dust Grazers. Their droppings seed the lichen that holds this plateau together."
+  },
+  {
+   "who": "aruun",
+   "expr": "aggressive",
+   "text": "Harm the herd and the valley comes apart. Choose your targets, Handler."
+  }
+ ]
+}

@@ -1,0 +1,15 @@
+{
+ "id": "hub_npc_nyxaris",
+ "lines": [
+  {
+   "who": "nyxaris",
+   "expr": "default",
+   "text": "Frost holds a shape longer than you'd think. So do arguments."
+  },
+  {
+   "who": "nyxaris",
+   "expr": "default",
+   "text": "The Helix case drags on. Law is slow architecture."
+  }
+ ]
+}

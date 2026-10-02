@@ -1,0 +1,10 @@
+{
+ "id": "rr_boss_phase2",
+ "lines": [
+  {
+   "who": "comms:mara",
+   "expr": "focused",
+   "text": "It's overheating! Coolant vents are opening — hit the vents, the armour won't give."
+  }
+ ]
+}

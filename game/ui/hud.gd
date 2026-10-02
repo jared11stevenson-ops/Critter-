@@ -64,6 +64,7 @@ func setup(f: Field, p: PartyController) -> void:
 func _ready() -> void:
 	layer = 20
 	add_to_group("hud")
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	root = Control.new()
 	root.set_anchors_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -315,13 +316,13 @@ func _layout() -> void:
 	_objective_panel.reset_size()
 	var ow := _objective_panel.get_combined_minimum_size().x
 	_objective_panel.position = Vector2((W - ow) * 0.5, 14)
-	_toast_box.position = Vector2(W * 0.5 - 300, 84)
-	_toast_box.size = Vector2(600, 10)
+	_toast_box.position = Vector2(W * 0.5 - 260, 80)
+	_toast_box.size = Vector2(520, 10)
 	_boss_panel.position = Vector2(W * 0.5 - 320, H - 92)
 	_revive_label.position = Vector2(W * 0.5 - 250, H * 0.36)
 	_revive_label.size = Vector2(500, 40)
 	_contain_bar.position = Vector2(W * 0.5 - 130, H * 0.42)
-	_burden_panel.position = Vector2(W * 0.5 - 260, 120)
+	_burden_panel.position = Vector2(W * 0.5 - 260, H - 236)
 
 func _place(c: Control, center: Vector2, lh: bool, W: float) -> void:
 	var s := c.custom_minimum_size
@@ -332,7 +333,13 @@ func _place(c: Control, center: Vector2, lh: bool, W: float) -> void:
 	c.position = Vector2(cx - s.x * 0.5, center.y - s.y * 0.5)
 
 # ---------------- per-frame ----------------
+var _last_vs := Vector2.ZERO
+
 func _process(delta: float) -> void:
+	var vs := root.get_viewport_rect().size
+	if vs != _last_vs:
+		_last_vs = vs
+		_layout_dirty = true
 	if _layout_dirty:
 		_layout()
 	if party == null or party.members.size() < 2:
@@ -436,14 +443,14 @@ func toast(text: String, kind: String = "info") -> void:
 			edge = UiKit.ACCENT_2
 	var pc := PanelContainer.new()
 	pc.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	pc.add_theme_stylebox_override("panel", UiKit.box(Color(col, 0.9), edge, 14, 3, 14))
-	var l := UiKit.label(text, 24, UiKit.PARCHMENT, "ui")
+	pc.add_theme_stylebox_override("panel", UiKit.box(Color(col, 0.86), edge, 12, 2, 10))
+	var l := UiKit.label(text, 22, UiKit.PARCHMENT, "ui")
 	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	l.custom_minimum_size = Vector2(560, 0)
+	l.custom_minimum_size = Vector2(500, 0)
 	pc.add_child(l)
 	_toast_box.add_child(pc)
-	while _toast_box.get_child_count() > 3:
+	while _toast_box.get_child_count() > 2:
 		_toast_box.get_child(0).free()
 	pc.modulate.a = 0.0
 	var tw := pc.create_tween()
@@ -500,6 +507,8 @@ func open_pause() -> void:
 	get_parent().add_child(_pause_menu)
 
 func _unhandled_input(ev: InputEvent) -> void:
+	if get_tree().paused:
+		return
 	if ev.is_action_pressed("pause"):
 		open_pause()
 		get_viewport().set_input_as_handled()

@@ -22,6 +22,11 @@ var _t := 0.0
 var _last_us := 0
 var _snap := true
 var override_focus: Variant = null   # scripted focus (dialogue / cinematic)
+var _pitch_cur := -40.0
+var _occl_t := 0.0
+var _pitch_want := -40.0
+var _dist_occl := 1.0
+var _dist_occl_want := 1.0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -51,8 +56,6 @@ func _process(_delta: float) -> void:
 	var now := Time.get_ticks_usec()
 	var rd := clampf(float(now - _last_us) / 1000000.0, 0.0, 0.1)
 	_last_us = now
-	if get_tree().paused:
-		return
 	_t += rd
 	var want := _focus
 	if override_focus is Vector3:
@@ -71,15 +74,25 @@ func _process(_delta: float) -> void:
 		else:
 			_frame_weight = move_toward(_frame_weight, 0.0, rd * 1.5)
 		if _frame_weight > 0.0 and _frame_point is Vector3:
-			want = want.lerp((tp + (_frame_point as Vector3)) * 0.5, _frame_weight * 0.6)
+			want = want.lerp((tp + (_frame_point as Vector3)) * 0.5, _frame_weight * 0.75)
 	_dist_mult = lerpf(_dist_mult, _dist_mult_target, 1.0 - exp(-2.0 * rd))
 	if _snap:
 		_focus = want
 		_snap = false
+		_solve_occlusion()
+		_pitch_cur = _pitch_want
+		_dist_occl = _dist_occl_want
 	else:
 		_focus = _focus.lerp(want, 1.0 - exp(-follow_sharpness * rd))
-	var p := deg_to_rad(pitch_deg)
-	var d := distance * _dist_mult
+	# terrain occlusion: steepen pitch (and pull in) when a cliff would sit between camera and focus
+	_occl_t -= rd
+	if _occl_t <= 0.0:
+		_occl_t = 0.1
+		_solve_occlusion()
+	_pitch_cur = lerpf(_pitch_cur, _pitch_want, 1.0 - exp(-4.0 * rd))
+	_dist_occl = lerpf(_dist_occl, _dist_occl_want, 1.0 - exp(-4.0 * rd))
+	var p := deg_to_rad(_pitch_cur)
+	var d := distance * _dist_mult * _dist_occl
 	var offset := Vector3(0, -sin(p) * d, cos(p) * d)
 	global_position = _focus + offset
 	rotation = Vector3(p, 0, 0)
@@ -92,6 +105,33 @@ func _process(_delta: float) -> void:
 	else:
 		cam.position = Vector3.ZERO
 		cam.rotation.z = 0.0
+
+func _blocked(pitch: float, dist: float) -> bool:
+	var f := Field.current
+	if f == null:
+		return false
+	var p := deg_to_rad(pitch)
+	var off := Vector3(0, -sin(p) * dist, cos(p) * dist)
+	for k in [0.35, 0.55, 0.75, 0.9, 1.0]:
+		var q: Vector3 = _focus + off * float(k)
+		if f.height_at(q.x, q.z) + 0.8 > q.y:
+			return true
+	return false
+
+func _solve_occlusion() -> void:
+	var d := distance * _dist_mult
+	for pd in [pitch_deg, pitch_deg - 8.0, pitch_deg - 16.0, pitch_deg - 24.0, pitch_deg - 32.0]:
+		if not _blocked(pd, d):
+			_pitch_want = pd
+			_dist_occl_want = 1.0
+			return
+	for dm in [0.8, 0.65, 0.5]:
+		if not _blocked(pitch_deg - 32.0, d * dm):
+			_pitch_want = pitch_deg - 32.0
+			_dist_occl_want = dm
+			return
+	_pitch_want = pitch_deg - 34.0
+	_dist_occl_want = 0.5
 
 ## World → screen helper for UI anchoring.
 func unproject(p: Vector3) -> Vector2:

@@ -6,6 +6,7 @@ extends Control
 
 signal tapped
 
+var always_active := false   # receive input while the tree is paused
 var action := ""
 var glyph := ""
 var caption := ""
@@ -37,7 +38,7 @@ func _ready() -> void:
 	_tex_down = UiKit.tex("res://game/art/ui/button_round_pressed.png")
 
 func _input(ev: InputEvent) -> void:
-	if not is_visible_in_tree():
+	if not is_visible_in_tree() or (get_tree().paused and not always_active):
 		if _pressed:
 			_release()
 		return

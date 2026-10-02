@@ -2,6 +2,7 @@ class_name FloatingJoystick
 extends Control
 ## Floating left-thumb joystick: appears where the thumb lands inside its zone, writes TouchInput.move.
 
+var always_active := false   # receive input while the tree is paused
 var radius := 96.0
 var _touch := -1
 var _origin := Vector2.ZERO
@@ -22,7 +23,7 @@ func set_idle(p: Vector2) -> void:
 	queue_redraw()
 
 func _input(ev: InputEvent) -> void:
-	if not is_visible_in_tree():
+	if not is_visible_in_tree() or (get_tree().paused and not always_active):
 		if _touch != -1:
 			_end()
 		return
