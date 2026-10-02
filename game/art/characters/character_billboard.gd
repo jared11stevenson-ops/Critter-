@@ -115,7 +115,7 @@ func _load_character() -> void:
 	if height_override > 0.0:
 		_height = height_override
 	for v in ["front", "side", "back"]:
-		var p := dir + v + ".png"
+		var p: String = dir + str(v) + ".png"
 		if ResourceLoader.exists(p):
 			_tex[v] = load(p)
 			_views.append(v)
@@ -266,9 +266,9 @@ func _process(delta: float) -> void:
 	_flash = maxf(0.0, _flash - delta * 5.5)
 	# downed
 	_downed_amt = move_toward(_downed_amt, 1.0 if _downed else 0.0, delta * 3.0)
-	sy *= lerpf(1.0, 0.62, _downed_amt)
+	sy *= lerpf(1.0, 0.7, _downed_amt)
 	sx *= lerpf(1.0, 1.08, _downed_amt)
-	shear += 0.25 * _downed_amt
+	shear += 0.1 * _downed_amt
 	_highlight_amt = move_toward(_highlight_amt, 1.0 if _highlight_on else 0.0, delta * 6.0)
 	var mat: ShaderMaterial = _mesh.material_override
 	mat.set_shader_parameter("anim_scale", Vector2(sx, sy))

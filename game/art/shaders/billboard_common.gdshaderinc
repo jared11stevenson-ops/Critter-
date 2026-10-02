@@ -23,11 +23,11 @@ uniform vec4 flash_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 uniform float flash = 0.0;
 uniform float desaturate = 0.0;
 uniform float darken = 0.0;
-uniform float mip_bias = -0.6;
+uniform float mip_bias = -0.3;
 
 varying vec2 v_uv;
 
-vec3 billboard_vertex(vec3 vtx, vec2 uv) {
+vec3 billboard_vertex(vec3 vtx, vec2 uv, out vec2 uv_out) {
 	vec3 v = vtx;                               // quad local: x in [-0.5,0.5], y in [0,1]
 	vec2 size = quad_size;
 	v.x *= size.x;
@@ -45,7 +45,7 @@ vec3 billboard_vertex(vec3 vtx, vec2 uv) {
 	}
 	// expand uv into the margin
 	u = (u - 0.5) * (1.0 + 2.0 * margin_uv) + 0.5;
-	v_uv = u;
+	uv_out = u;
 	return v;
 }
 

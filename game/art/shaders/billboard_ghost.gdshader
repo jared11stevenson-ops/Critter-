@@ -1,6 +1,6 @@
 shader_type spatial;
 // CRITTER character billboard — translucent ghost variant (False Memory decoys, Premonition future ghosts).
-render_mode unshaded, cull_disabled, blend_add, depth_draw_never, shadows_disabled;
+render_mode unshaded, cull_disabled, blend_add, depth_draw_never, shadows_disabled, fog_disabled;
 
 #include "res://game/art/shaders/billboard_common.gdshaderinc"
 
@@ -9,7 +9,9 @@ uniform float ghost_alpha = 0.5;
 uniform float ghost_time_scale = 1.0;
 
 void vertex() {
-	VERTEX = billboard_vertex(VERTEX, UV);
+	vec2 buv;
+	VERTEX = billboard_vertex(VERTEX, UV, buv);
+	v_uv = buv;
 	MODELVIEW_MATRIX = VIEW_MATRIX * billboard_matrix(MODEL_MATRIX, INV_VIEW_MATRIX);
 }
 

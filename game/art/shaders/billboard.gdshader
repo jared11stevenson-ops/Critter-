@@ -5,7 +5,9 @@ render_mode unshaded, cull_disabled, depth_draw_opaque, shadows_disabled;
 #include "res://game/art/shaders/billboard_common.gdshaderinc"
 
 void vertex() {
-	VERTEX = billboard_vertex(VERTEX, UV);
+	vec2 buv;
+	VERTEX = billboard_vertex(VERTEX, UV, buv);
+	v_uv = buv;
 	MODELVIEW_MATRIX = VIEW_MATRIX * billboard_matrix(MODEL_MATRIX, INV_VIEW_MATRIX);
 }
 

@@ -1,6 +1,6 @@
 extends Node3D
 ## QA: every character billboard on a ground plane under the field lighting, gameplay camera angle.
-## tools/shot.sh res://game/art/characters/_qa_billboards.tscn /tmp/qa/bb 1.5,3.5,5.5 6
+## tools/shot.sh res://game/art/characters/_qa_billboards.tscn /tmp/qa/bb 1.5,3.5,5.5,6.5 7
 
 const IDS := ["aruun", "cigarra", "mara", "dexter", "mollusk", "bramvex", "nerit", "zephyr", "nyxaris",
 	"pharilux", "solmara", "scarlith"]
@@ -25,7 +25,7 @@ func _ready() -> void:
 	_cam = Camera3D.new()
 	_cam.fov = 42.0
 	add_child(_cam)
-	_set_cam(Vector3(0, 0, 1.5))
+	_set_cam(Vector3(0, 0.8, -1.0))
 	_cam.current = true
 	for i in IDS.size():
 		var bb: CharacterBillboard = preload("res://game/art/characters/character_billboard.tscn").instantiate()
@@ -48,6 +48,12 @@ func _set_cam(focus: Vector3) -> void:
 
 func _process(delta: float) -> void:
 	_t += delta
+	if _t > 6.0 and _t - delta <= 6.0:
+		# close-up of the two partners
+		var pitch := deg_to_rad(-25.0)
+		var focus := Vector3(-6.8, 1.0, -2.5)
+		_cam.position = focus + Vector3(0, -sin(pitch) * 6.0, cos(pitch) * 6.0)
+		_cam.look_at(focus, Vector3.UP)
 	# phase A (0-2s): idle front; B (2-4s): walking right/left/away; C (4-6s): attacks, hits, ghost, downed
 	for i in _bbs.size():
 		var bb: CharacterBillboard = _bbs[i]
