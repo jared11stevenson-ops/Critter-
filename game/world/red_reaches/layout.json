@@ -1,0 +1,87 @@
+{
+  "_doc": "Red Reaches slice layout. Units: meters. X = east (screen right), Z = south (toward camera), Y = up. Owned by the Lead. Terrain builder: any point not inside a 'floor' shape is mesa cliff at 'mesa_height' (+noise). 'chasm' shapes override everything to 'chasm_depth'. Floor shapes blend over 'edge_width'. Heights for capsules lerp from h_a to h_b along the segment.",
+  "bounds": {"min_x": -24, "max_x": 348, "min_z": -48, "max_z": 48},
+  "cell_size": 1.0,
+  "mesa_height": 12.0,
+  "chasm_depth": -40.0,
+  "edge_width": 4.0,
+  "floors": [
+    {"id": "gate_pad",        "type": "disc",    "c": [0, 0],    "r": 16, "h": 0,  "surface": "stone"},
+    {"id": "ramp_down",       "type": "capsule", "a": [12, 0],   "b": [34, 2],  "r": 6,  "h_a": 0,  "h_b": -4, "surface": "dirt"},
+    {"id": "fracture_valley", "type": "capsule", "a": [34, 2],   "b": [84, -1], "r": 9,  "h_a": -4, "h_b": -4, "surface": "dirt"},
+    {"id": "gap_landing",     "type": "capsule", "a": [98, -1],  "b": [106, -1],"r": 6,  "h_a": -3, "h_b": -3, "surface": "dirt"},
+    {"id": "waystation",      "type": "disc",    "c": [118, -2], "r": 18, "h": -3, "surface": "stone"},
+    {"id": "boulder_pass",    "type": "capsule", "a": [134, -2], "b": [164, 6], "r": 5,  "h_a": -3, "h_b": -4, "surface": "dirt"},
+    {"id": "drill_basin",     "type": "disc",    "c": [196, 8],  "r": 30, "h": -6, "surface": "dirt"},
+    {"id": "span_approach",   "type": "capsule", "a": [220, 2],  "b": [246, 0], "r": 6,  "h_a": -6, "h_b": -2, "surface": "stone"},
+    {"id": "foundation",      "type": "disc",    "c": [318, 0],  "r": 24, "h": -2, "surface": "stone"}
+  ],
+  "chasms": [
+    {"id": "the_gap",    "type": "capsule", "a": [92, -40],  "b": [92, 40],  "r": 6},
+    {"id": "span_chasm", "type": "capsule", "a": [270, -60], "b": [270, 60], "r": 23}
+  ],
+  "structures": [
+    {"id": "gate_ring",        "kind": "gate_ring",   "pos": [-7, 0, -4],  "rot_y": 20},
+    {"id": "rope_span",        "kind": "rope_bridge", "a": [85, -4, -1],  "b": [99, -3, -1], "width": 2.6, "starts_hidden": true},
+    {"id": "ochre_span",       "kind": "stone_bridge","a": [245, -2, 0],  "b": [297, -2, 0], "width": 7.0},
+    {"id": "waystation_ruins", "kind": "ruins",       "pos": [118, -3, -2], "radius": 15},
+    {"id": "old_road_marker",  "kind": "marker_stone","pos": [112, -3, -13]},
+    {"id": "thought_boulder",  "kind": "cracked_boulder", "pos": [151, -3.5, 3.5], "radius": 3.6},
+    {"id": "drill_camp",       "kind": "dominion_camp", "pos": [208, -6, 26]},
+    {"id": "augur_rig",        "kind": "boss_rig",    "pos": [330, -2, 0]}
+  ],
+  "markers": {
+    "player_spawn":      [2, 0, 6],
+    "partner_spawn":     [-1, 0, 7],
+    "leap_a":            [84.5, -4, -1],
+    "leap_b":            [100, -3, -1],
+    "rope_anchor":       [100.5, -3, 1.5],
+    "encounter_valley":  [58, -4, 0],
+    "grazer_herd":       [126, -3, 6],
+    "waystation_talk":   [116, -3, 0],
+    "boulder_interact":  [146, -3.2, 2],
+    "encounter_drill":   [196, -6, 8],
+    "pylon_1":           [182, -6, -8],
+    "pylon_2":           [204, -6, 26],
+    "pylon_3":           [214, -6, -6],
+    "beetle_1":          [192, -6, 4],
+    "beetle_2":          [202, -6, 14],
+    "span_burden_point": [268, -2, 0],
+    "boss_arena_center": [314, -2, 0],
+    "boss_pos":          [330, -2, 0],
+    "choice_point":      [324, -2, 0],
+    "exfil_beacon":      [304, -2, -12]
+  },
+  "triggers": [
+    {"id": "t_arrival",     "pos": [2, 0, 6],      "r": 4,  "event": "arrival"},
+    {"id": "t_valley",      "pos": [44, -4, 1],    "r": 7,  "event": "valley_enter"},
+    {"id": "t_gap",         "pos": [80, -4, -1],   "r": 6,  "event": "gap_reached"},
+    {"id": "t_waystation",  "pos": [108, -3, -1],  "r": 6,  "event": "waystation_enter"},
+    {"id": "t_boulder",     "pos": [140, -3, 0],   "r": 5,  "event": "boulder_seen"},
+    {"id": "t_drill",       "pos": [172, -6, 2],   "r": 8,  "event": "drill_enter"},
+    {"id": "t_span",        "pos": [250, -2, 0],   "r": 5,  "event": "span_enter"},
+    {"id": "t_burden",      "pos": [268, -2, 0],   "r": 4,  "event": "span_burden"},
+    {"id": "t_boss",        "pos": [300, -2, 0],   "r": 6,  "event": "boss_start"}
+  ],
+  "pickups": [
+    {"kind": "reach_soil",       "pos": [24, -2, -3]},
+    {"kind": "salvage",          "pos": [70, -4, 6]},
+    {"kind": "lichen_culture",   "pos": [104, -3, 4]},
+    {"kind": "lichen_culture",   "pos": [128, -3, -12]},
+    {"kind": "reach_soil",       "pos": [122, -3, 12]},
+    {"kind": "thoughtstone_dust","pos": [156, -4, 7]},
+    {"kind": "salvage",          "pos": [186, -6, 20]},
+    {"kind": "salvage",          "pos": [212, -6, 10]},
+    {"kind": "thoughtstone_dust","pos": [232, -4, 3]},
+    {"kind": "lichen_culture",   "pos": [300, -2, 12]}
+  ],
+  "props_scatter": [
+    {"area": "gate_pad",        "kinds": ["rock_small", "bone"],                    "count": 10},
+    {"area": "fracture_valley", "kinds": ["rock_small", "rock_spire", "flat_tree", "bone", "shrub"], "count": 42},
+    {"area": "waystation",      "kinds": ["rock_small", "shrub", "flat_tree", "lichen_patch"], "count": 26},
+    {"area": "boulder_pass",    "kinds": ["rock_small", "shrub"],                   "count": 12},
+    {"area": "drill_basin",     "kinds": ["rock_small", "crate", "shrub", "bone", "survey_flag"], "count": 36},
+    {"area": "foundation",      "kinds": ["rock_small", "pillar_broken"],           "count": 12},
+    {"area": "mesa_top",        "kinds": ["flat_tree", "rock_spire", "shrub"],      "count": 160}
+  ]
+}

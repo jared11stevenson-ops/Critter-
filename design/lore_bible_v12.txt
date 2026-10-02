@@ -1,0 +1,1917 @@
+CRITTER
+MASTER LORE BIBLE
+Canon Continuity v12 • Illustrated Edition
+Earth discovered Critter. Then Earth introduced Critter to itself.
+[Heading1] CRITTER --- MASTER LORE BIBLE
+[Heading2] Canon Continuity v5.0 --- The Living Eightfold World
+[Heading1] THE PRIME DIRECTIVE
+CRITTER is not a plot waiting to end.
+It is a living setting whose history accumulates.
+The world is approximately **eight times the total physical size of
+Earth**, and no civilization---not humanity, not the oldest known
+Critter culture, not the player---possesses a complete map of it.
+The First Ten are not a native team. Most never personally met before
+reaching Earth. Their friendships, rivalries and collaborations are
+products of the First Contact Era. Prior connections require believable
+regional history: war, migration, trade, diplomacy, transmitted legend
+or another explicit route of contact.
+Earth discovered Critter.
+Then Earth accidentally began introducing Critter to itself.
+[Heading1] BOOK I --- SCALE
+[Heading2] 1. THE DISCOVERY
+Humanity did not find Critter by looking through a stronger microscope.
+The discovery began with a reproducible error.
+Experiments involving quantum coherence repeatedly produced a tiny
+amount of matter whose measured position and apparent spatial history
+did not agree. The anomaly was dismissed as contamination until separate
+laboratories produced the same result.
+The breakthrough came when researchers stopped asking **where the
+particles had gone** and asked whether they had remained inside the same
+spatial scale-state at all.
+The first stable probe vanished for less than a second.
+It returned carrying material that did not exist in its chamber before
+departure:
+soil, spores, microscopic shell fragments, and biological proteins with
+no terrestrial evolutionary lineage.
+Humanity had not discovered a smaller room inside Earth.
+It had discovered another world.
+[Heading2] 2. QUANTUM DESCENT
+A Scale Transition Array, commonly called a Gate, forces matter into
+a stable relationship with another scale-state.
+Earth is designated S0.
+Critter is designated S−1.
+"Shrinking" is convenient slang but scientifically incomplete. A
+traveler crossing a Gate does not merely become a tiny S0 object. Their
+matter is translated into S−1 physical relationships.
+This distinction explains why Critter can possess geography vastly
+larger than Earth despite being accessed through a quantum-scale
+transition.
+[Heading2] 3. THE EIGHTFOLD PARADOX
+Early expeditions expected a microscopic environment.
+Instead they encountered distances that made no sense.
+Survey data eventually suggested Critter's total traversable physical
+extent is roughly eight times Earth's.
+The measurement remains approximate because humanity has not mapped the
+entire world.
+This contradiction becomes known as the Eightfold Paradox:
+**How can a world entered by descending in scale contain more internal
+space than the world from which the traveler descended?**
+Several scientific models compete.
+None is canonically confirmed.
+Some researchers argue that scale and spatial extent are independent
+dimensions.
+Others propose that S−1 possesses different geometric constraints.
+A minority argues that "world" is itself the wrong concept and that
+Critter may occupy a folded physical domain intersecting Earth only
+through particular quantum relationships.
+The mystery remains scientific, observable and unresolved.
+[Heading2] 4. SCALE SICKNESS
+Crossing is physically stressful.
+Most trained humans experience temporary symptoms after early Descents:
+vertigo, distorted depth perception, phantom changes in body size,
+auditory delay, nausea, and a sensation that nearby objects are either
+impossibly close or impossibly far away.
+Repeated travelers develop adaptation.
+Handlers call the first minutes after a rough transition the Tilt.
+Critters brought to S0 can experience the inverse.
+Habitats are therefore not decorative enclosures. They are medical
+infrastructure.
+[Heading2] 5. SCALE ANCHORING
+Living organisms carry a residual relationship to their native Scale
+State called a Scale Signature.
+Without stabilization, prolonged displacement can cause biological
+stress.
+A Habitat maintains environmental and quantum conditions close enough to
+a Critter's native signature to permit long-term health.
+This is why a captured organism cannot simply be put in a conventional
+cage.
+It needs pieces of home.
+Soil chemistry. Microbes. Humidity. Light cycle. Pressure. Food web.
+Mineral content. Symbiotic organisms. And a tuned Scale Anchor.
+The better the Habitat, the healthier and more behaviorally complex the
+resident becomes.
+This creates the foundation of the game's building system.
+[Heading1] BOOK II --- THE WORLD OF CRITTER
+[Heading2] 6. A WORLD WITHOUT A WORLD MAP
+Critter is too large for a single cultural map.
+Humanity's maps are mosaics assembled from expedition surveys, native
+charts, orbital inference where possible, oral geography, migration
+records and enormous blank spaces.
+Different peoples map different things.
+A maritime civilization may possess extraordinarily accurate current
+charts but almost no inland knowledge.
+A subterranean culture may map vertical depth rather than surface
+distance.
+Migratory species may encode geography as seasonal routes.
+Cigarra's people describe certain routes by probability of safe passage.
+Solmara's people can encode portions of geography through tidal and
+gravitational rhythm.
+A "complete map" may be philosophically impossible because different
+species experience terrain differently.
+[Heading2] 7. THE GREAT DISTANCES
+The known homelands of the First Ten are separated by distances large
+enough that most of them would never naturally meet.
+The Canopy Fold, Red Reaches, Lumen Depths, Rainward, Briarwild,
+Frostbloom, Velvet Warrens, Pelagic Expanse and Thornmarch belong to
+different geographic and cultural systems.
+Some may share indirect trade chains.
+Others have no meaningful historical contact.
+A commodity can travel farther than the person who made it.
+A story can travel farther than the commodity.
+A lie can travel farther than either.
+This allows distant cultures to possess distorted ideas about one
+another without direct contact.
+[Heading2] 8. CIVILIZATION IS SPECIES-SHAPED
+Critter societies are not human kingdoms wearing insect costumes.
+Their bodies shape their institutions.
+A species that communicates through vibration may build public chambers
+around resonant architecture.
+A species that molts may treat discarded exoskeletons as inheritance,
+waste, sacred remains or legal identity.
+A colony organism may not recognize the individual as the fundamental
+political unit.
+A nocturnal species may define a "day" by temperature rather than
+sunlight.
+A migratory species may own routes instead of land.
+A burrowing culture may consider surface borders meaningless.
+Human translators therefore routinely create false equivalences.
+"King." "Temple." "Marriage." "Property." "War."
+These words may be useful while still being wrong.
+[Heading2] 9. THE OLD ROADS
+Despite Critter's enormous size, evidence exists of ancient
+long-distance movement.
+Ruined causeways.
+Abandoned migration tunnels.
+Stone markers whose symbols appear continents apart.
+Dead trade languages.
+Ports facing routes no modern ship uses.
+These do not prove a lost global empire.
+They prove that Critter's civilizations have risen, connected,
+fragmented and forgotten one another many times.
+The past is deep enough that two cultures can share ancestry without
+knowing it.
+[Heading1] BOOK III --- LIFE, KNACKS AND ECOLOGY
+[Heading2] 10. WHAT IS A CRITTER?
+"Critter" begins as Handler slang and becomes humanity's broad term for
+native S−1 organisms.
+It is biologically useless.
+It includes:
+wild animals, sapient peoples, fungal colonies, plantlike organisms,
+symbiotic collectives, and forms of life difficult to classify using
+Earth taxonomy.
+Many intelligent inhabitants dislike the word.
+Others adopt it.
+Earthborn generations sometimes use it proudly.
+The term therefore changes meaning depending on speaker and context.
+[Heading2] 11. KNACKS
+A Knack is the human term for an extraordinary biological capability
+that exceeds familiar terrestrial limits.
+Knacks are not a universal magic system.
+They emerge from different biological mechanisms.
+Cigarra's probability perception is not the same phenomenon as Mollusk's
+temporal inertia.
+Nerit's light manipulation is not secretly powered by the same substance
+as Solmara's gravitational biology.
+Humanity groups them together because humans need categories.
+Critter does not owe humanity a unified explanation.
+[Heading2] 12. ECOLOGICAL COST
+Power has biological consequences.
+A Knack consumes something.
+Heat. Stored chemical energy. Minerals. Hydration. Neural stability.
+Symbiotic organisms. Metabolic reserves. Environmental conditions. Time.
+This gives powerful Critters ecology.
+Nyxaris cannot endlessly generate cryogenic silk without replenishing
+the minerals and biological precursors used by her spinnerets.
+Cigarra's perception becomes unreliable when overwhelmed by too many
+competing futures.
+Aruun can damage his own body by exceeding safety limits.
+Mollusk's temporal manipulation creates accumulated physiological
+fatigue.
+Solmara's strongest states depend upon environmental and celestial
+conditions.
+Power is therefore something a creature lives with, not simply a combat
+button.
+[Heading2] 13. HABITAT CHAINS
+Critters rarely exist independently.
+A captured species may require a plant.
+That plant may require a fungus.
+The fungus may require a decomposer.
+The decomposer may become prey for another organism.
+Players who attempt to maintain only valuable combat species create
+unstable Habitats.
+The most successful Terrariums become ecosystems.
+This turns collection into stewardship, engineering and experimentation.
+[Heading1] BOOK IV --- HUMANITY ENTERS
+[Heading2] 14. THE FIRST EXPEDITIONS
+The earliest human expeditions are cautious and scientific.
+Then samples return.
+Critter silk outperforms industrial fibers.
+Microbes digest pollutants.
+Plant compounds show pharmaceutical potential.
+Mineral-biological composites react to neural signals.
+The scientific discovery becomes an economic event.
+Governments classify Gate research.
+Corporations compete for licenses.
+Universities demand access.
+Military agencies ask the obvious questions.
+Smugglers ask them faster.
+[Heading2] 15. THE TERRARIUM AUTHORITY
+The Terrarium Authority is formed to coordinate Gate safety,
+biological containment and cross-scale law.
+Its existence is necessary.
+Its power becomes enormous.
+It controls:
+Gate licensing, Handler certification, quarantine, Habitat standards,
+cross-scale transport, species classification, research permissions, and
+much of the legal definition of personhood during early contact.
+This creates a structural conflict.
+The institution responsible for protecting Critter life is also
+responsible for authorizing its extraction.
+Not everyone inside the Authority agrees on what its mission should
+become.
+[Heading2] 16. HANDLERS
+Handlers begin as field specialists.
+A Handler must survive Critter, read unfamiliar ecology, operate Scale
+equipment, defend an expedition, identify organisms, manage capture
+systems and return alive.
+As contact expands, the profession fractures into specialties:
+field Handlers, ecological Handlers, rescue Handlers, surveyors, combat
+contractors, diplomatic escorts, rangers, collectors, and illegal
+poachers.
+The public uses one word for people doing radically different jobs.
+That ambiguity becomes politically important.
+[Heading2] 17. CAPTURE
+The original capture system is designed for dangerous wildlife.
+It becomes ethically explosive when humanity discovers sapient species.
+Modern legal systems eventually distinguish:
+Wild Containment --- temporary or permanent containment of
+nonsapient dangerous organisms.
+Protective Extraction --- emergency removal for rescue, medicine or
+ecological crisis.
+Contract Bonding --- voluntary partnership between a sapient Critter
+and Handler.
+Diplomatic Transit --- recognized sapient travelers crossing scales
+independently.
+Criminal Extraction --- trafficking or unauthorized capture.
+The technology may look similar.
+The legal and moral meaning is completely different.
+Early humanity does not make these distinctions quickly enough.
+That failure shapes the First Contact Era.
+[Heading2] 18. WHY CRITTERS BATTLE
+Critter combat on Earth has multiple origins.
+Handlers require defensive training.
+Wild organisms sometimes cannot be safely controlled without force.
+Some Critter cultures possess existing competitive combat traditions.
+Earth spectators turn Handler exhibitions into entertainment.
+The result becomes the Handler League.
+Its early history is ugly.
+Later reforms require documented consent for sapient competitors and
+introduce welfare rules for nonsapient partners.
+Debate continues.
+Some intelligent Critters love professional competition.
+Some consider it degrading.
+Both positions exist simultaneously.
+[Heading1] BOOK V --- TERRARIUM ONE
+[Heading2] 19. THE LABORATORY THAT BECAME A CITY
+Terrarium One begins as a secure Gate complex.
+Every new Habitat adds environmental machinery.
+Then the environments begin interacting.
+Fungal spores enter ventilation shafts.
+Pollinators move between authorized zones.
+Water from an aquatic Habitat creates humidity problems three floors
+away.
+Intelligent residents decorate sterile rooms.
+Human technicians begin eating Critter food.
+Critter merchants begin accepting Earth currency.
+A maintenance corridor becomes an unofficial market.
+The market becomes permanent.
+Terrarium One slowly stops being a laboratory containing ecosystems.
+It becomes an ecosystem containing laboratories.
+[Heading2] 20. THE COMMON
+The first genuinely mixed district becomes known as the Common.
+No architect designed it.
+Aruun later helps prevent it from collapsing.
+Nerit contributes living illumination.
+Scarlith acquires half the things nobody officially authorized.
+Human cooks adapt Critter ingredients.
+Translation boards cover walls.
+Handlers trade field stories beside Critter travelers from regions that
+have never heard of each other.
+The Common becomes the cultural heart of the First Contact Era.
+[Heading2] 21. GATE COMPRESSION
+Earth's Gate network creates a historical phenomenon with no easy
+Critter equivalent.
+A person can be extracted from one Critter region, returned to Earth,
+then encounter someone extracted from a homeland thousands upon
+thousands of miles away.
+Earth therefore compresses Critter geography.
+This accelerates:
+trade, linguistic exchange, political ideology, technology, religious
+debate, disease risk, romance, crime, art, and conflict.
+Humanity does not merely influence Critter.
+Humanity creates the infrastructure through which Critter begins
+globalizing.
+[Heading1] BOOK VI --- THE FIRST TEN
+[Heading2] 22. CIGARRA --- THE ORACLE HOPPER
+Homeland: The Canopy Fold
+Designation: PSI-017
+Knack: Probability Perception / Psychic Interference
+Core contradiction: She can glimpse possibilities but struggles to
+trust certainty.
+Cigarra's approved visual design is immutable: Brazilian-treehopper
+crown with branching black spheres, pale leaflike hair, yellow-green
+ringed eyes, dark oversized collar, loose clothing, charms and
+translucent green treehopper-wing cloak.
+[Heading3] The Canopy Fold
+The Canopy Fold is not one forest.
+It is a vertical continental ecology.
+Settlements occupy different heights and may experience entirely
+different climates despite being geographically close.
+The highest communities live among sunlit crowns.
+Lower communities inhabit perpetual green twilight.
+Deep Fold settlements may never see open sky.
+Routes change as living bridges grow, die or migrate.
+Maps are temporary.
+Cigarra's culture therefore values interpretation over certainty.
+A path that existed yesterday may not exist tomorrow.
+[Heading3] The Listening Houses
+Cigarra is raised around a tradition of sensory specialists sometimes
+translated as Listeners.
+Listeners study vibrations, animal behavior, weather, social tension and
+subtle environmental patterns.
+Most are not psychic.
+They are extremely observant.
+Cigarra's Knack emerges as an extreme mutation of that tradition.
+She begins perceiving outcomes that have not happened.
+At first adults believe she is lying.
+Then her predictions contradict one another.
+They believe she is lying badly.
+Eventually someone realizes all of the contradictory events were
+possible.
+[Heading3] Cost of Premonition
+Cigarra does not experience prophecy as clarity.
+She experiences noise.
+Crowded environments can produce dozens of competing outcome-images.
+Strong emotion biases which possibilities she notices.
+Her greatest fear is not being wrong.
+It is choosing an action because she saw it and thereby causing the
+future she feared.
+This is why she uses humor and apparent instability as psychological
+armor.
+[Heading3] Human Capture
+Cigarra recognizes humans as intelligent before humans recognize her.
+She allows herself to remain classified as a specimen because escape
+would reveal too little.
+For months she listens.
+Learns English.
+Studies routines.
+Studies lies.
+Then writes:
+I KNOW WHAT YOU ARE DOING.
+The sentence becomes one of the defining images of the personhood
+debate.
+[Heading3] Earth Arc
+Earth terrifies and fascinates her because humans create environments
+with unprecedented numbers of rapid decisions.
+Traffic. Markets. Internet culture. Crowds. Machines.
+To Cigarra, a city can feel like standing inside weather made of
+choices.
+She eventually becomes useful in investigations, search-and-rescue and
+anomaly research.
+She refuses to be called an oracle.
+[Heading3] Blind Spots
+Certain people, places and events produce almost no readable probability
+around them.
+Pharilux is one.
+Some Gate events are another.
+Cigarra does not know why.
+She hates unanswered questions enough to keep looking.
+[Heading2] 23. ARUUN --- THE REACHER
+Homeland: The Red Reaches
+Designation: BRU-004
+Knack: Psionic Bond / Kinetic Force
+Bonded object: Morrow
+Core contradiction: He is famous for destruction and wants to be
+remembered for building.
+Aruun retains his approved giraffe-beetle barbarian design and
+psionically bonded mace.
+[Heading3] The Red Reaches
+The Red Reaches are plateaus, mineral deserts and enormous fracture
+valleys.
+Settlements survive because generations maintain bridges, wells and
+roads.
+Reach culture develops around the idea of carried weight.
+The closest human translation of an important moral term is "strength,"
+but its fuller meaning is:
+the burden you can accept without forcing it onto someone weaker.
+[Heading3] Spanwrights
+Bridge engineers called Spanwrights hold enormous cultural status.
+Aruun apprentices as one.
+He is gifted, ambitious and impatient.
+He wants to build monuments.
+His teacher wants him to understand that infrastructure succeeds when
+people stop noticing the danger it protects them from.
+Aruun does not understand until much later.
+[Heading3] Morrow and Thoughtstone
+Thoughtstone grows around deep subterranean biological-mineral networks.
+Most appears inert.
+Rare pieces respond to neural activity.
+Morrow bonds with Aruun during an expedition beneath an ancient bridge.
+It is shaped into a mace because Aruun needs a practical form for
+something too heavy and reactive to carry safely.
+Morrow can redirect in flight, return to Aruun and transmit impact
+sensation.
+Sometimes it appears to move before he commands it.
+Aruun refuses to call Morrow property.
+[Heading3] Red Span
+During a regional conflict, sabotage causes Red Span to fail while
+civilians are crossing.
+Aruun anchors Morrow and uses their bond to redistribute structural
+force through his own body.
+For eleven minutes he carries part of a bridge.
+Thousands escape.
+His shell fractures.
+Hundreds still die.
+The event makes him famous locally and permanently destroys his youthful
+belief that strength guarantees success.
+[Heading3] Rage
+Aruun's Rage is deliberate physiological overdrive.
+He suppresses his body's protective limits.
+Greater strength therefore means greater self-damage.
+The more desperate the situation, the more of himself he is willing to
+spend.
+[Heading3] First Human Conflict
+Human prospectors seeking Thoughtstone destabilize old foundations.
+Aruun destroys their equipment, defeats the responding Handlers and then
+forces the expedition engineers to repair what they damaged before
+allowing them to leave.
+The official report calls it a hostile encounter.
+Aruun calls it a lesson.
+[Heading3] Earth
+Human construction initially disgusts him because it appears temporary.
+Then he sees suspension bridges, tunnels, skyscrapers and heavy
+machinery.
+He realizes humanity's genius is not permanence.
+It is speed.
+On Earth he meets Mollusk, Bramvex and the others for the first time.
+His friendship with Mollusk begins through structural testing: Aruun
+builds; Mollusk tries to break it.
+His respect for Bramvex comes from watching a soldier prioritize
+extraction over victory.
+Cigarra becomes an infuriatingly useful probability-based safety
+inspector.
+[Heading3] Long Horizon
+Aruun eventually becomes a cross-scale architect.
+His greatest proposed project is the Morrow Span, a structure
+designed around both S0 and S−1 physics.
+What it will ultimately connect remains unresolved.
+[Heading2] 24. NERIT --- THE LUMEN WEAVER
+Homeland: The Lumen Depths
+Designation: LUX-031
+Knack: Light Relocation / Darkness Manipulation
+Core contradiction: Nerit creates visibility while believing some
+things deserve darkness.
+Nerit retains the approved nonhuman glow-worm design.
+[Heading3] The Lumen Depths
+The Depths are not merely caves.
+They are a subterranean world of vertical oceans, mineral forests,
+hollow mountains and ceilings so distant they resemble night skies.
+Bioluminescent colonies create living constellations.
+Their movement marks seasons, migration and danger.
+[Heading3] Light as Ecology
+Light is food, language, navigation and territory.
+Certain species communicate by pulse.
+Others hunt illumination.
+Some plants only open beneath specific color frequencies.
+Controlling light therefore means controlling an ecosystem.
+[Heading3] Nerit's Gift
+Nerit can gather light into biological reservoirs, redirect it and
+create zones where illumination behaves unnaturally.
+Human physicists insist the darkness is simply removed photons.
+Nerit insists they are describing the result, not the process.
+[Heading3] Cultural Tension
+In Nerit's culture, darkness is not automatically evil.
+Darkness can mean privacy.
+Rest.
+Protection from predators.
+Mourning.
+Intimacy.
+To forcibly illuminate someone can be invasive.
+Earth's obsession with constant visibility unsettles Nerit as much as
+its neon fascinates them.
+[Heading3] Earth
+Nerit becomes captivated by artificial light precisely because it is
+nonliving.
+Concerts, signs, screens and city skylines become a new artistic
+vocabulary.
+Nerit and Zephyr meet on Earth and become mutually enabling explorers of
+human culture.
+Nerit eventually creates installations combining living Critter light
+with electronic Earth systems.
+The art becomes famous.
+The scientific implications become uncomfortable.
+[Heading2] 25. MOLLUSK --- THE WEIGHT OF TOMORROW
+Homeland: Rainward
+Designation: CHR-001
+Knack: Temporal Inertia
+Core contradiction: He can delay consequences but believes
+consequences must eventually be faced.
+Mollusk retains the approved giant-African-snail-inspired design.
+[Heading3] Rainward
+Rainward is a tropical storm continent of volcanic soil, enormous
+vegetation, floodplains and waterways that regularly redraw the
+landscape.
+Permanent architecture is difficult.
+Rainward cultures build for movement, repair and adaptation.
+[Heading3] Shell Memory
+Mollusk's shell grows in layers.
+His people carve tiny marks into old shell growth recording important
+journeys and obligations.
+The shell is simultaneously body, home and autobiography.
+Damage to it can therefore carry emotional meaning beyond injury.
+[Heading3] Temporal Inertia
+Mollusk does not stop time.
+He increases resistance to change.
+A falling object falls more slowly.
+A fracture spreads reluctantly.
+An impact can remain incomplete.
+The effect eventually resolves.
+Nothing is erased.
+This shapes his worldview:
+Delay is useful only if you use the delay.
+[Heading3] Earth
+Disaster-response teams quickly understand his value.
+He can hold a collapsing structure in an unfinished state while people
+evacuate.
+This makes him beloved by rescue crews.
+His friendship with Aruun begins only on Earth.
+The two discover that their Knacks interact strangely with structural
+forces, making them exceptional collaborators.
+Mollusk's love of forklifts remains inexplicable and unquestioned.
+[Heading2] 26. ZEPHYR --- THE NECTAR SEEKER
+Homeland: The Briarwild
+Designation: AER-009
+Knack: Motion / Atmospheric Disturbance / Pollination
+Core contradiction: Zephyr treats rules as games but treats promises
+as sacred.
+Zephyr retains the hummingbird-hawk-moth and old-folklore-fairy design
+philosophy.
+[Heading3] The Briarwild
+The Briarwild is an immense flowering ecosystem where many routes exist
+only while particular plants bloom.
+Movement is seasonal.
+Territory is difficult to define.
+Briarwild cultures therefore place unusual importance on agreements
+rather than borders.
+[Heading3] Promise Law
+A spoken promise can function as contract, reputation and identity.
+Wording matters.
+Witnesses matter.
+Intent matters.
+Breaking a promise may carry greater stigma than theft.
+This produces a culture that outsiders mistake for trickery.
+Zephyr loves loopholes but despises broken vows.
+Those are not contradictory to Zephyr.
+[Heading3] Earth Arrival
+Zephyr follows human Gate activity out of curiosity and enters Earth
+voluntarily.
+Attempts at detention repeatedly fail.
+Zephyr keeps returning anyway.
+Eventually bureaucracy gives up and produces the designation
+COOPERATIVE NON-DETAINED ENTITY.
+Someone later changes it to CONSULTANT.
+No one admits doing it.
+[Heading3] Earth
+Zephyr becomes a courier because crossing spaces quickly is both talent
+and joy.
+The courier network eventually moves messages between Critter residents
+who could never have communicated directly on their homeworld.
+Zephyr accidentally becomes part of Critter globalization.
+[Heading2] 27. NYXARIS --- THE FROSTBLOOM WEAVER
+Homeland: Frostbloom
+Designation: CRYO-022
+Knack: Cryogenic Silk / Venom
+Core contradiction: She creates beautiful things specifically to
+control danger.
+Nyxaris's approved concept sheet and comic are immutable visual canon.
+She remains fully nonhuman.
+[Heading3] Frostbloom
+Frostbloom exists where glacial systems intersect geothermal vents.
+Heat and cold occupy the same landscape.
+Enormous flowers grow around thermal pockets.
+Ice forms around boiling channels.
+Life survives through precise boundaries.
+[Heading3] Silk Culture
+Nyxaris's people do not separate engineering from art.
+Web structures can be bridges, traps, insulation, records, nurseries and
+territorial markers simultaneously.
+Pattern communicates authorship.
+A skilled silksmith can identify another's work by tension alone.
+[Heading3] Nyxaris
+Nyxaris becomes a sentinel because her silk is unusually cold-reactive.
+She learns to turn fragile beauty into controlled space.
+Her personality reflects Frostbloom itself: patient until a boundary is
+crossed.
+[Heading3] Extraction
+Human researchers initially value her as a biological specimen before
+fully recognizing the sophistication of her work.
+Samples of her silk enter materials research.
+Helix Industries develops commercial derivatives.
+Nyxaris asks the obvious question:
+Who gave you permission?
+[Heading3] Nyxaris v. Helix Industries
+The case becomes larger than money.
+If her silk pattern and biological production are inseparable from her
+body and culture, can a corporation patent an imitation?
+If she is legally a person, does extraction constitute theft?
+If her species is not yet recognized by every jurisdiction, whose law
+applies?
+The case becomes one of the foundational legal battles of the First
+Contact Era.
+[Heading3] Scarlith
+Nyxaris meets Scarlith on Earth, not Critter.
+She initially sees him as exactly the kind of opportunist exploiting
+cross-scale chaos.
+Scarlith sees someone whose work is being stolen because she does not
+understand human markets.
+Their rivalry eventually becomes an uncomfortable alliance.
+He teaches her how ownership systems work.
+She teaches him that not everything valuable should be sold.
+Neither admits learning anything.
+[Heading2] 28. PHARILUX --- THE WATCHER BELOW
+Homeland: Unknown
+Designation: UNKNOWN
+Knack: Pressure / Guiding Light / Spectral Tide
+Core contradiction: He guides others while refusing to explain where
+he came from.
+Pharilux's approved concept sheet and comic are immutable visual canon:
+fully nonhuman ghost-prey-mantis anatomy fused with antique diving and
+lighthouse forms, insectoid lantern face, lighthouse structure, chains,
+anchors, tattered membranes and amber beacon.
+[Heading3] The Watch
+Pharilux behaves less like a traveler and more like a custodian.
+He protects thresholds.
+Ruins.
+Coastlines.
+Submerged structures.
+Places where environments or histories meet.
+He does not defend every secret.
+He appears to distinguish between discovery and intrusion.
+[Heading3] The 1897 Problem
+An authenticated Earth photograph predating modern Quantum Descent
+appears to show Pharilux beside lighthouse keepers.
+The physical markings match.
+The damaged lens matches.
+The equipment matches.
+When shown modern Gate technology, Pharilux says:
+"You finally rebuilt it."
+He refuses to clarify the pronoun.
+[Heading3] Human History
+Further investigation produces stories that might be coincidence:
+a "walking lantern" seen after a nineteenth-century shipwreck;
+a lighthouse log describing a silent figure arriving from the sea;
+a coastal folktale about a keeper who never slept.
+None is definitive.
+Together they create unease.
+[Heading3] Solmara
+Pharilux and Solmara first meet on Earth.
+Their interaction is quiet.
+Solmara studies the beacon.
+Pharilux studies Solmara's lunar mechanism.
+They exchange terminology no translator understands.
+This is interesting precisely because they did not know one another
+beforehand.
+It suggests shared concepts, not shared history.
+[Heading3] Cigarra
+Cigarra attempts to read Pharilux's future.
+She receives almost nothing.
+Not darkness.
+Absence.
+Pharilux notices.
+He says only:
+"Wrong direction."
+[Heading2] 29. SCARLITH --- THE FERMENTED KINGPIN
+Homeland: The Velvet Warrens
+Designation: MYC-013
+Knack: Fermentation / Decomposition / Cultivation
+Core contradiction: He believes everything has value and therefore
+risks treating everything as merchandise.
+Scarlith retains the red-velvet-mite design and metaphorical
+cheese/pirate influences.
+[Heading3] The Velvet Warrens
+The Warrens thrive in ecological margins.
+Rotting forests.
+Abandoned nests.
+Fungal basins.
+Carcass fields.
+Places other cultures label ruined.
+Warren philosophy sees decomposition as transition.
+Nothing is worthless merely because its first use ended.
+[Heading3] Fermentation
+Fermentation becomes biological process, craft and economic metaphor.
+Age can create value.
+Controlled decay can preserve.
+Waste can become food.
+Scarlith grows up in a culture where wealth often comes from
+understanding what others discard.
+[Heading3] Earth
+Scarlith recognizes Earth's waste streams almost immediately.
+Humanity throws away absurd quantities of useful material.
+He is horrified.
+Then delighted.
+[Heading3] The Undermarket
+Scarlith does not create the Undermarket and does not control all of it.
+He becomes one of its most capable brokers.
+Sometimes he traffics harmless goods around stupid regulations.
+Sometimes he crosses ethical lines.
+Sometimes he exposes traffickers because involuntary captivity is bad
+for long-term commerce.
+His morality is coherent to him and infuriating to everyone else.
+[Heading3] Nyxaris
+Their Earth-born rivalry forces Scarlith to confront the difference
+between finding abandoned value and declaring something abandoned
+because its owner lacks power.
+This becomes one of his strongest long-term character pressures.
+[Heading2] 30. SOLMARA --- THE TIDE BALANCER
+Homeland: The Pelagic Expanse
+Designation: TID-001
+Knack: Solar / Lunar / Tidal / Gravitational
+Core contradiction: Solmara understands enormous celestial systems
+but can misread individual emotion.
+Solmara retains the approved actual-sea-spider anatomy and solar/lunar
+mechanism.
+[Heading3] The Pelagic Expanse
+The Expanse is not one ocean.
+It is an oceanic world-region containing trench civilizations, drifting
+ecosystems, thermal fields, reef nations and distances so large that
+some inhabitants treat land as legend.
+[Heading3] Gravity Sense
+Solmara's people sense subtle gravitational and tidal changes
+biologically.
+Navigation combines current, pressure and celestial influence.
+Their astronomy is experienced through the body before it is represented
+mathematically.
+[Heading3] Solar and Lunar States
+Solmara's paired biological states regulate opposing environmental
+interactions.
+Solar favors pressure, heat, expansion and repulsion.
+Lunar favors attraction, cold, tidal force and control.
+Eclipse states temporarily reconcile both.
+Balance is not spiritual decoration.
+It is physiology.
+[Heading3] Earth Moon
+When Solmara sees Earth's Moon, the response is immediate:
+"Who moved it?"
+Human scientists assume mistranslation.
+Solmara repeats the question.
+Solmara does not claim conspiracy.
+Does not explain further.
+The mystery remains open.
+[Heading3] Pharilux
+They meet on Earth.
+Their shared vocabulary around tides, beacons and orientation suggests
+that two radically distant traditions may have independently preserved
+fragments of older knowledge.
+Or the similarity may have another explanation.
+No answer is forced.
+[Heading2] 31. BRAMVEX --- THE QUIET COMMAND
+Homeland: Thornmarch
+Designation: MIL-006
+Knack: Camouflage / Sensory Adaptation / Tactical Terrain Use
+Weapon: Diplomacy
+Core contradiction: A professional soldier who distrusts anyone
+eager for war.
+Bramvex retains his approved prickly-stick-insect design, ragged
+membranous wings, field equipment, restrained red insignia and thorned
+weapon.
+[Heading3] Thornmarch
+Thornmarch is a contested region of dense thorn forests, elevated ruins,
+fortified routes and communities shaped by generations of local warfare.
+Camouflage is ecological before it is military.
+To be visible can mean vulnerability.
+[Heading3] Sergeant
+Bramvex is not royalty.
+Not a legendary chosen warrior.
+Not the supreme commander.
+He is a sergeant.
+His responsibility is immediate:
+Who has eaten? Who is exhausted? Which route is safe? Who is missing?
+How much ammunition remains? Where is the retreat? Can the wounded move?
+This makes him dangerous in a way heroic warriors often are not.
+[Heading3] Diplomacy
+His enormous thorned weapon earns the nickname Diplomacy from his
+unit.
+The joke survives people who originally told it.
+Bramvex rarely explains that.
+[Heading3] Capture and the Terrarium Standoff
+Humans capture Bramvex during an expedition.
+He spends nineteen days observing.
+He maps routines, doors, cameras, electrical systems, guard habits and
+emergency procedures.
+He also identifies seventeen other intelligent detainees.
+On Day 20 he escapes.
+Then frees them.
+Then, instead of fleeing, occupies an unfinished Habitat wing.
+His demands are practical:
+food, medical care, translation, private living spaces, communication,
+and an end to forced experimentation on recognized sapients.
+The Authority refuses publicly.
+Six days later, most demands quietly become policy.
+[Heading3] Earth Relationships
+Bramvex meets the other First Ten only after Earth contact.
+Cigarra infuriates him because she improvises around plans he spent
+hours creating.
+Then he realizes her probability perception can expose failure points.
+Aruun initially appears to Bramvex as a dangerous glory fighter.
+Then Bramvex sees him use his body to shield an evacuation.
+His assessment changes.
+Bramvex tells Aruun:
+"You're not a good soldier."
+Aruun bristles.
+"You're the reason good soldiers get home."
+[Heading1] BOOK VII --- EARTH POLITICS, ECONOMICS AND CULTURE
+[Heading2] 32. THE PERSONHOOD CRISIS
+Human law is not prepared for Critter.
+Some governments recognize sapient Critters quickly.
+Others create provisional categories.
+Corporations prefer definitions that preserve research rights.
+Activists demand universal presumptions of personhood.
+Scientists warn that intelligence may not present in human-recognizable
+ways.
+The hardest cases are not obvious speakers like Cigarra.
+They are hive organisms.
+Seasonally intelligent species.
+Distributed fungal minds.
+Symbiotic pairs that only demonstrate complex cognition together.
+The question becomes:
+**How do you prove personhood without forcing another form of life to
+perform humanity?**
+[Heading2] 33. CRITTER RIGHTS
+Free Scale begins as a loose coalition rather than one organization.
+Its factions disagree.
+Some demand an end to all extraction.
+Some support voluntary migration.
+Some focus on anti-trafficking.
+Some advocate independent Critter embassies on Earth.
+Some Earthborn members reject the idea that Critter is automatically
+their homeland.
+The movement gains complexity as Critters themselves take leadership.
+[Heading2] 34. HELIX INDUSTRIES
+Helix is not evil for the sake of being evil.
+Its Critter-derived technologies save lives.
+Its materials reduce industrial waste.
+Its medicines matter.
+It also has enormous financial incentives to define biological
+discoveries as patentable resources before legal systems catch up.
+Nyxaris v. Helix becomes important precisely because both the benefits
+and exploitation are real.
+[Heading2] 35. THE UNDERMARKET
+Where law cannot keep pace, informal systems appear.
+The Undermarket sells:
+unregistered eggs, Habitat cultures, Critter foods, Scale stabilizers,
+Knack-derived materials, fake Handler credentials, forbidden research,
+and ordinary products unavailable through slow bureaucracy.
+Some sellers are traffickers.
+Others are effectively immigrant grocers operating without a license.
+Treating all of them identically becomes another failure of early
+policy.
+[Heading2] 36. THE HANDLER LEAGUE
+The League becomes one of Earth's largest entertainment industries.
+Teams develop identities.
+Critters become celebrities.
+Handler strategies become sports analysis.
+Species welfare becomes public controversy.
+Sapient competitors negotiate contracts.
+Scandals erupt over coercion, enhancement and illegal Knack
+manipulation.
+Aruun enjoys voluntary competition.
+Bramvex dislikes the culture of spectacle around violence.
+Cigarra is repeatedly accused of cheating by knowing what opponents are
+about to do.
+Her defense is always:
+"Then surprise me."
+[Heading1] BOOK VIII --- CULTURAL COLLISION
+[Heading2] 37. LANGUAGE
+Gate contact produces a translation crisis.
+Human machine translation works poorly on species that communicate
+partly through:
+light, vibration, pheromone, body posture, temperature, color, or
+electromagnetic change.
+Early translations flatten meaning.
+Some famous diplomatic incidents begin as bad subtitles.
+Terrarium One develops a hybrid communication culture combining spoken
+language, icons, color codes, gesture and translation devices.
+[Heading2] 38. FOOD
+Food becomes one of the fastest forms of cultural exchange.
+Some Critter ingredients are toxic to humans.
+Some Earth foods are chemically bizarre to Critters.
+Scarlith becomes fascinated by fermentation traditions.
+Mollusk likes produce markets.
+Nerit finds birthday candles conceptually strange.
+Aruun initially interprets protein bars as construction material.
+Zephyr steals sweet drinks with no remorse unless explicitly asked to
+promise not to.
+The Common's food district becomes one of the few places where diplomacy
+happens accidentally.
+[Heading2] 39. RELIGION AND PHILOSOPHY
+No single Critter religion exists.
+Some cultures worship.
+Some do not.
+Some understand sacredness through ecology rather than gods.
+Some philosophies developed around molting, metamorphosis, colony
+identity, predation, migration, darkness, decomposition or celestial
+rhythm.
+Human religions also respond differently to Critter.
+The discovery creates theological debate without requiring the lore
+bible to declare one side correct.
+[Heading2] 40. ART
+Cross-scale art becomes revolutionary.
+Nerit combines living illumination with electronic systems.
+Aruun treats load-bearing structure as aesthetic expression.
+Nyxaris creates silk architecture humans initially mistake for
+decoration.
+Cigarra creates works that appear differently depending on where viewers
+stand because she anticipates movement.
+Earth artists import Critter pigments and materials.
+Critter artists discover recording technology.
+New forms emerge that belong to neither world alone.
+[Heading1] BOOK IX --- HISTORY IN MOTION
+[Heading2] 41. THE TERRARIUM STANDOFF
+Bramvex's six-day occupation becomes one of the first events where the
+public sees intelligent Critters making political demands rather than
+performing intelligence for scientists.
+The Authority's quiet concessions become precedent.
+[Heading2] 42. NYXARIS v. HELIX
+The case forces courts to distinguish discovery from ownership.
+It also makes Nyxaris famous against her wishes.
+Her image appears on protest signs, advertisements and bootleg
+merchandise.
+She hates all three.
+[Heading2] 43. THE HABITAT REVOLUTION
+Stable multi-species Habitats reveal that Critter ecosystems can perform
+useful environmental work on Earth.
+Pollution cleanup. Soil restoration. Pollination. Waste processing.
+Materials growth.
+The same technology that enables exploitation can enable ecological
+repair.
+This prevents the setting from resolving into "close every Gate."
+[Heading2] 44. WILD EARTH
+Eventually containment fails often enough for breeding populations to
+establish outside facilities.
+Some become invasive.
+Some die.
+Some integrate harmlessly.
+Some occupy human infrastructure.
+A subway system can develop its own nocturnal Critter ecology.
+An abandoned industrial site can become a fungal biome.
+Earth itself begins changing.
+[Heading2] 45. EARTHBORN
+Critters born on Earth complicate every political category.
+Some speak human languages first.
+Some have never seen their ancestral biome.
+Some resent being told to "go home."
+Earthborn culture develops its own slang, fashion, food and music.
+It is neither Earth-human nor traditional Critter culture.
+[Heading2] 46. CRITTER-BORN HUMANS
+Permanent S−1 settlements eventually produce humans whose first memories
+are of Critter skies.
+They know Earth through media and family stories.
+Over generations, questions emerge about biological adaptation to S−1.
+Humanity itself may begin branching culturally long before it branches
+biologically.
+[Heading1] BOOK X --- THE FIRST TEN ON EARTH
+[Heading2] 47. THEY ARE NOT A TEAM
+The First Ten become famous partly because humans group them together.
+They do not necessarily like the label.
+They are not always together.
+They have separate jobs, loyalties and lives.
+Sometimes two cooperate.
+Sometimes three collide.
+Sometimes one disappears from public life for months.
+Sometimes their interests oppose one another.
+This keeps the cast alive.
+[Heading2] 48. THE COMMON TABLE
+One recurring Earth location becomes important without becoming a
+headquarters.
+Inside the Common is a large reinforced table built from discarded
+Habitat material.
+Nobody officially owns it.
+Different First Ten occasionally end up there.
+Arguments happen.
+Deals happen.
+Meals happen.
+Nothing world-ending needs to happen.
+The table becomes useful because epic characters need ordinary places.
+[Heading2] 49. RELATIONSHIPS BEGINNING ON EARTH
+Cigarra and Bramvex develop respect through repeated operational
+conflict.
+Aruun and Mollusk develop friendship through construction.
+Nerit and Zephyr become explorers of human culture.
+Nyxaris and Scarlith become commercial enemies and reluctant teachers to
+one another.
+Solmara and Pharilux share an unsettling vocabulary neither explains.
+Cigarra cannot reliably perceive Pharilux's futures.
+Aruun and Bramvex learn that courage and discipline are not opposites.
+These are Earth relationships.
+Their homelands did not conveniently produce one preassembled cast.
+[Heading1] BOOK XI --- MYSTERY ARCHITECTURE
+[Heading2] 50. THE RULE OF SEPARATE MYSTERIES
+Critter should contain many deep mysteries.
+They must not all secretly be one mystery.
+[Heading3] The Eightfold Paradox
+Why is S−1 internally larger than Earth?
+[Heading3] Pharilux
+How was he on Earth before modern Quantum Descent?
+[Heading3] The Old Objects
+Why do artifacts apparently connected to different periods of Earth
+history appear in Critter?
+[Heading3] The Moon Question
+What does Solmara perceive about Earth's Moon?
+[Heading3] Probability Blindness
+Why can Cigarra not perceive some events and individuals?
+[Heading3] Thoughtstone
+Is it mineral, organism, network, memory medium or something without a
+human category?
+[Heading3] The Deep Dark
+What does Nerit mean when saying human physics misunderstands darkness?
+Some may intersect.
+Some may remain unrelated forever.
+That makes the universe feel discovered rather than authored around one
+twist.
+[Heading1] BOOK XII --- GAMEPLAY AS LORE
+[Heading2] 51. THE PLAYER
+The player is a Handler, not the chosen savior of reality.
+Their importance grows from accumulated relationships and
+accomplishments.
+The player's story can move through:
+exploration, capture, diplomacy, Habitat building, research, battle,
+trade, rescue, construction, ecological management, and discovery.
+[Heading2] 52. CAPTURE AS CHOICE
+Not every encounter should end with ownership.
+A wild predator may be captured.
+A sapient traveler may sign a contract.
+A wounded organism may temporarily enter protective containment.
+A civilization may lend a companion under treaty.
+A criminal may traffic a creature illegally.
+Mechanically related systems can therefore tell very different stories.
+[Heading2] 53. THREE USES OF EVERY GOOD CRITTER
+Where possible, a species should matter in three dimensions:
+Battle --- what can it do in conflict?
+Labor --- what can it do for construction, gathering, farming,
+rescue or industry?
+Ecology --- what does it require and what does it change inside a
+Habitat?
+This makes collection part of the world rather than a detached minigame.
+[Heading2] 54. WORLD STATES
+Regions change.
+Flood. Fire. War. Migration. Overgrowth. Disease. Industrial extraction.
+Predator imbalance. Political control.
+Player actions can alter local conditions without determining the fate
+of all Critter.
+Local consequences matter.
+[Heading2] 55. THE TERRARIUM AS AUTOBIOGRAPHY
+The player's Terrarium should eventually become a physical record of
+their playthrough.
+A bridge exists because Aruun helped design it.
+A dark garden uses Nerit's lighting principles.
+A frozen web greenhouse incorporates Nyxaris architecture.
+A damaged wall remains from an old incident.
+An Earthborn family runs a shop beside an early research wing.
+The base is not simply upgraded.
+It remembers.
+[Heading1] BOOK XIII --- CANON RULES FOR FUTURE DEVELOPMENT
+[Heading2] 56. GEOGRAPHY RULE
+Critter is approximately eight times Earth's total size.
+Do not casually connect distant regions.
+Distance matters.
+Isolation matters.
+Discovery matters.
+[Heading2] 57. CONTACT RULE
+The First Ten meet one another on Earth unless a specific prior regional
+conflict, migration, trade history or transmitted cultural connection is
+deliberately established.
+Historical awareness does not equal personal acquaintance.
+[Heading2] 58. BIOLOGY RULE
+Design cultures from bodies and ecosystems outward.
+Do not make every Critter society a human nation with insect aesthetics.
+[Heading2] 59. POWER RULE
+Knacks have biological mechanisms, costs and ecological implications.
+Do not reduce them to colored spells.
+[Heading2] 60. HUMANITY RULE
+Humans are neither the universal villains nor unquestioned heroes.
+Scientific wonder, greed, compassion, bureaucracy, curiosity,
+exploitation, friendship and fear all coexist.
+[Heading2] 61. VISUAL CANON RULE
+Approved character sheets are model sheets.
+Comics, cinematics and new illustrations must preserve established
+anatomy, silhouette, facial structure, costume/equipment, palette and
+material language.
+Do not humanize nonhuman characters.
+Do not simplify a design because a scene is difficult.
+[Heading2] 62. MYSTERY RULE
+Do not connect every mystery to one hidden mastermind, god, civilization
+or final answer.
+[Heading2] 63. STORY RULE
+Stories can end.
+The setting does not.
+A completed storyline should leave something behind:
+a law, friendship, enemy, business, building, scar, species, route,
+tradition, technology, political movement, Habitat, mystery, or
+historical memory.
+The question for every expansion is not:
+"How does this lead to the ending?"
+It is:
+"What now exists that did not exist before?"
+[Heading1] FINAL SETTING STATEMENT
+Critter is an enormous world humanity reaches by becoming smaller.
+Humanity arrives expecting specimens and discovers peoples.
+Critters arrive on Earth expecting another place and discover one
+another.
+The Gate changes biology, economics, law, culture and identity in both
+directions.
+Aruun can spend years becoming an architect without ceasing to be a
+warrior.
+Nyxaris can win a legal battle and discover that victory creates new
+problems.
+Cigarra can solve one mystery while finding ten futures she cannot
+explain.
+Bramvex can change detention law and still have soldiers he failed to
+save.
+Nerit can become famous for art while remaining convinced humans
+misunderstand darkness.
+Mollusk can hold a building long enough for everyone to escape and still
+be unable to prevent every collapse.
+Zephyr can carry messages between cultures that once did not know each
+other existed.
+Scarlith can turn waste into empires and eventually confront the limits
+of ownership.
+Solmara can understand tides across worlds while remaining puzzled by
+one moon.
+Pharilux can guard a lighthouse for a century without explaining how he
+arrived.
+And beyond every mapped region are distances large enough to contain
+histories nobody on Earth has heard yet.
+EARTH DISCOVERED CRITTER.
+EARTH INTRODUCED CRITTER TO ITSELF.
+CRITTER DOES NOT END.
+IT ACCUMULATES.
+[Heading1] BOOK XIV --- THE FIRST TEN: EVOLVED CANON
+This section deepens the First Ten without replacing their earlier
+entries. It establishes the pressures that continue shaping them after
+arrival on Earth.
+[Heading2] CIGARRA --- POSSIBILITY IS NOT DESTINY
+Cigarra's Earth life changes her relationship with foresight. In the
+Canopy Fold, futures were ecological: falling limbs, predators, weather,
+migration, disputes. Earth exposes her to systems in which millions of
+strangers make linked decisions every minute. Her crown becomes
+overwhelmed in dense cities, producing what she calls future-noise.
+She develops rituals for narrowing possibility: covering selected crown
+spheres, carrying objects with strong personal associations, and asking
+people to make small arbitrary choices. These are not magical charms;
+they are cognitive anchors.
+Humans initially try to use her as a prediction engine. She resists
+because probability changes when people act on predictions. A forecast
+can manufacture its own outcome.
+Her mature philosophy becomes: "A future seen is a future touched."
+This creates a lasting conflict with institutions that want certainty
+from her. Cigarra becomes more valuable as an investigator of *where
+possibility behaves incorrectly* than as a fortune teller.
+Her Earth relationship with Bramvex deepens because his planning gives
+her fewer chaotic branches to process. He slowly learns that her
+improvisation is often an attempt to escape a future that has become too
+predictable.
+Pharilux remains one of her most disturbing blind spots.
+[Heading2] ARUUN --- THE BURDEN OF PERMANENCE
+Aruun's Earth career as a builder forces him to confront a flaw in Reach
+philosophy: carrying every burden can become another form of pride.
+After Red Span, Aruun quietly believes that if he had been stronger,
+fewer people would have died. Earth rescue work repeatedly puts him in
+situations where no individual can carry everything.
+Mollusk is among the first to recognize this.
+Aruun begins designing structures whose defining feature is not strength
+but distributed failure: if one section breaks, the rest survives.
+To older Reach traditionalists, intentionally designing something with
+breakable components initially sounds disgraceful.
+Aruun answers that a structure should sacrifice itself before
+sacrificing the people inside it.
+This becomes the foundation of a new cross-scale engineering school
+called Burden Architecture.
+Morrow also becomes stranger. Thoughtstone samples near Morrow
+occasionally align their internal structure toward it. Aruun refuses
+invasive experiments. He increasingly treats Morrow as a partner whose
+consent humanity cannot yet measure.
+The proposed Morrow Span therefore becomes more than a bridge. It is his
+attempt to build infrastructure that can survive the physics of both
+Scale States without forcing either world to imitate the other.
+[Heading2] NERIT --- THE RIGHT TO DARKNESS
+Nerit's fame as an artist creates an unexpected political movement.
+Earth surveillance systems, laboratories and Terrariums are built around
+visibility. Cameras are everywhere. Researchers treat darkness as a
+technical failure.
+Nerit argues that darkness can be a right.
+A sleeping creature does not owe observation. A private conversation
+does not owe illumination. A Habitat does not exist only to be watched.
+The argument spreads among sapient Critters and eventually influences
+Terrarium privacy standards.
+Nerit's installations become famous because they contain intentional
+areas no camera can correctly record. Visitors must physically enter
+them.
+Scientists studying the phenomenon discover that Nerit's Knack does more
+than absorb visible photons; some instruments lose information they
+should still retain.
+Nerit refuses to explain this as mysticism.
+Nerit simply says:
+**"You keep measuring light because you are afraid to measure
+absence."**
+[Heading2] MOLLUSK --- THE DEBT OF DELAY
+Mollusk's rescue work makes him a symbol of impossible saves.
+That reputation becomes dangerous.
+People begin expecting him to stop every collapse.
+But temporal inertia never eliminates consequence. It postpones
+transition.
+Mollusk begins teaching rescue crews a doctrine called **Borrowed
+Seconds**:
+Every second he creates is a debt.
+Move someone. Brace something. Choose. Act.
+Do not admire the miracle.
+Use it.
+His shell accumulates new carved records on Earth. Unlike older Rainward
+marks recording journeys, these record structures and disasters: a
+collapsed tunnel, a burning tower, a bridge, a Habitat breach.
+His friendship with Aruun deepens because both are haunted by structures
+they could not completely save.
+Mollusk becomes the philosophical counterweight to Aruun's instinct to
+carry everything himself.
+[Heading2] ZEPHYR --- THE PROMISE NETWORK
+Zephyr's courier work evolves into something unexpectedly important.
+Critter residents on Earth come from civilizations separated by enormous
+distances. Messages sent through Zephyr begin creating relationships
+that never existed on S−1.
+A merchant in the Common writes to a distant culture. A refugee locates
+relatives through chained Gate contacts. Two scholars exchange texts
+from civilizations that had never directly communicated.
+The informal system becomes known as the Promise Network.
+Zephyr refuses conventional employment contracts but honors individually
+spoken delivery promises with almost frightening seriousness.
+This creates a legal problem: are Briarwild verbal promises enforceable
+on Earth?
+Zephyr thinks the question is backwards.
+**"Why would written words be more real because you trapped them on dead
+trees?"**
+The Promise Network eventually becomes one of the first communication
+systems operated substantially by Critters for Critters.
+[Heading2] NYXARIS --- PATTERN AS PERSONHOOD
+Nyxaris v. Helix changes more than intellectual-property law.
+During litigation, human experts repeatedly describe her silk as a
+secretion.
+Nyxaris demonstrates that its tension, knot geometry, chemical
+composition and crystal growth encode authorship, warning, family
+history and structural intent.
+Humans had been looking at writing and calling it material.
+The revelation transforms the case.
+Frostbloom silk-patterns become legally relevant as cultural works, not
+merely biological products.
+Nyxaris becomes an unwilling public figure. She hates slogans using her
+face and destroys counterfeit merchandise when she finds it.
+Her relationship with Scarlith becomes more complicated. He teaches her
+how Earth corporations hide ownership inside contracts. She teaches him
+to recognize cultural property that cannot ethically become inventory.
+Her long-term Earth project is the Cold Archive: a structure of
+living frozen silk preserving testimony from displaced Critter peoples
+in patterns that cannot be separated from their physical architecture.
+[Heading2] PHARILUX --- THE KEEPER OF THRESHOLDS
+Pharilux's importance grows slowly because he rarely volunteers
+information.
+Researchers eventually realize his behavior follows a consistent rule:
+he intervenes most strongly at thresholds.
+Shore and sea. Light and dark. Ruin and habitation. One Scale State and
+another.
+His lighthouse apparatus is not merely symbolic. Its rotating beacon
+sometimes produces measurable disturbances in Scale instrumentation.
+This does not prove Pharilux created Gates.
+It proves his technology or biology interacts with related phenomena.
+The oldest verified Earth record connected to him remains the 1897
+lighthouse evidence.
+Newer investigation finds something stranger: the lighthouse's original
+foundation contains a sealed cavity older than the lighthouse itself.
+Pharilux will not allow it to be opened.
+When asked why, he answers:
+"Because closed is still working."
+This becomes one of the setting's strongest mystery hooks without making
+him the answer to every mystery.
+[Heading2] SCARLITH --- VALUE WITHOUT OWNERSHIP
+Scarlith's success on Earth eventually creates the exact problem his
+culture taught him to exploit.
+He becomes wealthy enough that other people begin treating *his*
+discarded things as opportunities.
+Trade methods are copied. Fermentation cultures are stolen. Undermarket
+routes are sold without permission.
+For the first time, Scarlith experiences his own philosophy from the
+other side.
+Nyxaris finds this extremely funny.
+The experience does not make him abandon commerce. It makes his
+definition of abandonment more sophisticated.
+Something is not abandoned merely because you can take it.
+The Velvet Warren principle evolves in his hands:
+Value begins where neglect ends---but neglect must be real.
+Scarlith becomes a major force behind Earth-Critter salvage law, partly
+from ethics and partly because clear salvage rights are excellent for
+business.
+[Heading2] SOLMARA --- THE WRONG MOON
+Solmara's question about Earth's Moon becomes famous enough to become
+irritating.
+Scientists repeatedly ask for clarification.
+Eventually Solmara provides one piece.
+The Moon is not in the wrong orbit.
+The relationship feels displaced.
+That distinction creates more questions than answers.
+Solmara's species does not observe gravity only as force. Their bodies
+experience repeating gravitational relationships as patterns analogous
+to rhythm.
+Earth's pattern contains what Solmara describes as a missing return.
+No instrument initially detects what that means.
+Solmara refuses to claim danger.
+Human media does it anyway.
+On Earth, Solmara becomes increasingly interested in artificial tides:
+reservoirs, locks, pumps, flood-control systems and even municipal water
+infrastructure. A being associated with cosmic forces develops enormous
+respect for plumbers.
+The relationship with Pharilux remains restrained. They recognize
+overlapping concepts but have no shared personal history before Earth.
+[Heading2] BRAMVEX --- WHAT COMES AFTER SURVIVAL
+The Terrarium Standoff makes Bramvex famous as a revolutionary.
+He hates the description.
+From his perspective, he performed an extraction operation.
+The difficult part comes afterward.
+The seventeen detainees he freed do not automatically agree with one
+another. Some want repatriation. Some want asylum. Some want revenge.
+Some want nothing to do with politics.
+Bramvex learns that getting people out is simpler than deciding what
+freedom should look like.
+He becomes involved in Terrarium emergency planning, not because he
+trusts the Authority, but because badly designed evacuation systems kill
+civilians first.
+His military doctrine influences Earth facilities:
+multiple exits, distributed supplies, species-specific evacuation
+routes, nonvisual alarms, and plans that assume infrastructure will
+fail.
+His relationship with Cigarra becomes a study in controlled
+unpredictability. Bramvex eventually begins leaving deliberate blank
+spaces in plans for her to exploit.
+He calls them Cigarra Holes.
+She is delighted.
+He regrets naming them.
+[Heading1] BOOK XV --- BEYOND THE FIRST TEN
+[Heading2] SOLTHRIN --- THE ASTRAL PROCESSION
+Historical grouping: Second Contact Generation
+Homeland: The Ember Expanse
+Human designation: AST-002
+Class: Support / Control
+Role: Battlefield Control / Transport
+Knack: Astral Pathing / Ember Cultivation / Spatial Guidance
+Core contradiction: Solthrin exists to carry paths forward, yet does
+not believe every path should remain open.
+Solthrin is not one of the First Ten. His arrival marks the moment
+when humanity realizes those ten were never a representative sample of
+Critter's possibilities.
+His approved visual design is immutable canon: a long centipede-like
+body with dark slate-blue segmented armor, many small articulated legs,
+a narrow nonhuman armored head with warm amber light, extremely long
+sweeping antennae, restrained brass-gold harness elements, pale
+weathered hanging membranes, suspended lanterns, and a modest living
+grove of ember-orange branches growing from a carriage-like structure
+integrated along his back. Chariot influence remains structural and
+processional rather than literal. Astral and burning-bush influences
+remain ecological, symbolic and restrained.
+Do not add a humanoid rider, human face, conventional wheeled chariot,
+giant fantasy throne, or excessive celestial ornamentation.
+[Heading3] The Ember Expanse
+The Ember Expanse is a high, dry region of Critter where exposed
+plateaus are divided by immense fractures and strange atmospheric
+phenomena.
+At night, faint luminous lines sometimes appear across the landscape.
+They do not correspond perfectly to roads.
+Some cross empty air.
+Some terminate at ruins.
+Some appear only during particular celestial conditions.
+Local cultures call the phenomenon by several names. The closest
+translation used by humans is Astral Roads.
+[Heading3] Astral Roads
+Astral Roads are not portals.
+They are temporary alignments in which distance, orientation and safe
+passage behave differently.
+A journey remains a journey.
+But the terrain seems to agree with movement.
+Cliffs offer routes that should not quite connect. Falling debris misses
+a procession by improbable margins. Travelers maintain orientation
+through storms that erase landmarks.
+Human physicists suspect weak Scale geometry.
+Cigarra initially assumes probability manipulation.
+Solthrin disagrees with both explanations.
+His translation is:
+"The road remembers being crossed."
+No theory is confirmed.
+[Heading3] The Burning Grove
+The orange growth on Solthrin's back is not ordinary fire.
+It is a living symbiotic plant colony called an Ember Grove.
+Its branches produce heatless flame-like light through a reaction
+involving mineral sap and Scale-sensitive microorganisms.
+The grove does not burn Solthrin.
+It feeds on trace material gathered during travel and changes subtly
+according to the routes he has carried.
+Old branches darken. New branches ignite. Some branches only glow when
+Solthrin approaches a place previously visited.
+The grove is therefore part garden, part navigation record and part
+living archive.
+[Heading3] The Procession
+Solthrin's people are not charioteers in the human sense.
+They are carriers of continuity.
+In the Ember Expanse, settlements can become isolated when Astral Roads
+shift.
+Processions maintain connection.
+They carry:
+medicine, messages, seeds, funerary remains, craftspeople, children,
+diplomats, and memory.
+The procession is not defined by what follows Solthrin.
+It is defined by what must arrive.
+This is the subtle origin of his chariot influence.
+Solthrin is simultaneously creature, guide and road-bearing
+infrastructure.
+[Heading3] Childhood
+Solthrin is born during a period when several established Astral Roads
+begin failing.
+As a juvenile, he repeatedly wanders toward routes adults consider dead.
+His Ember Grove sprouts unusually early.
+The first branch ignites after he successfully guides two lost travelers
+through a dust event by following a line nobody else can perceive.
+His elders do not call this destiny.
+They call it responsibility.
+[Heading3] The Fracture
+Solthrin's defining pre-Earth event is remembered as the Fracture.
+A major Astral Road connecting several Expanse communities becomes
+unstable.
+Travelers disappear. Landmarks cease matching. Routes return processions
+to where they began.
+Solthrin enters anyway.
+He discovers that the road is not gone.
+It is losing continuity.
+Unable to repair the phenomenon, Solthrin does something his tradition
+considers extreme.
+He roots part of the Burning Grove into the failing route and physically
+carries the surviving continuity with him.
+The grove changes permanently.
+From then onward, Solthrin can temporarily lay stable paths across
+hostile or fractured terrain.
+The ability costs him.
+Every major route leaves something inside the grove.
+[Heading3] Why He Leaves
+Solthrin begins sensing a path unlike the others.
+It does not lead across the Ember Expanse.
+It appears to point away from the world.
+He follows it over years.
+Not continuously.
+Not as a chosen-one pilgrimage.
+The path appears, disappears and reappears.
+Eventually it intersects a human expedition operating a Gate.
+The Gate is the first human object Solthrin has ever seen that resembles
+an Astral Road while behaving completely unlike one.
+He follows.
+[Heading3] Earth Arrival
+Solthrin arrives on Earth voluntarily.
+This distinction matters.
+He is neither captured nor rescued.
+His arrival becomes a diplomatic headache because existing law assumes
+most Critter entrants are either Authority property under containment
+rules, registered partners, or recognized diplomatic travelers.
+Solthrin is none of those.
+He simply arrives carrying an ecosystem and refuses to leave until he
+understands the road.
+[Heading3] Earth and the First Ten
+Solthrin meets the established cast only after arriving on Earth.
+Cigarra is fascinated because his Astral Paths appear to reduce possible
+routes without feeling like psychic manipulation.
+Pharilux watches Solthrin's grove for an uncomfortably long time and
+says:
+"Different road."
+Solthrin answers:
+"Same mistake."
+Neither elaborates.
+This is a connection between concepts, not proof of shared origin.
+Aruun immediately recognizes Solthrin as living infrastructure and
+treats him with unusual professional respect.
+Mollusk appreciates the Procession philosophy: a delayed journey is
+acceptable if everyone arrives.
+Zephyr considers Astral Roads an irresistible challenge and repeatedly
+tries to race one.
+Nerit studies the Ember Grove because its light behaves partly like
+living illumination and partly like something else.
+Nyxaris is interested in whether Astral Paths can transport delicate
+structures without changing tension.
+Scarlith sees revolutionary logistics.
+Bramvex sees evacuation routes.
+Solmara senses slight gravitational irregularities around active paths
+but cannot fully account for them.
+Nobody receives a complete explanation.
+[Heading3] Earth Role
+Solthrin becomes valuable in:
+disaster evacuation, hazardous transport, Habitat construction, remote
+logistics, and exploration.
+He refuses jobs whose only purpose is speed.
+To Solthrin, a path exists to connect responsibilities, not merely
+shorten distance.
+This creates constant conflict with corporations hoping to commercialize
+Astral Pathing.
+[Heading3] Abilities
+Astral Procession --- lays a guided route across hazardous terrain,
+improving allied movement and maintaining orientation.
+Ember Grove --- roots part of the symbiotic grove temporarily,
+creating a protective zone that restores allies and disrupts hostile
+movement.
+Chariot's Pull --- uses astral tension to draw enemies, objects or
+terrain elements toward a chosen line.
+Heavenward Road --- marks a temporary traversable route through
+otherwise difficult terrain.
+Burning Guide --- fully manifests the grove's stored route-memory,
+creating a large processional corridor that reveals paths, protects
+movement and destabilizes enemies.
+[Heading3] Long Horizon
+Solthrin does not become the explanation for Gates.
+Instead, his existence creates a new discipline:
+Comparative Path Physics.
+Human researchers now have at least three phenomena that interact
+strangely with space and Scale:
+Gates, Pharilux's threshold technology, and Solthrin's Astral Roads.
+They overlap.
+They are not identical.
+That difference is more interesting than a single answer.
+[Heading3] Solthrin's Law
+Solthrin eventually gives Terrarium One a phrase that becomes common
+among Handlers:
+"A road is a promise between places."
+Bramvex adds:
+"Then maintain it."
+Aruun agrees.
+Zephyr says promises do not require roads.
+The argument lasts four hours.
+That is how Solthrin truly becomes part of Earth life.
+[Heading1] BOOK XVI --- THE SECOND CONTACT GENERATION
+The First Ten become famous because they arrived early enough to shape
+human assumptions.
+Solthrin's arrival begins a cultural correction.
+Humanity realizes the First Ten are not archetypes representing all of
+Critter.
+They are ten people.
+Beyond them are civilizations larger than nations, species with entirely
+different concepts of identity, and regions no Handler has entered.
+The term Second Contact Generation develops for major figures who
+emerge after the First Ten have already become public history.
+It does not mean they are less important.
+It means humanity is finally old enough in its relationship with Critter
+to possess generations of contact.
+This protects the First Ten as a historical group while allowing the
+cast to expand indefinitely.
+[Heading1] BOOK XVII --- DEEPENED WORLD CONSEQUENCES
+[Heading2] THE CROSSROADS EFFECT
+Terrarium One is no longer merely where distant Critters meet.
+It begins producing things that could not have developed naturally in
+any one Critter homeland.
+Aruun's structural principles combine with Nyxaris silk. Nerit lighting
+is used in Rainward-style Habitat systems. Bramvex evacuation doctrine
+incorporates Solthrin routes. Scarlith distributes materials produced by
+hybrid ecosystems. Zephyr carries messages between communities separated
+by impossible native distances.
+Earth becomes a cultural accelerator.
+This is beneficial and dangerous.
+Ideas can travel faster than societies can absorb them.
+[Heading2] CULTURAL RETURN
+Eventually Earth-influenced Critters return home.
+They carry new languages. New technology. New political ideas. New
+diseases. New friendships. New prejudices. New expectations.
+Critter therefore begins changing even in places no human has visited.
+A song created in Terrarium One can reach a Critter city before any
+Handler does.
+A legal argument from Nyxaris v. Helix can be translated into a culture
+with no corporations.
+Bramvex's detention reforms can inspire prisoners in a conflict humanity
+knows nothing about.
+Earth's greatest impact may ultimately be indirect.
+[Heading2] THE ROAD QUESTION
+Solthrin creates a new political issue.
+If Astral Roads can connect remote regions, who controls them?
+The Terrarium Authority wants safety regulation.
+Corporations want logistics rights.
+Critter governments may consider certain routes sovereign territory.
+Free Scale argues that no Earth institution should own native pathways.
+Solthrin's answer remains frustratingly simple:
+"The road belongs to those responsible for where it leads."
+Human lawyers hate this sentence.
+[Heading1] BOOK XVIII --- CANON ADDENDUM
+[ListNumber] The First Ten remain exactly ten. Solthrin belongs to the Second
+Contact Generation.
+[ListNumber] The First Ten generally meet each other on Earth. Prior personal
+contact remains rare and must be explicitly justified.
+[ListNumber] Critter remains approximately eight times Earth's total physical
+size.
+[ListNumber] Astral Roads do not replace Gates and are not confirmed to share an
+origin with them.
+[ListNumber] Solthrin's Burning Grove is a living symbiotic organism, not literal
+supernatural fire.
+[ListNumber] Solthrin's chariot inspiration is expressed through procession,
+carrying, harness architecture and social role---not a literal human
+chariot.
+[ListNumber] The astral influence is expressed through navigation, path geometry
+and altered orientation---not generic space magic.
+[ListNumber] The burning-bush influence is expressed through a living luminous
+grove that burns without being consumed and functions as
+responsibility, memory and guidance---not direct religious copying.
+[ListNumber] Solthrin's approved concept sheet and comic establish his visual
+canon. Future depictions must preserve his centipede anatomy,
+proportions, head, armor, restrained carriage structure, Ember
+Grove, antennae, lanterns, palette and nonhuman identity.
+[ListNumber] New major characters may belong to later Contact Generations without
+altering the historical identity of the First Ten.
+[Heading1] EVOLVED SETTING STATEMENT
+The First Ten were once treated as humanity's introduction to Critter.
+With time, everyone understands how arrogant that was.
+Ten individuals could never represent a world eight times Earth's size.
+They represented ten openings.
+Cigarra opened the problem of certainty. Aruun opened the problem of
+burden. Nerit opened the problem of privacy and perception. Mollusk
+opened the problem of consequence. Zephyr opened the problem of promises
+across cultures. Nyxaris opened the problem of ownership. Pharilux
+opened the problem of forgotten contact. Scarlith opened the problem of
+value. Solmara opened the problem of celestial memory. Bramvex opened
+the problem of freedom after captivity.
+Then Solthrin arrived carrying a road nobody had mapped.
+And humanity learned the next lesson:
+Discovery is not the moment you find a world.
+**Discovery is the moment the world becomes larger than the explanation
+you had for it.**
+CRITTER does not end.
+It accumulates.
+[Heading1] BOOK XXX — THE HUMAN SCHISM
+[Heading2] HUMANITY DOES NOT ENTER CRITTER AS ONE PEOPLE
+First Contact does not divide Earth neatly into humans who love Critter and humans who hate it. The deeper fracture concerns what discovery itself permits.
+The Gate proves that reality contains accessible territory, life, resources and physical relationships outside every assumption humanity previously possessed. The same evidence produces two incompatible moral conclusions:
+Contact creates obligation.
+Discovery creates leverage.
+Over time these become the two dominant human ideological blocs of the First Contact Era: the Stewardship Coalition and the Human Dominion. Neither is a single government. Their beliefs cut through the Terrarium Authority, Handler culture, research institutions, corporations and public life.
+Critters are not automatically members of either faction. Many reject the premise that humanity's internal argument should determine S−1's future at all.
+[Heading2] THE STEWARDSHIP COALITION
+The Coalition grows from scientists, rescue Handlers, Habitat engineers, legal advocates, diplomats, Free Scale organizers and Critter residents who force early institutions to confront sapience, consent and ecological interdependence.
+Its principle is: Access does not create ownership.
+It supports exploration and continued Gate use, but argues that humanity's unprecedented power creates unprecedented responsibility. Its priorities include sapient personhood, voluntary partnership, Habitat welfare, ecological safeguards, provenance, negotiated access, rescue and scientific exchange.
+Dr. Mara Venn becomes one of its recognizable intellectual architects, though she dislikes becoming a symbol.
+The Coalition is broadly benevolent but not morally flawless. Its members disagree about Gate regulation, extraction and cultural exchange. Critter members frequently challenge the paternalism hidden inside human language about "granting" rights that were never humanity's to grant.
+[Heading2] THE HUMAN DOMINION
+The Dominion grows from the strategic wing of the same scientific revolution.
+Its principle is: A frontier ignored is a frontier surrendered.
+The Dominion argues that S−1 permanently changes humanity's survival equation. Critter contains organisms, materials, Knacks, routes and physical principles capable of transforming medicine, energy, warfare, construction and ecology. Refusing to secure those advantages merely leaves them for another government, corporation, criminal network or hostile power.
+It favors aggressive exploration, strategic extraction, Knack research, territorial footholds, weaponization, controlled Gate expansion and human supremacy in cross-scale decision-making.
+It is the principal antagonistic human faction. Its danger is not that every member enjoys cruelty. Its danger is that atrocity can be translated into logistics.
+Dominion technology can save lives while being built on exploitation. That contradiction is intentional.
+[Heading2] DEXTER MANE
+Origin: Earth
+Role: Scientist, strategist, expedition architect; eventual central figure of the Human Dominion
+Specialties: Scale-State physics, Gate systems, Knack application, unconventional engineering and expedition strategy
+Narrative role: Human antagonist / parallel protagonist
+Core contradiction: Dexter genuinely loves individual people while believing populations and futures can require individual sacrifice.
+Dexter belongs to the scientific generation that turns Scale-State theory into functioning machinery. He is not a sadist or nihilist. He believes humanity has been handed the most consequential discovery in its history and considers hesitation potentially more immoral than exploitation.
+Where Mara sees a door and asks who lives on the other side, Dexter asks what happens if somebody else controls the door first.
+[Heading3] Personality
+Dexter is exceptionally intelligent, improvisational, charismatic, irreverent and dangerous. He dislikes ceremony and uses humor to puncture authority. He can explain terrifyingly complicated science in ordinary language.
+He is easy to like in person. He remembers technicians' names, works beside junior staff, is generous with people he considers his own and sincerely enjoys intelligent opposition.
+These qualities do not redeem his choices. They make those choices more disturbing.
+His defining moral failure is scale abstraction: he feels individuals intensely but can convert distant suffering into arithmetic when pursuing an outcome he considers necessary.
+He does not think morality is meaningless. He thinks morality without survival is decoration.
+[Heading3] Humor, anger and affection
+Dexter's humor is dark, quick and deliberately informal. It is both genuine and a method of controlling a room.
+He rarely shouts. True anger makes him clearer. Jokes disappear and sentences become exact.
+Dexter shows affection by solving problems. He fixes what someone needs and mocks attempts to thank him. His tragedy is that he can love a person while supporting a system that would sacrifice someone exactly like them.
+[Heading3] Fear and flaw
+Dexter fears humanity voluntarily remaining weak until strength is forced upon it by someone less sentimental. He interprets uncertainty as a race even when no race has been proven to exist.
+His central flaw is believing that sufficiently accurate prediction can justify taking choices away from other people.
+[Heading3] Speech fingerprint
+Conversational, fast, intellectually compressed and funny. He avoids formal terminology unless precision demands it. He reduces grand arguments to concrete consequences.
+When emotionally wounded, he becomes more formal rather than less.
+Never write Dexter as: a cackling villain, omnipotent genius, random psychopath, generic antihero, or imitation of his creative inspirations.
+He can be right about facts while catastrophically wrong about what those facts permit.
+[Heading2] MARA VENN AND DEXTER MANE
+Mara and Dexter's conflict predates the formal factions.
+Both contribute to the scientific culture that makes controlled Quantum Descent possible. The Gate is still the achievement of a large international scientific and engineering effort, not two lone geniuses.
+They become symbolic opposites because they understand one another unusually well.
+Mara knows Dexter is not pretending to care about humanity. Dexter knows Mara's ethics are not cowardice.
+Before stable Descent, they can argue for hours and solve a technical problem together afterward. The discovery of sapient Critter life turns philosophical differences into material consequences.
+Cigarra's capture becomes a fracture point.
+Mara sees a person humanity harmed before understanding her.
+Dexter sees proof that S−1 contains intelligences and Knacks humanity cannot afford to ignore.
+Both look at the same room. Both become more certain.
+Their tragedy is not misunderstanding. It is understanding each other and disagreeing anyway.
+[Heading2] CIGARRA AND THE SCHISM
+Cigarra refuses to become evidence in a human argument.
+She forces Mara to understand that ethical treatment does not make Mara her owner, savior or representative.
+Dexter fascinates her because his decisions create unusually sharp probability branches. Dexter enjoys her because she can surprise him.
+Neither trusts the other. There are moments when they genuinely like each other. This is more dangerous than simple hatred.
+Cigarra's question—"Am I property?"—turns the Human Schism from a laboratory disagreement into a public moral crisis.
+[Heading2] EXISTING INSTITUTIONS
+The Terrarium Authority never becomes wholly Coalition or Dominion. Coalition officials push personhood, Habitat standards, diplomatic transit and consent. Dominion-aligned officials push secrecy, extraction, security classifications and expanded Handler authority. Its contradictions produce both genuine protection and genuine abuse.
+Helix Industries is not synonymous with the Dominion. Some divisions align with aggressive extraction; others prefer regulated voluntary supply chains. Nyxaris v. Helix remains its own conflict over bodily ownership and intellectual property. Dexter can cooperate with Helix or oppose it when interests diverge.
+Free Scale overlaps strongly with Coalition goals but remains independent. Many Critter activists distrust any human faction calling itself the good side. Radical cells may oppose Mara and Dexter alike.
+The Handler League becomes a cultural battleground over consent, partnership, capture and the difference between competition and ownership.
+The Undermarket serves people from every ideology when official systems fail or become profitable to evade. It is not a Dominion subsidiary.
+[Heading2] TERRARIUM ONE AS COUNTERARGUMENT
+Terrarium One becomes the strongest living challenge to the assumption that cross-scale relationships require human control.
+It begins as containment infrastructure. Residents alter it. Markets appear. Friendships form. Critters from distant regions meet. Humans become dependent on Critter expertise. Critters adopt Earth technology without becoming human.
+The city works precisely because nobody fully controls it.
+Dexter considers Terrarium One strategically invaluable and administratively infuriating.
+Mara considers it proof coexistence can grow out of structures originally designed for containment.
+Cigarra considers both interpretations annoyingly human.
+[Heading2] THE MAJOR CRITTERS AND THE SCHISM
+Cigarra: refuses symbolic ownership by either side.
+Aruun: judges factions by what their structures force weaker people to carry. Dominion engineering can impress him while its burden distribution disgusts him.
+Nerit: values Coalition privacy protections but distrusts any human rhetoric that turns transparency into forced exposure. Dominion surveillance is a profound cultural violation.
+Mollusk: works with disaster-response systems regardless of politics when lives are at stake. Dexter occasionally mistakes cooperation for agreement.
+Zephyr: is fascinated by human contracts. Both factions discover that wording can manufacture apparent consent; Briarwild culture rejects coercion as a basis for promise.
+Nyxaris: becomes a major voice against extraction without consent but rejects being turned into a Coalition mascot.
+Pharilux: treats both factions as temporary occupants of thresholds older than their argument. Dexter is intensely interested in the 1897 evidence; Pharilux gives him almost nothing.
+Scarlith: profits from both blocs while refining his own law of legitimate salvage. Dominion buyers are excellent customers and terrible precedent.
+Solmara: cares less about faction labels than whether either side understands the systems its Gate expansion disturbs.
+Bramvex: distrusts Dominion casualty arithmetic and Coalition plans that assume good intentions are emergency infrastructure. He demands exits either way.
+Solthrin: rejects ownership of Astral Roads by either faction: "The road belongs to those responsible for where it leads."
+Vaesii: challenges both sides' removal of things from context. Dominion extraction can destroy provenance violently; Coalition researchers can destroy it politely.
+Brixel: collaborates with Habitat builders but refuses to let Walking Floor technology become occupation infrastructure.
+[Heading2] DEXTER'S LIMITS
+Dexter has real limits.
+He despises purposeless cruelty. He hates waste. He protects his personnel. He does not enjoy suffering. He can honor agreements when betrayal would be strategically easier.
+The danger lies in the exception.
+If convinced that violating a principle prevents a sufficiently large catastrophe, Dexter can violate it and live with the guilt.
+He does not emerge untouched.
+He believes guilt is cheaper than failure.
+[Heading2] DEXTER'S VISUAL CANON
+Dexter Mane's approved character sheet establishes his visual direction inside CRITTER's shared art language: inked/cel-shaded concept illustration, weathered practical equipment, restrained dark and earth tones with saturated faction accents, asymmetry and graphic-novel presentation.
+He is a scientist who refuses to remain behind a desk. His silhouette must work in a laboratory, Gate facility and hostile field environment.
+Future art must not exaggerate him into a conventional military villain.
+[Heading2] THE FACTIONS DO NOT EXPLAIN THE OLD MYSTERIES
+The Human Dominion does not cause the Eightfold Paradox.
+Dexter does not create Pharilux's historical anomaly.
+Neither faction explains Thoughtstone, Cigarra's blind spots, Solmara's Moon question, the Boneyard markers, Hollow Mountain, Pale Causeway or Astral Roads.
+They may investigate, exploit, damage, conceal or misunderstand those mysteries.
+They are not their source.
+[Heading1] BOOK XXXI — INTEGRATED CONTINUITY
+[Heading2] THE WORLD MOVES AS ONE SYSTEM
+The discovery of S−1 begins as science.
+Science creates Gates.
+Gates create expeditions.
+Expeditions create extraction.
+Extraction creates Habitats because Scale Signatures make displacement physically costly.
+Habitats create sustained contact.
+Sustained contact reveals sapience that early capture doctrine was not built to recognize.
+Cigarra turns that failure into a public moral crisis.
+The crisis accelerates the Human Schism.
+The Schism reshapes the Terrarium Authority, Handler culture, corporate research, law and public opinion.
+Meanwhile Terrarium One grows beyond every institution that helped create it.
+Earth's Gate network compresses Critter's enormous geography, causing peoples who might never have met on S−1 to encounter one another on S0.
+Those encounters create friendships, rivalries, technologies, legal arguments and hybrid cultures.
+Those changes return through the Gates.
+Critter changes because Earth exists.
+Earth changes because Critter exists.
+Neither remains the world it was at First Contact.
+[Heading2] THE FIRST CONTACT TRIANGLE
+Book One's central relationship remains Mara and Cigarra. Dexter creates pressure around it rather than replacing it.
+Mara: We arrived. Therefore we are responsible for what we do next.
+Dexter: We arrived. Therefore what happens next will occur whether we feel ready or not.
+Cigarra: You arrived. Stop speaking as though arrival made the world yours.
+This triangle becomes one philosophical foundation of the First Contact Era.
+[Heading2] STORY ENGINE
+The Schism creates stories rather than predetermined answers.
+A Coalition Habitat may depend on Dominion-derived technology.
+A Dominion expedition may need a Critter guide who despises its mission.
+A Free Scale cell may sabotage a project Mara believes is ethical.
+Dexter may save a Critter settlement for reasons nobody trusts.
+Mara may defend a Dominion scientist's rights.
+A Critter government may choose Dominion trade because Coalition conditions feel paternalistic.
+Friends can work for opposing blocs.
+People can defect.
+A faction can correctly identify a danger and choose a terrible response.
+This is not a war between colored uniforms. It is an argument about what humanity becomes after learning reality is larger than humanity.
+[Heading2] CANON STORY PRINCIPLE
+No character exists only to represent a side.
+Mara is not goodness embodied.
+Dexter is not evil embodied.
+Cigarra is not the voice of all Critters.
+The First Ten are not ambassadors for an entire planet.
+Institutions, cultures and families contain disagreement.
+Characters may cooperate across ideological lines without abandoning their beliefs.
+The setting becomes richer whenever a relationship is more complicated than its faction label.
+[Heading2] EVOLVED SETTING STATEMENT
+Humanity first believes the great discovery is another world.
+Then it believes the great problem is how to use that world.
+Then it learns the world was already being used, inhabited, argued over, loved, buried, traveled, remembered and misunderstood long before humans arrived.
+The question of the First Contact Era stops being:
+What can Critter do for humanity?
+It becomes:
+What kind of civilization does humanity become now that it knows Critter is watching back?
+Critter has its own questions.
+Every Gate opens in both directions.
+CRITTER DOES NOT COLLAPSE INTO ONE CONFLICT, ONE MYSTERY OR ONE ENDING.
+THE WORLD ACCUMULATES.
+[Heading1] BOOK XXXII — GAMEPLAY CANON
+[Heading2] THE CORE LOOP
+CRITTER's gameplay follows the same law as its setting: actions accumulate.
+DESCEND -> EXPLORE -> UNDERSTAND -> INTERVENE -> RETURN -> BUILD -> LIVE WITH CONSEQUENCES -> DESCEND AGAIN
+Players leave an Earth-side Terrarium through a Gate and enter known or partially known regions of S-1. Exploration is ecological and cultural investigation, not merely traversal between combat encounters. An unfamiliar organism may be wildlife, livestock, a person, sacred, economically valuable, ecologically necessary, or several of these at once. Understanding context is therefore a gameplay resource.
+Intervention can mean combat, capture, negotiation, stealth, construction, trade, rescue, environmental manipulation, retreat or deliberate non-interference. Critter abilities must alter traversal, ecology and problem-solving as well as combat.
+The defining mechanic is persistent consequence. Removing a predator can change prey populations. Opening a route can redirect trade. Extracting a resource can create political or ecological scarcity. Saving a settlement can create a future ally, dependency or migration. A completed mission is not erased; it becomes part of the next world state.
+[Heading2] TERRARIUM PROGRESSION
+The Earth-side Terrarium begins as research and containment infrastructure and grows into a living settlement. Scale Signatures mean Habitats require ecological chains: soil, microbes, humidity, light, food webs, minerals and symbionts. Building is therefore stewardship and systems design rather than decorative housing.
+As the Terrarium grows, Critters from distant regions meet, businesses and institutions appear, relationships change, and the player's settlement develops its own history.
+[Heading2] CHARACTER PROGRESSION
+Sapient major characters are not collectible property. Recruitment is relationship-driven. Characters accompany the player because goals, trust or circumstance align. Progression emphasizes knowledge, relationships, adaptations, infrastructure and combination abilities rather than simple numerical weapon escalation.
+Relationships affect mechanics. Characters who learn to trust one another can develop cooperative techniques; characters in conflict may refuse or alter combinations until their relationship changes.
+[Heading2] FACTION PRESSURE
+The Stewardship Coalition and Human Dominion create competing opportunities without reducing every decision to a binary morality meter. Helix Industries, Free Scale, the Terrarium Authority, Handler League, Undermarket, Critter governments and local cultures retain independent interests.
+A faction may correctly identify a danger and propose an unacceptable response. A player can cooperate without permanent ideological allegiance. Consequences matter more than colored dialogue choices.
+[Heading2] LONG MYSTERIES
+Thoughtstone, the Boneyard markers, Pharilux's 1897 anomaly, Astral Roads, Hollow Mountain, the Pale Causeway, Solmara's Moon question, Cigarra's probability blind spots and the Eightfold Paradox function as long-running investigation threads. They can span many expeditions and do not need to resolve together.
+[Heading2] MULTIPLAYER PRINCIPLE
+A player's Terrarium can function as a persistent social home for visiting, trade and cooperative expeditions. Specialization in combat, exploration, Habitat engineering, gathering or diplomacy should create useful interdependence. Competitive systems must preserve the setting's consequence-driven identity rather than turning CRITTER into a disconnected arena game.
+[Heading2] DESIGN LAW
+You do not progress by consuming the world. You progress by becoming more capable of interacting with it. Every interaction leaves something behind.
+[Heading1] VISUAL CANON ARCHIVE
+The following project images are embedded as visual-development references. Approved model sheets remain binding visual canon where the Lore Bible identifies them as approved. Comics and exploratory panels preserve the shared visual language and continuity references but do not override explicit written canon.
+[IMG]
+Visual Reference 01 — 2916
+[IMG]
+Visual Reference 02 — 3437
+[IMG]
+Visual Reference 03 — 3438
+[IMG]
+Visual Reference 04 — 5593
+[IMG]
+Visual Reference 05 — a detailed character design collage infographic fo
+[IMG]
+Visual Reference 06 — a detailed character sheet concept board in a ci
+[IMG]
+Visual Reference 07 — a detailed cinematic concept art character design
+[IMG]
+Visual Reference 08 — a detailed comic style illustration in the exact s
+[IMG]
+Visual Reference 09 — a detailed comic style poster graphic novel page
+[IMG]
+Visual Reference 10 — a detailed concept art character design sheet illu
+[IMG]
+Visual Reference 11 — a detailed concept art character design sheet in a
+[IMG]
+Visual Reference 12 — a detailed illustrated character concept sheet fa
+[IMG]
+Visual Reference 13 — a detailed illustrated concept character design sh
+[IMG]
+Visual Reference 14 — a detailed illustrated concept sheet poster in a c
+[IMG]
+Visual Reference 15 — a highly detailed concept art character design she
+[IMG]
+Visual Reference 16 — a large detailed comic illustration poster collag
+[IMG]
+Visual Reference 17 — a large stylized character design sheet concept
+[IMG]
+Visual Reference 18 — a richly detailed comic comic book style illustrat
+[IMG]
+Visual Reference 19 — a wide comic anime style concept sheet illustrati
+[IMG]
+Visual Reference 20 — a wide comic book style illustrated poster comic
+[IMG]
+Visual Reference 21 — a wide comic graphic poster page in the same style
+[IMG]
+Visual Reference 22 — a wide comic illustration style character design
+[IMG]
+Visual Reference 23 — a wide concept art character sheet in the same sty
+[IMG]
+Visual Reference 24 — a wide detailed comic page in the same art style
+[IMG]
+Visual Reference 25 — a wide detailed concept art asset sheet in a styl
+[IMG]
+Visual Reference 26 — a wide detailed concept art character sheet illus
+[IMG]
+Visual Reference 27 — a wide detailed concept art style character desig
+[IMG]
+Visual Reference 28 — a wide detailed concept art style worldbuilding a
+[IMG]
+Visual Reference 29 — a wide detailed illustrated concept art character
+[IMG]
+Visual Reference 30 — a wide highly detailed character concept sheet
+[IMG]
+Visual Reference 31 — a wide illustrated concept art character sheet at
+[IMG]
+Visual Reference 32 — wide comic page in the same stylized illustration
+[IMG]
+Visual Reference 33 — wide comic panel layout in the same stylized illus
+[IMG]
+Visual Reference 34 — wide detailed character design sheet concept ar
+[IMG]
+Visual Reference 35 — wide detailed character design sheet concept ar 2
+[IMG]
+Visual Reference 36 — wide detailed concept art character sheet illustr
+[IMG]
+Visual Reference 37 — wide illustrated concept art character sheet poste
+[IMG]
+Visual Reference 38 — wide illustrated concept art sheet split into two

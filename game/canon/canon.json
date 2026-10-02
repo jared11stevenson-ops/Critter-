@@ -1,0 +1,127 @@
+{
+  "_doc": "Canon database. Sourced from CRITTER Master Lore Bible v12 + approved model sheets. Do not edit without Lead sign-off. 'art' records the approved model sheet each sprite/portrait is cut from.",
+  "characters": {
+    "aruun": {
+      "name": "Aruun", "title": "The Reacher", "designation": "BRU-004", "pronoun": "he",
+      "homeland": "The Red Reaches", "knack": "Psionic Bond / Kinetic Force", "bonded_object": "Morrow",
+      "class": "Barbarian", "role": "Melee / Tank", "height_m": 2.4,
+      "quote": "Further than you think.",
+      "contradiction": "He is famous for destruction and wants to be remembered for building.",
+      "palette": ["#9c2f22", "#c8462b", "#d9803a", "#6b6a3a", "#4a3226"],
+      "expressions": ["calm", "focused", "rage", "amused", "aggressive"],
+      "playable": true,
+      "art": {"sheet": "uploads/b8675d96-image.jpg (Aruun & Nerit sheet, left half)"}
+    },
+    "cigarra": {
+      "name": "Cigarra", "title": "The Oracle Hopper", "designation": "PSI-017", "pronoun": "she",
+      "homeland": "The Canopy Fold", "knack": "Probability Perception / Psychic Interference",
+      "class": "Psychic Witch", "role": "Control / Mobility / Utility", "height_m": 1.65,
+      "quote": "Reality is just someone else's memory.",
+      "contradiction": "She can glimpse possibilities but struggles to trust certainty.",
+      "palette": ["#1e1a22", "#3b2a44", "#8f8a52", "#b8c24a", "#d9cf9a", "#efe6cf", "#b5473a"],
+      "expressions": ["neutral", "curious", "unhinged", "annoyed", "happy", "focused", "shocked"],
+      "playable": true,
+      "art": {"sheet": "bible media image34.jpg / uploads/47a8f7dc-image.jpg"}
+    },
+    "nerit": {
+      "name": "Nerit", "title": "The Lumen Weaver", "designation": "LUX-031", "pronoun": "they",
+      "homeland": "The Lumen Depths", "knack": "Light Relocation / Darkness Manipulation",
+      "height_m": 1.75, "quote": "Light remembers the dark.",
+      "contradiction": "Nerit creates visibility while believing some things deserve darkness.",
+      "expressions": ["neutral", "curious", "calm", "serious", "playful", "unsettling"],
+      "art": {"sheet": "uploads/b8675d96-image.jpg (right half, nonhuman v2 — approved)"}
+    },
+    "mollusk": {
+      "name": "Mollusk", "title": "The Weight of Tomorrow", "designation": "CHR-001", "pronoun": "he",
+      "homeland": "Rainward", "knack": "Temporal Inertia", "height_m": 2.2,
+      "quote": "Some things don't break... they just take longer.",
+      "contradiction": "He can delay consequences but believes consequences must eventually be faced.",
+      "expressions": ["calm", "curious", "focused", "angry", "exertion", "serene"],
+      "art": {"sheet": "uploads/64927916-image.png (Hawaiian giant African snail — approved)"}
+    },
+    "zephyr": {
+      "name": "Zephyr", "title": "The Nectar Seeker", "designation": "AER-009", "pronoun": "they",
+      "homeland": "The Briarwild", "knack": "Motion / Atmospheric Disturbance / Pollination", "height_m": 1.65,
+      "quote": "Beauty distracts. Movement protects.",
+      "contradiction": "Zephyr treats rules as games but treats promises as sacred.",
+      "expressions": ["calm", "curious", "focused", "aggressive", "haunted"],
+      "art": {"sheet": "uploads/932a21e6-image.png"}
+    },
+    "nyxaris": {
+      "name": "Nyxaris", "title": "The Frostbloom Weaver", "designation": "CRYO-022", "pronoun": "she",
+      "homeland": "Frostbloom", "knack": "Cryogenic Silk / Venom", "height_m": 2.0,
+      "quote": "She lures with beauty... and keeps you forever.",
+      "contradiction": "She creates beautiful things specifically to control danger.",
+      "art": {"sheet": "uploads/53615e17-image.png"}
+    },
+    "pharilux": {
+      "name": "Pharilux", "title": "The Watcher Below", "designation": "UNKNOWN", "pronoun": "he",
+      "homeland": "Unknown", "knack": "Pressure / Guiding Light / Spectral Tide", "height_m": 2.6,
+      "quote": "Even in darkness, someone keeps watch.",
+      "contradiction": "He guides others while refusing to explain where he came from.",
+      "expressions": ["calm", "curious", "focused", "aggressive", "watchful"],
+      "art": {"sheet": "uploads/8208bbb0-image.png"}
+    },
+    "scarlith": {
+      "name": "Scarlith", "title": "The Fermented Kingpin", "designation": "MYC-013", "pronoun": "he",
+      "homeland": "The Velvet Warrens", "knack": "Fermentation / Decomposition / Cultivation", "height_m": 0.12,
+      "quote": "The world forgets. I cultivate.",
+      "contradiction": "He believes everything has value and therefore risks treating everything as merchandise.",
+      "art": {"sheet": "bible media image26.jpg"}
+    },
+    "solmara": {
+      "name": "Solmara", "title": "The Tide Balancer", "designation": "TID-001", "pronoun": "",
+      "homeland": "The Pelagic Expanse", "knack": "Solar / Lunar / Tidal / Gravitational", "height_m": 5.5,
+      "quote": "The ocean remembers both the sun and the moon.",
+      "contradiction": "Solmara understands enormous celestial systems but can misread individual emotion.",
+      "art": {"sheet": "uploads/ad8893e2-image.png (sea-spider v2 — approved)"}
+    },
+    "bramvex": {
+      "name": "Bramvex", "title": "The Quiet Command", "designation": "MIL-006", "pronoun": "he",
+      "homeland": "Thornmarch", "knack": "Camouflage / Sensory Adaptation / Tactical Terrain Use",
+      "weapon": "Diplomacy", "height_m": 2.3,
+      "quote": "Silence sets the standard.",
+      "contradiction": "A professional soldier who distrusts anyone eager for war.",
+      "art": {"sheet": "uploads/6d25bb86-image.png"}
+    },
+    "mara": {
+      "name": "Dr. Mara Venn", "title": "Lead Physicist — Expedition Lead", "pronoun": "she",
+      "faction": "Stewardship Coalition", "height_m": 1.7, "age": 34,
+      "quote": "Curiosity always wins. It just usually costs more than people expect.",
+      "expressions": ["neutral", "curious", "focused", "annoyed", "tired", "soft"],
+      "art": {"sheet": "bible media image17.jpg (illustrated — approved for game)"}
+    },
+    "dexter": {
+      "name": "Dexter Mane", "title": "Director — Human Dominion", "pronoun": "he",
+      "faction": "Human Dominion", "height_m": 1.85, "age": 37,
+      "quote": "Morality is a luxury. So is time.",
+      "expressions": ["neutral", "amused", "irritated", "serious", "genuine", "tired"],
+      "art": {"sheet": "bible media image19.jpg"}
+    }
+  },
+  "abilities": {
+    "aruun_combo":         {"owner": "aruun",   "name": "Morrow",            "desc": "A three-strike mace combo. The last swing knocks enemies back."},
+    "reaching_strike":     {"owner": "aruun",   "name": "Reaching Strike",   "desc": "Morrow extends through the psionic link for a devastating long-range hit. Shatters cracked Thoughtstone.", "cooldown": 6.0},
+    "gravity_pull":        {"owner": "aruun",   "name": "Gravity Pull",      "desc": "Morrow floats ahead, drags enemies together, then slams down.", "cooldown": 10.0},
+    "beetle_rage":         {"owner": "aruun",   "name": "Beetle Rage",       "desc": "Deliberate physiological overdrive. Greater strength, paid for with Aruun's own body (Strain).", "cooldown": 18.0},
+    "bad_thought":         {"owner": "cigarra", "name": "Bad Thought",       "desc": "Flicks a crown sphere and fires a distorted psychic object."},
+    "premonition":         {"owner": "cigarra", "name": "Premonition",       "desc": "Translucent future ghosts show where enemies are about to move or attack. Dodge through one to counter.", "cooldown": 12.0},
+    "false_memory":        {"owner": "cigarra", "name": "False Memory",      "desc": "A temporary hallucination. Enemies believe it and attack it.", "cooldown": 14.0},
+    "brain_skip":          {"owner": "cigarra", "name": "Brain Skip",        "desc": "The target loses a fraction of time. Its action jumps forward and it stumbles.", "cooldown": 9.0},
+    "grasshopper_thought": {"owner": "cigarra", "name": "Grasshopper Thought","desc": "Crouch low, then launch great distances. The wing cloak opens for steering."},
+    "probable_impact":     {"owner": "combo",   "name": "Probable Impact",   "desc": "While Premonition is active, Gravity Pull's slam lands where Cigarra saw it would: double damage and a stun."}
+  },
+  "places": {
+    "terrarium_one": {"name": "Terrarium One", "desc": "It began as a laboratory containing ecosystems. It became an ecosystem containing laboratories."},
+    "the_common": {"name": "The Common", "desc": "The first genuinely mixed district. No architect designed it. Aruun later helped prevent it from collapsing."},
+    "red_reaches": {"name": "The Red Reaches", "desc": "Plateaus, mineral deserts and enormous fracture valleys. Settlements survive because generations maintain bridges, wells and roads."},
+    "ochre_span": {"name": "The Ochre Span", "desc": "A Spanwright crossing older than anyone's records, built in the same tradition as the Red Span that failed."}
+  },
+  "species": {
+    "skitter_mite": {"name": "Skitter Mite", "class": "WILDLIFE", "sapient": false, "desc": "Rust-red mites that strip mineral crust from rock. Harmless alone. Not alone, usually.", "behavior": "Swarms. Flees when its swarm is broken."},
+    "plate_beetle": {"name": "Plate Beetle", "class": "WILDLIFE", "sapient": false, "desc": "A slow, heavy grazer of mineral lichen with a carapace like layered slate.", "behavior": "Normally docile. Agitated by resonance vibration — the Dominion pylons are driving it mad."},
+    "dust_grazer": {"name": "Dust Grazer", "class": "WILDLIFE", "sapient": false, "desc": "Long-legged lichen grazers. Their droppings seed the lichen that holds the plateau soil together.", "behavior": "Passive. Ecological keystone — harming the herd destabilizes the valley."},
+    "dominion_drone": {"name": "Survey Drone (Dominion)", "class": "DOMINION ASSET", "sapient": false, "desc": "Autonomous survey and security drone licensed under a Dominion extraction permit.", "behavior": "Defends the drill site. Weak to heavy impact."},
+    "augur_rig": {"name": "AUGUR-7 Deepcore Rig", "class": "DOMINION ASSET", "sapient": false, "desc": "A Thoughtstone extraction rig. Its drill is resonating with the Span's foundation.", "behavior": "Vents coolant when overheated — the vents are its weakness."}
+  }
+}
