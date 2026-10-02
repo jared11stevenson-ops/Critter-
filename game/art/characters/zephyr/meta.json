@@ -1,0 +1,29 @@
+{
+ "height_m": 1.65,
+ "views": [
+  "front",
+  "side",
+  "back"
+ ],
+ "px": {
+  "front": [
+   367,
+   543
+  ],
+  "side": [
+   262,
+   353
+  ],
+  "back": [
+   207,
+   350
+  ]
+ },
+ "feet_y_px": 543,
+ "source": {
+  "front": "hero FRONT",
+  "side": "SIDE (mirrored to face right)",
+  "back": "BACK"
+ },
+ "sheet": "zephyr_sheet.png"
+}

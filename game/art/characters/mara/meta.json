@@ -1,0 +1,29 @@
+{
+ "height_m": 1.7,
+ "views": [
+  "front",
+  "side",
+  "back"
+ ],
+ "px": {
+  "front": [
+   87,
+   323
+  ],
+  "side": [
+   91,
+   324
+  ],
+  "back": [
+   113,
+   325
+  ]
+ },
+ "feet_y_px": 323,
+ "source": {
+  "front": "turnaround FRONT",
+  "side": "turnaround SIDE (faces right)",
+  "back": "turnaround BACK"
+ },
+ "sheet": "mara_sheet.jpg"
+}
