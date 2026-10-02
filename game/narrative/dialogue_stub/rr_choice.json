@@ -1,0 +1,27 @@
+{
+ "id": "rr_choice",
+ "lines": [
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Brace the foundation, and the Span carries people for another generation."
+  },
+  {
+   "who": "comms:mara",
+   "expr": "tired",
+   "text": "Hand the cache to the Dominion, and the contract is satisfied. Resources. Standing. A failing bridge."
+  },
+  {
+   "choice": [
+    {
+     "text": "Brace the foundation with Aruun",
+     "event": "choice_repair"
+    },
+    {
+     "text": "Hand the cache to the Dominion contract",
+     "event": "choice_extract"
+    }
+   ]
+  }
+ ]
+}

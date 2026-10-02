@@ -1,0 +1,15 @@
+{
+ "id": "hub_npc_mollusk",
+ "lines": [
+  {
+   "who": "mollusk",
+   "expr": "calm",
+   "text": "Aruun builds. I test. So far his bridges win."
+  },
+  {
+   "who": "mollusk",
+   "expr": "curious",
+   "text": "Bring me something he made in the Reaches. I want to try to break it."
+  }
+ ]
+}

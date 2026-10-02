@@ -1,0 +1,18 @@
+{
+ "id": "rr_rope",
+ "lines": [
+  {
+   "who": "cigarra",
+   "expr": "happy",
+   "text": "Landed! There's a rope span coiled on the anchor. Old Spanwright knots."
+  },
+  {
+   "who": "aruun",
+   "expr": "amused",
+   "text": "My teacher tied knots like that. Drop it. I'll cross."
+  },
+  {
+   "event": "drop_rope"
+  }
+ ]
+}

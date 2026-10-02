@@ -1,0 +1,15 @@
+{
+ "id": "rr_valley",
+ "lines": [
+  {
+   "who": "cigarra",
+   "expr": "focused",
+   "text": "Skitter Mites. Harmless alone. Not alone, usually."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "Drive them off. Their swarm breaks fast. Tap my portrait if you want her instead."
+  }
+ ]
+}

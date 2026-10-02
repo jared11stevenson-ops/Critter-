@@ -1,0 +1,54 @@
+{
+  "_doc": "All tunable gameplay numbers for the Red Span Survey slice. Owner: Agent 2. Times in seconds, distances in meters, damage in HP. Read via Balance.v('path.to.key', default). Reloaded at each field scene load.",
+  "global": {
+    "crit_chance": 0.08, "crit_mult": 1.6,
+    "hitstop_light": 0.045, "hitstop_heavy": 0.085, "hitstop_crit": 0.11, "hitstop_max": 0.16,
+    "shake_light": 0.12, "shake_heavy": 0.32, "shake_boss": 0.6,
+    "autoaim_cone_deg": 70.0, "autoaim_max_range": 14.0,
+    "swap_cooldown": 1.0,
+    "revive_time": 2.0, "revive_radius": 2.4, "revive_hp_frac": 0.35,
+    "respawn_hp_frac": 0.6,
+    "contain_hp_frac": 0.30, "contain_channel": 1.2, "contain_range": 7.0,
+    "scan_radius": 25.0, "scan_slowmo_scale": 0.3, "scan_slowmo_time": 0.4, "scan_label_time": 5.5,
+    "invuln_after_hit": 0.3, "fall_damage_frac": 0.08
+  },
+  "aruun": {
+    "hp": 420, "speed": 4.6, "accel": 38.0, "friction": 30.0, "height": 2.4, "radius": 0.55,
+    "dash_dist": 3.5, "dash_time": 0.2, "dash_iframes": 0.25, "dash_cd": 1.2,
+    "poise": 60,
+    "combo": {"damage": [22, 22, 40], "range": [2.9, 2.9, 3.3], "arc_deg": [150, 150, 210],
+              "windup": [0.09, 0.09, 0.15], "active": [0.08, 0.08, 0.1], "recover": [0.24, 0.24, 0.42], "chain_window": 0.45,
+              "knockback": [2.5, 2.5, 9.0], "stagger": [0.2, 0.2, 0.55], "lunge": [1.0, 1.0, 1.6]},
+    "reaching_strike": {"cd": 6.0, "damage": 60, "length": 9.0, "width": 1.8, "windup": 0.26, "knockback": 6.0, "stagger": 0.6},
+    "gravity_pull": {"cd": 10.0, "dist": 6.0, "radius": 6.0, "pull_time": 2.0, "slam_damage": 45, "slam_radius": 4.2, "pull_speed": 5.5, "combo_mult": 2.0, "combo_stun": 2.0},
+    "beetle_rage": {"cd": 18.0, "duration": 8.0, "dmg_mult": 1.5, "speed_mult": 1.25, "strain_per_s": 0.04}
+  },
+  "cigarra": {
+    "hp": 240, "speed": 5.4, "accel": 46.0, "friction": 34.0, "height": 1.65, "radius": 0.42,
+    "dash_dist": 5.0, "dash_time": 0.28, "dash_iframes": 0.25, "dash_cd": 1.2,
+    "poise": 20,
+    "bad_thought": {"damage": 16, "range": 14.0, "speed": 26.0, "interval": 0.36, "knockback": 1.2, "stagger": 0.12},
+    "premonition": {"cd": 12.0, "duration": 5.0, "time_scale": 0.7, "noise": 30.0, "counter_mult": 2.5, "counter_slowmo": 0.35, "counter_slowmo_scale": 0.25, "ghost_lead": 0.9, "ghost_radius": 1.6},
+    "false_memory": {"cd": 14.0, "duration": 5.0, "noise": 25.0},
+    "brain_skip": {"cd": 9.0, "damage": 30, "stun": 1.6, "range": 12.0, "noise": 20.0},
+    "grasshopper_thought": {"noise": 10.0, "time": 1.15, "height": 6.0},
+    "noise": {"max": 100.0, "decay": 6.0, "decay_delay": 0.8, "distort_at": 60.0, "overwhelm_time": 3.0, "overwhelm_slow": 0.5}
+  },
+  "ai_partner": {"follow_min": 3.0, "follow_max": 5.0, "engage_radius": 12.0, "ability_chance_per_s": 0.16, "teleport_dist": 28.0, "attack_interval": 0.7},
+  "enemies": {
+    "skitter_mite": {"hp": 34, "speed": 5.4, "damage": 7, "range": 1.4, "telegraph": 0.45, "recover": 0.8, "aggro": 14.0, "flee_below": 2, "poise": 0, "radius": 0.5},
+    "plate_beetle": {"hp": 260, "speed": 2.0, "charge_speed": 11.0, "damage": 34, "range": 2.8, "telegraph": 1.0, "charge_time": 0.9, "recover": 1.6, "aggro": 16.0, "poise": 80, "radius": 1.4, "pylon_radius": 32.0},
+    "dust_grazer": {"hp": 90, "speed": 1.6, "flee_speed": 6.5, "poise": 10, "radius": 0.9},
+    "dominion_drone": {"hp": 70, "speed": 4.4, "damage": 9, "range": 13.0, "pref_range": 8.0, "telegraph": 0.6, "burst": 3, "burst_gap": 0.16, "shot_speed": 15.0, "recover": 1.8, "aggro": 18.0, "poise": 0, "radius": 0.6, "heavy_mult": 1.6},
+    "resonance_pylon": {"hp": 120, "radius": 0.8},
+    "augur_rig": {"hp": 1600, "phase2_at": 0.66, "phase3_at": 0.33, "radius": 5.0,
+                  "slam_damage": 48, "slam_radius": 4.2, "slam_telegraph": 1.1, "slam_interval": 3.2,
+                  "drone_wave": 2, "drone_wave_interval": 14.0, "max_drones": 3,
+                  "vent_open_time": 6.0, "vent_closed_time": 4.0, "vent_radius": 3.6, "vent_mult": 1.5,
+                  "shard_count": 3, "shard_damage": 30, "shard_telegraph": 1.1, "shard_radius": 2.2, "shard_life": 18.0, "shard_interval": 7.0,
+                  "beam_damage_per_s": 70, "beam_telegraph": 1.4, "beam_sweep_time": 2.6, "beam_arc_deg": 150, "beam_length": 34.0, "beam_interval": 9.0}
+  },
+  "burden": {"hold_time": 6.0, "strain_per_tremor": 0.025, "tremor_interval": 1.3},
+  "pickups": {"magnet_radius": 4.5, "amount": {"reach_soil": 2, "lichen_culture": 2, "thoughtstone_dust": 2, "salvage": 2, "thoughtstone_cache": 1}},
+  "drops": {"skitter_mite": {"reach_soil": 0.25}, "dominion_drone": {"salvage": 0.8}, "plate_beetle": {"lichen_culture": 1.0}}
+}

@@ -1,0 +1,29 @@
+{
+ "id": "hub_lab_mara",
+ "lines": [
+  {
+   "who": "mara",
+   "expr": "tired",
+   "text": "Scale-State readings, contamination logs, three cups of something that used to be coffee.",
+   "if_not": "rr_complete"
+  },
+  {
+   "who": "mara",
+   "expr": "focused",
+   "text": "The Gate is calibrated for the Reaches. Bring back data, not trophies.",
+   "if_not": "rr_complete"
+  },
+  {
+   "who": "mara",
+   "expr": "soft",
+   "text": "You came back with both partners and a decision. That's a good first survey.",
+   "if": "rr_complete"
+  },
+  {
+   "who": "mara",
+   "expr": "curious",
+   "text": "The Thoughtstone readings near Morrow are... not mineral behaviour. Keep that between us for now.",
+   "if": "rr_complete"
+  }
+ ]
+}

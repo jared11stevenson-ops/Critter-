@@ -1,0 +1,30 @@
+{
+ "id": "rr_after_choice",
+ "lines": [
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Good. Then this is what it was for.",
+   "if": "ochre_span_braced"
+  },
+  {
+   "who": "aruun",
+   "expr": "aggressive",
+   "text": "I'll remember this, Handler.",
+   "if": "ochre_span_failing"
+  },
+  {
+   "who": "cigarra",
+   "expr": "shocked",
+   "text": "Wait. The fragment — it's turning. Toward Morrow."
+  },
+  {
+   "event": "thoughtstone_align"
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "...It does that sometimes. We'll talk at the Common. Head to the exfil beacon."
+  }
+ ]
+}

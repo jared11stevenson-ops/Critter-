@@ -1,0 +1,14 @@
+[
+ {"t":0.2,"call":"scene.qa_auto_dialogue","args":[true,0,0.4]},
+ {"t":0.5,"call":"scene.qa_skip_to","args":["boss"]},
+ {"t":1.5,"action":"move_right","dur":2.0},
+ {"t":4.0,"action":"attack","dur":3.0},
+ {"t":7.5,"call":"scene.qa_damage_boss","args":[0.36]},
+ {"t":10.0,"action":"move_right","dur":1.5},
+ {"t":11.6,"action":"attack","dur":3.0},
+ {"t":15.0,"call":"scene.qa_damage_boss","args":[0.33]},
+ {"t":17.0,"action":"ability_1","dur":0.1},
+ {"t":19.0,"action":"dash","dur":0.1},
+ {"t":24.0,"call":"scene.qa_damage_boss","args":[0.5]},
+ {"t":27.0,"call":"scene.qa_log_flags"}
+]

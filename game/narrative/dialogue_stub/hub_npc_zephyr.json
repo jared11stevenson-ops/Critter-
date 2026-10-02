@@ -1,0 +1,15 @@
+{
+ "id": "hub_npc_zephyr",
+ "lines": [
+  {
+   "who": "zephyr",
+   "expr": "curious",
+   "text": "The Reaches have flowers in the cracks. Tiny ones. Did you notice?"
+  },
+  {
+   "who": "zephyr",
+   "expr": "calm",
+   "text": "Bring back nectar samples next time. Please."
+  }
+ ]
+}
