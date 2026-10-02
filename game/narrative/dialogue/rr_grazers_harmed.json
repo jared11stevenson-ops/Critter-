@@ -1,0 +1,25 @@
+{
+ "id": "rr_grazers_harmed",
+ "lines": [
+  {
+   "who": "aruun",
+   "expr": "aggressive",
+   "text": "Stop. They're grazers."
+  },
+  {
+   "who": "comms:mara",
+   "expr": "annoyed",
+   "text": "Handler, that herd holds the soil together. Every action down there leaves something behind."
+  },
+  {
+   "set": {
+    "grazers_harmed": true
+   }
+  },
+  {
+   "trust": {
+    "aruun": -3
+   }
+  }
+ ]
+}

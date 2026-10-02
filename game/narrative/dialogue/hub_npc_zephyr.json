@@ -1,0 +1,66 @@
+{
+ "id": "hub_npc_zephyr",
+ "lines": [
+  {
+   "who": "zephyr",
+   "expr": "curious",
+   "text": "Courier? No — Handler. Same face as someone with a job to finish."
+  },
+  {
+   "who": "zephyr",
+   "expr": "calm",
+   "text": "Promise me something. Anything small. You'd be surprised how few people do.",
+   "if_not": "promised_zephyr"
+  },
+  {
+   "choice": [
+    {
+     "text": "I promise to bring them both home.",
+     "set": {
+      "promised_zephyr": true
+     },
+     "goto": "z_promise"
+    },
+    {
+     "text": "I don't make promises I can't word carefully.",
+     "goto": "z_careful"
+    }
+   ],
+   "if_not": "promised_zephyr"
+  },
+  {
+   "label": "z_promise"
+  },
+  {
+   "who": "zephyr",
+   "expr": "focused",
+   "text": "Witnessed. Wording noted. 'Both.' 'Home.' Don't break it.",
+   "if_not": "rr_complete"
+  },
+  {
+   "who": "zephyr",
+   "expr": "calm",
+   "text": "You kept it. I like you a measurable amount more.",
+   "if": "rr_complete"
+  },
+  {
+   "goto": "z_end"
+  },
+  {
+   "label": "z_careful"
+  },
+  {
+   "who": "zephyr",
+   "expr": "curious",
+   "text": "Oh, I like you. Careful wording is the whole art."
+  },
+  {
+   "label": "z_end"
+  },
+  {
+   "who": "zephyr",
+   "expr": "calm",
+   "text": "That drink on the table was unattended. That's practically a gift."
+  }
+ ]
+}

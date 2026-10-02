@@ -1,0 +1,31 @@
+{
+ "id": "rr_burden_done",
+ "lines": [
+  {
+   "who": "cigarra",
+   "expr": "focused",
+   "text": "Across. Everyone's across. You can let go."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "...Not eleven minutes. Just enough."
+  },
+  {
+   "who": "cigarra",
+   "expr": "happy",
+   "text": "Just enough is my favourite amount."
+  },
+  {
+   "set": {
+    "burden_done": true
+   }
+  },
+  {
+   "trust": {
+    "aruun": 5,
+    "cigarra": 3
+   }
+  }
+ ]
+}

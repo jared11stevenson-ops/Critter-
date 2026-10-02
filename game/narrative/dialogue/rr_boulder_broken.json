@@ -1,0 +1,24 @@
+{
+ "id": "rr_boulder_broken",
+ "lines": [
+  {
+   "who": "narration",
+   "text": "The Thoughtstone fragments hum. For a moment, the dust drifts toward Morrow."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "...Collect the dust. The Habitat techs will want it."
+  },
+  {
+   "who": "cigarra",
+   "expr": "focused",
+   "text": "That one I couldn't read. Interesting."
+  },
+  {
+   "set": {
+    "boulder_broken": true
+   }
+  }
+ ]
+}

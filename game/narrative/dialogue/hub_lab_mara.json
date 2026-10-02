@@ -1,0 +1,46 @@
+{
+ "id": "hub_lab_mara",
+ "lines": [
+  {
+   "who": "mara",
+   "expr": "neutral",
+   "text": "Mara's lab. Officially 'Scale-State Instrumentation'. Unofficially, where the coffee lives.",
+   "if_not": "rr_complete"
+  },
+  {
+   "who": "mara",
+   "expr": "curious",
+   "text": "You're wondering about Dexter. Everyone does, eventually.",
+   "if_not": "rr_complete"
+  },
+  {
+   "who": "mara",
+   "expr": "focused",
+   "text": "Half the Gate math came off one whiteboard we shared. We could argue for hours and still solve the problem afterward.",
+   "if_not": "rr_complete"
+  },
+  {
+   "who": "mara",
+   "expr": "tired",
+   "text": "I know he isn't pretending to care about humanity. That's what frightens me.",
+   "if_not": "rr_complete"
+  },
+  {
+   "who": "mara",
+   "expr": "soft",
+   "text": "You came back. Both of them came back. On a first descent, that's the whole score.",
+   "if": "rr_complete"
+  },
+  {
+   "who": "mara",
+   "expr": "focused",
+   "text": "The Thoughtstone readings from your field log are... wrong. Not broken. Wrong in a very consistent direction.",
+   "if": "rr_complete"
+  },
+  {
+   "who": "mara",
+   "expr": "neutral",
+   "text": "Curiosity always wins. It just usually costs more than people expect."
+  }
+ ]
+}

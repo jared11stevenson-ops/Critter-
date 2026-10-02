@@ -1,0 +1,20 @@
+{
+ "id": "rr_span",
+ "lines": [
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "The Ochre Span. Look at the keystones. Every one carries the next."
+  },
+  {
+   "who": "cigarra",
+   "expr": "focused",
+   "text": "This bridge has more futures than most people. Most of them are falling."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "Then we cross in one of the others."
+  }
+ ]
+}

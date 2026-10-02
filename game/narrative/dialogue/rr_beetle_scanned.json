@@ -1,0 +1,25 @@
+{
+ "id": "rr_beetle_scanned",
+ "lines": [
+  {
+   "who": "comms:mara",
+   "expr": "focused",
+   "text": "Resonance pylons. The drill's tuning field is driving the beetles out of their minds."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "Break the pylons and they calm."
+  },
+  {
+   "who": "cigarra",
+   "expr": "happy",
+   "text": "Or fight a lot of very upset furniture. Your call, Handler."
+  },
+  {
+   "set": {
+    "beetle_scanned": true
+   }
+  }
+ ]
+}

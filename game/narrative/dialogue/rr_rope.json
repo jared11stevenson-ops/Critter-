@@ -1,0 +1,33 @@
+{
+ "id": "rr_rope",
+ "lines": [
+  {
+   "who": "cigarra",
+   "expr": "happy",
+   "text": "Landed in the version where I land. Good version."
+  },
+  {
+   "who": "cigarra",
+   "expr": "focused",
+   "text": "The Spanwright anchors on this side still hold. Dropping the line."
+  },
+  {
+   "event": "drop_rope"
+  },
+  {
+   "set": {
+    "rope_dropped": true
+   }
+  },
+  {
+   "who": "aruun",
+   "expr": "amused",
+   "text": "If this breaks, I'm telling everyone you planned it."
+  },
+  {
+   "who": "cigarra",
+   "expr": "unhinged",
+   "text": "I did plan it. Just not the breaking part. Probably."
+  }
+ ]
+}

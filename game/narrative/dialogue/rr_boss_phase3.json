@@ -1,0 +1,15 @@
+{
+ "id": "rr_boss_phase3",
+ "lines": [
+  {
+   "who": "cigarra",
+   "expr": "shocked",
+   "text": "Big beam. Lots of futures with holes in them. Stand in the ones without holes."
+  },
+  {
+   "who": "comms:dexter",
+   "expr": "serious",
+   "text": "Overdrive. That is... not a setting I approved."
+  }
+ ]
+}

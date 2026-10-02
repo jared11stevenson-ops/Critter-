@@ -1,0 +1,28 @@
+{
+ "id": "hub_npc_scarlith",
+ "lines": [
+  {
+   "who": "scarlith",
+   "expr": "default",
+   "text": "Down here, Handler. Lower. On the table. Yes. Hello."
+  },
+  {
+   "who": "scarlith",
+   "expr": "default",
+   "text": "Value begins where neglect ends. Neglect must be real, though. I am told this often.",
+   "if_not": "rr_complete"
+  },
+  {
+   "who": "scarlith",
+   "expr": "default",
+   "text": "The Dominion bought a whole cache? Excellent customers. Terrible precedent.",
+   "if": "ochre_span_failing"
+  },
+  {
+   "who": "scarlith",
+   "expr": "default",
+   "text": "A braced foundation. Nobody can sell that. Annoying. Admirable. Mostly annoying.",
+   "if": "ochre_span_braced"
+  }
+ ]
+}

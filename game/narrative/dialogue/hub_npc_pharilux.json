@@ -1,0 +1,50 @@
+{
+ "id": "hub_npc_pharilux",
+ "lines": [
+  {
+   "who": "pharilux",
+   "expr": "watchful",
+   "text": "..."
+  },
+  {
+   "choice": [
+    {
+     "text": "Where are you from?",
+     "goto": "p_from"
+    },
+    {
+     "text": "Keeping watch?",
+     "goto": "p_watch"
+    }
+   ]
+  },
+  {
+   "label": "p_from"
+  },
+  {
+   "who": "pharilux",
+   "expr": "calm",
+   "text": "Wrong direction."
+  },
+  {
+   "goto": "p_end"
+  },
+  {
+   "label": "p_watch"
+  },
+  {
+   "who": "pharilux",
+   "expr": "watchful",
+   "text": "Even in darkness, someone keeps watch."
+  },
+  {
+   "label": "p_end"
+  },
+  {
+   "who": "pharilux",
+   "expr": "calm",
+   "text": "Thresholds remember who crossed them carefully.",
+   "if": "rr_complete"
+  }
+ ]
+}

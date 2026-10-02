@@ -1,0 +1,10 @@
+{
+ "id": "rr_boss_phase2",
+ "lines": [
+  {
+   "who": "comms:mara",
+   "expr": "focused",
+   "text": "It's overheating — the coolant vents are opening! Hit the vents!"
+  }
+ ]
+}

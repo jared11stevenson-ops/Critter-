@@ -1,0 +1,42 @@
+{
+ "id": "rr_boss_intro",
+ "lines": [
+  {
+   "who": "narration",
+   "text": "AUGUR-7 DEEPCORE RIG — DOMINION EXTRACTION PERMIT 7-K"
+  },
+  {
+   "who": "comms:dexter",
+   "expr": "amused",
+   "text": "Ah. You must be the Handler Mara sent. Hi. Dexter Mane. I'd shake your hand, but there's a scale-state in the way."
+  },
+  {
+   "who": "comms:dexter",
+   "expr": "neutral",
+   "text": "That rig is licensed, insured and very expensive. The foundation fails with or without it. I'm making sure the Thoughtstone doesn't fail with it."
+  },
+  {
+   "who": "aruun",
+   "expr": "aggressive",
+   "text": "You're the reason it's failing."
+  },
+  {
+   "who": "comms:dexter",
+   "expr": "serious",
+   "text": "I'm the reason it's being measured. Different thing."
+  },
+  {
+   "who": "cigarra",
+   "expr": "focused",
+   "text": "His futures are sharp. Every one of them has a version where he's sorry. None of them has a version where he stops."
+  },
+  {
+   "who": "comms:dexter",
+   "expr": "genuine",
+   "text": "...That's unsettlingly fair. Do try not to break my drill more than necessary."
+  },
+  {
+   "event": "start_boss"
+  }
+ ]
+}

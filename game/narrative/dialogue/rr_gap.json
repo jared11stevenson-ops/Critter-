@@ -1,0 +1,15 @@
+{
+ "id": "rr_gap",
+ "lines": [
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "The old rope span is gone. Cut. Not rotted."
+  },
+  {
+   "who": "cigarra",
+   "expr": "happy",
+   "text": "Gaps are my favourite shape. Swap to me, Handler — I'll hop it and drop a line for the big one."
+  }
+ ]
+}
