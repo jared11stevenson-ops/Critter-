@@ -141,17 +141,17 @@ def sheets():
     out = []
     # LEAF SKIRT: olive leaf panels around the back and sides (angles: +X = 0, back +Y = 90 deg)
     rng = np.random.default_rng(8)
-    angles = [-35, -10, 15, 40, 135, 160, 185, 210]
+    angles = [-168, -142, -118, -62, -38, -12]   # front + sides only (sheet back: legs bare)
     for k, a in enumerate(angles):
         phi0 = math.radians(a)
-        L = rng.uniform(0.55, 0.72) * (0.85 if a in (-35, 210) else 1.0)
-        w = 0.13
+        L = rng.uniform(0.52, 0.64) * (0.85 if a in (-168, -12) else 1.0)
+        w = 0.12
 
         def shape(U, Vv, phi0=phi0, L=L, w=w):
             phi = phi0 + (U - 0.5) * w / 0.16
             top = _waist_point(phi, z=1.09)
             rad = np.stack([np.cos(phi), np.sin(phi), np.zeros_like(phi)], -1)
-            return top + rad * (0.035 + 0.13 * Vv ** 1.2)[..., None] + np.array([0, 0, -1.0]) * (L * Vv)[..., None]
+            return top + rad * (0.03 + 0.09 * Vv ** 1.2)[..., None] + np.array([0, 0, -1.0]) * (L * Vv)[..., None]
 
         def alpha(u, v, seed=k):
             r = np.random.default_rng(seed)
@@ -189,15 +189,15 @@ def sheets():
     c = np.array([0.0, -0.04, 1.665])
 
     def cloak(U, Vv):
-        phi = np.radians(255 - U * 160)               # 255 (front-right) -> 95 (back centre): right shoulder only
+        phi = np.radians(242 - U * 140)               # 242 (front-right) -> 102 (just right of the spine): right shoulder only
         rad = np.stack([np.cos(phi), np.sin(phi), np.zeros_like(phi)], -1)
         # length by angle: front 0.25, right side 0.5, back 1.15
         back = np.clip(np.sin(phi), 0, 1)
         side = np.clip(-np.cos(phi), 0, 1)
-        L = 0.22 + 0.25 * side + 0.42 * back ** 0.7
+        L = 0.2 + 0.32 * side + 0.5 * back ** 0.7      # full length incl. the hanging tails
         top = c + rad * np.where(back > 0, 0.11, 0.1)[..., None] + np.array([0, 0, 0.0])
         over = np.where(Vv < 0.25, Vv / 0.25, 1.0)
-        out_r = (0.1 + 0.14 * side + 0.06 * back) * over
+        out_r = (0.07 + 0.1 * side + 0.04 * back) * over
         drop = np.clip(Vv - 0.12, 0, None) / 0.88 * L
         return top + rad * out_r[..., None] + np.array([0, 0, -1.0]) * drop[..., None] + np.array([0, 0, 0.05]) * \
             (1 - over)[..., None]
@@ -205,8 +205,12 @@ def sheets():
     def cloak_alpha(u, v):
         a = torn_edge(91, 0.14, 5.0)(u, v)
         # long ragged strips at the back: deep vertical tears in the lower half
-        tears = (np.abs(np.sin(u * 37.0 + 1.3)) < 0.18) & (v > 0.55 + 0.2 * np.abs(np.sin(u * 13)))
-        return (a * (~tears)).astype(np.float32)
+        # main hem at ~55% of the length (waist at the back); only a few ragged tails hang to the full length
+        hem = 0.5 + 0.06 * np.sin(u * 29.0 + 0.7) + 0.04 * np.sin(u * 61.0)
+        tail = np.abs(np.sin(u * 3.3 * 6.283 + 0.9)) > 0.72
+        taper = np.abs(np.sin(u * 3.3 * 6.283 + 0.9)) > 0.72 + 0.25 * np.clip((v - hem) / 0.5, 0, 1)
+        keep = (v < hem) | (tail & taper)
+        return (a * keep).astype(np.float32)
     out.append(Sheet("cloak", cloak, kind="cloak", bind="cloak", nu=16, nv=18, thick=0.006, gap=0.02,
                      folds=lambda U, Vv: 0.02 * np.sin(U * 31.0 + 1.0) * np.clip(Vv - 0.2, 0, 1) +
                      0.008 * np.sin(U * 71.0) * Vv, wrinkle=0.002, alpha=cloak_alpha, iters=10, smooth=0.3))
