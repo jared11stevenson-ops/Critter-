@@ -27,7 +27,7 @@ Grade = average. **A ≥ 4.5 · B ≥ 3.5 · C ≥ 2.5 · D < 2.5**
 | **Agent 2 — Gameplay/UI** | 5 | 4 | 5 | 5 | 4 | **A (4.6)** | Rewarded: takes the **performance/lag** task, with authority over world shaders for perf |
 | **Agent 4 — Animation** | 5 | 4 | 4 | 4 | 5 | **A− (4.4)** | Rewarded: owns **all character animation + 3D model integration** as default, Cigarra anims |
 | **Agent 1 — Art/World** | 5 | 4 | 4 | 5 | 3 | **B+ (4.2)** | Benched (no cull): its scope is mostly delivered; lag partly from its realism pass → perf handed to Agent 2 |
-| **Agent 3 — Modeling** | 3 | 2 | 4 | 5 | 4 | **C+ (3.6→3.0 on quality gate)** | **Probation**: one run to deliver an Aruun model that clearly beats the billboard in-game. Fail → culled; modeling goes to Agent 4 |
+| **Agent 3 — Canon Art Fidelity (retrained)** | 3 | 2 | 4 | 5 | 4 | C+ as modeler | **Retrained** (creator's call): 3D modeling → Agent 4. New role plays to its strengths: Real-ESRGAN sharper billboards/portraits/icons, canon fidelity audit, reference packs. Graded fresh in the new role. |
 
 ### Evidence
 - Agent 2: delivered the entire playable slice (combat, AI, boss, UI, hub, habitat, save), proved both endings end-to-end, fixed real bugs (80 m/s knockback), cut draw calls 238→~125.
