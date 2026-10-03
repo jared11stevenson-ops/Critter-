@@ -15,11 +15,17 @@
    "impact": null,
    "speed": 1.065
   },
-  "run": {
+  "jog": {
    "duration": 0.7667,
    "loop": true,
    "impact": null,
    "speed": 2.907
+  },
+  "run": {
+   "duration": 0.7333,
+   "loop": true,
+   "impact": null,
+   "speed": 3.303
   },
   "dash": {
    "duration": 0.4333,

@@ -183,3 +183,26 @@ def match_hip_height(tr, z, k=1.0):
     hi = tr.sk.index["hips"]
     dz = (z - tr.P[:, hi, 2].mean()) * k
     shift(tr, (0, 0, dz))
+
+
+def roll_loop(tr, start):
+    """Re-phase a seamless loop so frame `start` becomes frame 0 (last frame == first frame kept)."""
+    F = tr.F
+    n = F - 1
+    start %= n
+    idx = np.r_[np.arange(start, n), np.arange(0, start), [start]]
+    tr.W = tr.W[idx].copy()
+    tr.P = tr.P[idx].copy()
+    for k in tr.loc:
+        tr.loc[k] = tr.loc[k][idx].copy()
+
+
+def phase_to_left_contact(tr, v):
+    """Loco clips start at the left foot's touch-down so all gaits blend in phase."""
+    c = rt.detect_contacts(tr, "foot.L", "toe.L", cyclic=True, inplace_v=v)
+    segs = rt.segments(c, True)
+    if not segs:
+        return
+    s = min(segs, key=lambda ab: abs(ab[1] - ab[0]) * 0 + (ab[0] % (tr.F - 1)))
+    starts = sorted(a % (tr.F - 1) for a, b in segs)
+    roll_loop(tr, starts[0])

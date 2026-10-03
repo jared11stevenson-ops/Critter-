@@ -12,7 +12,7 @@ import lib
 import retarget as rt
 from retarget import FPS
 
-CLIPS = ["idle", "walk", "run", "dash", "attack_1", "attack_2", "attack_3", "reaching_strike", "gravity_pull",
+CLIPS = ["idle", "walk", "jog", "run", "dash", "attack_1", "attack_2", "attack_3", "reaching_strike", "gravity_pull",
          "beetle_rage", "hit", "hit_back", "hit_left", "hit_right", "hit_heavy", "downed", "revive", "burden_hold",
          "talk_idle"]
 
@@ -199,21 +199,34 @@ def walk(sk):
     plant(tr, cyclic=True, v=v)
     rt.pendulum(tr, "weapon", stiffness=55, damping=7, cyclic=True, max_deg=25)
     lib.loop_blend(tr, 3)
+    lib.phase_to_left_contact(tr, v)
     return tr, meta(tr, True, speed=round(float(np.linalg.norm(v)) * FPS, 3))
+
+
+def _gait(sk, clip, t0, t1, lean, hold, haft, stiff, ts=1.0, sink=0.05):
+    tr = base(sk, clip, t0, t1, timescale=ts, loop=True)
+    lib.hold_local(tr, ["upperarm.R", "forearm.R", "hand.R"], hold)
+    lib.layer(tr, CARRY)
+    carry(tr, haft)
+    lib.layer(tr, lean)
+    lib.shift(tr, (0, 0, -sink))
+    v = lib.make_inplace(tr)
+    plant(tr, cyclic=True, v=v)
+    rt.pendulum(tr, "weapon", stiffness=stiff, damping=6, cyclic=True, max_deg=35)
+    lib.loop_blend(tr, 3)
+    lib.phase_to_left_contact(tr, v)
+    return tr, meta(tr, True, speed=round(float(np.linalg.norm(v)) * FPS, 3))
+
+
+def jog(sk):
+    return _gait(sk, "35_17", 0.6, 1.3667, {"spine1": (10, 0, 0), "chest": (4, 0, 0), "head": (-10, 0, 0)},
+                 0.35, (-0.45, 0.1, -0.85), 45)
 
 
 def run(sk):
-    tr = base(sk, "35_17", 0.6, 1.3667, loop=True)
-    lib.hold_local(tr, ["upperarm.R", "forearm.R", "hand.R"], 0.35)
-    lib.layer(tr, CARRY)
-    carry(tr, (-0.45, 0.1, -0.85))
-    lib.layer(tr, {"spine1": (10, 0, 0), "chest": (4, 0, 0), "head": (-10, 0, 0)})
-    lib.shift(tr, (0, 0, -0.05))
-    v = lib.make_inplace(tr)
-    plant(tr, cyclic=True, v=v)
-    rt.pendulum(tr, "weapon", stiffness=45, damping=6, cyclic=True, max_deg=35)
-    lib.loop_blend(tr, 3)
-    return tr, meta(tr, True, speed=round(float(np.linalg.norm(v)) * FPS, 3))
+    # heavy run: strong forward lean from the hips, head held level, Morrow trailing low
+    return _gait(sk, "09_01", 0.4, 1.1333, {"spine1": (14, 0, 0), "chest": (6, 0, 0), "neck1": (-4, 0, 0),
+                                            "head": (-14, 0, 0)}, 0.4, (-0.45, 0.35, -0.8), 40, sink=0.07)
 
 
 def idle(sk):
