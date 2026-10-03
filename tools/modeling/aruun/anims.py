@@ -3,13 +3,14 @@
 Pose = {bone: (rx, ry, rz)} in degrees, rotations about ARMATURE axes (Z up, character faces -Y, his left +X):
   rx > 0 tips an upward bone forward / swings a hanging limb BACK; ry > 0 tilts toward his left (+X) for
   upward bones; rz > 0 turns the front toward his left. Special keys: "hips_loc": (x, y, z) metres
-  (armature space offset), "weapon_len": haft scale (Morrow's telescoping reach), "jaw": open angle.
+  (armature space offset), "weapon_len": haft length factor (Morrow's telescoping reach), "jaw": open angle.
 Mirroring helper `M()` builds .R from .L values (ry, rz negate).
 """
 import math
 
 import bpy
 from mathutils import Euler, Quaternion, Vector
+from body import MORROW_HAFT
 
 FPS = 30
 
@@ -230,8 +231,11 @@ def build_all(rig):
                     pb["hips"].keyframe_insert("location", frame=f)
                 elif bn == "weapon_len":
                     s = p.get(bn, 1.0)
-                    pb["weapon"].scale = (1, s, 1)
-                    pb["weapon"].keyframe_insert("scale", frame=f)
+                    # telescoping: the two outer haft segments slide out along the haft; the head is not scaled
+                    e = (s - 1.0) * MORROW_HAFT * 0.5
+                    for bn2 in ("weapon_ext1", "weapon_ext2"):
+                        pb[bn2].location = (0, e, 0)
+                        pb[bn2].keyframe_insert("location", frame=f)
                 else:
                     r = p.get(bn, (0, 0, 0))
                     pb[bn].rotation_quaternion = _local_quat(rest[bn], *r)

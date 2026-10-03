@@ -75,10 +75,10 @@ def build_body(mb):
 def _head(mb):
     # cranium + snout: path from the back of the skull to the snout tip (points forward/down)
     back = V(0, 0.075, 2.07)
-    path = [back, V(0, 0.03, 2.075), V(0, -0.03, 2.055), V(0, -0.10, 2.02), V(0, -0.17, 1.985), V(0, -0.225, 1.955)]
+    path = [back, V(0, 0.03, 2.078), V(0, -0.025, 2.06), V(0, -0.08, 2.03), V(0, -0.13, 1.995), V(0, -0.17, 1.965)]
     # widths (half) / heights (half) along the head
-    rx = [0.035, 0.075, 0.072, 0.050, 0.036, 0.022]
-    ry = [0.040, 0.068, 0.062, 0.045, 0.034, 0.020]
+    rx = [0.042, 0.088, 0.088, 0.066, 0.046, 0.026]
+    ry = [0.044, 0.072, 0.068, 0.052, 0.037, 0.021]
 
     def shape(t, th, x, y):
         # flatter skull top, brow ridge bulge over the eyes, slight keel under the snout
@@ -93,16 +93,16 @@ def _head(mb):
     mb.loft(path, rx, ry, n=16, part="head", mat=BODY, side=(1, 0, 0), front=(0, 0, 1), samples=11,
             shape=shape, cap0="flat", cap1="point", power=[2.0, 2.3, 2.3, 2.2, 2.0, 2.0])
     # downward mandible hook at the snout tip (front view: beak-like hook)
-    mb.cone(V(0, -0.205, 1.950), V(0, -0.245, 1.905), 0.018, part="head", mat=BODY, n=6,
+    mb.cone(V(0, -0.155, 1.958), V(0, -0.19, 1.912), 0.018, part="head", mat=BODY, n=6,
             bend=V(0, 0.02, 0.0), segs=3)
     # lower jaw (separate part -> jaw bone; opens for roars)
-    jp = [V(0, 0.02, 1.995), V(0, -0.05, 1.975), V(0, -0.12, 1.950), V(0, -0.195, 1.928)]
+    jp = [V(0, 0.02, 1.995), V(0, -0.04, 1.975), V(0, -0.095, 1.952), V(0, -0.15, 1.935)]
     mb.loft(jp, [0.050, 0.045, 0.034, 0.018], [0.022, 0.024, 0.02, 0.012], n=10, part="jaw", mat=BODY,
             side=(1, 0, 0), front=(0, 0, -1), samples=6, cap0="flat", cap1="point")
     # fangs (white) at the jaw corners, upward
     for sx in (1, -1):
-        mb.cone(V(sx * 0.03, -0.11, 1.960), V(sx * 0.033, -0.118, 1.995), 0.007, part="fang", mat=BODY, n=5, segs=2)
-        mb.cone(V(sx * 0.024, -0.16, 1.955), V(sx * 0.026, -0.166, 1.978), 0.005, part="fang", mat=BODY, n=5, segs=2)
+        mb.cone(V(sx * 0.034, -0.09, 1.962), V(sx * 0.037, -0.098, 1.997), 0.007, part="fang", mat=BODY, n=5, segs=2)
+        mb.cone(V(sx * 0.026, -0.125, 1.958), V(sx * 0.028, -0.131, 1.981), 0.005, part="fang", mat=BODY, n=5, segs=2)
     # eyes: yellow, on the sides of the head, set under a brow plate
     for sx in (1, -1):
         mb.sphere(V(sx * 0.064, -0.035, 2.048), (0.017, 0.022, 0.017), part="eye", mat=BODY, n=10, rings=6)
@@ -117,10 +117,12 @@ def _head(mb):
                     segs=2)
     # horns: rise from the crown, spread outward, lean forward, tips curl back inward (back view: lyre/crescent)
     for sx in (1, -1):
-        hp = [V(sx * 0.032, 0.0, 2.10), V(sx * 0.05, -0.01, 2.18), V(sx * 0.085, -0.03, 2.26),
-              V(sx * 0.105, -0.045, 2.32), V(sx * 0.095, -0.05, 2.37), V(sx * 0.06, -0.04, 2.40)]
-        rings = mb.loft(hp, [0.022, 0.019, 0.016, 0.013, 0.010, 0.006], [0.020, 0.017, 0.015, 0.012, 0.009, 0.005],
-                        n=8, part="horn", mat=BODY, side=(1, 0, 0), front=(0, -1, 0), samples=14, cap0="flat",
+        # hook: rise, sweep back over the skull, tip curls down/forward (side view + front-view crescent)
+        hp = [V(sx * 0.034, -0.005, 2.10), V(sx * 0.05, -0.01, 2.20), V(sx * 0.07, 0.015, 2.30),
+              V(sx * 0.085, 0.065, 2.375), V(sx * 0.088, 0.135, 2.40), V(sx * 0.078, 0.19, 2.37),
+              V(sx * 0.066, 0.205, 2.315)]
+        rings = mb.loft(hp, [0.024, 0.021, 0.018, 0.015, 0.012, 0.009, 0.005], [0.022, 0.019, 0.016, 0.013, 0.011, 0.008, 0.004],
+                        n=8, part="horn", mat=BODY, side=(1, 0, 0), front=(0, -1, 0), samples=18, cap0="flat",
                         cap1="point",
                         shape=lambda t, th, x, y: (x * (1 + 0.18 * max(0, math.sin(t * 40))), y))
         # knobbed tines along the horn (front/side views)
@@ -130,7 +132,7 @@ def _head(mb):
             mb.cone(p, p + d.normalized() * ln, 0.007, part="horn", mat=BODY, n=5, segs=2)
         # notched forked tip
         tip = hp[-1]
-        mb.cone(tip, tip + V(-sx * 0.012, 0.0, 0.03), 0.005, part="horn", mat=BODY, n=4, segs=1)
+        mb.cone(tip, tip + V(-sx * 0.01, -0.025, -0.012), 0.005, part="horn", mat=BODY, n=4, segs=1)
     # temple bone tines (tan antler-like branches behind the eyes)
     for sx in (1, -1):
         b0 = V(sx * 0.06, 0.03, 2.08)
@@ -463,30 +465,32 @@ def _mantle(mb):
     mb.loft(pts, 0.055, 0.045, n=8, part="cloak_hood", mat=GEAR, side=(0, 0, 1), front=(0, 1, 0.3), samples=13,
             cap0="flat", cap1="flat",
             shape=lambda t, th, x, y: (x * (0.75 + 0.5 * math.sin(math.pi * t)), y * (0.8 + 0.5 * math.sin(math.pi * t))))
-    # cape draped over his RIGHT shoulder (-X) and down the back (back view), ragged strips at the hem
-    for k in range(7):
-        u = k / 6.0
-        x0 = -0.30 + 0.30 * u          # from the right shoulder tip toward the spine
-        top = V(x0, 0.06 + 0.06 * (1 - u), 1.74 - 0.08 * (1 - u))
-        ln = 0.75 + 0.2 * rnd.random() - 0.25 * u
-        p1 = V(x0 * 1.05, 0.16 + 0.03 * (1 - u), 1.55)
-        p2 = V(x0 * 1.1, 0.19, 1.35 - 0.05 * rnd.random())
-        p3 = V(x0 * 1.1 + 0.02 * rnd.random(), 0.21, 1.72 - ln)
-        mb.ribbon([top, p1, p2, p3], [0.1, 0.11, 0.1, 0.06], part="cloak_back", mat=GEAR, normal_hint=(0, 1, 0),
-                  samples=8, across=2, curl=0.15)
-    # over-shoulder flap (front side of the right shoulder)
-    mb.ribbon([V(-0.28, 0.08, 1.75), V(-0.33, -0.02, 1.70), V(-0.34, -0.07, 1.58), V(-0.33, -0.08, 1.48)],
-              [0.16, 0.18, 0.16, 0.10], part="cloak_back", mat=GEAR, normal_hint=(-1, -0.3, 0), samples=7, across=2,
-              curl=0.2)
+    # ragged cape over his RIGHT shoulder (-X) and down the back: narrow torn strips with gaps, uneven hems
+    for k in range(9):
+        u = k / 8.0
+        x0 = -0.31 + 0.27 * u + 0.012 * (rnd.random() - 0.5)
+        top = V(x0, 0.06 + 0.05 * (1 - u), 1.74 - 0.07 * (1 - u))
+        ln = 0.42 + 0.3 * rnd.random() - 0.12 * u
+        p1 = V(x0 * 1.04, 0.15 + 0.03 * (1 - u), 1.58)
+        p2 = V(x0 * 1.08 + 0.02 * (rnd.random() - 0.5), 0.175, 1.72 - ln * 0.65)
+        p3 = V(x0 * 1.1 + 0.03 * (rnd.random() - 0.5), 0.19 + 0.02 * rnd.random(), 1.72 - ln)
+        w = 0.055 + 0.03 * rnd.random()
+        mb.ribbon([top, p1, p2, p3], [w, w * 1.05, w * 0.8, 0.008], part="cloak_back", mat=GEAR,
+                  normal_hint=(0, 1, 0), samples=8, across=2, curl=0.2)
+    # over-shoulder flap: three torn tongues hanging over the front of the right shoulder
+    for k, (dx, ln) in enumerate(((0.0, 0.26), (-0.05, 0.2), (0.045, 0.16))):
+        mb.ribbon([V(-0.28 + dx * 0.4, 0.08, 1.75), V(-0.32 + dx, -0.01, 1.71), V(-0.335 + dx, -0.06, 1.75 - ln * 0.6),
+                   V(-0.33 + dx, -0.075, 1.75 - ln)], [0.07, 0.07, 0.05, 0.006], part="cloak_back", mat=GEAR,
+                  normal_hint=(-1, -0.3, 0), samples=7, across=2, curl=0.25)
     # long dark cloak tails behind the legs (front view: dark tails behind the olive skirt to ~0.35 m)
-    for k in range(6):
-        u = k / 5.0
+    for k in range(8):
+        u = k / 7.0
         a = math.radians(200 + 140 * u)
         c, s = math.cos(a), math.sin(a)
         top = V(0.2 * c, 0.03 + 0.15 * abs(s) + 0.02, 1.16)
-        ln = 0.78 + 0.08 * rnd.random()
+        ln = 0.6 + 0.2 * rnd.random()
         bot = top + V(0.08 * c, 0.1, -ln)
-        mb.ribbon([top, top.lerp(bot, 0.5) + V(0.02 * c, 0.03, 0), bot], [0.13, 0.15, 0.02], part="cloak_tail",
+        mb.ribbon([top, top.lerp(bot, 0.5) + V(0.02 * c, 0.03, 0), bot], [0.08, 0.09, 0.008], part="cloak_tail",
                   mat=GEAR, normal_hint=(c * 0.5, 1, 0), samples=7, across=2, curl=0.2)
 
 
@@ -543,6 +547,10 @@ def build_morrow(mb):
         mb.loft([V(0, 0, z) for z in zz], rr, rr, n=8, part=part, mat=MORROW, side=(1, 0, 0), front=(0, -1, 0),
                 cap0="flat", cap1="flat",
                 shape=lambda t, th, x, y: (x * (1 + 0.1 * math.sin(3 * th + t * 9)), y * (1 + 0.1 * math.cos(2 * th + t * 7))))
+        # inner rod: hidden at rest inside the head-side segments, exposed when the haft telescopes
+        if part != "morrow_seg0":
+            mb.loft([V(0, 0, z1 + 0.02), V(0, 0, z1 - 0.45)], [0.022, 0.022], [0.022, 0.022], n=8, part=part, mat=MORROW,
+                    side=(1, 0, 0), front=(0, -1, 0), cap0="flat", cap1=None)
         # knots / ring collars
         for zc in (z0 - 0.01, (z0 + z1) / 2):
             mb.sphere(V(0, 0, zc), (r * 1.45, r * 1.45, 0.022), part=part, mat=MORROW, n=8, rings=4)
