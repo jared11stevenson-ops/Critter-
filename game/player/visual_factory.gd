@@ -18,6 +18,16 @@ static func _scene(path: String) -> PackedScene:
 	return ps
 
 static func character(id: String) -> Node3D:
+	# Preview: full 3D character models (Agent 3) when enabled in Settings.
+	if GameState.settings.get("use_3d_models", false):
+		var mps := _scene("res://game/art/models/%s/%s_model.tscn" % [id, id])
+		if mps:
+			var mn: Node = mps.instantiate()
+			if mn is Node3D:
+				if "character_id" in mn:
+					mn.set("character_id", id)
+				return mn as Node3D
+			mn.free()
 	var ps := _scene(BILLBOARD)
 	if ps:
 		var n: Node = ps.instantiate()

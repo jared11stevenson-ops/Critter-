@@ -19,7 +19,7 @@ var dominion_standing: int = 0
 var chapter: String = "prologue"
 var settings: Dictionary = {
 	"music_volume": 0.8, "sfx_volume": 0.9, "screen_shake": 1.0,
-	"show_damage_numbers": true, "left_handed": false, "reduce_flashing": false,
+	"show_damage_numbers": true, "left_handed": false, "reduce_flashing": false, "use_3d_models": false,
 }
 
 func _ready() -> void:

@@ -50,6 +50,8 @@ func _ready() -> void:
 					GameState.add_item(p[0], int(p[1]) if p.size() > 1 else 1)
 			"qa_scene":
 				get_tree().change_scene_to_file.call_deferred(v)
+	if args.has("qa_3d"):
+		GameState.settings["use_3d_models"] = true
 	print("[QA] active, shots=", _shots, " quit=", _quit)
 
 func _process(delta: float) -> void:

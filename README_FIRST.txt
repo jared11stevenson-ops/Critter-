@@ -1,4 +1,4 @@
-CRITTER — The Red Span Survey  ·  v0.6.0 PLAYTEST BUILD
+CRITTER — The Red Span Survey  ·  v0.7.0 PLAYTEST BUILD
 =======================================================
 HOW TO OPEN (Godot 4.7 mobile editor)
 1. Unzip this file.
@@ -27,3 +27,11 @@ KNOWN PLACEHOLDERS
 
 NOTES FOR THE DIRECTOR
 Send notes in any form: "the boss is too hard", screenshots, voice-to-text, whatever.
+
+NEW IN v0.7.0
+- World realism pass: textured PBR terrain and cliffs, real 3D rocks/trees/grass, no ink outlines,
+  per-area lighting, rim light on characters, dust motes, Dominion work lights, hub light pools.
+- Text audit: spelling standardized to the bible's American English; 4 lore-accuracy fixes in dialogue.
+- Godot 4.7 is now the official engine.
+- PREVIEW: 3D Aruun model (rigged, 15 animations). Turn on in Settings -> "3D character models (preview)".
+  Still being refined; Cigarra's 3D model is next. Tell me how Aruun looks/moves on your phone.
