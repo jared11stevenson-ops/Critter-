@@ -106,8 +106,8 @@ def paint(ob):
     col[is_car & (n1 < -0.7)] = deep
     h[is_car] = np.clip(n1[is_car], -1, 1) * 0.5 + 0.3
     # dark chitin: cream plates and red bands
-    col[is_dark & (n1 > 0.4)] = cream
-    col[is_dark & (n2 < -0.55)] = red
+    col[is_dark & (n1 > 0.12)] = cream
+    col[is_dark & (n2 < -0.3)] = red
     col[is_dark & (n3 > 1.05)] = ochre * 0.9
     h[is_dark] = (n1[is_dark] > 0.65) * 0.6 + n3[is_dark] * 0.1
     # bone: subtle grain
