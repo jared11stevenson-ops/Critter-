@@ -66,7 +66,7 @@ func _ready() -> void:
 	add_to_group("hud")
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	root = Control.new()
-	root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.theme = UiKit.theme()
 	add_child(root)
@@ -125,7 +125,7 @@ func _btn(act: String, d: float, g: String) -> TouchButton:
 # ---------------- build ----------------
 func _build_overlays() -> void:
 	_noise_rect = ColorRect.new()
-	_noise_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_noise_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_noise_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_noise_mat = ShaderMaterial.new()
 	if ResourceLoader.exists(NOISE_SHADER_PATH):
@@ -138,7 +138,7 @@ func _build_overlays() -> void:
 	_noise_rect.visible = false
 	root.add_child(_noise_rect)
 	_vignette = TextureRect.new()
-	_vignette.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_vignette.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_vignette.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_vignette.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_vignette.stretch_mode = TextureRect.STRETCH_SCALE

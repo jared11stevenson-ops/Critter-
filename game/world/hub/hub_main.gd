@@ -83,7 +83,7 @@ func _build_ui() -> void:
 	ui.layer = 20
 	add_child(ui)
 	ui_root = Control.new()
-	ui_root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	ui_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	ui_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ui_root.theme = UiKit.theme()
 	ui.add_child(ui_root)
@@ -227,7 +227,9 @@ func _process(delta: float) -> void:
 	_objective_panel.visible = not modal
 	_objective_panel.reset_size()
 	_objective_panel.position = Vector2(20, 50)
-	_toast_box.position = Vector2(vs.x * 0.5 - 260, TOP_SAFE + 4)
+	# Toasts sit bottom-centre above the hint line, clear of the top bar and the hotspot labels' band.
+	_toast_box.reset_size()
+	_toast_box.position = Vector2(vs.x * 0.5 - 260, vs.y - 56.0 - _toast_box.size.y)
 
 func _unhandled_input(ev: InputEvent) -> void:
 	if runner.active or habitat != null or _end_card != null:

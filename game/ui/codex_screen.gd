@@ -13,14 +13,14 @@ var _portrait_holder: Control
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	theme = UiKit.theme()
 	var dim := ColorRect.new()
 	dim.color = Color(0.06, 0.04, 0.04, 0.92)
-	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(dim)
 	var margin := MarginContainer.new()
-	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for side in ["left", "right", "top", "bottom"]:
 		margin.add_theme_constant_override("margin_" + side, 28)
 	add_child(margin)
@@ -79,6 +79,7 @@ func _ready() -> void:
 	tv.add_child(_page_sub)
 	_page_body = RichTextLabel.new()
 	_page_body.bbcode_enabled = true
+	_page_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_page_body.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_page_body.add_theme_color_override("default_color", UiKit.INK)
 	_page_body.add_theme_font_size_override("normal_font_size", 26)
@@ -137,6 +138,7 @@ func _select_tab(t: String) -> void:
 		_page_body.text = "No entries yet. Scan organisms and explore to fill these pages."
 		for c in _portrait_holder.get_children():
 			c.queue_free()
+		_portrait_holder.visible = false
 
 func _show(id: String) -> void:
 	Audio.sfx("ui_tap", -4.0)

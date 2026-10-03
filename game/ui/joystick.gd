@@ -14,7 +14,7 @@ var _knob_tex: Texture2D
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_base_tex = UiKit.tex("res://game/art/ui/joystick_base.png")
 	_knob_tex = UiKit.tex("res://game/art/ui/joystick_knob.png")
 
