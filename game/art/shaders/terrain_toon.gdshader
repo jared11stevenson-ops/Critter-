@@ -21,6 +21,7 @@ uniform vec3 strata_3 : source_color = vec3(0.34, 0.11, 0.11);
 uniform vec3 strata_4 : source_color = vec3(0.60, 0.23, 0.16);
 uniform vec3 ink : source_color = vec3(0.16, 0.07, 0.07);
 uniform float strata_scale = 0.42;
+uniform float flag_scale = 0.21;
 uniform float deep_fade_y = -14.0;
 uniform vec3 deep_color : source_color = vec3(0.30, 0.16, 0.20);
 
@@ -65,7 +66,7 @@ void fragment() {
 	float crack = texture(noise_tex, xz * 0.06).a;
 	dirt = mix(dirt, ink, crack * 0.55);
 	// --- stone paving (flagstones with ink mortar)
-	vec4 fl = texture(flag_tex, xz * 0.21);
+	vec4 fl = texture(flag_tex, xz * flag_scale);
 	vec3 stone = mix(stone_b, stone_a, fl.r) * (0.82 + 0.18 * fl.g);
 	stone = mix(stone, dirt_dark, smoothstep(0.55, 0.8, n2.b) * 0.35);
 	stone = mix(stone, ink, fl.a * 0.85);

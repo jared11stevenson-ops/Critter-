@@ -143,12 +143,12 @@ static func cylinder(st: SurfaceTool, a: Vector3, b: Vector3, ra: float, rb: flo
 		ring_b.append(b + d * rb * jb)
 	for i in segs:
 		var j := (i + 1) % segs
-		quad(st, ring_a[i], ring_a[j], ring_b[j], ring_b[i], col)
+		quad(st, ring_a[j], ring_a[i], ring_b[i], ring_b[j], col)
 	if caps:
 		for i in segs:
 			var j := (i + 1) % segs
-			tri(st, b, ring_b[i], ring_b[j], col.lightened(0.05))
-			tri(st, a, ring_a[j], ring_a[i], col.darkened(0.2))
+			tri(st, b, ring_b[j], ring_b[i], col.lightened(0.05))
+			tri(st, a, ring_a[i], ring_a[j], col.darkened(0.2))
 
 
 ## Low-poly boulder: jittered, squashed octahedron-sphere. Returns nothing; adds to st.

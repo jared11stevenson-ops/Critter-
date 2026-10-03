@@ -280,13 +280,13 @@ static func tube(st: SurfaceTool, a: Vector3, b: Vector3, ra: float, rb: float, 
 		var q1 := b + d1 * rb
 		st.set_color(col)
 		# (CCW authored; emitted clockwise like ToonKit.tri)
-		_v(st, p0, ua); _v(st, q1, ub); _v(st, p1, ua)
-		_v(st, p0, ua); _v(st, q0, ub); _v(st, q1, ub)
+		_v(st, p0, ua); _v(st, p1, ua); _v(st, q1, ub)
+		_v(st, p0, ua); _v(st, q1, ub); _v(st, q0, ub)
 	# foot cap
 	for i in segs:
 		var a0 := TAU * float(i) / segs
 		var a1 := TAU * float(i + 1) / segs
-		_v(st, b, ub); _v(st, b + (x * cos(a1) + z * sin(a1)) * rb, ub); _v(st, b + (x * cos(a0) + z * sin(a0)) * rb, ub)
+		_v(st, b, ub); _v(st, b + (x * cos(a0) + z * sin(a0)) * rb, ub); _v(st, b + (x * cos(a1) + z * sin(a1)) * rb, ub)
 
 
 static func _v(st: SurfaceTool, p: Vector3, uv2: Vector2) -> void:
