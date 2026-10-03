@@ -3,12 +3,12 @@ extends RefCounted
 ## Red Reaches structures (Agent 1). `build(spec, terrain)` returns a Node3D for a layout.json structure.
 ## Each structure merges its visuals into 1-3 meshes (draw-call budget) and owns layer-1 collision.
 
-const STONE := Color(0.74, 0.50, 0.37)
+const STONE := Color(0.66, 0.42, 0.31)
 const STONE_DARK := Color(0.56, 0.34, 0.26)
-const OCHRE := Color(0.84, 0.58, 0.32)
+const OCHRE := Color(0.74, 0.47, 0.26)
 const WOOD := Color(0.48, 0.32, 0.22)
 const ROPE := Color(0.80, 0.66, 0.42)
-const GUNMETAL := Color(0.30, 0.31, 0.34)
+const GUNMETAL := Color(0.36, 0.37, 0.41)
 const DOM_RED := Color(0.72, 0.10, 0.09)
 const THOUGHT := Color(0.62, 0.86, 1.0)
 
@@ -480,27 +480,27 @@ class CrackedBoulder extends Node3D:
 		position = ReachesStructures._v3(spec.get("pos", [0, 0, 0]))
 		radius = float(spec.get("radius", 3.6))
 		var st := ToonKit.begin()
-		ToonKit.rock(st, Vector3(0, radius * 0.55, 0), Vector3(radius, radius * 0.85, radius * 0.9), Color(0.62, 0.36, 0.30), 151, 2)
-		ToonKit.rock(st, Vector3(radius * 0.8, 0.5, radius * 0.5), Vector3(1.1, 0.8, 1.0), Color(0.6, 0.36, 0.28), 152, 1)
+		ToonKit.rock(st, Vector3(0, radius * 0.55, 0), Vector3(radius, radius * 0.85, radius * 0.9), Color(0.52, 0.27, 0.22), 151, 2)
+		ToonKit.rock(st, Vector3(radius * 0.8, 0.5, radius * 0.5), Vector3(1.1, 0.8, 1.0), Color(0.5, 0.27, 0.21), 152, 1)
 		rock_mi = ReachesStructures._add_mesh(self, st, ToonKit.material({"outline": 0.05, "strata": 0.6}), "Boulder")
 		# glowing Thoughtstone cracks: thin bright wedges on the camera-facing (+Z) side and top
 		var gs := ToonKit.begin()
 		var rng := RandomNumberGenerator.new()
 		rng.seed = 5
-		for i in 5:
-			var p := Vector3(rng.randf_range(-0.6, 0.6), rng.randf_range(0.2, 0.9), 0.0)
+		for i in 9:
+			var p := Vector3(rng.randf_range(-0.75, 0.75), rng.randf_range(0.15, 0.95), 0.0)
 			var d := Vector3(rng.randf_range(-1, 1), rng.randf_range(-0.6, 0.6), 0).normalized()
 			var pts: Array = []
 			var q := p
 			for k in 4:
 				pts.append(q)
-				q += d * 0.22
+				q += d * 0.12
 				d = (d + Vector3(rng.randf_range(-0.6, 0.6), rng.randf_range(-0.6, 0.6), 0)).normalized()
 			for k in pts.size() - 1:
 				var u: Vector3 = _surf(pts[k])
 				var v: Vector3 = _surf(pts[k + 1])
-				ToonKit.cylinder(gs, u, v, 0.11 - k * 0.02, 0.09 - k * 0.02, 4, THOUGHT, false)
-		veins = ToonKit.mesh_instance(gs.commit(), ToonKit.glow(Color(0.55, 0.85, 1.0), 2.2), "Veins")
+				ToonKit.cylinder(gs, u, v, 0.09 - k * 0.015, 0.075 - k * 0.015, 4, THOUGHT, false)
+		veins = ToonKit.mesh_instance(gs.commit(), ToonKit.glow(Color(0.45, 0.8, 1.0), 1.5), "Veins")
 		veins.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		add_child(veins)
 		body = ToonKit.static_cylinder(self, Vector3(0, -0.5, 0), radius * 0.95, radius * 1.6)
@@ -510,14 +510,14 @@ class CrackedBoulder extends Node3D:
 		var x := p.x * radius * 0.85
 		var y := radius * 0.55 + (p.y - 0.5) * radius * 1.3
 		var e := Vector2(x / radius, (y - radius * 0.55) / (radius * 0.85))
-		var zz := sqrt(maxf(0.0, 1.0 - e.length_squared())) * radius * 0.9 * 0.86
+		var zz := sqrt(maxf(0.0, 1.0 - e.length_squared())) * radius * 0.9 * 1.04
 		return Vector3(x, y, zz)
 
 	func _process(_d: float) -> void:
 		if veins and not broken:
 			var m: StandardMaterial3D = veins.material_override
-			var k := 1.8 + 0.6 * sin(Time.get_ticks_msec() * 0.004)
-			m.albedo_color = Color(0.55, 0.85, 1.0) * k
+			var k := 1.3 + 0.4 * sin(Time.get_ticks_msec() * 0.004)
+			m.albedo_color = Color(0.45, 0.8, 1.0) * k
 
 	func shatter() -> void:
 		if broken:
@@ -573,7 +573,7 @@ class DominionCamp extends Node3D:
 	func _init(spec: Dictionary, t: Node) -> void:
 		position = ReachesStructures._v3(spec.get("pos", [0, 0, 0]))
 		var st := ToonKit.begin()
-		var huts := [[Vector3(-5, 0, 2), 0.2], [Vector3(5.5, 0, 3.5), -0.3]]
+		var huts := [[Vector3(-1, 0, -7), 0.2], [Vector3(9.5, 0, -5.5), -0.3]]
 		for h in huts:
 			var p: Vector3 = h[0]
 			var r: float = h[1]
@@ -584,7 +584,7 @@ class DominionCamp extends Node3D:
 			ToonKit.box(st, xf.translated_local(Vector3(0.9, 0.95, 1.62)), Vector3(1.1, 1.9, 0.06), GUNMETAL.darkened(0.4))
 			ToonKit.static_box(self, xf.translated_local(Vector3(0, 1.3, 0)), Vector3(4.4, 2.6, 3.2))
 		# survey derrick (lattice tower) behind the huts
-		var dp := Vector3(0, 0, 5.0)
+		var dp := Vector3(4.5, 0, -11.0)
 		var Ht := 9.0
 		for cx: float in [-1.0, 1.0]:
 			for cz: float in [-1.0, 1.0]:
@@ -599,14 +599,14 @@ class DominionCamp extends Node3D:
 		ToonKit.cylinder(st, dp + Vector3(0, -0.5, 0), dp + Vector3(0, Ht, 0), 0.22, 0.22, 6, Color(0.55, 0.55, 0.58))
 		ToonKit.static_box(self, Transform3D(Basis(), dp + Vector3(0, 2.0, 0)), Vector3(3.4, 4.0, 3.4))
 		# antenna mast + dish
-		var mp := Vector3(-8.5, 0, 6)
+		var mp := Vector3(-6.5, 0, -10.0)
 		ToonKit.cylinder(st, mp, mp + Vector3(0, 7.0, 0), 0.12, 0.07, 5, GUNMETAL)
 		ToonKit.cylinder(st, mp + Vector3(0, 5.2, 0), mp + Vector3(0.6, 5.6, 0.6), 0.9, 0.2, 8, Color(0.62, 0.62, 0.66))
 		# crates + barricades
 		var rng := RandomNumberGenerator.new()
 		rng.seed = 208
 		for i in 7:
-			var p := Vector3(rng.randf_range(-9, 9), 0, rng.randf_range(-5, -1.5))
+			var p := Vector3(rng.randf_range(2, 12), 0, rng.randf_range(-3, 1.5))
 			var s := rng.randf_range(0.8, 1.2)
 			var xf := Transform3D(Basis(Vector3.UP, rng.randf() * TAU), p + Vector3(0, 0.45 * s, 0))
 			ToonKit.box(st, xf, Vector3(1.1, 0.9, 0.9) * s, GUNMETAL.lightened(0.1))
@@ -614,7 +614,7 @@ class DominionCamp extends Node3D:
 			if i % 2 == 0:
 				ToonKit.static_box(self, xf, Vector3(1.1, 0.9, 0.9) * s)
 		for sx: float in [-1.0, 1.0]:
-			var xf := Transform3D(Basis(Vector3.UP, sx * 0.4), Vector3(sx * 11.0, 0.5, 1.0))
+			var xf := Transform3D(Basis(Vector3.UP, sx * 0.4), Vector3(4.0 + sx * 9.0, 0.5, -2.0))
 			ToonKit.box(st, xf, Vector3(3.0, 1.0, 0.5), Color(0.5, 0.48, 0.45))
 			ToonKit.box(st, xf.translated_local(Vector3(0, 0.3, 0.26)), Vector3(3.0, 0.2, 0.02), DOM_RED)
 		ReachesStructures._add_mesh(self, st, ToonKit.material({"outline": 0.035, "grain": 0.1}), "Camp")
