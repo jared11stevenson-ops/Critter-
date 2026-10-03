@@ -11,7 +11,8 @@ an optimized (palettized when lossless enough) PNG.
 
 Usage:
   python3 tools/art_pipeline/esrgan_upscale.py <weights.pth> tools/source_art/<sheet> <x4dir>/<sheet stem>.png
-  python3 tools/art_pipeline/hd_sprites.py --x4 <x4dir> [id ...] [--preview out.png] [--dry]
+  python3 tools/art_pipeline/hd_sprites.py --x4 <x4dir> [id ...] [--preview out.png] [--dry] [--refs]
+  --refs also writes design/model_sheets/<id>/hires/<view>_hd.png (<= 1200 px tall, same cut, original paint).
 Requires: pillow numpy scipy rembg onnxruntime; optional pngquant + pyoxipng (pip install pngquant-cli pyoxipng).
 """
 import json
@@ -31,6 +32,7 @@ import matte  # noqa: E402
 ROOT = matte.ROOT
 OUT = os.path.join(ROOT, "game", "art", "characters")
 CACHE = os.path.join(tempfile.gettempdir(), "critter_hd_cache")
+REF_H = 1200
 
 # Target texture height per character (px). Chosen by on-screen size (canon height x camera use) and a
 # total pixel budget of <= 1.5x the previous set (3.40 Mpx -> <= 5.1 Mpx). Every view of a character
@@ -94,6 +96,21 @@ def refine_x4(a1, rgb4, bgc, v, box, k=4):
     a = np.where(near, a, 0.0)
     # never resurrect regions the x1 cut excluded on purpose: limit growth to the dilated x1 matte
     a = np.minimum(a, ndi.binary_dilation(core, iterations=k).astype(np.float32))
+    # parchment connected to the crop border (pockets between legs the x1 model kept): background
+    if v.get("x4_flood", True):
+        bgm = ndi.binary_opening(d < lo * 0.8, iterations=2)
+        lab, n = ndi.label(bgm)
+        if n:
+            edge = np.unique(np.concatenate([lab[0], lab[-1], lab[:, 0], lab[:, -1]]))
+            edge = edge[edge > 0]
+            outside = ndi.binary_dilation(np.isin(lab, edge), iterations=2)
+            a = np.where(outside & ~inner, np.minimum(a, key), a)
+    # sheet ground lines / shadow strokes under the feet: thin horizontal structures in the bottom band
+    yb = int(h4 * 0.93)
+    sol = a[yb:] > 0.35
+    keep = ndi.binary_opening(sol, structure=np.ones((11, 1), bool))
+    keep = ndi.binary_dilation(keep, iterations=2) & sol
+    a[yb:][sol & ~keep] = 0.0
     return a.astype(np.float32)
 
 
@@ -139,6 +156,7 @@ def main():
     x4dir = argv[argv.index("--x4") + 1] if "--x4" in argv else os.path.join(CACHE, "x4")
     preview = argv[argv.index("--preview") + 1] if "--preview" in argv else None
     dry = "--dry" in argv
+    refs = "--refs" in argv
     skip = {x4dir, preview}
     ids = [a for a in argv if not a.startswith("--") and a not in skip]
     with open(os.path.join(os.path.dirname(__file__), "sprite_boxes.json")) as f:
@@ -183,6 +201,12 @@ def main():
             canvas = Image.new("RGBA", (4 * W1, 4 * H1), (0, 0, 0, 0))
             canvas.paste(im4, (-4 * r[0], -4 * r[1]))
             canvas = matte.rebleed(canvas)
+            if refs:   # hi-res reference view for 3D work (design/model_sheets/<id>/hires/), <= REF_H tall
+                rd = os.path.join(ROOT, "design", "model_sheets", cid, "hires")
+                os.makedirs(rd, exist_ok=True)
+                rh = min(REF_H, canvas.height)
+                ref = downsample(canvas, (max(1, round(canvas.width * rh / canvas.height)), rh))
+                save_optimized(ImageOps.mirror(ref) if v.get("flip") else ref, os.path.join(rd, view + "_hd.png"))
             Ht = min(H, 1024, 4 * H1)
             Wt = max(1, int(round(W1 * Ht / H1)))
             out = downsample(canvas, (Wt, Ht))

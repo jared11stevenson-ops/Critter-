@@ -7,23 +7,24 @@
  ],
  "px": {
   "front": [
-   122,
-   229
+   273,
+   512
   ],
   "side": [
-   144,
-   238
+   310,
+   512
   ],
   "back": [
-   133,
-   230
+   296,
+   512
   ]
  },
- "feet_y_px": 229,
+ "feet_y_px": 512,
  "source": {
   "front": "turnaround FRONT",
   "side": "turnaround SIDE (mirrored to face right)",
   "back": "turnaround BACK"
  },
- "sheet": "bramvex_sheet.png"
+ "sheet": "bramvex_sheet.png",
+ "hd": "Real-ESRGAN x4 anime_6B re-cut (tools/art_pipeline/hd_sprites.py)"
 }

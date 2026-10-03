@@ -7,23 +7,24 @@
  ],
  "px": {
   "front": [
-   398,
-   514
+   446,
+   576
   ],
   "side": [
-   194,
-   502
+   223,
+   576
   ],
   "back": [
-   246,
-   502
+   282,
+   576
   ]
  },
- "feet_y_px": 514,
+ "feet_y_px": 576,
  "source": {
   "front": "turnaround FRONT",
   "side": "turnaround SIDE (faces left on sheet, mirrored)",
   "back": "turnaround BACK"
  },
- "sheet": "cigarra_sheet.jpg"
+ "sheet": "cigarra_sheet.jpg",
+ "hd": "Real-ESRGAN x4 anime_6B re-cut (tools/art_pipeline/hd_sprites.py)"
 }
