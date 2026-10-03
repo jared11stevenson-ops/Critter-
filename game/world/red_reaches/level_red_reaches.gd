@@ -825,7 +825,10 @@ func _thoughtstone_align() -> void:
 		return
 	_events_seen["_aligned"] = true
 	var a := party.get_member("aruun")
-	field.vfx("thoughtstone_align", a.global_position + Vector3(0, 1.2, 0), {"target": a})
+	# Canon (Bible XIV): a loose sliver on the ground turns until it points at Morrow — spawn it a few
+	# metres in front of Aruun (toward the camera so the player sees it turn), aimed at him.
+	var spot := a.global_position + Vector3(1.8, 0.0, 2.6)
+	field.vfx("thoughtstone_align", spot, {"target": a, "duration": 4.5})
 	GameState.unlock_codex("mystery_thoughtstone")
 	field.request_time_scale("align", 0.5, 1.2)
 	cam.add_shake(0.15)
