@@ -1,0 +1,10 @@
+[
+ {"t":0.2,"call":"scene.qa_auto_dialogue","args":[true,0,0.3]},
+ {"t":0.5,"call":"scene.qa_skip_to","args":["boss"]},
+ {"t":1.5,"action":"move_right","dur":1.5},
+ {"t":5.0,"call":"scene.qa_damage_boss","args":[0.36]},
+ {"t":8.5,"call":"scene.qa_boss_beam"},
+ {"t":16.0,"call":"scene.qa_damage_boss","args":[0.33]},
+ {"t":19.5,"call":"scene.qa_boss_beam"},
+ {"t":26.0,"call":"scene.qa_log_flags"}
+]

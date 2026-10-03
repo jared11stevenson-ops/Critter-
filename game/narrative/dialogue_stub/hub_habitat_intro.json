@@ -1,0 +1,21 @@
+{
+ "id": "hub_habitat_intro",
+ "lines": [
+  {
+   "who": "mara",
+   "expr": "neutral",
+   "text": "The Habitat Wing. Every organism carries its home's chain with it: Substrate, Symbiont, Climate, Anchor."
+  },
+  {
+   "who": "mara",
+   "expr": "focused",
+   "text": "Get the chain wrong and the specimen is stressed. Get it right and it thrives. Materials come from the field."
+  },
+  {
+   "who": "aruun",
+   "expr": "amused",
+   "text": "Build it like a bridge. Each piece carries the next.",
+   "if": "ochre_span_braced"
+  }
+ ]
+}

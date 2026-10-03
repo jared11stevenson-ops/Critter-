@@ -1,0 +1,23 @@
+{
+ "id": "rr_boss_intro",
+ "lines": [
+  {
+   "who": "comms:mara",
+   "expr": "focused",
+   "text": "That's the AUGUR-7 Deepcore Rig. Its drill is resonating with the Span's foundation."
+  },
+  {
+   "who": "aruun",
+   "expr": "aggressive",
+   "text": "Then we stop it."
+  },
+  {
+   "who": "cigarra",
+   "expr": "focused",
+   "text": "Watch the red circles. That's where it's going to hit. I'd know."
+  },
+  {
+   "event": "start_boss"
+  }
+ ]
+}

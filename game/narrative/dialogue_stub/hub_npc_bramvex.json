@@ -1,0 +1,15 @@
+{
+ "id": "hub_npc_bramvex",
+ "lines": [
+  {
+   "who": "bramvex",
+   "expr": "default",
+   "text": "Extraction before victory, Handler. Always know your way out."
+  },
+  {
+   "who": "bramvex",
+   "expr": "default",
+   "text": "The Gate is an exit too. Remember that when it gets loud."
+  }
+ ]
+}

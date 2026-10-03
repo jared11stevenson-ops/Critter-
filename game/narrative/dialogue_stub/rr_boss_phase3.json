@@ -1,0 +1,10 @@
+{
+ "id": "rr_boss_phase3",
+ "lines": [
+  {
+   "who": "cigarra",
+   "expr": "shocked",
+   "text": "Overdrive! A beam sweep — dash through it or hide behind the Thoughtstone!"
+  }
+ ]
+}

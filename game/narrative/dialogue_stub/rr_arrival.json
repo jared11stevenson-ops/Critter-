@@ -1,0 +1,25 @@
+{
+ "id": "rr_arrival",
+ "lines": [
+  {
+   "who": "narration",
+   "expr": "default",
+   "text": "The Gate folds shut behind you. Scale settles. The Tilt passes."
+  },
+  {
+   "who": "comms:mara",
+   "expr": "focused",
+   "text": "Handler, you're through. Telemetry is green. The valley east of the Gate pad is your route."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "The Red Reaches. Every road here was carried by someone."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "Move with the left thumb. Fight with the right. I'm told that's how you think."
+  }
+ ]
+}

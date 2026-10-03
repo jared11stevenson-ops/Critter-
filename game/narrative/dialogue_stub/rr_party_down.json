@@ -1,0 +1,10 @@
+{
+ "id": "rr_party_down",
+ "lines": [
+  {
+   "who": "comms:mara",
+   "expr": "focused",
+   "text": "Pulled you both back to the last checkpoint. Regroup and try again, Handler."
+  }
+ ]
+}

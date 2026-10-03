@@ -1,0 +1,15 @@
+{
+ "id": "hub_npc_pharilux",
+ "lines": [
+  {
+   "who": "pharilux",
+   "expr": "watchful",
+   "text": "I was old before your Gate opened. I am watching it."
+  },
+  {
+   "who": "pharilux",
+   "expr": "calm",
+   "text": "Cigarra cannot read me. That troubles her more than it troubles me."
+  }
+ ]
+}

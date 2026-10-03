@@ -1,0 +1,15 @@
+{
+ "id": "rr_burden_done",
+ "lines": [
+  {
+   "who": "cigarra",
+   "expr": "focused",
+   "text": "Marker's across! Aruun, you can let go!"
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "...A structure should sacrifice itself before the people inside it. Not today, though."
+  }
+ ]
+}

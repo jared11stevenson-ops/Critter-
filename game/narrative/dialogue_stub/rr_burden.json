@@ -1,0 +1,23 @@
+{
+ "id": "rr_burden",
+ "lines": [
+  {
+   "who": "narration",
+   "expr": "default",
+   "text": "The drill bites. The Ochre Span lurches under your feet."
+  },
+  {
+   "who": "aruun",
+   "expr": "rage",
+   "text": "It's failing — I have it. Cigarra, take the convoy marker across. Go!"
+  },
+  {
+   "who": "cigarra",
+   "expr": "shocked",
+   "text": "Handler — keep him holding!"
+  },
+  {
+   "event": "start_burden"
+  }
+ ]
+}

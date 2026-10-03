@@ -1,0 +1,48 @@
+{
+ "id": "hub_debrief",
+ "lines": [
+  {
+   "who": "mara",
+   "expr": "focused",
+   "text": "Welcome back through the Gate. Debrief, please."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "The foundation is braced. It will carry people long after anyone remembers why.",
+   "if": "ochre_span_braced"
+  },
+  {
+   "who": "aruun",
+   "expr": "aggressive",
+   "text": "The Dominion has its stone. The Span has a countdown. Remember that you chose this.",
+   "if": "ochre_span_failing"
+  },
+  {
+   "who": "cigarra",
+   "expr": "annoyed",
+   "text": "The grazers remember being hit. So do I.",
+   "if": "grazers_harmed"
+  },
+  {
+   "who": "cigarra",
+   "expr": "happy",
+   "text": "And the beetles walked away. Nobody had to win.",
+   "if": "beetles_calmed"
+  },
+  {
+   "who": "mara",
+   "expr": "soft",
+   "text": "One more thing. A Dust Grazer was injured near the drill site. We brought it back under Protective Extraction. It needs a Habitat."
+  },
+  {
+   "set": {
+    "debriefed": true,
+    "rescued_grazer": true
+   }
+  },
+  {
+   "event": "open_habitat"
+  }
+ ]
+}

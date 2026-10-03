@@ -1,0 +1,15 @@
+{
+ "id": "rr_gap",
+ "lines": [
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "The old crossing is gone. I can't jump this."
+  },
+  {
+   "who": "cigarra",
+   "expr": "happy",
+   "text": "I can. Swap to me and use the ledge. I'll find the Spanwright anchor on the far side."
+  }
+ ]
+}

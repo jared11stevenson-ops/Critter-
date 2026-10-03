@@ -1,0 +1,15 @@
+{
+ "id": "rr_beetle_scanned",
+ "lines": [
+  {
+   "who": "comms:mara",
+   "expr": "curious",
+   "text": "Plate Beetles are normally docile. The scan says they're agitated by resonance vibration."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "The pylons. Break the pylons and the beetles have no reason to fight us."
+  }
+ ]
+}
