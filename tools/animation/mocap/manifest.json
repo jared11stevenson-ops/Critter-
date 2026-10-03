@@ -1,4 +1,12 @@
 {
+ "09_01": {
+  "offset": 0.0,
+  "source": "https://raw.githubusercontent.com/una-dinosauria/cmu-mocap/master/data/009/09_01.bvh",
+  "window": [
+   0.0,
+   1.633
+  ]
+ },
  "124_07": {
   "offset": 1.8,
   "source": "https://raw.githubusercontent.com/una-dinosauria/cmu-mocap/master/data/124/124_07.bvh",
