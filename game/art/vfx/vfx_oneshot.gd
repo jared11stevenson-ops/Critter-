@@ -227,7 +227,9 @@ func _align_step(k: float, frag: Variant) -> void:
 	var target := _align_target()
 	if f3.global_position.distance_to(target) < 0.01:
 		return
-	var want := f3.global_transform.looking_at(target, Vector3.UP).basis.get_rotation_quaternion()
+	var dir := (target - f3.global_position).normalized()
+	var up := Vector3.UP if absf(dir.dot(Vector3.UP)) < 0.97 else Vector3.FORWARD
+	var want := f3.global_transform.looking_at(target, up).basis.get_rotation_quaternion()
 	var cur := f3.global_transform.basis.get_rotation_quaternion()
 	f3.global_transform.basis = Basis(cur.slerp(want, k * 0.15))
 

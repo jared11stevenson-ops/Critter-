@@ -114,6 +114,10 @@ func get_marker(marker_name: String) -> Vector3:
 		if s.get("id", "") == marker_name and s.has("pos"):
 			var p: Array = s["pos"]
 			return Vector3(float(p[0]), float(p[1]), float(p[2]))
+	for tr in layout.get("triggers", []):
+		if tr.get("id", "") == marker_name and tr.has("pos"):
+			var p: Array = tr["pos"]
+			return Vector3(float(p[0]), float(p[1]), float(p[2]))
 	push_warning("RedReachesTerrain: unknown marker " + marker_name)
 	return Vector3.ZERO
 
