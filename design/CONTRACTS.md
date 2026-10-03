@@ -5,8 +5,8 @@ implement the closest compliant version, then write the request in `design/REQUE
 Never silently change another owner's files.
 
 ## 0. Ground rules (both agents)
-- **Godot 4.3+ compatible GDScript.** Must load cleanly on Godot **4.3** and **4.7.2**. No typed
-  Dictionaries (`Dictionary[String, int]` is 4.4+), no `@export_tool_button`, no `.uid` dependence.
+- **Target engine: Godot 4.7.2** (the creator's mobile editor runs 4.7). Must load cleanly on 4.7.2;
+  4.4+ features (typed Dictionaries, `.uid` files, etc.) are allowed. 4.3 compatibility is no longer required.
   Hand-written `.tscn` files: `format=3`, no `uid=` attributes needed.
 - **Renderer: Compatibility (gl_compatibility).** Shaders must compile there. No compute, no
   `hint_depth_texture` reliance for core visuals (allowed for optional effects with fallbacks).

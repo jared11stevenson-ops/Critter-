@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Validate the project on Godot 4.7.2 (current) and 4.3 (compat floor).
-# Usage: tools/validate.sh [--fast]   (--fast = only 4.7.2)
+# Validate the project on Godot 4.7.2 (the target engine).
+# Usage: tools/validate.sh [--compat]   (--compat also checks the old 4.3 floor; no longer required)
 cd "$(dirname "$0")/.."
 G47=/opt/godot/Godot_v4.7.2-stable_linux.x86_64
 G43=/opt/godot/Godot_v4.3-stable_linux.x86_64
@@ -15,5 +15,5 @@ run() {
   echo "$out" | grep -q "failed=0" || status=1
 }
 run $G47 "Godot 4.7.2"
-[ "$1" == "--fast" ] || run $G43 "Godot 4.3"
+[ "$1" == "--compat" ] && run $G43 "Godot 4.3"
 exit $status

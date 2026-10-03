@@ -1,6 +1,6 @@
 CRITTER — The Red Span Survey  ·  v0.6.0 PLAYTEST BUILD
 =======================================================
-HOW TO OPEN (Godot 4 mobile editor, 4.3 or newer)
+HOW TO OPEN (Godot 4.7 mobile editor)
 1. Unzip this file.
 2. In Godot: Import -> pick the folder's project.godot -> Import & Edit.
 3. First import takes a minute or two (it converts the art and audio).
