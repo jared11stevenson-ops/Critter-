@@ -1,0 +1,57 @@
+{
+ "height_m": 2.4,
+ "canonical_heights_m": {
+  "horn_tip": 2.4,
+  "cranium_top": 2.127,
+  "jaw": 1.97,
+  "neck_base": 1.772,
+  "shoulder": 1.631,
+  "elbow": 1.311,
+  "waist": 1.239,
+  "crotch": 0.894,
+  "knee": 0.596,
+  "ankle": 0.251,
+  "sole": 0.0
+ },
+ "view_rows_px": {
+  "side": {
+   "horn_tip": 0,
+   "cranium_top": 45,
+   "jaw": 72,
+   "neck_base": 100,
+   "shoulder": 120,
+   "elbow": 172,
+   "waist": 185,
+   "crotch": 240,
+   "knee": 285,
+   "ankle": 340,
+   "sole": 386
+  },
+  "back": {
+   "horn_tip": 0,
+   "cranium_top": 42,
+   "jaw": 65,
+   "neck_base": 100,
+   "shoulder": 125,
+   "elbow": 175,
+   "waist": 185,
+   "crotch": 240,
+   "knee": 290,
+   "ankle": 345,
+   "sole": 379
+  },
+  "front": {
+   "horn_tip": 0,
+   "cranium_top": 50,
+   "jaw": 100,
+   "neck_base": 128,
+   "shoulder": 140,
+   "elbow": 225,
+   "waist": 240,
+   "crotch": 330,
+   "knee": 385,
+   "ankle": 440,
+   "sole": 486
+  }
+ }
+}
