@@ -143,9 +143,9 @@ func _emit(o: Dictionary) -> CPUParticles3D:
 	add_child(p)
 	if o.has("delay"):
 		p.emitting = false
-		get_tree().create_timer(float(o["delay"])).timeout.connect(func() -> void:
-			if is_instance_valid(p):
-				p.emitting = true)
+		var dt := create_tween()
+		dt.tween_interval(float(o["delay"]))
+		dt.tween_property(p, "emitting", true, 0.0)
 	else:
 		p.emitting = true
 	_parts.append(p)
@@ -200,6 +200,36 @@ func _glow_mat(c: Color, energy: float = 1.6) -> StandardMaterial3D:
 func _free_after(t: float) -> void:
 	_life = t
 	get_tree().create_timer(t).timeout.connect(queue_free)
+
+
+var _align_tw: Tween
+
+
+func _exit_tree() -> void:
+	if _align_tw and _align_tw.is_valid():
+		_align_tw.kill()
+
+
+## params.target may be a Vector3 or a Node3D (re-read every step; looks at its chest height).
+func _align_target() -> Vector3:
+	var t: Variant = params.get("target", null)
+	if t is Node3D and is_instance_valid(t):
+		return (t as Node3D).global_position + Vector3(0, 1.4, 0)
+	if t is Vector3:
+		return t
+	return global_position + Vector3(0, 1.4, -10)
+
+
+func _align_step(k: float, frag: Variant) -> void:
+	if not is_instance_valid(frag) or not (frag as Node3D).is_inside_tree():
+		return
+	var f3 := frag as Node3D
+	var target := _align_target()
+	if f3.global_position.distance_to(target) < 0.01:
+		return
+	var want := f3.global_transform.looking_at(target, Vector3.UP).basis.get_rotation_quaternion()
+	var cur := f3.global_transform.basis.get_rotation_quaternion()
+	f3.global_transform.basis = Basis(cur.slerp(want, k * 0.15))
 
 
 # ------------------------------------------------------------------ presets
@@ -307,9 +337,9 @@ func _p_gravity_well() -> void:
 	var core := _flash(Color(0.5, 0.3, 0.9, 0.8), 2.0, d)
 	core.position.y = 0.8
 	var p := _emit({"amount": 40, "life": 0.9, "one_shot": false, "expl": 0.0, "c0": Color(0.8, 0.65, 1.0, 0.0), "c1": Color(0.55, 0.35, 1.0, 0.9), "size": Vector2(0.12, 0.25), "vel": Vector2(0.0, 0.3), "gravity": Vector3.ZERO, "radial": -r * 2.2, "tangential": 5.0, "ring": r, "pos": Vector3(0, 0.3, 0)})
-	get_tree().create_timer(d).timeout.connect(func() -> void:
-		if is_instance_valid(p):
-			p.emitting = false)
+	var et := create_tween()
+	et.tween_interval(d)
+	et.tween_property(p, "emitting", false, 0.0)
 	_free_after(d + 1.0)
 
 
@@ -483,13 +513,10 @@ func _p_thoughtstone_align() -> void:
 	halo.reparent(frag, false)
 	frag.position = Vector3(0, 0.6, 0)
 	frag.rotation = Vector3(0.4, randf() * TAU, 0.3)
-	var target: Vector3 = params.get("target", global_position + Vector3(0, 1.4, -10))
-	var tw := create_tween()
+	_align_tw = create_tween()
+	var tw := _align_tw
 	tw.tween_property(frag, "position:y", 1.4, 1.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tw.tween_method(func(k: float) -> void:
-		var want := frag.global_transform.looking_at(target, Vector3.UP).basis.get_rotation_quaternion()
-		var cur := frag.global_transform.basis.get_rotation_quaternion()
-		frag.global_transform.basis = Basis(cur.slerp(want, k * 0.15)), 0.0, 1.0, dur * 0.6)
+	tw.tween_method(_align_step.bind(frag), 0.0, 1.0, dur * 0.6)
 	tw.tween_property(m, "albedo_color", _tint(Color(0.7, 0.95, 1.0)) * 3.0, 0.3)
 	tw.tween_property(m, "albedo_color", _tint(Color(0.55, 0.88, 1.0)) * 1.8, 0.6)
 	_emit({"amount": 16, "life": 1.2, "one_shot": false, "expl": 0.0, "tex": TEX_STAR, "c0": Color(0.7, 0.95, 1.0, 0.9), "c1": Color(0.5, 0.8, 1.0, 0), "size": Vector2(0.06, 0.14), "vel": Vector2(0.1, 0.4), "gravity": Vector3(0, 0.3, 0), "sphere": 0.6, "pos": Vector3(0, 1.4, 0)})

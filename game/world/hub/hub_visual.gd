@@ -85,9 +85,9 @@ func _process(delta: float) -> void:
 		return
 	var base: Vector3 = NPC_FACING[id]
 	bb.set_facing(base.rotated(Vector3.UP, _rng.randf_range(-1.2, 1.2)))
-	get_tree().create_timer(_rng.randf_range(1.5, 3.0)).timeout.connect(func() -> void:
-		if is_instance_valid(bb):
-			bb.set_facing(base))
+	var tw := bb.create_tween()
+	tw.tween_interval(_rng.randf_range(1.5, 3.0))
+	tw.tween_callback(bb.set_facing.bind(base))
 
 
 func _tune_lighting() -> void:

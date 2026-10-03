@@ -420,6 +420,8 @@ func _update_light() -> void:
 	var env: Environment = null
 	var sun: DirectionalLight3D = null
 	for n in _find_cached(root):
+		if not is_instance_valid(n):
+			continue
 		if n is WorldEnvironment and env == null:
 			env = (n as WorldEnvironment).environment
 		elif n is DirectionalLight3D and sun == null and (n as DirectionalLight3D).visible:
@@ -459,13 +461,24 @@ func _update_light() -> void:
 
 
 static var _scan_frame := -1
+static var _scan_scene_id := 0
 static var _light_nodes: Array = []
 static var _omni_cache: Array = []
 
 
+## Light rig cache, shared by all billboards; rebuilt when the current scene changes (Router scene swaps),
+## when a cached node was freed, or every 30 frames.
 func _find_cached(root: Node) -> Array:
 	var f := Engine.get_process_frames()
-	if f - _scan_frame > 30 or _scan_frame < 0:
+	var sid := root.get_instance_id()
+	var stale := sid != _scan_scene_id
+	if not stale and f != _scan_frame:
+		for n in _light_nodes:
+			if not is_instance_valid(n):
+				stale = true
+				break
+	if stale or f - _scan_frame > 30 or _scan_frame < 0:
+		_scan_scene_id = sid
 		_scan_frame = f
 		_light_nodes = []
 		_omni_cache = []
