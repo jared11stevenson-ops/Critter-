@@ -8,8 +8,8 @@ const OUTLINE_SHADER_PATH := "res://game/art/shaders/ink_outline.gdshader"
 const GLOBAL_FOCUS := "critter_focus_pos"
 const GLOBAL_CAM := "critter_cam_pos"
 const NOISE_TEX := preload("res://game/art/world/terrain_noise.png")
-const DETAIL_TEX := preload("res://game/art/world/pbr/prop_detail.png")
-const DETAIL_NRM := preload("res://game/art/world/pbr/prop_rock_normal.png")
+const DETAIL_TEX := preload("res://game/art/world/pbr/prop_detail.webp")
+const DETAIL_NRM := preload("res://game/art/world/pbr/prop_rock_normal.webp")
 ## v0.7 painterly realism: ink outlines are off on all world/creature geometry (halves draw calls). Set true (or pass
 ## "force_outline") to bring the old inked look back.
 static var outlines_enabled := false

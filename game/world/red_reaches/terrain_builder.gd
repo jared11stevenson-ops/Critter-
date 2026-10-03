@@ -376,9 +376,9 @@ func _make_material() -> ShaderMaterial:
 	terrain_material.shader = TERRAIN_SHADER
 	for set_name in ["dirt", "flag", "scrub", "cliff"]:
 		var file: String = {"dirt": "ground_dirt", "flag": "ground_flag", "scrub": "scrub", "cliff": "cliff_rock"}[set_name]
-		terrain_material.set_shader_parameter(set_name + "_albedo", load(PBR_DIR + file + "_albedo.png"))
-		terrain_material.set_shader_parameter(set_name + "_normal", load(PBR_DIR + file + "_normal.png"))
-	terrain_material.set_shader_parameter("macro_tex", load(PBR_DIR + "macro_var.png"))
+		terrain_material.set_shader_parameter(set_name + "_albedo", load(PBR_DIR + file + "_albedo.webp"))
+		terrain_material.set_shader_parameter(set_name + "_normal", load(PBR_DIR + file + "_normal.webp"))
+	terrain_material.set_shader_parameter("macro_tex", load(PBR_DIR + "macro_var.webp"))
 	return terrain_material
 
 

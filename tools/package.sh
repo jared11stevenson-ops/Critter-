@@ -7,5 +7,5 @@ mkdir -p "$OUTDIR"
 NAME="CRITTER_v$VER"
 rm -f "$OUTDIR/$NAME.zip"
 # Exclude editor cache, git, tool outputs. Keep tools/qa (inert) so the project loads cleanly.
-zip -q -r "$OUTDIR/$NAME.zip" . -x ".git/*" ".godot/*" "*.import.tmp" "tools/source_art/*" "design/*.docx" ".claude/*" "design/model_sheets/*" "*.pth" "*.onnx" "*/__pycache__/*" "*.pyc"
+zip -q -r "$OUTDIR/$NAME.zip" . -x ".git/*" ".godot/*" "*.import.tmp" "tools/source_art/*" "design/*.docx" ".claude/*" "design/model_sheets/*" "*.pth" "*.onnx" "game/art/models/*/*_albedo.png*" "game/art/models/*/*_normal.png*" "game/art/models/*/*_orm.png*" "*/__pycache__/*" "*.pyc"
 ls -la "$OUTDIR/$NAME.zip"
