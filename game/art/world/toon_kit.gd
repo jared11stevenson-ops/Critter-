@@ -38,14 +38,26 @@ static func occluding_shader(path: String) -> Shader:
 		return _shader_cache[path]
 	var base: Shader = load(path)
 	var sh := base
+	var code := base.code
 	if ensure_globals() and base.code.contains("uniform vec3 critter_focus_pos;"):
-		sh = Shader.new()
-		var code := base.code
 		code = code.replace("\nuniform vec3 critter_focus_pos;", "\nglobal uniform vec3 critter_focus_pos;")
 		code = code.replace("\nuniform vec3 critter_cam_pos;", "\nglobal uniform vec3 critter_cam_pos;")
+		sh = Shader.new()
 		sh.code = code
+	# graphics quality variants (#define QUALITY_LOW / QUALITY_MEDIUM), recompiled live by the Quality autoload
+	var q := quality()
+	if q and code.contains("QUALITY_"):
+		sh = q.call("shader", path, code)
 	_shader_cache[path] = sh
 	return sh
+
+
+## The Quality autoload (graphics presets) or null (editor / tool contexts).
+static func quality() -> Node:
+	var ml := Engine.get_main_loop()
+	if ml is SceneTree and (ml as SceneTree).root:
+		return (ml as SceneTree).root.get_node_or_null("Quality")
+	return null
 
 
 ## Shared toon material. opts: outline (float width, 0 = none), strata (0..1), emission (Color), energy, grain.

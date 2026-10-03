@@ -16,6 +16,9 @@ uniform float planet_size = 0.16;
 uniform float ring_tilt = 0.42;
 uniform float cloud_cover = 0.48;
 uniform float cloud_speed = 0.004;
+// Cloud drift clock, advanced in coarse steps by CritterLighting (High quality only). Not TIME: a sky shader that
+// reads TIME re-renders + re-filters its radiance cubemap every frame (Agent 2 perf pass).
+uniform float cloud_time = 0.0;
 uniform vec3 sun_tint : source_color = vec3(1.0, 0.9, 0.7);
 
 float hash(vec2 p) {
@@ -88,7 +91,7 @@ void sky() {
 	// clouds: flattened fbm bands near the horizon
 	if (h > -0.02) {
 		vec2 cuv = d.xz / (h + 0.18);
-		cuv = cuv * 1.3 + vec2(TIME * cloud_speed, 0.0);
+		cuv = cuv * 1.3 + vec2(cloud_time * cloud_speed, 0.0);
 		float n = fbm(cuv * 1.4);
 		float n2 = fbm(cuv * 3.1 + 7.0);
 		float c = smoothstep(1.0 - cloud_cover, 1.0 - cloud_cover + 0.12, n * 0.8 + n2 * 0.3);

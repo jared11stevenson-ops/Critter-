@@ -84,6 +84,11 @@ const ZONE_KEYS := [[-30.0, "gate"], [14.0, "gate"], [40.0, "valley"], [86.0, "v
 	[400.0, "boss"]]
 
 var _cur: Dictionary = {}
+var _mood_t := 0.0
+var _sky_t := 0.0
+var _sky_dirty := false
+var _cloud_clock := 0.0
+var _motes_amount := 90
 
 
 func _ready() -> void:
@@ -91,6 +96,9 @@ func _ready() -> void:
 		_build()
 		apply_preset(preset)
 	set_process(true)
+	var q := ToonKit.quality()
+	if q and not q.is_connected("changed", _apply_quality):
+		q.connect("changed", _apply_quality)
 	# put every character / creature mesh on the rim layer so the back light separates PBR characters
 	get_tree().node_added.connect(_on_node_added)
 	for n in get_tree().root.find_children("*", "GeometryInstance3D", true, false):
@@ -169,6 +177,21 @@ func _build() -> void:
 	add_child(rim)
 	_build_motes()
 	_tune_shadow_quality()
+	_apply_quality()
+
+
+## Graphics quality (Quality autoload): sun shadows, glow / grading, fog extras, dust motes.
+func _apply_quality(_lv: int = -1) -> void:
+	var q := ToonKit.quality()
+	if q == null or sun == null:
+		return
+	q.call("setup_sun", sun, 46.0)
+	q.call("setup_environment", env)
+	if motes:
+		var lv: int = q.get("level")
+		motes.visible = lv > 0
+		motes.emitting = lv > 0
+		motes.amount = maxi(8, int(_motes_amount * (0.6 if lv == 1 else 1.0)))
 
 
 ## Sunlit dust motes drifting around the camera focus (one draw call; follows the active camera).
@@ -226,7 +249,10 @@ func _build_motes() -> void:
 
 
 func _tune_shadow_quality() -> void:
-	# softer, cleaner sun shadows (Compatibility honours the atlas size + soft filter quality)
+	# softer, cleaner sun shadows (Compatibility honours the atlas size + soft filter quality). Atlas size / filter
+	# follow the graphics quality preset (Quality autoload); this is the fallback without it.
+	if ToonKit.quality() != null:
+		return
 	RenderingServer.directional_shadow_atlas_set_size(2048, true)
 	RenderingServer.directional_soft_shadow_filter_set_quality(RenderingServer.SHADOW_QUALITY_SOFT_LOW)
 
@@ -237,6 +263,7 @@ func apply_preset(p: String) -> void:
 		_build()
 	match p:
 		"hub":
+			_motes_amount = 40
 			motes.amount = 40
 			# interior: warm lamps do the work; dim cool fill, little fog
 			env.background_mode = Environment.BG_COLOR
@@ -304,7 +331,7 @@ static func _mix(a: Dictionary, b: Dictionary, t: float) -> Dictionary:
 	return r
 
 
-func _apply_mood(m: Dictionary) -> void:
+func _apply_mood(m: Dictionary, soft: bool = false) -> void:
 	_cur = m
 	env.background_mode = Environment.BG_SKY
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
@@ -332,21 +359,49 @@ func _apply_mood(m: Dictionary) -> void:
 	rim.light_color = m["rim_col"]
 	rim.light_energy = m["rim_e"]
 	rim.rotation_degrees = Vector3(-18, sr.y + 180.0 + 35.0, 0)
-	if sky_mat:
+	_sky_dirty = true
+	if not soft:
+		_apply_sky_params()
+	var q := ToonKit.quality()
+	if q:
+		q.call("setup_environment", env)
+
+
+## Sky colours are pushed at most twice a second: every sky uniform change re-renders the radiance cubemap.
+func _apply_sky_params(force: bool = true) -> void:
+	if not _sky_dirty or (not force and _sky_t > 0.0):
+		return
+	_sky_dirty = false
+	_sky_t = 0.5
+	var m := _cur
+	if sky_mat and not m.is_empty():
 		sky_mat.set_shader_parameter("horizon_color", m["horizon"])
 		sky_mat.set_shader_parameter("zenith_color", m["zenith"])
 		sky_mat.set_shader_parameter("mid_color", (m["horizon"] as Color).lerp(m["zenith"], 0.55))
 		sky_mat.set_shader_parameter("sun_tint", m["sun_col"])
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	var cam := get_viewport().get_camera_3d()
 	if cam == null:
 		return
-	if motes:
+	if motes and motes.visible:
 		motes.global_position = cam.global_position - cam.global_transform.basis.z * 9.0
+	_sky_t -= delta
+	_apply_sky_params(false)
+	# slow cloud drift (High only), stepped every 4 s so the sky radiance is not rebuilt every frame
+	var q := ToonKit.quality()
+	if sky_mat and (q == null or int(q.get("level")) == 2):
+		_cloud_clock += delta
+		if fmod(_cloud_clock, 4.0) < delta:
+			sky_mat.set_shader_parameter("cloud_time", _cloud_clock)
 	if not zone_blend:
 		return
+	# mood blend at 10 Hz (tiny steps between keyframes are invisible)
+	_mood_t -= delta
+	if _mood_t > 0.0:
+		return
+	_mood_t = 0.1
 	# focus ≈ where the camera looks at ground level (gameplay rig ~14 m away)
 	var fx := cam.global_position.x - cam.global_transform.basis.z.x * 12.0
 	var m := mood_at_x(fx)
@@ -354,4 +409,5 @@ func _process(_delta: float) -> void:
 			and (_cur.get("fog_col", Color()) as Color).is_equal_approx(m["fog_col"]):
 		return
 	current_zone = m.get("zone", "")
-	_apply_mood(m)
+	_apply_mood(m, true)
+

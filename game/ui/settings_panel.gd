@@ -1,6 +1,9 @@
 class_name SettingsPanel
 extends Control
-## Settings: music/sfx volume, screen shake, damage numbers, left-handed layout, reduce flashing.
+## Settings: music/sfx volume, screen shake, graphics quality + FPS cap, damage numbers, left-handed layout,
+## reduce flashing.
+
+const QUALITY_CYCLE := ["auto", "low", "medium", "high"]
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -32,6 +35,8 @@ func _ready() -> void:
 	_slider(left, "Music volume", "music_volume")
 	_slider(left, "Sound effects", "sfx_volume")
 	_slider(left, "Screen shake", "screen_shake")
+	_quality_row(left)
+	_fps_row(left)
 	_toggle(right, "Damage numbers", "show_damage_numbers")
 	_toggle(right, "Left-handed layout", "left_handed")
 	_toggle(right, "Reduce flashing", "reduce_flashing")
@@ -77,6 +82,38 @@ func _toggle(vb: Node, text: String, key: String) -> void:
 	b.button_pressed = bool(GameState.settings.get(key, false))
 	b.text = "ON" if b.button_pressed else "OFF"
 	b.toggled.connect(_on_toggle.bind(b, key))
+	hb.add_child(b)
+
+func _quality_text() -> String:
+	var s := str(GameState.settings.get("gfx_quality", "auto"))
+	if s == "auto":
+		return "AUTO · %s" % Quality.level_name().to_upper()
+	return s.to_upper()
+
+func _quality_row(vb: Node) -> void:
+	var hb := _row(vb, "Graphics")
+	var b := UiKit.button(_quality_text(), Vector2(250, 76), 26)
+	b.name = "Quality"
+	b.pressed.connect(func():
+		var cur := str(GameState.settings.get("gfx_quality", "auto"))
+		var i := (QUALITY_CYCLE.find(cur) + 1) % QUALITY_CYCLE.size()
+		GameState.settings["gfx_quality"] = QUALITY_CYCLE[i]
+		if QUALITY_CYCLE[i] == "auto":
+			GameState.settings.erase("gfx_auto_level")
+		Quality.apply_settings()
+		b.text = _quality_text()
+		Audio.sfx("ui_tap"))
+	hb.add_child(b)
+
+func _fps_row(vb: Node) -> void:
+	var hb := _row(vb, "Frame rate")
+	var b := UiKit.button("%d FPS" % Quality.fps_cap(), Vector2(250, 76), 26)
+	b.name = "FpsCap"
+	b.pressed.connect(func():
+		GameState.settings["fps_cap"] = 30 if Quality.fps_cap() == 60 else 60
+		Quality.apply_settings()
+		b.text = "%d FPS" % Quality.fps_cap()
+		Audio.sfx("ui_tap"))
 	hb.add_child(b)
 
 func _on_toggle(on: bool, b: Button, key: String) -> void:

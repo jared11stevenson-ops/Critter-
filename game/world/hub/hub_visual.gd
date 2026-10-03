@@ -103,6 +103,9 @@ func _tune_lighting() -> void:
 		sun.light_energy = 0.95
 		sun.rotation_degrees = Vector3(-58, -24, 0)
 		sun.directional_shadow_max_distance = 45.0
+		var q := ToonKit.quality()
+		if q:
+			q.call("setup_sun", sun, 45.0)
 
 
 func _vertex_glow() -> StandardMaterial3D:
@@ -421,6 +424,9 @@ func _build_living_lights(geo: Node3D) -> void:
 		ol.omni_attenuation = 1.2
 		ol.shadow_enabled = false
 		geo.add_child(ol)
+		var q := ToonKit.quality()
+		if q:
+			q.call("track_light", ol, 1)
 	var bulbs := ToonKit.mesh_instance(lst.commit(), _vertex_glow(), "LivingLights")
 	bulbs.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	geo.add_child(bulbs)

@@ -21,6 +21,7 @@ Canon="*res://game/core/canon.gd"
 GameState="*res://game/core/game_state.gd"
 Audio="*res://game/core/audio.gd"
 Router="*res://game/core/router.gd"
+Quality="*res://game/core/quality.gd"
 QA="*res://tools/qa/qa.gd"
 
 [display]
