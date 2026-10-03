@@ -28,7 +28,7 @@ def grip_frame():
     wr, he = S.jm("wrist.R"), S.jm("hand_end.R")
     R = S.frame(wr, he, (-1, 0, 0))
     grip = wr + R[:, 2] * 0.075 - R[:, 0] * 0.012
-    axis = V([-0.3, -0.36, -0.88])
+    axis = V([-0.2, -0.24, -0.95])
     axis = axis / np.linalg.norm(axis)                 # world direction of local -Z
     z = -axis
     x = np.cross(V([0, -1.0, 0]), z)

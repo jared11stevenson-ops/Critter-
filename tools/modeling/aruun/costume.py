@@ -141,10 +141,10 @@ def sheets():
     out = []
     # LEAF SKIRT: olive leaf panels around the back and sides (angles: +X = 0, back +Y = 90 deg)
     rng = np.random.default_rng(8)
-    angles = [-20, 5, 30, 55, 80, 100, 125, 150, 175, 200]
+    angles = [-35, -10, 15, 40, 135, 160, 185, 210]
     for k, a in enumerate(angles):
         phi0 = math.radians(a)
-        L = rng.uniform(0.55, 0.72) * (0.85 if a in (-20, 200) else 1.0)
+        L = rng.uniform(0.55, 0.72) * (0.85 if a in (-35, 210) else 1.0)
         w = 0.13
 
         def shape(U, Vv, phi0=phi0, L=L, w=w):
@@ -160,7 +160,7 @@ def sheets():
             jag = 0.04 * np.sin(v * 41 + seed) + 0.03 * np.sin(v * 97 + seed * 2)
             return ((np.abs(u - 0.5) < 0.5 * width + jag) & (v < tipv)).astype(np.float32)
 
-        out.append(Sheet("leaf%d" % k, shape, kind="leaf", bind="skirt", nu=3, nv=10, thick=0.004, gap=0.02,
+        out.append(Sheet("leaf%d" % k, shape, kind="leaf", bind="skirt", nu=4, nv=12, thick=0.004, gap=0.02,
                          folds=lambda U, Vv: 0.012 * (1 - np.abs(2 * U - 1)) * np.sin(np.pi * Vv) ** 0.5,
                          wrinkle=0.001, alpha=alpha, smooth=0.25))
     # FRONT: cream strips + a dark-red flap under them
@@ -173,7 +173,7 @@ def sheets():
             top = _waist_point(phi, z=1.075, ry=0.15)
             rad = np.stack([np.cos(phi), np.sin(phi), np.zeros_like(phi)], -1)
             return top + rad * (0.03 + 0.03 * Vv)[..., None] + np.array([0, 0, -1.0]) * (L * Vv)[..., None]
-        out.append(Sheet("strip%d" % k, shape, kind="cloth", bind="skirt", nu=2, nv=6, thick=0.004, gap=0.025,
+        out.append(Sheet("strip%d" % k, shape, kind="cloth", bind="skirt", nu=3, nv=8, thick=0.004, gap=0.025,
                          wrinkle=0.0012, alpha=torn_edge(50 + k, 0.12, 3.0), smooth=0.2))
 
     def flap(U, Vv):
@@ -181,7 +181,7 @@ def sheets():
         top = _waist_point(phi, z=1.07, ry=0.145)
         rad = np.stack([np.cos(phi), np.sin(phi), np.zeros_like(phi)], -1)
         return top + rad * (0.015 + 0.02 * Vv)[..., None] + np.array([0, 0, -1.0]) * (0.42 * Vv)[..., None]
-    out.append(Sheet("flap", flap, kind="cloth_red", bind="skirt", nu=5, nv=8, thick=0.005, gap=0.015,
+    out.append(Sheet("flap", flap, kind="cloth_red", bind="skirt", nu=6, nv=10, thick=0.005, gap=0.015,
                      folds=lambda U, Vv: 0.008 * np.sin(U * 9.4) * Vv, wrinkle=0.0015, alpha=torn_edge(77, 0.1, 4.0)))
 
     # CLOAK over his right shoulder: top edge around the neck base from front-right over the right shoulder to the
@@ -189,12 +189,12 @@ def sheets():
     c = np.array([0.0, -0.04, 1.665])
 
     def cloak(U, Vv):
-        phi = np.radians(250 - U * 150)               # 250 (front-right) -> 100 (just past the back centre)
+        phi = np.radians(255 - U * 160)               # 255 (front-right) -> 95 (back centre): right shoulder only
         rad = np.stack([np.cos(phi), np.sin(phi), np.zeros_like(phi)], -1)
         # length by angle: front 0.25, right side 0.5, back 1.15
         back = np.clip(np.sin(phi), 0, 1)
         side = np.clip(-np.cos(phi), 0, 1)
-        L = 0.25 + 0.3 * side + 0.85 * back ** 0.7
+        L = 0.22 + 0.25 * side + 0.42 * back ** 0.7
         top = c + rad * np.where(back > 0, 0.11, 0.1)[..., None] + np.array([0, 0, 0.0])
         over = np.where(Vv < 0.25, Vv / 0.25, 1.0)
         out_r = (0.1 + 0.14 * side + 0.06 * back) * over
@@ -207,7 +207,7 @@ def sheets():
         # long ragged strips at the back: deep vertical tears in the lower half
         tears = (np.abs(np.sin(u * 37.0 + 1.3)) < 0.18) & (v > 0.55 + 0.2 * np.abs(np.sin(u * 13)))
         return (a * (~tears)).astype(np.float32)
-    out.append(Sheet("cloak", cloak, kind="cloak", bind="cloak", nu=12, nv=16, thick=0.006, gap=0.02,
+    out.append(Sheet("cloak", cloak, kind="cloak", bind="cloak", nu=16, nv=18, thick=0.006, gap=0.02,
                      folds=lambda U, Vv: 0.02 * np.sin(U * 31.0 + 1.0) * np.clip(Vv - 0.2, 0, 1) +
                      0.008 * np.sin(U * 71.0) * Vv, wrinkle=0.002, alpha=cloak_alpha, iters=10, smooth=0.3))
     return out
