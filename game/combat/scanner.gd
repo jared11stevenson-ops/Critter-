@@ -176,7 +176,7 @@ func _layout() -> Array:
 			if not hit:
 				break
 		r.position.x = clampf(r.position.x, 6.0, vs.x - r.size.x - 6.0)
-		r.position.y = clampf(r.position.y, 96.0, vs.y - r.size.y - 6.0)
+		r.position.y = clampf(r.position.y, 132.0, vs.y - r.size.y - 6.0)   # below objective + toast band
 		c["rect"] = r
 		placed.append(r)
 	return vis
