@@ -89,6 +89,8 @@ func _set_cam() -> void:
 			target = _pos + Vector3(0, 1.3, 0); pitch = -10.0; dist = 5.6; yaw = 35.0
 		"side":
 			target = _pos + Vector3(0, 1.2, 0); pitch = -4.0; dist = 7.0; yaw = 90.0
+		"sidec":
+			target = _pos + Vector3(0, 1.15, 0); pitch = -3.0; dist = 4.4; yaw = 90.0
 		"front":
 			target = _pos + Vector3(0, 1.2, 0); pitch = -8.0; dist = 7.0; yaw = 0.0
 	var b := Basis.from_euler(Vector3(deg_to_rad(pitch), deg_to_rad(yaw), 0))

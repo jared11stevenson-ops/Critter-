@@ -54,6 +54,12 @@ const LOWER_BONES := ["root", "hips", "thigh.L", "shin.L", "foot.L", "toe.L", "t
 const FADE_IN := 0.08
 const FADE_OUT := 0.22
 const XFADE := 0.1
+## Anticipation may be compressed at most this much to meet a gameplay hit time; past it the kit waits (≤ delay).
+const IMPACT_MAX_WARP := 2.2
+const IMPACT_MAX_DELAY := 0.08
+## When gameplay holds the hit much longer than the clip's windup (channelled casts), freeze this long before impact.
+const HOLD_LEAD := 0.12
+const HOLD_DRIFT := 0.04
 
 var _model: Node3D
 var _player: AnimationPlayer
@@ -87,6 +93,13 @@ var _warp := []                  # [[clip_t, rate], ...] piecewise playback rate
 var _hold_end := false
 var _hit_pending := 0
 var _ext_state := ""
+var _plan_clip := ""
+var _hold_at := 0.0               # channelled actions: clip time to pause at ...
+var _hold_left := 0.0             # ... for this many more seconds
+var _plan_t := 0.0
+var _plan_frame := -1
+var _log := false                # QA: "-- qa_anim_log" prints impact-frame vs damage timing
+var _act_clock := 0.0           # game seconds since the current action started (QA log)
 
 
 func _ready() -> void:
@@ -114,6 +127,11 @@ func _ready() -> void:
 		_build_tree()
 	if cast_blob_shadow:
 		_add_shadow()
+	if "qa_anim_log" in OS.get_cmdline_user_args():
+		_log = true
+		Events.actor_damaged.connect(func(_a, amt, src):
+			if src == get_parent():
+				print("[ANIM] damage  +%4d ms  clip=%s clip_t=%.3f amt=%d" % [int(_act_clock * 1000.0), _act_name, _act_t, amt]))
 
 
 func _find_player(n: Node) -> AnimationPlayer:
@@ -237,27 +255,53 @@ func set_move_amount(v: float) -> void:
 
 
 func play_attack(kind: String = "light") -> void:
-	var clip := ""
 	var p := get_parent()
 	var pstate = p.get("state") if p else null
 	if pstate == "dash" and has_anim("dash"):
 		play_anim("dash")
 		return
+	var clip := _choose_clip(kind, true)
+	var gi := _game_impact(clip)
+	if _plan_clip == clip and Engine.get_process_frames() == _plan_frame:
+		gi = _plan_t
+	_plan_clip = ""
+	play_anim(clip, -1.0, gi)
+
+
+## Clip play_attack(kind) would pick now; advance=true consumes the light-combo step.
+func _choose_clip(kind: String, advance: bool) -> String:
+	var p := get_parent()
+	var pstate = p.get("state") if p else null
 	if kind == "light":
-		if _combo_timer <= 0.0:
+		var step := 0 if _combo_timer <= 0.0 else _combo
+		if advance:
+			_combo = step + 1
+			_combo_timer = 1.1
+		return combo_clips[step % 2]
+	if kind == "heavy":
+		var h := _infer_heavy(p)
+		if advance and h == "attack_3":
 			_combo = 0
-		clip = combo_clips[_combo % 2]
-		_combo += 1
-		_combo_timer = 1.1
-	elif kind == "heavy":
-		clip = _infer_heavy(p)
-		if clip == "attack_3":
-			_combo = 0
-	else:
-		clip = attack_map.get(kind, "attack_1")
-		if kind == "leap" and pstate == "leap" and has_anim("dash"):
-			clip = "dash"
-	play_anim(clip, -1.0, _game_impact(clip))
+		return h
+	if kind == "leap" and pstate == "leap" and has_anim("dash"):
+		return "dash"
+	return attack_map.get(kind, "attack_1")
+
+
+## Kits ask before play_attack(kind): returns when (s after the call) the hit should land so damage/hit-stop meet
+## the clip's impact frame. The windup is only ever lengthened, by at most IMPACT_MAX_DELAY, and only as far as the
+## clip cannot be compressed (IMPACT_MAX_WARP); billboards don't have this method, so kits keep Balance timing.
+func attack_hit_time(kind: String, game_windup: float) -> float:
+	# asked before the kit's begin_action, so the parent state can't disambiguate "heavy": it is the combo finisher
+	var clip: String = attack_map.get("heavy", "attack_3") if kind == "heavy" else _choose_clip(kind, false)
+	var imp := get_impact_time(clip)
+	if _tree == null or imp <= 0.0 or game_windup <= 0.0:
+		return game_windup
+	var t := clampf(imp / IMPACT_MAX_WARP, game_windup, game_windup + IMPACT_MAX_DELAY)
+	_plan_clip = clip
+	_plan_t = t
+	_plan_frame = Engine.get_process_frames()
+	return t
 
 
 ## Kits call play_attack("heavy") for the combo finisher, Reaching Strike and Beetle Rage; tell them apart from the
@@ -284,6 +328,8 @@ func _game_impact(clip: String) -> float:
 			return Balance.arr("aruun.combo.windup", 2, 0.15) + Balance.arr("aruun.combo.active", 2, 0.1) * 0.5
 		"reaching_strike":
 			return Balance.f("aruun.reaching_strike.windup", 0.26)
+		"gravity_pull":
+			return Balance.f("aruun.gravity_pull.pull_time", 2.0)    # slam after the well has pulled
 	return -1.0
 
 
@@ -362,7 +408,11 @@ func play_anim(anim_name: String, blend: float = -1.0, game_impact: float = -1.0
 	_act_len = a.length
 	_act_loop = a.loop_mode != Animation.LOOP_NONE
 	_hold_end = _downed and anim_name == "downed"
+	_hold_left = 0.0
 	_warp = _make_warp(anim_name, game_impact)
+	_act_clock = 0.0
+	if _log:
+		print("[ANIM] play %s game_impact=%.3f clip_impact=%.3f warp=%s" % [anim_name, game_impact, get_impact_time(anim_name), str(_warp)])
 	_set_p("ts" + s + "/scale", _rate_at(0.0))
 	return a.length
 
@@ -371,9 +421,15 @@ func _make_warp(n: String, game_impact: float) -> Array:
 	var imp := get_impact_time(n)
 	if game_impact <= 0.0 or imp <= 0.0:
 		return [[0.0, 1.0]]
-	var r1 := clampf(imp / game_impact, 0.75, 1.9)
-	# after impact: recover a little faster if gameplay unlocks early (cancel window), never slower than real time
 	var cancel := float(_meta.get(n, {}).get("cancel", _act_len))
+	var r1 := imp / game_impact
+	if r1 < 0.6 and imp > HOLD_LEAD * 2.0:
+		# channelled: play the wind-up, hold the raised pose, release into the impact on time (see _process)
+		_hold_at = imp - HOLD_LEAD
+		_hold_left = (game_impact - imp) / (1.0 - HOLD_DRIFT)
+		return [[0.0, 1.0], [cancel, 1.1]]
+	r1 = clampf(r1, 0.75, IMPACT_MAX_WARP + 0.05)
+	# after impact: recover a little faster if gameplay unlocks early (cancel window), never slower than real time
 	return [[0.0, r1], [imp, 1.0], [cancel, 1.1]]
 
 
@@ -480,6 +536,7 @@ func _process(delta: float) -> void:
 	_yaw_vel += (diff * k * k - 2.0 * k * _yaw_vel) * delta
 	rotation.y += _yaw_vel * delta
 	_combo_timer -= delta
+	_act_clock += delta
 	_flash = move_toward(_flash, 0.0, delta * 5.0)
 	_hl = move_toward(_hl, 1.0 if _hl_on else 0.0, delta * 6.0)
 	if _overlay:
@@ -509,7 +566,17 @@ func _process(delta: float) -> void:
 	if _act_name != "":
 		var s := "A" if _slot == 0 else "B"
 		var r := _rate_at(_act_t)
+		if _hold_left > 0.0 and _act_t + delta * r >= _hold_at:
+			# stop exactly on the hold frame, then wait out the channel with a faint drift (never a dead freeze)
+			if _act_t < _hold_at:
+				r = (_hold_at - _act_t) / delta
+			else:
+				r = HOLD_DRIFT
+				_hold_left -= delta
 		_set_p("ts" + s + "/scale", r)
+		var imp := get_impact_time(_act_name) if _log else -1.0
+		if _log and _act_t < imp and _act_t + delta * r >= imp:
+			print("[ANIM] impact  +%4d ms  clip=%s" % [int(_act_clock * 1000.0), _act_name])
 		_act_t += delta * r
 		if _act_loop:
 			want_w = 1.0
