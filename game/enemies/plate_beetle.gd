@@ -55,6 +55,7 @@ func _think(_delta: float) -> void:
 			_desired = _charge_dir * float(cfg.get("charge_speed", 11.0))
 			velocity.x = _desired.x
 			velocity.z = _desired.z
+			_knock_applied = Vector3.ZERO
 			var f := Field.current
 			if f:
 				for p in f.party_members:

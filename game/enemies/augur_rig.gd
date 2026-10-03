@@ -45,7 +45,11 @@ func _enemy_ready() -> void:
 
 func _bind_vent_markers() -> void:
 	for i in 3:
-		var m := VisualFactory.marker(visual, "Vent%d" % (i + 1))
+		var m: Node3D = null
+		if visual and visual.has_method("get_vent"):
+			m = visual.get_vent(i + 1) as Node3D
+		if m == null:
+			m = VisualFactory.marker(visual, "Vent%d" % (i + 1))
 		if m == null:
 			m = Marker3D.new()
 			add_child(m)
@@ -317,7 +321,19 @@ func _beam_tick(delta: float) -> void:
 
 func _beam_visual(on: bool) -> void:
 	if visual and visual.has_method("set_beam"):
-		visual.set_beam(on, _beam_a)
+		visual.set_beam(on, _beam_angle_for_visual())
+
+## Gameplay keeps the beam as a world-space angle a (direction (cos a, 0, sin a)). Agent 1's rig wants
+## yaw relative to its facing (its "Beam" node points down local -Z of its parent); the fallback
+## visual takes the world angle as-is.
+func _beam_angle_for_visual() -> float:
+	var bn := visual.find_child("Beam", true, false) as Node3D
+	if bn == null or not (bn.get_parent() is Node3D):
+		return _beam_a
+	var pb: Basis = (bn.get_parent() as Node3D).global_basis.orthonormalized()
+	var parent_yaw := atan2(pb.z.x, pb.z.z)
+	var want := atan2(-cos(_beam_a), -sin(_beam_a))
+	return wrapf(want - parent_yaw, -PI, PI)
 
 func _beam_damage(delta: float) -> void:
 	var f := Field.current

@@ -1015,9 +1015,8 @@ func qa_interact() -> void:
 
 func qa_debug() -> void:
 	var l := party.get_leader()
-	print("[QA] leader ", l.char_id, " pos ", l.global_position, " cam ", cam.global_position, " rot ", cam.rotation_degrees, " vp ", get_viewport().get_visible_rect().size, " fps ", Engine.get_frames_per_second(), " paused ", get_tree().paused, " dlg ", runner.active, " ", runner.dialogue_id, " boxvis ", runner.box.visible)
-	if terrain.has_method("surface_at"):
-		print("[QA] terrain h ", terrain.height_at(2, 6), " surf ", terrain.surface_at(2, 6), " col ", terrain._color_for(2, 6, 0.0))
+	print("[QA] leader ", l.char_id, " hp ", l.hp, " vel ", l.velocity, " knock ", l.knock, " pos ", l.global_position, " cam ", cam.global_position, " rot ", cam.rotation_degrees, " vp ", get_viewport().get_visible_rect().size, " fps ", Engine.get_frames_per_second(), " paused ", get_tree().paused, " dlg ", runner.active, " ", runner.dialogue_id, " boxvis ", runner.box.visible)
+	print("[QA] terrain h at leader ", height_at(l.global_position.x, l.global_position.z), " boss ", (boss.global_position if boss and is_instance_valid(boss) else Vector3.ZERO), " boss h ", (height_at(boss.global_position.x, boss.global_position.z) if boss and is_instance_valid(boss) else 0.0))
 
 func qa_log_flags() -> void:
 	var keys := ["briefed", "arrived_rr", "valley_clear", "first_scan_done", "rope_dropped", "combo_unlocked", "grazers_harmed",
@@ -1079,3 +1078,9 @@ func qa_perf_breakdown(path: String = "") -> void:
 	cam.process_mode = cam_mode
 	get_tree().paused = was_paused
 	print("[QA] PERF BREAKDOWN %s " % (path if path != "" else "level"), ", ".join(out))
+
+## QA: start a drill-beam cycle now (telegraph → sweep), for screenshots.
+func qa_boss_beam() -> void:
+	if boss and is_instance_valid(boss):
+		boss._beam_state = ""
+		boss._beam_t = 0.0

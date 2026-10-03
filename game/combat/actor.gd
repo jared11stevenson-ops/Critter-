@@ -193,8 +193,12 @@ func tick_statuses(delta: float) -> void:
 		pull_t -= delta
 
 ## Horizontal steering + knockback + pull + gravity, then move_and_slide.
+var _knock_applied := Vector3.ZERO   # knock added to velocity last frame (removed before steering)
+
 func body_move(desired: Vector3, accel: float, friction: float, delta: float, fly_height: float = -1.0) -> void:
-	var hv := Vector3(velocity.x, 0, velocity.z)
+	# Steer the actor's own velocity only — last frame's knockback is taken back out first, otherwise it
+	# feeds back into velocity every frame and a 6 m/s knock snowballs into 80 m/s launches.
+	var hv := Vector3(velocity.x - _knock_applied.x, 0, velocity.z - _knock_applied.z)
 	if desired.length_squared() > 0.0001:
 		hv = hv.move_toward(desired, accel * delta)
 	else:
@@ -208,6 +212,7 @@ func body_move(desired: Vector3, accel: float, friction: float, delta: float, fl
 			hv = Vector3.ZERO
 	var k := knock
 	knock = knock.move_toward(Vector3.ZERO, 30.0 * delta)
+	_knock_applied = Vector3(k.x, 0, k.z)
 	velocity.x = hv.x + k.x
 	velocity.z = hv.z + k.z
 	if fly_height >= 0.0:

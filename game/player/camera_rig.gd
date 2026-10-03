@@ -57,7 +57,22 @@ func set_target(t: Node3D, snap: bool = false) -> void:
 ## Boss framing: keep `point` in frame and pull back by `dist_mult`.
 func set_framing(point: Variant, dist_mult: float = 1.35) -> void:
 	_frame_point = point
+	_frame_min_mult = dist_mult
 	_dist_mult_target = dist_mult if point != null else 1.0
+
+var _frame_min_mult := 1.0
+const FRAME_MARGIN := 10.0  # metres kept around the framed point (boss body radius + breathing room)
+const FRAME_MAX_MULT := 2.3
+
+## Pull back far enough that both the target and the framed point fit horizontally.
+func _framing_mult(tp: Vector3) -> float:
+	var fp: Vector3 = _frame_point
+	var sep := Vector2(fp.x - tp.x, fp.z - tp.z).length()
+	var vs := get_viewport().get_visible_rect().size
+	var aspect := vs.x / maxf(1.0, vs.y)
+	var half_w := tan(deg_to_rad(cam.fov * 0.5)) * aspect
+	var need := (sep * 0.5 + FRAME_MARGIN) / maxf(0.01, half_w * distance)
+	return clampf(need, _frame_min_mult, FRAME_MAX_MULT)
 
 func add_shake(amount: float) -> void:
 	var s := float(GameState.settings.get("screen_shake", 1.0))
@@ -85,7 +100,8 @@ func _process(_delta: float) -> void:
 		else:
 			_frame_weight = move_toward(_frame_weight, 0.0, rd * 1.5)
 		if _frame_weight > 0.0 and _frame_point is Vector3:
-			want = want.lerp((tp + (_frame_point as Vector3)) * 0.5, _frame_weight * 0.75)
+			want = want.lerp((tp + (_frame_point as Vector3)) * 0.5, _frame_weight * 0.85)
+			_dist_mult_target = _framing_mult(tp)
 	_dist_mult = lerpf(_dist_mult, _dist_mult_target, 1.0 - exp(-2.0 * rd))
 	if _snap:
 		_focus = want

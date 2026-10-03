@@ -172,6 +172,7 @@ func _physics_process(delta: float) -> void:
 			_dash_t -= delta
 			velocity.x = _dash_dir.x * _dash_speed
 			velocity.z = _dash_dir.z * _dash_speed
+			_knock_applied = Vector3.ZERO
 			velocity.y = -2.0 if is_on_floor() else velocity.y - gravity * delta
 			move_and_slide()
 			_check_ghost_dash()
@@ -186,6 +187,7 @@ func _physics_process(delta: float) -> void:
 			p.y += sin(k * PI) * _leap_h
 			global_position = p
 			velocity = Vector3.ZERO
+			_knock_applied = Vector3.ZERO
 			if k >= 1.0:
 				state = "normal"
 				Audio.sfx_at("land", global_position)
@@ -261,6 +263,7 @@ func _fall_recover() -> void:
 		p = Field.current.level.safe_point_near(p, self)
 	global_position = p + Vector3(0, 0.6, 0)
 	velocity = Vector3.ZERO
+	_knock_applied = Vector3.ZERO
 	knock = Vector3.ZERO
 	state = "normal"
 	if alive and not downed:
@@ -274,6 +277,7 @@ func _fall_recover() -> void:
 func teleport(p: Vector3) -> void:
 	global_position = p
 	velocity = Vector3.ZERO
+	_knock_applied = Vector3.ZERO
 	knock = Vector3.ZERO
 	_safe_ring.clear()
 	if state == "dash" or state == "leap" or state == "scripted":
