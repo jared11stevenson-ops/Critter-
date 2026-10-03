@@ -18,7 +18,7 @@ const LAYOUT_PATH := "res://game/world/red_reaches/layout.json"
 const TERRAIN_SHADER := preload("res://game/art/shaders/terrain_toon.gdshader")
 const NOISE_TEX := preload("res://game/art/world/terrain_noise.png")
 const FLAG_TEX := preload("res://game/art/world/flagstone.png")
-const CHUNK := 32
+const CHUNK := 64
 
 @export var layout_path: String = LAYOUT_PATH
 @export var with_lighting: bool = true

@@ -18,6 +18,9 @@ uniform float flash = 0.0;
 uniform vec4 highlight_color : source_color = vec4(0.4, 0.9, 1.0, 1.0);
 uniform float highlight = 0.0;
 uniform float use_vertex_color = 1.0;
+uniform float reveal = 2.0;               // rope unroll: fragments with UV2.x > reveal are hidden
+
+varying float v_rev;
 
 varying vec3 w_pos;
 varying vec3 w_nrm;
@@ -25,9 +28,13 @@ varying vec3 w_nrm;
 void vertex() {
 	w_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	w_nrm = normalize((MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
+	v_rev = UV2.x;
 }
 
 void fragment() {
+	if (reveal < 1.5 && v_rev > reveal) {
+		discard;
+	}
 	vec3 base = albedo.rgb * mix(vec3(1.0), COLOR.rgb, use_vertex_color);
 	// tri-planar-ish grain so flat colours read as painted
 	vec3 an = abs(w_nrm);

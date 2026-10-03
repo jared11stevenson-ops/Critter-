@@ -32,7 +32,7 @@ func _build() -> void:
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	env.reflected_light_source = Environment.REFLECTION_SOURCE_DISABLED
 	env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
-	env.tonemap_exposure = 1.0
+	env.tonemap_exposure = 0.92
 	env.tonemap_white = 6.0
 	env.glow_enabled = true
 	env.glow_intensity = 0.55
@@ -48,7 +48,7 @@ func _build() -> void:
 	sun.name = "Sun"
 	sun.shadow_enabled = true
 	sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS
-	sun.directional_shadow_max_distance = 70.0
+	sun.directional_shadow_max_distance = 40.0
 	sun.directional_shadow_split_1 = 0.25
 	sun.directional_shadow_blend_splits = false
 	sun.shadow_bias = 0.06
@@ -89,16 +89,16 @@ func apply_preset(p: String) -> void:
 			sky_mat.set_shader_parameter("zenith_color", Color(0.25, 0.2, 0.45))
 		_:
 			# Red Reaches midday: warm sun from the upper left/back, cool sky fill
-			env.ambient_light_color = Color(0.70, 0.66, 0.78)
-			env.ambient_light_energy = 0.72
-			env.fog_light_color = Color(0.93, 0.70, 0.56)
+			env.ambient_light_color = Color(0.58, 0.48, 0.74)
+			env.ambient_light_energy = 0.62
+			env.fog_light_color = Color(0.86, 0.60, 0.52)
 			env.fog_light_energy = 1.0
 			env.fog_density = 0.0045
 			env.fog_sky_affect = 0.15
 			env.fog_height = -8.0
 			env.fog_height_density = 0.09
-			env.adjustment_saturation = 1.1
-			env.adjustment_contrast = 1.06
+			env.adjustment_saturation = 1.18
+			env.adjustment_contrast = 1.1
 			sun.light_color = Color(1.0, 0.89, 0.74)
-			sun.light_energy = 1.35
+			sun.light_energy = 1.2
 			sun.rotation_degrees = Vector3(-52, -38, 0)

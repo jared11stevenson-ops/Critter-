@@ -8,7 +8,7 @@ const STOPS := [
 	["gate_pad", Vector3(2, 0, 4)],
 	["ramp", Vector3(24, -2, 1)],
 	["valley", Vector3(58, -4, 0)],
-	["gap", Vector3(88, -4, -1)],
+	["gap", Vector3(83, -4, -1)],
 	["waystation", Vector3(116, -3, 0)],
 	["boulder", Vector3(146, -3.2, 2)],
 	["drill", Vector3(196, -6, 8)],
