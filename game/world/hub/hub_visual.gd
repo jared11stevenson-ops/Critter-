@@ -409,6 +409,18 @@ func _build_living_lights(geo: Node3D) -> void:
 	var wire := ToonKit.mesh_instance(ToonKit.finish(wst), ToonKit.material({"outline": 0.0}), "LightWires")
 	wire.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	geo.add_child(wire)
+	# a few real coloured pools under the strings so the bulbs actually light the Common (shadowless)
+	var pools := [[Vector3(-9, 5.6, -11), 0], [Vector3(9, 5.8, -12), 2], [Vector3(0, 5.4, -3), 4]]
+	for pl in pools:
+		var ol := OmniLight3D.new()
+		ol.name = "LivingLightPool"
+		ol.position = pl[0]
+		ol.light_color = (LIGHTS[int(pl[1]) % LIGHTS.size()] as Color).lerp(Color(1, 0.9, 0.75), 0.35)
+		ol.light_energy = 2.0
+		ol.omni_range = 11.0
+		ol.omni_attenuation = 1.2
+		ol.shadow_enabled = false
+		geo.add_child(ol)
 	var bulbs := ToonKit.mesh_instance(lst.commit(), _vertex_glow(), "LivingLights")
 	bulbs.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	geo.add_child(bulbs)
