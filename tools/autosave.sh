@@ -11,7 +11,6 @@ while true; do
   git -C $REPO worktree list --porcelain | awk '/^worktree /{print $2}' | while read wt; do
     br=$(git -C "$wt" rev-parse --abbrev-ref HEAD 2>/dev/null) || continue
     tmpidx=$(mktemp)
-    cp "$wt/.git" /dev/null 2>/dev/null
     gitdir=$(git -C "$wt" rev-parse --git-dir)
     cp "$gitdir/index" "$tmpidx" 2>/dev/null
     GIT_INDEX_FILE=$tmpidx git -C "$wt" add -A 2>/dev/null
