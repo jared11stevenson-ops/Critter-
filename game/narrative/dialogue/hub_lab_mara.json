@@ -16,7 +16,7 @@
   {
    "who": "mara",
    "expr": "focused",
-   "text": "Half the Gate math came off one whiteboard we shared. We could argue for hours and still solve the problem afterward.",
+   "text": "Before stable Descent, we shared a whiteboard on the Gate project. We could argue for hours and still solve the problem afterward.",
    "if_not": "rr_complete"
   },
   {

@@ -8,12 +8,12 @@ const CODEX_JSON := "res://game/canon/codex.json"
 const TABS := ["Species", "Characters", "Places", "Lore", "Mysteries"]
 
 const LORE := {
-	"old_roads": {"tab": "Lore", "title": "The Old Roads", "body": "Despite Critter's enormous size, evidence exists of ancient long-distance movement: ruined causeways, abandoned migration tunnels, stone markers whose symbols appear continents apart.\n\nThe marker at the Spanwright Waystation carries the same glyph family as stones recorded far beyond the Reaches.\n\nThese do not prove a lost global empire. They prove that Critter's civilizations have risen, connected, fragmented and forgotten one another many times. (Bible §9)"},
-	"mystery_thoughtstone": {"tab": "Mysteries", "title": "Thoughtstone", "body": "Thoughtstone grows around deep subterranean biological-mineral networks. Most appears inert. Rare pieces respond to neural activity.\n\nAt the Ochre Span foundation, a fragment turned itself toward Morrow. Aruun refuses invasive experiments.\n\nIs it mineral, organism, network, memory medium, or something without a human category? (Bible §23, Book XIV)"},
+	"old_roads": {"tab": "Lore", "title": "The Old Roads", "body": "Despite Critter's enormous size, evidence exists of ancient long-distance movement: ruined causeways, abandoned migration tunnels, stone markers whose symbols appear continents apart.\n\nThe marker at the Spanwright Waystation carries the same glyph family as stones recorded far beyond the Reaches.\n\nThese do not prove a lost global empire. They prove that Critter's civilizations have risen, connected, fragmented and forgotten one another many times."},
+	"mystery_thoughtstone": {"tab": "Mysteries", "title": "Thoughtstone", "body": "Thoughtstone grows around deep subterranean biological-mineral networks. Most appears inert. Rare pieces respond to neural activity.\n\nAt the Ochre Span foundation, a fragment turned itself toward Morrow. Aruun refuses invasive experiments.\n\nIs it mineral, organism, network, memory medium, or something without a human category?"},
 	"mystery_pharilux_1897": {"tab": "Mysteries", "title": "Pharilux, 1897", "body": ""},
 	"mystery_moon_question": {"tab": "Mysteries", "title": "The Moon Question", "body": ""},
-	"mystery_blind_spots": {"tab": "Mysteries", "title": "Probability Blind Spots", "body": "Certain people, places and events produce almost no readable probability around them. Pharilux is one. Some Gate events are another. Cigarra does not know why. She hates unanswered questions enough to keep looking. (Bible §22)"},
-	"lore_burden_architecture": {"tab": "Lore", "title": "Burden Architecture", "body": "Aruun answers that a structure should sacrifice itself before sacrificing the people inside it. This becomes the foundation of a cross-scale engineering school called Burden Architecture. (Bible Book XIV)"},
+	"mystery_blind_spots": {"tab": "Mysteries", "title": "Probability Blind Spots", "body": "Certain people, places and events produce almost no readable probability around them. Pharilux is one. Some Gate events are another. Cigarra does not know why. She hates unanswered questions enough to keep looking."},
+	"lore_burden_architecture": {"tab": "Lore", "title": "Burden Architecture", "body": "Aruun answers that a structure should sacrifice itself before sacrificing the people inside it. This becomes the foundation of a cross-scale engineering school called Burden Architecture."},
 }
 
 static var _db: Dictionary = {}
@@ -136,7 +136,7 @@ static func _fallback_body(id: String) -> String:
 		return b if b != "" else "An open question. The Codex will fill this page when you learn more."
 	if id.begins_with("species_"):
 		var s := Canon.species(id.substr(8))
-		return "[b]%s[/b] · %s\n\n%s\n\n[b]Behaviour:[/b] %s" % [s.get("class", ""), "SAPIENT" if s.get("sapient", false) else "non-sapient", s.get("desc", ""), s.get("behavior", "")]
+		return "[b]%s[/b] · %s\n\n%s\n\n[b]Behavior:[/b] %s" % [s.get("class", ""), "SAPIENT" if s.get("sapient", false) else "non-sapient", s.get("desc", ""), s.get("behavior", "")]
 	if id.begins_with("char_"):
 		var c := Canon.character(id.substr(5))
 		var lines: Array = []

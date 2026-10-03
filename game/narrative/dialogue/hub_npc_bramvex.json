@@ -43,7 +43,7 @@
   {
    "who": "bramvex",
    "expr": "default",
-   "text": "If Cigarra improvises, let her. I leave deliberate gaps in my plans for her now. Someone named them. I regret it.",
+   "text": "If Cigarra improvises, let her. I leave deliberate gaps in my plans for her now. I named them. I regret naming them.",
    "if_not": "rr_complete"
   },
   {

@@ -58,7 +58,7 @@ D["hub_intro"] = [
 D["hub_lab_mara"] = [
     MA("neutral", "Mara's lab. Officially 'Scale-State Instrumentation'. Unofficially, where the coffee lives.", **{"if_not": "rr_complete"}),
     MA("curious", "You're wondering about Dexter. Everyone does, eventually.", **{"if_not": "rr_complete"}),
-    MA("focused", "Half the Gate math came off one whiteboard we shared. We could argue for hours and still solve the problem afterward.", **{"if_not": "rr_complete"}),
+    MA("focused", "Before stable Descent, we shared a whiteboard on the Gate project. We could argue for hours and still solve the problem afterward.", **{"if_not": "rr_complete"}),
     MA("tired", "I know he isn't pretending to care about humanity. That's what frightens me.", **{"if_not": "rr_complete"}),
     MA("soft", "You came back. Both of them came back. On a first descent, that's the whole score.", **{"if": "rr_complete"}),
     MA("focused", "The Thoughtstone readings from your field log are... wrong. Not broken. Wrong in a very consistent direction.", **{"if": "rr_complete"}),
@@ -85,7 +85,7 @@ D["hub_debrief"] = [
 
 D["hub_habitat_intro"] = [
     MA("focused", "Four slots: Substrate, Symbiont, Climate, Anchor. Your scan data tells you what it needs."),
-    MA("neutral", "Wrong pieces stress the resident. The better the Habitat, the healthier and more behaviourally complex it becomes."),
+    MA("neutral", "Wrong pieces stress the resident. The better the Habitat, the healthier and more behaviorally complex it becomes."),
     A("calm", "If my bridge design is in the catalogue, it's free. I don't charge for load paths.", **{"if": "ochre_span_braced"}),
 ]
 
@@ -99,7 +99,7 @@ D["hub_hook"] = [
     C("focused", "I tried reading it. It has too many futures. Every one of them is pointing the same way."),
     MA("neutral", "Mineral. Organism. Network. Memory medium. Or something without a human category."),
     DX("amused", "Mara. Handler. Lovely work out there. One more thing before you pretend not to answer."),
-    DX("serious", "Your rock turned. Ours did too. Every sample in my lab, the same second. Call me when you want to compare notes."),
+    DX("serious", "Your field log says a Thoughtstone sliver turned to face the mace on its own. I would very much like to see that. Call me when you want to compare notes."),
     MA("tired", "...He's going to be impossible about this."),
     C("happy", "He was always going to be. That one I didn't need the crown for."),
     N("MYSTERY LOGGED — THOUGHTSTONE."),
@@ -127,7 +127,7 @@ D["hub_npc_bramvex"] = [
     {"label": "b_honest"},
     L("bramvex", "default", "Honest. Good. Now count. Every room, every time."),
     {"label": "b_end"},
-    L("bramvex", "default", "If Cigarra improvises, let her. I leave deliberate gaps in my plans for her now. Someone named them. I regret it.", **{"if_not": "rr_complete"}),
+    L("bramvex", "default", "If Cigarra improvises, let her. I leave deliberate gaps in my plans for her now. I named them. I regret naming them.", **{"if_not": "rr_complete"}),
     L("bramvex", "default", "You brought both of them back. That's the job. The rest is paperwork.", **{"if": "rr_complete"}),
 ]
 D["hub_npc_nerit"] = [
@@ -211,7 +211,7 @@ D["rr_valley_clear"] = [
 ]
 D["rr_gap"] = [
     A("focused", "The old rope span is gone. Cut. Not rotted."),
-    C("happy", "Gaps are my favourite shape. Swap to me, Handler — I'll hop it and drop a line for the big one."),
+    C("happy", "Gaps are my favorite shape. Swap to me, Handler — I'll hop it and drop a line for the big one."),
 ]
 D["rr_rope"] = [
     C("happy", "Landed in the version where I land. Good version."),
@@ -224,7 +224,7 @@ D["rr_rope"] = [
 D["rr_waystation"] = [
     A("calm", "A Spanwright waystation. Wells. Shade. A place to mend rope."),
     A("calm", "My teacher said infrastructure succeeds when people stop noticing the danger it protects them from."),
-    C("curious", "Did you understand that when he said it?"),
+    C("curious", "Did you understand that at the time?"),
     A("focused", "No. I understood it at Red Span."),
     C("neutral", "...Eleven minutes."),
     A("calm", "Thousands crossed. Hundreds didn't."),
@@ -297,7 +297,7 @@ D["rr_burden"] = [
 D["rr_burden_done"] = [
     C("focused", "Across. Everyone's across. You can let go."),
     A("calm", "...Not eleven minutes. Just enough."),
-    C("happy", "Just enough is my favourite amount."),
+    C("happy", "Just enough is my favorite amount."),
     {"set": {"burden_done": True}},
     {"trust": {"aruun": 5, "cigarra": 3}},
 ]
