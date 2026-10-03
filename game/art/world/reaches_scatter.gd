@@ -16,7 +16,16 @@ const KIND_ITEMS := {
 	"shrub": ["shrub_red", "plant_agave", "plant_redbush", "plant_blue", "plant_bulb", "plant_orange", "plant_cone"],
 	"lichen_patch": ["plant_bulb", "plant_blue", "plant_agave"],
 }
-const MESH_KINDS := ["crate", "survey_flag", "pillar_broken"]
+const MESH_KINDS := ["crate", "survey_flag", "pillar_broken", "rock_a", "rock_b", "rock_c", "spire", "lichen_rock",
+	"grass_tuft", "pebbles", "dead_tree"]
+## v0.7: rocks, spires, shrubs and lichen are real 3D meshes (PBR detail shader); only trees/bones stay painted cards.
+const KIND_MESH := {
+	"rock_small": ["rock_a", "rock_b", "rock_c", "rock_a", "pebbles"],
+	"rock_spire": ["spire"],
+	"flat_tree": ["dead_tree", "dead_tree", "spire"],
+	"shrub": ["grass_tuft", "grass_tuft", "grass_tuft"],
+	"lichen_patch": ["lichen_rock", "grass_tuft"],
+}
 
 var _atlas: Dictionary = {}
 var _rng := RandomNumberGenerator.new()
@@ -46,6 +55,7 @@ func populate(t: Node) -> void:
 		elif floors.has(area):
 			_scatter_floor(t, floors[area], kinds, count)
 	_extra_backdrop_trees(t)
+	_ground_cover(t, floors)
 	_commit_billboards()
 	_commit_props()
 
@@ -164,7 +174,53 @@ func _extra_backdrop_trees(t: Node) -> void:
 		_add(kind, Vector3(x, hv, z), 1.5)
 
 
+## Dense grounded cover: pebble clusters and dry grass tufts on every floor (cheap instanced meshes), thicker at the
+## floor rims and against cliffs, sparse on the paths.
+func _ground_cover(t: Node, floors: Dictionary) -> void:
+	for id in floors:
+		var f: Dictionary = floors[id]
+		var n := 260
+		if f.get("type", "disc") == "capsule":
+			var a: Array = f["a"]
+			var b: Array = f["b"]
+			n = int(Vector2(float(a[0]), float(a[1])).distance_to(Vector2(float(b[0]), float(b[1]))) * 6.0) + 120
+		for i in n:
+			var p := _random_in_shape(f)
+			var sd: float = t.floor_sdf(p.x, p.y)
+			if sd > -0.2 or t.chasm_sdf(p.x, p.y) < 1.5:
+				continue
+			if -sd > 3.0 and _rng.randf() < 0.85:
+				continue
+			if not _is_clear(p, 0.3):
+				continue
+			var y: float = t.height_at(p.x, p.y)
+			var k := "pebbles" if _rng.randf() < 0.45 else "grass_tuft"
+			_add_mesh(k, Vector3(p.x, y, p.y), _rng.randf_range(1.1, 1.9) if k == "grass_tuft" else _rng.randf_range(0.9, 1.6))
+
+
+func _add_mesh(kind: String, pos: Vector3, s: float) -> void:
+	if not _props.has(kind):
+		_props[kind] = []
+	var b := Basis(Vector3.UP, _rng.randf() * TAU)
+	if kind.begins_with("rock") or kind == "lichen_rock":
+		b = b * Basis(Vector3.RIGHT, _rng.randf_range(-0.25, 0.25))
+		pos.y -= 0.15 * s
+	_props[kind].append(Transform3D(b.scaled(Vector3(s, s * _rng.randf_range(0.8, 1.2), s)), pos))
+
+
 func _add(kind: String, pos: Vector3, scale_mul: float) -> void:
+	if KIND_MESH.has(kind):
+		var opts: Array = KIND_MESH[kind]
+		var mk: String = opts[_rng.randi() % opts.size()]
+		var s := _rng.randf_range(1.0, 2.2) * scale_mul
+		if mk == "grass_tuft":
+			s = _rng.randf_range(1.2, 2.0) * scale_mul
+		if mk == "spire" or mk == "dead_tree":
+			s = _rng.randf_range(0.8, 1.3) * scale_mul
+			if _south_of_floor(pos.x, pos.z):
+				return
+		_add_mesh(mk, pos, s)
+		return
 	if KIND_ITEMS.has(kind):
 		var items: Array = KIND_ITEMS[kind]
 		var id: String = items[_rng.randi() % items.size()]
@@ -248,14 +304,94 @@ func _commit_props() -> void:
 		var mmi := MultiMeshInstance3D.new()
 		mmi.name = "Props_" + kind
 		mmi.multimesh = mm
-		mmi.material_override = ToonKit.material({"outline": 0.03})
+		if kind == "grass_tuft":
+			mmi.material_override = _grass_material()
+		elif kind in ["crate", "survey_flag"]:
+			mmi.material_override = ToonKit.material({"roughness": 0.7, "detail": 0.35})
+		else:
+			mmi.material_override = ToonKit.material({"strata": 0.35, "roughness": 0.9})
 		mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		if kind in ["spire", "rock_a", "rock_b", "pillar_broken"]:
+			mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 		add_child(mmi)
 
 
+static func _grass_material() -> StandardMaterial3D:
+	var m := StandardMaterial3D.new()
+	m.vertex_color_use_as_albedo = true
+	m.cull_mode = BaseMaterial3D.CULL_DISABLED
+	m.roughness = 0.95
+	m.diffuse_mode = BaseMaterial3D.DIFFUSE_BURLEY
+	m.specular_mode = BaseMaterial3D.SPECULAR_DISABLED
+	m.rim_enabled = true
+	m.rim = 0.4
+	m.rim_tint = 0.8
+	return m
+
+
+## Dry grass tuft: ~14 tapered blades, normals pointing up (soft, grass-like lighting), roots dark, tips bleached.
+static func _grass_mesh() -> ArrayMesh:
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 41
+	for i in 14:
+		var a := rng.randf() * TAU
+		var r := rng.randf() * 0.12
+		var base := Vector3(cos(a) * r, 0.0, sin(a) * r)
+		var h := rng.randf_range(0.28, 0.62)
+		var lean := Vector3(cos(a), 0, sin(a)) * rng.randf_range(0.08, 0.3) + Vector3(rng.randf() - 0.5, 0, rng.randf() - 0.5) * 0.1
+		var side := Vector3(-sin(a), 0, cos(a)) * 0.022
+		var tip := base + lean + Vector3(0, h, 0)
+		var root := Color(0.36, 0.22, 0.14)
+		var c := Color(0.86, 0.68, 0.42).lerp(Color(0.74, 0.52, 0.3), rng.randf())
+		for v in [[base - side, root], [tip, c], [base + side, root]]:
+			st.set_color(v[1])
+			st.set_normal(Vector3(0, 1, 0).lerp(Vector3(cos(a), 0, sin(a)), 0.3).normalized())
+			st.add_vertex(v[0])
+	return st.commit()
+
+
 static func _prop_mesh(kind: String) -> ArrayMesh:
+	if kind == "grass_tuft":
+		return _grass_mesh()
 	var st := ToonKit.begin()
 	match kind:
+		"rock_a":
+			ToonKit.rock(st, Vector3(0, 0.3, 0), Vector3(0.75, 0.5, 0.6), Color(0.66, 0.36, 0.25), 11, 2)
+			ToonKit.rock(st, Vector3(0.6, 0.12, 0.35), Vector3(0.3, 0.22, 0.28), Color(0.58, 0.3, 0.22), 12, 1)
+		"rock_b":
+			ToonKit.rock(st, Vector3(0, 0.45, 0), Vector3(0.6, 0.75, 0.55), Color(0.72, 0.42, 0.3), 23, 2)
+		"rock_c":
+			ToonKit.rock(st, Vector3(0, 0.15, 0), Vector3(0.55, 0.25, 0.5), Color(0.62, 0.33, 0.24), 31, 2)
+			ToonKit.rock(st, Vector3(-0.5, 0.08, -0.2), Vector3(0.22, 0.14, 0.2), Color(0.7, 0.4, 0.28), 32, 1)
+		"lichen_rock":
+			ToonKit.rock(st, Vector3(0, 0.25, 0), Vector3(0.65, 0.42, 0.6), Color(0.6, 0.48, 0.3), 41, 2)
+			ToonKit.rock(st, Vector3(0, 0.5, 0), Vector3(0.45, 0.12, 0.4), Color(0.56, 0.6, 0.36), 42, 1)
+		"spire":
+			ToonKit.rock(st, Vector3(0, 1.4, 0), Vector3(0.7, 1.9, 0.65), Color(0.72, 0.38, 0.26), 51, 2)
+			ToonKit.rock(st, Vector3(0.1, 3.0, 0.05), Vector3(0.45, 0.8, 0.42), Color(0.8, 0.5, 0.34), 52, 1)
+			ToonKit.rock(st, Vector3(0.7, 0.3, 0.3), Vector3(0.5, 0.4, 0.45), Color(0.62, 0.33, 0.24), 53, 1)
+		"dead_tree":
+			var rng := RandomNumberGenerator.new()
+			rng.seed = 71
+			var bark := Color(0.42, 0.32, 0.27)
+			ToonKit.cylinder(st, Vector3(0, -0.2, 0), Vector3(0.15, 2.2, 0.05), 0.24, 0.13, 7, bark, true, 0.04, 7)
+			for i in 5:
+				var a := float(i) * 2.4 + rng.randf()
+				var y0 := 1.3 + rng.randf() * 0.9
+				var p0 := Vector3(0.1, y0, 0.03)
+				var p1 := p0 + Vector3(cos(a) * 1.1, 0.7 + rng.randf() * 0.6, sin(a) * 1.1)
+				ToonKit.cylinder(st, p0, p1, 0.09, 0.04, 5, bark.lightened(0.08), false)
+				ToonKit.cylinder(st, p1, p1 + Vector3(cos(a + 0.7) * 0.5, 0.45, sin(a + 0.7) * 0.5), 0.04, 0.015, 4, bark.lightened(0.15), false)
+			ToonKit.rock(st, Vector3(0, 0.0, 0), Vector3(0.5, 0.2, 0.5), Color(0.55, 0.32, 0.24), 72, 1)
+		"pebbles":
+			var rng := RandomNumberGenerator.new()
+			rng.seed = 61
+			for i in 6:
+				var c := Vector3(rng.randf_range(-0.4, 0.4), 0.02, rng.randf_range(-0.4, 0.4))
+				var r := rng.randf_range(0.05, 0.13)
+				ToonKit.rock(st, c, Vector3(r, r * 0.6, r * 0.9), Color(0.78, 0.5, 0.36).lerp(Color(0.6, 0.38, 0.3), rng.randf()), 62 + i, 0)
 		"crate":
 			var wood := Color(0.36, 0.33, 0.33)
 			ToonKit.box(st, Transform3D(Basis(), Vector3(0, 0.45, 0)), Vector3(1.1, 0.9, 0.8), wood)
