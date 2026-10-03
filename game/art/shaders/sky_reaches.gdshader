@@ -88,7 +88,8 @@ void sky() {
 	float arc = abs(dot(d, normalize(vec3(0.25, 0.55, 0.8))) - 0.18);
 	float arcb = (1.0 - smoothstep(0.0, 0.012, arc)) * smoothstep(0.02, 0.3, h);
 	col = mix(col, ring_color, arcb * 0.45);
-	// clouds: flattened fbm bands near the horizon
+	// clouds: flattened fbm bands near the horizon (2 x 4-octave fbm per pixel: skipped on Low quality)
+#ifndef QUALITY_LOW
 	if (h > -0.02) {
 		vec2 cuv = d.xz / (h + 0.18);
 		cuv = cuv * 1.3 + vec2(cloud_time * cloud_speed, 0.0);
@@ -100,5 +101,6 @@ void sky() {
 		float fade = smoothstep(-0.02, 0.06, h) * (1.0 - smoothstep(0.35, 0.8, h));
 		col = mix(col, cc, c * fade);
 	}
+#endif
 	COLOR = col;
 }

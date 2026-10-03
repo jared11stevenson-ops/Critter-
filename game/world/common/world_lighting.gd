@@ -125,7 +125,9 @@ func _build() -> void:
 	env.background_mode = Environment.BG_SKY
 	var sky := Sky.new()
 	sky_mat = ShaderMaterial.new()
-	sky_mat.shader = preload("res://game/art/shaders/sky_reaches.gdshader")
+	var sky_sh: Shader = preload("res://game/art/shaders/sky_reaches.gdshader")
+	var q := ToonKit.quality()
+	sky_mat.shader = q.call("shader", sky_sh.resource_path, sky_sh.code) if q else sky_sh
 	sky.sky_material = sky_mat
 	sky.radiance_size = Sky.RADIANCE_SIZE_32
 	sky.process_mode = Sky.PROCESS_MODE_QUALITY

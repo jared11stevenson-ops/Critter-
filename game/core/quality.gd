@@ -24,6 +24,9 @@ enum { LOW, MEDIUM, HIGH }
 const NAMES := ["low", "medium", "high"]
 const LABELS := ["Low", "Medium", "High"]
 const RENDER_SCALE := [0.7, 0.85, 1.0]
+## ...but never render 3D taller than this many pixels (high-DPI phones render 3D at native resolution with the
+## canvas_items stretch mode: a 2400x1080 screen is 2.8x the pixels of 720p). Scale is clamped to >= 0.5.
+const MAX_3D_HEIGHT := [620.0, 860.0, 1440.0]
 const SCATTER := [0.3, 0.6, 1.0]
 const PARTICLES := [0.5, 0.75, 1.0]
 ## Visibility range multiplier for scatter / small structure detail.
@@ -92,6 +95,15 @@ func set_level(lv: int) -> void:
 	_apply_lights()
 	if not first:
 		changed.emit(level)
+
+
+## 3D resolution scale for the current level and window size.
+func render_scale() -> float:
+	var h := float(get_tree().root.size.y)
+	var sc: float = RENDER_SCALE[level]
+	if h > 1.0:
+		sc = minf(sc, MAX_3D_HEIGHT[level] / h)
+	return clampf(sc, 0.5, 1.0)
 
 
 func level_name() -> String:
@@ -175,7 +187,9 @@ func _apply_viewport() -> void:
 	var vp := get_tree().root
 	vp.msaa_3d = Viewport.MSAA_2X if level == HIGH else Viewport.MSAA_DISABLED
 	vp.scaling_3d_mode = Viewport.SCALING_3D_MODE_BILINEAR
-	vp.scaling_3d_scale = RENDER_SCALE[level]
+	vp.scaling_3d_scale = render_scale()
+	if not vp.size_changed.is_connected(_apply_viewport):
+		vp.size_changed.connect(_apply_viewport)
 	vp.anisotropic_filtering_level = [Viewport.ANISOTROPY_DISABLED, Viewport.ANISOTROPY_2X,
 		Viewport.ANISOTROPY_4X][level]
 
@@ -210,7 +224,6 @@ func setup_environment(env: Environment) -> void:
 	if env == null:
 		return
 	env.glow_enabled = level >= MEDIUM
-	env.adjustment_enabled = level >= MEDIUM
 	if level == LOW:
 		env.fog_aerial_perspective = 0.0
 		env.fog_sun_scatter = 0.0
