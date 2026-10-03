@@ -213,16 +213,24 @@ def paint(ob):
     img[nop] = proc[nop]
     himg = np.zeros((TEX, TEX), dtype=np.float32)
     himg[mask] = h
-    rough = np.full(len(P), 0.6)
+    rough = np.full(len(P), 0.72)
     metal = np.zeros(len(P))
     for k, v in ROUGH.items():
         rough[part == k] = v
     for k, v in METAL.items():
         metal[part == k] = v
-    rough[is_car] = 0.45 - 0.1 * np.clip(n1[is_car], 0, 1)
+    rough[is_car] = 0.62 - 0.1 * np.clip(n1[is_car], 0, 1)
     rough[cloth] = 0.85
     orm = np.zeros((TEX, TEX, 3), dtype=np.float32)
     orm[mask] = np.stack([np.ones(len(P)), rough, metal], 1)
+    # in-engine grade: the warm Red Reaches key light lifts the cream/red blotches toward pink. Deepen the
+    # midtones (gamma) and pull light warm tones slightly toward the sheet's ochre-cream so the read matches the sheet.
+    lum = img.mean(-1, keepdims=True)
+    img = np.clip(img, 0, 1) ** 1.18
+    warm = np.clip((lum - 0.45) * 3, 0, 1) * np.clip(img[..., :1] - img[..., 2:3], 0, 1)
+    img[..., 0:1] -= 0.10 * warm
+    img[..., 1:2] += 0.04 * warm
+    img = np.clip(img, 0, 1)
     img, _ = dilate(img, mask, 6)
     himg, _ = dilate(himg, mask, 6)
     orm, _ = dilate(orm, mask, 6)
@@ -299,7 +307,7 @@ HEAD_PARTS = {"head", "eye", "brow", "crest", "horn", "tine", "fringe_cream", "f
 JAW_PARTS = {"jaw", "fang"}
 TORSO_ONLY = ("cloak", "belt", "buckle", "medallion", "gold", "beads", "talisman", "cloth_sash", "band_cream",
               "strip")
-SKIRT = ("leaf",)
+SKIRT = ("leaf", "strip_cream", "strip_olive")
 MORROW_GRIP = None
 MORROW_ROT = (Matrix.Rotation(0.5, 3, "Y") @ Matrix.Rotation(-0.25, 3, "X"))
 EXT1 = ("morrow_seg1",)
@@ -392,7 +400,7 @@ def skin(mesh_ob, rig):
             allowed.append(j)
         if base.startswith(SKIRT):
             # skirt panels ride the thigh on their side progressively down the panel (no leg pass-through)
-            a = float(np.clip((1.02 - co[vi, 2]) / 0.4, 0, 1)) * 0.85
+            a = float(np.clip((1.05 - co[vi, 2]) / 0.3, 0, 1)) * 0.97
             th = "thigh.L" if co[vi, 0] > 0.02 else "thigh.R" if co[vi, 0] < -0.02 else None
             if th is None:
                 groups["hips"].add([vi], 1.0 - a, "REPLACE")
@@ -445,6 +453,67 @@ def asymmetric_shoulders(ob):
             ob.data.vertices[i].co = c + Vector((v.x * sc[0], v.y * sc[1], v.z * sc[2])) + Vector(off)
 
 
+
+# Posture (sheet SIDE view): chest pitched forward, neck thrust forward; head shortened toward a mask (detail_head).
+HUNCH_CHEST = (1.50, 0.10)   # pivot z, radians (top goes forward = -Y)
+HUNCH_NECK = (1.70, 0.20)
+SNOUT_K = 0.8                # head/jaw lengths in front of the skull centre are scaled by this
+ARM_PARTS = ("upperarm", "forearm", "hand", "armplate", "bracer", "pauldron", "claw", "morrow")
+FACE_PARTS = ("head", "jaw", "fang", "brow", "eye")
+
+
+def _ss(a, b, z):
+    t = np.clip((z - a) / (b - a), 0, 1)
+    return t * t * (3 - 2 * t)
+
+
+def _rotx(P, pz, ang):
+    y, z = P[:, 1], P[:, 2] - pz
+    c, s = np.cos(ang), np.sin(ang)
+    Q = P.copy()
+    Q[:, 1] = y * c - z * s
+    Q[:, 2] = y * s + z * c + pz
+    return Q
+
+
+def hunch_points(P):
+    z = P[:, 2].copy()
+    Q = _rotx(P, HUNCH_NECK[0], HUNCH_NECK[1] * _ss(1.66, 1.84, z))
+    return _rotx(Q, HUNCH_CHEST[0], HUNCH_CHEST[1] * _ss(1.40, 1.60, z))
+
+
+def hunch(ob):
+    """Deform mesh + skeleton joints (body.J) into the sheet's hunched posture; shorten the snout."""
+    names = ob["parts"]
+    me = ob.data
+    pa = np.zeros(len(me.polygons), dtype=np.int32)
+    me.attributes["part"].data.foreach_get("value", pa)
+    vp = np.empty(len(me.vertices), dtype=object)
+    for p in me.polygons:
+        for v in p.vertices:
+            vp[v] = names[pa[p.index]].split(".")[0]
+    co = np.zeros(len(me.vertices) * 3)
+    me.vertices.foreach_get("co", co)
+    co = co.reshape(-1, 3)
+    face = np.array([x in FACE_PARTS for x in vp]) & (co[:, 2] > 1.85)
+    hy = body.J["head"].y
+    co[face, 1] = hy + (co[face, 1] - hy) * np.where(co[face, 1] < hy, SNOUT_K, 1.0)
+    for k in ("head_end", "jaw_end"):
+        j = body.J[k]
+        body.J[k] = body.V(j.x, hy + (j.y - hy) * SNOUT_K, j.z)
+    arm = np.array([x is not None and x.startswith(ARM_PARTS) for x in vp])
+    sh = np.array([tuple(body.J["shoulder.L"])])
+    d = hunch_points(sh)[0] - sh[0]
+    new = hunch_points(co)
+    new[arm] = co[arm] + d
+    me.vertices.foreach_set("co", new.ravel())
+    me.update()
+    for k, j in list(body.J.items()):
+        p = np.array([tuple(j)])
+        q = p[0] + d if k.split(".")[0] in ("shoulder", "elbow", "wrist", "hand_end") else hunch_points(p)[0]
+        body.J[k] = body.V(*q)
+
+
 def main():
     bpy.ops.wm.open_mainfile(filepath=os.path.join(WORK, "aruun_geo.blend"))
     ob = bpy.data.objects["Aruun"]
@@ -471,6 +540,7 @@ def main():
     bpy.context.view_layer.objects.active = ob
     bpy.ops.object.join()
     ob["parts"] = parts
+    hunch(ob)
     bu.pack_uvs(ob, density={"head": 1.8, "eye": 1.5, "brow": 1.5, "jaw": 1.4, "horn": 1.2, "morrow_head": 0.8,
                              "cloak": 0.7, "torso": 1.2})
     paths = paint(ob)
