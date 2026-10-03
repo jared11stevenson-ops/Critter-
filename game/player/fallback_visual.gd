@@ -50,7 +50,40 @@ func _build() -> void:
 			"resonance_pylon": _build_pylon()
 			"augur_rig": _build_rig()
 			_: _build_mite()
+	_bake()
 	_add_shadow()
+
+## Perf: merge every static part that shares a material into one mesh (a Skitter Mite goes from
+## 10 draws to 3) and let small creatures rely on the blob shadow instead of casting real shadows.
+func _bake() -> void:
+	var groups: Dictionary = {}
+	var order: Array = []
+	for c in _pivot.get_children():
+		if c is MeshInstance3D and not _vents.has(c):
+			var m: Material = (c as MeshInstance3D).material_override
+			if not groups.has(m):
+				groups[m] = []
+				order.append(m)
+			groups[m].append(c)
+	for m in order:
+		var parts: Array = groups[m]
+		if parts.size() < 2:
+			continue
+		var st := SurfaceTool.new()
+		st.begin(Mesh.PRIMITIVE_TRIANGLES)
+		for mi in parts:
+			st.append_from((mi as MeshInstance3D).mesh, 0, (mi as MeshInstance3D).transform)
+		var merged := MeshInstance3D.new()
+		merged.mesh = st.commit()
+		merged.material_override = m
+		_pivot.add_child(merged)
+		for mi in parts:
+			_pivot.remove_child(mi)
+			mi.queue_free()
+	if kind == "creature" and _radius < 1.0:
+		for c in _pivot.get_children():
+			if c is GeometryInstance3D:
+				(c as GeometryInstance3D).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
 # ---------------- builders ----------------
 func _mat(col: Color, emissive: float = 0.0) -> StandardMaterial3D:

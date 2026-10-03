@@ -38,6 +38,17 @@ func _ready() -> void:
 	add_child(cam)
 	_last_us = Time.get_ticks_usec()
 
+## Agent 1's dithered occlusion fade reads these two globals (declared in project.godot [shader_globals]).
+const GP_FOCUS := &"critter_focus_pos"
+const GP_CAM := &"critter_cam_pos"
+
+func _push_global_params() -> void:
+	var fp := _focus
+	if target and is_instance_valid(target):
+		fp = target.global_position
+	RenderingServer.global_shader_parameter_set(GP_FOCUS, fp)
+	RenderingServer.global_shader_parameter_set(GP_CAM, cam.global_position)
+
 func set_target(t: Node3D, snap: bool = false) -> void:
 	target = t
 	if snap:
@@ -105,6 +116,7 @@ func _process(_delta: float) -> void:
 	else:
 		cam.position = Vector3.ZERO
 		cam.rotation.z = 0.0
+	_push_global_params()
 
 func _blocked(pitch: float, dist: float) -> bool:
 	var f := Field.current

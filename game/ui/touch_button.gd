@@ -112,17 +112,11 @@ func _draw() -> void:
 		else:
 			draw_circle(c, r * scale_k, Color(0, 0, 0, 0.35))
 			draw_circle(c, (r - 3.0) * scale_k, col.lerp(UiKit.ACCENT, 0.3 if _pressed else 0.0))
-			draw_arc(c, (r - 3.0) * scale_k, 0, TAU, 48, ring_col if enabled else UiKit.MUTED, 4.0, true)
+			draw_arc(c, (r - 3.0) * scale_k, 0, TAU, 48, ring_col if enabled else UiKit.MUTED, 4.0, false)
 		if cost_tint.a > 0.0:
-			draw_arc(c, (r - 9.0) * scale_k, 0, TAU, 48, cost_tint, 5.0, true)
-	if icon:
-		var isz := r * 1.25 * scale_k
-		draw_texture_rect(icon, Rect2(c - Vector2(isz, isz) * 0.5, Vector2(isz, isz)), false, Color(1, 1, 1, 1 if enabled else 0.5))
-	elif glyph != "" and _font:
-		var fs := glyph_size
-		var w := _font.get_string_size(glyph, HORIZONTAL_ALIGNMENT_CENTER, -1, fs).x
-		draw_string_outline(_font, Vector2(c.x - w * 0.5, c.y + fs * 0.36), glyph, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, 6, Color(0, 0, 0, 0.7))
-		draw_string(_font, Vector2(c.x - w * 0.5, c.y + fs * 0.36), glyph, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, UiKit.PARCHMENT if enabled else UiKit.MUTED)
+			draw_arc(c, (r - 9.0) * scale_k, 0, TAU, 48, cost_tint, 5.0, false)
+	# Perf (Compatibility batches by texture): every untextured shape first, then text grouped by
+	# size, no outline passes. Captions sit on a dark plate instead of an outline.
 	if cd_frac > 0.001 and not pill:
 		var pts := PackedVector2Array()
 		pts.append(c)
@@ -132,13 +126,23 @@ func _draw() -> void:
 			var a := start + TAU * cd_frac * float(i) / float(seg)
 			pts.append(c + Vector2(cos(a), sin(a)) * (r - 4.0) * scale_k)
 		draw_colored_polygon(pts, Color(0.05, 0.03, 0.03, 0.62))
+	var fs2 := 22
+	var cap_w := 0.0
+	var cap_y := s.y + 22.0
 	if caption != "" and _font:
-		var fs2 := 22
-		var w2 := _font.get_string_size(caption, HORIZONTAL_ALIGNMENT_CENTER, -1, fs2).x
-		var y := s.y + 22.0
+		cap_w = _font.get_string_size(caption, HORIZONTAL_ALIGNMENT_CENTER, -1, fs2).x
 		if pill:
-			y = c.y + fs2 * 0.36
-		draw_string_outline(_font, Vector2(c.x - w2 * 0.5, y), caption, HORIZONTAL_ALIGNMENT_LEFT, -1, fs2, 6, Color(0, 0, 0, 0.75))
-		draw_string(_font, Vector2(c.x - w2 * 0.5, y), caption, HORIZONTAL_ALIGNMENT_LEFT, -1, fs2, UiKit.PARCHMENT)
+			cap_y = c.y + fs2 * 0.36
+		else:
+			draw_rect(Rect2(Vector2(c.x - cap_w * 0.5 - 8.0, cap_y - fs2 * 0.92), Vector2(cap_w + 16.0, fs2 * 1.25)), Color(0.06, 0.04, 0.035, 0.72))
+	if icon:
+		var isz := r * 1.25 * scale_k
+		draw_texture_rect(icon, Rect2(c - Vector2(isz, isz) * 0.5, Vector2(isz, isz)), false, Color(1, 1, 1, 1 if enabled else 0.5))
+	elif glyph != "" and _font:
+		var fs := glyph_size
+		var w := _font.get_string_size(glyph, HORIZONTAL_ALIGNMENT_CENTER, -1, fs).x
+		draw_string(_font, Vector2(c.x - w * 0.5, c.y + fs * 0.36), glyph, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, UiKit.PARCHMENT if enabled else UiKit.MUTED)
+	if caption != "" and _font:
+		draw_string(_font, Vector2(c.x - cap_w * 0.5, cap_y), caption, HORIZONTAL_ALIGNMENT_LEFT, -1, fs2, UiKit.PARCHMENT)
 	if _pulse > 0.0 and not bool(GameState.settings.get("reduce_flashing", false)):
 		draw_arc(c, r + (1.0 - _pulse) * 16.0, 0, TAU, 40, Color(1, 0.9, 0.7, _pulse * 0.8), 3.0, true)

@@ -66,6 +66,7 @@ func _ready() -> void:
 	add_to_group("hud")
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	root = Control.new()
+	root.name = "Root"
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.theme = UiKit.theme()
@@ -119,6 +120,7 @@ func _ready() -> void:
 
 func _btn(act: String, d: float, g: String) -> TouchButton:
 	var b := TouchButton.new(act, d, g)
+	b.name = "Btn_" + (act if act != "" else g)
 	root.add_child(b)
 	return b
 
