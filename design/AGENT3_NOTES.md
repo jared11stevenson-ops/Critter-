@@ -1,15 +1,19 @@
 # Agent 3 notes
 ## Aruun 3D (status: in engine, animated; refinement pending)
 - 13,579 tris (budget 25k). One 2048^2 texture set (albedo, normal, ORM) embedded in the glb.
-- Known deviations from the sheet (honest list):
-  - Albedo is procedural mottling in sheet palette colours, NOT projected from the sheet; the sheet's
-    specific blotch layout (especially cream plates on thighs/shins/forearms) is not reproduced; limbs read darker.
-  - Normal map is derived from the painted height (no high-poly bake).
-  - Horns are near-straight paired horns; the sheet's horns arc back in a hook. Head reads more giraffe-like than the sheet.
-  - Back cloak is a blocky slab, larger than the sheet's ragged drape; skirt panels are simpler.
-  - Proportions: shoulders/pauldrons more symmetric and rounder than the sheet's hunched 3/4 pose.
-  - Morrow's reach is a whole-weapon Y-scale (head stretches slightly) rather than segment telescoping.
-  - Weights are procedural (distance to bone segments, part-restricted); skirt can intersect legs in run/downed.
+- Fidelity pass (lead review): albedo is now the sheet's own paint, orthographically projected from
+  game/art/characters/aruun/{front,side,back}.png (facing^2 blend + per-view depth test, best-facing fallback for
+  occluded texels, UV dilation for seams; procedural only where nothing projects, and on Morrow/eyes). Horns
+  now hook back over the skull; snout shortened/skull widened; cape = 9 torn strips + 3 shoulder tongues;
+  pauldrons asymmetric (L high/forward, R low/flat); Morrow reach = two haft segments sliding on bones
+  weapon_ext1/2 (head unscaled); skirt panels progressively ride the same-side thigh.
+- Remaining deviations (honest):
+  - Sheet "front" is a 3/4 pose with Morrow in front of the legs: projected front colours on the lower legs/skirt
+    partly carry Morrow/haft paint; sheet line-art + baked shading come along; texel density limited by the
+    ~200 px/m sheet views (soft). In engine the albedo reads lighter/pinker than the sheet under Red Reaches light.
+  - Front-view horn hook is in depth so orthographic front reads straight; head still longer than the sheet mask.
+  - Body is not hunched (rig joints unchanged); only the pauldrons carry the asymmetry.
+  - Skirt clipping reduced by weights, not verified frame-by-frame in all clips.
 - Cigarra: NOT started (no 3D reference pack yet).
 ## Integration
 `res://game/art/models/aruun/aruun_model.tscn` (script `character_model.gd`, class `CharacterModel`) implements the
