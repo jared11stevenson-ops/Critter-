@@ -1,0 +1,15 @@
+{
+ "id": "rr_valley_clear",
+ "lines": [
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "They scattered. Good. They'll be back to the rock crust by nightfall."
+  },
+  {
+   "who": "comms:mara",
+   "expr": "neutral",
+   "text": "Handler, use your Scan. Context is half the job down there."
+  }
+ ]
+}

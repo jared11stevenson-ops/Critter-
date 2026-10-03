@@ -1,0 +1,28 @@
+{
+ "id": "rr_waystation",
+ "lines": [
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "A Spanwright waystation. They rested here between repairs."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "Aruun. When we fight, leave me a hole. When I see where they'll stand, pull them there."
+  },
+  {
+   "who": "aruun",
+   "expr": "amused",
+   "text": "Bramvex calls those Cigarra Holes. All right. When you see it, I'll make it land."
+  },
+  {
+   "event": "unlock_combo"
+  },
+  {
+   "who": "narration",
+   "expr": "default",
+   "text": "Combo unlocked — Probable Impact: Gravity Pull during Cigarra's Premonition deals double damage and stuns."
+  }
+ ]
+}

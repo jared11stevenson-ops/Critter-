@@ -1,0 +1,15 @@
+{
+ "id": "hub_npc_nerit",
+ "lines": [
+  {
+   "who": "nerit",
+   "expr": "playful",
+   "text": "The lights here are borrowed from the dark. It doesn't mind."
+  },
+  {
+   "who": "nerit",
+   "expr": "unsettling",
+   "text": "Human physics misunderstands darkness. You'll see."
+  }
+ ]
+}

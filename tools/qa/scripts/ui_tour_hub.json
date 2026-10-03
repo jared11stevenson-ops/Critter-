@@ -1,0 +1,12 @@
+[
+ {"t":0.3,"print":"ui tour: hub late-game (habitat, end card)"},
+ {"t":0.5,"call":"GameState.add_specimen","args":["dust_grazer"]},
+ {"t":2.5,"call":"scene.qa_auto_dialogue","args":[true,0,0.3]},
+ {"t":3.0,"call":"scene.qa_open","args":["habitat"]},
+ {"t":7.0,"call":"scene.qa_habitat_solve"},
+ {"t":9.5,"call":"scene.qa_habitat_close"},
+ {"t":11.0,"call":"scene.qa_auto_dialogue","args":[false,0,0.3]},
+ {"t":12.0,"call":"scene.qa_open","args":["end_card"]},
+ {"t":17.0,"call":"scene.qa_end_card_close"},
+ {"t":18.0,"call":"scene.qa_log_flags"}
+]

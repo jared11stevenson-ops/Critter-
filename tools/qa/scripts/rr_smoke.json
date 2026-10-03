@@ -1,0 +1,12 @@
+[
+ {"t":0.8,"call":"scene.qa_skip_dialogue"},
+ {"t":1.0,"action":"move_right","dur":2.5},
+ {"t":2.0,"action":"attack","dur":0.6},
+ {"t":4.0,"call":"scene.qa_teleport","args":["encounter_valley"]},
+ {"t":4.3,"call":"scene.qa_skip_dialogue"},
+ {"t":5.0,"action":"attack","dur":2.0},
+ {"t":6.0,"action":"ability_1","dur":0.1},
+ {"t":7.0,"call":"scene.qa_scan"},
+ {"t":7.3,"call":"scene.qa_skip_dialogue"},
+ {"t":9.0,"call":"scene.qa_log_flags"}
+]

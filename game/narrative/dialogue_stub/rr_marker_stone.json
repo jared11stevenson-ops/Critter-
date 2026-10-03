@@ -1,0 +1,15 @@
+{
+ "id": "rr_marker_stone",
+ "lines": [
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "An Old Road marker. The same symbols stand on stones a continent away."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "So someone walked very far, a very long time ago. And then everyone forgot."
+  }
+ ]
+}

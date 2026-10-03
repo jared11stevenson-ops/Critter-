@@ -1,0 +1,15 @@
+{
+ "id": "rr_drill",
+ "lines": [
+  {
+   "who": "comms:mara",
+   "expr": "focused",
+   "text": "Dominion survey site. Drones are licensed under the permit, so expect resistance."
+  },
+  {
+   "who": "cigarra",
+   "expr": "annoyed",
+   "text": "Those beetles look wrong. Too angry. Scan one."
+  }
+ ]
+}

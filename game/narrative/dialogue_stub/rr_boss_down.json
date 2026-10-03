@@ -1,0 +1,20 @@
+{
+ "id": "rr_boss_down",
+ "lines": [
+  {
+   "who": "narration",
+   "expr": "default",
+   "text": "AUGUR-7 grinds to a stop. The drill shaft hisses and goes still."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "There's a Thoughtstone cache in the scar. Enough to brace the foundation."
+  },
+  {
+   "who": "comms:mara",
+   "expr": "neutral",
+   "text": "Or enough to satisfy the Dominion contract. Handler, the call is yours. Use the marked point."
+  }
+ ]
+}

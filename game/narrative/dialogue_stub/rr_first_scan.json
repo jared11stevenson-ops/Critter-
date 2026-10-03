@@ -1,0 +1,15 @@
+{
+ "id": "rr_first_scan",
+ "lines": [
+  {
+   "who": "comms:mara",
+   "expr": "focused",
+   "text": "Scan logged. Wildlife, sapients, resources, Dominion assets — your tablet tells them apart. Use it before you swing."
+  },
+  {
+   "who": "cigarra",
+   "expr": "happy",
+   "text": "Understanding is cheaper than fighting. Usually."
+  }
+ ]
+}

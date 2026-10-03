@@ -1,0 +1,38 @@
+{
+ "id": "hub_hook",
+ "lines": [
+  {
+   "who": "cigarra",
+   "expr": "shocked",
+   "text": "Aruun. Your mace. It moved before you did."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "The fragment from the foundation turned toward Morrow. I felt it — like a held breath."
+  },
+  {
+   "who": "mara",
+   "expr": "curious",
+   "text": "Thoughtstone responding to a bonded object. That is not in any of our models."
+  },
+  {
+   "who": "cigarra",
+   "expr": "unhinged",
+   "text": "And I can't see a single future where we ignore it."
+  },
+  {
+   "who": "narration",
+   "expr": "default",
+   "text": "In the Habitat Wing, something small begins to build a home of its own."
+  },
+  {
+   "set": {
+    "slice_complete": true
+   }
+  },
+  {
+   "event": "slice_end"
+  }
+ ]
+}
