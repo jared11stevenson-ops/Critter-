@@ -1,0 +1,902 @@
+{
+ "_doc": "Character billboard cut table. box/exclude/include/seed/anchor_x are SOURCE SHEET pixel coords. flip=true mirrors so side views face screen-right. 'source' notes which sheet panel the cut comes from. Run: python3 tools/art_pipeline/cut_sprites.py [id ...]",
+ "aruun": {
+  "sheet": "aruun_nerit_sheet.jpg",
+  "views": {
+   "front": {
+    "box": [
+     6,
+     12,
+     392,
+     494
+    ],
+    "anchor_x": 300,
+    "exclude": [
+     [
+      383,
+      12,
+      392,
+      494
+     ]
+    ],
+    "source": "turnaround FRONT (with Morrow)"
+   },
+   "back": {
+    "box": [
+     384,
+     104,
+     534,
+     496
+    ],
+    "exclude": [
+     [
+      [
+       486,
+       104
+      ],
+      [
+       534,
+       104
+      ],
+      [
+       534,
+       250
+      ],
+      [
+       523,
+       250
+      ],
+      [
+       519,
+       205
+      ],
+      [
+       500,
+       192
+      ],
+      [
+       486,
+       192
+      ]
+     ]
+    ],
+    "hole_regions": [
+     [
+      420,
+      104,
+      480,
+      175
+     ]
+    ],
+    "source": "turnaround BACK"
+   },
+   "side": {
+    "box": [
+     532,
+     104,
+     620,
+     496
+    ],
+    "exclude": [
+     [
+      598,
+      340,
+      620,
+      496
+     ]
+    ],
+    "source": "turnaround SIDE (faces right)"
+   }
+  }
+ },
+ "cigarra": {
+  "sheet": "cigarra_sheet.jpg",
+  "views": {
+   "front": {
+    "box": [
+     172,
+     0,
+     545,
+     514
+    ],
+    "exclude": [
+     [
+      408,
+      8,
+      462,
+      72
+     ],
+     [
+      462,
+      0,
+      545,
+      160
+     ],
+     [
+      [
+       545,
+       160
+      ],
+      [
+       512,
+       160
+      ],
+      [
+       516,
+       230
+      ],
+      [
+       522,
+       300
+      ],
+      [
+       529,
+       360
+      ],
+      [
+       531,
+       400
+      ],
+      [
+       522,
+       450
+      ],
+      [
+       508,
+       480
+      ],
+      [
+       508,
+       514
+      ],
+      [
+       545,
+       514
+      ]
+     ]
+    ],
+    "flood_regions": [
+     [
+      276,
+      0,
+      408,
+      130
+     ]
+    ],
+    "anchor_x": 372,
+    "source": "turnaround FRONT"
+   },
+   "back": {
+    "box": [
+     522,
+     18,
+     772,
+     516
+    ],
+    "source": "turnaround BACK"
+   },
+   "side": {
+    "box": [
+     776,
+     18,
+     930,
+     516
+    ],
+    "exclude": [
+     [
+      878,
+      222,
+      930,
+      300
+     ],
+     [
+      884,
+      300,
+      930,
+      516
+     ]
+    ],
+    "flood_regions": [
+     [
+      776,
+      18,
+      930,
+      120
+     ]
+    ],
+    "flip": true,
+    "source": "turnaround SIDE (faces left on sheet, mirrored)"
+   }
+  }
+ },
+ "mara": {
+  "sheet": "mara_sheet.jpg",
+  "views": {
+   "front": {
+    "box": [
+     484,
+     205,
+     568,
+     532
+    ],
+    "source": "turnaround FRONT"
+   },
+   "side": {
+    "box": [
+     562,
+     205,
+     660,
+     532
+    ],
+    "source": "turnaround SIDE (faces right)"
+   },
+   "back": {
+    "box": [
+     656,
+     205,
+     768,
+     532
+    ],
+    "source": "turnaround BACK"
+   }
+  }
+ },
+ "dexter": {
+  "sheet": "dexter_sheet.jpg",
+  "views": {
+   "front": {
+    "box": [
+     196,
+     8,
+     430,
+     800
+    ],
+    "exclude": [
+     [
+      404,
+      120,
+      430,
+      700
+     ],
+     [
+      396,
+      270,
+      430,
+      640
+     ],
+     [
+      390,
+      0,
+      430,
+      112
+     ]
+    ],
+    "hole_regions": [
+     [
+      366,
+      20,
+      400,
+      112
+     ]
+    ],
+    "source": "hero FRONT (3/4)"
+   },
+   "side": {
+    "box": [
+     196,
+     8,
+     430,
+     800
+    ],
+    "exclude": [
+     [
+      404,
+      120,
+      430,
+      700
+     ],
+     [
+      396,
+      270,
+      430,
+      640
+     ],
+     [
+      390,
+      0,
+      430,
+      112
+     ]
+    ],
+    "hole_regions": [
+     [
+      366,
+      20,
+      400,
+      112
+     ]
+    ],
+    "source": "hero 3/4 (sheet has no true side view; faces right)"
+   },
+   "back": {
+    "box": [
+     148,
+     682,
+     236,
+     912
+    ],
+    "source": "BACK VIEW / SILHOUETTE panel, long coat w/ Dominion red lining"
+   }
+  }
+ },
+ "nerit": {
+  "sheet": "aruun_nerit_sheet.jpg",
+  "views": {
+   "front": {
+    "box": [
+     760,
+     60,
+     992,
+     508
+    ],
+    "exclude": [
+     [
+      [
+       740,
+       60
+      ],
+      [
+       862,
+       60
+      ],
+      [
+       862,
+       130
+      ],
+      [
+       882,
+       140
+      ],
+      [
+       882,
+       160
+      ],
+      [
+       857,
+       172
+      ],
+      [
+       850,
+       300
+      ],
+      [
+       740,
+       300
+      ]
+     ],
+     [
+      946,
+      50,
+      1000,
+      168
+     ],
+     [
+      930,
+      160,
+      1000,
+      172
+     ],
+     [
+      740,
+      320,
+      767,
+      392
+     ],
+     [
+      983,
+      200,
+      992,
+      340
+     ]
+    ],
+    "source": "turnaround FRONT (nonhuman v2)",
+    "dark_regions": [
+     [
+      740,
+      60,
+      1000,
+      300
+     ],
+     [
+      740,
+      300,
+      852,
+      430
+     ],
+     [
+      852,
+      298,
+      874,
+      326
+     ]
+    ],
+    "dark_color": [
+     24,
+     24,
+     28
+    ],
+    "method": "rembg"
+   },
+   "back": {
+    "box": [
+     990,
+     170,
+     1112,
+     500
+    ],
+    "source": "turnaround BACK",
+    "method": "rembg",
+    "hole_regions": [
+     [
+      1020,
+      160,
+      1090,
+      215
+     ]
+    ]
+   },
+   "side": {
+    "box": [
+     1110,
+     160,
+     1214,
+     500
+    ],
+    "exclude": [
+     [
+      1205,
+      160,
+      1214,
+      500
+     ]
+    ],
+    "source": "turnaround SIDE (faces right)",
+    "method": "rembg"
+   }
+  },
+  "bg_sample": [
+   1000,
+   500
+  ]
+ },
+ "mollusk": {
+  "sheet": "mollusk_sheet.png",
+  "views": {
+   "front": {
+    "box": [
+     150,
+     4,
+     708,
+     512
+    ],
+    "exclude": [
+     [
+      140,
+      420,
+      196,
+      512
+     ]
+    ],
+    "source": "hero illustration (3/4 front)"
+   },
+   "back": {
+    "box": [
+     828,
+     205,
+     1002,
+     500
+    ],
+    "source": "turnaround BACK"
+   },
+   "side": {
+    "box": [
+     1000,
+     200,
+     1108,
+     500
+    ],
+    "flip": true,
+    "source": "turnaround SIDE (mirrored to face right)"
+   }
+  }
+ },
+ "bramvex": {
+  "sheet": "bramvex_sheet.png",
+  "views": {
+   "front": {
+    "box": [
+     646,
+     18,
+     765,
+     246
+    ],
+    "source": "turnaround FRONT"
+   },
+   "side": {
+    "box": [
+     760,
+     8,
+     885,
+     246
+    ],
+    "flip": true,
+    "source": "turnaround SIDE (mirrored to face right)"
+   },
+   "back": {
+    "box": [
+     880,
+     14,
+     1008,
+     246
+    ],
+    "source": "turnaround BACK"
+   }
+  }
+ },
+ "zephyr": {
+  "sheet": "zephyr_sheet.png",
+  "views": {
+   "front": {
+    "box": [
+     186,
+     0,
+     542,
+     548
+    ],
+    "source": "hero FRONT",
+    "hole_regions": [
+     [
+      186,
+      0,
+      420,
+      260
+     ]
+    ]
+   },
+   "side": {
+    "box": [
+     496,
+     176,
+     742,
+     538
+    ],
+    "exclude": [
+     [
+      496,
+      176,
+      520,
+      400
+     ]
+    ],
+    "flip": true,
+    "source": "SIDE (mirrored to face right)",
+    "hole_regions": [
+     [
+      496,
+      176,
+      742,
+      320
+     ]
+    ]
+   },
+   "back": {
+    "box": [
+     722,
+     176,
+     912,
+     538
+    ],
+    "exclude": [
+     [
+      900,
+      380,
+      912,
+      538
+     ]
+    ],
+    "source": "BACK",
+    "hole_regions": [
+     [
+      722,
+      176,
+      912,
+      320
+     ]
+    ]
+   }
+  }
+ },
+ "nyxaris": {
+  "sheet": "nyxaris_sheet.png",
+  "views": {
+   "front": {
+    "box": [
+     168,
+     4,
+     668,
+     516
+    ],
+    "exclude": [
+     [
+      150,
+      380,
+      205,
+      516
+     ],
+     [
+      [
+       168,
+       4
+      ],
+      [
+       318,
+       4
+      ],
+      [
+       290,
+       60
+      ],
+      [
+       268,
+       190
+      ],
+      [
+       262,
+       300
+      ],
+      [
+       230,
+       330
+      ],
+      [
+       168,
+       360
+      ]
+     ],
+     [
+      585,
+      4,
+      668,
+      300
+     ]
+    ],
+    "source": "hero illustration",
+    "pocket_k": 0.45,
+    "pocket_min": 60
+   },
+   "side": {
+    "box": [
+     728,
+     18,
+     905,
+     296
+    ],
+    "exclude": [
+     [
+      728,
+      18,
+      745,
+      296
+     ]
+    ],
+    "source": "multi-angle SIDE",
+    "pocket_k": 0.45,
+    "pocket_min": 40
+   },
+   "back": {
+    "box": [
+     902,
+     18,
+     1012,
+     296
+    ],
+    "source": "multi-angle BACK",
+    "pocket_k": 0.45,
+    "pocket_min": 40
+   }
+  },
+  "bg_sample": [
+   1050,
+   320
+  ]
+ },
+ "pharilux": {
+  "sheet": "pharilux_sheet.png",
+  "views": {
+   "front": {
+    "box": [
+     190,
+     12,
+     660,
+     526
+    ],
+    "exclude": [
+     [
+      195,
+      420,
+      250,
+      526
+     ],
+     [
+      520,
+      12,
+      660,
+      290
+     ],
+     [
+      190,
+      90,
+      250,
+      420
+     ],
+     [
+      190,
+      12,
+      345,
+      92
+     ]
+    ],
+    "source": "hero illustration",
+    "hole_regions": [
+     [
+      300,
+      12,
+      560,
+      250
+     ],
+     [
+      190,
+      380,
+      660,
+      526
+     ]
+    ]
+   },
+   "side": {
+    "box": [
+     690,
+     16,
+     878,
+     276
+    ],
+    "source": "turnaround SIDE (faces right)",
+    "hole_regions": [
+     [
+      690,
+      16,
+      878,
+      120
+     ]
+    ]
+   },
+   "back": {
+    "box": [
+     876,
+     16,
+     1016,
+     276
+    ],
+    "source": "turnaround BACK",
+    "hole_regions": [
+     [
+      876,
+      16,
+      1016,
+      120
+     ]
+    ]
+   }
+  },
+  "bg_sample": [
+   700,
+   300
+  ]
+ },
+ "solmara": {
+  "sheet": "solmara_sheet.png",
+  "views": {
+   "front": {
+    "box": [
+     596,
+     32,
+     728,
+     216
+    ],
+    "exclude": [
+     [
+      714,
+      32,
+      728,
+      216
+     ]
+    ],
+    "source": "turnaround FRONT (hero is on dark water, unusable)"
+   },
+   "side": {
+    "box": [
+     740,
+     32,
+     912,
+     216
+    ],
+    "source": "turnaround SIDE"
+   },
+   "back": {
+    "box": [
+     912,
+     32,
+     1036,
+     216
+    ],
+    "source": "turnaround BACK"
+   }
+  }
+ },
+ "scarlith": {
+  "sheet": "scarlith_sheet.jpg",
+  "views": {
+   "front": {
+    "box": [
+     56,
+     6,
+     652,
+     476
+    ],
+    "exclude": [
+     [
+      0,
+      300,
+      122,
+      396
+     ]
+    ],
+    "source": "hero illustration",
+    "hole_regions": [
+     [
+      56,
+      6,
+      652,
+      476
+     ]
+    ]
+   },
+   "side": {
+    "box": [
+     722,
+     10,
+     872,
+     180
+    ],
+    "flip": true,
+    "source": "turnaround SIDE (mirrored)"
+   },
+   "back": {
+    "box": [
+     868,
+     10,
+     1052,
+     180
+    ],
+    "source": "turnaround BACK",
+    "hole_regions": [
+     [
+      868,
+      10,
+      1052,
+      180
+     ]
+    ]
+   }
+  }
+ }
+}

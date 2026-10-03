@@ -1,0 +1,29 @@
+{
+ "height_m": 2.0,
+ "views": [
+  "front",
+  "side",
+  "back"
+ ],
+ "px": {
+  "front": [
+   475,
+   516
+  ],
+  "side": [
+   177,
+   277
+  ],
+  "back": [
+   120,
+   254
+  ]
+ },
+ "feet_y_px": 516,
+ "source": {
+  "front": "hero illustration",
+  "side": "multi-angle SIDE",
+  "back": "multi-angle BACK"
+ },
+ "sheet": "nyxaris_sheet.png"
+}

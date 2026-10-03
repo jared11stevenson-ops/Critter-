@@ -1,0 +1,526 @@
+{
+ "_doc": "Portrait + icon crop table (SOURCE SHEET pixel boxes [x0,y0,x1,y1]). Portraits are padded to square with the panel's own parchment, upscaled to 256 and lightly sharpened. Run: python3 tools/art_pipeline/cut_portraits.py",
+ "portraits": {
+  "aruun": {
+   "sheet": "aruun_nerit_sheet.jpg",
+   "default": "calm",
+   "inset": 0,
+   "boxes": {
+    "calm": [
+     328,
+     526,
+     389,
+     606
+    ],
+    "focused": [
+     389,
+     526,
+     446,
+     606
+    ],
+    "rage": [
+     446,
+     526,
+     504,
+     606
+    ],
+    "amused": [
+     503,
+     526,
+     558,
+     606
+    ],
+    "aggressive": [
+     560,
+     526,
+     630,
+     606
+    ]
+   }
+  },
+  "cigarra": {
+   "sheet": "cigarra_sheet.jpg",
+   "default": "neutral",
+   "inset": 3,
+   "boxes": {
+    "neutral": [
+     1010,
+     243,
+     1138,
+     342
+    ],
+    "curious": [
+     1140,
+     243,
+     1262,
+     342
+    ],
+    "unhinged": [
+     1265,
+     243,
+     1388,
+     342
+    ],
+    "annoyed": [
+     1007,
+     372,
+     1101,
+     488
+    ],
+    "happy": [
+     1102,
+     372,
+     1200,
+     488
+    ],
+    "focused": [
+     1200,
+     372,
+     1297,
+     488
+    ],
+    "shocked": [
+     1297,
+     372,
+     1391,
+     488
+    ]
+   }
+  },
+  "mara": {
+   "sheet": "mara_sheet.jpg",
+   "default": "neutral",
+   "inset": 3,
+   "boxes": {
+    "neutral": [
+     484,
+     4,
+     624,
+     162
+    ],
+    "curious": [
+     627,
+     4,
+     770,
+     162
+    ],
+    "focused": [
+     777,
+     4,
+     920,
+     162
+    ],
+    "annoyed": [
+     927,
+     4,
+     1070,
+     162
+    ],
+    "tired": [
+     1077,
+     4,
+     1227,
+     162
+    ],
+    "soft": [
+     1231,
+     4,
+     1391,
+     162
+    ]
+   }
+  },
+  "dexter": {
+   "sheet": "dexter_sheet.jpg",
+   "default": "neutral",
+   "inset": 3,
+   "boxes": {
+    "neutral": [
+     510,
+     22,
+     614,
+     160
+    ],
+    "amused": [
+     618,
+     22,
+     722,
+     160
+    ],
+    "irritated": [
+     726,
+     22,
+     830,
+     160
+    ],
+    "serious": [
+     836,
+     22,
+     930,
+     160
+    ],
+    "genuine": [
+     934,
+     22,
+     1035,
+     160
+    ],
+    "tired": [
+     1038,
+     22,
+     1140,
+     160
+    ]
+   }
+  },
+  "nerit": {
+   "sheet": "aruun_nerit_sheet.jpg",
+   "default": "neutral",
+   "inset": 2,
+   "boxes": {
+    "neutral": [
+     1077,
+     530,
+     1137,
+     588
+    ],
+    "curious": [
+     1143,
+     530,
+     1203,
+     588
+    ],
+    "calm": [
+     1210,
+     530,
+     1270,
+     588
+    ],
+    "serious": [
+     1077,
+     603,
+     1137,
+     655
+    ],
+    "playful": [
+     1143,
+     603,
+     1203,
+     655
+    ],
+    "unsettling": [
+     1210,
+     603,
+     1270,
+     655
+    ]
+   }
+  },
+  "mollusk": {
+   "sheet": "mollusk_sheet.png",
+   "default": "calm",
+   "inset": 2,
+   "boxes": {
+    "calm": [
+     1112,
+     22,
+     1205,
+     150
+    ],
+    "curious": [
+     1210,
+     22,
+     1300,
+     150
+    ],
+    "focused": [
+     1305,
+     22,
+     1400,
+     150
+    ],
+    "angry": [
+     1112,
+     162,
+     1205,
+     290
+    ],
+    "exertion": [
+     1210,
+     162,
+     1300,
+     290
+    ],
+    "serene": [
+     1305,
+     162,
+     1400,
+     290
+    ]
+   }
+  },
+  "bramvex": {
+   "sheet": "bramvex_sheet.png",
+   "default": "default",
+   "inset": 3,
+   "boxes": {
+    "default": [
+     1142,
+     26,
+     1255,
+     165
+    ]
+   }
+  },
+  "zephyr": {
+   "sheet": "zephyr_sheet.png",
+   "default": "calm",
+   "inset": 2,
+   "boxes": {
+    "calm": [
+     1022,
+     565,
+     1103,
+     647
+    ],
+    "curious": [
+     1112,
+     565,
+     1210,
+     647
+    ],
+    "focused": [
+     1220,
+     565,
+     1325,
+     647
+    ],
+    "aggressive": [
+     1335,
+     565,
+     1425,
+     647
+    ],
+    "haunted": [
+     1435,
+     565,
+     1515,
+     647
+    ]
+   }
+  },
+  "nyxaris": {
+   "sheet": "nyxaris_sheet.png",
+   "default": "default",
+   "inset": 3,
+   "boxes": {
+    "default": [
+     1025,
+     26,
+     1140,
+     165
+    ]
+   }
+  },
+  "pharilux": {
+   "sheet": "pharilux_sheet.png",
+   "default": "head",
+   "inset": 2,
+   "boxes": {
+    "calm": [
+     607,
+     330,
+     676,
+     488
+    ],
+    "curious": [
+     680,
+     330,
+     746,
+     488
+    ],
+    "focused": [
+     755,
+     330,
+     823,
+     488
+    ],
+    "aggressive": [
+     830,
+     330,
+     911,
+     488
+    ],
+    "watchful": [
+     920,
+     330,
+     986,
+     488
+    ],
+    "head": [
+     1055,
+     34,
+     1136,
+     130
+    ]
+   }
+  },
+  "solmara": {
+   "sheet": "solmara_sheet.png",
+   "default": "calm",
+   "inset": 3,
+   "boxes": {
+    "calm": [
+     965,
+     285,
+     1066,
+     403
+    ],
+    "aggressive": [
+     1072,
+     285,
+     1180,
+     403
+    ],
+    "defensive": [
+     1188,
+     285,
+     1302,
+     403
+    ],
+    "curious": [
+     1310,
+     285,
+     1418,
+     403
+    ],
+    "ritual": [
+     1424,
+     285,
+     1528,
+     403
+    ]
+   }
+  },
+  "scarlith": {
+   "sheet": "scarlith_sheet.jpg",
+   "default": "neutral",
+   "inset": 3,
+   "boxes": {
+    "neutral": [
+     643,
+     222,
+     740,
+     302
+    ],
+    "curious": [
+     744,
+     222,
+     830,
+     302
+    ],
+    "calculating": [
+     834,
+     222,
+     918,
+     302
+    ],
+    "aggressive": [
+     922,
+     222,
+     1012,
+     302
+    ],
+    "satisfied": [
+     1016,
+     222,
+     1098,
+     302
+    ]
+   }
+  }
+ },
+ "icons": {
+  "reaching_strike": {
+   "sheet": "aruun_nerit_sheet.jpg",
+   "box": [
+    36,
+    680,
+    140,
+    784
+   ]
+  },
+  "beetle_rage": {
+   "sheet": "aruun_nerit_sheet.jpg",
+   "box": [
+    148,
+    680,
+    252,
+    784
+   ]
+  },
+  "gravity_pull": {
+   "sheet": "aruun_nerit_sheet.jpg",
+   "box": [
+    392,
+    680,
+    496,
+    784
+   ]
+  },
+  "aruun_combo": {
+   "sheet": "aruun_nerit_sheet.jpg",
+   "box": [
+    212,
+    524,
+    318,
+    630
+   ]
+  },
+  "bad_thought": {
+   "sheet": "cigarra_sheet.jpg",
+   "box": [
+    106,
+    757,
+    222,
+    873
+   ]
+  },
+  "false_memory": {
+   "sheet": "cigarra_sheet.jpg",
+   "box": [
+    262,
+    757,
+    378,
+    873
+   ]
+  },
+  "brain_skip": {
+   "sheet": "cigarra_sheet.jpg",
+   "box": [
+    500,
+    757,
+    616,
+    873
+   ]
+  },
+  "premonition": {
+   "sheet": "cigarra_sheet.jpg",
+   "box": [
+    728,
+    757,
+    844,
+    873
+   ]
+  },
+  "grasshopper_thought": {
+   "sheet": "cigarra_sheet.jpg",
+   "box": [
+    985,
+    757,
+    1101,
+    873
+   ]
+  }
+ }
+}
