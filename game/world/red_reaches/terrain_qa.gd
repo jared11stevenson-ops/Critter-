@@ -24,6 +24,7 @@ var _t := 0.0
 var _i := -1
 var _bb: Array = []
 var _wide := false
+var _occ: MeshInstance3D
 
 
 func _ready() -> void:
@@ -64,6 +65,13 @@ func _goto(i: int) -> void:
 	print("[QA] stop ", stop[0], " focus ", f)
 	# exercise the scripted structure API (qa_alt = broken boulder + failing span; default = braced span)
 	var alt := OS.get_cmdline_user_args().has("qa_alt")
+	if OS.get_cmdline_user_args().has("qa_occ"):
+		if _occ == null:
+			var st := ToonKit.begin()
+			ToonKit.cylinder(st, Vector3(0, 0, 0), Vector3(0, 7, 0), 1.4, 1.1, 8, Color(0.6, 0.3, 0.2))
+			_occ = ToonKit.mesh_instance(ToonKit.finish(st), ToonKit.material({"outline": 0.04}), "OccTest")
+			add_child(_occ)
+		_occ.position = f + Vector3(0.5, 0, 5.0)
 	if stop[0] == "valley":
 		terrain.set_rope_span_visible(true)
 	if stop[0] == "boulder" and alt:
