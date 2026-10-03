@@ -25,6 +25,7 @@ var rim: DirectionalLight3D
 var world_env: WorldEnvironment
 var sky_mat: ShaderMaterial
 var current_zone := ""
+var motes: GPUParticles3D
 
 ## Mood table. sun_rot = Vector2(pitch, yaw) degrees. All colours are linear-ish artist values.
 const MOODS := {
@@ -56,7 +57,7 @@ const MOODS := {
 		"sun_col": Color(1.0, 0.72, 0.52), "sun_e": 1.6, "sun_rot": Vector2(-30, -128),
 		"amb_col": Color(0.58, 0.42, 0.46), "amb_e": 0.5, "sky_e": 0.25,
 		"fog_col": Color(0.78, 0.44, 0.34), "fog_d": 0.0055, "fog_h": -12.0, "fog_hd": 0.035, "fog_sun": 0.3,
-		"exposure": 1.07, "sat": 1.02, "contrast": 1.12, "glow": 0.62,
+		"exposure": 1.02, "sat": 0.9, "contrast": 1.12, "glow": 0.62,
 		"rim_col": Color(1.0, 0.45, 0.38), "rim_e": 1.1,
 		"horizon": Color(0.92, 0.58, 0.44), "zenith": Color(0.36, 0.36, 0.56),
 	},
@@ -89,7 +90,24 @@ func _ready() -> void:
 	if world_env == null:
 		_build()
 		apply_preset(preset)
-	set_process(zone_blend)
+	set_process(true)
+	# put every character / creature mesh on the rim layer so the back light separates PBR characters
+	get_tree().node_added.connect(_on_node_added)
+	for n in get_tree().root.find_children("*", "GeometryInstance3D", true, false):
+		_on_node_added(n)
+
+
+func _on_node_added(n: Node) -> void:
+	if not (n is GeometryInstance3D):
+		return
+	var p := n.get_parent()
+	var depth := 0
+	while p != null and depth < 8:
+		if p is CharacterBody3D or p is CritterCreature:
+			(n as GeometryInstance3D).layers |= RIM_LAYER
+			return
+		p = p.get_parent()
+		depth += 1
 
 
 func _build() -> void:
@@ -149,7 +167,62 @@ func _build() -> void:
 	rim.light_specular = 1.0
 	rim.sky_mode = DirectionalLight3D.SKY_MODE_LIGHT_ONLY
 	add_child(rim)
+	_build_motes()
 	_tune_shadow_quality()
+
+
+## Sunlit dust motes drifting around the camera focus (one draw call; follows the active camera).
+func _build_motes() -> void:
+	motes = GPUParticles3D.new()
+	motes.name = "DustMotes"
+	motes.amount = 90
+	motes.lifetime = 7.0
+	motes.preprocess = 7.0
+	motes.local_coords = false
+	motes.visibility_aabb = AABB(Vector3(-20, -6, -20), Vector3(40, 12, 40))
+	motes.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var pm := ParticleProcessMaterial.new()
+	pm.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_BOX
+	pm.emission_box_extents = Vector3(14, 4, 10)
+	pm.direction = Vector3(1, 0.15, 0.2)
+	pm.spread = 40.0
+	pm.initial_velocity_min = 0.15
+	pm.initial_velocity_max = 0.5
+	pm.gravity = Vector3(0, 0.02, 0)
+	pm.turbulence_enabled = true
+	pm.turbulence_noise_strength = 0.6
+	pm.scale_min = 0.5
+	pm.scale_max = 1.4
+	var g := Gradient.new()
+	g.set_color(0, Color(1, 1, 1, 0))
+	g.add_point(0.25, Color(1, 1, 1, 1))
+	g.add_point(0.75, Color(1, 1, 1, 1))
+	g.set_color(g.get_point_count() - 1, Color(1, 1, 1, 0))
+	var gt := GradientTexture1D.new()
+	gt.gradient = g
+	pm.color_ramp = gt
+	motes.process_material = pm
+	var q := QuadMesh.new()
+	q.size = Vector2(0.06, 0.06)
+	var m := StandardMaterial3D.new()
+	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	m.billboard_mode = BaseMaterial3D.BILLBOARD_PARTICLES
+	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	m.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	m.vertex_color_use_as_albedo = true
+	m.albedo_color = Color(1.0, 0.86, 0.66, 0.55)
+	var rt := GradientTexture2D.new()
+	rt.fill = GradientTexture2D.FILL_RADIAL
+	rt.fill_from = Vector2(0.5, 0.5)
+	rt.fill_to = Vector2(1.0, 0.5)
+	var rg := Gradient.new()
+	rg.set_color(0, Color(1, 1, 1, 1))
+	rg.set_color(1, Color(1, 1, 1, 0))
+	rt.gradient = rg
+	m.albedo_texture = rt
+	q.material = m
+	motes.draw_pass_1 = q
+	add_child(motes)
 
 
 func _tune_shadow_quality() -> void:
@@ -164,6 +237,7 @@ func apply_preset(p: String) -> void:
 		_build()
 	match p:
 		"hub":
+			motes.amount = 40
 			# interior: warm lamps do the work; dim cool fill, little fog
 			env.background_mode = Environment.BG_COLOR
 			env.background_color = Color(0.10, 0.08, 0.08)
@@ -268,6 +342,10 @@ func _apply_mood(m: Dictionary) -> void:
 func _process(_delta: float) -> void:
 	var cam := get_viewport().get_camera_3d()
 	if cam == null:
+		return
+	if motes:
+		motes.global_position = cam.global_position - cam.global_transform.basis.z * 9.0
+	if not zone_blend:
 		return
 	# focus ≈ where the camera looks at ground level (gameplay rig ~14 m away)
 	var fx := cam.global_position.x - cam.global_transform.basis.z.x * 12.0

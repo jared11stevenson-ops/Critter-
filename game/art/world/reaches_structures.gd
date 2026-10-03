@@ -617,7 +617,17 @@ class DominionCamp extends Node3D:
 			var xf := Transform3D(Basis(Vector3.UP, sx * 0.4), Vector3(4.0 + sx * 9.0, 0.5, -2.0))
 			ToonKit.box(st, xf, Vector3(3.0, 1.0, 0.5), Color(0.5, 0.48, 0.45))
 			ToonKit.box(st, xf.translated_local(Vector3(0, 0.3, 0.26)), Vector3(3.0, 0.2, 0.02), DOM_RED)
-		ReachesStructures._add_mesh(self, st, ToonKit.material({"outline": 0.035, "grain": 0.1}), "Camp")
+		ReachesStructures._add_mesh(self, st, ToonKit.material({"outline": 0.035, "grain": 0.1, "metal": 0.45, "roughness": 0.5, "detail": 0.4}), "Camp")
+		# Dominion red work lights (short range, shadowless: only the camp props pick up the extra light pass)
+		for lp: Vector3 in [Vector3(1.5, 3.2, -4.0), dp + Vector3(0, Ht + 0.6, 1.2)]:
+			var ol := OmniLight3D.new()
+			ol.position = lp
+			ol.light_color = Color(1.0, 0.22, 0.14)
+			ol.light_energy = 1.5
+			ol.omni_range = 9.0
+			ol.omni_attenuation = 1.4
+			ol.shadow_enabled = false
+			add_child(ol)
 		# beacons
 		var gs := ToonKit.begin()
 		ToonKit.rock(gs, dp + Vector3(0, Ht + 0.8, 0), Vector3(0.3, 0.3, 0.3), DOM_RED, 1, 1)
