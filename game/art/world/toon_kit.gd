@@ -60,10 +60,11 @@ static func finish(st: SurfaceTool) -> ArrayMesh:
 
 
 static func tri(st: SurfaceTool, a: Vector3, b: Vector3, c: Vector3, col: Color) -> void:
+	# Godot front faces are clockwise as seen from the outside: emit a, c, b for CCW-authored triangles
 	st.set_color(col)
 	st.add_vertex(a)
-	st.add_vertex(b)
 	st.add_vertex(c)
+	st.add_vertex(b)
 
 
 static func quad(st: SurfaceTool, a: Vector3, b: Vector3, c: Vector3, d: Vector3, col: Color) -> void:

@@ -3,9 +3,12 @@ shader_type spatial;
 render_mode unshaded, cull_front, shadows_disabled, depth_draw_opaque;
 
 uniform vec4 ink_color : source_color = vec4(0.12, 0.06, 0.06, 1.0);
+uniform float reveal = 2.0;
+varying float v_rev;
 uniform float width = 0.035;          // meters at 10 m from camera (scales with distance a little)
 
 void vertex() {
+	v_rev = UV2.x;
 	vec4 wp = MODEL_MATRIX * vec4(VERTEX, 1.0);
 	float d = length((INV_VIEW_MATRIX[3].xyz) - wp.xyz);
 	float w = width * clamp(d / 10.0, 0.6, 2.5);
@@ -15,5 +18,8 @@ void vertex() {
 }
 
 void fragment() {
+	if (reveal < 1.5 && v_rev > reveal) {
+		discard;
+	}
 	ALBEDO = ink_color.rgb;
 }
