@@ -99,9 +99,8 @@ func height_at(x: float, z: float) -> float:
 			continue
 		var perp := absf(ap.cross(ab)) / sqrt(L2)
 		if perp <= float(d["width"]) * 0.5:
-			var deck_y := lerpf(a.y, b.y, t) + float(d.get("sag", 0.0)) * -sin(t * PI)
-			if deck_y > best - 0.5 or best < deck_y - 3.0:
-				best = maxf(deck_y, best) if best < deck_y + 0.5 else deck_y
+			var deck_y := lerpf(a.y, b.y, t) - float(d.get("sag", 0.0)) * sin(t * PI)
+			best = maxf(best, deck_y)
 	return best
 
 
@@ -575,7 +574,9 @@ func _build_lighting() -> void:
 
 
 func _build_structures() -> void:
-	var S := load("res://game/art/world/reaches_structures.gd")
+	if not ResourceLoader.exists("res://game/art/world/reaches_structures.gd"):
+		return
+	var S: GDScript = load("res://game/art/world/reaches_structures.gd")
 	if S == null:
 		return
 	var root := Node3D.new()
@@ -593,7 +594,9 @@ func _build_structures() -> void:
 
 
 func _build_scatter() -> void:
-	var S := load("res://game/art/world/reaches_scatter.gd")
+	if not ResourceLoader.exists("res://game/art/world/reaches_scatter.gd"):
+		return
+	var S: GDScript = load("res://game/art/world/reaches_scatter.gd")
 	if S == null:
 		return
 	var sc: Node3D = S.new()
