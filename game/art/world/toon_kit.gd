@@ -3,11 +3,44 @@ extends RefCounted
 ## Procedural low-poly mesh + material helpers for the CRITTER toon/ink world (Agent 1).
 ## Everything is built with SurfaceTool, flat-shaded, vertex-coloured, so one material can colour many parts.
 
-const PROP_SHADER := preload("res://game/art/shaders/toon_prop.gdshader")
-const OUTLINE_SHADER := preload("res://game/art/shaders/ink_outline.gdshader")
+const PROP_SHADER_PATH := "res://game/art/shaders/toon_prop.gdshader"
+const OUTLINE_SHADER_PATH := "res://game/art/shaders/ink_outline.gdshader"
+const GLOBAL_FOCUS := "critter_focus_pos"
+const GLOBAL_CAM := "critter_cam_pos"
 const NOISE_TEX := preload("res://game/art/world/terrain_noise.png")
 
 static var _mat_cache: Dictionary = {}
+static var _shader_cache: Dictionary = {}
+static var _globals_ok := false
+
+
+## Registers the camera-occlusion globals (vec3 critter_focus_pos / critter_cam_pos) if the project does not
+## declare them (idempotent; call it instead of adding them yourself). Gameplay sets them each frame:
+## RenderingServer.global_shader_parameter_set(name, Vector3).
+static func ensure_globals() -> bool:
+	if _globals_ok:
+		return true
+	for n in [GLOBAL_FOCUS, GLOBAL_CAM]:
+		if not ProjectSettings.has_setting("shader_globals/" + n):
+			RenderingServer.global_shader_parameter_add(n, RenderingServer.GLOBAL_VAR_TYPE_VEC3, Vector3.ZERO)
+	_globals_ok = true
+	return true
+
+
+## Loads a shader whose occlusion uniforms are plain `uniform`s in the file and rewires them to the globals.
+static func occluding_shader(path: String) -> Shader:
+	if _shader_cache.has(path):
+		return _shader_cache[path]
+	var base: Shader = load(path)
+	var sh := base
+	if ensure_globals() and base.code.contains("uniform vec3 critter_focus_pos;"):
+		sh = Shader.new()
+		var code := base.code
+		code = code.replace("\nuniform vec3 critter_focus_pos;", "\nglobal uniform vec3 critter_focus_pos;")
+		code = code.replace("\nuniform vec3 critter_cam_pos;", "\nglobal uniform vec3 critter_cam_pos;")
+		sh.code = code
+	_shader_cache[path] = sh
+	return sh
 
 
 ## Shared toon material. opts: outline (float width, 0 = none), strata (0..1), emission (Color), energy, grain.
@@ -16,7 +49,7 @@ static func material(opts: Dictionary = {}) -> ShaderMaterial:
 	if _mat_cache.has(key) and not opts.get("unique", false):
 		return _mat_cache[key]
 	var m := ShaderMaterial.new()
-	m.shader = PROP_SHADER
+	m.shader = occluding_shader(PROP_SHADER_PATH)
 	m.set_shader_parameter("noise_tex", NOISE_TEX)
 	m.set_shader_parameter("albedo", opts.get("albedo", Color(1, 1, 1)))
 	m.set_shader_parameter("strata", float(opts.get("strata", 0.0)))
@@ -28,7 +61,7 @@ static func material(opts: Dictionary = {}) -> ShaderMaterial:
 	var ow := float(opts.get("outline", 0.035))
 	if ow > 0.0:
 		var o := ShaderMaterial.new()
-		o.shader = OUTLINE_SHADER
+		o.shader = occluding_shader(OUTLINE_SHADER_PATH)
 		o.set_shader_parameter("width", ow)
 		m.next_pass = o
 	if not opts.get("unique", false):

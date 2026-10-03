@@ -13,6 +13,10 @@ varying vec4 v_rect;
 varying vec2 v_uv;
 varying float v_var;
 varying float v_h;
+varying vec3 w_pos;
+uniform vec3 critter_focus_pos;
+uniform vec3 critter_cam_pos;
+#include "res://game/art/shaders/occlusion_fade.gdshaderinc"
 
 void vertex() {
 	v_rect = INSTANCE_CUSTOM;
@@ -37,7 +41,9 @@ void vertex() {
 	float sx = length(MODEL_MATRIX[0].xyz);
 	float sy = length(MODEL_MATRIX[1].xyz);
 	mat4 m = mat4(vec4(cam_x * sx, 0.0), vec4(up * sy, 0.0), vec4(z, 0.0), MODEL_MATRIX[3]);
+	VERTEX = v;
 	MODELVIEW_MATRIX = VIEW_MATRIX * m;
+	w_pos = (m * vec4(v, 1.0)).xyz;
 }
 
 void fragment() {
@@ -46,6 +52,7 @@ void fragment() {
 	if (c.a < 0.5) {
 		discard;
 	}
+	occ_discard(w_pos, FRAGCOORD.xy);
 	// painted art already carries its shading; tint by scene light, darken the base a touch (contact)
 	vec3 col = c.rgb * light_tint * (0.92 + v_var * 0.16);
 	col = mix(col * shade_tint, col, smoothstep(0.0, 0.35, 1.0 - v_h));

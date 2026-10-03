@@ -7,11 +7,11 @@ render_mode diffuse_lambert, specular_disabled;
 
 uniform sampler2D noise_tex : filter_linear_mipmap, repeat_enable;
 uniform sampler2D flag_tex : filter_linear_mipmap, repeat_enable;
-uniform vec3 dirt_a : source_color = vec3(0.66, 0.31, 0.19);
-uniform vec3 dirt_b : source_color = vec3(0.78, 0.47, 0.28);
+uniform vec3 dirt_a : source_color = vec3(0.60, 0.26, 0.16);
+uniform vec3 dirt_b : source_color = vec3(0.71, 0.39, 0.23);
 uniform vec3 dirt_dark : source_color = vec3(0.46, 0.19, 0.14);
-uniform vec3 stone_a : source_color = vec3(0.70, 0.47, 0.35);
-uniform vec3 stone_b : source_color = vec3(0.55, 0.33, 0.26);
+uniform vec3 stone_a : source_color = vec3(0.64, 0.41, 0.31);
+uniform vec3 stone_b : source_color = vec3(0.50, 0.29, 0.23);
 uniform vec3 top_a : source_color = vec3(0.62, 0.34, 0.22);
 uniform vec3 top_b : source_color = vec3(0.52, 0.42, 0.26);
 uniform vec3 strata_0 : source_color = vec3(0.50, 0.16, 0.12);

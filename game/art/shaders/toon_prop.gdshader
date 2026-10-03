@@ -18,9 +18,13 @@ uniform float flash = 0.0;
 uniform vec4 highlight_color : source_color = vec4(0.4, 0.9, 1.0, 1.0);
 uniform float highlight = 0.0;
 uniform float use_vertex_color = 1.0;
-uniform float reveal = 2.0;               // rope unroll: fragments with UV2.x > reveal are hidden
+uniform float reveal = 2.0;
+uniform float occlude = 1.0;              // camera occlusion fade on/off               // rope unroll: fragments with UV2.x > reveal are hidden
 
 varying float v_rev;
+uniform vec3 critter_focus_pos;
+uniform vec3 critter_cam_pos;
+#include "res://game/art/shaders/occlusion_fade.gdshaderinc"
 
 varying vec3 w_pos;
 varying vec3 w_nrm;
@@ -34,6 +38,9 @@ void vertex() {
 void fragment() {
 	if (reveal < 1.5 && v_rev > reveal) {
 		discard;
+	}
+	if (occlude > 0.5) {
+		occ_discard(w_pos, FRAGCOORD.xy);
 	}
 	vec3 base = albedo.rgb * mix(vec3(1.0), COLOR.rgb, use_vertex_color);
 	// tri-planar-ish grain so flat colours read as painted

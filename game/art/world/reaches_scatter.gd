@@ -5,7 +5,7 @@ extends Node3D
 
 const ATLAS_TEX := preload("res://game/art/world/reaches_atlas.png")
 const ATLAS_JSON := "res://game/art/world/reaches_atlas.json"
-const SCATTER_SHADER := preload("res://game/art/shaders/scatter_billboard.gdshader")
+const SCATTER_SHADER_PATH := "res://game/art/shaders/scatter_billboard.gdshader"
 
 ## layout kind -> atlas items (weighted by repetition)
 const KIND_ITEMS := {
@@ -23,10 +23,12 @@ var _rng := RandomNumberGenerator.new()
 var _bb: Array = []        # [Transform3D, Color, rect Color]
 var _props: Dictionary = {}  # kind -> Array[Transform3D]
 var _clear: Array = []     # [Vector2 center, radius]
+var _t: Node
 
 
 func populate(t: Node) -> void:
 	_rng.seed = 1977
+	_t = t
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(ATLAS_JSON))
 	if parsed is Dictionary:
 		_atlas = parsed.get("items", {})
@@ -171,6 +173,10 @@ func _add(kind: String, pos: Vector3, scale_mul: float) -> void:
 		var it: Dictionary = _atlas[id]
 		var px: Array = it["px"]
 		var hm := float(it.get("height_m", 2.0)) * _rng.randf_range(0.8, 1.15) * scale_mul
+		if hm > 3.0 and _south_of_floor(pos.x, pos.z):
+			hm = minf(hm, 2.6) if kind == "rock_small" or kind == "shrub" else 0.0
+			if hm <= 0.0:
+				return
 		var wm := hm * float(px[0]) / float(px[1])
 		var xf := Transform3D(Basis().scaled(Vector3(wm, hm, 1.0)), pos + Vector3(0, -0.12, 0))
 		var uv: Array = it["uv"]
@@ -187,6 +193,17 @@ func _add(kind: String, pos: Vector3, scale_mul: float) -> void:
 		var s := _rng.randf_range(0.85, 1.2)
 		var xf := Transform3D(Basis(Vector3.UP, _rng.randf() * TAU).scaled(Vector3(s, s, s)), pos)
 		_props[kind].append(xf)
+
+
+## True when walkable floor lies within 10 m to the north (-Z): anything tall here sits between the
+## gameplay camera and the player.
+func _south_of_floor(x: float, z: float) -> bool:
+	if _t == null:
+		return false
+	for k in range(3, 11):
+		if _t.floor_sdf(x, z - float(k)) < -0.5:
+			return true
+	return false
 
 
 func _commit_billboards() -> void:
@@ -207,7 +224,7 @@ func _commit_billboards() -> void:
 		mm.set_instance_color(i, e[1])
 		mm.set_instance_custom_data(i, e[2])
 	var mat := ShaderMaterial.new()
-	mat.shader = SCATTER_SHADER
+	mat.shader = ToonKit.occluding_shader(SCATTER_SHADER_PATH)
 	mat.set_shader_parameter("atlas", ATLAS_TEX)
 	var mmi := MultiMeshInstance3D.new()
 	mmi.name = "PaintedProps"

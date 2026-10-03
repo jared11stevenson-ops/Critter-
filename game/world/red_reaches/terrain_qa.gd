@@ -59,7 +59,19 @@ func _goto(i: int) -> void:
 		dist = 34.0
 	cam.position = f + Vector3(0, 1.0, 0) + Vector3(0, -sin(pitch) * dist, cos(pitch) * dist)
 	cam.look_at(f + Vector3(0, 1.0, 0), Vector3.UP)
+	RenderingServer.global_shader_parameter_set("critter_focus_pos", f)
+	RenderingServer.global_shader_parameter_set("critter_cam_pos", cam.global_position)
 	print("[QA] stop ", stop[0], " focus ", f)
+	# exercise the scripted structure API (qa_alt = broken boulder + failing span; default = braced span)
+	var alt := OS.get_cmdline_user_args().has("qa_alt")
+	if stop[0] == "valley":
+		terrain.set_rope_span_visible(true)
+	if stop[0] == "boulder" and alt:
+		terrain.break_boulder()
+	if stop[0] == "span_approach":
+		terrain.set_span_state("failing" if alt else "braced")
+	if stop[0] == "span_mid" and alt:
+		terrain.shake_span(1.0)
 
 
 func _process(delta: float) -> void:
