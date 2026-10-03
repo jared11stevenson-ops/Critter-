@@ -21,7 +21,7 @@ func _ready() -> void:
 	var vb := VBoxContainer.new()
 	vb.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	vb.alignment = BoxContainer.ALIGNMENT_CENTER
-	vb.add_theme_constant_override("separation", 14)
+	vb.add_theme_constant_override("separation", 8)
 	vb.modulate.a = 0.0
 	_root.add_child(vb)
 	var t1 := UiKit.label("CRITTER DOES NOT END.", 56, UiKit.PARCHMENT, "solemn")
@@ -34,7 +34,7 @@ func _ready() -> void:
 	gap.custom_minimum_size = Vector2(0, 18)
 	vb.add_child(gap)
 	for line in _summary():
-		var l := UiKit.label(line, 26, UiKit.PARCHMENT.darkened(0.1), "dialogue")
+		var l := UiKit.label(line, 24, UiKit.PARCHMENT.darkened(0.1), "dialogue")
 		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		vb.add_child(l)
 	var gap2 := Control.new()
