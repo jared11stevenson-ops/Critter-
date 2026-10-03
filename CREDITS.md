@@ -12,3 +12,8 @@ Godot Engine 4 — MIT License — https://godotengine.org
 - Barlow Condensed — Jeremy Tribby
 - Cinzel — Natanael Gama
 License texts: `game/art/fonts/LICENSE_*.txt`
+
+## Motion capture
+Character animation is retargeted from the **CMU Graphics Lab Motion Capture Database** (free for any use).
+The data used in this project was obtained from mocap.cs.cmu.edu. The database was created with funding from
+NSF EIA-0196217. BVH conversion by Bruce Hahne (cgspeed). Per-clip list: `tools/animation/SOURCES.md`.
