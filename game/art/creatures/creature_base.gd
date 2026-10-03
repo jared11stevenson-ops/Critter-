@@ -54,7 +54,7 @@ func _build() -> void:
 	body.add_child(pose)
 	mat = ToonKit.material({"outline": outline_width, "unique": true, "rim": 0.35, "grain": 0.14})
 	mat.set_shader_parameter("occlude", 0.0)
-	(mat.next_pass as ShaderMaterial).set_shader_parameter("occlude", 0.0)
+	_opset("occlude", 0.0)
 	var st := ToonKit.begin()
 	st.set_uv2(Vector2.ZERO)
 	var gst := ToonKit.begin()
@@ -180,7 +180,7 @@ func set_highlight(color: Color, on: bool) -> void:
 	_build()
 	mat.set_shader_parameter("highlight_color", color)
 	mat.set_shader_parameter("highlight", 1.0 if on else 0.0)
-	(mat.next_pass as ShaderMaterial).set_shader_parameter("ink_color", color if on else Color(0.12, 0.06, 0.06))
+	_opset("ink_color", color if on else Color(0.12, 0.06, 0.06))
 
 
 func set_ghost(alpha: float) -> void:
@@ -207,6 +207,12 @@ func set_ghost(alpha: float) -> void:
 	shadow.visible = false
 
 
+## Outline pass parameter (no-op when ink outlines are off, v0.7 default).
+func _opset(param: String, v: Variant) -> void:
+	if mat and mat.next_pass:
+		(mat.next_pass as ShaderMaterial).set_shader_parameter(param, v)
+
+
 func get_radius() -> float:
 	return radius
 
@@ -225,9 +231,8 @@ func _process(delta: float) -> void:
 	_phase = fmod(_phase + delta * gait_speed * (0.25 + amt), 1000.0)
 	mat.set_shader_parameter("gait_phase", _phase)
 	mat.set_shader_parameter("gait_amp", gait_stride * amt)
-	var op := mat.next_pass as ShaderMaterial
-	op.set_shader_parameter("gait_phase", _phase)
-	op.set_shader_parameter("gait_amp", gait_stride * amt)
+	_opset("gait_phase", _phase)
+	_opset("gait_amp", gait_stride * amt)
 	if not _dead and (_tw == null or not _tw.is_running()):
 		var bob := sin(_phase * TAU * 2.0) * bob_amount * amt
 		var idle := sin(_t * 2.1) * bob_amount * 0.35

@@ -15,9 +15,8 @@ extends Node3D
 signal built
 
 const LAYOUT_PATH := "res://game/world/red_reaches/layout.json"
-const TERRAIN_SHADER := preload("res://game/art/shaders/terrain_toon.gdshader")
-const NOISE_TEX := preload("res://game/art/world/terrain_noise.png")
-const FLAG_TEX := preload("res://game/art/world/flagstone.png")
+const TERRAIN_SHADER := preload("res://game/art/shaders/terrain_pbr.gdshader")
+const PBR_DIR := "res://game/art/world/pbr/"
 const CHUNK := 64
 
 @export var layout_path: String = LAYOUT_PATH
@@ -375,8 +374,11 @@ func _make_material() -> ShaderMaterial:
 		return terrain_material
 	terrain_material = ShaderMaterial.new()
 	terrain_material.shader = TERRAIN_SHADER
-	terrain_material.set_shader_parameter("noise_tex", NOISE_TEX)
-	terrain_material.set_shader_parameter("flag_tex", FLAG_TEX)
+	for set_name in ["dirt", "flag", "scrub", "cliff"]:
+		var file: String = {"dirt": "ground_dirt", "flag": "ground_flag", "scrub": "scrub", "cliff": "cliff_rock"}[set_name]
+		terrain_material.set_shader_parameter(set_name + "_albedo", load(PBR_DIR + file + "_albedo.png"))
+		terrain_material.set_shader_parameter(set_name + "_normal", load(PBR_DIR + file + "_normal.png"))
+	terrain_material.set_shader_parameter("macro_tex", load(PBR_DIR + "macro_var.png"))
 	return terrain_material
 
 
@@ -407,9 +409,15 @@ func _build_terrain_meshes() -> void:
 			normals[i] = Vector3(hl - hr, 2.0 * _cell, hd - hu).normalized()
 			var avg := (hl + hr + hd + hu) * 0.25
 			var lap := _hv[i] - avg
-			var ink := clampf((lap - 0.9) * 0.35, 0.0, 0.7)
-			var ao := clampf((-lap - 0.6) * 0.12, 0.0, 0.6)
-			colors[i] = Color(_sw[i], _fw[i], ink, ao)
+			var crest := clampf((lap - 0.5) * 0.4, 0.0, 0.8)
+			# cavity: concave spots + the foot of cliffs (floor cells next to much higher terrain)
+			var ao := clampf((-lap - 0.3) * 0.18, 0.0, 0.6)
+			var hmax := maxf(maxf(hl, hr), maxf(hd, hu))
+			for r in [2, 3]:
+				hmax = maxf(hmax, maxf(_hv_at(ix - r, iz), _hv_at(ix + r, iz)))
+				hmax = maxf(hmax, maxf(_hv_at(ix, iz - r), _hv_at(ix, iz + r)))
+			ao = maxf(ao, clampf((hmax - _hv[i] - 0.8) * 0.12, 0.0, 0.55) * _fw[i])
+			colors[i] = Color(_sw[i], _fw[i], crest, ao)
 	var cx := int(ceil(float(_nx - 1) / CHUNK))
 	var cz := int(ceil(float(_nz - 1) / CHUNK))
 	for c_z in cz:
@@ -574,6 +582,7 @@ func _build_lighting() -> void:
 	lighting = L.new()
 	lighting.name = "Lighting"
 	lighting.set("preset", "reaches")
+	lighting.set("zone_blend", true)
 	add_child(lighting)
 
 

@@ -84,6 +84,15 @@ func _goto(i: int) -> void:
 
 func _process(delta: float) -> void:
 	_t += delta
+	for a in OS.get_cmdline_user_args():
+		if a.begins_with("qa_sun="):
+			terrain.lighting.sun.light_energy = float(a.split("=")[1])
+		if a.begins_with("qa_amb="):
+			terrain.lighting.env.ambient_light_energy = float(a.split("=")[1])
+		if a.begins_with("qa_tm="):
+			terrain.lighting.env.tonemap_mode = int(a.split("=")[1])
+		if a.begins_with("qa_exp="):
+			terrain.lighting.env.tonemap_exposure = float(a.split("=")[1])
 	var want := int(floor((_t - 0.4) / 1.2))
 	if want > _i and want < STOPS.size():
 		_goto(want)
