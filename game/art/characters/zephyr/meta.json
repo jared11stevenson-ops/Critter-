@@ -7,23 +7,24 @@
  ],
  "px": {
   "front": [
-   367,
-   543
+   346,
+   512
   ],
   "side": [
-   262,
-   353
+   379,
+   512
   ],
   "back": [
-   207,
-   350
+   303,
+   512
   ]
  },
- "feet_y_px": 543,
+ "feet_y_px": 512,
  "source": {
   "front": "hero FRONT",
   "side": "SIDE (mirrored to face right)",
   "back": "BACK"
  },
- "sheet": "zephyr_sheet.png"
+ "sheet": "zephyr_sheet.png",
+ "hd": "Real-ESRGAN x4 anime_6B re-cut (tools/art_pipeline/hd_sprites.py)"
 }

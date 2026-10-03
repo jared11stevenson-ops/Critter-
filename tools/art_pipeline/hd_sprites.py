@@ -105,6 +105,20 @@ def refine_x4(a1, rgb4, bgc, v, box, k=4):
             edge = edge[edge > 0]
             outside = ndi.binary_dilation(np.isin(lab, edge), iterations=2)
             a = np.where(outside & ~inner, np.minimum(a, key), a)
+    # detached fragments from neighbouring panels (bits of another view, label arrows): small islands far
+    # from the main body. Ornaments that hang close (antenna tips, crown spheres) are within keep_dist.
+    binm = a > 0.5
+    lab, n = ndi.label(binm)
+    if n > 1:
+        sizes = ndi.sum(binm, lab, index=np.arange(1, n + 1))
+        main = lab == (1 + int(np.argmax(sizes)))
+        dist = ndi.distance_transform_edt(~ndi.binary_dilation(main, iterations=1))
+        keep_dist = float(v.get("keep_dist", 0.035)) * h4
+        for i, sz in enumerate(sizes):
+            comp = lab == (i + 1)
+            if sz < 0.015 * sizes.max() and dist[comp].min() > keep_dist:
+                a[ndi.binary_dilation(comp, iterations=3)] = 0.0
+                print("  drop fragment", v.get("source", ""), int(sz), "px at", [int(c.mean()) for c in np.nonzero(comp)][::-1], flush=True)
     # sheet ground lines / shadow strokes under the feet: thin horizontal structures in the bottom band
     yb = int(h4 * 0.93)
     sol = a[yb:] > 0.35
