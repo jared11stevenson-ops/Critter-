@@ -16,6 +16,7 @@ H = 650
 # turnaround.png (3308 px wide) columns of each view, rows horn tip..sole
 VIEWS = [("front", (240, 1300), 0), ("side", (1930, 2330), -90), ("back", (2430, 2990), 180)]
 Y0, Y1 = 140, 1439
+HIRES = {"front": "front_clean_x4.png", "side": "side_x4.png", "back": "back_x4.png"}
 
 
 def main():
@@ -30,7 +31,8 @@ def main():
         p = "/tmp/_aruun_cmp_%s.png" % name
         R.render(p)
         r = Image.open(p).convert("RGBA")
-        s = sheet.crop((x0, Y0, x1, Y1))
+        s = Image.open(os.path.join(SHEETDIR, "hires", HIRES[name])).convert("RGBA")
+        s = s.crop(s.getchannel("A").point(lambda v: 255 if v > 128 else 0).getbbox())
         s = s.resize((int(s.width * H / s.height), H), Image.LANCZOS)
         cols.append((name, s, r))
     W = sum(s.width + r.width + 30 for _, s, r in cols)

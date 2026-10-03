@@ -56,7 +56,8 @@ def noise3(P, freq, seed):
 
 
 # ----------------------------------------------------------------------------------------- sheet projection
-SHEET = os.path.join(ROOT, "game", "art", "characters", "aruun")
+SHEET = os.path.join(ROOT, "design", "model_sheets", "aruun", "hires")   # Real-ESRGAN x4 views (see NOTES.md)
+SHEET_FILE = {"front": "front_clean_x4.png", "side": "side_x4.png", "back": "back_x4.png"}
 # view name -> (raster view, unit vector from the model toward the camera)
 PROJ_VIEWS = {"front": ("front", (0, -1, 0)), "side": ("side_r", (-1, 0, 0)), "back": ("back", (0, 1, 0))}
 NO_PROJECT = ("morrow", "eye")   # Morrow is posed differently on the sheet; eyes keep their emissive colour
@@ -92,7 +93,7 @@ def project_sheet(P, N, co, tris, allow):
     fb = np.zeros((len(P), 3))
     fbw = np.full(len(P), -2.0)
     for name, (view, d) in PROJ_VIEWS.items():
-        img = np.asarray(Image.open(os.path.join(SHEET, name + ".png")).convert("RGBA")).astype(np.float64) / 255
+        img = np.asarray(Image.open(os.path.join(SHEET, SHEET_FILE[name])).convert("RGBA")).astype(np.float64) / 255
         H, W = img.shape[:2]
         ppm, org = _sheet_fit(img)
         _, _, zb, _ = __import__("common.raster", fromlist=["view_raster"]).view_raster(co, tris, view, ppm, W, H, org)
