@@ -8,7 +8,7 @@ const STONE_DARK := Color(0.56, 0.34, 0.26)
 const OCHRE := Color(0.74, 0.47, 0.26)
 const WOOD := Color(0.48, 0.32, 0.22)
 const ROPE := Color(0.80, 0.66, 0.42)
-const GUNMETAL := Color(0.36, 0.37, 0.41)
+const GUNMETAL := Color(0.30, 0.31, 0.35)
 const DOM_RED := Color(0.72, 0.10, 0.09)
 const THOUGHT := Color(0.62, 0.86, 1.0)
 

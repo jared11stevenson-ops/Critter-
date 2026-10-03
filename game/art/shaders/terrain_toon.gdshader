@@ -21,7 +21,7 @@ uniform vec3 strata_3 : source_color = vec3(0.34, 0.11, 0.11);
 uniform vec3 strata_4 : source_color = vec3(0.60, 0.23, 0.16);
 uniform vec3 ink : source_color = vec3(0.16, 0.07, 0.07);
 uniform float strata_scale = 0.42;
-uniform float flag_scale = 0.21;
+uniform float flag_scale = 0.3;
 uniform float deep_fade_y = -14.0;
 uniform vec3 deep_color : source_color = vec3(0.30, 0.16, 0.20);
 
@@ -61,7 +61,7 @@ void fragment() {
 
 	// --- ground: dirt with painted patches, pebbles, cracks
 	vec3 dirt = mix(dirt_a, dirt_b, smoothstep(0.35, 0.7, n1.r + (n2.g - 0.5) * 0.4));
-	dirt = mix(dirt, dirt_dark, smoothstep(0.62, 0.8, n2.r) * 0.55);
+	dirt = mix(dirt, dirt_dark, smoothstep(0.58, 0.8, n2.r) * 0.65);
 	dirt *= 0.93 + 0.12 * n3.b;
 	float crack = texture(noise_tex, xz * 0.06).a;
 	dirt = mix(dirt, ink, crack * 0.55);
