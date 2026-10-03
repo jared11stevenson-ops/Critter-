@@ -1,0 +1,10 @@
+[
+ {"t":0.3,"call":"scene.qa_auto_dialogue","args":[true,0,0.2]},
+ {"t":1.0,"call":"scene.qa_teleport","args":["t_valley"]},
+ {"t":1.5,"action":"move_right","dur":1.0},
+ {"t":3.0,"call":"scene.qa_scan"},
+ {"t":3.6,"call":"scene.qa_perf_breakdown"},
+ {"t":9.0,"call":"scene.qa_perf_breakdown","args":["HUD"]},
+ {"t":13.0,"call":"scene.qa_skip_to","args":["boss"]},
+ {"t":16.0,"call":"scene.qa_perf_breakdown"}
+]

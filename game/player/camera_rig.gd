@@ -37,6 +37,24 @@ func _ready() -> void:
 	cam.current = true
 	add_child(cam)
 	_last_us = Time.get_ticks_usec()
+	_ensure_global_params()
+
+## Agent 1's dithered occlusion fade reads these two globals (focus = player feet, cam = eye).
+const GP_FOCUS := &"critter_focus_pos"
+const GP_CAM := &"critter_cam_pos"
+
+static func _ensure_global_params() -> void:
+	var have := RenderingServer.global_shader_parameter_get_list()
+	for n in [GP_FOCUS, GP_CAM]:
+		if not have.has(n):
+			RenderingServer.global_shader_parameter_add(n, RenderingServer.GLOBAL_VAR_TYPE_VEC3, Vector3.ZERO)
+
+func _push_global_params() -> void:
+	var fp := _focus
+	if target and is_instance_valid(target):
+		fp = target.global_position
+	RenderingServer.global_shader_parameter_set(GP_FOCUS, fp)
+	RenderingServer.global_shader_parameter_set(GP_CAM, cam.global_position)
 
 func set_target(t: Node3D, snap: bool = false) -> void:
 	target = t
@@ -105,6 +123,7 @@ func _process(_delta: float) -> void:
 	else:
 		cam.position = Vector3.ZERO
 		cam.rotation.z = 0.0
+	_push_global_params()
 
 func _blocked(pitch: float, dist: float) -> bool:
 	var f := Field.current

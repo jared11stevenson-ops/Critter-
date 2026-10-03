@@ -1028,3 +1028,54 @@ func qa_log_flags() -> void:
 		out.append("%s=%s" % [k, str(GameState.get_flag(k, false))])
 	print("[QA] FLAGS ", ", ".join(out))
 	print("[QA] ITEMS ", GameState.items, " SPECIMENS ", GameState.specimens.size(), " TRUST ", GameState.trust, " CODEX ", GameState.codex)
+
+## QA: draw-call breakdown. Pauses the tree (frozen frame), hides each child of `path` (default: the
+## level's top-level nodes + actors grouped by script) in turn and prints what it was costing.
+func qa_perf_breakdown(path: String = "") -> void:
+	var dc := func() -> int: return int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME))
+	var was_paused := get_tree().paused
+	get_tree().paused = true
+	var cam_mode := cam.process_mode
+	cam.process_mode = Node.PROCESS_MODE_DISABLED
+	for _i in 4:
+		await get_tree().process_frame
+	var base: int = dc.call()
+	var out: Array = ["total=%d" % base]
+	var groups: Dictionary = {}
+	var root: Node = get_node(path) if path != "" else self
+	for c in root.get_children():
+		if c == actors_root:
+			continue
+		var key: String = str(c.name)
+		if key.begins_with("@"):
+			key = c.get_class()
+		if not groups.has(key):
+			groups[key] = []
+		groups[key].append(c)
+	if path == "":
+		for a in actors_root.get_children():
+			var k: String = "actor:" + (a.get_script().resource_path.get_file().get_basename() if a.get_script() else a.get_class())
+			if not groups.has(k):
+				groups[k] = []
+			groups[k].append(a)
+	for k in groups.keys():
+		var nodes: Array = groups[k]
+		var hid: Array = []
+		for n in nodes:
+			if "visible" in n and n.visible:
+				n.visible = false
+				hid.append(n)
+		if hid.is_empty():
+			continue
+		for _i in 3:
+			await get_tree().process_frame
+		var v: int = dc.call()
+		for n in hid:
+			n.visible = true
+		for _i in 3:
+			await get_tree().process_frame
+		if base - v != 0:
+			out.append("%s(x%d)=%d" % [k, nodes.size(), base - v])
+	cam.process_mode = cam_mode
+	get_tree().paused = was_paused
+	print("[QA] PERF BREAKDOWN %s " % (path if path != "" else "level"), ", ".join(out))
