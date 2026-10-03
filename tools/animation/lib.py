@@ -23,6 +23,9 @@ def mocap_file(clip):
     return os.path.join(RAW, "%03d" % int(s), clip + ".bvh"), 0.0
 
 
+USED = {}     # clip -> [min_t, max_t] of every source window read (for trim_mocap.py)
+
+
 def source(clip, t0, t1=None, timescale=1.0, warp=None):
     """warp: [(out_t, src_t), ...] piecewise-linear time map (overrides t0/t1/timescale)."""
     path, off = mocap_file(clip)
@@ -33,6 +36,9 @@ def source(clip, t0, t1=None, timescale=1.0, warp=None):
     else:
         n = int(round((t1 - t0) * FPS * timescale))
         times = t0 + np.arange(n + 1) / (FPS * timescale)
+    u = USED.setdefault(clip, [1e9, -1e9])
+    u[0] = min(u[0], float(times.min()))
+    u[1] = max(u[1], float(times.max()))
     return rt.Source(path, None, times=times, offset=off)
 
 
@@ -153,3 +159,27 @@ def pose_blend(tr, Qpose, k):
 
 def timeline(F):
     return np.arange(F) / FPS
+
+
+def ground_body(tr, clearance=None, sigma=1.5, only_below=False):
+    """Shift the body vertically per frame so its lowest contact point (knees, feet, toes, hands) touches z=0.
+    clearance: per-point radius (m). only_below: only lift parts that penetrate (never pull down)."""
+    sk = tr.sk
+    pts = []
+    for s in ("L", "R"):
+        pts += [(tr.P[:, sk.index["shin." + s]], 0.09), (tr.P[:, sk.index["foot." + s]], 0.16),
+                (tr.tail("toe." + s), 0.02), (tr.tail("hand." + s), 0.03)]
+    lo = np.min(np.stack([p[:, 2] - r for p, r in pts], 1), axis=1)
+    d = -lo
+    if only_below:
+        d = np.maximum(d, 0)
+    d = rt.smooth(d[:, None], sigma)[:, 0]
+    shift(tr, np.c_[np.zeros(tr.F), np.zeros(tr.F), d])
+    return d
+
+
+def match_hip_height(tr, z, k=1.0):
+    """Raise/lower the hips so their mean height is z (legs then re-straightened by foot IK)."""
+    hi = tr.sk.index["hips"]
+    dz = (z - tr.P[:, hi, 2].mean()) * k
+    shift(tr, (0, 0, dz))

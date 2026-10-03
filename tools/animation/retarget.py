@@ -215,7 +215,7 @@ class Track:
             Mp_rot = self.W[:, p]                         # world rotation of parent bone frame
             pos = self.P[:, p] + np.einsum("fij,j->fi", Mp_rot, off)
             if sk.names[i] in self.loc:
-                pos = pos + np.einsum("fij,j->fi", Mp_rot @ sk.L[i][:3, :3], self.loc[sk.names[i]])
+                pos = pos + np.einsum("fij,fj->fi", Mp_rot @ sk.L[i][:3, :3][None], self.loc[sk.names[i]])
             self.P[:, i] = pos
 
     def tail(self, n):

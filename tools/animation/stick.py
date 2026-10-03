@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw
 from bvh import BVH
 
 
-def strip(path, t0=0.0, t1=None, step=0.25, view="side", cell=110, label=""):
+def strip(path, t0=0.0, t1=None, step=0.25, view="side", cell=150, label=""):
     b = BVH(path)
     n = len(b.data)
     f0 = max(1, int(t0 * b.fps))
@@ -19,6 +19,13 @@ def strip(path, t0=0.0, t1=None, step=0.25, view="side", cell=110, label=""):
     d.text((2, 0), label or path.split("/")[-1], fill=(0, 0, 0))
     ax = (1, 2) if view == "side" else (0, 2)
     sgn = -1 if view == "side" else 1
+    if view == "34":
+        P = P.copy()
+        c, s_ = np.cos(0.8), np.sin(0.8)
+        x, y = P[..., 0].copy(), P[..., 1].copy()
+        P[..., 0] = c * x - s_ * y
+        P[..., 1] = s_ * x + c * y
+        ax, sgn = (0, 2), 1
     for k, f in enumerate(frames):
         root = P[k, 0]
         ox = k * cell + cell / 2
