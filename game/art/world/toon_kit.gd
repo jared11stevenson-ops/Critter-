@@ -8,6 +8,11 @@ const OUTLINE_SHADER_PATH := "res://game/art/shaders/ink_outline.gdshader"
 const GLOBAL_FOCUS := "critter_focus_pos"
 const GLOBAL_CAM := "critter_cam_pos"
 const NOISE_TEX := preload("res://game/art/world/terrain_noise.png")
+const DETAIL_TEX := preload("res://game/art/world/pbr/prop_detail.png")
+const DETAIL_NRM := preload("res://game/art/world/pbr/prop_rock_normal.png")
+## v0.7 painterly realism: ink outlines are off on all world/creature geometry (halves draw calls). Set true (or pass
+## "force_outline") to bring the old inked look back.
+static var outlines_enabled := false
 
 static var _mat_cache: Dictionary = {}
 static var _shader_cache: Dictionary = {}
@@ -51,6 +56,12 @@ static func material(opts: Dictionary = {}) -> ShaderMaterial:
 	var m := ShaderMaterial.new()
 	m.shader = occluding_shader(PROP_SHADER_PATH)
 	m.set_shader_parameter("noise_tex", NOISE_TEX)
+	m.set_shader_parameter("detail_tex", DETAIL_TEX)
+	m.set_shader_parameter("detail_normal", DETAIL_NRM)
+	m.set_shader_parameter("roughness", float(opts.get("roughness", 0.82)))
+	m.set_shader_parameter("metallic", float(opts.get("metal", 0.0)))
+	if opts.has("detail"):
+		m.set_shader_parameter("detail_strength", float(opts["detail"]))
 	m.set_shader_parameter("albedo", opts.get("albedo", Color(1, 1, 1)))
 	m.set_shader_parameter("strata", float(opts.get("strata", 0.0)))
 	m.set_shader_parameter("grain", float(opts.get("grain", 0.18)))
@@ -59,7 +70,7 @@ static func material(opts: Dictionary = {}) -> ShaderMaterial:
 		m.set_shader_parameter("emission_energy", float(opts.get("energy", 1.0)))
 	m.set_shader_parameter("rim_strength", float(opts.get("rim", 0.25)))
 	var ow := float(opts.get("outline", 0.035))
-	if ow > 0.0:
+	if ow > 0.0 and (outlines_enabled or opts.get("force_outline", false)):
 		var o := ShaderMaterial.new()
 		o.shader = occluding_shader(OUTLINE_SHADER_PATH)
 		o.set_shader_parameter("width", ow)
