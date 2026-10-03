@@ -52,7 +52,9 @@ void fragment() {
 	if (c.a < 0.5) {
 		discard;
 	}
-	occ_discard(w_pos, FRAGCOORD.xy);
+	if (occ_cut(w_pos, FRAGCOORD.xy)) {
+		discard;
+	}
 	// painted art already carries its shading; tint by scene light, darken the base a touch (contact)
 	vec3 col = c.rgb * light_tint * (0.92 + v_var * 0.16);
 	col = mix(col * shade_tint, col, smoothstep(0.0, 0.35, 1.0 - v_h));

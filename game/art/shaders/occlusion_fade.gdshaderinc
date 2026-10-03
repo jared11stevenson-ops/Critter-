@@ -31,8 +31,7 @@ float occ_amount(vec3 wp) {
 	return k * smoothstep(0.86, 0.72, t) * 0.85;
 }
 
-void occ_discard(vec3 wp, vec2 fragcoord) {
-	if (occ_amount(wp) > occ_bayer4(fragcoord)) {
-		discard;
-	}
+// usage in fragment(): if (occ_cut(w_pos, FRAGCOORD.xy)) { discard; }  (4.3 forbids discard in helpers)
+bool occ_cut(vec3 wp, vec2 fragcoord) {
+	return occ_amount(wp) > occ_bayer4(fragcoord);
 }

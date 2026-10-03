@@ -39,8 +39,8 @@ void fragment() {
 	if (reveal < 1.5 && v_rev > reveal) {
 		discard;
 	}
-	if (occlude > 0.5) {
-		occ_discard(w_pos, FRAGCOORD.xy);
+	if (occlude > 0.5 && occ_cut(w_pos, FRAGCOORD.xy)) {
+		discard;
 	}
 	vec3 base = albedo.rgb * mix(vec3(1.0), COLOR.rgb, use_vertex_color);
 	// tri-planar-ish grain so flat colours read as painted

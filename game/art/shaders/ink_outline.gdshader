@@ -27,8 +27,8 @@ void fragment() {
 	if (reveal < 1.5 && v_rev > reveal) {
 		discard;
 	}
-	if (occlude > 0.5) {
-		occ_discard(w_pos, FRAGCOORD.xy);
+	if (occlude > 0.5 && occ_cut(w_pos, FRAGCOORD.xy)) {
+		discard;
 	}
 	ALBEDO = ink_color.rgb;
 }
