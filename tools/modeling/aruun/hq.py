@@ -23,21 +23,61 @@ os.makedirs(WORK, exist_ok=True)
 KIND_COL = {"skin": (0.22, 0.2, 0.26), "chitin": (0.62, 0.22, 0.16), "claw": (0.12, 0.1, 0.1),
             "bone": (0.85, 0.76, 0.6), "eye": (0.95, 0.8, 0.2), "horn": (0.6, 0.2, 0.14), "fringe": (0.8, 0.75, 0.45),
             "cloth": (0.75, 0.66, 0.5), "leaf": (0.55, 0.55, 0.3), "cloak": (0.3, 0.25, 0.2), "gold": (0.8, 0.6, 0.3),
-            "morrow": (0.18, 0.16, 0.18), "stone": (0.8, 0.15, 0.12), "leather": (0.45, 0.2, 0.15)}
+            "morrow": (0.18, 0.16, 0.18), "stone": (0.8, 0.15, 0.12), "leather": (0.45, 0.2, 0.15),
+            "cloth_red": (0.6, 0.15, 0.12), "morrow_metal": (0.3, 0.28, 0.3)}
+# (sheet_* npz: V/F = high, LV/LF/LUV = low grid)
 SHEET_CENTER = {"side": 0.25}     # metres from the cut-out's left edge to the world origin (foot centre)
 NAME_COL = {"sternum": (0.85, 0.75, 0.6), "carapace": (0.45, 0.15, 0.12), "neckrings": (0.8, 0.35, 0.18)}
 
 
-def sculpt(names=None):
+def all_components():
+    """Sculpt components + costume SDF parts + Morrow (world space). Sheets are handled separately."""
     import sculpt as S
+    import costume
+    import morrow
     C = S.components()
+    body = C["body"]["field"]
+    for n, (f, kind, bind, step) in costume.sdf_parts(body).items():
+        C[n] = dict(field=f, lo=None, hi=None, step=step, kind=kind, bind=bind, budget=None)
+    for n, (f, kind, bone) in morrow.fields().items():
+        C[n] = dict(field=f, lo=None, hi=None, step=0.002 if n != "morrow_core" else 0.0015, kind=kind, bind=bone,
+                    budget=None)
+    return C
+
+
+def collider():
+    import sculpt as S
+    from common.sdf2 import union
+    C = S.components()
+    fs = [C["body"]["field"]] + [C[n]["field"] for n in C if n.startswith(("pauldron", "carapace", "lame", "sternum",
+                                                                          "thighplate"))]
+    return union(fs)
+
+
+def sculpt_sheets(names=None):
+    import costume
+    from common import cloth
+    col = collider()
+    for sh in costume.sheets():
+        if names and sh.name not in names:
+            continue
+        t = time.time()
+        V, F, UV, grid = cloth.low_mesh(sh, col)
+        Vh, Fh, UVh = cloth.high_mesh(sh, grid, k=8, seed=sum(map(ord, sh.name)))
+        np.savez_compressed(os.path.join(WORK, "sheet_" + sh.name + ".npz"), V=Vh, F=Fh, UV=UVh, LV=V, LF=F, LUV=UV,
+                            kind=sh.kind, bind=sh.bind)
+        print("%-18s low %5d  high %7d tris  %.1fs" % (sh.name, len(F), len(Fh), time.time() - t), flush=True)
+
+
+def sculpt(names=None):
+    C = all_components()
     for name, c in C.items():
         if names and name not in names:
             continue
         t = time.time()
         lo, hi = c["lo"], c["hi"]
         if lo is None:
-            b = sdf2.auto_bounds(c["field"], (-0.6, -0.5, 0.0), (0.6, 0.5, 2.5), 0.02)
+            b = sdf2.auto_bounds(c["field"], (-0.9, -0.9, 0.0), (0.9, 0.6, 2.5), 0.02)
             if b is None:
                 print("EMPTY", name)
                 continue
@@ -84,5 +124,7 @@ if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "sculpt"
     if cmd == "sculpt":
         sculpt(sys.argv[2:] or None)
+    elif cmd == "sheets":
+        sculpt_sheets(sys.argv[2:] or None)
     elif cmd == "preview":
         preview(ppm=int(sys.argv[2]) if len(sys.argv) > 2 else 400)

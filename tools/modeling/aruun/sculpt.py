@@ -41,11 +41,11 @@ J = {
     "elbow.L": V([0.275, 0.065, 1.30]),
     "wrist.L": V([0.305, 0.04, 0.97]),
     "hand_end.L": V([0.315, 0.025, 0.82]),
-    "hip.L": V([0.105, -0.035, 0.975]),
-    "knee.L": V([0.15, 0.02, 0.585]),
-    "ankle.L": V([0.18, 0.085, 0.235]),
-    "toe.L": V([0.19, -0.085, 0.055]),
-    "toe_end.L": V([0.195, -0.215, 0.03]),
+    "hip.L": V([0.11, -0.035, 0.975]),
+    "knee.L": V([0.165, 0.02, 0.585]),
+    "ankle.L": V([0.205, 0.085, 0.235]),
+    "toe.L": V([0.215, -0.085, 0.055]),
+    "toe_end.L": V([0.22, -0.215, 0.03]),
 }
 
 
@@ -177,12 +177,12 @@ def _leg(side):
     Rt = frame(hp, kn, sv)
     Rs = frame(kn, an, sv)
     fs = [
-        capsule(hp + V([0, 0, 0.03]), kn, 0.088, 0.058),
+        capsule(hp + V([0, 0, 0.03]), kn, 0.095, 0.06),
         ellipsoid(at(hp, kn, 0.45, s * 0.012, 0.035), (0.082, 0.078, 0.2), Rt),       # quads
-        ellipsoid(at(hp, kn, 0.72, s * 0.022, 0.035), (0.05, 0.045, 0.10), Rt),       # vastus lateralis tear
+        ellipsoid(at(hp, kn, 0.70, s * 0.03, 0.035), (0.058, 0.05, 0.11), Rt),        # vastus lateralis
         ellipsoid(at(hp, kn, 0.70, -s * 0.03, 0.025), (0.045, 0.045, 0.09), Rt),      # vastus medialis
-        ellipsoid(at(hp, kn, 0.42, 0, -0.035), (0.07, 0.065, 0.18), Rt),             # hamstrings
-        ellipsoid(at(hp, kn, 0.28, -s * 0.035, 0.0), (0.055, 0.06, 0.13), Rt),        # adductors
+        ellipsoid(at(hp, kn, 0.42, 0, -0.04), (0.08, 0.072, 0.19), Rt),              # hamstrings
+        ellipsoid(at(hp, kn, 0.28, -s * 0.035, 0.0), (0.065, 0.068, 0.14), Rt),       # adductors
         ellipsoid(at(kn, an, 0.0, 0, 0.012), (0.05, 0.05, 0.058), Rs),                # knee
         capsule(kn, an, 0.052, 0.036),
         ellipsoid(at(kn, an, 0.27, s * 0.014, -0.042), (0.052, 0.054, 0.13), Rs),     # gastrocnemius lateral
@@ -238,7 +238,7 @@ def body_field():
         T_ += [
             ellipsoid((s * 0.08, -0.14, 1.465), (0.088, 0.05, 0.068), euler(0.3, 0, s * 0.3)),    # pectoral
             ellipsoid((s * 0.1, -0.06, 1.20), (0.058, 0.078, 0.12)),                           # obliques
-            ellipsoid((s * 0.075, 0.06, 0.975), (0.085, 0.07, 0.09)),                          # glutes
+            ellipsoid((s * 0.08, 0.065, 0.975), (0.095, 0.078, 0.1)),                          # glutes
             ellipsoid((s * 0.125, 0.04, 1.37), (0.068, 0.085, 0.15), euler(0.25, 0, 0)),        # lats
             ellipsoid((s * 0.085, 0.0, 1.62), (0.10, 0.075, 0.06), euler(0.4, 0, s * -0.3)),    # trapezius
             ellipsoid((s * 0.095, 0.115, 1.48), (0.075, 0.035, 0.095), euler(0.35, 0, 0)),     # scapula
@@ -381,7 +381,7 @@ def neck_rings():
     for z0, z1 in zs:
         def base(P, z0=z0, z1=z1):
             t = _ss(z1, z0, P[:, 2])              # 0 at the top, 1 at the bottom edge
-            return neck(P) - (0.003 + 0.011 * t)
+            return neck(P) - (0.003 + 0.006 * t)
         region = intersect(intersect(lambda P, z0=z0: z0 - P[:, 2], lambda P, z1=z1: P[:, 2] - z1),
                            halfspace((0, -1, 0.0), (0, -0.118, 0)), 0.004)
         segs.append(shell_cut(base, 0.0075, region, 0.003))
