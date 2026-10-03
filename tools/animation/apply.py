@@ -21,7 +21,13 @@ from retarget import FPS, Skeleton  # noqa: E402
 
 
 def apply_animations(armature_obj, character_id, clips=None, verbose=True):
+    import bpy
     cfg = importlib.import_module("characters." + character_id)
+    # clips are sampled at FPS; the glTF exporter times keys by the scene rate (Blender default 24 -> clips 25% slow)
+    sc = bpy.context.scene
+    sc.render.fps = FPS
+    sc.render.fps_base = 1.0
+    sc.frame_start = 0
     sk = Skeleton.from_blender(armature_obj)
     meta = {}
     names = clips or cfg.CLIPS
@@ -51,7 +57,7 @@ def bake(rig, name, tr):
     rig.animation_data.action_slot = slot
     cb = action_ensure_channelbag_for_slot(act, slot)
     F = tr.F
-    frames = 1 + np.arange(F, dtype=np.float64)
+    frames = np.arange(F, dtype=np.float64)        # frame 0 = t 0 (no held lead-in frame)
     sk = tr.sk
     for pb in rig.pose.bones:
         pb.rotation_mode = "QUATERNION"

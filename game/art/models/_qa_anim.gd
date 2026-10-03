@@ -10,6 +10,8 @@ var _move := 0.0
 var _move_target := 0.0
 var _pos := Vector3.ZERO
 var model: Node3D
+var _feet := false
+var _skel: Skeleton3D
 @onready var cam: Camera3D = $Camera3D
 
 const SEQS := {
@@ -32,6 +34,8 @@ func _ready() -> void:
 			_seq = SEQS.get(a.substr(7), [])
 		elif a.begins_with("qa_cam="):
 			_cam_kind = a.substr(7)
+		elif a == "qa_feet":
+			_feet = true
 		elif a.begins_with("qa_char="):
 			char_id = a.substr(8)
 	var ps: PackedScene = load("res://game/art/models/%s/%s_model.tscn" % [char_id, char_id])
@@ -62,6 +66,14 @@ func _process(delta: float) -> void:
 	_pos.z += _move * model.max_speed * delta
 	model.position = _pos
 	_set_cam()
+	if _feet:
+		if _skel == null:
+			_skel = model.find_children("*", "Skeleton3D", true, false)[0]
+		var o := "[FEET] %.3f %.3f" % [_t, _move * model.max_speed]
+		for b in ["foot.L", "toe.L", "foot.R", "toe.R"]:
+			var g: Vector3 = _skel.global_transform * _skel.get_bone_global_pose(_skel.find_bone(b)).origin
+			o += " %.4f %.4f %.4f" % [g.x, g.y, g.z]
+		print(o)
 
 
 func _set_cam() -> void:

@@ -198,11 +198,23 @@ def roll_loop(tr, start):
 
 
 def phase_to_left_contact(tr, v):
-    """Loco clips start at the left foot's touch-down so all gaits blend in phase."""
-    c = rt.detect_contacts(tr, "foot.L", "toe.L", cyclic=True, inplace_v=v)
-    segs = rt.segments(c, True)
-    if not segs:
+    """Loco clips start at the left foot's touch-down (start of its stance) so all gaits blend in phase.
+    Stance = the ankle is (almost) still in the travelling world frame; robust on already-planted clips."""
+    F = tr.F
+    p = tr.P[:, tr.sk.index["foot.L"]] + np.asarray(v)[None] * np.arange(F)[:, None]
+    n = F - 1
+    d = np.linalg.norm(np.diff(p[:, :2], axis=0), axis=1) * rt.FPS          # (n,) speed of frame i -> i+1
+    still = d < max(0.25, 0.15 * float(np.linalg.norm(v)) * rt.FPS)
+    if still.all() or not still.any():
         return
-    s = min(segs, key=lambda ab: abs(ab[1] - ab[0]) * 0 + (ab[0] % (tr.F - 1)))
-    starts = sorted(a % (tr.F - 1) for a, b in segs)
-    roll_loop(tr, starts[0])
+    # touch-down = first still frame after a moving one (cyclic); prefer the longest stance
+    best, best_len = None, -1
+    for i in range(n):
+        if still[i] and not still[i - 1]:
+            L = 0
+            while L < n and still[(i + L) % n]:
+                L += 1
+            if L > best_len:
+                best, best_len = i, L
+    if best:
+        roll_loop(tr, best)
