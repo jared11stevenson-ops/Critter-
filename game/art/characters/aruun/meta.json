@@ -7,19 +7,19 @@
  ],
  "px": {
   "front": [
-   695,
-   576
+   617,
+   512
   ],
   "side": [
-   148,
-   576
+   131,
+   512
   ],
   "back": [
-   234,
-   576
+   208,
+   512
   ]
  },
- "feet_y_px": 576,
+ "feet_y_px": 512,
  "source": {
   "front": "turnaround FRONT (with Morrow)",
   "side": "turnaround SIDE (faces right)",

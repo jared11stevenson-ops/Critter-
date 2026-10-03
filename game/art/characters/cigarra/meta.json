@@ -7,19 +7,19 @@
  ],
  "px": {
   "front": [
-   446,
-   576
+   396,
+   512
   ],
   "side": [
-   223,
-   576
+   198,
+   512
   ],
   "back": [
-   282,
-   576
+   251,
+   512
   ]
  },
- "feet_y_px": 576,
+ "feet_y_px": 512,
  "source": {
   "front": "turnaround FRONT",
   "side": "turnaround SIDE (faces left on sheet, mirrored)",

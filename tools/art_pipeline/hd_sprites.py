@@ -38,8 +38,8 @@ REF_H = 1200
 # total pixel budget of <= 1.5x the previous set (3.40 Mpx -> <= 5.1 Mpx). Every view of a character
 # shares one height, so the outline/rim (texel based) is consistent when the view switches.
 HEIGHTS = {
-    "solmara": 768,   # 5.5 m, largest on screen (was 176-186 px: badly magnified)
-    "aruun": 576, "cigarra": 576,           # playable, closest to camera, cutscenes
+    "solmara": 576,   # 5.5 m, largest on screen (was 176-186 px: badly magnified); 768 blew the budget
+    "aruun": 512, "cigarra": 512,           # playable
     "pharilux": 512, "bramvex": 512, "mollusk": 512, "nyxaris": 512,
     "dexter": 512, "mara": 512, "nerit": 512, "zephyr": 512,
     "scarlith": 384,  # 12 cm canon; never large on screen
@@ -224,6 +224,14 @@ def main():
             Ht = int(min(H, 1024, 4 * H1))
             Wt = int(max(1, round(W1 * Ht / H1)))
             out = downsample(canvas, (Wt, Ht))
+            # feet on the bottom edge: if cleanup removed a ground line, slide the art down (size unchanged)
+            al = np.asarray(out)[..., 3]
+            rows = np.nonzero((al > 8).any(1))[0]
+            gap = int(Ht - 1 - rows.max()) if len(rows) else 0
+            if gap > 0:
+                arr = np.zeros_like(np.asarray(out))
+                arr[gap:] = np.asarray(out)[:Ht - gap]
+                out = Image.fromarray(arr, "RGBA")
             if v.get("flip"):
                 out = ImageOps.mirror(out)
             total += Wt * Ht

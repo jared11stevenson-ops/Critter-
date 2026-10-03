@@ -7,19 +7,19 @@
  ],
  "px": {
   "front": [
-   548,
-   744
+   424,
+   576
   ],
   "side": [
-   724,
-   740
+   564,
+   576
   ],
   "back": [
-   492,
-   704
+   403,
+   576
   ]
  },
- "feet_y_px": 744,
+ "feet_y_px": 576,
  "source": {
   "front": "turnaround FRONT (hero is on dark water, unusable)",
   "side": "turnaround SIDE",
