@@ -13,7 +13,7 @@ const LORE := {
 	"mystery_pharilux_1897": {"tab": "Mysteries", "title": "Pharilux, 1897", "body": ""},
 	"mystery_moon_question": {"tab": "Mysteries", "title": "The Moon Question", "body": ""},
 	"mystery_blind_spots": {"tab": "Mysteries", "title": "Probability Blind Spots", "body": "Certain people, places and events produce almost no readable probability around them. Pharilux is one. Some Gate events are another. Cigarra does not know why. She hates unanswered questions enough to keep looking. (Bible §22)"},
-	"burden_architecture": {"tab": "Lore", "title": "Burden Architecture", "body": "Aruun answers that a structure should sacrifice itself before sacrificing the people inside it. This becomes the foundation of a cross-scale engineering school called Burden Architecture. (Bible Book XIV)"},
+	"lore_burden_architecture": {"tab": "Lore", "title": "Burden Architecture", "body": "Aruun answers that a structure should sacrifice itself before sacrificing the people inside it. This becomes the foundation of a cross-scale engineering school called Burden Architecture. (Bible Book XIV)"},
 }
 
 static var _db: Dictionary = {}

@@ -33,7 +33,7 @@ func _ready() -> void:
 	shade.texture = g
 	add_child(shade)
 	var left := VBoxContainer.new()
-	left.position = Vector2(72, 70)
+	left.position = Vector2(72, 150)
 	left.add_theme_constant_override("separation", 6)
 	add_child(left)
 	var title := UiKit.label("CRITTER", 128, UiKit.PARCHMENT, "title", 18, Color(0.1, 0.05, 0.04, 0.95))
@@ -42,12 +42,19 @@ func _ready() -> void:
 	left.add_child(sub)
 	var tag := UiKit.label("A Handler's first descent into the Red Reaches", 26, UiKit.PARCHMENT.darkened(0.1), "dialogue", 6, Color(0.1, 0.05, 0.04, 0.8))
 	left.add_child(tag)
-	var spacer := Control.new()
-	spacer.custom_minimum_size = Vector2(0, 26)
-	left.add_child(spacer)
+	# Menu column on the right, vertically centred: four 88 px targets never run off a 720p screen.
 	_menu = VBoxContainer.new()
-	_menu.add_theme_constant_override("separation", 14)
-	left.add_child(_menu)
+	_menu.add_theme_constant_override("separation", 16)
+	_menu.anchor_left = 1.0
+	_menu.anchor_right = 1.0
+	_menu.anchor_top = 0.5
+	_menu.anchor_bottom = 0.5
+	_menu.offset_left = -460
+	_menu.offset_right = -80
+	_menu.offset_top = -200
+	_menu.offset_bottom = 200
+	_menu.alignment = BoxContainer.ALIGNMENT_CENTER
+	add_child(_menu)
 	var has_progress := GameState.has_save() and (GameState.flags.size() > 0)
 	var cont := UiKit.button("Continue", Vector2(380, 88), 32)
 	cont.disabled = not has_progress
@@ -229,3 +236,11 @@ func qa_press(button_name: String) -> void:
 		b.pressed.emit()
 	else:
 		push_warning("[QA] title button %s missing/disabled" % button_name)
+
+func qa_close_overlays() -> void:
+	if _sub and is_instance_valid(_sub):
+		_sub.queue_free()
+		_sub = null
+	if _confirm:
+		_confirm.queue_free()
+		_confirm = null

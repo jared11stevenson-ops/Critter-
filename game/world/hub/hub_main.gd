@@ -486,3 +486,19 @@ func qa_log_flags() -> void:
 	for k in keys:
 		out.append("%s=%s" % [k, str(GameState.get_flag(k, false))])
 	print("[QA] HUB FLAGS ", ", ".join(out), " specimens=", GameState.specimens.size(), " items=", GameState.items)
+
+## QA: open the pause menu / codex / a dialogue without auto-advance (for screenshots).
+func qa_open(what: String) -> void:
+	match what:
+		"menu": add_child(PauseMenu.new())
+		"codex": _open_codex()
+		"habitat": open_habitat()
+		"end_card": _show_end_card()
+
+func qa_close_all() -> void:
+	for c in get_children():
+		if c is PauseMenu:
+			c.queue_free()
+		elif c is CanvasLayer and c.get_child_count() > 0 and c.get_child(0) is CodexScreen:
+			c.queue_free()
+	get_tree().paused = false

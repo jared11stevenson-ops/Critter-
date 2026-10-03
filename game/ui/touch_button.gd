@@ -133,9 +133,9 @@ func _draw() -> void:
 			pts.append(c + Vector2(cos(a), sin(a)) * (r - 4.0) * scale_k)
 		draw_colored_polygon(pts, Color(0.05, 0.03, 0.03, 0.62))
 	if caption != "" and _font:
-		var fs2 := 20
+		var fs2 := 22
 		var w2 := _font.get_string_size(caption, HORIZONTAL_ALIGNMENT_CENTER, -1, fs2).x
-		var y := s.y + 20.0
+		var y := s.y + 22.0
 		if pill:
 			y = c.y + fs2 * 0.36
 		draw_string_outline(_font, Vector2(c.x - w2 * 0.5, y), caption, HORIZONTAL_ALIGNMENT_LEFT, -1, fs2, 6, Color(0, 0, 0, 0.75))
