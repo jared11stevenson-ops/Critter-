@@ -1,10 +1,12 @@
 class_name CodexScreen
 extends Control
-## Field Codex: tabs (Species, Characters, Places, Mysteries), entry list, parchment page.
+## Field Codex: tabs (Species, Characters, Places, Lore, Mysteries), entry list, parchment page.
+## Content from CodexData (codex.json when present). Locked entries show as "? ? ?".
 
 var _tab := "Species"
 var _list: VBoxContainer
 var _page_title: Label
+var _page_sub: Label
 var _page_body: RichTextLabel
 var _tabs: HBoxContainer
 var _portrait_holder: Control
@@ -37,7 +39,7 @@ func _ready() -> void:
 	_tabs.add_theme_constant_override("separation", 10)
 	vb.add_child(_tabs)
 	for t in CodexData.TABS:
-		var b := UiKit.button(t, Vector2(210, 88), 28)
+		var b := UiKit.button(t, Vector2(200, 88), 24)
 		b.toggle_mode = true
 		b.pressed.connect(_select_tab.bind(t))
 		b.name = t
@@ -65,10 +67,16 @@ func _ready() -> void:
 	_portrait_holder = Control.new()
 	_portrait_holder.custom_minimum_size = Vector2(110, 110)
 	ph.add_child(_portrait_holder)
+	var tv := VBoxContainer.new()
+	tv.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tv.alignment = BoxContainer.ALIGNMENT_CENTER
+	ph.add_child(tv)
 	_page_title = UiKit.label("", 40, UiKit.INK, "title")
-	_page_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_page_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	ph.add_child(_page_title)
+	_page_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	tv.add_child(_page_title)
+	_page_sub = UiKit.label("", 22, UiKit.ACCENT.darkened(0.15), "bold")
+	_page_sub.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	tv.add_child(_page_sub)
 	_page_body = RichTextLabel.new()
 	_page_body.bbcode_enabled = true
 	_page_body.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -96,6 +104,15 @@ func _select_tab(t: String) -> void:
 	var first := ""
 	var ids := CodexData.all_ids_for_tab(t)
 	var unlocked_n := 0
+	# unlocked first, then locked placeholders
+	var ordered: Array = []
+	for id in ids:
+		if id in GameState.codex:
+			ordered.append(id)
+	for id in ids:
+		if not (id in GameState.codex):
+			ordered.append(id)
+	ids = ordered
 	for id in ids:
 		var ok: bool = id in GameState.codex
 		var b := UiKit.button(CodexData.title(id) if ok else "? ? ?", Vector2(360, 88), 26)
@@ -107,10 +124,16 @@ func _select_tab(t: String) -> void:
 			if first == "":
 				first = id
 		_list.add_child(b)
+	var tb: Button = _tabs.get_node(t)
+	tb.text = "%s %d/%d" % [t, unlocked_n, ids.size()] if ids.size() > 0 else t
+	for ob in _tabs.get_children():
+		if ob != tb:
+			(ob as Button).text = ob.name
 	if first != "":
 		_show(first)
 	else:
 		_page_title.text = t
+		_page_sub.text = ""
 		_page_body.text = "No entries yet. Scan organisms and explore to fill these pages."
 		for c in _portrait_holder.get_children():
 			c.queue_free()
@@ -118,13 +141,27 @@ func _select_tab(t: String) -> void:
 func _show(id: String) -> void:
 	Audio.sfx("ui_tap", -4.0)
 	_page_title.text = CodexData.title(id)
+	_page_sub.text = CodexData.subtitle(id)
+	_page_sub.visible = _page_sub.text != ""
 	_page_body.text = CodexData.body(id)
+	_page_body.scroll_to_line(0)
 	for c in _portrait_holder.get_children():
 		c.queue_free()
-	if id.begins_with("char_"):
-		var p := UiKit.portrait_control(id.substr(5), "default", 100)
-		_portrait_holder.add_child(p)
-	_portrait_holder.visible = id.begins_with("char_")
+	var por := CodexData.portrait(id)
+	if por.begins_with("res://"):
+		var tex := UiKit.tex(por)
+		if tex:
+			var tr := TextureRect.new()
+			tr.texture = tex
+			tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			tr.custom_minimum_size = Vector2(100, 100)
+			_portrait_holder.add_child(tr)
+		else:
+			por = ""
+	elif por != "":
+		_portrait_holder.add_child(UiKit.portrait_control(por, "default", 100))
+	_portrait_holder.visible = por != ""
 
 func _close() -> void:
 	Audio.sfx("ui_back")

@@ -290,12 +290,15 @@ func _layout() -> void:
 	var H := vs.y
 	var fx := func(x: float, w: float) -> float: return (W - x - w) if lh else x
 	# right cluster (relative to right edge)
-	var C := Vector2(W - 140, H - 140)
+	# Attack in the corner; the three abilities on a clean 200 px arc around it (180°, 225°, 270°)
+	# so each caption (drawn under its disc) clears its neighbours; Dash sits outside the arc.
+	var C := Vector2(W - 130, H - 130)
 	_place(btn_attack, C, lh, W)
-	var offs := [Vector2(-178, 40), Vector2(-150, -98), Vector2(-40, -178)]
+	var R := 200.0
 	for i in 3:
-		_place(btn_ab[i], C + offs[i], lh, W)
-	_place(btn_dash, C + Vector2(-300, 72), lh, W)
+		var a := deg_to_rad(180.0 + 45.0 * i)
+		_place(btn_ab[i], C + Vector2(cos(a), sin(a)) * R, lh, W)
+	_place(btn_dash, C + Vector2(-335, 36), lh, W)
 	_place(btn_interact, C + Vector2(-60, -330), lh, W)
 	_place(btn_contain, C + Vector2(-60, -440), lh, W)
 	_place(btn_scan, Vector2(W - 170, 62), lh, W)
@@ -316,9 +319,9 @@ func _layout() -> void:
 	_objective_panel.reset_size()
 	var ow := _objective_panel.get_combined_minimum_size().x
 	_objective_panel.position = Vector2((W - ow) * 0.5, 14)
-	_toast_box.position = Vector2(W * 0.5 - 260, 80)
+	_toast_box.position = Vector2(W * 0.5 - 260, 156 if _boss_panel.visible else 84)
 	_toast_box.size = Vector2(520, 10)
-	_boss_panel.position = Vector2(W * 0.5 - 320, H - 92)
+	_boss_panel.position = Vector2(W * 0.5 - 320, 80)
 	_revive_label.position = Vector2(W * 0.5 - 250, H * 0.36)
 	_revive_label.size = Vector2(500, 40)
 	_contain_bar.position = Vector2(W * 0.5 - 130, H * 0.42)
@@ -407,6 +410,7 @@ func _process(delta: float) -> void:
 		_boss_name.text = "AUGUR-7 DEEPCORE RIG  ·  PHASE %d" % ph
 		if not _boss.alive:
 			_boss_panel.visible = false
+			_layout_dirty = true
 			_boss = null
 	# vignette fade
 	if _vignette.modulate.a > 0.0:
@@ -464,6 +468,7 @@ func toast(text: String, kind: String = "info") -> void:
 func set_boss(b: Node) -> void:
 	_boss = b
 	_boss_panel.visible = b != null
+	_layout_dirty = true
 	_boss_bar.value = 1.0
 
 func show_burden(on: bool) -> void:

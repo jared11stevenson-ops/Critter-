@@ -6,6 +6,7 @@ extends Node3D
 const VISUAL := "res://game/world/hub/hub_visual.tscn"
 const FALLBACK := "res://game/world/hub/hub_fallback_room.gd"
 const RR := "res://game/world/red_reaches/red_reaches.tscn"
+const TOP_SAFE := 120.0
 const NPC_IDS := ["mollusk", "bramvex", "nerit", "zephyr", "nyxaris", "pharilux", "solmara", "scarlith"]
 
 var visual: Node3D
@@ -86,8 +87,8 @@ func _build_ui() -> void:
 	ui_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ui_root.theme = UiKit.theme()
 	ui.add_child(ui_root)
-	var title := UiKit.label("TERRARIUM ONE · THE COMMON", 30, UiKit.PARCHMENT, "solemn", 8, Color(0, 0, 0, 0.85))
-	title.position = Vector2(24, 18)
+	var title := UiKit.label("TERRARIUM ONE · THE COMMON", 24, UiKit.PARCHMENT, "solemn", 7, Color(0, 0, 0, 0.85))
+	title.position = Vector2(24, 14)
 	ui_root.add_child(title)
 	_objective_panel = PanelContainer.new()
 	_objective_panel.add_theme_stylebox_override("panel", UiKit.box(Color(UiKit.PARCHMENT, 0.94), UiKit.ACCENT.darkened(0.2), 22, 3, 18))
@@ -182,23 +183,51 @@ func _process(delta: float) -> void:
 	cam.global_position = _focus + Vector3(0, -sin(p) * _dist, cos(p) * _dist)
 	cam.rotation = Vector3(p, 0, 0)
 	var modal := runner.active or habitat != null or _end_card != null or get_tree().paused
+	var vs := ui_root.get_viewport_rect().size
+	# Place hotspot labels: big places first, then people; nudge overlapping labels apart and keep
+	# them clear of the top bar (title/objective/menu) and the screen edges.
+	var placed: Array = []
+	var order: Array = []
 	for s in _spots:
+		if s["kind"] == "spot":
+			order.append(s)
+	for s in _spots:
+		if s["kind"] != "spot":
+			order.append(s)
+	for s in order:
 		var b: Button = s["button"]
 		var wp: Vector3 = s["node"].global_position + Vector3(0, s["h"], 0)
 		if modal or cam.is_position_behind(wp):
 			b.visible = false
 			continue
 		var sp := cam.unproject_position(wp)
-		b.visible = true
 		b.reset_size()
-		b.position = sp - Vector2(b.size.x * 0.5, b.size.y)
+		var r := Rect2(sp - Vector2(b.size.x * 0.5, b.size.y), b.size)
+		for _attempt in 6:
+			var hit := false
+			for pr in placed:
+				if r.grow(3.0).intersects(pr):
+					var up: float = pr.position.y - r.size.y - 4.0
+					var down: float = pr.end.y + 4.0
+					r.position.y = up if absf(up - r.position.y) <= absf(down - r.position.y) and up > TOP_SAFE else down
+					hit = true
+					break
+			if not hit:
+				break
+		r.position.x = clampf(r.position.x, 8.0, vs.x - r.size.x - 8.0)
+		r.position.y = clampf(r.position.y, TOP_SAFE, vs.y - r.size.y - 52.0)
+		var onscreen := sp.x > -40.0 and sp.x < vs.x + 40.0 and sp.y > 0.0 and sp.y < vs.y + 60.0
+		b.visible = onscreen
+		if not onscreen:
+			continue
+		b.position = r.position
+		placed.append(r)
 		var locked: bool = s["id"] == "gate" and not bool(GameState.get_flag("briefed", false))
 		b.modulate = Color(1, 1, 1, 0.55) if locked else Color.WHITE
 	_objective_panel.visible = not modal
 	_objective_panel.reset_size()
-	var vs := ui_root.get_viewport_rect().size
-	_objective_panel.position = Vector2((vs.x - _objective_panel.size.x) * 0.5, 16)
-	_toast_box.position = Vector2(vs.x * 0.5 - 260, 92)
+	_objective_panel.position = Vector2(20, 50)
+	_toast_box.position = Vector2(vs.x * 0.5 - 260, TOP_SAFE + 4)
 
 func _unhandled_input(ev: InputEvent) -> void:
 	if runner.active or habitat != null or _end_card != null:
@@ -457,3 +486,19 @@ func qa_log_flags() -> void:
 	for k in keys:
 		out.append("%s=%s" % [k, str(GameState.get_flag(k, false))])
 	print("[QA] HUB FLAGS ", ", ".join(out), " specimens=", GameState.specimens.size(), " items=", GameState.items)
+
+## QA: open the pause menu / codex / a dialogue without auto-advance (for screenshots).
+func qa_open(what: String) -> void:
+	match what:
+		"menu": add_child(PauseMenu.new())
+		"codex": _open_codex()
+		"habitat": open_habitat()
+		"end_card": _show_end_card()
+
+func qa_close_all() -> void:
+	for c in get_children():
+		if c is PauseMenu:
+			c.queue_free()
+		elif c is CanvasLayer and c.get_child_count() > 0 and c.get_child(0) is CodexScreen:
+			c.queue_free()
+	get_tree().paused = false

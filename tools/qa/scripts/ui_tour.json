@@ -1,0 +1,14 @@
+[
+ {"t":0.2,"print":"title tour"},
+ {"t":2.0,"call":"scene.qa_press","args":["Settings"]},
+ {"t":3.5,"call":"scene.qa_close_overlays"},
+ {"t":3.8,"call":"scene.qa_press","args":["Credits"]},
+ {"t":5.2,"call":"scene.qa_close_overlays"},
+ {"t":5.5,"call":"scene.qa_press","args":["NewGame"]},
+ {"t":9.5,"call":"scene.qa_auto_dialogue","args":[true,0,0.4]},
+ {"t":13.0,"call":"scene.qa_open","args":["codex"]},
+ {"t":15.0,"call":"scene.qa_close_all"},
+ {"t":15.5,"call":"scene.qa_open","args":["menu"]},
+ {"t":17.0,"call":"scene.qa_close_all"},
+ {"t":17.5,"call":"scene.qa_log_flags"}
+]

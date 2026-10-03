@@ -805,7 +805,7 @@ func _choice(kind: String) -> void:
 		GameState.add_trust("aruun", 10)
 		GameState.set_flag("ochre_span", "braced")
 		GameState.set_flag("ochre_span_braced", true)
-		GameState.unlock_codex("burden_architecture")
+		GameState.unlock_codex("lore_burden_architecture")
 		Events.toast.emit("The Ochre Span is BRACED", "info")
 	else:
 		GameState.spend_item("thoughtstone_cache", 1)

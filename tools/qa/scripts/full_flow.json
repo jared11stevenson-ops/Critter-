@@ -4,7 +4,18 @@
   "call": "GameState.new_game"
  },
  {
-  "t": 0.4,
+  "t": 0.2,
+  "print": "title"
+ },
+ {
+  "t": 2.0,
+  "call": "scene.qa_press",
+  "args": [
+   "NewGame"
+  ]
+ },
+ {
+  "t": 3.4,
   "call": "scene.qa_auto_dialogue",
   "args": [
    true,
@@ -13,18 +24,18 @@
   ]
  },
  {
-  "t": 4.2,
+  "t": 7.2,
   "call": "scene.qa_log_flags"
  },
  {
-  "t": 4.5,
+  "t": 7.5,
   "call": "scene.qa_spot",
   "args": [
    "gate"
   ]
  },
  {
-  "t": 9.2,
+  "t": 12.2,
   "call": "scene.qa_auto_dialogue",
   "args": [
    true,
@@ -33,184 +44,184 @@
   ]
  },
  {
-  "t": 10.0,
+  "t": 13.0,
   "action": "move_right",
   "dur": 1.5
  },
  {
-  "t": 12.0,
+  "t": 15.0,
   "call": "scene.qa_teleport",
   "args": [
    "t_valley"
   ]
  },
  {
-  "t": 12.5,
+  "t": 15.5,
   "action": "move_right",
   "dur": 1.0
  },
  {
-  "t": 13.6,
+  "t": 16.6,
   "call": "scene.qa_kill_species",
   "args": [
    "skitter_mite"
   ]
  },
  {
-  "t": 14.4,
+  "t": 17.4,
   "call": "scene.qa_scan"
  },
  {
-  "t": 15.5,
+  "t": 18.5,
   "call": "scene.qa_teleport",
   "args": [
    "t_gap"
   ]
  },
  {
-  "t": 16.5,
+  "t": 19.5,
   "call": "scene.qa_teleport",
   "args": [
    "leap_a"
   ]
  },
  {
-  "t": 17.0,
+  "t": 20.0,
   "action": "interact",
   "dur": 0.1
  },
  {
-  "t": 22.5,
+  "t": 25.5,
   "call": "scene.qa_teleport",
   "args": [
    "t_waystation"
   ]
  },
  {
-  "t": 24.0,
+  "t": 27.0,
   "call": "scene.qa_teleport",
   "args": [
    "t_boulder"
   ]
  },
  {
-  "t": 25.0,
+  "t": 28.0,
   "call": "scene.qa_teleport",
   "args": [
    "boulder_interact"
   ]
  },
  {
-  "t": 25.6,
+  "t": 28.6,
   "action": "interact",
   "dur": 0.1
  },
  {
-  "t": 28.0,
+  "t": 31.0,
   "call": "scene.qa_teleport",
   "args": [
    "t_drill"
   ]
  },
  {
-  "t": 29.0,
+  "t": 32.0,
   "call": "scene.qa_scan"
  },
  {
-  "t": 30.5,
+  "t": 33.5,
   "call": "scene.qa_kill_species",
   "args": [
    "resonance_pylon"
   ]
  },
  {
-  "t": 32.0,
+  "t": 35.0,
   "call": "scene.qa_kill_species",
   "args": [
    "dominion_drone"
   ]
  },
  {
-  "t": 40.0,
+  "t": 43.0,
   "call": "scene.qa_teleport",
   "args": [
    "t_span"
   ]
  },
  {
-  "t": 41.5,
+  "t": 44.5,
   "call": "scene.qa_teleport",
   "args": [
    "t_burden"
   ]
  },
  {
-  "t": 42.5,
+  "t": 45.5,
   "action": "attack",
   "dur": 8.0
  },
  {
-  "t": 52.0,
+  "t": 55.0,
   "call": "scene.qa_teleport",
   "args": [
    "t_boss"
   ]
  },
  {
-  "t": 54.0,
+  "t": 57.0,
   "call": "scene.qa_damage_boss",
   "args": [
    0.4
   ]
  },
  {
-  "t": 57.0,
+  "t": 60.0,
   "call": "scene.qa_damage_boss",
   "args": [
    0.33
   ]
  },
  {
-  "t": 61.0,
+  "t": 64.0,
   "call": "scene.qa_damage_boss",
   "args": [
    0.5
   ]
  },
  {
-  "t": 65.0,
+  "t": 68.0,
   "call": "scene.qa_teleport",
   "args": [
    "choice_point"
   ]
  },
  {
-  "t": 66.0,
+  "t": 69.0,
   "action": "interact",
   "dur": 0.1
  },
  {
-  "t": 70.0,
+  "t": 73.0,
   "call": "scene.qa_log_flags"
  },
  {
-  "t": 70.5,
+  "t": 73.5,
   "call": "scene.qa_teleport",
   "args": [
    "exfil_beacon"
   ]
  },
  {
-  "t": 71.5,
+  "t": 74.5,
   "action": "interact",
   "dur": 0.1
  },
  {
-  "t": 73.0,
+  "t": 76.0,
   "print": "after exfil"
  },
  {
-  "t": 77.0,
+  "t": 80.0,
   "call": "scene.qa_auto_dialogue",
   "args": [
    true,
@@ -219,27 +230,50 @@
   ]
  },
  {
-  "t": 83.0,
+  "t": 86.0,
   "call": "scene.qa_log_flags"
  },
  {
-  "t": 83.5,
+  "t": 86.5,
   "call": "scene.qa_habitat_solve"
  },
  {
-  "t": 86.0,
+  "t": 89.0,
   "call": "scene.qa_habitat_close"
- },
- {
-  "t": 93.0,
-  "call": "scene.qa_log_flags"
- },
- {
-  "t": 95.0,
-  "call": "scene.qa_end_card_close"
  },
  {
   "t": 96.0,
   "call": "scene.qa_log_flags"
+ },
+ {
+  "t": 98.0,
+  "call": "scene.qa_end_card_close"
+ },
+ {
+  "t": 99.0,
+  "call": "scene.qa_log_flags"
+ },
+ {
+  "t": 101.0,
+  "call": "Router.goto",
+  "args": [
+   "res://game/ui/title/title.tscn",
+   "fade"
+  ]
+ },
+ {
+  "t": 103.0,
+  "call": "scene.qa_press",
+  "args": [
+   "Continue"
+  ]
+ },
+ {
+  "t": 106.0,
+  "call": "scene.qa_log_flags"
+ },
+ {
+  "t": 106.1,
+  "print": "continue ok"
  }
 ]
