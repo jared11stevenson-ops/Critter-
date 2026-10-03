@@ -2,7 +2,7 @@ extends Node
 ## Persistent world state + save/load + input map + settings.
 ## Bible Book XXXII: "A completed mission is not erased; it becomes part of the next world state."
 
-const SAVE_PATH := "user://critter_save.json"
+var SAVE_PATH := "user://critter_save.json"
 const SAVE_VERSION := 1
 
 # World flags (see GDD §10). Values are bool / String / int.
@@ -25,6 +25,14 @@ var settings: Dictionary = {
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_setup_input_map()
+	# QA runs use an isolated save and start fresh unless "qa_keep_save" is passed.
+	var args := OS.get_cmdline_user_args()
+	if args.has("qa"):
+		SAVE_PATH = "user://qa_save.json"
+		if not args.has("qa_keep_save"):
+			if FileAccess.file_exists(SAVE_PATH):
+				DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE_PATH))
+			return
 	load_game()
 
 # ---------------- Flags ----------------

@@ -15,6 +15,9 @@ var _script: Array = []
 var _held: Dictionary = {}   # action -> release time
 var _shot_i := 0
 var _log_fps: Array = []
+var _max_draw := 0
+var _max_prims := 0
+var _max_objs := 0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -52,6 +55,10 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_t += delta
 	_log_fps.append(Engine.get_frames_per_second())
+	if _t > 1.0:
+		_max_draw = max(_max_draw, int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)))
+		_max_prims = max(_max_prims, int(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME)))
+		_max_objs = max(_max_objs, int(Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME)))
 	# timed shots
 	while _shot_i < _shots.size() and _t >= float(_shots[_shot_i]):
 		var img := get_viewport().get_texture().get_image()
@@ -83,7 +90,10 @@ func _process(delta: float) -> void:
 		var avg := 0.0
 		for v in _log_fps:
 			avg += v
-		print("[QA] quit t=", snapped(_t, 0.01), " avg_fps=", snapped(avg / max(1, _log_fps.size()), 0.1))
+		print("[QA] quit t=", snapped(_t, 0.01), " avg_fps=", snapped(avg / max(1, _log_fps.size()), 0.1),
+			" | PERF peak draw_calls=", _max_draw, " primitives=", _max_prims, " objects=", _max_objs,
+			" nodes=", int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT)),
+			" static_mem_mb=", snapped(Performance.get_monitor(Performance.MEMORY_STATIC) / 1048576.0, 0.1))
 		get_tree().quit()
 
 func _do_call(path: String, args: Array) -> void:
