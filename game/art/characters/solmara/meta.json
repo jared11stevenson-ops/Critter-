@@ -7,23 +7,24 @@
  ],
  "px": {
   "front": [
-   137,
-   186
+   548,
+   744
   ],
   "side": [
-   181,
-   185
+   724,
+   740
   ],
   "back": [
-   123,
-   176
+   492,
+   704
   ]
  },
- "feet_y_px": 186,
+ "feet_y_px": 744,
  "source": {
   "front": "turnaround FRONT (hero is on dark water, unusable)",
   "side": "turnaround SIDE",
   "back": "turnaround BACK"
  },
- "sheet": "solmara_sheet.png"
+ "sheet": "solmara_sheet.png",
+ "hd": "Real-ESRGAN x4 anime_6B re-cut (tools/art_pipeline/hd_sprites.py)"
 }

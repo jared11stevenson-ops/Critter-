@@ -207,8 +207,8 @@ def main():
                 rh = min(REF_H, canvas.height)
                 ref = downsample(canvas, (max(1, round(canvas.width * rh / canvas.height)), rh))
                 save_optimized(ImageOps.mirror(ref) if v.get("flip") else ref, os.path.join(rd, view + "_hd.png"))
-            Ht = min(H, 1024, 4 * H1)
-            Wt = max(1, int(round(W1 * Ht / H1)))
+            Ht = int(min(H, 1024, 4 * H1))
+            Wt = int(max(1, round(W1 * Ht / H1)))
             out = downsample(canvas, (Wt, Ht))
             if v.get("flip"):
                 out = ImageOps.mirror(out)
@@ -229,11 +229,13 @@ def main():
                     "source": {k: spec["views"][k].get("source", "") for k in views}, "sheet": spec["sheet"],
                     "hd": "Real-ESRGAN x4 anime_6B re-cut (tools/art_pipeline/hd_sprites.py)"}
             mp = os.path.join(odir, "meta.json")
-            if os.path.exists(mp):
-                old = json.load(open(mp))
-                meta["height_m"] = old.get("height_m", meta["height_m"])
+            try:
+                meta["height_m"] = json.load(open(mp)).get("height_m", meta["height_m"])
+            except Exception:
+                pass
+            txt = json.dumps(meta, indent=1)   # serialize first: never leave a half-written meta.json
             with open(mp, "w") as f:
-                json.dump(meta, f, indent=1)
+                f.write(txt)
     print("total px %.2f M" % (total / 1e6))
     if preview:
         matte.composite_preview(previews, labels, cell_h=360).save(preview)
