@@ -176,7 +176,7 @@ static func _fill_portrait(holder: Control, id: String, expr: String, size: floa
 	var t := portrait(id, expr)
 	var frame := Panel.new()
 	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	frame.set_anchors_preset(Control.PRESET_FULL_RECT)
+	frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var col := char_color(id)
 	frame.add_theme_stylebox_override("panel", box(col.darkened(0.45), PARCHMENT, int(size * 0.5), 4))
 	holder.add_child(frame)
@@ -185,7 +185,7 @@ static func _fill_portrait(holder: Control, id: String, expr: String, size: floa
 		tr.texture = t
 		tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-		tr.set_anchors_preset(Control.PRESET_FULL_RECT)
+		tr.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		tr.offset_left = 4
 		tr.offset_top = 4
 		tr.offset_right = -4
@@ -195,7 +195,7 @@ static func _fill_portrait(holder: Control, id: String, expr: String, size: floa
 	else:
 		var inner := Panel.new()
 		inner.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		inner.set_anchors_preset(Control.PRESET_FULL_RECT)
+		inner.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		inner.offset_left = 6
 		inner.offset_top = 6
 		inner.offset_right = -6
@@ -204,7 +204,7 @@ static func _fill_portrait(holder: Control, id: String, expr: String, size: floa
 		holder.add_child(inner)
 		var nm := Canon.display_name(id) if id != "" else "?"
 		var l := label(nm.substr(0, 1).to_upper(), int(size * 0.5), PARCHMENT, "title", 6, INK)
-		l.set_anchors_preset(Control.PRESET_FULL_RECT)
+		l.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		holder.add_child(l)

@@ -102,7 +102,7 @@ func _build_ui() -> void:
 	_ui.layer = 30
 	add_child(_ui)
 	_root = Control.new()
-	_root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_root.theme = UiKit.theme()
 	_ui.add_child(_root)

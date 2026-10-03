@@ -12,14 +12,14 @@ var _motes: Array = []
 var _bg: Control
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	theme = UiKit.theme()
 	TouchInput.reset()
 	get_tree().paused = false
 	Engine.time_scale = 1.0
 	_build_background()
 	var shade := TextureRect.new()
-	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	shade.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	shade.stretch_mode = TextureRect.STRETCH_SCALE
@@ -84,14 +84,14 @@ func _ready() -> void:
 
 func _build_background() -> void:
 	_bg = Control.new()
-	_bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_bg)
 	var art := _find_key_art()
 	if art:
 		var tr := TextureRect.new()
 		tr.texture = art
-		tr.set_anchors_preset(Control.PRESET_FULL_RECT)
+		tr.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -99,7 +99,7 @@ func _build_background() -> void:
 		return
 	# Painted-sky fallback: Red Reaches dusk gradient + mesa silhouettes + ringed planet + drifting motes
 	var sky := TextureRect.new()
-	sky.set_anchors_preset(Control.PRESET_FULL_RECT)
+	sky.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	sky.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	sky.stretch_mode = TextureRect.STRETCH_SCALE
 	var g := GradientTexture2D.new()
@@ -179,16 +179,49 @@ func _settings() -> void:
 
 func _credits() -> void:
 	Audio.sfx("ui_confirm")
-	var txt := "CRITTER — The Red Span Survey\n\nWorld, lore bible, characters and concept art: the CRITTER creator.\n\nEngine: Godot Engine 4 (MIT).\nFonts (SIL OFL 1.1): Permanent Marker — Font Diner · Kalam — Indian Type Foundry · Barlow Condensed — Jeremy Tribby · Cinzel — Natanael Gama."
-	_confirm = _dialog(txt, "", Callable())
+	_confirm = _dialog("", "", Callable(), _credits_body())
 
-func _dialog(text: String, ok_text: String, ok: Callable) -> Control:
+## Credits per CREDITS.md. "Music" is a placeholder line for the composer credit.
+const CREDITS := [
+	["World, lore & characters", "The CRITTER creator — lore bible, characters, concept art"],
+	["Music", "Youngyumeprophecy"],
+	["Engine", "Godot Engine 4 — MIT License"],
+	["Fonts (SIL OFL 1.1)", "Permanent Marker — Font Diner\nKalam — Indian Type Foundry\nBarlow Condensed — Jeremy Tribby\nCinzel — Natanael Gama"],
+]
+
+func _credits_body() -> Control:
+	var vb := VBoxContainer.new()
+	vb.add_theme_constant_override("separation", 10)
+	var t := UiKit.label("CREDITS", 44, UiKit.INK, "title")
+	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vb.add_child(t)
+	var sub := UiKit.label("CRITTER — The Red Span Survey", 24, UiKit.ACCENT, "solemn")
+	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vb.add_child(sub)
+	var grid := GridContainer.new()
+	grid.columns = 2
+	grid.add_theme_constant_override("h_separation", 28)
+	grid.add_theme_constant_override("v_separation", 8)
+	vb.add_child(grid)
+	for row in CREDITS:
+		var k := UiKit.label(str(row[0]).to_upper(), 20, UiKit.MUTED, "bold")
+		k.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		k.custom_minimum_size = Vector2(250, 0)
+		k.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+		k.size_flags_vertical = Control.SIZE_FILL
+		grid.add_child(k)
+		var v := UiKit.label(str(row[1]), 24, UiKit.INK, "ui")
+		v.name = "Credit_" + str(row[0]).split(" ")[0]
+		grid.add_child(v)
+	return vb
+
+func _dialog(text: String, ok_text: String, ok: Callable, body: Control = null) -> Control:
 	var root := Control.new()
-	root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(root)
 	var dim := ColorRect.new()
 	dim.color = Color(0.05, 0.03, 0.03, 0.6)
-	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.add_child(dim)
 	var pc := PanelContainer.new()
 	pc.custom_minimum_size = Vector2(720, 0)
@@ -196,10 +229,13 @@ func _dialog(text: String, ok_text: String, ok: Callable) -> Control:
 	var vb := VBoxContainer.new()
 	vb.add_theme_constant_override("separation", 18)
 	pc.add_child(vb)
-	var l := UiKit.label(text, 26, UiKit.INK, "dialogue")
-	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	l.custom_minimum_size = Vector2(660, 0)
-	vb.add_child(l)
+	if body:
+		vb.add_child(body)
+	else:
+		var l := UiKit.label(text, 26, UiKit.INK, "dialogue")
+		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		l.custom_minimum_size = Vector2(660, 0)
+		vb.add_child(l)
 	var hb := HBoxContainer.new()
 	hb.alignment = BoxContainer.ALIGNMENT_CENTER
 	vb.add_child(hb)

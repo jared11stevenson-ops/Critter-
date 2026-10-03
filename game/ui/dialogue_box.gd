@@ -31,7 +31,7 @@ func bind(r: DialogueRunner) -> void:
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	theme = UiKit.theme()
 	visible = false
@@ -39,7 +39,7 @@ func _ready() -> void:
 	var catcher := ColorRect.new()
 	catcher.name = "Catcher"
 	catcher.color = Color(0, 0, 0, 0.18)
-	catcher.set_anchors_preset(Control.PRESET_FULL_RECT)
+	catcher.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	catcher.mouse_filter = Control.MOUSE_FILTER_STOP
 	catcher.gui_input.connect(_on_catcher_input)
 	add_child(catcher)
@@ -79,6 +79,8 @@ func _ready() -> void:
 	_text.bbcode_enabled = true
 	_text.fit_content = false
 	_text.scroll_active = false
+	_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_text.clip_contents = true
 	_text.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_text.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_text.add_theme_font_size_override("normal_font_size", 28)
@@ -152,7 +154,7 @@ func _on_line(line: Dictionary) -> void:
 		var holder := _portrait_l if left else _portrait_r
 		holder.visible = true
 		var p := UiKit.portrait_control(who, line["expr"], 170)
-		p.set_anchors_preset(Control.PRESET_FULL_RECT)
+		p.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		if style == "comms":
 			p.modulate = Color(0.75, 1.0, 1.0)
 		holder.add_child(p)
