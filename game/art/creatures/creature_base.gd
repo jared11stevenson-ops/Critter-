@@ -13,6 +13,12 @@ extends Node3D
 @export var bob_amount: float = 0.04
 @export var outline_width: float = 0.03
 @export var turn_speed: float = 10.0
+## Rigged glb (tools/modeling/npcs creature specs). When set and present the procedural geometry below is skipped.
+@export var model_path: String = ""
+var rigged := false
+var _rig_anim: AnimationPlayer
+var _rig_cur := ""
+var _rig_once_t := 0.0
 
 var body: Node3D          # yaw + attack offsets
 var pose: Node3D          # bob / squash / tilt
@@ -46,6 +52,9 @@ func _build() -> void:
 	if _built:
 		return
 	_built = true
+	if model_path != "" and ResourceLoader.exists(model_path):
+		_build_rigged()
+		return
 	body = Node3D.new()
 	body.name = "Body"
 	add_child(body)
@@ -75,6 +84,104 @@ func _build() -> void:
 	_vis.aabb = AABB(Vector3(-radius * 1.5, -0.5, -radius * 1.5), Vector3(radius * 3.0, radius * 3.0 + 1.0, radius * 3.0))
 	add_child(_vis)
 	_after_build()
+
+
+const RIG_SHADER := preload("res://game/art/shaders/creature_rigged.gdshader")
+
+
+func _build_rigged() -> void:
+	rigged = true
+	body = Node3D.new()
+	body.name = "Body"
+	add_child(body)
+	pose = Node3D.new()
+	pose.name = "Pose"
+	pose.position.y = hover_height
+	body.add_child(pose)
+	var inst := (load(model_path) as PackedScene).instantiate() as Node3D
+	inst.rotation.y = PI          # glTF faces +Z; creatures face -Z
+	pose.add_child(inst)
+	mat = ShaderMaterial.new()
+	mat.shader = RIG_SHADER
+	var meshes: Array = []
+	_collect_meshes(inst, meshes)
+	for m in meshes:
+		var mi: MeshInstance3D = m
+		var src: Material = mi.mesh.surface_get_material(0) if mi.mesh else null
+		if src is BaseMaterial3D and mat.get_shader_parameter("albedo_tex") == null:
+			mat.set_shader_parameter("albedo_tex", (src as BaseMaterial3D).albedo_texture)
+			var et: Texture2D = (src as BaseMaterial3D).emission_texture
+			if et:
+				mat.set_shader_parameter("emis_tex", et)
+				mat.set_shader_parameter("use_emis", 1.0)
+		mi.material_override = mat
+		mi.visibility_range_end = 90.0
+		mi.visibility_range_end_margin = 6.0
+	mesh = meshes[0] if not meshes.is_empty() else null
+	_rig_anim = _find_anim(inst)
+	if _rig_anim:
+		for n in _rig_anim.get_animation_list():
+			_rig_anim.get_animation(n).loop_mode = Animation.LOOP_LINEAR if n in ["idle", "walk", "telegraph"] else Animation.LOOP_NONE
+		_rig_play("idle", 0.0)
+	_add_shadow()
+	_vis = VisibleOnScreenNotifier3D.new()
+	_vis.name = "OnScreen"
+	_vis.aabb = AABB(Vector3(-radius * 1.5, -0.5, -radius * 1.5), Vector3(radius * 3.0, radius * 3.0 + 1.0, radius * 3.0))
+	add_child(_vis)
+
+
+static func _collect_meshes(n: Node, out: Array) -> void:
+	if n is MeshInstance3D:
+		out.append(n)
+	for c in n.get_children():
+		_collect_meshes(c, out)
+
+
+static func _find_anim(n: Node) -> AnimationPlayer:
+	if n is AnimationPlayer:
+		return n
+	for c in n.get_children():
+		var a := _find_anim(c)
+		if a:
+			return a
+	return null
+
+
+func _rig_play(clip: String, blend: float = 0.15, speed: float = 1.0) -> void:
+	if _rig_anim == null or not _rig_anim.has_animation(clip):
+		return
+	_rig_anim.speed_scale = speed
+	if _rig_cur != clip:
+		_rig_cur = clip
+		_rig_anim.play(clip, blend)
+
+
+func _rig_once(clip: String) -> void:
+	if _rig_anim and _rig_anim.has_animation(clip):
+		_rig_once_t = _rig_anim.get_animation(clip).length
+		_rig_cur = ""
+		_rig_play(clip, 0.06)
+
+
+func _rig_animate(delta: float) -> void:
+	if _rig_anim == null:
+		return
+	if _dead:
+		_rig_anim.speed_scale = 0.0
+		return
+	if _vis != null and not _vis.is_on_screen():
+		_rig_anim.speed_scale = 0.0     # off screen: no skeleton updates
+		return
+	if _rig_once_t > 0.0:
+		_rig_once_t -= delta
+		_rig_anim.speed_scale = 1.0
+		return
+	if _telegraph > 0.0:
+		_rig_play("telegraph", 0.1)
+	elif _move > 0.08:
+		_rig_play("walk", 0.15, 0.5 + 1.0 * _move)
+	else:
+		_rig_play("idle", 0.2)
 
 
 ## Override: add geometry. Return true if the glow surface tool was used.
@@ -134,6 +241,8 @@ func play_attack(kind: String = "light") -> void:
 	_tw.parallel().tween_property(pose, "rotation:x", deg_to_rad(-10.0), 0.09)
 	_tw.tween_property(pose, "position", Vector3(0, hover_height, 0), 0.25).set_trans(Tween.TRANS_SINE)
 	_tw.parallel().tween_property(pose, "rotation:x", 0.0, 0.25)
+	if rigged:
+		_rig_once("attack")
 	_on_attack(kind)
 
 
@@ -152,6 +261,8 @@ func flash_hit() -> void:
 	_flash = 1.0
 	if _dead:
 		return
+	if rigged:
+		_rig_once("hit")
 	var tw := create_tween()
 	tw.tween_property(pose, "rotation:z", deg_to_rad(9.0), 0.05)
 	tw.tween_property(pose, "rotation:z", deg_to_rad(-5.0), 0.08)
@@ -261,7 +372,10 @@ func _process(delta: float) -> void:
 			mat.set_shader_parameter("emission_energy", 0.0)
 			if not _dead and (_tw == null or not _tw.is_running()):
 				pose.rotation.x = 0.0
-	_animate(delta)
+	if rigged:
+		_rig_animate(delta)
+	else:
+		_animate(delta)
 
 
 ## Override for species-specific motion (antennae, rotors, drills).

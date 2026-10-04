@@ -7,6 +7,7 @@ const CHITIN := Color(0.86, 0.52, 0.30)
 
 
 func _init() -> void:
+	model_path = "res://game/art/creatures/models/skitter_mite/skitter_mite.glb"
 	radius = 0.5
 	gait_speed = 4.5
 	gait_stride = 0.14

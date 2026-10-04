@@ -68,7 +68,7 @@ def build(cid, do_preview=False, do_anim=True):
         meta = animate(spec, rig, cid)
     if not do_anim:          # preview-only run: never overwrite the shipped glb with an animation-less one
         return tris
-    out = os.path.join(ROOT, "game", "art", "models", "npcs", cid)
+    out = os.path.join(ROOT, "game", "art", "creatures", "models", cid) if getattr(spec, "TSCN", "") == "creature" else os.path.join(ROOT, "game", "art", "models", "npcs", cid)
     os.makedirs(out, exist_ok=True)
     for o in bpy.data.objects:
         o.select_set(o in (ob, rig))
@@ -79,6 +79,10 @@ def build(cid, do_preview=False, do_anim=True):
                               export_yup=True, export_force_sampling=True, export_image_format="WEBP")
     json.dump({"height_m": spec.HEIGHT, "tris": tris, "texture_px": 128, "fps": 30, "animations": meta},
               open(os.path.join(out, cid + "_anim.json"), "w"), indent=1)
+    if getattr(spec, "TSCN", "") == "creature":
+        bpy.ops.wm.save_as_mainfile(filepath=os.path.join(WORK, cid + ".blend"))
+        print("[%s] wrote %s" % (cid, glb))
+        return tris
     extra = getattr(spec, "TSCN_EXTRA", "")
     open(os.path.join(out, cid + "_model.tscn"), "w").write(
         '[gd_scene load_steps=3 format=3]\n\n'
@@ -142,4 +146,4 @@ if __name__ == "__main__":
     for i in ids:
         t[i] = build(i, "--preview" in sys.argv, "--noanim" not in sys.argv)
     print("TRIS", t)
-    write_registry()
+    # npc_registry.json is hand/NpcLife-owned (merged format); write_registry() is kept for reference only.

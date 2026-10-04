@@ -10,6 +10,7 @@ var _neck_t := 0.0
 
 
 func _init() -> void:
+	model_path = "res://game/art/creatures/models/dust_grazer/dust_grazer.glb"
 	radius = 0.9
 	gait_speed = 1.3
 	gait_stride = 0.45
