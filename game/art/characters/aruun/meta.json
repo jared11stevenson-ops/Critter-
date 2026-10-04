@@ -7,23 +7,24 @@
  ],
  "px": {
   "front": [
-   586,
-   486
+   617,
+   512
   ],
   "side": [
-   99,
-   386
+   131,
+   512
   ],
   "back": [
-   154,
-   379
+   208,
+   512
   ]
  },
- "feet_y_px": 486,
+ "feet_y_px": 512,
  "source": {
   "front": "turnaround FRONT (with Morrow)",
   "side": "turnaround SIDE (faces right)",
   "back": "turnaround BACK"
  },
- "sheet": "aruun_nerit_sheet.jpg"
+ "sheet": "aruun_nerit_sheet.jpg",
+ "hd": "Real-ESRGAN x4 anime_6B re-cut (tools/art_pipeline/hd_sprites.py)"
 }

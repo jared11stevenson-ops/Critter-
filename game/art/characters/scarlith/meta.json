@@ -7,23 +7,24 @@
  ],
  "px": {
   "front": [
-   715,
-   473
+   580,
+   384
   ],
   "side": [
-   147,
-   173
+   326,
+   384
   ],
   "back": [
-   203,
-   156
+   500,
+   384
   ]
  },
- "feet_y_px": 473,
+ "feet_y_px": 384,
  "source": {
   "front": "hero illustration",
   "side": "turnaround SIDE (mirrored)",
   "back": "turnaround BACK"
  },
- "sheet": "scarlith_sheet.jpg"
+ "sheet": "scarlith_sheet.jpg",
+ "hd": "Real-ESRGAN x4 anime_6B re-cut (tools/art_pipeline/hd_sprites.py)"
 }

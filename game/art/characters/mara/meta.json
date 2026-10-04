@@ -7,23 +7,24 @@
  ],
  "px": {
   "front": [
-   87,
-   323
+   138,
+   512
   ],
   "side": [
-   91,
-   324
+   144,
+   512
   ],
   "back": [
-   113,
-   325
+   178,
+   512
   ]
  },
- "feet_y_px": 323,
+ "feet_y_px": 512,
  "source": {
   "front": "turnaround FRONT",
   "side": "turnaround SIDE (faces right)",
   "back": "turnaround BACK"
  },
- "sheet": "mara_sheet.jpg"
+ "sheet": "mara_sheet.jpg",
+ "hd": "Real-ESRGAN x4 anime_6B re-cut (tools/art_pipeline/hd_sprites.py)"
 }

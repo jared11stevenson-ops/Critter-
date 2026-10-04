@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Cut dialogue portraits and ability icons from the model sheets.
 
-Usage: python3 tools/art_pipeline/cut_portraits.py [--preview out.png]
+Usage: python3 tools/art_pipeline/cut_portraits.py [--x4 <dir of Real-ESRGAN x4 sheets>] [--preview out.png]
 Writes game/art/portraits/<id>/<expression>.png (+ default.png) and game/art/icons/<ability>.png.
+With --x4, every crop is taken from the x4 upscale of the sheet (box coords x4) and DOWN-sampled to 256
+(crisp lines, no JPEG blocks) instead of up-sampling a 60-140 px crop; output is palettized (pngquant).
 """
 import json
 import os
@@ -12,6 +14,7 @@ from PIL import Image, ImageFilter, ImageDraw
 
 sys.path.insert(0, os.path.dirname(__file__))
 import matte  # noqa: E402
+from hd_sprites import save_optimized  # noqa: E402
 
 ROOT = matte.ROOT
 SIZE = 256
@@ -51,8 +54,32 @@ def square(im, fill):
 
 
 def upscale(im, size=SIZE):
+    up = im.width < size
     im = im.resize((size, size), Image.LANCZOS)
-    return im.filter(ImageFilter.UnsharpMask(radius=1.6, percent=70, threshold=2))
+    if up:
+        return im.filter(ImageFilter.UnsharpMask(radius=1.6, percent=70, threshold=2))
+    return im.filter(ImageFilter.UnsharpMask(radius=0.9, percent=45, threshold=2))
+
+
+X4 = sys.argv[sys.argv.index("--x4") + 1] if "--x4" in sys.argv else None
+_sheets = {}
+
+
+def get_sheet(name):
+    """(image, scale): the x4 upscale when available, else the original sheet."""
+    if name not in _sheets:
+        p = X4 and os.path.join(X4, os.path.splitext(name)[0] + ".png")
+        if p and os.path.exists(p):
+            _sheets[name] = (Image.open(p).convert("RGB"), 4)
+        else:
+            if X4:
+                print("WARNING: no x4 sheet for", name, "- using original")
+            _sheets[name] = (matte.sheet(name), 1)
+    return _sheets[name]
+
+
+def save(im, path):
+    save_optimized(im, path, quality="80-100")
 
 
 def main():
@@ -60,26 +87,26 @@ def main():
         table = json.load(f)
     previews = []
     for cid, spec in table["portraits"].items():
-        sh = matte.sheet(spec["sheet"])
+        sh, k = get_sheet(spec["sheet"])
         odir = os.path.join(ROOT, "game", "art", "portraits", cid)
         os.makedirs(odir, exist_ok=True)
         ins = spec.get("inset", 0)
         for name, box in spec["boxes"].items():
             x0, y0, x1, y1 = box
-            crop = sh.crop((x0 + ins, y0 + ins, x1 - ins, y1 - ins))
+            crop = sh.crop((k * (x0 + ins), k * (y0 + ins), k * (x1 - ins), k * (y1 - ins)))
             out = upscale(square(crop, border_color(crop)))
-            out.save(os.path.join(odir, name + ".png"), optimize=True)
+            save(out, os.path.join(odir, name + ".png"))
             if name == spec["default"]:
-                out.save(os.path.join(odir, "default.png"), optimize=True)
+                save(out, os.path.join(odir, "default.png"))
             previews.append((cid + "/" + name, out))
         print("portraits", cid, list(spec["boxes"].keys()))
     idir = os.path.join(ROOT, "game", "art", "icons")
     os.makedirs(idir, exist_ok=True)
     for aid, spec in table["icons"].items():
-        sh = matte.sheet(spec["sheet"])
-        crop = sh.crop(tuple(spec["box"]))
+        sh, k = get_sheet(spec["sheet"])
+        crop = sh.crop(tuple(k * c for c in spec["box"]))
         out = upscale(square(crop, border_color(crop)))
-        out.save(os.path.join(idir, aid + ".png"), optimize=True)
+        save(out, os.path.join(idir, aid + ".png"))
         previews.append(("icon/" + aid, out))
     print("icons", list(table["icons"].keys()))
     if "--preview" in sys.argv:
