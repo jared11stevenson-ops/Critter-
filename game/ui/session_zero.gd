@@ -13,6 +13,7 @@ func _init(from_pause: bool = false) -> void:
 	_from_pause = from_pause
 
 func _ready() -> void:
+	Quality.set_covered(true)
 	layer = 75
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	var root := Control.new()
@@ -118,3 +119,6 @@ func _finish() -> void:
 func qa_set(k: String, v: int) -> void:
 	if _sliders.has(k):
 		(_sliders[k] as HSlider).value = v
+
+func _exit_tree() -> void:
+	Quality.set_covered(false)

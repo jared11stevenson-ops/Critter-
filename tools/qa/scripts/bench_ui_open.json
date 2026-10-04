@@ -1,0 +1,13 @@
+[
+ {"t":0.5,"call":"GameState.set_flag","args":["briefed",true]},
+ {"t":1.0,"call":"scene.qa_open","args":["codex"]},
+ {"t":2.0,"call":"scene.qa_close_all"},
+ {"t":2.5,"call":"scene.qa_open","args":["bonds"]},
+ {"t":3.5,"call":"scene.qa_close_all"},
+ {"t":4.0,"call":"scene.qa_open","args":["gate"]},
+ {"t":5.0,"call":"scene.qa_close_all"},
+ {"t":5.5,"call":"scene.qa_open","args":["menu"]},
+ {"t":6.5,"call":"scene.qa_close_all"},
+ {"t":7.0,"call":"scene.qa_open","args":["habitat"]},
+ {"t":9.0,"call":"scene.qa_habitat_close"}
+]

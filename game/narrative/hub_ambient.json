@@ -1,0 +1,64 @@
+{
+ "_doc": "Hub ambient life (game/world/hub/hub_life.gd). lines: short barks shown in a bubble over an NPC, optionally gated by flags (if / if_not). pairs: two NPCs meet, trade lines, and part. stations: where each NPC wanders (x, z in hub metres, y is the floor).",
+ "stations": {
+  "mollusk": [[-3.4, 0.2], [-1.6, 3.0], [-6.2, 2.4]],
+  "bramvex": [[3.5, 0.0], [6.0, 3.2], [9.0, -2.2]],
+  "nerit": [[-7.5, 1.5], [-9.0, -1.0], [-6.0, 5.0]],
+  "zephyr": [[-5.0, 4.0], [2.0, 5.0], [-9.2, 6.0]],
+  "nyxaris": [[6.0, -10.0], [2.5, -9.2], [10.0, -9.2]],
+  "pharilux": [[8.5, 0.5], [10.5, 3.0], [7.0, -3.0]],
+  "solmara": [[-5.0, -11.5]],
+  "scarlith": [[0.9, -1.3]]
+ },
+ "lines": {
+  "mollusk": [
+   {"text": "Slow down. The floor is not going anywhere."},
+   {"text": "Have you seen the new forklift in Bay Four?"},
+   {"text": "Every second is borrowed. I am only admiring mine.", "if_not": "rr_complete"},
+   {"text": "Aruun held the Span. I am letting myself be proud for exactly one minute.", "if": "ochre_span_braced"}
+  ],
+  "bramvex": [
+   {"text": "Exits. Always know the exits."},
+   {"text": "Third door on the left, if anyone asks. Nobody asks."},
+   {"text": "A good plan has a way out written into the first line.", "if_not": "rr_complete"},
+   {"text": "Back from the Reaches in one piece. That is the only metric.", "if": "rr_complete"}
+  ],
+  "nerit": [
+   {"text": "...Could we dim the lights a little?"},
+   {"text": "The pool lights are talking again. They are only saying hello."},
+   {"text": "Some things are meant to stay unlit."}
+  ],
+  "zephyr": [
+   {"text": "Wording noted. Wording, always, noted."},
+   {"text": "Nobody owes anybody anything until it is said aloud."},
+   {"text": "If you promise me something, say it slowly.", "if_not": "rr_complete"},
+   {"text": "I heard about the Span. Very tidy promises, those.", "if": "rr_complete"}
+  ],
+  "nyxaris": [
+   {"text": "Do not touch the thread. It is mid-sentence."},
+   {"text": "A pattern is a promise someone made to the cloth."},
+   {"text": "The stall pays fair. I checked the weave."}
+  ],
+  "pharilux": [
+   {"text": "Some doors are doing their job by staying shut."},
+   {"text": "Curiosity is not an invitation."},
+   {"text": "A sealed thing is not a secret. It is a boundary."}
+  ],
+  "solmara": [
+   {"text": "The water is restless today. Somebody is worried."},
+   {"text": "Listen. The pool is a slow, low drum."},
+   {"text": "Your pulse is the loudest thing in this room."}
+  ],
+  "scarlith": [
+   {"text": "Everything has a price. Not everything is for sale."},
+   {"text": "That crate is mine. That one is also mine. That one is a gift, do not tell."},
+   {"text": "Salvage is a form of respect, if you do it right."}
+  ]
+ },
+ "pairs": [
+  {"a": "zephyr", "b": "bramvex", "lines": [["zephyr", "Where is the exit from this conversation?"], ["bramvex", "Behind you. Third door."], ["zephyr", "That was not a promise, was it."]]},
+  {"a": "mollusk", "b": "nerit", "lines": [["mollusk", "You are very quiet today."], ["nerit", "I like it when the room is quiet."], ["mollusk", "Then I will be slow about it."]]},
+  {"a": "scarlith", "b": "nyxaris", "lines": [["scarlith", "I will give you three coins for the thread."], ["nyxaris", "It is not for sale."], ["scarlith", "Good. I wanted to be told so."]]},
+  {"a": "pharilux", "b": "solmara", "lines": [["pharilux", "The pool is unusually still."], ["solmara", "It is listening to you."], ["pharilux", "That is also a boundary."]]}
+ ]
+}

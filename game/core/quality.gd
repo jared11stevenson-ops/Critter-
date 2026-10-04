@@ -183,21 +183,25 @@ func _inject(code: String) -> String:
 
 # ------------------------------------------------------------------ viewport / renderer
 
-var _modal := false
+var _covers := 0
 
-## While a dialogue or full-screen menu covers the world, render the 3D scene at a lower resolution: the player is
-## reading, so the GPU time goes to keeping the text/UI smooth instead.
-func set_modal(on: bool) -> void:
-	if on == _modal:
-		return
-	_modal = on
-	get_tree().root.scaling_3d_scale = render_scale() * (0.72 if on else 1.0)
+## A (nearly) opaque full-screen menu covers the world: stop rendering the 3D scene entirely while it is up, so the
+## GPU/CPU time goes to the UI. Counted, so overlapping screens (pause over codex) nest correctly. This replaces the old
+## render-scale trick: changing scaling_3d_scale reallocates the render targets, which was itself a hitch at the start
+## and end of every dialogue.
+func set_covered(on: bool) -> void:
+	_covers = maxi(0, _covers + (1 if on else -1))
+	get_tree().root.disable_3d = _covers > 0
+
+## Dialogues keep the world visible, so they no longer touch the renderer (kept so older callers still work).
+func set_modal(_on: bool) -> void:
+	pass
 
 func _apply_viewport() -> void:
 	var vp := get_tree().root
 	vp.msaa_3d = Viewport.MSAA_2X if level == HIGH else Viewport.MSAA_DISABLED
 	vp.scaling_3d_mode = Viewport.SCALING_3D_MODE_BILINEAR
-	vp.scaling_3d_scale = render_scale() * (0.72 if _modal else 1.0)
+	vp.scaling_3d_scale = render_scale()
 	if not vp.size_changed.is_connected(_apply_viewport):
 		vp.size_changed.connect(_apply_viewport)
 	vp.anisotropic_filtering_level = [Viewport.ANISOTROPY_DISABLED, Viewport.ANISOTROPY_2X,

@@ -45,8 +45,6 @@ func _ready() -> void:
 	box = DialogueBox.new()
 	layer.add_child(box)
 	box.bind(self)
-	started.connect(func(_i): Quality.set_modal(true))
-	finished.connect(func(_i): Quality.set_modal(false))
 	_prewarm()
 
 static var _warmed := false

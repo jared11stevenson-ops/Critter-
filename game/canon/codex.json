@@ -263,6 +263,54 @@
    "body": "Solmara: the Moon is not in the wrong orbit. The relationship feels displaced. Earth's gravitational pattern contains a missing return. No instrument has yet detected what that means.",
    "portrait": "",
    "unlock": "found"
+  },
+  "place_echo_hollow": {
+   "category": "places",
+   "title": "Echo Hollow",
+   "subtitle": "Red Reaches",
+   "body": "A dry side-cut off the Fracture Valley. The glyph wall answers speakers in their own voice, half a second late. Spanwright maintenance marks, left for strangers.",
+   "portrait": "",
+   "unlock": "found"
+  },
+  "place_drovers_rest": {
+   "category": "places",
+   "title": "Drover's Rest",
+   "subtitle": "Red Reaches",
+   "body": "The north spur from the Waystation. Cart ruts, a stalled wagon and a drover who prefers to carry his own weight until someone offers to share it.",
+   "portrait": "",
+   "unlock": "found"
+  },
+  "place_salt_pans": {
+   "category": "places",
+   "title": "The Salt Pans",
+   "subtitle": "Red Reaches",
+   "body": "White flats south of the Waystation. An old well still works if someone keeps patching it, and the crust preserves things that should not have lasted.",
+   "portrait": "",
+   "unlock": "found"
+  },
+  "place_thought_vault": {
+   "category": "places",
+   "title": "The Thoughtstone Vault",
+   "subtitle": "Red Reaches",
+   "body": "A sealed Spanwright vault off the Boulder Pass. The pulse-lock still turns. Closed is still working.",
+   "portrait": "",
+   "unlock": "found"
+  },
+  "place_cistern": {
+   "category": "places",
+   "title": "The Drowned Cistern",
+   "subtitle": "Red Reaches",
+   "body": "A hidden cleft behind the survey camp. Cold, still, dark. Something sleeps below the water and does not owe anyone a look.",
+   "portrait": "",
+   "unlock": "found"
+  },
+  "place_overlook": {
+   "category": "places",
+   "title": "Spanwright Overlook",
+   "subtitle": "Red Reaches",
+   "body": "A ledge above the Ochre Span. Past crews scratched load limits into the rail, and a cairn marks each crew that crossed.",
+   "portrait": "",
+   "unlock": "found"
   }
  }
 }

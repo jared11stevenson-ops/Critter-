@@ -61,20 +61,27 @@ func build() -> void:
 	if _built:
 		return
 	_built = true
+	var t0 := Time.get_ticks_msec()
 	_load_layout()
 	_setup_noise()
 	_compute_heights()
+	var t1 := Time.get_ticks_msec()
 	_build_terrain_meshes()
+	var t2 := Time.get_ticks_msec()
 	if with_collision:
 		_build_collision()
 	if with_backdrop:
 		_build_backdrop()
+	var t3 := Time.get_ticks_msec()
 	if with_lighting:
 		_build_lighting()
 	if with_structures:
 		_build_structures()
+	var t4 := Time.get_ticks_msec()
 	if with_scatter:
 		_build_scatter()
+	if OS.get_cmdline_user_args().has("qa"):
+		print("[PERF] terrain heights=%d meshes=%d collision+backdrop=%d light+structs=%d scatter=%d" % [t1 - t0, t2 - t1, t3 - t2, t4 - t3, Time.get_ticks_msec() - t4])
 	built.emit()
 
 
@@ -317,21 +324,70 @@ func _height(x: float, z: float) -> Array:
 	return [h, fw, float(fe[2]) * fw]
 
 
+const CACHE_RES := "res://game/world/red_reaches/heights.cache"
+const CACHE_USER := "user://rr_heights.cache"
+const CACHE_VER := "v1"
+
+func _cache_key() -> String:
+	return "%s|%s|%d|%d" % [CACHE_VER, FileAccess.get_md5(layout_path), _nx, _nz]
+
+func _load_height_cache() -> bool:
+	for path in [CACHE_RES, CACHE_USER]:
+		if not FileAccess.file_exists(path):
+			continue
+		var f := FileAccess.open(path, FileAccess.READ)
+		if f == null or f.get_pascal_string() != _cache_key():
+			continue
+		var n := _nx * _nz
+		var bh := f.get_buffer(n * 4)
+		var bf := f.get_buffer(n * 4)
+		var bs := f.get_buffer(n * 4)
+		if bs.size() != n * 4:
+			continue
+		_h = bh.to_float32_array()
+		_fw = bf.to_float32_array()
+		_sw = bs.to_float32_array()
+		return true
+	return false
+
+func _save_height_cache() -> void:
+	var paths := [CACHE_USER]
+	if OS.has_feature("editor") or OS.get_cmdline_user_args().has("qa"):
+		paths.append(CACHE_RES)
+	for path in paths:
+		var f := FileAccess.open(path, FileAccess.WRITE)
+		if f == null:
+			continue
+		f.store_pascal_string(_cache_key())
+		f.store_buffer(_h.to_byte_array())
+		f.store_buffer(_fw.to_byte_array())
+		f.store_buffer(_sw.to_byte_array())
+
+func _height_row(iz: int) -> void:
+	var z := _min_z + iz * _cell
+	for ix in _nx:
+		var x := _min_x + ix * _cell
+		var r := _height(x, z)
+		var i := iz * _nx + ix
+		_h[i] = r[0]
+		_fw[i] = r[1]
+		_sw[i] = r[2]
+
+## The heightfield is deterministic from layout.json, so it is cached on disk (shipped in res:// when generated in the
+## editor/QA, else written to user:// on first run) and, when it does have to be computed, the rows are spread across
+## the worker threads. This was ~1 s of main-thread GDScript per level load on a desktop CPU.
 func _compute_heights() -> void:
 	var n := _nx * _nz
-	_h.resize(n)
+	if _load_height_cache():
+		pass
+	else:
+		_h.resize(n)
+		_fw.resize(n)
+		_sw.resize(n)
+		var gid := WorkerThreadPool.add_group_task(_height_row, _nz, -1, true, "rr_heights")
+		WorkerThreadPool.wait_for_group_task_completion(gid)
+		_save_height_cache()
 	_hv.resize(n)
-	_fw.resize(n)
-	_sw.resize(n)
-	for iz in _nz:
-		var z := _min_z + iz * _cell
-		for ix in _nx:
-			var x := _min_x + ix * _cell
-			var r := _height(x, z)
-			var i := iz * _nx + ix
-			_h[i] = r[0]
-			_fw[i] = r[1]
-			_sw[i] = r[2]
 	_hv = _h.duplicate()
 	# camera cut: scan each column north -> south
 	for ix in _nx:
@@ -393,72 +449,24 @@ func _build_terrain_meshes() -> void:
 	var root := Node3D.new()
 	root.name = "TerrainMesh"
 	add_child(root)
+	var _tm := Time.get_ticks_msec()
 	var mat := _make_material()
-	# per-vertex normals + colours
+	if OS.get_cmdline_user_args().has("qa"):
+		print("[PERF]  material ms=", Time.get_ticks_msec() - _tm)
+	# per-vertex normals + colours (rows spread over worker threads), then one mesh per chunk (arrays built on workers too)
 	var n := _nx * _nz
-	var normals := PackedVector3Array()
-	normals.resize(n)
-	var colors := PackedColorArray()
-	colors.resize(n)
-	for iz in _nz:
-		for ix in _nx:
-			var i := iz * _nx + ix
-			var hl := _hv_at(ix - 1, iz)
-			var hr := _hv_at(ix + 1, iz)
-			var hd := _hv_at(ix, iz - 1)
-			var hu := _hv_at(ix, iz + 1)
-			normals[i] = Vector3(hl - hr, 2.0 * _cell, hd - hu).normalized()
-			var avg := (hl + hr + hd + hu) * 0.25
-			var lap := _hv[i] - avg
-			var crest := clampf((lap - 0.5) * 0.4, 0.0, 0.8)
-			# cavity: concave spots + the foot of cliffs (floor cells next to much higher terrain)
-			var ao := clampf((-lap - 0.3) * 0.18, 0.0, 0.6)
-			var hmax := maxf(maxf(hl, hr), maxf(hd, hu))
-			for r in [2, 3]:
-				hmax = maxf(hmax, maxf(_hv_at(ix - r, iz), _hv_at(ix + r, iz)))
-				hmax = maxf(hmax, maxf(_hv_at(ix, iz - r), _hv_at(ix, iz + r)))
-			ao = maxf(ao, clampf((hmax - _hv[i] - 0.8) * 0.12, 0.0, 0.55) * _fw[i])
-			colors[i] = Color(_sw[i], _fw[i], crest, ao)
+	_normals.resize(n)
+	_colors.resize(n)
+	WorkerThreadPool.wait_for_group_task_completion(WorkerThreadPool.add_group_task(_shade_row, _nz, -1, true, "rr_shade"))
 	var cx := int(ceil(float(_nx - 1) / CHUNK))
 	var cz := int(ceil(float(_nz - 1) / CHUNK))
+	_chunk_arrays.clear()
+	_chunk_arrays.resize(cx * cz)
+	_chunk_cx = cx
+	WorkerThreadPool.wait_for_group_task_completion(WorkerThreadPool.add_group_task(_chunk_job, cx * cz, -1, true, "rr_chunks"))
 	for c_z in cz:
 		for c_x in cx:
-			var x0 := c_x * CHUNK
-			var z0 := c_z * CHUNK
-			var x1 := mini(x0 + CHUNK, _nx - 1)
-			var z1 := mini(z0 + CHUNK, _nz - 1)
-			var w := x1 - x0 + 1
-			var verts := PackedVector3Array()
-			var nrm := PackedVector3Array()
-			var col := PackedColorArray()
-			var idx := PackedInt32Array()
-			for iz in range(z0, z1 + 1):
-				for ix in range(x0, x1 + 1):
-					var i := iz * _nx + ix
-					verts.append(Vector3(_min_x + ix * _cell, _hv[i], _min_z + iz * _cell))
-					nrm.append(normals[i])
-					col.append(colors[i])
-			for iz in range(z1 - z0):
-				for ix in range(x1 - x0):
-					var a := iz * w + ix
-					var b := a + 1
-					var c := a + w
-					var d := c + 1
-					# split along the shorter diagonal for nicer cliffs
-					var ha := verts[a].y
-					var hb := verts[b].y
-					var hc := verts[c].y
-					var hd := verts[d].y
-					if absf(ha - hd) < absf(hb - hc):
-						idx.append_array([a, b, d, a, d, c])
-					else:
-						idx.append_array([a, b, c, b, d, c])
-			var arrays := []
-			arrays.resize(Mesh.ARRAY_MAX)
-			arrays[Mesh.ARRAY_VERTEX] = verts
-			arrays[Mesh.ARRAY_NORMAL] = nrm
-			arrays[Mesh.ARRAY_COLOR] = col
-			arrays[Mesh.ARRAY_INDEX] = idx
+			var arrays: Array = _chunk_arrays[c_z * cx + c_x]
 			var am := ArrayMesh.new()
 			am.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 			var mi := MeshInstance3D.new()
@@ -467,6 +475,77 @@ func _build_terrain_meshes() -> void:
 			mi.material_override = mat
 			mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 			root.add_child(mi)
+	_chunk_arrays.clear()
+	_normals = PackedVector3Array()
+	_colors = PackedColorArray()
+
+
+var _normals := PackedVector3Array()
+var _colors := PackedColorArray()
+var _chunk_arrays: Array = []
+var _chunk_cx := 1
+
+func _shade_row(iz: int) -> void:
+	for ix in _nx:
+		var i := iz * _nx + ix
+		var hl := _hv_at(ix - 1, iz)
+		var hr := _hv_at(ix + 1, iz)
+		var hd := _hv_at(ix, iz - 1)
+		var hu := _hv_at(ix, iz + 1)
+		_normals[i] = Vector3(hl - hr, 2.0 * _cell, hd - hu).normalized()
+		var avg := (hl + hr + hd + hu) * 0.25
+		var lap := _hv[i] - avg
+		var crest := clampf((lap - 0.5) * 0.4, 0.0, 0.8)
+		# cavity: concave spots + the foot of cliffs (floor cells next to much higher terrain)
+		var ao := clampf((-lap - 0.3) * 0.18, 0.0, 0.6)
+		var hmax := maxf(maxf(hl, hr), maxf(hd, hu))
+		for r in [2, 3]:
+			hmax = maxf(hmax, maxf(_hv_at(ix - r, iz), _hv_at(ix + r, iz)))
+			hmax = maxf(hmax, maxf(_hv_at(ix, iz - r), _hv_at(ix, iz + r)))
+		ao = maxf(ao, clampf((hmax - _hv[i] - 0.8) * 0.12, 0.0, 0.55) * _fw[i])
+		_colors[i] = Color(_sw[i], _fw[i], crest, ao)
+
+
+func _chunk_job(ci: int) -> void:
+	var c_x := ci % _chunk_cx
+	var c_z := ci / _chunk_cx
+	var x0 := c_x * CHUNK
+	var z0 := c_z * CHUNK
+	var x1 := mini(x0 + CHUNK, _nx - 1)
+	var z1 := mini(z0 + CHUNK, _nz - 1)
+	var w := x1 - x0 + 1
+	var verts := PackedVector3Array()
+	var nrm := PackedVector3Array()
+	var col := PackedColorArray()
+	var idx := PackedInt32Array()
+	for iz in range(z0, z1 + 1):
+		for ix in range(x0, x1 + 1):
+			var i := iz * _nx + ix
+			verts.append(Vector3(_min_x + ix * _cell, _hv[i], _min_z + iz * _cell))
+			nrm.append(_normals[i])
+			col.append(_colors[i])
+	for iz in range(z1 - z0):
+		for ix in range(x1 - x0):
+			var a := iz * w + ix
+			var b := a + 1
+			var c := a + w
+			var d := c + 1
+			# split along the shorter diagonal for nicer cliffs
+			var ha := verts[a].y
+			var hb := verts[b].y
+			var hc := verts[c].y
+			var hd := verts[d].y
+			if absf(ha - hd) < absf(hb - hc):
+				idx.append_array([a, b, d, a, d, c])
+			else:
+				idx.append_array([a, b, c, b, d, c])
+	var arrays := []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = verts
+	arrays[Mesh.ARRAY_NORMAL] = nrm
+	arrays[Mesh.ARRAY_COLOR] = col
+	arrays[Mesh.ARRAY_INDEX] = idx
+	_chunk_arrays[ci] = arrays
 
 
 func _build_collision() -> void:
