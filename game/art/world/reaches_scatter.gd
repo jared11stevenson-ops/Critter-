@@ -25,6 +25,7 @@ const KIND_MESH := {
 	"flat_tree": ["dead_tree", "dead_tree", "spire"],
 	"shrub": ["grass_tuft", "grass_tuft", "grass_tuft"],
 	"lichen_patch": ["lichen_rock", "grass_tuft"],
+	"bone": ["bone_ribs", "bone_horn"],      # v0.12: the painted horn card is now a real 3D bleached ribcage / horn
 }
 
 var _atlas: Dictionary = {}
@@ -267,6 +268,8 @@ func _add(kind: String, pos: Vector3, scale_mul: float) -> void:
 		var s := _rng.randf_range(1.0, 2.2) * scale_mul
 		if mk == "grass_tuft":
 			s = _rng.randf_range(1.2, 2.0) * scale_mul
+		if mk == "bone_ribs" or mk == "bone_horn":
+			s = _rng.randf_range(0.9, 1.5) * scale_mul
 		if mk == "spire" or mk == "dead_tree":
 			s = _rng.randf_range(0.8, 1.3) * scale_mul
 			if _south_of_floor(pos.x, pos.z):
@@ -449,6 +452,27 @@ static func _prop_mesh(kind: String) -> ArrayMesh:
 				ToonKit.cylinder(st, p0, p1, 0.09, 0.04, 5, bark.lightened(0.08), false)
 				ToonKit.cylinder(st, p1, p1 + Vector3(cos(a + 0.7) * 0.5, 0.45, sin(a + 0.7) * 0.5), 0.04, 0.015, 4, bark.lightened(0.15), false)
 			ToonKit.rock(st, Vector3(0, 0.0, 0), Vector3(0.5, 0.2, 0.5), Color(0.55, 0.32, 0.24), 72, 1)
+		"bone_ribs":
+			# half-buried ribcage: a spine and five tapering ribs arching over it
+			var bone := Color(0.86, 0.80, 0.68)
+			ToonKit.cylinder(st, Vector3(-1.1, 0.12, 0), Vector3(1.1, 0.2, 0.05), 0.07, 0.06, 5, bone.darkened(0.08), true)
+			for i in 5:
+				var x := -0.85 + float(i) * 0.42
+				var prev := Vector3(x, 0.15, 0.0)
+				for j in 6:
+					var a := PI * float(j + 1) / 6.0
+					var cur := Vector3(x + float(j) * 0.015, 0.15 + sin(a) * (0.75 - absf(float(i) - 2.0) * 0.08), -cos(a) * 0.62)
+					ToonKit.cylinder(st, prev, cur, 0.055 * (1.0 - float(j) * 0.1), 0.05 * (1.0 - float(j + 1) * 0.1), 4, bone.lightened(0.02 * float(j)), false)
+					prev = cur
+		"bone_horn":
+			# curved horn standing out of the dust
+			var horn := Color(0.82, 0.76, 0.62)
+			var hp := Vector3(0, -0.1, 0)
+			for j in 6:
+				var a2 := float(j) / 6.0
+				var np := Vector3(sin(a2 * 1.6) * 0.55, -0.1 + a2 * 1.7, 0)
+				ToonKit.cylinder(st, hp, np, 0.17 * (1.0 - a2 * 0.9), 0.17 * (1.0 - (a2 + 0.166) * 0.9), 6, horn.darkened(0.04 * float(j)), j == 0)
+				hp = np
 		"pebbles":
 			var rng := RandomNumberGenerator.new()
 			rng.seed = 61

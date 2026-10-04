@@ -69,6 +69,17 @@ func setup(region_id: String, host_node: Node) -> bool:
 		affix = str(states[0].get("id", ""))
 	return true
 
+## Layer extra sites / secrets (e.g. a level's world_extra.json) on top of the recipe without editing canon data.
+func merge_extra(extra: Dictionary) -> void:
+	for st in extra.get("sites", []):
+		if not _sites.has(str(st["id"])):
+			recipe["sites"] = recipe.get("sites", []) + [st]
+			_sites[str(st["id"])] = st
+	for sc in extra.get("secrets", []):
+		if not _secrets.has(str(sc["id"])):
+			recipe["secrets"] = recipe.get("secrets", []) + [sc]
+			_secrets[str(sc["id"])] = sc
+
 # ---------------------------------------------------------------- events
 func event_taken(event_id: String) -> bool:
 	return Ledger.exists({"type": "descent_event", "target": event_id}) or bool(GameState.flags.get("_rg_" + event_id, false))
@@ -448,6 +459,10 @@ func discover_secret(sid: String) -> void:
 	Ledger.record("discovered", "player", sid, sc.get("ledger_tags", ["discovery"]), {}, 3, id)
 	for g in sc.get("reward_gear", []):
 		Gear.grant(str(g))
+	var ri: Dictionary = sc.get("reward_items", {})
+	for it in ri:
+		GameState.add_item(str(it), int(ri[it]))
+		Events.toast.emit("+%d %s" % [int(ri[it]), UiKit.item_name(str(it))], "item")
 	Events.toast.emit("Secret found: %s" % str(sc.get("name", sid)), "codex")
 	Audio.sfx("ui_confirm")
 	if host and host.runner:

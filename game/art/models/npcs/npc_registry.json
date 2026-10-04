@@ -1,0 +1,72 @@
+{
+ "_doc": "NPC id -> 3D model scene. Agent 1 drops scenes at game/art/models/npcs/<id>/<id>.tscn (or edit 'scene' here) and NpcLife picks them up with NO code change; until a scene exists the NPC is a baked FallbackVisual silhouette. Scene root must be Node3D, feet at y=0, facing -Z. Optional duck-typed API on the root: set_facing(Vector3 dir), set_move_amount(0..1). Otherwise an AnimationPlayer anywhere under the root is driven by name: 'anim' maps NpcLife states (idle, walk, work, rest) to clip names (missing clips fall back to idle). 'scale' multiplies the model, 'height_m' sizes the name tag and speech bubble anchor.",
+ "version": 1,
+ "anim_defaults": {
+  "idle": "idle",
+  "walk": "walk",
+  "work": "work",
+  "rest": "idle"
+ },
+ "npcs": {
+  "rr_oda": {
+   "scene": "res://game/art/models/npcs/rr_oda/rr_oda.tscn",
+   "height_m": 1.6,
+   "scale": 1.0,
+   "anim": {}
+  },
+  "rr_tavik": {
+   "scene": "res://game/art/models/npcs/rr_tavik/rr_tavik.tscn",
+   "height_m": 1.8,
+   "scale": 1.0,
+   "anim": {}
+  },
+  "rr_tessaly": {
+   "scene": "res://game/art/models/npcs/rr_tessaly/rr_tessaly.tscn",
+   "height_m": 1.72,
+   "scale": 1.0,
+   "anim": {}
+  },
+  "rr_dunnock": {
+   "scene": "res://game/art/models/npcs/rr_dunnock/rr_dunnock.tscn",
+   "height_m": 1.35,
+   "scale": 1.0,
+   "anim": {}
+  },
+  "rr_mags": {
+   "scene": "res://game/art/models/npcs/rr_mags/rr_mags.tscn",
+   "height_m": 1.78,
+   "scale": 1.0,
+   "anim": {}
+  },
+  "rr_vesk": {
+   "scene": "res://game/art/models/npcs/rr_vesk/rr_vesk.tscn",
+   "height_m": 1.8,
+   "scale": 1.0,
+   "anim": {}
+  },
+  "rr_imre": {
+   "scene": "res://game/art/models/npcs/rr_imre/rr_imre.tscn",
+   "height_m": 1.78,
+   "scale": 1.0,
+   "anim": {}
+  },
+  "rr_wick": {
+   "scene": "res://game/art/models/npcs/rr_wick/rr_wick.tscn",
+   "height_m": 1.7,
+   "scale": 1.0,
+   "anim": {}
+  },
+  "rr_ilsa": {
+   "scene": "res://game/art/models/npcs/rr_ilsa/rr_ilsa.tscn",
+   "height_m": 1.95,
+   "scale": 1.0,
+   "anim": {}
+  },
+  "rr_pel": {
+   "scene": "res://game/art/models/npcs/rr_pel/rr_pel.tscn",
+   "height_m": 2.35,
+   "scale": 1.0,
+   "anim": {}
+  }
+ }
+}

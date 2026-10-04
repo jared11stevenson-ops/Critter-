@@ -1,0 +1,11 @@
+[
+ {"t":0.3,"call":"scene.qa_auto_dialogue","args":[true,0,0.2]},
+ {"t":0.5,"call":"scene.qa_npc_log"},
+ {"t":1.0,"call":"scene.qa_npc","args":["rr_oda"]},
+ {"t":5.0,"call":"scene.qa_npc","args":["rr_tavik"]},
+ {"t":9.0,"call":"scene.qa_npc","args":["rr_mags"]},
+ {"t":13.0,"call":"scene.qa_npc","args":["rr_imre"]},
+ {"t":17.0,"call":"scene.qa_npc","args":["rr_ilsa"]},
+ {"t":21.0,"call":"scene.qa_npc","args":["rr_pel"]},
+ {"t":23.0,"call":"scene.qa_npc_log"}
+]

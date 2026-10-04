@@ -40,6 +40,14 @@ var _fade: ColorRect
 var region: RegionRunner = null      # generic region recipe runner (side areas, sites, descent events)
 var _spoke_signs: Array = []
 var _spoke_tick := 0.0
+var extra: Dictionary = {}           # world_extra.json: settlements, loot, signs, extra sites/secrets
+var settlements: RrSettlements = null
+var ambient: RrAmbient = null
+var npcs: NpcLife = null
+var _marker_mesh: ArrayMesh = null
+var _marker_mats: Array = []
+const EXTRA := "res://game/world/red_reaches/world_extra.json"
+const NPC_DATA := "res://game/world/red_reaches/rr_npcs.json"
 
 # burden
 var burden_active := false
@@ -84,6 +92,10 @@ func _ready() -> void:
 	runner.finished.connect(_on_dialogue_finished)
 	region = RegionRunner.new()
 	region.setup("red_reaches", self)
+	var ex: Variant = JSON.parse_string(FileAccess.get_file_as_string(EXTRA)) if FileAccess.file_exists(EXTRA) else null
+	if ex is Dictionary:
+		extra = ex
+		region.merge_extra(extra)
 	rivals = RivalEncounters.new()
 	rivals.name = "Rivals"
 	add_child(rivals)
@@ -94,6 +106,7 @@ func _ready() -> void:
 	add_child(hud)
 	field.hud = hud
 	_build_fade()
+	_build_world_life()
 	_build_interactables()
 	replay = bool(GameState.get_flag("rr_complete", false))
 	_spawn_content()
@@ -263,6 +276,15 @@ func _spawn_content() -> void:
 			continue
 		var pp: Array = pk["pos"]
 		spawn_pickup(pk["kind"], Vector3(pp[0], pp[1], pp[2]), -1, key)
+	# loot from the region loot_table, placed near its sources (persisted per spot)
+	var li := 0
+	for lt in extra.get("loot", []):
+		var lkey := "_loot_%d" % li
+		li += 1
+		if bool(GameState.flags.get(lkey, false)):
+			continue
+		var lp: Array = lt["p"]
+		spawn_pickup(str(lt["item"]), Vector3(float(lp[0]), 0.0, float(lp[1])), 1, lkey)
 	# Fracture Valley mites
 	if not bool(GameState.get_flag("valley_clear", false)):
 		_spawn_swarm(marker("encounter_valley"), 5)
@@ -351,19 +373,56 @@ func _build_interactables() -> void:
 	]
 	if region:
 		_interactables.append_array(region.interactables())
+	if npcs:
+		# NPCs own their quests / descent events: drop the stand-alone sites for them
+		var drop: Array = []
+		for q in npcs.owned_quests():
+			drop.append("rg_quest_" + str(q))
+		for st in region.recipe.get("sites", []) if region else []:
+			if npcs.owned_events().has(str(st.get("event", "x"))):
+				drop.append("rg_" + str(st["id"]))
+		_interactables = _interactables.filter(func(it): return not drop.has(str(it["id"])))
+		_interactables.append_array(npcs.interactables())
+	_marker_mesh = _make_marker_mesh()
+	_marker_mats = [ToonKit.glow(UiKit.ACCENT_2, 1.4), ToonKit.glow(UiKit.PSI, 1.6)]
 	for it in _interactables:
-		var l := Label3D.new()
-		l.text = "◆"
-		l.font_size = 72
-		l.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-		l.fixed_size = true
-		l.pixel_size = 0.0012
-		l.no_depth_test = true
-		l.outline_size = 10
-		l.modulate = UiKit.ACCENT_2
-		add_child(l)
-		l.global_position = ground(it["pos"], 2.6)
-		_markers3d[it["id"]] = l
+		var mk := MeshInstance3D.new()
+		mk.mesh = _marker_mesh
+		mk.material_override = _marker_mats[0]
+		mk.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		mk.visible = false
+		add_child(mk)
+		mk.global_position = ground(it["pos"], 2.6)
+		_markers3d[it["id"]] = mk
+
+## A small spinning 3D diamond (two pyramids) over every interactable: one shared mesh + material, no sprites or glyphs.
+func _make_marker_mesh() -> ArrayMesh:
+	var st := ToonKit.begin()
+	var r := 0.26
+	var top := Vector3(0, 0.42, 0)
+	var bot := Vector3(0, -0.42, 0)
+	var ring := [Vector3(r, 0, 0), Vector3(0, 0, r), Vector3(-r, 0, 0), Vector3(0, 0, -r)]
+	for i in 4:
+		var a: Vector3 = ring[i]
+		var b: Vector3 = ring[(i + 1) % 4]
+		ToonKit.tri(st, top, b, a, Color.WHITE)
+		ToonKit.tri(st, bot, a, b, Color(0.8, 0.8, 0.8))
+	return ToonKit.finish(st)
+
+## Settlements, NPCs, ambience and loot of the living region.
+func _build_world_life() -> void:
+	ambient = RrAmbient.new()
+	ambient.name = "Ambient"
+	add_child(ambient)
+	ambient.setup(self, height_at, player_position)
+	settlements = RrSettlements.new()
+	settlements.name = "Settlements"
+	add_child(settlements)
+	settlements.build(extra, height_at)
+	npcs = NpcLife.new()
+	npcs.name = "Npcs"
+	add_child(npcs)
+	npcs.setup(self, NPC_DATA, region, runner, player_position, height_at, func() -> String: return ambient.phase, "red_reaches")
 
 ## Optional side areas: a faint signpost at each unvisited spoke entrance, plus the spoke's guardians/wildlife.
 func _spawn_spokes() -> void:
@@ -385,7 +444,11 @@ func _spawn_spokes() -> void:
 			l.visible = false
 			add_child(l)
 			# The sign stands at the junction on the critical path, not at the spoke itself.
-			l.global_position = ground(Vector3(float(tp[0]), float(tp[1]), float(tp[2])), 3.2)
+			var sgp := Vector3(float(tp[0]), float(tp[1]), float(tp[2]))
+			for sg in extra.get("signs", []):
+				if str(sg["spoke"]) == sid:
+					sgp = Vector3(float(sg["p"][0]), 0.0, float(sg["p"][1]))
+			l.global_position = ground(sgp, 3.2)
 			_spoke_signs.append({"node": l, "id": sid})
 		var swarm: Array = []
 		for sw in sp.get("spawn", []):
@@ -417,12 +480,17 @@ func _interact_tick(delta: float) -> void:
 	var bd := INF
 	for it in _interactables:
 		var ok: bool = (it["cond"] as Callable).call()
-		var mk: Label3D = _markers3d[it["id"]]
+		var mk: Node3D = _markers3d[it["id"]]
 		mk.visible = ok
 		if not ok:
 			continue
-		mk.position.y = height_at(it["pos"].x, it["pos"].z) + 2.6 + sin(Time.get_ticks_msec() * 0.004) * 0.2
-		var d := Vector2(l.global_position.x - it["pos"].x, l.global_position.z - it["pos"].z).length()
+		var ip: Vector3 = (it["pos_fn"] as Callable).call() if it.has("pos_fn") else it["pos"]
+		mk.position = Vector3(ip.x, height_at(ip.x, ip.z) + float(it.get("y_off", 2.6)) + sin(Time.get_ticks_msec() * 0.004) * 0.2, ip.z)
+		mk.rotation.y += delta * 1.8
+		if it.has("hot"):
+			var hot: bool = (it["hot"] as Callable).call()
+			(mk as MeshInstance3D).material_override = _marker_mats[1 if hot else 0]
+		var d := Vector2(l.global_position.x - ip.x, l.global_position.z - ip.z).length()
 		if d < float(it["r"]) and d < bd:
 			bd = d
 			best = it
@@ -642,6 +710,8 @@ func _say(id: String, force: bool = false) -> bool:
 	return ok
 
 func _on_dialogue_event(ev: String) -> void:
+	if npcs and npcs.handle_event(ev):
+		return
 	if region and region.handle_dialogue_event(ev):
 		return
 	_events_seen[ev] = true
@@ -1056,6 +1126,38 @@ func qa_teleport(marker_name: String) -> void:
 	party.clear_trail()
 	cam.set_target(l, true)
 	print("[QA] teleport ", marker_name, " -> ", p)
+
+func qa_npc(id: String) -> void:
+	## teleport next to a named NPC (ids in rr_npcs.json)
+	if npcs == null or not npcs.has_npc(id):
+		print("[QA] no npc ", id)
+		return
+	var p := npcs.npc_position(id) + Vector3(2.2, 0, 1.4)
+	var l := party.get_leader()
+	l.teleport(ground(p, 0.4))
+	party.get_partner().teleport(ground(p + Vector3(-1.6, 0, 1.0), 0.4))
+	party.clear_trail()
+	cam.set_target(l, true)
+	print("[QA] teleport npc ", id, " -> ", p)
+
+func qa_talk(id: String) -> void:
+	if npcs:
+		npcs.talk(id)
+
+func qa_clock(t: float) -> void:
+	if ambient:
+		ambient.qa_set_clock(t)
+
+func qa_weather(w: String) -> void:
+	if ambient:
+		ambient.qa_set_weather(w)
+
+func qa_npc_log() -> void:
+	if npcs == null:
+		return
+	for id in npcs.ids():
+		print("[QA] NPC ", id, " at ", npcs.npc_position(id), " quest=", npcs.quest_state(str(npcs._npcs[id]["spec"].get("quest", ""))))
+	print("[QA] clock=%.2f phase=%s weather=%s dusk=%.2f dust=%.2f settlements_built=%s tris=%d" % [ambient.t_day, ambient.phase, ambient.weather, ambient.dusk_k, ambient.dust_k, str(settlements.built), settlements.tri_count])
 
 func qa_skip_to(beat: String) -> void:
 	var order := ["valley", "gap", "waystation", "boulder", "drill", "span", "burden", "boss", "choice", "exfil"]

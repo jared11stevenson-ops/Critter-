@@ -21,6 +21,10 @@ const CHAR_COLORS := {
 	"pharilux": Color("#4e6b4a"), "solmara": Color("#3a8a8a"), "scarlith": Color("#b0302a"), "bramvex": Color("#6b5a3a"),
 }
 
+## Named field NPCs (registered by NpcLife): speaker names / tint for dialogue and bubbles.
+static var npc_names: Dictionary = {}
+static var npc_colors: Dictionary = {}
+
 const RIVAL_COLORS := {
 	"dominion": Color("#8a3a30"), "undermarket": Color("#8a6a2a"), "free_scale": Color("#3a6b4a"), "helix": Color("#2a8f9a"),
 }
@@ -167,13 +171,15 @@ static func char_color(id: String) -> Color:
 	if id.begins_with("rival:"):
 		var r: Dictionary = Rivals.get_rival(id.substr(6))
 		return RIVAL_COLORS.get(str(r.get("faction", "")), Color("#6b5a4a"))
-	return CHAR_COLORS.get(id, Color("#6b5a4a"))
+	return CHAR_COLORS.get(id, npc_colors.get(id, Color("#6b5a4a")))
 
 ## Display name for a speaker id; "rival:<id>" resolves through the Ledger Rivals roster.
 static func speaker_name(id: String) -> String:
 	if id.begins_with("rival:"):
 		var r: Dictionary = Rivals.get_rival(id.substr(6))
 		return str(r.get("name", "Stranger"))
+	if npc_names.has(id):
+		return str(npc_names[id])
 	return Canon.display_name(id)
 
 ## Portrait control: real portrait if present, else a coloured badge with the initial.

@@ -1,0 +1,290 @@
+{
+ "_doc": "Red Reaches field NPCs (consumed by game/world/common/npc_life.gd). Roles come from game/canon/regions/red_reaches.json (ambient.npcs, side_quests, descent_events); names marked 'new' are invented bit-parts that fill canon roles (drover, Free Scale contact, Dominion clerk, stranded hauler). Schema: stations[{p:[x,z],act,face:[dx,dz]}], schedule{dawn|day|dusk: station index}, hotspot{label,r,y_off}, quest (region side quest id handed to RegionRunner), events (region descent events this NPC owns - their stand-alone sites are hidden), talk[] first matching entry wins ({first, state: open|locked|done, if, if_not, lines[], quest, play_event, choices[{text, actions[], reply[], reply_fail[]}]}), barks[] ({text, if, if_not, phase}). Visual: game/art/models/npcs/npc_registry.json (real model scene) else a baked FallbackVisual silhouette from shape/h/r/body/acc/head.",
+ "bark_range": 13.0,
+ "npcs": [
+  {
+   "id": "rr_oda", "name": "Mother Oda Keth", "role": "Well-keeper, Salt Pans", "species": "plate beetle",
+   "shape": "beetle", "h": 1.6, "r": 0.62, "body": "#6a5c58", "acc": "#4b5262", "head": "#8d7e72",
+   "stations": [
+    {"p": [107.0, 31.0], "act": "crank", "face": [1.0, 0.4]},
+    {"p": [114.5, 38.5], "act": "rest", "face": [-1.0, -0.5]},
+    {"p": [104.5, 28.0], "act": "idle", "face": [0.6, 1.0]}
+   ],
+   "schedule": {"dawn": 0, "day": 1, "dusk": 2},
+   "hotspot": {"label": "Talk to Mother Oda", "r": 3.4},
+   "quest": "rr_well_line", "events": ["rr_well_keeper"],
+   "talk": [
+    {"first": true, "lines": [
+      {"text": "You are standing in my light. Move left. Left. Good."},
+      {"text": "Sixteen generations of Keths have cranked this line. I am the sixteenth. I am not tired. I am annoyed. It is different."}
+     ], "play_event": "rr_well_keeper"},
+    {"state": "open", "lines": [
+      {"text": "Handlers. Good. Someone who can carry a stone."},
+      {"text": "The contractor left a brochure. Do you know what a brochure is? It is a promise printed on something that will not hold water."}
+     ], "quest": true},
+    {"if": "rr_wells_kept", "lines": [{"text": "Wells stay when people do. Mind the third crank, it bites."}]},
+    {"if": "rr_wells_shared", "lines": [{"text": "Three apprentices. Crooked, crooked, fine. That is how a line is taught."}]},
+    {"if": "rr_wells_leased", "lines": [{"text": "Water by evening. A seal on every cistern. I drink it. I do not thank it."}]},
+    {"lines": [{"text": "The Line does not need you to like it. It needs you to leave the stones where they are."}]}
+   ],
+   "barks": [
+    {"text": "Water is not a thing you own. It is a thing you owe.", "phase": "dawn"},
+    {"text": "Wells stay when people do.", "if": "rr_wells_kept"},
+    {"text": "Noon. Shade. Nobody speak to me for an hour."},
+    {"text": "Crooked. Re-lay it. Again.", "phase": "dusk"}
+   ]
+  },
+  {
+   "id": "rr_tavik", "name": "Tavik Roon", "role": "Herder, Grazer Flats", "species": "human",
+   "shape": "herder", "h": 1.8, "r": 0.38, "body": "#6b5238", "acc": "#c9a05a", "head": "#b98c66",
+   "stations": [
+    {"p": [128.0, 9.5], "act": "watch", "face": [-1.0, -0.3]},
+    {"p": [123.5, 13.0], "act": "idle", "face": [0.0, -1.0]},
+    {"p": [116.0, 11.0], "act": "rest", "face": [1.0, -0.6]}
+   ],
+   "schedule": {"dawn": 1, "day": 0, "dusk": 2},
+   "hotspot": {"label": "Talk to the herder", "r": 3.4},
+   "quest": "rr_grazer_crossing",
+   "talk": [
+    {"first": true, "state": "open", "lines": [
+      {"text": "Easy. Hands low. The sentinel is watching you, and she decides for the herd."},
+      {"text": "A road collapse cut my grazers off from the lichen terraces. A week, maybe, before they start to fail."}
+     ], "quest": true},
+    {"state": "open", "lines": [{"text": "They are still out there. The sentinel keeps her head up. That is how I know it is bad."}], "quest": true},
+    {"if": "rr_herd_saved", "lines": [{"text": "We took the long way, on foot. Slow. Nobody lost. That is the whole trick of herding."}]},
+    {"if": "rr_road_rebuilt", "lines": [{"text": "The road holds. First trip over it, the sentinel dropped her head. I nearly wept. Do not tell her."}]},
+    {"if": "rr_herd_hurt", "lines": [{"text": "I do not talk about the gap. Graze on, friends. Graze on."}]},
+    {"lines": [{"text": "Dust grazers keep the Waystation basin open. Without them it would be scrub by spring."}]}
+   ],
+   "barks": [
+    {"text": "One sentinel, always. She drops her head when the herd is safe."},
+    {"text": "Watch the wedge. They move as one animal."},
+    {"text": "The herd is whole.", "if": "rr_herd_saved"}
+   ]
+  },
+  {
+   "id": "rr_tessaly", "name": "Tessaly Vane", "role": "Free Scale contact (new)", "species": "human",
+   "shape": "scarf", "h": 1.72, "r": 0.36, "body": "#3a6b4a", "acc": "#e0d28a", "head": "#a97c5a",
+   "stations": [
+    {"p": [124.5, -9.0], "act": "watch", "face": [-1.0, 0.2]},
+    {"p": [108.0, -8.5], "act": "idle", "face": [1.0, -0.4]},
+    {"p": [121.0, -14.0], "act": "rest", "face": [0.0, 1.0]}
+   ],
+   "schedule": {"dawn": 1, "day": 0, "dusk": 2},
+   "hotspot": {"label": "Talk to the Free Scale scout", "r": 3.4},
+   "talk": [
+    {"first": true, "lines": [
+      {"text": "Do not look at the scarf. Look at the road. Free Scale does not own this road. Nobody does. That is the point."},
+      {"text": "I count Dominion carts and I note which stones they take. No politics. Just arithmetic."}
+     ]},
+    {"if": "boulder_broken", "if_not": "_rg_rr_vault_door", "lines": [
+      {"text": "The Thoughtstone is open. Past it there is a Spanwright vault. Closed is still working, they say. Let it work."}
+     ]},
+    {"if": "drill_clear", "lines": [{"text": "The pylons are quiet. My tally says the Dominion lost a week. I will take a week."}]},
+    {"if_not": "_secret_rr_wayfarer_stone", "lines": [
+      {"text": "Free tip. Stand in the old ruin's shadow and push at the capstone, the loose one. People stopped looking there a century ago."}
+     ]},
+    {"lines": [{"text": "Native pathways, native hands. Walk softly and take only what the road offers."}]}
+   ],
+   "barks": [
+    {"text": "Four carts east, empty. Eight west, loaded. Note it."},
+    {"text": "No institution should own a pathway."},
+    {"text": "Dominion survey flags, ninety-one this week.", "phase": "dusk"}
+   ]
+  },
+  {
+   "id": "rr_dunnock", "name": "Dunnock", "role": "Stranded plate beetle hauler (new)", "species": "plate beetle",
+   "shape": "beetle", "h": 1.35, "r": 0.55, "body": "#5f5750", "acc": "#6a6e7a", "head": "#7d7167",
+   "stations": [
+    {"p": [72.0, 3.0], "act": "rest", "face": [1.0, 0.0]},
+    {"p": [76.0, -3.0], "act": "idle", "face": [-1.0, 0.2]}
+   ],
+   "schedule": {"dawn": 0, "day": 0, "dusk": 1},
+   "hotspot": {"label": "Talk to the stranded hauler", "r": 3.4},
+   "talk": [
+    {"if": "_rr_dunnock_helped", "lines": [{"text": "My plate is whole again. The valley is long. Walk it with something to carry."}]},
+    {"lines": [
+      {"text": "Cart axle went at the narrows. I can drag it. I cannot drag it and eat at the same time."},
+      {"text": "A scrap of lichen culture would do. I shed plates every season. I will pay in plate."}
+     ],
+     "choices": [
+      {"text": "Share a lichen culture.", "actions": ["trade:lichen_culture:1:red_slate_plate:1", "flag:_rr_dunnock_helped", "ledger:helped:rr_dunnock:protect_weak,stewardship:2"],
+       "reply": [{"text": "Good. Slate plate, fresh shed. Do not tell the others I gave you the nice one.", "if": "_npc_ok"}],
+       "reply_fail": [{"text": "Nothing in the satchel? Then take the thought. Mites ticked by the cracks east of here, that is where lichen grows."}]},
+      {"text": "Help drag the cart.", "actions": ["flag:_rr_dunnock_helped", "ledger:helped:rr_dunnock:braced_structure,protect_weak:1", "give:reach_soil:1"],
+       "reply": [{"text": "A hand on the rope is worth a month of advice. Take this soil, off the grazer trail."}]},
+      {"text": "Leave him to it.", "actions": [], "reply": [{"text": "Road is long. I will manage. I always manage."}]}
+     ]}
+   ],
+   "barks": [
+    {"text": "Axle. Of all the things, an axle."},
+    {"text": "Slow is a speed."}
+   ]
+  },
+  {
+   "id": "rr_mags", "name": "Mags Tolliver", "role": "Drover, Drover's Rest (new)", "species": "human",
+   "shape": "human", "h": 1.78, "r": 0.4, "body": "#6b4a2a", "acc": "#b9a06a", "head": "#b98c66",
+   "stations": [
+    {"p": [130.0, -36.0], "act": "haul", "face": [0.4, -1.0]},
+    {"p": [135.5, -42.0], "act": "rest", "face": [-1.0, 0.4]}
+   ],
+   "schedule": {"dawn": 0, "day": 0, "dusk": 1},
+   "hotspot": {"label": "Help the drover", "r": 3.4},
+   "events": ["rr_drover_cart"],
+   "talk": [
+    {"first": true, "lines": [
+      {"text": "Do not just stand there admiring my flour. Unless you are going to lift."},
+      {"text": "Axle-deep and one pair of hands. A day's flour sacks, tied on top, and the road wants it back."}
+     ], "play_event": "rr_drover_cart"},
+    {"if": "_rg_rr_drover_cart", "lines": [{"text": "Cart rolls. Flour goes north. Dust goes everywhere else. You are all right, Handler."}]},
+    {"lines": [{"text": "The road keeps what it is given. I intend to give it one cart at a time."}], "play_event": "rr_drover_cart"}
+   ],
+   "barks": [
+    {"text": "Brace. Lift. Brace. Lift."},
+    {"text": "A cart road is a promise with ruts in it."},
+    {"text": "Who tied this knot? Me. Of course me.", "phase": "dusk"}
+   ]
+  },
+  {
+   "id": "rr_vesk", "name": "Vesk Dunmore", "role": "Claims broker", "species": "human",
+   "shape": "human", "h": 1.8, "r": 0.4, "body": "#6b4a2a", "acc": "#d9a43a", "head": "#b98c66",
+   "stations": [
+    {"p": [137.0, -32.0], "act": "idle", "face": [-1.0, 0.0]},
+    {"p": [136.5, -35.0], "act": "watch", "face": [-1.0, 0.3]}
+   ],
+   "schedule": {"dawn": 0, "day": 1, "dusk": 0},
+   "hotspot": {"label": "Talk to the broker", "r": 3.4},
+   "quest": "rr_vesk_cache",
+   "talk": [
+    {"first": true, "state": "open", "lines": [
+      {"text": "A claim on the Red Span wreck. Staked, filed, legal in three jurisdictions and one I invented. Handler, you look like you read the fine print."},
+      {"text": "Under the stumps: a cache of cut Thoughtstone. The yard calls the place a grave. I call it inventory."}
+     ], "quest": true},
+    {"state": "open", "lines": [{"text": "Still thinking? The stone is not going anywhere. Neither, sadly, is the yard."}], "quest": true},
+    {"if": "rr_cache_kept", "lines": [{"text": "Claim struck. I lost a week of margin and gained a lecture. Net: even."}]},
+    {"if": "rr_cache_fair", "lines": [{"text": "Half to the families. I do not enjoy it. I do sleep better. Do not tell the Undermarket."}]},
+    {"if": "rr_cache_sold", "lines": [{"text": "Pleasure doing business. The yard will not speak to either of us. I have grown fond of the quiet."}]},
+    {"lines": [{"text": "I have a permit for everything. Ask me about the permit for permits."}]}
+   ],
+   "barks": [
+    {"text": "Everything is for sale. Not everything should be."},
+    {"text": "A grave is only a claim nobody has filed yet."},
+    {"text": "Fair price. Never a fair share. Different words.", "if": "rr_cache_sold"}
+   ]
+  },
+  {
+   "id": "rr_imre", "name": "Imre Dahl", "role": "Dominion surveyor", "species": "human",
+   "shape": "human", "h": 1.78, "r": 0.4, "body": "#4b5058", "acc": "#b53a2a", "head": "#c9a07a",
+   "stations": [
+    {"p": [196.0, -12.0], "act": "watch", "face": [0.2, 1.0]},
+    {"p": [200.5, -8.0], "act": "idle", "face": [-0.3, 1.0]}
+   ],
+   "schedule": {"dawn": 0, "day": 0, "dusk": 1},
+   "hotspot": {"label": "Talk to the surveyor", "r": 3.4},
+   "quest": "rr_beetle_pylon",
+   "talk": [
+    {"first": true, "state": "open", "lines": [
+      {"text": "Do not pull the permit. I know it is a bad permit. I did not write it."},
+      {"text": "The plate beetles keep throwing themselves at the survey pylons. I was told to keep them out of the dig. I do not know how."}
+     ], "quest": true},
+    {"state": "open", "lines": [{"text": "You are back. The beetles are back too. They never left."}], "quest": true},
+    {"if": "rr_beetles_calmed", "lines": [{"text": "Below their hearing. Quiet as a bad rumor. I filed it as a calibration. Nobody asked what for."}]},
+    {"if": "rr_beetles_culled", "lines": [{"text": "The dig continues. I do not recommend looking at the pit floor."}]},
+    {"if": "rr_pylon_pulled", "lines": [{"text": "Power cell gone, nobody saw. Funny. I have not slept this well in a year."}]},
+    {"lines": [{"text": "Survey is not a crime. It is only a way of saying: this is mine, in numbers."}]}
+   ],
+   "barks": [
+    {"text": "Four more pylons to calibrate. Forty minutes of sleep to ration."},
+    {"text": "The beetles lean on the slate at dusk. I used to find that funny.", "phase": "dusk"},
+    {"text": "I am only the instrument.", "if": "rr_beetles_calmed"}
+   ]
+  },
+  {
+   "id": "rr_wick", "name": "Clerk Anselm Wick", "role": "Dominion permit clerk (new)", "species": "human",
+   "shape": "clerk", "h": 1.7, "r": 0.36, "body": "#4b5058", "acc": "#3a3d46", "head": "#d8b48c",
+   "stations": [
+    {"p": [204.0, 21.0], "act": "write", "face": [0.5, -1.0]},
+    {"p": [210.0, 19.0], "act": "idle", "face": [-1.0, 0.0]}
+   ],
+   "schedule": {"dawn": 0, "day": 0, "dusk": 1},
+   "hotspot": {"label": "Talk to the clerk", "r": 3.4},
+   "talk": [
+    {"first": true, "lines": [
+      {"text": "Permit seven-one-four covers every rock in this basin. If you are carrying a rock, I need the form."},
+      {"text": "I am not a villain. I am a stamp. The stamp does not get to choose, but it does get to be accurate."}
+     ]},
+    {"if": "rr_wells_leased", "lines": [{"text": "Your pump contract is filed. Dominion seal on every cistern. The aquifer schedule is quarterly. Please do not read the appendix."}]},
+    {"if": "rr_pylon_pulled", "lines": [{"text": "A power cell is missing. I am required to ask. I am also required to record that nobody answered."}]},
+    {"if": "drill_clear", "lines": [{"text": "The pylons are down. Form nine, loss of equipment. Someone will sign. It will not be me."}]},
+    {"lines": [{"text": "Stand behind the yellow line. If you cannot find the yellow line, stand behind me."}]}
+   ],
+   "barks": [
+    {"text": "Stamp. Stamp. File."},
+    {"text": "Form nine-C. Where did I put form nine-C?"},
+    {"text": "It is not corruption if it is on letterhead.", "phase": "dusk"}
+   ]
+  },
+  {
+   "id": "rr_ilsa", "name": "Ilsa Brandt", "role": "Spanwright apprentice", "species": "stick mantis",
+   "shape": "mantis", "h": 1.95, "r": 0.26, "body": "#5a6b3c", "acc": "#c9b36a", "head": "#8a9a52",
+   "stations": [
+    {"p": [236.0, -28.0], "act": "sketch", "face": [0.3, 1.0]},
+    {"p": [241.5, -33.0], "act": "idle", "face": [-0.5, 1.0]}
+   ],
+   "schedule": {"dawn": 0, "day": 0, "dusk": 1},
+   "hotspot": {"label": "Talk to the apprentice", "r": 3.4},
+   "quest": "rr_apprentice_arch",
+   "talk": [
+    {"first": true, "state": "open", "lines": [
+      {"text": "Do not look at the sketch! ...Fine. Look. It is an arch. For the yard's gate. I want it to be remembered."},
+      {"text": "The yard's pylons are rotting under the gate. Everyone says so. Nobody says it to the arch."}
+     ], "quest": true},
+    {"state": "open", "lines": [{"text": "Still deciding about the arch? I am. For the record, I have been deciding for a month."}], "quest": true},
+    {"state": "locked", "lines": [{"text": "I sketch arches in the dust and rub them out when someone looks. It is a ritual. It is not a good one."}]},
+    {"if": "rr_arch_hidden", "lines": [{"text": "I still think it looks incredible. I also know what is inside it. Both are true."}]},
+    {"if": "rr_arch_built", "lines": [{"text": "It looks incredible. Nobody has mentioned the pylons. I mention them every night to the wall."}]},
+    {"if": "rr_arch_deferred", "lines": [{"text": "Pylons first. Arch later. My teacher said that is the whole job. I said that is half. She said: which half."}]},
+    {"lines": [{"text": "The Span from here looks like a held breath. I am learning not to hold mine."}]}
+   ],
+   "barks": [
+    {"text": "Wider at the base. Always wider at the base."},
+    {"text": "I still think it looks incredible.", "if": "rr_arch_hidden"},
+    {"text": "Do not look at the sketch.", "phase": "day"}
+   ]
+  },
+  {
+   "id": "rr_pel", "name": "Warden Pel Narr", "role": "Span warden", "species": "long-legged crane",
+   "shape": "crane", "h": 2.35, "r": 0.28, "body": "#7a8088", "acc": "#c9c28a", "head": "#c8c0b0",
+   "stations": [
+    {"p": [232.0, 4.5], "act": "pluck", "face": [1.0, -0.1]},
+    {"p": [240.5, 0.5], "act": "pluck", "face": [1.0, 0.0]},
+    {"p": [226.0, -2.0], "act": "idle", "face": [1.0, 0.2]}
+   ],
+   "schedule": {"dawn": 0, "day": 1, "dusk": 2},
+   "hotspot": {"label": "Talk to the Warden", "r": 3.4},
+   "quest": "rr_drill_drill",
+   "talk": [
+    {"first": true, "state": "open", "lines": [
+      {"text": "Hum. B-flat, a little sharp. The cable is fine. The foundation is the one humming wrong."},
+      {"text": "Market day crossings draw thousands. I want an evacuation drill. The guild says it will cost a day's trade."}
+     ], "quest": true},
+    {"state": "open", "lines": [{"text": "Hum. Still B-flat. Still sharp. Still waiting on your answer."}], "quest": true},
+    {"state": "locked", "lines": [{"text": "I check the cable by plucking it. If it hums wrong, I hum back. Quietly. So the Span does not take offence."}]},
+    {"if": "rr_drill_run", "lines": [{"text": "Practice makes boring. Boring is a gift."}]},
+    {"if": "rr_drill_skipped", "lines": [{"text": "The guild is pleased. The cable is not. I will be here, plucking, in case it has an opinion."}]},
+    {"if": "rr_drill_borne", "lines": [{"text": "You stood on the weakest span and promised. I wrote it in the log. In ink."}]},
+    {"lines": [{"text": "Mind the third pier. It rings a little when it is thinking."}]}
+   ],
+   "barks": [
+    {"text": "Hum. B-flat."},
+    {"text": "Practice makes boring. Boring is a gift.", "if": "rr_drill_run"},
+    {"text": "Tension is a kind of listening.", "phase": "dusk"}
+   ]
+  }
+ ],
+ "pairs": [
+  {"a": "rr_mags", "b": "rr_vesk", "lines": [["rr_mags", "Vesk. The axle is mine. The flour is mine."], ["rr_vesk", "I only want to know how much the sack weighs, for the record."], ["rr_mags", "It weighs what it weighs. Go record somewhere else."]]},
+  {"a": "rr_imre", "b": "rr_wick", "lines": [["rr_wick", "Dahl, form nine-C. Beetle incident. Sign here."], ["rr_imre", "There is no box for 'they are not wrong'."], ["rr_wick", "Then it goes in comments. Nobody reads comments."]]},
+  {"a": "rr_tavik", "b": "rr_tessaly", "lines": [["rr_tessaly", "Count of carts, east: four. Herd count?"], ["rr_tavik", "Five. All present. All stubborn."], ["rr_tessaly", "Free Scale thanks you. Free Scale also lacks a budget."]]}
+ ]
+}
