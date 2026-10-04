@@ -50,6 +50,7 @@ var _convoy: Node3D = null
 var _burden_shake_t := 0.0
 
 func _ready() -> void:
+	var _t0 := Time.get_ticks_msec()
 	_load_layout()
 	field = Field.new()
 	field.name = "Field"
@@ -57,6 +58,7 @@ func _ready() -> void:
 	field.music_explore = "explore_reaches"
 	add_child(field)
 	_build_terrain()
+	var _t1 := Time.get_ticks_msec()
 	actors_root = Node3D.new()
 	actors_root.name = "Actors"
 	add_child(actors_root)
@@ -110,6 +112,8 @@ func _ready() -> void:
 	Events.scene_ready.emit("red_reaches")
 	_begin_ledger_run()
 	_update_objective(true)
+	if OS.get_cmdline_user_args().has("qa"):
+		print("[PERF] level _ready ms total=%d terrain=%d" % [Time.get_ticks_msec() - _t0, _t1 - _t0])
 
 # ================= setup =================
 func _load_layout() -> void:

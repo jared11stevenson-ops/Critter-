@@ -153,7 +153,7 @@ func _on_line(line: Dictionary) -> void:
 		var key := "%s|%s|%s" % [who, str(line["expr"]), style]
 		if holder.get_meta("pkey", "") != key:
 			# Portrait controls are cached and toggled (no node churn or texture rebuild when speakers alternate).
-			var cur: Variant = holder.get_meta("pcur", null)
+			var cur: Variant = holder.get_meta("pcur") if holder.has_meta("pcur") else null
 			if cur is Control and is_instance_valid(cur):
 				(cur as Control).visible = false
 			var cache: Dictionary = _pcache.get(holder.get_instance_id(), {})

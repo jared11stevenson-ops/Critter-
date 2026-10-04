@@ -91,7 +91,7 @@ func _ready() -> void:
 	_prewarm_vfx.call_deferred()
 
 const WARM_VFX := ["hit_spark", "heavy_impact", "dust_puff", "mace_arc", "reach_line", "gravity_well", "psychic_bolt", "psychic_burst",
-	"false_memory_echo", "brain_skip_glitch", "capture_beam", "scan_ping", "pickup_glint", "drill_sparks", "coolant_vent", "leap_trail",
+	"false_memory_echo", "scan_ping", "pickup_glint", "drill_sparks", "coolant_vent", "leap_trail",
 	"heal_motes", "rage_aura"]
 
 ## Compatibility compiles a material's shader the first time it is drawn, and loads scene files synchronously: both showed up as
