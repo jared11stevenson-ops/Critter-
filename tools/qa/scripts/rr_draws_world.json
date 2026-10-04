@@ -1,0 +1,13 @@
+[
+ {"t":0.3,"call":"scene.qa_auto_dialogue","args":[true,0,0.15]},
+ {"t":1.0,"call":"scene.qa_npc","args":["rr_tessaly"]},
+ {"t":12.0,"call":"scene.qa_perf_breakdown"},
+ {"t":40.0,"call":"scene.qa_npc","args":["rr_oda"]},
+ {"t":50.0,"call":"scene.qa_perf_breakdown"},
+ {"t":80.0,"call":"scene.qa_npc","args":["rr_wick"]},
+ {"t":90.0,"call":"scene.qa_perf_breakdown"},
+ {"t":120.0,"call":"scene.qa_npc","args":["rr_ilsa"]},
+ {"t":130.0,"call":"scene.qa_perf_breakdown"},
+ {"t":160.0,"call":"scene.qa_npc","args":["rr_mags"]},
+ {"t":170.0,"call":"scene.qa_perf_breakdown"}
+]

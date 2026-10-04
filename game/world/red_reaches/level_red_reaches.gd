@@ -411,6 +411,7 @@ func _make_marker_mesh() -> ArrayMesh:
 
 ## Settlements, NPCs, ambience and loot of the living region.
 func _build_world_life() -> void:
+	var _w0 := Time.get_ticks_msec()
 	ambient = RrAmbient.new()
 	ambient.name = "Ambient"
 	add_child(ambient)
@@ -423,6 +424,8 @@ func _build_world_life() -> void:
 	npcs.name = "Npcs"
 	add_child(npcs)
 	npcs.setup(self, NPC_DATA, region, runner, player_position, height_at, func() -> String: return ambient.phase, "red_reaches")
+	if OS.get_cmdline_user_args().has("qa"):
+		print("[PERF] world life (ambient+settlement dispatch+npcs) ms=%d" % (Time.get_ticks_msec() - _w0))
 
 ## Optional side areas: a faint signpost at each unvisited spoke entrance, plus the spoke's guardians/wildlife.
 func _spawn_spokes() -> void:
@@ -1120,6 +1123,13 @@ func qa_teleport(marker_name: String) -> void:
 		for st in region.recipe.get("sites", []):
 			if st["id"] == marker_name.substr(5):
 				p = Vector3(st["pos"][0], st["pos"][1], st["pos"][2]) + Vector3(1.0, 0, 0)
+	if marker_name.begins_with("secret:") and region:
+		for sc in region.recipe.get("secrets", []):
+			if sc["id"] == marker_name.substr(7):
+				p = Vector3(sc["trigger"]["pos"][0], sc["trigger"]["pos"][1], sc["trigger"]["pos"][2]) + Vector3(0.6, 0, 0.4)
+	if marker_name.begins_with("loot:"):
+		var lt: Dictionary = extra.get("loot", [])[int(marker_name.substr(5))]
+		p = Vector3(float(lt["p"][0]), 0.0, float(lt["p"][1])) + Vector3(0.5, 0, 0.5)
 	var l := party.get_leader()
 	l.teleport(ground(p, 0.4))
 	party.get_partner().teleport(ground(p + Vector3(-2, 0, 1.2), 0.4))
@@ -1157,6 +1167,13 @@ func qa_npc_log() -> void:
 		return
 	for id in npcs.ids():
 		print("[QA] NPC ", id, " at ", npcs.npc_position(id), " quest=", npcs.quest_state(str(npcs._npcs[id]["spec"].get("quest", ""))))
+	print("[QA] items=", GameState.items)
+	var fl: Array = []
+	for k in GameState.flags:
+		if str(k).begins_with("_quest_") or str(k).begins_with("_secret_") or str(k).begins_with("_loot_") or str(k).begins_with("_rg_") or str(k).begins_with("rr_") or str(k).begins_with("_npc_") or str(k).begins_with("_rr_"):
+			fl.append(str(k))
+	fl.sort()
+	print("[QA] flags=", fl)
 	print("[QA] clock=%.2f phase=%s weather=%s dusk=%.2f dust=%.2f settlements_built=%s tris=%d" % [ambient.t_day, ambient.phase, ambient.weather, ambient.dusk_k, ambient.dust_k, str(settlements.built), settlements.tri_count])
 
 func qa_skip_to(beat: String) -> void:

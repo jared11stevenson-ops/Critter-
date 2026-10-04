@@ -24,7 +24,7 @@ const BONE := Color(0.86, 0.80, 0.68)
 const FLAME := Color(1.0, 0.62, 0.20)
 const LAMP := Color(1.0, 0.86, 0.45)
 const THOUGHT := Color(0.58, 0.86, 1.0)
-const WATER := Color(0.07, 0.11, 0.15)
+const WATER := Color(0.10, 0.17, 0.22)
 
 signal finished
 
@@ -42,20 +42,37 @@ func build(extra: Dictionary, ground_cb: Callable) -> void:
 	_mat = ToonKit.material({"roughness": 0.85, "detail": 0.3, "outline": 0.0})
 	for s in extra.get("settlements", []):
 		var spec := _prepare(s)
-		var job := {"id": str(s.get("id", "?")), "spec": spec, "out": {}}
-		job["task"] = WorkerThreadPool.add_task(_build_job.bind(job), false, "rr_settlement_" + job["id"])
-		_jobs.append(job)
-		_pending += 1
+		if s.get("center", [1, 1]) == [0, 0]:
+			# map-wide groups (signposts, well line): one mesh per 60 m slice so frustum culling still works
+			for ck in _chunks(spec["items"]):
+				_dispatch(str(s.get("id", "?")) + "_" + str(ck["id"]), {"items": ck["items"]})
+		else:
+			_dispatch(str(s.get("id", "?")), spec)
 	var tr: Dictionary = extra.get("cairn_trail", {})
 	if not tr.is_empty():
-		var spec2 := {"items": _trail_items(tr)}
-		var job2 := {"id": "cairn_trail", "spec": spec2, "out": {}}
-		job2["task"] = WorkerThreadPool.add_task(_build_job.bind(job2), false, "rr_cairn_trail")
-		_jobs.append(job2)
-		_pending += 1
+		for ck in _chunks(_trail_items(tr)):
+			_dispatch("cairn_trail_" + str(ck["id"]), {"items": ck["items"]})
 	if _pending == 0:
 		built = true
 		finished.emit()
+
+func _dispatch(id: String, spec: Dictionary) -> void:
+	var job := {"id": id, "spec": spec, "out": {}}
+	job["task"] = WorkerThreadPool.add_task(_build_job.bind(job), false, "rr_settlement_" + id)
+	_jobs.append(job)
+	_pending += 1
+
+static func _chunks(items: Array) -> Array:
+	var by: Dictionary = {}
+	for it in items:
+		var ci := int(floor((it["pos"] as Vector3).x / 60.0))
+		if not by.has(ci):
+			by[ci] = []
+		by[ci].append(it)
+	var out: Array = []
+	for ci in by:
+		out.append({"id": ci, "items": by[ci]})
+	return out
 
 func _prepare(s: Dictionary) -> Dictionary:
 	var c: Array = s["center"]
@@ -379,13 +396,18 @@ static func _glyph_wall(st: SurfaceTool, T: Transform3D, cols: Array) -> void:
 	rng.seed = 91
 	for r in 4:
 		for k in 8:
-			var x := -3.1 + float(k) * 0.88
-			var y := 0.65 + float(r) * 0.72
-			var w := rng.randf_range(0.18, 0.5)
-			var h := rng.randf_range(0.08, 0.3)
-			_box(st, T, Vector3(x, y, 0.37), Vector3(w, h, 0.04), Color(0.28, 0.17, 0.14))
+			if rng.randf() < 0.22:
+				continue      # worn-away gaps
+			var x := -3.1 + float(k) * 0.88 + rng.randf_range(-0.14, 0.14)
+			var y := 0.65 + float(r) * 0.72 + rng.randf_range(-0.12, 0.12)
+			var w := rng.randf_range(0.14, 0.55)
+			var h := rng.randf_range(0.07, 0.3)
+			var g := Color(0.28, 0.17, 0.14).lerp(Color(0.42, 0.28, 0.22), rng.randf())
+			_box(st, T, Vector3(x, y, 0.37), Vector3(w, h, 0.04), g)
 			if rng.randf() < 0.5:
-				_box(st, T, Vector3(x + 0.12, y + 0.18, 0.37), Vector3(0.05, 0.22, 0.04), Color(0.28, 0.17, 0.14))
+				_box(st, T, Vector3(x + w * 0.4, y + 0.18, 0.37), Vector3(0.05, 0.22, 0.04), g)
+			if rng.randf() < 0.3:
+				_box(st, T, Vector3(x - w * 0.3, y - 0.14, 0.37), Vector3(0.3, 0.04, 0.04), g)
 	_collider(cols, T, Vector3(0, 1.7, 0), Vector3(7.0, 3.4, 0.8))
 
 static func _vault_door(st: SurfaceTool, T: Transform3D, cols: Array) -> void:
