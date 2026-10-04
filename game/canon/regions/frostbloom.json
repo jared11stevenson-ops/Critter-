@@ -753,5 +753,777 @@
         ]
       }
     }
-  ]
+  ],
+  "story": {
+    "title": "Who Gave You Permission",
+    "logline": "Helix wants Frostbloom's silk. Nyxaris wants to know who asked, and Frostbloom's boundaries hold the answer.",
+    "acts": [
+      {
+        "id": "fb_act1",
+        "act": 1,
+        "title": "Samples",
+        "beat": "A Helix field team has been taking silk off the boundary lines. Nyxaris notices by tension alone: forty threads missing, none cut cleanly. Pemberton's crew calls it 'sampling' and has the paperwork to say so.",
+        "trigger": {
+          "event": {
+            "region": "frostbloom"
+          }
+        },
+        "completes_flag": "fb_act1_done",
+        "unlocks": [
+          "fb_silk_forgery",
+          "fb_helix_kit",
+          "fb_vent_skaters"
+        ],
+        "reward_gear": [
+          "nyxaris_boundary_charm"
+        ]
+      },
+      {
+        "id": "fb_act2",
+        "act": 2,
+        "title": "The Pattern Case",
+        "beat": "The silk is more than material: it is signature, record and boundary at once. A forged span near the ring proves Helix can copy the work but not the meaning. Nyxaris prepares the case that will define what it means to own a pattern.",
+        "trigger": {
+          "all": [
+            {
+              "flag": "fb_act1_done"
+            },
+            {
+              "event": {
+                "tags_any": [
+                  "pattern_respected",
+                  "accepted_boundary",
+                  "extraction_refused",
+                  "silk_taken",
+                  "evidence"
+                ]
+              }
+            }
+          ]
+        },
+        "completes_flag": "fb_act2_done",
+        "unlocks": [
+          "fb_nursery_web",
+          "fb_cold_archive",
+          "fb_icefall_stalker",
+          "fb_deep_bloom"
+        ],
+        "reward_gear": [
+          "nyxaris_evidence_mantle"
+        ]
+      },
+      {
+        "id": "fb_act3",
+        "act": 3,
+        "title": "The Bloom Opens",
+        "beat": "The great bloom ring opens once a decade and the boundary silk around it must be rewoven by hand. Nyxaris asks the player to hold the threads while she works. The whole region watches to see who stays on the right side of the line.",
+        "trigger": {
+          "flag": "fb_act2_done"
+        },
+        "completes_flag": "fb_act3_done",
+        "variants": [
+          {
+            "id": "respect",
+            "when": {
+              "event": {
+                "tag": "pattern_respected"
+              }
+            },
+            "text": "The ring is rewoven in a pattern nobody in Helix could have copied, because it was made with the people who share the tension. It is beautiful and impossible to take.",
+            "sets_flag": "fb_ending_respected"
+          },
+          {
+            "id": "refused",
+            "when": {
+              "event": {
+                "tag": "extraction_refused"
+              }
+            },
+            "text": "Pemberton's crew packs out. The silk on the ring goes unharvested for the first time in years. Nyxaris says it is not a victory, only a boundary.",
+            "sets_flag": "fb_ending_refused"
+          },
+          {
+            "id": "taken",
+            "when": {
+              "event": {
+                "tag": "silk_taken"
+              }
+            },
+            "text": "A section of the ring is cut and sold. The bloom opens anyway, around a gap that never closes. Nyxaris sews it herself and says nothing, which is worse than speaking.",
+            "sets_flag": "fb_ending_cut"
+          }
+        ],
+        "unlocks": [
+          "fb_first_web"
+        ],
+        "reward_gear": [
+          "nyxaris_ring_pendant"
+        ]
+      }
+    ]
+  },
+  "side_quests": [
+    {
+      "id": "fb_silk_forgery",
+      "title": "Tension Tells",
+      "giver": "Silksmith Vael Orun",
+      "landmark": "silk_bridge_site",
+      "summary": "A silk bridge near the ring is a flawless copy of Vael's pattern. It was not made by Vael. It was made by something that did not know what the pattern is for.",
+      "choices": [
+        {
+          "id": "expose",
+          "label": "Show Vael how to read the tension to prove the forgery.",
+          "result": "Vael traces the wrong tension with a claw and laughs, once, bitterly.",
+          "records": [
+            {
+              "type": "talked",
+              "target": "silk_bridge",
+              "tags": [
+                "evidence",
+                "pattern_respected",
+                "rival_exposed"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The forgery is removed, and Vael's signature stands.",
+          "sets_flag": "fb_forgery_exposed"
+        },
+        {
+          "id": "accept",
+          "label": "Say nothing. It is a good copy, and it carries people.",
+          "result": "The bridge works. Vael does not stop looking at it.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "silk_bridge",
+              "tags": [
+                "silk_taken",
+                "shortcut"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "A pattern stands without its author's consent.",
+          "sets_flag": "fb_forgery_used"
+        },
+        {
+          "id": "cut_down",
+          "label": "Cut the forgery down.",
+          "result": "It falls in a long white curl. Someone could have been on it.",
+          "records": [
+            {
+              "type": "harmed",
+              "target": "silk_bridge",
+              "tags": [
+                "pattern_destroyed",
+                "casualty"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "Vael is grateful and also frightened.",
+          "sets_flag": "fb_forgery_cut"
+        }
+      ],
+      "cares": [
+        "nyxaris",
+        "mara",
+        "scarlith"
+      ],
+      "reward_gear": [
+        "nyxaris_tension_needle"
+      ]
+    },
+    {
+      "id": "fb_helix_kit",
+      "title": "The Sampling Kit",
+      "giver": "A Helix field tech named Corin Bale",
+      "landmark": "helix_camp",
+      "summary": "Corin has a sampling kit and a letter from legal. He needs a signature from anyone who speaks for the silk. He does not know that Nyxaris is behind you.",
+      "choices": [
+        {
+          "id": "refuse",
+          "label": "Refuse, and make him read the clause about consent aloud.",
+          "result": "He reads it. He stops halfway, and does not finish.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "helix_camp",
+              "tags": [
+                "extraction_refused",
+                "consent_asked",
+                "stewardship"
+              ],
+              "weight": 4
+            }
+          ],
+          "consequence": "The kit leaves empty. Helix notes the refusal.",
+          "sets_flag": "fb_kit_refused"
+        },
+        {
+          "id": "license",
+          "label": "Negotiate a licensing arrangement with Nyxaris's consent.",
+          "result": "It is a ridiculous document and it is real.",
+          "records": [
+            {
+              "type": "talked",
+              "target": "helix_camp",
+              "tags": [
+                "rival_negotiated",
+                "consent_asked",
+                "leverage"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "Helix pays, and Nyxaris keeps editorial control. Both sides dislike it.",
+          "sets_flag": "fb_kit_licensed"
+        },
+        {
+          "id": "sell",
+          "label": "Sell Corin a sample quietly.",
+          "result": "He is grateful and you are paid.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "helix_camp",
+              "tags": [
+                "silk_taken",
+                "extraction",
+                "dominion_favor"
+              ],
+              "weight": 4
+            }
+          ],
+          "consequence": "A thread leaves Frostbloom for good.",
+          "sets_flag": "fb_kit_sold"
+        }
+      ],
+      "cares": [
+        "nyxaris",
+        "mara",
+        "scarlith",
+        "dexter"
+      ],
+      "reward_gear": [
+        "nyxaris_spindle"
+      ]
+    },
+    {
+      "id": "fb_vent_skaters",
+      "title": "Skaters on the Vent",
+      "giver": "A vent-field naturalist",
+      "landmark": "vent_field_site",
+      "summary": "Vent skaters thrive in a narrow band of heat. A new Dominion borehole has cooled their channel.",
+      "choices": [
+        {
+          "id": "reroute",
+          "label": "Reroute the vent channel by hand.",
+          "result": "Hot water flows where it should. The skaters begin skimming at once.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "vent_skater_colony",
+              "tags": [
+                "stewardship",
+                "calmed_wildlife",
+                "protect_weak"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The colony recovers, and the borehole is capped.",
+          "sets_flag": "fb_vent_rerouted"
+        },
+        {
+          "id": "seal",
+          "label": "Seal the channel to keep the Dominion out.",
+          "result": "It works. The skaters go too.",
+          "records": [
+            {
+              "type": "harmed",
+              "target": "vent_skater_colony",
+              "tags": [
+                "harm_wildlife",
+                "kill_wildlife"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The colony starves.",
+          "sets_flag": "fb_vent_sealed"
+        },
+        {
+          "id": "ignore",
+          "label": "Leave it. The Dominion has paperwork, after all.",
+          "result": "The channel cools by degrees.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "vent_field",
+              "tags": [
+                "neglect",
+                "extraction"
+              ],
+              "weight": 2
+            }
+          ],
+          "consequence": "The skaters thin out.",
+          "sets_flag": "fb_vent_ignored"
+        }
+      ],
+      "cares": [
+        "nyxaris",
+        "mara"
+      ],
+      "reward_gear": [
+        "solmara_eclipse_mantle"
+      ]
+    },
+    {
+      "id": "fb_nursery_web",
+      "title": "The Cold Snap Nursery",
+      "giver": "Nursery-keeper Idris Fen",
+      "landmark": "nursery_site",
+      "summary": "A cold snap is freezing a silk nursery. Idris needs warmth, fast. Steam from a nearby vent would do it, but the nursery's pattern is meant to remain cold.",
+      "choices": [
+        {
+          "id": "warm_vent",
+          "label": "Channel vent steam to the nursery.",
+          "result": "The eggs warm. The pattern warps a little.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "silk_nursery",
+              "tags": [
+                "protect_weak",
+                "stewardship"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The nursery survives, with an odd, lovely scar in the weave.",
+          "sets_flag": "fb_nursery_warmed"
+        },
+        {
+          "id": "ask_first",
+          "label": "Ask the nursery's silksmiths what they want first.",
+          "result": "It takes an hour. They choose a warm night and cold weave.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "silk_nursery",
+              "tags": [
+                "accepted_boundary",
+                "consent_asked",
+                "pattern_respected"
+              ],
+              "weight": 4
+            }
+          ],
+          "consequence": "The nursery is warmed in a way that preserves its pattern.",
+          "sets_flag": "fb_nursery_asked"
+        },
+        {
+          "id": "borrow_silk",
+          "label": "Borrow silk from the boundary and wrap the nursery.",
+          "result": "It works. The boundary line is thinner by a hand's width.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "silk_nursery",
+              "tags": [
+                "silk_taken",
+                "shortcut"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "A boundary weakens to save a nursery.",
+          "sets_flag": "fb_nursery_borrowed"
+        }
+      ],
+      "cares": [
+        "nyxaris",
+        "mollusk"
+      ],
+      "reward_gear": [
+        "bramvex_silk_grip"
+      ]
+    },
+    {
+      "id": "fb_cold_archive",
+      "title": "The Cold Archive",
+      "giver": "A panel reader named Sera Kwan",
+      "landmark": "cold_archive_site",
+      "summary": "The cold archive's ice panels carry the region's silk history. They are slowly melting, and a collector offers good money for whole panels.",
+      "choices": [
+        {
+          "id": "copy",
+          "label": "Copy the panels by hand, with the archive's permission.",
+          "result": "It takes days. Sera guides every stroke.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "cold_archive",
+              "tags": [
+                "pattern_respected",
+                "consent_asked",
+                "stewardship"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The archive is preserved in two places.",
+          "sets_flag": "fb_archive_copied"
+        },
+        {
+          "id": "sell_panel",
+          "label": "Sell one panel to the collector to fund the rest.",
+          "result": "The money keeps the lights on. The panel is gone.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "cold_archive",
+              "tags": [
+                "trafficked",
+                "silk_taken"
+              ],
+              "weight": 4
+            }
+          ],
+          "consequence": "One chapter of the record belongs to a stranger.",
+          "sets_flag": "fb_archive_sold"
+        },
+        {
+          "id": "leave_it",
+          "label": "Leave the panels to melt as they will.",
+          "result": "Sera says nothing and covers her eyes.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "cold_archive",
+              "tags": [
+                "neglect",
+                "pattern_destroyed"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The record is lost quietly.",
+          "sets_flag": "fb_archive_lost"
+        }
+      ],
+      "cares": [
+        "nyxaris",
+        "scarlith",
+        "pharilux"
+      ],
+      "reward_gear": [
+        "pharilux_archive_bell"
+      ]
+    },
+    {
+      "id": "fb_icefall_stalker",
+      "title": "The Icefall Stalker",
+      "giver": "A caravan guide named Brogan",
+      "landmark": "ice_road_site",
+      "summary": "An icefall stalker has been taking caravan animals along the ice road. The guides want it dead. It is also the last of its line.",
+      "choices": [
+        {
+          "id": "reroute",
+          "label": "Mark a new ice road away from its hunting grounds.",
+          "result": "The road is longer. It is also quiet.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "ice_road",
+              "tags": [
+                "route_laid",
+                "stewardship",
+                "spared"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The stalker hunts elsewhere. The caravans stay safe.",
+          "sets_flag": "fb_stalker_rerouted"
+        },
+        {
+          "id": "kill",
+          "label": "Hunt the stalker down.",
+          "result": "It is quick, and it is the last.",
+          "records": [
+            {
+              "type": "killed",
+              "target": "icefall_stalker",
+              "tags": [
+                "kill_wildlife",
+                "harm_wildlife"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The ice road is safe. Something in the glacier is missing.",
+          "sets_flag": "fb_stalker_killed"
+        },
+        {
+          "id": "lure",
+          "label": "Lure it to a silk-fenced hunting reserve.",
+          "result": "It takes the bait and the boundary, and does not mind either.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "icefall_stalker",
+              "tags": [
+                "calmed_wildlife",
+                "accepted_boundary",
+                "nonviolent"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The stalker has a territory, and the caravans a road.",
+          "sets_flag": "fb_stalker_fenced"
+        }
+      ],
+      "cares": [
+        "nyxaris",
+        "solthrin",
+        "bramvex"
+      ],
+      "reward_gear": [
+        "solthrin_ice_harness"
+      ]
+    }
+  ],
+  "secrets": [
+    {
+      "id": "fb_deep_bloom",
+      "name": "The Chord Bloom",
+      "hint": "A flower the size of a hall that opens to one struck chord.",
+      "how_found": "Strike the three bell-tone stones in the glass thistle valley in order after Act 2 to open the Chord Bloom.",
+      "reward": "The petals part around a silk-spun reliquary, kept for the first silksmith. Nyxaris is silent for a long moment.",
+      "ledger_tags": [
+        "discovery",
+        "pattern_respected"
+      ],
+      "reward_gear": [
+        "scarlith_not_for_sale_ledger"
+      ]
+    },
+    {
+      "id": "fb_first_web",
+      "name": "The First Web",
+      "hint": "A single strand, older than the region's boundary, crossing a chasm.",
+      "how_found": "Cross the chasm of the silk halls by the oldest strand, without cutting it, after the Act 3 bloom ring is rewoven.",
+      "reward": "The origin nursery of Frostbloom silk, and a garment that has never been worn.",
+      "ledger_tags": [
+        "discovery",
+        "accepted_boundary"
+      ],
+      "reward_gear": [
+        "nyxaris_unworn_garment"
+      ]
+    }
+  ],
+  "landmarks": [
+    {
+      "id": "silk_bridge_site",
+      "name": "Vael's Span",
+      "kind": "silk bridge",
+      "desc": "A bridge of woven silk. The tension tells you who made it."
+    },
+    {
+      "id": "helix_camp",
+      "name": "Helix Field Camp",
+      "kind": "camp",
+      "desc": "Three tents, a generator and a very neat sampling table."
+    },
+    {
+      "id": "vent_field_site",
+      "name": "The Skater Channel",
+      "kind": "vent field",
+      "desc": "A narrow, warm channel where vent skaters glide."
+    },
+    {
+      "id": "nursery_site",
+      "name": "The Weave Nursery",
+      "kind": "nursery",
+      "desc": "A cold, glittering nursery of silk and eggs."
+    },
+    {
+      "id": "cold_archive_site",
+      "name": "The Cold Archive",
+      "kind": "archive",
+      "desc": "Ice panels carved with generations of silk history."
+    },
+    {
+      "id": "ice_road_site",
+      "name": "The Ice Road",
+      "kind": "route",
+      "desc": "A caravan road on the glacier, and the hunting grounds beside it."
+    }
+  ],
+  "ambient": {
+    "npcs": [
+      {
+        "id": "fb_vael",
+        "name": "Silksmith Vael Orun",
+        "species": "ice spider",
+        "behavior": "Plucks a thread and listens to the answer, then adjusts a knot a thousandth of a hair.",
+        "schedule": "always at the span",
+        "reacts": {
+          "flag": "fb_forgery_exposed",
+          "line": "Now it is mine again. Unrecognizably mine."
+        }
+      },
+      {
+        "id": "fb_corin",
+        "name": "Corin Bale",
+        "species": "human technician",
+        "behavior": "Labels sample tubes and, when no one is looking, tucks a small silk thread behind his ear.",
+        "schedule": "camp mornings",
+        "reacts": {
+          "flag": "fb_kit_refused",
+          "line": "I read it to the end this time. It was not what I was told."
+        }
+      },
+      {
+        "id": "fb_sera",
+        "name": "Sera Kwan",
+        "species": "glass beetle",
+        "behavior": "Rubs frost off a panel with her sleeve and reads one line, then hums.",
+        "schedule": "midday at the archive",
+        "reacts": {
+          "flag": "fb_archive_copied",
+          "line": "There are two copies now. I sleep better."
+        }
+      }
+    ],
+    "creature_behaviors": [
+      {
+        "creature": "frost_moth",
+        "behavior": "Circle the bloom rings in slow spirals and shed frost as they pass.",
+        "trigger": "bloom open"
+      },
+      {
+        "creature": "rime_beetle",
+        "behavior": "Roll small balls of ice toward the vents and watch them steam.",
+        "trigger": "warm hours"
+      },
+      {
+        "creature": "vent_skater",
+        "behavior": "Skate in perfect patterns that vanish when a shadow falls across the water.",
+        "trigger": "player nearby"
+      }
+    ]
+  },
+  "loot_table": [
+    {
+      "item": "frost_silk_thread",
+      "weight": 5,
+      "source": "boundary lines",
+      "rarity": "uncommon"
+    },
+    {
+      "item": "steam_lily_petal",
+      "weight": 4,
+      "source": "vent edges",
+      "rarity": "common"
+    },
+    {
+      "item": "cinder_moss",
+      "weight": 4,
+      "source": "warm rocks",
+      "rarity": "common"
+    },
+    {
+      "item": "rime_chitin",
+      "weight": 3,
+      "source": "rime beetle molts",
+      "rarity": "uncommon"
+    },
+    {
+      "item": "glass_thistle_seed",
+      "weight": 3,
+      "source": "thistle valleys",
+      "rarity": "uncommon"
+    },
+    {
+      "item": "venom_vial",
+      "weight": 2,
+      "source": "icefall stalkers, with permission",
+      "rarity": "rare"
+    },
+    {
+      "item": "archive_ice_chip",
+      "weight": 2,
+      "source": "the Cold Archive",
+      "rarity": "rare"
+    },
+    {
+      "item": "first_thread",
+      "weight": 1,
+      "source": "the First Web",
+      "rarity": "epic"
+    }
+  ],
+  "mood": {
+    "palette": {
+      "primary": "#4a7090",
+      "secondary": "#a8c8e0",
+      "accent": "#e0a0b0",
+      "shadow": "#0e1a2a",
+      "highlight": "#e8f0f4",
+      "vent_glow": "#d9803a",
+      "bloom": "#e0a0b0"
+    },
+    "weather": [
+      "low-angle polar light with long blue shadows",
+      "vent steam drifting sideways",
+      "fine ice dust that glitters",
+      "a warm exhale from a vent that melts frost to rain"
+    ],
+    "sounds": [
+      "glass harp wind",
+      "ice creaking underfoot",
+      "silk thrumming like a plucked string",
+      "the soft pop of vents",
+      "frost moth wings, faintly like paper"
+    ],
+    "music_slots": [
+      {
+        "slot": "glacier_day",
+        "use": "open glacier exploration",
+        "notes": "Glass harp and bell. Spacious, patient."
+      },
+      {
+        "slot": "bloom_ring",
+        "use": "bloom ring and nursery scenes",
+        "notes": "Soft choir over a low synth drone. Warm, but precise."
+      },
+      {
+        "slot": "silk_hall",
+        "use": "silk halls and archive",
+        "notes": "Bowed metal playing very quietly, with a tension that never releases."
+      },
+      {
+        "slot": "vent_flare",
+        "use": "vent eruptions",
+        "notes": "Orange brass swells over cold bells. Heat and cold in the same chord."
+      },
+      {
+        "slot": "case_theme",
+        "use": "Nyxaris v. Helix scenes",
+        "notes": "Slow courtroom piano re-voiced on glass harp."
+      },
+      {
+        "slot": "bloom_opens",
+        "use": "Act 3",
+        "notes": "Choir enters on one note and adds a pitch for every thread rewoven."
+      }
+    ]
+  }
 }

@@ -94,6 +94,165 @@
         "to": "zephyr",
         "template": "bring_both_home"
       }
+    },
+    "rr_act1_done": {
+      "type": "chose",
+      "target": "rr_act1",
+      "tags": [
+        "discovery",
+        "curiosity"
+      ],
+      "weight": 1
+    },
+    "rr_act2_done": {
+      "type": "chose",
+      "target": "rr_act2",
+      "tags": [
+        "burden",
+        "stewardship"
+      ],
+      "weight": 2
+    },
+    "rr_act3_done": {
+      "type": "chose",
+      "target": "rr_act3",
+      "tags": [
+        "boss",
+        "burden"
+      ],
+      "weight": 4
+    },
+    "cf_act1_done": {
+      "type": "chose",
+      "target": "cf_act1",
+      "tags": [
+        "discovery",
+        "curiosity"
+      ],
+      "weight": 1
+    },
+    "cf_act2_done": {
+      "type": "chose",
+      "target": "cf_act2",
+      "tags": [
+        "curiosity",
+        "foresight_used"
+      ],
+      "weight": 2
+    },
+    "cf_act3_done": {
+      "type": "chose",
+      "target": "cf_act3",
+      "tags": [
+        "boss",
+        "evacuation"
+      ],
+      "weight": 4
+    },
+    "ld_act1_done": {
+      "type": "chose",
+      "target": "ld_act1",
+      "tags": [
+        "discovery",
+        "curiosity"
+      ],
+      "weight": 1
+    },
+    "ld_act2_done": {
+      "type": "chose",
+      "target": "ld_act2",
+      "tags": [
+        "privacy_respected"
+      ],
+      "weight": 2
+    },
+    "ld_act3_done": {
+      "type": "chose",
+      "target": "ld_act3",
+      "tags": [
+        "boss",
+        "threshold_kept"
+      ],
+      "weight": 4
+    },
+    "rw_act1_done": {
+      "type": "chose",
+      "target": "rw_act1",
+      "tags": [
+        "discovery",
+        "curiosity"
+      ],
+      "weight": 1
+    },
+    "rw_act2_done": {
+      "type": "chose",
+      "target": "rw_act2",
+      "tags": [
+        "delay_used"
+      ],
+      "weight": 2
+    },
+    "rw_act3_done": {
+      "type": "chose",
+      "target": "rw_act3",
+      "tags": [
+        "boss",
+        "consequence_faced"
+      ],
+      "weight": 4
+    },
+    "bw_act1_done": {
+      "type": "chose",
+      "target": "bw_act1",
+      "tags": [
+        "discovery",
+        "curiosity"
+      ],
+      "weight": 1
+    },
+    "bw_act2_done": {
+      "type": "chose",
+      "target": "bw_act2",
+      "tags": [
+        "promise_made"
+      ],
+      "weight": 2
+    },
+    "bw_act3_done": {
+      "type": "chose",
+      "target": "bw_act3",
+      "tags": [
+        "boss",
+        "promise_kept"
+      ],
+      "weight": 4
+    },
+    "fb_act1_done": {
+      "type": "chose",
+      "target": "fb_act1",
+      "tags": [
+        "discovery",
+        "evidence"
+      ],
+      "weight": 1
+    },
+    "fb_act2_done": {
+      "type": "chose",
+      "target": "fb_act2",
+      "tags": [
+        "evidence",
+        "pattern_respected"
+      ],
+      "weight": 2
+    },
+    "fb_act3_done": {
+      "type": "chose",
+      "target": "fb_act3",
+      "tags": [
+        "boss",
+        "pattern_respected"
+      ],
+      "weight": 4
     }
   },
   "dialogue_events": {

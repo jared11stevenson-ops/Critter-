@@ -1,0 +1,2518 @@
+{
+  "_doc": "Gear and materials catalog. Owner: Agent 3 (content). Every obtainable character (First Ten + Solthrin) has 6 items: 2 weapon, 2 charm, 2 garment, each with a lore_reason tied to the character's canon contradiction. Stats use paths from game/combat/balance.json: '<character>.<key>' (full path where balance.json has that character section, otherwise a common actor key: hp, speed, accel, friction, dash_dist, dash_time, dash_iframes, dash_cd, poise) or 'global.*', 'pickups.*', 'burden.*'. op 'add' adds to the base value, 'mult' multiplies it. Epic and legendary items must carry a cost stat. 'hooks' are runtime effects listed in design/DATA_REQUESTS.md. source.region + source.kind (act|quest|secret) + source.ref points at an entry in game/canon/regions/<region>.json whose reward_gear lists the item.",
+  "slots": [
+    "weapon",
+    "charm",
+    "garment"
+  ],
+  "rarities": {
+    "common": {
+      "order": 1,
+      "buffs": [
+        1,
+        1
+      ],
+      "cost_required": false
+    },
+    "uncommon": {
+      "order": 2,
+      "buffs": [
+        1,
+        2
+      ],
+      "cost_required": false
+    },
+    "rare": {
+      "order": 3,
+      "buffs": [
+        2,
+        2
+      ],
+      "cost_required": false
+    },
+    "epic": {
+      "order": 4,
+      "buffs": [
+        2,
+        2
+      ],
+      "cost_required": true
+    },
+    "legendary": {
+      "order": 5,
+      "buffs": [
+        3,
+        3
+      ],
+      "cost_required": true
+    }
+  },
+  "items": [
+    {
+      "id": "aruun_plumb_apron",
+      "name": "Apprentice's Plumb Apron",
+      "character": "aruun",
+      "slot": "garment",
+      "rarity": "common",
+      "source": {
+        "region": "red_reaches",
+        "kind": "act",
+        "ref": "rr_act1"
+      },
+      "lore_reason": "A Spanwright apprentice's apron, far too small for him now. He keeps wearing it because the first lesson was never about monuments, and he is still learning it.",
+      "stats": [
+        {
+          "stat": "aruun.hp",
+          "op": "add",
+          "value": 30
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "aruun_ironroot_haft",
+      "name": "Ironroot Haft",
+      "character": "aruun",
+      "slot": "weapon",
+      "rarity": "uncommon",
+      "source": {
+        "region": "red_reaches",
+        "kind": "act",
+        "ref": "rr_act2"
+      },
+      "lore_reason": "Morrow rides an ironroot haft grown by Reach hands. Aruun wanted marble; ironroot flexes under load, which is why it never breaks.",
+      "stats": [
+        {
+          "stat": "aruun.combo.damage",
+          "op": "mult",
+          "value": 1.08
+        },
+        {
+          "stat": "aruun.combo.chain_window",
+          "op": "add",
+          "value": 0.05
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "aruun_well_stone",
+      "name": "Keth Well Stone",
+      "character": "aruun",
+      "slot": "charm",
+      "rarity": "uncommon",
+      "source": {
+        "region": "red_reaches",
+        "kind": "quest",
+        "ref": "rr_well_line"
+      },
+      "lore_reason": "A smooth pebble from the bottom of the Keth wells. The kind of work he once called beneath him now keeps a plateau alive.",
+      "stats": [
+        {
+          "stat": "aruun.hp",
+          "op": "add",
+          "value": 40
+        },
+        {
+          "stat": "global.revive_time",
+          "op": "mult",
+          "value": 0.9
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "aruun_two_path_loop",
+      "name": "Two-Path Cable Loop",
+      "character": "aruun",
+      "slot": "charm",
+      "rarity": "rare",
+      "source": {
+        "region": "red_reaches",
+        "kind": "quest",
+        "ref": "rr_apprentice_arch"
+      },
+      "lore_reason": "A cable loop braided with two load paths, one always hidden. It is the lesson his teacher spent years trying to give him: a good structure never announces its safety.",
+      "stats": [
+        {
+          "stat": "aruun.poise",
+          "op": "add",
+          "value": 15
+        },
+        {
+          "stat": "aruun.gravity_pull.slam_damage",
+          "op": "mult",
+          "value": 1.1
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "aruun_eleven_minute_shell",
+      "name": "Eleven-Minute Shell Wrap",
+      "character": "aruun",
+      "slot": "garment",
+      "rarity": "epic",
+      "source": {
+        "region": "red_reaches",
+        "kind": "act",
+        "ref": "rr_act3"
+      },
+      "lore_reason": "His fractured shell, refitted with Spanwright cable after the Red Span. Every seam is a record of the eleven minutes he carried a bridge, and of the hundreds he could not.",
+      "stats": [
+        {
+          "stat": "aruun.hp",
+          "op": "add",
+          "value": 60
+        },
+        {
+          "stat": "aruun.poise",
+          "op": "add",
+          "value": 20
+        },
+        {
+          "stat": "aruun.speed",
+          "op": "mult",
+          "value": 0.94
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "aruun_morrow_foundation",
+      "name": "Foundation-Cut Morrow Head",
+      "character": "aruun",
+      "slot": "weapon",
+      "rarity": "legendary",
+      "source": {
+        "region": "red_reaches",
+        "kind": "secret",
+        "ref": "rr_foundation_room"
+      },
+      "lore_reason": "A resting block of Thoughtstone from the foundation room, shaped into a new head for Morrow. It answers faster than he commands, and he refuses to call it a weapon, because he wants it to hold things up.",
+      "stats": [
+        {
+          "stat": "aruun.reaching_strike.damage",
+          "op": "mult",
+          "value": 1.2
+        },
+        {
+          "stat": "aruun.gravity_pull.slam_damage",
+          "op": "mult",
+          "value": 1.15
+        },
+        {
+          "stat": "aruun.combo.damage",
+          "op": "mult",
+          "value": 1.1
+        },
+        {
+          "stat": "aruun.beetle_rage.strain_per_s",
+          "op": "mult",
+          "value": 1.25
+        }
+      ],
+      "hooks": [
+        "morrow_brace_on_reaching_strike"
+      ]
+    },
+    {
+      "id": "cigarra_charm_knots",
+      "name": "Wish-Line Knots",
+      "character": "cigarra",
+      "slot": "charm",
+      "rarity": "common",
+      "source": {
+        "region": "canopy_fold",
+        "kind": "act",
+        "ref": "cf_act1"
+      },
+      "lore_reason": "A knot of hanging-line charms. Each is a wish she is not sure she believes in, which is precisely why she keeps them close.",
+      "stats": [
+        {
+          "stat": "cigarra.noise.decay",
+          "op": "mult",
+          "value": 1.1
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "cigarra_bough_wrap",
+      "name": "Bough-Walker Wrap",
+      "character": "cigarra",
+      "slot": "garment",
+      "rarity": "uncommon",
+      "source": {
+        "region": "canopy_fold",
+        "kind": "quest",
+        "ref": "cf_lantern_census"
+      },
+      "lore_reason": "A light wrap the shelf-keepers use on slick boughs. She learned from the hall that certainty is a rope you test before you trust.",
+      "stats": [
+        {
+          "stat": "cigarra.speed",
+          "op": "add",
+          "value": 0.3
+        },
+        {
+          "stat": "cigarra.dash_dist",
+          "op": "add",
+          "value": 0.4
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "cigarra_second_thought_sphere",
+      "name": "Sphere of Second Thoughts",
+      "character": "cigarra",
+      "slot": "weapon",
+      "rarity": "uncommon",
+      "source": {
+        "region": "canopy_fold",
+        "kind": "act",
+        "ref": "cf_act2"
+      },
+      "lore_reason": "A crown sphere that hums when she is about to doubt herself. She has learned to fire it anyway.",
+      "stats": [
+        {
+          "stat": "cigarra.bad_thought.damage",
+          "op": "mult",
+          "value": 1.1
+        },
+        {
+          "stat": "cigarra.bad_thought.interval",
+          "op": "mult",
+          "value": 0.95
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "cigarra_calder_compass",
+      "name": "Calder's Compass",
+      "character": "cigarra",
+      "slot": "charm",
+      "rarity": "rare",
+      "source": {
+        "region": "canopy_fold",
+        "kind": "quest",
+        "ref": "cf_wren_cable"
+      },
+      "lore_reason": "A surveyor's compass Wren Calder left behind. It points somewhere certain, and Cigarra keeps it because she cannot bring herself to hate how that feels.",
+      "stats": [
+        {
+          "stat": "cigarra.premonition.counter_mult",
+          "op": "add",
+          "value": 0.25
+        },
+        {
+          "stat": "cigarra.brain_skip.cd",
+          "op": "mult",
+          "value": 0.92
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "cigarra_unseen_cloak",
+      "name": "Long Bough Cloak",
+      "character": "cigarra",
+      "slot": "garment",
+      "rarity": "epic",
+      "source": {
+        "region": "canopy_fold",
+        "kind": "act",
+        "ref": "cf_act3"
+      },
+      "lore_reason": "Her treehopper-wing cloak, re-sewn with leaves shed by the Long Bough. It lets her step off the path she foresaw, and she loves how it hides her from her own visions.",
+      "stats": [
+        {
+          "stat": "cigarra.grasshopper_thought.height",
+          "op": "add",
+          "value": 1.5
+        },
+        {
+          "stat": "cigarra.premonition.duration",
+          "op": "add",
+          "value": 1.0
+        },
+        {
+          "stat": "cigarra.hp",
+          "op": "mult",
+          "value": 0.92
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "cigarra_dead_route_sphere",
+      "name": "Dead-Route Crown Sphere",
+      "character": "cigarra",
+      "slot": "weapon",
+      "rarity": "legendary",
+      "source": {
+        "region": "canopy_fold",
+        "kind": "secret",
+        "ref": "cf_route_archive"
+      },
+      "lore_reason": "A black sphere etched with every route that has died. It shows her nothing of the future, only what was truly crossed, and that is the first certainty she has ever trusted.",
+      "stats": [
+        {
+          "stat": "cigarra.bad_thought.damage",
+          "op": "mult",
+          "value": 1.2
+        },
+        {
+          "stat": "cigarra.premonition.duration",
+          "op": "add",
+          "value": 1.5
+        },
+        {
+          "stat": "cigarra.brain_skip.stun",
+          "op": "add",
+          "value": 0.3
+        },
+        {
+          "stat": "cigarra.noise.distort_at",
+          "op": "add",
+          "value": -10
+        }
+      ],
+      "hooks": [
+        "dead_route_replay"
+      ]
+    },
+    {
+      "id": "nerit_pocket_reservoir",
+      "name": "Pocket Reservoir",
+      "character": "nerit",
+      "slot": "charm",
+      "rarity": "common",
+      "source": {
+        "region": "lumen_depths",
+        "kind": "act",
+        "ref": "ld_act1"
+      },
+      "lore_reason": "A corked vial of plankton light. Nerit carries it the way others carry a coin: to give away, not to spend.",
+      "stats": [
+        {
+          "stat": "nerit.dash_cd",
+          "op": "mult",
+          "value": 0.95
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "nerit_hooded_lantern",
+      "name": "Hooded Lantern",
+      "character": "nerit",
+      "slot": "weapon",
+      "rarity": "uncommon",
+      "source": {
+        "region": "lumen_depths",
+        "kind": "act",
+        "ref": "ld_act2"
+      },
+      "lore_reason": "A lantern that works by hiding most of its own light. It is the only kind of lamp Nerit trusts.",
+      "stats": [
+        {
+          "stat": "nerit.hp",
+          "op": "mult",
+          "value": 1.05
+        },
+        {
+          "stat": "nerit.poise",
+          "op": "add",
+          "value": 10
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "nerit_mourning_veil",
+      "name": "Mourning Veil",
+      "character": "nerit",
+      "slot": "garment",
+      "rarity": "uncommon",
+      "source": {
+        "region": "lumen_depths",
+        "kind": "quest",
+        "ref": "ld_mourning_pool"
+      },
+      "lore_reason": "A veil of bell moss given by the family at the pool. It carries the lesson that darkness can be a gift to the grieving.",
+      "stats": [
+        {
+          "stat": "nerit.dash_iframes",
+          "op": "add",
+          "value": 0.04
+        },
+        {
+          "stat": "nerit.hp",
+          "op": "mult",
+          "value": 1.06
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "nerit_dimmer_ring",
+      "name": "Cycle-Dimmer Ring",
+      "character": "nerit",
+      "slot": "charm",
+      "rarity": "rare",
+      "source": {
+        "region": "lumen_depths",
+        "kind": "quest",
+        "ref": "ld_lamp_walkers"
+      },
+      "lore_reason": "A ring tuned from a Dominion lamp core to dim on the cave's own cycle. Nerit turned a tool of exposure into a tool of rest.",
+      "stats": [
+        {
+          "stat": "nerit.dash_cd",
+          "op": "mult",
+          "value": 0.9
+        },
+        {
+          "stat": "global.invuln_after_hit",
+          "op": "add",
+          "value": 0.05
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "nerit_sealed_cowl",
+      "name": "Sealed-Door Cowl",
+      "character": "nerit",
+      "slot": "garment",
+      "rarity": "epic",
+      "source": {
+        "region": "lumen_depths",
+        "kind": "act",
+        "ref": "ld_act3"
+      },
+      "lore_reason": "A cowl woven from threads gathered around the vault door. Wearing it, Nerit feels what the door wants: to be left alone.",
+      "stats": [
+        {
+          "stat": "nerit.hp",
+          "op": "mult",
+          "value": 1.12
+        },
+        {
+          "stat": "nerit.poise",
+          "op": "add",
+          "value": 15
+        },
+        {
+          "stat": "nerit.speed",
+          "op": "mult",
+          "value": 0.95
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "nerit_stilled_lantern",
+      "name": "Stilled Lantern",
+      "character": "nerit",
+      "slot": "weapon",
+      "rarity": "legendary",
+      "source": {
+        "region": "lumen_depths",
+        "kind": "secret",
+        "ref": "ld_constellation_key"
+      },
+      "lore_reason": "A lamp that has never been lit, filled with light that stopped moving long ago. Nerit can relocate it anywhere, and has sworn to light it only for those who ask.",
+      "stats": [
+        {
+          "stat": "nerit.dash_dist",
+          "op": "mult",
+          "value": 1.15
+        },
+        {
+          "stat": "global.scan_radius",
+          "op": "add",
+          "value": 6.0
+        },
+        {
+          "stat": "nerit.poise",
+          "op": "add",
+          "value": 15
+        },
+        {
+          "stat": "nerit.hp",
+          "op": "mult",
+          "value": 0.9
+        }
+      ],
+      "hooks": [
+        "light_relocation_range"
+      ]
+    },
+    {
+      "id": "mollusk_palm_cloak",
+      "name": "Rain Palm Cloak",
+      "character": "mollusk",
+      "slot": "garment",
+      "rarity": "common",
+      "source": {
+        "region": "rainward",
+        "kind": "act",
+        "ref": "rw_act1"
+      },
+      "lore_reason": "A rain-palm cloak that sheds the first storm. Mollusk wears it knowing that shedding rain is not the same as outrunning it.",
+      "stats": [
+        {
+          "stat": "mollusk.hp",
+          "op": "mult",
+          "value": 1.05
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "mollusk_interest_bead",
+      "name": "Interest Ledger Bead",
+      "character": "mollusk",
+      "slot": "charm",
+      "rarity": "rare",
+      "source": {
+        "region": "rainward",
+        "kind": "act",
+        "ref": "rw_act2"
+      },
+      "lore_reason": "A bead strung to his shell for every delay he has bought. It is heavier than it looks, and he refuses to take it off.",
+      "stats": [
+        {
+          "stat": "global.revive_hp_frac",
+          "op": "add",
+          "value": 0.08
+        },
+        {
+          "stat": "global.revive_time",
+          "op": "mult",
+          "value": 0.9
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "mollusk_faced_tide_wrap",
+      "name": "Faced-Tide Shell Wrap",
+      "character": "mollusk",
+      "slot": "garment",
+      "rarity": "epic",
+      "source": {
+        "region": "rainward",
+        "kind": "act",
+        "ref": "rw_act3"
+      },
+      "lore_reason": "A shell wrap carved with the night the flood came due. Every mark is a consequence he chose to face rather than dodge.",
+      "stats": [
+        {
+          "stat": "mollusk.hp",
+          "op": "mult",
+          "value": 1.15
+        },
+        {
+          "stat": "mollusk.poise",
+          "op": "add",
+          "value": 20
+        },
+        {
+          "stat": "mollusk.dash_dist",
+          "op": "mult",
+          "value": 0.9
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "mollusk_levee_spade",
+      "name": "Levee Spade",
+      "character": "mollusk",
+      "slot": "weapon",
+      "rarity": "uncommon",
+      "source": {
+        "region": "rainward",
+        "kind": "quest",
+        "ref": "rw_levee_patch"
+      },
+      "lore_reason": "A broad spade used to patch the Long Levee. In Mollusk's hands it is a tool for slowing the water long enough for someone to finish the real repair.",
+      "stats": [
+        {
+          "stat": "mollusk.poise",
+          "op": "add",
+          "value": 15
+        },
+        {
+          "stat": "mollusk.hp",
+          "op": "mult",
+          "value": 1.05
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "mollusk_carving_point",
+      "name": "Neema's Carving Point",
+      "character": "mollusk",
+      "slot": "charm",
+      "rarity": "uncommon",
+      "source": {
+        "region": "rainward",
+        "kind": "quest",
+        "ref": "rw_shell_marks"
+      },
+      "lore_reason": "A bone point used to mark old shell growth. Neema gave it to him to remind him that every debt has a name, and that paying it is a way of being remembered.",
+      "stats": [
+        {
+          "stat": "mollusk.dash_iframes",
+          "op": "add",
+          "value": 0.05
+        },
+        {
+          "stat": "mollusk.hp",
+          "op": "mult",
+          "value": 1.04
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "mollusk_unfinished_anchor",
+      "name": "Unfinished Anchor-Hook",
+      "character": "mollusk",
+      "slot": "weapon",
+      "rarity": "legendary",
+      "source": {
+        "region": "rainward",
+        "kind": "secret",
+        "ref": "rw_shell_vault"
+      },
+      "lore_reason": "A heavy hook left in the drowned chapel, with a loop of shell cord still unfinished. It holds a structure in an unfinished state, and it never lets him forget that unfinished is not the same as safe.",
+      "stats": [
+        {
+          "stat": "mollusk.poise",
+          "op": "add",
+          "value": 40
+        },
+        {
+          "stat": "mollusk.hp",
+          "op": "mult",
+          "value": 1.15
+        },
+        {
+          "stat": "global.contain_channel",
+          "op": "mult",
+          "value": 0.9
+        },
+        {
+          "stat": "mollusk.speed",
+          "op": "mult",
+          "value": 0.9
+        }
+      ],
+      "hooks": [
+        "borrowed_seconds_extends_with_anchor"
+      ]
+    },
+    {
+      "id": "zephyr_ribbon_knot",
+      "name": "Witness Ribbon Knot",
+      "character": "zephyr",
+      "slot": "charm",
+      "rarity": "common",
+      "source": {
+        "region": "briarwild",
+        "kind": "act",
+        "ref": "bw_act1"
+      },
+      "lore_reason": "A ribbon from the witness post, knotted around one wrist. It is the one thing Zephyr never bends.",
+      "stats": [
+        {
+          "stat": "zephyr.speed",
+          "op": "mult",
+          "value": 1.04
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "zephyr_loophole_coat",
+      "name": "Loophole-Lined Coat",
+      "character": "zephyr",
+      "slot": "garment",
+      "rarity": "uncommon",
+      "source": {
+        "region": "briarwild",
+        "kind": "act",
+        "ref": "bw_act2"
+      },
+      "lore_reason": "A coat with a pocket in every seam, each holding a promise Zephyr has found a way to keep. It is the best argument for wording that has ever been stitched.",
+      "stats": [
+        {
+          "stat": "zephyr.dash_dist",
+          "op": "mult",
+          "value": 1.08
+        },
+        {
+          "stat": "zephyr.dash_iframes",
+          "op": "add",
+          "value": 0.03
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "zephyr_kept_word_locket",
+      "name": "Kept-Word Locket",
+      "character": "zephyr",
+      "slot": "charm",
+      "rarity": "epic",
+      "source": {
+        "region": "briarwild",
+        "kind": "act",
+        "ref": "bw_act3"
+      },
+      "lore_reason": "A locket that holds the read-aloud promise from the night bloom. It is warm only when its owner has kept every word they gave.",
+      "stats": [
+        {
+          "stat": "global.crit_chance",
+          "op": "add",
+          "value": 0.03
+        },
+        {
+          "stat": "global.revive_hp_frac",
+          "op": "add",
+          "value": 0.1
+        },
+        {
+          "stat": "zephyr.hp",
+          "op": "mult",
+          "value": 0.95
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "zephyr_pollen_fan",
+      "name": "Pollen Fan",
+      "character": "zephyr",
+      "slot": "weapon",
+      "rarity": "uncommon",
+      "source": {
+        "region": "briarwild",
+        "kind": "quest",
+        "ref": "bw_witness_dispute"
+      },
+      "lore_reason": "A fan of silk poppy petals given at the witness post. It stirs the air and the room, and has never once been used against a vow.",
+      "stats": [
+        {
+          "stat": "global.crit_chance",
+          "op": "add",
+          "value": 0.02
+        },
+        {
+          "stat": "zephyr.speed",
+          "op": "mult",
+          "value": 1.04
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "zephyr_courier_cape",
+      "name": "Courier's Wind Cape",
+      "character": "zephyr",
+      "slot": "garment",
+      "rarity": "rare",
+      "source": {
+        "region": "briarwild",
+        "kind": "quest",
+        "ref": "bw_courier_chain"
+      },
+      "lore_reason": "A cape the relay captain awards to anyone who delivers on time. Zephyr treats it as a contract, and wears it as a signature.",
+      "stats": [
+        {
+          "stat": "zephyr.dash_cd",
+          "op": "mult",
+          "value": 0.9
+        },
+        {
+          "stat": "zephyr.speed",
+          "op": "mult",
+          "value": 1.06
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "zephyr_everbloom_sprig",
+      "name": "Everbloom Sprig",
+      "character": "zephyr",
+      "slot": "weapon",
+      "rarity": "legendary",
+      "source": {
+        "region": "briarwild",
+        "kind": "secret",
+        "ref": "bw_hidden_gate"
+      },
+      "lore_reason": "A sprig from the gate that is always open, because no one has ever broken a promise there. A game in Zephyr's hands, and a vow in his heart.",
+      "stats": [
+        {
+          "stat": "zephyr.dash_dist",
+          "op": "mult",
+          "value": 1.2
+        },
+        {
+          "stat": "zephyr.speed",
+          "op": "mult",
+          "value": 1.08
+        },
+        {
+          "stat": "global.crit_mult",
+          "op": "add",
+          "value": 0.2
+        },
+        {
+          "stat": "zephyr.hp",
+          "op": "mult",
+          "value": 0.9
+        }
+      ],
+      "hooks": [
+        "pollination_trail_on_dash"
+      ]
+    },
+    {
+      "id": "nyxaris_boundary_charm",
+      "name": "Boundary Thread Charm",
+      "character": "nyxaris",
+      "slot": "charm",
+      "rarity": "common",
+      "source": {
+        "region": "frostbloom",
+        "kind": "act",
+        "ref": "fb_act1"
+      },
+      "lore_reason": "A single boundary thread, knotted. It is the smallest border Nyxaris owns, and the one she defends most fiercely.",
+      "stats": [
+        {
+          "stat": "nyxaris.poise",
+          "op": "add",
+          "value": 8
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "nyxaris_evidence_mantle",
+      "name": "Evidence Silk Mantle",
+      "character": "nyxaris",
+      "slot": "garment",
+      "rarity": "uncommon",
+      "source": {
+        "region": "frostbloom",
+        "kind": "act",
+        "ref": "fb_act2"
+      },
+      "lore_reason": "A mantle woven from the tension patterns that prove the forgery. It is beauty built for a courtroom.",
+      "stats": [
+        {
+          "stat": "nyxaris.hp",
+          "op": "mult",
+          "value": 1.06
+        },
+        {
+          "stat": "nyxaris.dash_iframes",
+          "op": "add",
+          "value": 0.03
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "nyxaris_spindle",
+      "name": "Contract-Torn Spindle",
+      "character": "nyxaris",
+      "slot": "weapon",
+      "rarity": "uncommon",
+      "source": {
+        "region": "frostbloom",
+        "kind": "quest",
+        "ref": "fb_helix_kit"
+      },
+      "lore_reason": "A spindle that once held Helix's sampling letter. She tore the letter and kept the tool, to remember who asked and who did not.",
+      "stats": [
+        {
+          "stat": "nyxaris.speed",
+          "op": "mult",
+          "value": 1.05
+        },
+        {
+          "stat": "global.crit_mult",
+          "op": "add",
+          "value": 0.1
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "nyxaris_tension_needle",
+      "name": "Tension Needle",
+      "character": "nyxaris",
+      "slot": "weapon",
+      "rarity": "rare",
+      "source": {
+        "region": "frostbloom",
+        "kind": "quest",
+        "ref": "fb_silk_forgery"
+      },
+      "lore_reason": "A silksmith's needle that finds the wrong note in any web. It exists to protect authorship, which to her is a form of control and also a form of love.",
+      "stats": [
+        {
+          "stat": "global.crit_chance",
+          "op": "add",
+          "value": 0.03
+        },
+        {
+          "stat": "global.autoaim_max_range",
+          "op": "add",
+          "value": 2.0
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "nyxaris_ring_pendant",
+      "name": "Ring-Rewoven Pendant",
+      "character": "nyxaris",
+      "slot": "charm",
+      "rarity": "epic",
+      "source": {
+        "region": "frostbloom",
+        "kind": "act",
+        "ref": "fb_act3"
+      },
+      "lore_reason": "A pendant woven from the rewoven bloom ring. The pattern is beautiful and unbreakable, and she made it that way on purpose.",
+      "stats": [
+        {
+          "stat": "nyxaris.poise",
+          "op": "add",
+          "value": 20
+        },
+        {
+          "stat": "nyxaris.hp",
+          "op": "mult",
+          "value": 1.1
+        },
+        {
+          "stat": "nyxaris.speed",
+          "op": "mult",
+          "value": 0.95
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "nyxaris_unworn_garment",
+      "name": "The Unworn Garment",
+      "character": "nyxaris",
+      "slot": "garment",
+      "rarity": "legendary",
+      "source": {
+        "region": "frostbloom",
+        "kind": "secret",
+        "ref": "fb_first_web"
+      },
+      "lore_reason": "A garment from the origin nursery, never worn. It is the first thing her people ever made to be beautiful and safe at once.",
+      "stats": [
+        {
+          "stat": "nyxaris.hp",
+          "op": "mult",
+          "value": 1.2
+        },
+        {
+          "stat": "nyxaris.poise",
+          "op": "add",
+          "value": 25
+        },
+        {
+          "stat": "nyxaris.dash_iframes",
+          "op": "add",
+          "value": 0.06
+        },
+        {
+          "stat": "nyxaris.dash_cd",
+          "op": "mult",
+          "value": 1.15
+        }
+      ],
+      "hooks": [
+        "silk_pattern_zone_on_dash"
+      ]
+    },
+    {
+      "id": "pharilux_keepers_chain",
+      "name": "Keeper's Cairn Chain",
+      "character": "pharilux",
+      "slot": "charm",
+      "rarity": "epic",
+      "source": {
+        "region": "red_reaches",
+        "kind": "secret",
+        "ref": "rr_cairn_names"
+      },
+      "lore_reason": "A chain link from the cairn of bridge-keeper names. He keeps other people's names without ever explaining his own.",
+      "stats": [
+        {
+          "stat": "pharilux.poise",
+          "op": "add",
+          "value": 25
+        },
+        {
+          "stat": "pharilux.hp",
+          "op": "mult",
+          "value": 1.08
+        },
+        {
+          "stat": "pharilux.speed",
+          "op": "mult",
+          "value": 0.95
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "pharilux_wrong_direction_lens",
+      "name": "Wrong-Direction Lens",
+      "character": "pharilux",
+      "slot": "weapon",
+      "rarity": "epic",
+      "source": {
+        "region": "canopy_fold",
+        "kind": "secret",
+        "ref": "cf_silent_crown"
+      },
+      "lore_reason": "A lens cut from a leaf of the Silent Crown, where even prophecy goes blank. He looks through it at Cigarra's blind spot, and says nothing.",
+      "stats": [
+        {
+          "stat": "global.scan_radius",
+          "op": "add",
+          "value": 8.0
+        },
+        {
+          "stat": "pharilux.dash_iframes",
+          "op": "add",
+          "value": 0.05
+        },
+        {
+          "stat": "pharilux.hp",
+          "op": "mult",
+          "value": 0.93
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "pharilux_threshold_wrap",
+      "name": "Threshold Wrap",
+      "character": "pharilux",
+      "slot": "garment",
+      "rarity": "rare",
+      "source": {
+        "region": "lumen_depths",
+        "kind": "quest",
+        "ref": "ld_hollow_echo"
+      },
+      "lore_reason": "A wrap taken from the door keeper who asked not to be pressed. Pharilux wears it as a promise that he will not press anyone else.",
+      "stats": [
+        {
+          "stat": "pharilux.hp",
+          "op": "mult",
+          "value": 1.1
+        },
+        {
+          "stat": "pharilux.poise",
+          "op": "add",
+          "value": 15
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "pharilux_hour_beacon",
+      "name": "Hour-Mist Beacon",
+      "character": "pharilux",
+      "slot": "weapon",
+      "rarity": "epic",
+      "source": {
+        "region": "rainward",
+        "kind": "secret",
+        "ref": "rw_eye_of_storm"
+      },
+      "lore_reason": "His amber beacon, refilled with the mist of the hour when no rain fell. It burns steadily and tells him nothing about where it came from.",
+      "stats": [
+        {
+          "stat": "global.scan_radius",
+          "op": "add",
+          "value": 6.0
+        },
+        {
+          "stat": "global.crit_chance",
+          "op": "add",
+          "value": 0.02
+        },
+        {
+          "stat": "pharilux.speed",
+          "op": "mult",
+          "value": 0.95
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "pharilux_amber_oath_mantle",
+      "name": "Amber Oath Mantle",
+      "character": "pharilux",
+      "slot": "garment",
+      "rarity": "legendary",
+      "source": {
+        "region": "briarwild",
+        "kind": "secret",
+        "ref": "bw_honey_cellar"
+      },
+      "lore_reason": "A mantle sealed in amber from the cellar of oaths. The only thing he will say of it is that the oath inside it is not his, and it is kept anyway.",
+      "stats": [
+        {
+          "stat": "pharilux.hp",
+          "op": "mult",
+          "value": 1.2
+        },
+        {
+          "stat": "pharilux.poise",
+          "op": "add",
+          "value": 30
+        },
+        {
+          "stat": "global.invuln_after_hit",
+          "op": "add",
+          "value": 0.1
+        },
+        {
+          "stat": "pharilux.speed",
+          "op": "mult",
+          "value": 0.9
+        }
+      ],
+      "hooks": [
+        "sealed_oath_aura"
+      ]
+    },
+    {
+      "id": "pharilux_archive_bell",
+      "name": "Archive Ice Bell",
+      "character": "pharilux",
+      "slot": "charm",
+      "rarity": "rare",
+      "source": {
+        "region": "frostbloom",
+        "kind": "quest",
+        "ref": "fb_cold_archive"
+      },
+      "lore_reason": "A chip of the cold archive that carries one small, true record. He studies it for an uncomfortably long time, and then returns it to his pocket.",
+      "stats": [
+        {
+          "stat": "global.scan_radius",
+          "op": "add",
+          "value": 5.0
+        },
+        {
+          "stat": "pharilux.dash_cd",
+          "op": "mult",
+          "value": 0.92
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "scarlith_fair_scale",
+      "name": "Reach Fair Scale",
+      "character": "scarlith",
+      "slot": "charm",
+      "rarity": "uncommon",
+      "source": {
+        "region": "red_reaches",
+        "kind": "quest",
+        "ref": "rr_vesk_cache"
+      },
+      "lore_reason": "A brass scale balanced to Reach standards. He refuses to rig it, and it costs him sleep every time.",
+      "stats": [
+        {
+          "stat": "pickups.magnet_radius",
+          "op": "add",
+          "value": 1.0
+        },
+        {
+          "stat": "scarlith.hp",
+          "op": "mult",
+          "value": 1.05
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "scarlith_wishline_pin",
+      "name": "Wish-Line Pin",
+      "character": "scarlith",
+      "slot": "charm",
+      "rarity": "common",
+      "source": {
+        "region": "canopy_fold",
+        "kind": "quest",
+        "ref": "cf_charm_thief"
+      },
+      "lore_reason": "A tiny pin from the charm line. It is worth nothing to anyone but its owner, and he will not sell it.",
+      "stats": [
+        {
+          "stat": "pickups.magnet_radius",
+          "op": "add",
+          "value": 0.5
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "scarlith_eel_scale_vest",
+      "name": "Glass Eel Scale Vest",
+      "character": "scarlith",
+      "slot": "garment",
+      "rarity": "rare",
+      "source": {
+        "region": "lumen_depths",
+        "kind": "quest",
+        "ref": "ld_glass_eel_net"
+      },
+      "lore_reason": "A vest of clear scales taken from a net he refused to fill. The light that gets caught in it is the only thing he has ever been proud to waste.",
+      "stats": [
+        {
+          "stat": "scarlith.hp",
+          "op": "mult",
+          "value": 1.1
+        },
+        {
+          "stat": "scarlith.dash_iframes",
+          "op": "add",
+          "value": 0.04
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "scarlith_loader_cap",
+      "name": "Dockhand's Loader Cap",
+      "character": "scarlith",
+      "slot": "garment",
+      "rarity": "uncommon",
+      "source": {
+        "region": "rainward",
+        "kind": "quest",
+        "ref": "rw_forklift"
+      },
+      "lore_reason": "A cap left in the forklift's cab. He recognizes the stitching of someone who loved their work, and does not price it.",
+      "stats": [
+        {
+          "stat": "scarlith.hp",
+          "op": "mult",
+          "value": 1.06
+        },
+        {
+          "stat": "scarlith.speed",
+          "op": "mult",
+          "value": 1.04
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "scarlith_snare_cutters",
+      "name": "Snare Cutters",
+      "character": "scarlith",
+      "slot": "weapon",
+      "rarity": "rare",
+      "source": {
+        "region": "briarwild",
+        "kind": "quest",
+        "ref": "bw_snare_line"
+      },
+      "lore_reason": "Wire cutters he now carries as a quiet apology. He exposes traffickers because captivity is bad for long-term commerce, and also because it is wrong.",
+      "stats": [
+        {
+          "stat": "global.crit_chance",
+          "op": "add",
+          "value": 0.03
+        },
+        {
+          "stat": "scarlith.speed",
+          "op": "mult",
+          "value": 1.05
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "scarlith_not_for_sale_ledger",
+      "name": "The Not-For-Sale Ledger",
+      "character": "scarlith",
+      "slot": "weapon",
+      "rarity": "legendary",
+      "source": {
+        "region": "frostbloom",
+        "kind": "secret",
+        "ref": "fb_deep_bloom"
+      },
+      "lore_reason": "A ledger with one page left blank and stamped NOT FOR SALE, given by the reliquary of the first silksmith. It is the first thing he ever received that he did not try to value.",
+      "stats": [
+        {
+          "stat": "global.crit_mult",
+          "op": "add",
+          "value": 0.3
+        },
+        {
+          "stat": "pickups.magnet_radius",
+          "op": "add",
+          "value": 1.5
+        },
+        {
+          "stat": "scarlith.dash_iframes",
+          "op": "add",
+          "value": 0.05
+        },
+        {
+          "stat": "scarlith.hp",
+          "op": "mult",
+          "value": 0.88
+        }
+      ],
+      "hooks": [
+        "ledger_blank_page_unsellable"
+      ]
+    },
+    {
+      "id": "solmara_pitch_fork",
+      "name": "Below-Hearing Tuning Fork",
+      "character": "solmara",
+      "slot": "weapon",
+      "rarity": "uncommon",
+      "source": {
+        "region": "red_reaches",
+        "kind": "quest",
+        "ref": "rr_beetle_pylon"
+      },
+      "lore_reason": "A tuning fork that rings below a beetle's hearing. It taught Solmara that a whole herd's distress can be heard before a single creature's, and that she must listen for both.",
+      "stats": [
+        {
+          "stat": "global.scan_radius",
+          "op": "add",
+          "value": 4.0
+        },
+        {
+          "stat": "solmara.poise",
+          "op": "add",
+          "value": 10
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "solmara_flock_chart",
+      "name": "Flock-Turn Chart",
+      "character": "solmara",
+      "slot": "charm",
+      "rarity": "uncommon",
+      "source": {
+        "region": "canopy_fold",
+        "kind": "quest",
+        "ref": "cf_skimmer_roost"
+      },
+      "lore_reason": "A chart of a skimmer flock's turns, drawn like a tide table. She can predict the flock, not yet the person watching it.",
+      "stats": [
+        {
+          "stat": "solmara.dash_dist",
+          "op": "mult",
+          "value": 1.06
+        },
+        {
+          "stat": "solmara.speed",
+          "op": "mult",
+          "value": 1.04
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "solmara_pulse_gloss",
+      "name": "Pulse Grammar Gloss",
+      "character": "solmara",
+      "slot": "charm",
+      "rarity": "rare",
+      "source": {
+        "region": "lumen_depths",
+        "kind": "quest",
+        "ref": "ld_pulse_translation"
+      },
+      "lore_reason": "A glossary pinned inside her shell. She can now translate a swarm. A friend is harder.",
+      "stats": [
+        {
+          "stat": "global.scan_radius",
+          "op": "add",
+          "value": 5.0
+        },
+        {
+          "stat": "solmara.hp",
+          "op": "mult",
+          "value": 1.05
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "solmara_brass_gauge",
+      "name": "Linh's Brass Gauge",
+      "character": "solmara",
+      "slot": "weapon",
+      "rarity": "legendary",
+      "source": {
+        "region": "rainward",
+        "kind": "quest",
+        "ref": "rw_tide_gauge"
+      },
+      "lore_reason": "A brass gauge that reads a river's mood. Linh gave it to Solmara after Solmara read it correctly, and then, to everyone's surprise, asked Linh how she was feeling.",
+      "stats": [
+        {
+          "stat": "global.crit_chance",
+          "op": "add",
+          "value": 0.04
+        },
+        {
+          "stat": "global.scan_radius",
+          "op": "add",
+          "value": 8.0
+        },
+        {
+          "stat": "solmara.hp",
+          "op": "mult",
+          "value": 1.1
+        },
+        {
+          "stat": "solmara.speed",
+          "op": "mult",
+          "value": 0.92
+        }
+      ],
+      "hooks": [
+        "tide_read_preview"
+      ]
+    },
+    {
+      "id": "solmara_moon_shawl",
+      "name": "Night-Bloom Moon Shawl",
+      "character": "solmara",
+      "slot": "garment",
+      "rarity": "rare",
+      "source": {
+        "region": "briarwild",
+        "kind": "quest",
+        "ref": "bw_bloom_permit"
+      },
+      "lore_reason": "A shawl dusted with night-bloom pollen that opens only to moonlight. She felt the seeds tug at the same pull she feels in the tide.",
+      "stats": [
+        {
+          "stat": "solmara.hp",
+          "op": "mult",
+          "value": 1.1
+        },
+        {
+          "stat": "solmara.poise",
+          "op": "add",
+          "value": 15
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "solmara_eclipse_mantle",
+      "name": "Eclipse Vent Mantle",
+      "character": "solmara",
+      "slot": "garment",
+      "rarity": "uncommon",
+      "source": {
+        "region": "frostbloom",
+        "kind": "quest",
+        "ref": "fb_vent_skaters"
+      },
+      "lore_reason": "A mantle that holds heat on one side and cold on the other. It is her physiology, made wearable, for people who have never needed it.",
+      "stats": [
+        {
+          "stat": "solmara.hp",
+          "op": "mult",
+          "value": 1.06
+        },
+        {
+          "stat": "solmara.dash_iframes",
+          "op": "add",
+          "value": 0.03
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "bramvex_exit_marker",
+      "name": "Chalk Exit Marker",
+      "character": "bramvex",
+      "slot": "charm",
+      "rarity": "uncommon",
+      "source": {
+        "region": "red_reaches",
+        "kind": "quest",
+        "ref": "rr_drill_drill"
+      },
+      "lore_reason": "A stub of chalk and a ring of tags for marking exits. Every plan he has ever made began with the way out.",
+      "stats": [
+        {
+          "stat": "bramvex.dash_cd",
+          "op": "mult",
+          "value": 0.95
+        },
+        {
+          "stat": "bramvex.hp",
+          "op": "mult",
+          "value": 1.05
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "bramvex_rescue_harness",
+      "name": "Rescue Harness",
+      "character": "bramvex",
+      "slot": "garment",
+      "rarity": "uncommon",
+      "source": {
+        "region": "canopy_fold",
+        "kind": "quest",
+        "ref": "cf_limb_rescue"
+      },
+      "lore_reason": "A harness the root weavers rigged under the fallen limb. He admires it: it is a plan, and not a hero.",
+      "stats": [
+        {
+          "stat": "global.revive_time",
+          "op": "mult",
+          "value": 0.9
+        },
+        {
+          "stat": "bramvex.hp",
+          "op": "mult",
+          "value": 1.05
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "bramvex_lantern_cloak",
+      "name": "Lantern-Lull Cloak",
+      "character": "bramvex",
+      "slot": "garment",
+      "rarity": "rare",
+      "source": {
+        "region": "lumen_depths",
+        "kind": "quest",
+        "ref": "ld_drifter_lost"
+      },
+      "lore_reason": "A cloak that dims with its wearer's breath. He wore it to guide a child out of the dark, and has not taken it off.",
+      "stats": [
+        {
+          "stat": "bramvex.speed",
+          "op": "mult",
+          "value": 1.05
+        },
+        {
+          "stat": "bramvex.dash_iframes",
+          "op": "add",
+          "value": 0.04
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "bramvex_stilt_whistle",
+      "name": "Stilt Row Whistle",
+      "character": "bramvex",
+      "slot": "charm",
+      "rarity": "rare",
+      "source": {
+        "region": "rainward",
+        "kind": "quest",
+        "ref": "rw_stilt_evac"
+      },
+      "lore_reason": "A whistle for ordering an evacuation, house by house. He carried it through every drill of his career and is pleased to finally hold one that has saved a row.",
+      "stats": [
+        {
+          "stat": "global.revive_radius",
+          "op": "add",
+          "value": 0.8
+        },
+        {
+          "stat": "global.revive_time",
+          "op": "mult",
+          "value": 0.85
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "bramvex_silk_grip",
+      "name": "Silk-Wrapped Diplomacy Grip",
+      "character": "bramvex",
+      "slot": "weapon",
+      "rarity": "rare",
+      "source": {
+        "region": "frostbloom",
+        "kind": "quest",
+        "ref": "fb_nursery_web"
+      },
+      "lore_reason": "A grip of nursery silk for the thorned weapon he calls Diplomacy. The thorns do the talking, and the silk reminds him that it is better not to.",
+      "stats": [
+        {
+          "stat": "global.crit_chance",
+          "op": "add",
+          "value": 0.02
+        },
+        {
+          "stat": "bramvex.poise",
+          "op": "add",
+          "value": 10
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "bramvex_vigil_diplomacy",
+      "name": "Diplomacy, Vigil Edition",
+      "character": "bramvex",
+      "slot": "weapon",
+      "rarity": "legendary",
+      "source": {
+        "region": "briarwild",
+        "kind": "quest",
+        "ref": "bw_night_vigil"
+      },
+      "lore_reason": "His thorned weapon, wound with night-vigil ribbon. A soldier who sat a whole night to protect hares and never raised it. That is exactly the point of its name.",
+      "stats": [
+        {
+          "stat": "bramvex.poise",
+          "op": "add",
+          "value": 30
+        },
+        {
+          "stat": "global.revive_hp_frac",
+          "op": "add",
+          "value": 0.1
+        },
+        {
+          "stat": "bramvex.hp",
+          "op": "mult",
+          "value": 1.12
+        },
+        {
+          "stat": "bramvex.dash_cd",
+          "op": "mult",
+          "value": 1.1
+        }
+      ],
+      "hooks": [
+        "diplomacy_stagger_instead_of_damage"
+      ]
+    },
+    {
+      "id": "solthrin_dust_lamp",
+      "name": "Dust-Crossing Lamp",
+      "character": "solthrin",
+      "slot": "charm",
+      "rarity": "uncommon",
+      "source": {
+        "region": "red_reaches",
+        "kind": "quest",
+        "ref": "rr_grazer_crossing"
+      },
+      "lore_reason": "A lamp lit from the grazer trail. It marks the one road across the gap that is worth leaving open.",
+      "stats": [
+        {
+          "stat": "solthrin.hp",
+          "op": "mult",
+          "value": 1.05
+        },
+        {
+          "stat": "solthrin.speed",
+          "op": "mult",
+          "value": 1.04
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "solthrin_closed_bough",
+      "name": "Closed-Route Bough",
+      "character": "solthrin",
+      "slot": "charm",
+      "rarity": "rare",
+      "source": {
+        "region": "canopy_fold",
+        "kind": "quest",
+        "ref": "cf_widow_bridge"
+      },
+      "lore_reason": "A cut bough from a bridge closed on purpose. It is the proof he needs that closing a path can be the kindest way to carry something forward.",
+      "stats": [
+        {
+          "stat": "solthrin.poise",
+          "op": "add",
+          "value": 12
+        },
+        {
+          "stat": "solthrin.dash_dist",
+          "op": "mult",
+          "value": 1.08
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "solthrin_grove_cutting",
+      "name": "Thorn-Grown Grove Cutting",
+      "character": "solthrin",
+      "slot": "weapon",
+      "rarity": "rare",
+      "source": {
+        "region": "briarwild",
+        "kind": "quest",
+        "ref": "bw_thorn_gap"
+      },
+      "lore_reason": "An ember branch he grew inside a thorn gate. It remembers both the path that was opened and the one that was left closed.",
+      "stats": [
+        {
+          "stat": "global.crit_chance",
+          "op": "add",
+          "value": 0.03
+        },
+        {
+          "stat": "solthrin.speed",
+          "op": "mult",
+          "value": 1.05
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "solthrin_schedule_lantern",
+      "name": "Pump Schedule Lantern",
+      "character": "solthrin",
+      "slot": "weapon",
+      "rarity": "uncommon",
+      "source": {
+        "region": "rainward",
+        "kind": "quest",
+        "ref": "rw_pump_dispute"
+      },
+      "lore_reason": "A lantern lit with the shared pumping schedule. It lights only the hours that were agreed on by everyone it affects.",
+      "stats": [
+        {
+          "stat": "global.scan_radius",
+          "op": "add",
+          "value": 4.0
+        },
+        {
+          "stat": "solthrin.speed",
+          "op": "mult",
+          "value": 1.04
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "solthrin_ice_harness",
+      "name": "Ice Road Harness",
+      "character": "solthrin",
+      "slot": "garment",
+      "rarity": "rare",
+      "source": {
+        "region": "frostbloom",
+        "kind": "quest",
+        "ref": "fb_icefall_stalker"
+      },
+      "lore_reason": "A harness rewoven for the ice road he helped reroute. It is a road for the caravans, and a border for the stalker, and he is content with both.",
+      "stats": [
+        {
+          "stat": "solthrin.hp",
+          "op": "mult",
+          "value": 1.1
+        },
+        {
+          "stat": "solthrin.poise",
+          "op": "add",
+          "value": 12
+        }
+      ],
+      "hooks": []
+    },
+    {
+      "id": "solthrin_unlit_road_mantle",
+      "name": "Unlit Road Mantle",
+      "character": "solthrin",
+      "slot": "garment",
+      "rarity": "legendary",
+      "source": {
+        "region": "lumen_depths",
+        "kind": "secret",
+        "ref": "ld_unlit_chamber"
+      },
+      "lore_reason": "A mantle woven from the ancestral sleeping hall's quiet. He lays paths through the dark, and learned here that some halls should have none.",
+      "stats": [
+        {
+          "stat": "solthrin.hp",
+          "op": "mult",
+          "value": 1.15
+        },
+        {
+          "stat": "solthrin.dash_dist",
+          "op": "mult",
+          "value": 1.15
+        },
+        {
+          "stat": "global.fall_damage_frac",
+          "op": "mult",
+          "value": 0.5
+        },
+        {
+          "stat": "solthrin.dash_cd",
+          "op": "mult",
+          "value": 1.15
+        }
+      ],
+      "hooks": [
+        "laid_path_can_be_closed_by_player"
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "id": "reach_soil",
+      "name": "Reach Soil",
+      "kind": "material",
+      "rarity": "common",
+      "desc": "Iron-rich soil bound by lichen.",
+      "uses": [
+        "planting",
+        "crafting base"
+      ],
+      "origin_region": "red_reaches",
+      "found_in": "grazer trails"
+    },
+    {
+      "id": "lichen_culture",
+      "name": "Lichen Culture",
+      "kind": "material",
+      "rarity": "common",
+      "desc": "A living starter of mineral lichen.",
+      "uses": [
+        "herbal binders",
+        "armor padding"
+      ],
+      "origin_region": "red_reaches",
+      "found_in": "plate beetles"
+    },
+    {
+      "id": "thoughtstone_dust",
+      "name": "Thoughtstone Dust",
+      "kind": "material",
+      "rarity": "uncommon",
+      "desc": "Grit that pulses faintly near a bonded object.",
+      "uses": [
+        "charm cores",
+        "Morrow tuning"
+      ],
+      "origin_region": "red_reaches",
+      "found_in": "cracked seams"
+    },
+    {
+      "id": "thoughtstone_cache",
+      "name": "Thoughtstone Cache",
+      "kind": "material",
+      "rarity": "rare",
+      "desc": "A cut, resting block of Thoughtstone.",
+      "uses": [
+        "weapon cores",
+        "legendary crafting"
+      ],
+      "origin_region": "red_reaches",
+      "found_in": "foundation rooms"
+    },
+    {
+      "id": "salvage",
+      "name": "Survey Salvage",
+      "kind": "material",
+      "rarity": "common",
+      "desc": "Scrap from Dominion drones and rigs.",
+      "uses": [
+        "repairs",
+        "trade"
+      ],
+      "origin_region": "red_reaches",
+      "found_in": "drone wrecks"
+    },
+    {
+      "id": "spanwright_cable",
+      "name": "Spanwright Cable",
+      "kind": "material",
+      "rarity": "uncommon",
+      "desc": "Braided, repaired cable that has never failed in service.",
+      "uses": [
+        "garment trim",
+        "bridge repair"
+      ],
+      "origin_region": "red_reaches",
+      "found_in": "span stores"
+    },
+    {
+      "id": "red_slate_plate",
+      "name": "Red Slate Plate",
+      "kind": "material",
+      "rarity": "uncommon",
+      "desc": "A shed carapace scale like layered slate.",
+      "uses": [
+        "armor plating"
+      ],
+      "origin_region": "red_reaches",
+      "found_in": "plate beetles"
+    },
+    {
+      "id": "keth_water_flask",
+      "name": "Keth Water Flask",
+      "kind": "consumable",
+      "rarity": "uncommon",
+      "desc": "Cold, clean well water in a sealed gourd. Restores a quarter of lost HP.",
+      "uses": [
+        "healing"
+      ],
+      "origin_region": "red_reaches",
+      "found_in": "the Well Line"
+    },
+    {
+      "id": "thread_silk",
+      "name": "Hopper Thread Silk",
+      "kind": "material",
+      "rarity": "common",
+      "desc": "Strong, springy silk spun by thread hoppers.",
+      "uses": [
+        "garment lining",
+        "ropes"
+      ],
+      "origin_region": "canopy_fold",
+      "found_in": "hopper nests"
+    },
+    {
+      "id": "pale_orchid_spray",
+      "name": "Pale Orchid Spray",
+      "kind": "material",
+      "rarity": "common",
+      "desc": "A cluster of crown orchids that smell faintly of rain.",
+      "uses": [
+        "charm binding",
+        "tea"
+      ],
+      "origin_region": "canopy_fold",
+      "found_in": "crown branches"
+    },
+    {
+      "id": "lantern_bracket",
+      "name": "Lantern Bracket Fungus",
+      "kind": "material",
+      "rarity": "uncommon",
+      "desc": "A soft-glowing shelf of fungus.",
+      "uses": [
+        "lantern core",
+        "lighting"
+      ],
+      "origin_region": "canopy_fold",
+      "found_in": "glow shelves"
+    },
+    {
+      "id": "bridge_sap",
+      "name": "Living Bridge Sap",
+      "kind": "material",
+      "rarity": "uncommon",
+      "desc": "Resin from a dying living bridge. It still remembers how to grow.",
+      "uses": [
+        "adhesive",
+        "healing salve"
+      ],
+      "origin_region": "canopy_fold",
+      "found_in": "dying bridges"
+    },
+    {
+      "id": "wing_veil_scrap",
+      "name": "Skimmer Veil Scrap",
+      "kind": "material",
+      "rarity": "uncommon",
+      "desc": "A translucent scrap of molted wing.",
+      "uses": [
+        "cloak trim",
+        "charms"
+      ],
+      "origin_region": "canopy_fold",
+      "found_in": "skimmer molts"
+    },
+    {
+      "id": "hopper_bead",
+      "name": "Hopper Bead",
+      "kind": "material",
+      "rarity": "rare",
+      "desc": "A glass bead left on the charm line as a wish.",
+      "uses": [
+        "charm cores"
+      ],
+      "origin_region": "canopy_fold",
+      "found_in": "the charm line"
+    },
+    {
+      "id": "future_dust",
+      "name": "Future Dust",
+      "kind": "material",
+      "rarity": "rare",
+      "desc": "A faint residue left where Premonition ghosts were thickest.",
+      "uses": [
+        "foresight charms"
+      ],
+      "origin_region": "canopy_fold",
+      "found_in": "Premonition residue"
+    },
+    {
+      "id": "silent_leaf",
+      "name": "Silent Leaf",
+      "kind": "material",
+      "rarity": "epic",
+      "desc": "A leaf from the Silent Crown. Nothing can be seen through it.",
+      "uses": [
+        "blindness charms",
+        "legendary crafting"
+      ],
+      "origin_region": "canopy_fold",
+      "found_in": "the Silent Crown"
+    },
+    {
+      "id": "plankton_light_vial",
+      "name": "Plankton Light Vial",
+      "kind": "consumable",
+      "rarity": "common",
+      "desc": "A corked vial of living light. Restores Nerit's light reserve.",
+      "uses": [
+        "light reservoir",
+        "lantern fuel"
+      ],
+      "origin_region": "lumen_depths",
+      "found_in": "drifting shallows"
+    },
+    {
+      "id": "crystal_fern_frond",
+      "name": "Crystal Fern Frond",
+      "kind": "material",
+      "rarity": "common",
+      "desc": "A frond that opens only under particular colors.",
+      "uses": [
+        "charm binding",
+        "dyes"
+      ],
+      "origin_region": "lumen_depths",
+      "found_in": "mineral forests"
+    },
+    {
+      "id": "glass_eel_scale",
+      "name": "Glass Eel Scale",
+      "kind": "material",
+      "rarity": "uncommon",
+      "desc": "A clear scale that holds a captured glimmer.",
+      "uses": [
+        "garment trim",
+        "lens crafting"
+      ],
+      "origin_region": "lumen_depths",
+      "found_in": "eel shallows"
+    },
+    {
+      "id": "bell_moss",
+      "name": "Bell Moss",
+      "kind": "material",
+      "rarity": "uncommon",
+      "desc": "Soft moss that rings when touched.",
+      "uses": [
+        "charm cores",
+        "padding"
+      ],
+      "origin_region": "lumen_depths",
+      "found_in": "drifter dens"
+    },
+    {
+      "id": "spire_shard",
+      "name": "Spire Shard",
+      "kind": "material",
+      "rarity": "uncommon",
+      "desc": "A shard of mineral spire that stores a faint hum.",
+      "uses": [
+        "weapon cores"
+      ],
+      "origin_region": "lumen_depths",
+      "found_in": "mineral spires"
+    },
+    {
+      "id": "lamp_core",
+      "name": "Survey Lamp Core",
+      "kind": "material",
+      "rarity": "common",
+      "desc": "A steady, lifeless light source from a Dominion lamp.",
+      "uses": [
+        "repairs",
+        "trade"
+      ],
+      "origin_region": "lumen_depths",
+      "found_in": "survey lamps"
+    },
+    {
+      "id": "constellation_thread",
+      "name": "Constellation Thread",
+      "kind": "material",
+      "rarity": "rare",
+      "desc": "A thread of drifting colony light spun into a filament.",
+      "uses": [
+        "garment crafting",
+        "legendary crafting"
+      ],
+      "origin_region": "lumen_depths",
+      "found_in": "the vault ceiling"
+    },
+    {
+      "id": "stilled_light",
+      "name": "Stilled Light",
+      "kind": "material",
+      "rarity": "epic",
+      "desc": "A pool of light that stopped moving long ago.",
+      "uses": [
+        "legendary crafting"
+      ],
+      "origin_region": "lumen_depths",
+      "found_in": "the Constellation Key"
+    },
+    {
+      "id": "rain_palm_fiber",
+      "name": "Rain Palm Fiber",
+      "kind": "material",
+      "rarity": "common",
+      "desc": "Water-shedding fiber stripped from rain palms.",
+      "uses": [
+        "garment lining",
+        "ropes"
+      ],
+      "origin_region": "rainward",
+      "found_in": "palm groves"
+    },
+    {
+      "id": "taro_root",
+      "name": "Giant Taro Root",
+      "kind": "consumable",
+      "rarity": "common",
+      "desc": "A starchy root that restores a little HP and a little patience.",
+      "uses": [
+        "healing"
+      ],
+      "origin_region": "rainward",
+      "found_in": "flooded fields"
+    },
+    {
+      "id": "mudback_shell",
+      "name": "Mudback Shell",
+      "kind": "material",
+      "rarity": "uncommon",
+      "desc": "A thick crab shell, banded in gray and gold.",
+      "uses": [
+        "armor plating"
+      ],
+      "origin_region": "rainward",
+      "found_in": "mudback crabs"
+    },
+    {
+      "id": "levee_clay",
+      "name": "Levee Clay",
+      "kind": "material",
+      "rarity": "common",
+      "desc": "Dense blue clay used to patch earthen walls.",
+      "uses": [
+        "repairs",
+        "pottery"
+      ],
+      "origin_region": "rainward",
+      "found_in": "levee repairs"
+    },
+    {
+      "id": "storm_heron_plume",
+      "name": "Storm Heron Plume",
+      "kind": "material",
+      "rarity": "uncommon",
+      "desc": "A long gray plume that stays dry in any weather.",
+      "uses": [
+        "charms",
+        "trim"
+      ],
+      "origin_region": "rainward",
+      "found_in": "heron nests"
+    },
+    {
+      "id": "shell_mark_blank",
+      "name": "Blank Shell Plate",
+      "kind": "material",
+      "rarity": "rare",
+      "desc": "A polished shell plate waiting for a mark.",
+      "uses": [
+        "charm cores",
+        "memorials"
+      ],
+      "origin_region": "rainward",
+      "found_in": "the shell marker"
+    },
+    {
+      "id": "forklift_part",
+      "name": "Forklift Part",
+      "kind": "material",
+      "rarity": "uncommon",
+      "desc": "A strangely beloved machine part.",
+      "uses": [
+        "weapon cores",
+        "repairs"
+      ],
+      "origin_region": "rainward",
+      "found_in": "abandoned loaders"
+    },
+    {
+      "id": "hour_mist",
+      "name": "Hour Mist",
+      "kind": "material",
+      "rarity": "epic",
+      "desc": "A jar of the mist that stood over the river for one hour.",
+      "uses": [
+        "legendary crafting"
+      ],
+      "origin_region": "rainward",
+      "found_in": "the Hour of No Rain"
+    },
+    {
+      "id": "bell_briar_bud",
+      "name": "Bell Briar Bud",
+      "kind": "material",
+      "rarity": "common",
+      "desc": "A small bell-shaped bud that rings in wind.",
+      "uses": [
+        "charm binding"
+      ],
+      "origin_region": "briarwild",
+      "found_in": "bell briar hedges"
+    },
+    {
+      "id": "honey_thistle_comb",
+      "name": "Honey Thistle Comb",
+      "kind": "consumable",
+      "rarity": "common",
+      "desc": "Sweet, sticky comb. Restores HP and makes everyone a little friendlier.",
+      "uses": [
+        "healing",
+        "trade"
+      ],
+      "origin_region": "briarwild",
+      "found_in": "honey presses"
+    },
+    {
+      "id": "silk_poppy_petal",
+      "name": "Silk Poppy Petal",
+      "kind": "material",
+      "rarity": "common",
+      "desc": "A petal that never wrinkles.",
+      "uses": [
+        "garment trim",
+        "dyes"
+      ],
+      "origin_region": "briarwild",
+      "found_in": "bloom meadows"
+    },
+    {
+      "id": "ladder_vine_cord",
+      "name": "Ladder Vine Cord",
+      "kind": "material",
+      "rarity": "uncommon",
+      "desc": "A springy, strong cord of vine.",
+      "uses": [
+        "ropes",
+        "weapon wrapping"
+      ],
+      "origin_region": "briarwild",
+      "found_in": "thicket walls"
+    },
+    {
+      "id": "hare_whisker_bundle",
+      "name": "Hare Whisker Bundle",
+      "kind": "material",
+      "rarity": "uncommon",
+      "desc": "Fine whiskers shed in a warren.",
+      "uses": [
+        "charm cores",
+        "brushes"
+      ],
+      "origin_region": "briarwild",
+      "found_in": "hare warrens"
+    },
+    {
+      "id": "thorn_mantis_blade",
+      "name": "Thorn Mantis Blade",
+      "kind": "material",
+      "rarity": "rare",
+      "desc": "A curved, shed foreblade, sharper than it looks.",
+      "uses": [
+        "weapon cores"
+      ],
+      "origin_region": "briarwild",
+      "found_in": "thorn mantis molts"
+    },
+    {
+      "id": "witness_ribbon",
+      "name": "Witness Ribbon",
+      "kind": "material",
+      "rarity": "rare",
+      "desc": "A ribbon tied at the post when a vow is spoken.",
+      "uses": [
+        "promise charms"
+      ],
+      "origin_region": "briarwild",
+      "found_in": "the witness post"
+    },
+    {
+      "id": "amber_oath",
+      "name": "Amber Oath",
+      "kind": "material",
+      "rarity": "epic",
+      "desc": "A drop of honey amber that remembers a promise.",
+      "uses": [
+        "legendary crafting"
+      ],
+      "origin_region": "briarwild",
+      "found_in": "the Honey Cellar"
+    },
+    {
+      "id": "frost_silk_thread",
+      "name": "Frost Silk Thread",
+      "kind": "material",
+      "rarity": "uncommon",
+      "desc": "Cold-reactive silk that tightens when it chills.",
+      "uses": [
+        "garment crafting",
+        "bindings"
+      ],
+      "origin_region": "frostbloom",
+      "found_in": "boundary lines"
+    },
+    {
+      "id": "steam_lily_petal",
+      "name": "Steam Lily Petal",
+      "kind": "consumable",
+      "rarity": "common",
+      "desc": "A warm petal. Restores a little HP and cures the chill.",
+      "uses": [
+        "healing"
+      ],
+      "origin_region": "frostbloom",
+      "found_in": "vent edges"
+    },
+    {
+      "id": "cinder_moss",
+      "name": "Cinder Moss",
+      "kind": "material",
+      "rarity": "common",
+      "desc": "A warm, dry moss that burns slowly.",
+      "uses": [
+        "fuel",
+        "padding"
+      ],
+      "origin_region": "frostbloom",
+      "found_in": "warm rocks"
+    },
+    {
+      "id": "rime_chitin",
+      "name": "Rime Chitin",
+      "kind": "material",
+      "rarity": "uncommon",
+      "desc": "A frost-glazed plate from a rime beetle.",
+      "uses": [
+        "armor plating"
+      ],
+      "origin_region": "frostbloom",
+      "found_in": "rime beetle molts"
+    },
+    {
+      "id": "glass_thistle_seed",
+      "name": "Glass Thistle Seed",
+      "kind": "material",
+      "rarity": "uncommon",
+      "desc": "A faceted seed that rings faintly when struck.",
+      "uses": [
+        "charm cores"
+      ],
+      "origin_region": "frostbloom",
+      "found_in": "thistle valleys"
+    },
+    {
+      "id": "venom_vial",
+      "name": "Voluntary Venom Vial",
+      "kind": "material",
+      "rarity": "rare",
+      "desc": "Venom given, not taken. Its source insists on the distinction.",
+      "uses": [
+        "weapon coating",
+        "medicine"
+      ],
+      "origin_region": "frostbloom",
+      "found_in": "willing donors"
+    },
+    {
+      "id": "archive_ice_chip",
+      "name": "Archive Ice Chip",
+      "kind": "material",
+      "rarity": "rare",
+      "desc": "A chip of cold archive panel carrying a small, true record.",
+      "uses": [
+        "charm cores"
+      ],
+      "origin_region": "frostbloom",
+      "found_in": "the Cold Archive"
+    },
+    {
+      "id": "first_thread",
+      "name": "The First Thread",
+      "kind": "material",
+      "rarity": "epic",
+      "desc": "A strand older than the region's boundary.",
+      "uses": [
+        "legendary crafting"
+      ],
+      "origin_region": "frostbloom",
+      "found_in": "the First Web"
+    }
+  ]
+}

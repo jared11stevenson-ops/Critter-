@@ -1,0 +1,1198 @@
+{
+  "_doc": "Region recipe: The Red Reaches (Aruun's homeland). Data only. Schema: design/DATA_REQUESTS.md. Source: bible section 23. Plateaus, mineral deserts and enormous fracture valleys; settlements survive because generations maintain bridges, wells and roads. Reach culture is built on carried weight: strength is the burden you can accept without forcing it onto someone weaker.",
+  "id": "red_reaches",
+  "name": "The Red Reaches",
+  "homeland_of": [
+    "aruun"
+  ],
+  "tier": 1,
+  "summary": "Plateaus, mineral deserts and fracture valleys held together by bridges, wells and the people who maintain them. Strength here means the weight you can carry without handing it to someone weaker.",
+  "layers": [
+    {
+      "id": "plateau_top",
+      "depth": 0,
+      "light": "hard sun, long shadows",
+      "hazard": "heat, wind, loose scree",
+      "feel": "open, exposed, honest"
+    },
+    {
+      "id": "fracture_rim",
+      "depth": 1,
+      "light": "red stone glow at dusk",
+      "hazard": "crumbling edges, resonance tremors",
+      "feel": "dizzy, proud"
+    },
+    {
+      "id": "span_works",
+      "depth": 2,
+      "light": "amber work lamps in stone shade",
+      "hazard": "failing anchors, drone patrols",
+      "feel": "busy, tense, maintained"
+    },
+    {
+      "id": "foundation_deep",
+      "depth": 3,
+      "light": "dim, with faint blue Thoughtstone shimmer",
+      "hazard": "resonance, cave-ins",
+      "feel": "hushed, heavy, listening"
+    }
+  ],
+  "ground": {
+    "surfaces": [
+      {
+        "id": "red_scree",
+        "desc": "Rust-colored gravel that shifts underfoot and rattles.",
+        "color": "#b5533a"
+      },
+      {
+        "id": "slate_flat",
+        "desc": "Layered slate shelves worn smooth by wind.",
+        "color": "#6a5a52"
+      },
+      {
+        "id": "span_deck",
+        "desc": "Fitted stone and cable decking, repaired so often it has no original piece left.",
+        "color": "#a07850"
+      },
+      {
+        "id": "lichen_mat",
+        "desc": "Mineral lichen that holds the plateau soil together.",
+        "color": "#7a7a3a"
+      }
+    ],
+    "relief": "plateaus, fracture valleys, mineral deserts, long spans over gorges",
+    "palette": [
+      "#2a1a16",
+      "#4a3226",
+      "#9c2f22",
+      "#c8462b",
+      "#d9803a",
+      "#6b6a3a"
+    ]
+  },
+  "sky": {
+    "time": "day, with a blazing red dusk",
+    "fog_color": "#d8a080",
+    "fog_density": 0.004,
+    "ambient": "dry, hot, wind-scoured",
+    "motes": "dust, mineral glitter, sparks of mica"
+  },
+  "props": [
+    {
+      "id": "span_anchor",
+      "kind": "structure",
+      "density": "low",
+      "note": "A bridge anchor block carved with generations of maintenance marks."
+    },
+    {
+      "id": "well_head",
+      "kind": "structure",
+      "density": "low",
+      "note": "A stone well cap with a hand crank, kept by a named family."
+    },
+    {
+      "id": "resonance_pylon",
+      "kind": "hazard",
+      "density": "low",
+      "note": "A Dominion survey pylon that hums at a pitch beetles hate."
+    },
+    {
+      "id": "cairn_of_names",
+      "kind": "memorial",
+      "density": "low",
+      "note": "A stack of flat stones, each scratched with the name of a bridge-keeper."
+    },
+    {
+      "id": "lichen_terrace",
+      "kind": "flora",
+      "density": "high",
+      "note": "Stepped lichen beds grazers keep alive."
+    },
+    {
+      "id": "cable_walk",
+      "kind": "route",
+      "density": "med",
+      "note": "A narrow cable and plank walk strung along a cliff face."
+    }
+  ],
+  "flora": [
+    "mineral lichen",
+    "red sage",
+    "spine reed",
+    "ironroot",
+    "dust bloom"
+  ],
+  "creatures": [
+    {
+      "id": "skitter_mite",
+      "name": "Skitter Mite",
+      "class": "WILDLIFE",
+      "sapient": false,
+      "role": "scavenger",
+      "desc": "Rust-red mites that strip mineral crust from rock.",
+      "behavior": "Swarms. Flees when its swarm is broken.",
+      "uses": {
+        "battle": "low",
+        "labor": "surface stripping",
+        "ecology": "recycles mineral crust"
+      },
+      "weight": 4
+    },
+    {
+      "id": "plate_beetle",
+      "name": "Plate Beetle",
+      "class": "WILDLIFE",
+      "sapient": false,
+      "role": "grazer",
+      "desc": "A slow, heavy grazer with a carapace like layered slate.",
+      "behavior": "Docile until pylon vibration agitates it.",
+      "uses": {
+        "battle": "high",
+        "labor": "hauling",
+        "ecology": "grazes mineral lichen"
+      },
+      "weight": 2
+    },
+    {
+      "id": "dust_grazer",
+      "name": "Dust Grazer",
+      "class": "WILDLIFE",
+      "sapient": false,
+      "role": "keystone grazer",
+      "desc": "Long-legged lichen grazers whose droppings seed the plateau soil.",
+      "behavior": "Passive. Flees at the first loud noise.",
+      "uses": {
+        "battle": "none",
+        "labor": "none",
+        "ecology": "seeds lichen, holds soil"
+      },
+      "weight": 3
+    }
+  ],
+  "music": {
+    "mood": "wide, dry, carried; brass and low strings with a stubborn heartbeat",
+    "tempo": "70-110",
+    "instruments": [
+      "low brass",
+      "bowed cello",
+      "frame drum",
+      "stone chimes",
+      "bowed wire"
+    ],
+    "layers": {
+      "plateau_top": "open horn theme over wind",
+      "fracture_rim": "suspended strings",
+      "span_works": "work-song percussion",
+      "foundation_deep": "slow resonant drone"
+    },
+    "stinger_on_event": "a single struck stone that rings long"
+  },
+  "encounters": {
+    "enemies": [
+      {
+        "species": "dominion_drone",
+        "weight": 3
+      },
+      {
+        "species": "skitter_mite",
+        "weight": 3
+      },
+      {
+        "species": "plate_beetle",
+        "weight": 1
+      }
+    ],
+    "rivals": [
+      "foreman_orrin",
+      "poacher_vesk"
+    ],
+    "hazards": [
+      "resonance tremor",
+      "crumbling edge",
+      "heat shimmer",
+      "dust devil"
+    ],
+    "ambient": "wind in the fractures, cable hum, mite chatter"
+  },
+  "world_states": [
+    {
+      "id": "extraction",
+      "label": "Drill season",
+      "effect": "Pylons multiply and plate beetles grow agitated.",
+      "event_weight_mods": {
+        "rr_pylon_night": 2
+      }
+    },
+    {
+      "id": "fire",
+      "label": "Dry lightning",
+      "effect": "Lichen terraces burn and grazers bolt for the rim.",
+      "event_weight_mods": {
+        "rr_grazer_run": 2
+      }
+    },
+    {
+      "id": "migration",
+      "label": "Grazer drive",
+      "effect": "Herds cross the spans in numbers; the decks take the strain.",
+      "event_weight_mods": {
+        "rr_grazer_run": 3
+      }
+    }
+  ],
+  "bondable_here": [
+    {
+      "character": "aruun",
+      "hook": "Carried weight. Build the redundant thing nobody will ever thank you for."
+    },
+    {
+      "character": "mollusk",
+      "hook": "Structural testing: he tries to break what Aruun builds."
+    }
+  ],
+  "descent_events": [
+    {
+      "id": "rr_grazer_run",
+      "title": "The grazers bolt",
+      "kind": "migration",
+      "weight": 3,
+      "once": false,
+      "min_depth": 0,
+      "text": "A pylon coughs to life and a herd of dust grazers breaks across the plateau toward a rope span that was rated for half their number.",
+      "choices": [
+        {
+          "id": "steady",
+          "label": "Stand on the deck and brace it while they cross.",
+          "result": "Your arms shake. The herd passes in a long red wave. The deck holds.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "dust_grazer_herd",
+              "tags": [
+                "protect_weak",
+                "burden",
+                "stewardship"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The span remembers who held it."
+        },
+        {
+          "id": "turn",
+          "label": "Break the herd away from the span.",
+          "result": "They scatter into the scree and trample a lichen terrace on the way.",
+          "records": [
+            {
+              "type": "harmed",
+              "target": "dust_grazer_herd",
+              "tags": [
+                "harm_wildlife"
+              ],
+              "weight": 2
+            }
+          ],
+          "consequence": "The terrace will take a season to recover."
+        },
+        {
+          "id": "watch",
+          "label": "Watch from the rim and take notes.",
+          "result": "The deck sags and rights itself. Lucky. You wrote down how lucky.",
+          "records": [
+            {
+              "type": "discovered",
+              "target": "span_load",
+              "tags": [
+                "discovery",
+                "curiosity",
+                "neglect"
+              ],
+              "weight": 1
+            }
+          ],
+          "consequence": "Someone will have to mend the planks you did not."
+        }
+      ]
+    },
+    {
+      "id": "rr_pylon_night",
+      "title": "Pylon night",
+      "kind": "hazard",
+      "weight": 2,
+      "once": false,
+      "min_depth": 1,
+      "text": "After dusk a Dominion pylon begins a low, even hum. Across the valley, plate beetles lift their heads one by one.",
+      "choices": [
+        {
+          "id": "dampen",
+          "label": "Climb up and dampen the pylon's pitch.",
+          "result": "The hum drops below the beetles' hearing. They settle, one after another.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "plate_beetle_herd",
+              "tags": [
+                "calmed_wildlife",
+                "nonviolent",
+                "spared"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The herd remembers the quiet."
+        },
+        {
+          "id": "smash",
+          "label": "Smash the pylon.",
+          "result": "It sparks and dies. A drone patrol turns toward the noise.",
+          "records": [
+            {
+              "type": "killed",
+              "target": "resonance_pylon",
+              "tags": [
+                "kill_dominion",
+                "combat"
+              ],
+              "weight": 2
+            }
+          ],
+          "consequence": "Dominion surveyors will log the loss."
+        },
+        {
+          "id": "leave",
+          "label": "Leave it and move on.",
+          "result": "The hum follows you down the valley for an hour.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "resonance_pylon",
+              "tags": [
+                "neglect"
+              ],
+              "weight": 1
+            }
+          ],
+          "consequence": "The beetles will be angrier tomorrow."
+        }
+      ]
+    },
+    {
+      "id": "rr_old_road_marker",
+      "title": "An Old Road marker",
+      "kind": "marker",
+      "weight": 2,
+      "once": true,
+      "min_depth": 0,
+      "text": "A flat stone at the cliff edge is scratched with a three-line pattern: carry, set, let go. Beneath it, a worn handprint has been polished by a thousand palms.",
+      "choices": [
+        {
+          "id": "study",
+          "label": "Study the pattern and the handprint.",
+          "result": "You feel the weight shift in your arms, as if the stone were teaching you how to stand.",
+          "records": [
+            {
+              "type": "discovered",
+              "target": "old_road_marker",
+              "tags": [
+                "discovery",
+                "curiosity"
+              ],
+              "weight": 2
+            }
+          ],
+          "consequence": "You will carry the next load better."
+        },
+        {
+          "id": "press",
+          "label": "Press your palm against the print.",
+          "result": "It is warm. Something far below acknowledges you.",
+          "records": [
+            {
+              "type": "discovered",
+              "target": "old_road_marker",
+              "tags": [
+                "discovery",
+                "burden"
+              ],
+              "weight": 2
+            }
+          ],
+          "consequence": "The foundation knows your hand now."
+        }
+      ]
+    }
+  ],
+  "story": {
+    "title": "The Carried Weight",
+    "logline": "A deepcore rig hums under the Ochre Span while Aruun's old yard asks what strength is for.",
+    "acts": [
+      {
+        "id": "rr_act1",
+        "act": 1,
+        "title": "The Hum Under the Span",
+        "beat": "Aruun's old Spanwright yard hears the same low note in every stone: a Dominion deepcore rig is resonating with the Ochre Span's foundation. The apprentices have stopped sleeping. Find the source and decide who the yard can trust to help.",
+        "trigger": {
+          "event": {
+            "region": "red_reaches"
+          }
+        },
+        "completes_flag": "rr_act1_done",
+        "unlocks": [
+          "rr_well_line",
+          "rr_grazer_crossing",
+          "rr_beetle_pylon"
+        ],
+        "reward_gear": [
+          "aruun_plumb_apron"
+        ]
+      },
+      {
+        "id": "rr_act2",
+        "act": 2,
+        "title": "Redundant Strength",
+        "beat": "The yard's master calls the Span's real problem by its name: it is too perfect to be safe, a single load path with nothing behind it. Foreman Orrin offers a faster, cheaper fix and the permit that comes with it. Aruun is asked to choose between a monument and a mending.",
+        "trigger": {
+          "all": [
+            {
+              "flag": "rr_act1_done"
+            },
+            {
+              "event": {
+                "tags_any": [
+                  "discovery",
+                  "stewardship",
+                  "protect_weak",
+                  "extraction"
+                ]
+              }
+            }
+          ]
+        },
+        "completes_flag": "rr_act2_done",
+        "unlocks": [
+          "rr_apprentice_arch",
+          "rr_vesk_cache",
+          "rr_drill_drill",
+          "rr_cairn_names"
+        ],
+        "reward_gear": [
+          "aruun_ironroot_haft"
+        ]
+      },
+      {
+        "id": "rr_act3",
+        "act": 3,
+        "title": "Eleven Minutes",
+        "beat": "The AUGUR-7 rig wakes and the Span begins to sing itself apart, with a market day crossing. For eleven minutes the Reach tradition asks one question of Aruun, and the answer is carried by everyone he has helped, or failed to help, on the way here.",
+        "trigger": {
+          "all": [
+            {
+              "flag": "rr_act2_done"
+            }
+          ]
+        },
+        "completes_flag": "rr_act3_done",
+        "variants": [
+          {
+            "id": "braced",
+            "when": {
+              "event": {
+                "tag": "braced_structure"
+              }
+            },
+            "text": "The yard's apprentices take the second and third pier. Aruun carries only the share he can. The Span stands, and nobody sings about it, which is exactly right.",
+            "sets_flag": "rr_ending_braced"
+          },
+          {
+            "id": "failing",
+            "when": {
+              "event": {
+                "tag": "extraction"
+              }
+            },
+            "text": "The rig finishes its contract. The Span holds, barely, under Dominion bracing that will need its own bracing by winter. The yard goes quiet when Aruun walks past.",
+            "sets_flag": "rr_ending_leased"
+          },
+          {
+            "id": "borne",
+            "when": {
+              "event": {
+                "tag": "burden"
+              }
+            },
+            "text": "He holds it alone, shell fracturing, until the others reach him. They arrive in time. They are angry about the cost, and they should be.",
+            "sets_flag": "rr_ending_borne"
+          }
+        ],
+        "unlocks": [
+          "rr_foundation_room"
+        ],
+        "reward_gear": [
+          "aruun_eleven_minute_shell"
+        ]
+      }
+    ]
+  },
+  "side_quests": [
+    {
+      "id": "rr_well_line",
+      "title": "The Well Line",
+      "giver": "Mother Oda Keth, well-keeper",
+      "landmark": "well_line",
+      "summary": "Sixteen generations of Keths have kept the plateau wells. A Dominion contractor offers a pump that fills the cisterns in a week and drains the aquifer in ten years.",
+      "choices": [
+        {
+          "id": "hand_crank",
+          "label": "Repair the old gravity line with the Keth family, stone by stone.",
+          "result": "It takes three days. Oda complains about every stone and tells the whole yard.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "well_line",
+              "tags": [
+                "stewardship",
+                "braced_structure",
+                "protect_weak"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The wells will still be there for the Keth great-grandchildren.",
+          "sets_flag": "rr_wells_kept"
+        },
+        {
+          "id": "sign_pump",
+          "label": "Sign the pump contract for the quick water.",
+          "result": "Water runs by evening. The contractor leaves a Dominion seal on every cistern.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "well_line",
+              "tags": [
+                "extraction",
+                "dominion_favor"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The aquifer begins a slow decline, and the Dominion now owns the pumping schedule.",
+          "sets_flag": "rr_wells_leased"
+        },
+        {
+          "id": "teach",
+          "label": "Train three apprentices to maintain the line, then step back.",
+          "result": "The first repair is crooked. The second is fine. Oda corrects the third and nods once.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "well_line",
+              "tags": [
+                "burden",
+                "stewardship",
+                "redundant_design"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "Three families now know the wells, so none can lose them alone.",
+          "sets_flag": "rr_wells_shared"
+        }
+      ],
+      "cares": [
+        "aruun",
+        "mara",
+        "mollusk"
+      ],
+      "reward_gear": [
+        "aruun_well_stone"
+      ]
+    },
+    {
+      "id": "rr_grazer_crossing",
+      "title": "The Stranded Herd",
+      "giver": "A herder named Tavik Roon",
+      "landmark": "grazer_flats",
+      "summary": "A road collapse has cut a dust grazer herd off from the lichen terraces. They will starve in a week if nothing changes.",
+      "choices": [
+        {
+          "id": "lead_around",
+          "label": "Lead them around the long way, yourself, on foot.",
+          "result": "It takes a day. The herd follows because you walk slowly and do not hurry them.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "dust_grazer_herd",
+              "tags": [
+                "protect_weak",
+                "calmed_wildlife",
+                "stewardship"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The terraces seed again by spring.",
+          "sets_flag": "rr_herd_saved"
+        },
+        {
+          "id": "stampede",
+          "label": "Scare them over the gap before the rest of the road falls.",
+          "result": "Most make it. A few do not. The herd keeps going and does not look back.",
+          "records": [
+            {
+              "type": "harmed",
+              "target": "dust_grazer_herd",
+              "tags": [
+                "harm_wildlife",
+                "casualty"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "Lichen will thin on the east terraces.",
+          "sets_flag": "rr_herd_hurt"
+        },
+        {
+          "id": "rebuild",
+          "label": "Rebuild the road first, with the herder helping.",
+          "result": "You spend four days laying a new deck. Tavik says it is the first time anyone has asked him.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "grazer_flats",
+              "tags": [
+                "braced_structure",
+                "burden",
+                "stewardship"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "A new road crosses the gap. The herd uses it for years.",
+          "sets_flag": "rr_road_rebuilt"
+        }
+      ],
+      "cares": [
+        "aruun",
+        "cigarra"
+      ],
+      "reward_gear": [
+        "solthrin_dust_lamp"
+      ]
+    },
+    {
+      "id": "rr_beetle_pylon",
+      "title": "Pitch and Poise",
+      "giver": "A tired Dominion surveyor named Imre Dahl",
+      "landmark": "augur_pit",
+      "summary": "Plate beetles are throwing themselves at the survey pylons. Dahl was told to keep them out of the dig. He does not know how.",
+      "choices": [
+        {
+          "id": "retune",
+          "label": "Show Dahl how to retune the pylon below the beetles' hearing.",
+          "result": "He writes it down twice. 'Is that all?' he says. 'That is all.'",
+          "records": [
+            {
+              "type": "helped",
+              "target": "plate_beetle_herd",
+              "tags": [
+                "calmed_wildlife",
+                "nonviolent",
+                "spared"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The beetles graze quietly. Dahl is reassigned for being too efficient.",
+          "sets_flag": "rr_beetles_calmed"
+        },
+        {
+          "id": "cull",
+          "label": "Thin the herd so the dig can continue.",
+          "result": "It is done quickly. The silence afterward is longer than usual.",
+          "records": [
+            {
+              "type": "harmed",
+              "target": "plate_beetle_herd",
+              "tags": [
+                "harm_wildlife",
+                "kill_wildlife"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The dig continues. Something in the valley notices.",
+          "sets_flag": "rr_beetles_culled"
+        },
+        {
+          "id": "sabotage",
+          "label": "Pull the pylon's power cell and say nothing.",
+          "result": "The hum stops. Dahl looks at you for a long time and then, carefully, at the sky.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "resonance_pylon",
+              "tags": [
+                "kill_dominion",
+                "extraction_refused"
+              ],
+              "weight": 2
+            }
+          ],
+          "consequence": "Dominion logs will show a fault, not a person.",
+          "sets_flag": "rr_pylon_pulled"
+        }
+      ],
+      "cares": [
+        "aruun",
+        "mara"
+      ],
+      "reward_gear": [
+        "solmara_pitch_fork"
+      ]
+    },
+    {
+      "id": "rr_apprentice_arch",
+      "title": "The Monument Arch",
+      "giver": "Ilsa Brandt, a second-year apprentice",
+      "landmark": "spanwright_yard",
+      "summary": "Ilsa wants to build a grand arch at the yard's gate to be remembered. The yard's pylons are rotting under it.",
+      "choices": [
+        {
+          "id": "build_arch",
+          "label": "Help her raise the arch. It will look incredible.",
+          "result": "The arch goes up in five days. Visitors cry. A pier two valleys over develops a crack nobody checks.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "monument_arch",
+              "tags": [
+                "glory_seeking",
+                "shortcut"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The arch is beautiful. The deferred repair is not.",
+          "sets_flag": "rr_arch_built"
+        },
+        {
+          "id": "repair_first",
+          "label": "Make her repair the pylons first, then build.",
+          "result": "She sulks for two days and then asks a good question about load paths.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "spanwright_yard",
+              "tags": [
+                "redundant_design",
+                "burden",
+                "stewardship"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The arch is smaller and better. Ilsa will keep the habit.",
+          "sets_flag": "rr_arch_deferred"
+        },
+        {
+          "id": "hide_mending",
+          "label": "Build the arch, and hide a second load path inside it.",
+          "result": "Ilsa never learns. Four years later it saves a school.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "monument_arch",
+              "tags": [
+                "redundant_design",
+                "braced_structure",
+                "burden"
+              ],
+              "weight": 4
+            }
+          ],
+          "consequence": "A secret kept in the stone, as Spanwrights have always done.",
+          "sets_flag": "rr_arch_hidden"
+        }
+      ],
+      "cares": [
+        "aruun",
+        "mollusk"
+      ],
+      "reward_gear": [
+        "aruun_two_path_loop"
+      ]
+    },
+    {
+      "id": "rr_vesk_cache",
+      "title": "Dunmore's Cache",
+      "giver": "Vesk Dunmore, claims broker",
+      "landmark": "red_span_remnant",
+      "summary": "Vesk has staked a salvage claim on the wreckage of the Red Span, a place the yard treats as a grave. Under it, a cache of cut Thoughtstone is for sale.",
+      "choices": [
+        {
+          "id": "refuse_trade",
+          "label": "Refuse to deal and have the claim struck.",
+          "result": "The stone stays under the rubble. Vesk calls it a waste. The yard calls it respect.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "red_span_remnant",
+              "tags": [
+                "not_for_sale",
+                "stewardship"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The Red Span remnant remains a grave.",
+          "sets_flag": "rr_cache_kept"
+        },
+        {
+          "id": "fair_share",
+          "label": "Buy at a fair price and give half to the families.",
+          "result": "The families accept it quietly. Vesk makes a faint noise that might be approval.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "red_span_remnant",
+              "tags": [
+                "salvage_fair",
+                "protect_weak"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The stone is used for repairs, and the money for the dead's families.",
+          "sets_flag": "rr_cache_fair"
+        },
+        {
+          "id": "sell_on",
+          "label": "Resell the stone on the Undermarket.",
+          "result": "It moves quickly. It does not stop moving.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "red_span_remnant",
+              "tags": [
+                "trafficked",
+                "claim_jump"
+              ],
+              "weight": 4
+            }
+          ],
+          "consequence": "Someone, somewhere, is building with the Red Span's bones.",
+          "sets_flag": "rr_cache_sold"
+        }
+      ],
+      "cares": [
+        "scarlith",
+        "mara",
+        "aruun"
+      ],
+      "reward_gear": [
+        "scarlith_fair_scale"
+      ]
+    },
+    {
+      "id": "rr_drill_drill",
+      "title": "The Crossing Drill",
+      "giver": "Warden Pel Narr",
+      "landmark": "ochre_span",
+      "summary": "Market day crossings on the Ochre Span draw thousands. Pel wants an evacuation drill. The market guild says it will cost a day's trade.",
+      "choices": [
+        {
+          "id": "run_drill",
+          "label": "Plan and run the drill, with exits and timing.",
+          "result": "It takes six hours. It is awkward. It is useful.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "ochre_span",
+              "tags": [
+                "exit_planned",
+                "evacuation",
+                "stewardship"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "Two weeks later a pier cracks, and the crowd walks off in order.",
+          "sets_flag": "rr_drill_run"
+        },
+        {
+          "id": "skip",
+          "label": "Tell the guild the Span is fine and skip it.",
+          "result": "Market day goes on. The guild is delighted. Pel looks at the cables for a while.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "ochre_span",
+              "tags": [
+                "neglect",
+                "shortcut"
+              ],
+              "weight": 2
+            }
+          ],
+          "consequence": "The next incident will not have a plan.",
+          "sets_flag": "rr_drill_skipped"
+        },
+        {
+          "id": "stand_in",
+          "label": "Stand on the weakest span and promise to hold it yourself.",
+          "result": "The crowd walks over you for four hours. Nobody thanks you, which is the point.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "ochre_span",
+              "tags": [
+                "burden",
+                "protect_weak",
+                "rescue_civilians"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "You are tired in a way that will not go away by morning.",
+          "sets_flag": "rr_drill_borne"
+        }
+      ],
+      "cares": [
+        "bramvex",
+        "aruun",
+        "mollusk"
+      ],
+      "reward_gear": [
+        "bramvex_exit_marker"
+      ]
+    }
+  ],
+  "secrets": [
+    {
+      "id": "rr_foundation_room",
+      "name": "The Foundation Room",
+      "hint": "Below the third pier, the hum stops for exactly one step.",
+      "how_found": "Stand at the third pier of the Ochre Span at dusk after acting on the Span's foundations, and follow the silence down a crack no wider than a shoulder.",
+      "reward": "A buried room of old Spanwright anchors, each carved with a name and a load figure. A thoughtstone shard hums softly in answer to Morrow.",
+      "ledger_tags": [
+        "discovery",
+        "burden"
+      ],
+      "reward_gear": [
+        "aruun_morrow_foundation"
+      ]
+    },
+    {
+      "id": "rr_cairn_names",
+      "name": "The Cairn of Names",
+      "hint": "A stack of flat stones with one blank, left exactly where a hand would reach.",
+      "how_found": "Visit the cairn at the Red Span remnant, and leave it a stone of your own after choosing not to profit from the wreck.",
+      "reward": "The yard's elders scratch a name on the blank stone, and an old keeper's mace-head is returned to you.",
+      "ledger_tags": [
+        "stewardship",
+        "protect_weak"
+      ],
+      "reward_gear": [
+        "pharilux_keepers_chain"
+      ]
+    }
+  ],
+  "landmarks": [
+    {
+      "id": "ochre_span",
+      "name": "The Ochre Span",
+      "kind": "bridge",
+      "desc": "A Spanwright crossing older than anyone's records. Every plank has been replaced; none of it has ever been rebuilt."
+    },
+    {
+      "id": "red_span_remnant",
+      "name": "The Red Span Remnant",
+      "kind": "ruin",
+      "desc": "The broken stumps of the bridge that failed. Locals walk around it in silence."
+    },
+    {
+      "id": "spanwright_yard",
+      "name": "The Spanwright Yard",
+      "kind": "settlement",
+      "desc": "A stone workshop cut into the plateau, where apprentices learn to be unnoticed."
+    },
+    {
+      "id": "well_line",
+      "name": "The Well Line",
+      "kind": "infrastructure",
+      "desc": "A chain of hand-cranked wells strung across the dry flats."
+    },
+    {
+      "id": "grazer_flats",
+      "name": "The Grazer Flats",
+      "kind": "grazing",
+      "desc": "Lichen terraces and herd trails that hold the plateau together."
+    },
+    {
+      "id": "augur_pit",
+      "name": "The AUGUR Pit",
+      "kind": "extraction site",
+      "desc": "The deepcore rig's crater, ringed with pylons and quiet beetles."
+    }
+  ],
+  "ambient": {
+    "npcs": [
+      {
+        "id": "rr_oda",
+        "name": "Mother Oda Keth",
+        "species": "plate beetle",
+        "behavior": "Cranks a well at dawn and lectures anyone within earshot about water.",
+        "schedule": "dawn at the well, noon in the shade, dusk at the yard",
+        "reacts": {
+          "flag": "rr_wells_kept",
+          "line": "Wells stay when people do."
+        }
+      },
+      {
+        "id": "rr_ilsa",
+        "name": "Ilsa Brandt",
+        "species": "stick mantis",
+        "behavior": "Sketches arches in the dust and rubs them out when someone looks.",
+        "schedule": "mornings on the yard roof",
+        "reacts": {
+          "flag": "rr_arch_hidden",
+          "line": "I still think it looks incredible."
+        }
+      },
+      {
+        "id": "rr_pel",
+        "name": "Warden Pel Narr",
+        "species": "long-legged crane",
+        "behavior": "Checks cable tension by plucking it like a string and humming the note.",
+        "schedule": "all hours, usually on the Ochre Span",
+        "reacts": {
+          "flag": "rr_drill_run",
+          "line": "Practice makes boring. Boring is a gift."
+        }
+      }
+    ],
+    "creature_behaviors": [
+      {
+        "creature": "dust_grazer",
+        "behavior": "Graze in a wedge, with one sentinel that stares at the horizon and drops its head when the herd is safe.",
+        "trigger": "always"
+      },
+      {
+        "creature": "skitter_mite",
+        "behavior": "Trace the outline of a fresh crack and gather there by the hundreds, ticking.",
+        "trigger": "after a tremor"
+      },
+      {
+        "creature": "plate_beetle",
+        "behavior": "Rest against warm slate at dusk, leaning into each other like dropped books.",
+        "trigger": "evening, calm pylons"
+      }
+    ]
+  },
+  "loot_table": [
+    {
+      "item": "reach_soil",
+      "weight": 6,
+      "source": "common soil from grazer trails",
+      "rarity": "common"
+    },
+    {
+      "item": "lichen_culture",
+      "weight": 5,
+      "source": "plate beetle droppings",
+      "rarity": "common"
+    },
+    {
+      "item": "thoughtstone_dust",
+      "weight": 4,
+      "source": "cracked Thoughtstone seams",
+      "rarity": "uncommon"
+    },
+    {
+      "item": "salvage",
+      "weight": 4,
+      "source": "drone wrecks",
+      "rarity": "common"
+    },
+    {
+      "item": "spanwright_cable",
+      "weight": 3,
+      "source": "old span maintenance stores",
+      "rarity": "uncommon"
+    },
+    {
+      "item": "red_slate_plate",
+      "weight": 3,
+      "source": "shed beetle plates",
+      "rarity": "uncommon"
+    },
+    {
+      "item": "keth_water_flask",
+      "weight": 2,
+      "source": "the Well Line",
+      "rarity": "uncommon"
+    },
+    {
+      "item": "thoughtstone_cache",
+      "weight": 1,
+      "source": "buried foundation rooms",
+      "rarity": "rare"
+    }
+  ],
+  "mood": {
+    "palette": {
+      "primary": "#9c2f22",
+      "secondary": "#d9803a",
+      "accent": "#6b6a3a",
+      "shadow": "#2a1a16",
+      "highlight": "#f0d8a0",
+      "sky_day": "#d8a080",
+      "sky_dusk": "#b5533a"
+    },
+    "weather": [
+      "hard, dry sun with heat shimmer",
+      "dust devils on the flats",
+      "red dusk wind",
+      "rare mineral storm that glitters"
+    ],
+    "sounds": [
+      "wind whistling through fractures",
+      "cable hum on the spans",
+      "stone ticking as it cools",
+      "skitter mite chatter",
+      "a low Dominion pylon drone"
+    ],
+    "music_slots": [
+      {
+        "slot": "explore_day",
+        "use": "open plateau exploration",
+        "notes": "One low horn carrying a slow theme over wind. Never rushing."
+      },
+      {
+        "slot": "span_works",
+        "use": "inside the yard and on spans",
+        "notes": "Work-song percussion with stone chimes. Steady, communal."
+      },
+      {
+        "slot": "pylon_dread",
+        "use": "resonance tremor and beetle agitation",
+        "notes": "Detuned drone that rises a half step every 30 seconds."
+      },
+      {
+        "slot": "burden_theme",
+        "use": "holding a load, Aruun's Burden",
+        "notes": "Single cello, held notes, heartbeat underneath."
+      },
+      {
+        "slot": "foundation_hush",
+        "use": "secret rooms and the deep",
+        "notes": "Whispered resonance, almost no melody."
+      },
+      {
+        "slot": "augur_boss",
+        "use": "the AUGUR-7 fight",
+        "notes": "Industrial grind with the horn theme fighting through it."
+      }
+    ]
+  }
+}
