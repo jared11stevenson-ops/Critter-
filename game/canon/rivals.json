@@ -1,0 +1,118 @@
+{
+  "_doc": "Ledger Rivals (Lead-owned design; Agent 3 may extend names/traits/lines). DESIGN RULES that keep this system distinct from other studios' patented designs: (1) a SMALL authored cast per Era, not an army hierarchy; (2) no ranks / promotions / power-ups gained by defeating the player; (3) no rival-vs-rival vendettas; (4) rivals pursue FACTION OBJECTIVES (extraction plans) and are driven by the Consequence Ledger, not by personal revenge loops; (5) the player's moral/non-lethal options (negotiate, expose, release, bond) are first-class outcomes, not alternatives to a kill. Not legal advice: have an IP attorney review before launch.",
+
+  "archetypes": {
+    "survey_chief": {
+      "label": "Dominion Survey Chief", "faction": "dominion", "cultures": ["human"],
+      "aggression": 0.55, "flee_at": 0.25, "base_tactics": ["hold_ground", "call_drones"],
+      "bondable": false,
+      "names": {"first": ["Hale", "Marek", "Ines", "Tobias", "Renna", "Calder", "Oksana", "Wren"],
+                "last": ["Orrin", "Vasko", "Thane", "Merrow", "Lindqvist", "Okafor", "Brandt", "Aldous"]},
+      "title": "Survey Chief",
+      "intro": ["{title} {name}. This permit covers every rock you are standing on.", "Handler. {title} {name}, Dominion survey. You are standing in my site."]
+    },
+    "contract_poacher": {
+      "label": "Contract Poacher", "faction": "undermarket", "cultures": ["human", "critter"],
+      "aggression": 0.7, "flee_at": 0.35, "base_tactics": ["ambush", "snare_traps"],
+      "bondable": true,
+      "names": {"first": ["Vesk", "Dara", "Joss", "Mina", "Rook", "Sable", "Teague", "Lio"],
+                "last": ["Dunmore", "Quill", "Harrow", "Pike", "Sorrel", "Vance", "Marl", "Ketch"]},
+      "title": "Poacher",
+      "intro": ["You are bad for business, Handler.", "Criminal extraction? Please. I call it supply."]
+    },
+    "free_scale_radical": {
+      "label": "Free Scale Radical", "faction": "free_scale", "cultures": ["human", "critter"],
+      "aggression": 0.6, "flee_at": 0.3, "base_tactics": ["sabotage", "hit_and_fade"],
+      "bondable": true,
+      "names": {"first": ["Ayla", "Corin", "Ysolde", "Bram", "Nadia", "Tavi", "Eben", "Sora"],
+                "last": ["Fenwick", "Ashgrove", "Moreau", "Ibarra", "Kessel", "Rowan", "Lund", "Adeyemi"]},
+      "title": "Cell Leader",
+      "intro": ["I will not be your good side, Handler.", "Everyone who says they are protecting this place is selling it."]
+    },
+    "helix_recovery_agent": {
+      "label": "Helix Recovery Agent", "faction": "helix", "cultures": ["human"],
+      "aggression": 0.45, "flee_at": 0.3, "base_tactics": ["legal_pressure", "recovery_drones"],
+      "bondable": false,
+      "names": {"first": ["Julian", "Priya", "Desmond", "Lena", "Everett", "Mira", "Cassius", "Noor"],
+                "last": ["Whitlock", "Chandra", "Rourke", "Sato", "Pemberton", "Valdis", "Okoye", "Frost"]},
+      "title": "Recovery Agent",
+      "intro": ["Everything in this crate has a chain of custody. Yours is incomplete.", "I am authorized to recover company property, Handler. That includes the rock."]
+    }
+  },
+
+  "traits": {
+    "meticulous":   {"aggression": -0.05, "flee": 0.0,  "tactics": ["plans_ahead"],        "taunt": "I have a contingency for the contingency."},
+    "debt_ridden":  {"aggression": 0.05,  "flee": 0.05, "tactics": ["takes_bribes"],       "taunt": "Every hour on this site is money I do not have."},
+    "reckless":     {"aggression": 0.15,  "flee": -0.1, "tactics": ["rush"],               "taunt": "Hold still!"},
+    "superstitious":{"aggression": -0.05, "flee": 0.1,  "tactics": ["avoids_old_stone"],   "taunt": "The stone is watching us."},
+    "idealist":     {"aggression": 0.05,  "flee": -0.05,"tactics": ["rallies_allies"],     "taunt": "Somebody has to say no."},
+    "proud":        {"aggression": 0.1,   "flee": -0.1, "tactics": ["refuses_retreat"],    "taunt": "You do not walk away from me."},
+    "cautious":     {"aggression": -0.1,  "flee": 0.15, "tactics": ["keeps_distance"],     "taunt": "Distance is a kind of armor."},
+    "cruel":        {"aggression": 0.1,   "flee": 0.0,  "tactics": ["targets_weakest"],    "taunt": "Which one of you is slower?"}
+  },
+
+  "counters": {
+    "combo": "shielded_advance", "reaching_strike": "stay_off_the_line", "gravity_pull": "spread_formation",
+    "beetle_rage": "kite_and_wait", "probable_impact": "break_the_pairing",
+    "bad_thought": "bait_projectiles", "premonition": "erratic_timing", "false_memory": "ignore_echoes",
+    "brain_skip": "stagger_guard", "grasshopper_thought": "hunt_the_landing"
+  },
+
+  "adapt_lines": {
+    "shielded_advance":  "Heavy swings. I stay inside the arc.",
+    "stay_off_the_line": "I watched you throw that mace down a straight line. I am not standing on one.",
+    "spread_formation":  "Do not bunch up. He pulls.",
+    "kite_and_wait":     "Let him burn himself out. That rage is not free.",
+    "break_the_pairing": "Split them. They only work together.",
+    "bait_projectiles":  "Her little spheres curve. I know where they curve.",
+    "erratic_timing":    "She sees what I will do. So I do not decide until I move.",
+    "ignore_echoes":     "The double shimmers wrong. I ignore it.",
+    "stagger_guard":     "She can skip a heartbeat of mine. I keep two guards up.",
+    "hunt_the_landing":  "She has to land somewhere."
+  },
+
+  "scars": {
+    "reaching_strike": ["dented_pauldron", "cracked_visor"],
+    "gravity_pull": ["bruised_ribs", "torn_sleeve"],
+    "combo": ["limp", "split_lip"],
+    "beetle_rage": ["singed_coat"],
+    "bad_thought": ["burn_mark"],
+    "brain_skip": ["trembling_hand"],
+    "premonition": ["tired_eyes"]
+  },
+  "scar_phrases": {
+    "dented_pauldron": "This pauldron is still dented from your mace.",
+    "cracked_visor": "My visor is cracked because of you.",
+    "bruised_ribs": "My ribs remember that pull.",
+    "torn_sleeve": "You tore my sleeve. That was a good sleeve.",
+    "limp": "I still limp.",
+    "split_lip": "You split my lip last time.",
+    "singed_coat": "The coat is still singed.",
+    "burn_mark": "This burn does not fade.",
+    "trembling_hand": "My hand still trembles when I think of that skip.",
+    "tired_eyes": "I have not slept since she watched me."
+  },
+
+  "greetings": {
+    "escaped":    ["Back again. {scar_phrase} {adapt_line}", "You let me walk. {scar_phrase} I used the time."],
+    "negotiated": ["We have terms, Handler. Do not make me regret them.", "A deal is a deal. I am checking yours."],
+    "released":   ["I have not forgotten that you could have finished it.", "You let me go. I am still deciding what that means."],
+    "default_return": ["Handler. {scar_phrase}"]
+  },
+
+  "resolutions": [
+    {"id": "fight",     "label": "Stop them by force", "outcome": "defeated"},
+    {"id": "negotiate", "label": "Offer terms",        "outcome": "negotiated", "needs_trait_any": ["debt_ridden", "idealist", "meticulous", "cautious"]},
+    {"id": "expose",    "label": "Expose them",        "outcome": "exposed", "requires": {"event": {"type": "discovered", "tag": "evidence"}}},
+    {"id": "release",   "label": "Let them walk",      "outcome": "released"},
+    {"id": "bond",      "label": "Offer a Bond Contract", "outcome": "bonded", "needs_bondable": true,
+     "requires": {"event": {"type": "rival_resolved", "target": "$rival", "tag": "rival_released"}}}
+  ],
+
+  "authored": [
+    {"id": "foreman_orrin", "archetype": "survey_chief", "seed": 4172, "name": "Hale Orrin", "title": "Survey Chief",
+     "traits": ["meticulous", "debt_ridden"], "region": "red_reaches"},
+    {"id": "poacher_vesk", "archetype": "contract_poacher", "seed": 9031, "name": "Vesk Dunmore", "title": "Poacher",
+     "traits": ["reckless", "superstitious"], "region": "red_reaches"}
+  ]
+}

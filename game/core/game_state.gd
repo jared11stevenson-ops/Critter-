@@ -95,6 +95,10 @@ func new_game() -> void:
 	codex = []
 	dominion_standing = 0
 	chapter = "prologue"
+	for n in ["Ledger", "Rivals"]:
+		var sys := get_node_or_null("/root/" + n)
+		if sys:
+			sys.reset()
 	save_game()
 
 func has_save() -> bool:
@@ -109,6 +113,10 @@ func save_game() -> void:
 	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if f:
 		f.store_string(JSON.stringify(data, "\t"))
+	for n in ["Ledger", "Rivals"]:
+		var sys := get_node_or_null("/root/" + n)
+		if sys:
+			sys.save()
 
 func load_game() -> void:
 	if not has_save():

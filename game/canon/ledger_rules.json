@@ -1,0 +1,72 @@
+{
+  "_doc": "Ledger rules (Lead-owned data; Agent 3 may extend 'values', 'summaries', 'dialogue_events'). Tags on events are the shared vocabulary: characters judge events through their 'values' (tag -> score), the debrief renders 'summaries' (tag -> template), flags become events via 'flag_events'.",
+  "initial_bonds": ["aruun", "cigarra"],
+
+  "flag_events": {
+    "grazers_harmed":      {"type": "harmed",  "target": "dust_grazer_herd", "tags": ["harm_wildlife", "keystone"], "weight": 3},
+    "beetles_calmed":      {"type": "helped",  "target": "plate_beetle_herd", "tags": ["calmed_wildlife", "nonviolent", "spared"], "weight": 3},
+    "burden_done":         {"type": "helped",  "target": "ochre_span", "tags": ["burden", "protect_weak", "stewardship"], "weight": 4},
+    "boss_defeated":       {"type": "defeated", "target": "augur_rig", "tags": ["combat", "boss"], "weight": 4},
+    "ochre_span=braced":   {"type": "chose",   "target": "ochre_span", "tags": ["braced_structure", "stewardship", "burden"], "weight": 5},
+    "ochre_span=failing":  {"type": "chose",   "target": "ochre_span", "tags": ["extraction", "dominion_favor"], "weight": 4},
+    "rescued_grazer":      {"type": "helped",  "target": "dust_grazer", "tags": ["protect_weak", "stewardship"], "weight": 2},
+    "first_scan_done":     {"type": "discovered", "target": "scanner", "tags": ["discovery", "curiosity"], "weight": 1},
+    "combo_unlocked":      {"type": "bonded_pair", "target": "aruun_cigarra", "tags": ["trust"], "weight": 2},
+    "promised_zephyr":     {"promise": {"id": "zephyr_bring_both_home", "to": "zephyr", "template": "bring_both_home"}}
+  },
+
+  "dialogue_events": {
+    "hub_lab_mara": {"type": "talked", "target": "mara", "tags": ["social"]}
+  },
+
+  "values": {
+    "aruun":   {"protect_weak": 1.5, "burden": 2.0, "braced_structure": 3.0, "extraction": -2.5, "dominion_favor": -1.0,
+                "harm_wildlife": -2.0, "calmed_wildlife": 1.5, "spared": 1.0, "nonviolent": 0.5, "kill_wildlife": -0.1,
+                "promise_kept": 2.0, "promise_loophole": -1.0, "promise_bent": 1.0, "promise_broken": -4.0, "casualty": -2.0},
+    "cigarra": {"harm_wildlife": -1.0, "spared": 1.0, "nonviolent": 1.5, "curiosity": 1.0, "discovery": 0.4, "extraction": -0.5,
+                "braced_structure": 1.0, "promise_kept": 1.5, "promise_loophole": 1.0, "promise_bent": 0.5, "promise_broken": -3.0, "casualty": -2.0},
+    "zephyr":  {"promise_kept": 3.0, "promise_loophole": 2.5, "promise_bent": 0.5, "promise_broken": -6.0, "spared": 0.5, "curiosity": 0.5},
+    "bramvex": {"protect_weak": 1.0, "nonviolent": 0.5, "extraction": -1.0, "casualty": -3.0, "promise_kept": 2.0, "promise_broken": -3.0, "stewardship": 0.5},
+    "mara":    {"stewardship": 2.5, "extraction": -2.0, "harm_wildlife": -2.5, "spared": 1.5, "discovery": 0.5, "nonviolent": 1.0, "promise_kept": 1.5, "promise_broken": -2.0},
+    "dexter":  {"extraction": 2.0, "dominion_favor": 2.0, "braced_structure": -0.5, "discovery": 1.0, "combat": 0.2, "boss": 0.5}
+  },
+
+  "opinion_lines": {
+    "aruun":   {"up": "Aruun trusts your judgment more.", "down": "Aruun is quieter around you."},
+    "cigarra": {"up": "Cigarra finds you more interesting.", "down": "Cigarra's futures around you are getting noisier."},
+    "zephyr":  {"up": "Zephyr thinks you understand how promises work.", "down": "Zephyr is keeping count."},
+    "bramvex": {"up": "Bramvex nods when you pass.", "down": "Bramvex is counting exits again."},
+    "mara":    {"up": "Mara is proud of the work.", "down": "Mara is worried about your choices."},
+    "dexter":  {"up": "Dexter thinks you are more useful than expected.", "down": "Dexter is disappointed in you."}
+  },
+
+  "summaries": {
+    "harm_wildlife":    "The {target} was harmed. Their droppings seed the lichen that holds the soil together.",
+    "calmed_wildlife":  "The {target} walked away calm.",
+    "braced_structure": "The Ochre Span is braced. It will carry people for another generation.",
+    "extraction":       "The Dominion contract is satisfied. The Span will stand a season, maybe two.",
+    "burden":           "You held the span long enough for everyone to cross.",
+    "promise_kept":     "You kept your word to {target}, letter and spirit.",
+    "promise_loophole": "You kept your word to {target} to the letter. They noticed the difference.",
+    "promise_bent":     "You kept the spirit of your word to {target}, not the wording.",
+    "promise_broken":   "You broke your word to {target}.",
+    "boss":             "AUGUR-7 is down.",
+    "containment":      "You contained a {target}. It will need a Habitat chain.",
+    "rival_released":   "You let {target} walk away.",
+    "rival_negotiated": "You reached terms with {target}.",
+    "rival_exposed":    "You exposed {target}.",
+    "rival_escaped":    "{target} got away. They will remember how.",
+    "rival_defeated":   "{target} was stopped.",
+    "casualty":         "{target} went down. Every second you borrow is a debt."
+  },
+
+  "promise_templates": {
+    "bring_both_home": {
+      "wording": "I promise to bring them both home.",
+      "resolve_on": "return",
+      "letter": [{"type": "return", "data_eq": {"all_conscious": true}}],
+      "spirit": [{"type": "return"}, {"none": {"tag": "casualty"}}],
+      "break_on": []
+    }
+  }
+}

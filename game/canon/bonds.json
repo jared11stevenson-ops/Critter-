@@ -1,0 +1,17 @@
+{
+  "_doc": "Bond Contracts: how a sapient character is acquired. Each bond is a staged, character-specific trust quest built around their contradiction (Agent 3 authors the rest of the cast; Lead validates). 'requires' maps a stage to a spec (see design/LEDGER_SPEC.md). Empty requirement = advanced manually by gameplay (Ledger.set_bond). A bond never silently disappears: failing a test sends the character to 'estranged', with an optional 'reconcile_if'.",
+  "zephyr": {
+    "contradiction": "Treats rules as games but treats promises as sacred.",
+    "stages": ["unmet", "met", "interested", "tested", "bonded"],
+    "requires": {
+      "met":        {"event": {"type": "talked", "target": "zephyr"}},
+      "interested": {"promise": {"id": "zephyr_bring_both_home", "status_in": ["open", "kept", "loophole", "bent"]}},
+      "tested":     {"promise": {"id": "zephyr_bring_both_home", "status_in": ["kept", "loophole", "bent"]}},
+      "bonded":     {"all": [{"promise": {"id": "zephyr_bring_both_home", "status_in": ["kept", "loophole"]}}, {"opinion_min": {"character": "zephyr", "min": 3}}]}
+    },
+    "estrange_if": {"promise": {"id": "zephyr_bring_both_home", "status_in": ["broken"]}},
+    "reconcile_if": {"event": {"type": "promised", "target": "zephyr", "count_min": 2}},
+    "reconcile_to": "interested",
+    "test_hint": "Zephyr wants a promise, worded carefully. Wording is the whole art."
+  }
+}

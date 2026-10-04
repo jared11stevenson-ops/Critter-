@@ -1,0 +1,22 @@
+{
+  "_doc": "Reaction Matrix: companion x trigger x condition -> bark. Agent 3 authors the full matrix per voice sheet; Agent 2 displays them (hub idle, return from a descent, camp conversations). 'when' is a Ledger spec; 'once' reactions fire a single time; higher 'priority' wins.",
+  "aruun": [
+    {"id": "aruun_grazers", "trigger": "return", "priority": 5, "once": true, "expr": "aggressive",
+     "when": {"event": {"type": "harmed", "target": "dust_grazer_herd"}},
+     "text": "You hurt the grazers. I haven't forgotten."},
+    {"id": "aruun_braced", "trigger": "return", "priority": 4, "once": true, "expr": "calm",
+     "when": {"event": {"type": "chose", "tag": "braced_structure"}},
+     "text": "A structure should sacrifice itself before it sacrifices the people inside it. You understood that."},
+    {"id": "aruun_extraction", "trigger": "return", "priority": 4, "once": true, "expr": "focused",
+     "when": {"event": {"type": "chose", "tag": "extraction"}},
+     "text": "It'll stand a season. I'll remember who chose the season."}
+  ],
+  "cigarra": [
+    {"id": "cigarra_nonviolent", "trigger": "return", "priority": 3, "once": true, "expr": "happy",
+     "when": {"event": {"type": "helped", "tag": "nonviolent"}},
+     "text": "You let the beetles walk. That was a surprising branch."},
+    {"id": "cigarra_noisy", "trigger": "return", "priority": 2, "once": true, "expr": "annoyed",
+     "when": {"event": {"type": "harmed", "tag": "harm_wildlife"}},
+     "text": "The futures around you got louder after that."}
+  ]
+}
