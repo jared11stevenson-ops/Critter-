@@ -668,5 +668,770 @@
         ]
       }
     }
-  ]
+  ],
+  "story": {
+    "title": "What the Dark Keeps",
+    "logline": "Survey lamps arrive in a world that uses light as language, and Nerit must decide what deserves to stay unseen.",
+    "acts": [
+      {
+        "id": "ld_act1",
+        "act": 1,
+        "title": "Constellations Out of Season",
+        "beat": "The living constellations on the vault ceiling are drifting off their seasonal paths. Pulse swarms flicker out of rhythm. Dominion survey lamps have been hung across the hanging walkways, and the light is too steady to be alive.",
+        "trigger": {
+          "event": {
+            "region": "lumen_depths"
+          }
+        },
+        "completes_flag": "ld_act1_done",
+        "unlocks": [
+          "ld_mourning_pool",
+          "ld_pulse_translation",
+          "ld_lamp_walkers"
+        ],
+        "reward_gear": [
+          "nerit_pocket_reservoir"
+        ]
+      },
+      {
+        "id": "ld_act2",
+        "act": 2,
+        "title": "Lamps and Lullabies",
+        "beat": "The drift is not an accident. A sleeping den has been lit for weeks, and the sleepers are failing. Nerit must choose between the survey's data and the privacy of those who wanted to be left alone.",
+        "trigger": {
+          "all": [
+            {
+              "flag": "ld_act1_done"
+            },
+            {
+              "event": {
+                "tags_any": [
+                  "privacy_respected",
+                  "darkness_kept",
+                  "forced_exposure",
+                  "discovery"
+                ]
+              }
+            }
+          ]
+        },
+        "completes_flag": "ld_act2_done",
+        "unlocks": [
+          "ld_glass_eel_net",
+          "ld_drifter_lost",
+          "ld_hollow_echo",
+          "ld_constellation_key"
+        ],
+        "reward_gear": [
+          "nerit_hooded_lantern"
+        ]
+      },
+      {
+        "id": "ld_act3",
+        "act": 3,
+        "title": "The Sealed Door",
+        "beat": "Marek Vasko's crew has found the vault door at the center of the hollow mountain. The constellations have gathered around it. Whatever lies behind is older than the survey, older than the walkways, and it is not asking to be seen.",
+        "trigger": {
+          "flag": "ld_act2_done"
+        },
+        "completes_flag": "ld_act3_done",
+        "variants": [
+          {
+            "id": "dark",
+            "when": {
+              "event": {
+                "tag": "darkness_kept"
+              }
+            },
+            "text": "Nerit gathers the light off the door and leaves the dark intact. The constellations settle. The survey writes 'no findings', and for once it is the truth.",
+            "sets_flag": "ld_ending_dark"
+          },
+          {
+            "id": "exposed",
+            "when": {
+              "event": {
+                "tag": "forced_exposure"
+              }
+            },
+            "text": "The door glows for the cameras. The data is magnificent. The den behind the stone never forgives anyone for it, and Nerit does not blame them.",
+            "sets_flag": "ld_ending_exposed"
+          },
+          {
+            "id": "threshold",
+            "when": {
+              "event": {
+                "tag": "threshold_kept"
+              }
+            },
+            "text": "Someone old and quiet stands at the door and does not open it. Nerit stands beside them. The survey crew goes home, and nobody argues.",
+            "sets_flag": "ld_ending_threshold"
+          }
+        ],
+        "unlocks": [
+          "ld_unlit_chamber"
+        ],
+        "reward_gear": [
+          "nerit_sealed_cowl"
+        ]
+      }
+    ]
+  },
+  "side_quests": [
+    {
+      "id": "ld_mourning_pool",
+      "title": "The Mourning Pool",
+      "giver": "A bell drifter named Sooth",
+      "landmark": "dark_pool_landmark",
+      "summary": "A family has gathered at a lightless pool to mourn. A survey team wants to light it to map the basin.",
+      "choices": [
+        {
+          "id": "keep_dark",
+          "label": "Gather the light away and leave the pool in dark.",
+          "result": "The family does not speak to you. They do not need to.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "dark_pool",
+              "tags": [
+                "darkness_kept",
+                "privacy_respected",
+                "protect_weak"
+              ],
+              "weight": 4
+            }
+          ],
+          "consequence": "The pool is mourned in peace. The survey maps the other basin.",
+          "sets_flag": "ld_pool_kept"
+        },
+        {
+          "id": "light_it",
+          "label": "Light the pool for the survey.",
+          "result": "The map is perfect. The family leaves quietly, and does not return.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "dark_pool",
+              "tags": [
+                "forced_exposure",
+                "dominion_favor"
+              ],
+              "weight": 4
+            }
+          ],
+          "consequence": "The pool becomes a tourist stop. The family finds another.",
+          "sets_flag": "ld_pool_lit"
+        },
+        {
+          "id": "offer_light",
+          "label": "Offer the family a small, gentle light of their own.",
+          "result": "Sooth declines the first time and accepts the second.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "dark_pool",
+              "tags": [
+                "consent_asked",
+                "privacy_respected"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The pool is lit only by what the family chooses.",
+          "sets_flag": "ld_pool_asked"
+        }
+      ],
+      "cares": [
+        "nerit",
+        "cigarra",
+        "mara"
+      ],
+      "reward_gear": [
+        "nerit_mourning_veil"
+      ]
+    },
+    {
+      "id": "ld_pulse_translation",
+      "title": "Pulse Grammar",
+      "giver": "A glow-colony elder",
+      "landmark": "glow_colony_landmark",
+      "summary": "A pulse swarm speaks in rhythm, and a Dominion linguist has built a translator. It is wrong, and it is already being used.",
+      "choices": [
+        {
+          "id": "teach",
+          "label": "Teach the linguist the actual grammar, one pulse at a time.",
+          "result": "It is slow. The elder is patient, and so are you.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "glow_colony",
+              "tags": [
+                "discovery",
+                "curiosity",
+                "consent_asked"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The translator is corrected, and the elder gets a say in what it says.",
+          "sets_flag": "ld_grammar_taught"
+        },
+        {
+          "id": "mimic",
+          "label": "Mimic the swarm to lure it where the survey wants.",
+          "result": "It works. It also works on you, a little.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "glow_colony",
+              "tags": [
+                "coercion",
+                "forced_exposure"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The swarm follows a lie, and learns not to.",
+          "sets_flag": "ld_swarm_lured"
+        },
+        {
+          "id": "leave_it",
+          "label": "Leave it untranslated.",
+          "result": "The swarm pulses once, politely.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "glow_colony",
+              "tags": [
+                "darkness_kept",
+                "privacy_respected"
+              ],
+              "weight": 2
+            }
+          ],
+          "consequence": "Some meanings stay unshared.",
+          "sets_flag": "ld_grammar_private"
+        }
+      ],
+      "cares": [
+        "nerit",
+        "cigarra",
+        "solmara"
+      ],
+      "reward_gear": [
+        "solmara_pulse_gloss"
+      ]
+    },
+    {
+      "id": "ld_lamp_walkers",
+      "title": "The Lamp Line",
+      "giver": "Foreman's clerk Alis Tamm",
+      "landmark": "hanging_walkway_site",
+      "summary": "Dominion lamps line the hanging walkways at fixed intervals. They never dim, and the cave life is leaving.",
+      "choices": [
+        {
+          "id": "dim_them",
+          "label": "Show the crew how to dim the lamps on a cycle that matches the cave.",
+          "result": "Alis writes it down. She seems relieved to be allowed.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "hanging_walkway",
+              "tags": [
+                "stewardship",
+                "privacy_respected",
+                "calmed_wildlife"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "Cave life returns along the walkway, slowly.",
+          "sets_flag": "ld_lamps_dimmed"
+        },
+        {
+          "id": "rip_out",
+          "label": "Rip the lamps down.",
+          "result": "It is satisfying for about a minute.",
+          "records": [
+            {
+              "type": "killed",
+              "target": "survey_lamps",
+              "tags": [
+                "kill_dominion",
+                "combat"
+              ],
+              "weight": 2
+            }
+          ],
+          "consequence": "Dominion sends a replacement crew.",
+          "sets_flag": "ld_lamps_ripped"
+        },
+        {
+          "id": "keep_lit",
+          "label": "Let them burn and say it is not your problem.",
+          "result": "The walkway is bright and empty.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "hanging_walkway",
+              "tags": [
+                "extraction",
+                "dominion_favor"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The lamps stay on. The cave dims in other ways.",
+          "sets_flag": "ld_lamps_lit"
+        }
+      ],
+      "cares": [
+        "nerit",
+        "mara"
+      ],
+      "reward_gear": [
+        "nerit_dimmer_ring"
+      ]
+    },
+    {
+      "id": "ld_glass_eel_net",
+      "title": "Glass Eel Nets",
+      "giver": "Net-keeper Brim",
+      "landmark": "shallows_site",
+      "summary": "Brim's family has netted glass eels for light for generations. A buyer on the Undermarket wants ten times the usual catch.",
+      "choices": [
+        {
+          "id": "fair_catch",
+          "label": "Set a catch limit that Brim agrees to keep.",
+          "result": "Brim grumbles, then writes it on the net.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "glass_eel_shoal",
+              "tags": [
+                "stewardship",
+                "salvage_fair"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The shoals recover, and so does Brim's pride.",
+          "sets_flag": "ld_eels_limited"
+        },
+        {
+          "id": "overfish",
+          "label": "Help Brim fill the order.",
+          "result": "It is a spectacular catch. The shallows go dim afterward.",
+          "records": [
+            {
+              "type": "harmed",
+              "target": "glass_eel_shoal",
+              "tags": [
+                "harm_wildlife",
+                "trafficked"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The buyer leaves. The eels do not return this season.",
+          "sets_flag": "ld_eels_overfished"
+        },
+        {
+          "id": "free_them",
+          "label": "Cut the nets quietly.",
+          "result": "Brim is angry. The eels are not.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "glass_eel_shoal",
+              "tags": [
+                "calmed_wildlife",
+                "spared"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The shoals glow brightly for a week.",
+          "sets_flag": "ld_eels_freed"
+        }
+      ],
+      "cares": [
+        "nerit",
+        "scarlith",
+        "mara"
+      ],
+      "reward_gear": [
+        "scarlith_eel_scale_vest"
+      ]
+    },
+    {
+      "id": "ld_drifter_lost",
+      "title": "A Lantern in the Dark",
+      "giver": "A frightened bell drifter parent",
+      "landmark": "dark_layer_site",
+      "summary": "A young drifter has wandered into the lightless layer, where nothing glows unless carried.",
+      "choices": [
+        {
+          "id": "carry_light",
+          "label": "Carry a small light in and bring the child out.",
+          "result": "The child is thirsty, frightened and in one piece.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "bell_drifter",
+              "tags": [
+                "rescue_civilians",
+                "protect_weak"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The family thanks you with a patient silence.",
+          "sets_flag": "ld_drifter_rescued"
+        },
+        {
+          "id": "guide_dark",
+          "label": "Guide the child out by voice alone, without light.",
+          "result": "It takes longer. The child learns to trust the dark, and your voice.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "bell_drifter",
+              "tags": [
+                "darkness_kept",
+                "rescue_civilians",
+                "consent_asked"
+              ],
+              "weight": 4
+            }
+          ],
+          "consequence": "The child is not afraid of the dark anymore.",
+          "sets_flag": "ld_drifter_dark"
+        },
+        {
+          "id": "flood_light",
+          "label": "Light the whole cavern so the child can see.",
+          "result": "The child sees. So does everything else in the cave.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "dark_layer",
+              "tags": [
+                "forced_exposure",
+                "rescue_civilians"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The child is found. Eight other sleepers are woken.",
+          "sets_flag": "ld_drifter_flooded"
+        }
+      ],
+      "cares": [
+        "nerit",
+        "bramvex",
+        "pharilux"
+      ],
+      "reward_gear": [
+        "bramvex_lantern_cloak"
+      ]
+    },
+    {
+      "id": "ld_hollow_echo",
+      "title": "Door Rumors",
+      "giver": "A mineral-forest hermit",
+      "landmark": "hollow_mountain_landmark",
+      "summary": "Someone has spread a rumor about a door in the hollow mountain. A keeper of the threshold asks that you not look.",
+      "choices": [
+        {
+          "id": "respect",
+          "label": "Respect the keeper and do not go.",
+          "result": "The keeper nods and does not thank you.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "hollow_mountain",
+              "tags": [
+                "threshold_kept",
+                "sealed_kept"
+              ],
+              "weight": 4
+            }
+          ],
+          "consequence": "The door stays closed.",
+          "sets_flag": "ld_threshold_kept"
+        },
+        {
+          "id": "ask_origin",
+          "label": "Press the keeper to explain where the door came from.",
+          "result": "The keeper looks at you for a long time and says nothing, and means it.",
+          "records": [
+            {
+              "type": "talked",
+              "target": "threshold_keeper",
+              "tags": [
+                "pressed_origin"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The keeper will not speak to you again.",
+          "sets_flag": "ld_origin_pressed"
+        },
+        {
+          "id": "pry",
+          "label": "Go and pry at it anyway.",
+          "result": "The door hums once, as if offended.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "hollow_mountain",
+              "tags": [
+                "threshold_breached",
+                "forced_exposure"
+              ],
+              "weight": 4
+            }
+          ],
+          "consequence": "The mountain goes quiet in a way that feels like waiting.",
+          "sets_flag": "ld_door_pried"
+        }
+      ],
+      "cares": [
+        "pharilux",
+        "nerit",
+        "cigarra"
+      ],
+      "reward_gear": [
+        "pharilux_threshold_wrap"
+      ]
+    }
+  ],
+  "secrets": [
+    {
+      "id": "ld_unlit_chamber",
+      "name": "The Unlit Chamber",
+      "hint": "A chamber where every glow colony dims at the entrance, politely.",
+      "how_found": "Reach the threshold of the hollow mountain after ending Act 3 and enter without carrying light.",
+      "reward": "An entire family's ancestral sleeping hall, undisturbed. Nerit is welcomed and given a keepsake.",
+      "ledger_tags": [
+        "darkness_kept",
+        "privacy_respected"
+      ],
+      "reward_gear": [
+        "solthrin_unlit_road_mantle"
+      ]
+    },
+    {
+      "id": "ld_constellation_key",
+      "name": "The Constellation Key",
+      "hint": "On one night each season, three constellations align over a mineral spire.",
+      "how_found": "Wait beneath the spire on the night of the alignment and relocate the light into the crystal fern.",
+      "reward": "A hidden stair behind the spire descends to a pool of stilled light, and a lamp that has never been lit.",
+      "ledger_tags": [
+        "discovery",
+        "curiosity"
+      ],
+      "reward_gear": [
+        "nerit_stilled_lantern"
+      ]
+    }
+  ],
+  "landmarks": [
+    {
+      "id": "dark_pool_landmark",
+      "name": "The Mourning Pool",
+      "kind": "sacred site",
+      "desc": "A lightless pool where families grieve. Lamps are not welcome."
+    },
+    {
+      "id": "glow_colony_landmark",
+      "name": "The Speaking Colony",
+      "kind": "colony",
+      "desc": "A great glow colony that pulses in grammar older than the walkways."
+    },
+    {
+      "id": "hanging_walkway_site",
+      "name": "The Lamp Line",
+      "kind": "walkway",
+      "desc": "A hanging walkway lined with Dominion lamps that never dim."
+    },
+    {
+      "id": "shallows_site",
+      "name": "Brim's Shallows",
+      "kind": "fishery",
+      "desc": "A shallow lagoon of drifting plankton light and a family of net-keepers."
+    },
+    {
+      "id": "dark_layer_site",
+      "name": "The Lightless Reach",
+      "kind": "hazard",
+      "desc": "A layer where nothing glows unless carried."
+    },
+    {
+      "id": "hollow_mountain_landmark",
+      "name": "The Hollow Mountain",
+      "kind": "threshold",
+      "desc": "A mountain with nothing inside it, and a door at its center."
+    }
+  ],
+  "ambient": {
+    "npcs": [
+      {
+        "id": "ld_sooth",
+        "name": "Sooth",
+        "species": "bell drifter",
+        "behavior": "Rings softly when approached and falls silent when asked about the pool.",
+        "schedule": "dusk at the pool",
+        "reacts": {
+          "flag": "ld_pool_kept",
+          "line": "The dark said thank you. I am only the bell."
+        }
+      },
+      {
+        "id": "ld_alis",
+        "name": "Alis Tamm",
+        "species": "human clerk",
+        "behavior": "Checks lamp readouts and writes down which ones flickered, as if apologizing.",
+        "schedule": "walkway shifts",
+        "reacts": {
+          "flag": "ld_lamps_dimmed",
+          "line": "They are dimmer now. I think it is better."
+        }
+      },
+      {
+        "id": "ld_brim",
+        "name": "Net-keeper Brim",
+        "species": "mud skink",
+        "behavior": "Mends nets by feel and hums the eel count.",
+        "schedule": "all hours in the shallows",
+        "reacts": {
+          "flag": "ld_eels_limited",
+          "line": "Ten fewer a week. We will see."
+        }
+      }
+    ],
+    "creature_behaviors": [
+      {
+        "creature": "pulse_swarm",
+        "behavior": "Flash in a call-and-response when a light is carried past, then dim out of politeness.",
+        "trigger": "carried light"
+      },
+      {
+        "creature": "glass_eel",
+        "behavior": "Cluster beneath a lamp and ripple, then scatter when a shadow falls across them.",
+        "trigger": "light change"
+      },
+      {
+        "creature": "spire_sleeper",
+        "behavior": "Slowly roll over in sleep and glow a little brighter, then settle.",
+        "trigger": "nearby footsteps"
+      }
+    ]
+  },
+  "loot_table": [
+    {
+      "item": "plankton_light_vial",
+      "weight": 5,
+      "source": "drifting shallows",
+      "rarity": "common"
+    },
+    {
+      "item": "crystal_fern_frond",
+      "weight": 4,
+      "source": "mineral forests",
+      "rarity": "common"
+    },
+    {
+      "item": "glass_eel_scale",
+      "weight": 4,
+      "source": "eel shallows",
+      "rarity": "uncommon"
+    },
+    {
+      "item": "bell_moss",
+      "weight": 3,
+      "source": "bell drifter dens",
+      "rarity": "uncommon"
+    },
+    {
+      "item": "spire_shard",
+      "weight": 3,
+      "source": "mineral spires",
+      "rarity": "uncommon"
+    },
+    {
+      "item": "lamp_core",
+      "weight": 3,
+      "source": "Dominion survey lamps",
+      "rarity": "common"
+    },
+    {
+      "item": "constellation_thread",
+      "weight": 2,
+      "source": "the vault ceiling",
+      "rarity": "rare"
+    },
+    {
+      "item": "stilled_light",
+      "weight": 1,
+      "source": "the Constellation Key",
+      "rarity": "epic"
+    }
+  ],
+  "mood": {
+    "palette": {
+      "primary": "#1a2a40",
+      "secondary": "#6ab0c8",
+      "accent": "#e8e0a0",
+      "shadow": "#0a0e1a",
+      "highlight": "#b8e0d8",
+      "constellation": "#3a5a8a",
+      "pulse_warm": "#e0a060"
+    },
+    "weather": [
+      "still air that moves only when something large passes",
+      "drifting plankton snow",
+      "cold mineral mist",
+      "a warm pulse that rolls through the vault"
+    ],
+    "sounds": [
+      "water drip percussion",
+      "bell tones",
+      "glass chimes of mineral spires",
+      "slow breathing of the sleeping dens",
+      "the soft click of a pulse swarm"
+    ],
+    "music_slots": [
+      {
+        "slot": "vault_drift",
+        "use": "open cavern exploration",
+        "notes": "Bowed glass over a low choir pad. Everything is slow, and everything is listening."
+      },
+      {
+        "slot": "forest_crystal",
+        "use": "mineral forest",
+        "notes": "Bell tones with water-drip percussion that follows the player's steps."
+      },
+      {
+        "slot": "dark_hush",
+        "use": "lightless layer",
+        "notes": "Almost no sound. A single sustained harmonic that rises when light is carried."
+      },
+      {
+        "slot": "mourning",
+        "use": "mourning pool and den scenes",
+        "notes": "Choir pad, one voice, no words."
+      },
+      {
+        "slot": "survey_intrusion",
+        "use": "Dominion lamps and drones",
+        "notes": "A synth pulse too regular for the cave. It is meant to feel like a stranger's heartbeat."
+      },
+      {
+        "slot": "sealed_door",
+        "use": "Act 3 and the vault door",
+        "notes": "Huge slow bells, and then complete silence at the moment of the choice."
+      }
+    ]
+  }
 }

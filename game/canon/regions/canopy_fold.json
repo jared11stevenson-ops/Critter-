@@ -773,5 +773,784 @@
         ]
       }
     }
-  ]
+  ],
+  "story": {
+    "title": "The Map That Won't Hold",
+    "logline": "Living bridges are dying faster than anyone can map them, and Cigarra is asked to decide which future to trust.",
+    "acts": [
+      {
+        "id": "cf_act1",
+        "act": 1,
+        "title": "Ghost Routes",
+        "beat": "A living bridge Cigarra crossed last week is already gone, and the survey convoy lists it as 'permanent'. Premonition shows three routes blinking out together. Every settlement on the high boughs is about to be cut off.",
+        "trigger": {
+          "event": {
+            "region": "canopy_fold"
+          }
+        },
+        "completes_flag": "cf_act1_done",
+        "unlocks": [
+          "cf_lantern_census",
+          "cf_widow_bridge",
+          "cf_wren_cable"
+        ],
+        "reward_gear": [
+          "cigarra_charm_knots"
+        ]
+      },
+      {
+        "id": "cf_act2",
+        "act": 2,
+        "title": "Certainty Is a Rope",
+        "beat": "The Listening House asks Cigarra to name which of its futures should be built toward. Every elder wants a single answer. She sees nine and trusts none of them, and the cable crews are waiting for a decision they can bolt to a tree.",
+        "trigger": {
+          "all": [
+            {
+              "flag": "cf_act1_done"
+            },
+            {
+              "event": {
+                "tags_any": [
+                  "foresight_used",
+                  "improvised",
+                  "chose_unseen",
+                  "certainty_trusted",
+                  "stewardship"
+                ]
+              }
+            }
+          ]
+        },
+        "completes_flag": "cf_act2_done",
+        "unlocks": [
+          "cf_charm_thief",
+          "cf_skimmer_roost",
+          "cf_limb_rescue",
+          "cf_route_archive"
+        ],
+        "reward_gear": [
+          "cigarra_second_thought_sphere"
+        ]
+      },
+      {
+        "id": "cf_act3",
+        "act": 3,
+        "title": "The Long Bough",
+        "beat": "The great Long Bough, the one bridge every route depends on, begins its slow migration. It will cross the Fold in one night and then close forever behind it. Whatever Cigarra has taught the Fold about uncertainty, or failed to, will decide who is on it.",
+        "trigger": {
+          "flag": "cf_act2_done"
+        },
+        "completes_flag": "cf_act3_done",
+        "variants": [
+          {
+            "id": "unseen",
+            "when": {
+              "event": {
+                "tag": "chose_unseen"
+              }
+            },
+            "text": "Cigarra steps off the predicted path and finds the one future she did not see: a narrow bough that nobody mapped. Everyone crosses. She laughs for the first time in weeks.",
+            "sets_flag": "cf_ending_unseen"
+          },
+          {
+            "id": "trusted",
+            "when": {
+              "event": {
+                "tag": "certainty_trusted"
+              }
+            },
+            "text": "She picks one vision and commits. It costs a settlement its roost, and saves the rest. She will not be sure it was right, but she will be sure she decided.",
+            "sets_flag": "cf_ending_decided"
+          },
+          {
+            "id": "improvised",
+            "when": {
+              "event": {
+                "tag": "improvised"
+              }
+            },
+            "text": "The bridge folds half a minute early, and the crossing becomes a shouted, improvised relay of ropes and hopper leaps. Nobody is lost. Nobody could explain how.",
+            "sets_flag": "cf_ending_improvised"
+          }
+        ],
+        "unlocks": [
+          "cf_silent_crown"
+        ],
+        "reward_gear": [
+          "cigarra_unseen_cloak"
+        ]
+      }
+    ]
+  },
+  "side_quests": [
+    {
+      "id": "cf_lantern_census",
+      "title": "The Lantern Census",
+      "giver": "Ottoline Marr, shelf-keeper",
+      "landmark": "glow_shelf_hall",
+      "summary": "A deep settlement's glow-fungus shelves are dying one by one and nobody can tell which will go next. Without them, the lower halls go dark.",
+      "choices": [
+        {
+          "id": "read_futures",
+          "label": "Use Premonition to see which shelves will fail first.",
+          "result": "The ghosts show it clearly. Three shelves, in order. It costs you a headache and a tin of tea.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "glow_shelf_hall",
+              "tags": [
+                "foresight_used",
+                "stewardship",
+                "protect_weak"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The keepers move cuttings in time. Ottoline writes your method into the hall ledger.",
+          "sets_flag": "cf_shelves_foreseen"
+        },
+        {
+          "id": "guess",
+          "label": "Do it by feel, with cuttings and plain guessing.",
+          "result": "You lose one shelf. You save two. Ottoline calls it an acceptable error.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "glow_shelf_hall",
+              "tags": [
+                "improvised",
+                "curiosity",
+                "stewardship"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The hall learns the shelves can be tended without prophecy.",
+          "sets_flag": "cf_shelves_guessed"
+        },
+        {
+          "id": "dominion_lamps",
+          "label": "Accept Dominion lamps and leave the fungus alone.",
+          "result": "The hall is lit by morning. It is also brighter than anyone remembers.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "glow_shelf_hall",
+              "tags": [
+                "extraction",
+                "dominion_favor"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The fungus shelves go dormant, and the hall pays for the lamps.",
+          "sets_flag": "cf_shelves_lamped"
+        }
+      ],
+      "cares": [
+        "cigarra",
+        "nerit",
+        "mara"
+      ],
+      "reward_gear": [
+        "cigarra_bough_wrap"
+      ]
+    },
+    {
+      "id": "cf_widow_bridge",
+      "title": "Maren's Bridge",
+      "giver": "Old Maren Quill",
+      "landmark": "widow_bridge",
+      "summary": "A living bridge Maren's family has trained for four generations is dying. Her grandchildren cross it every day. Premonition shows the bridge failing in two ways.",
+      "choices": [
+        {
+          "id": "graft",
+          "label": "Graft a young vine in and nurse it for days.",
+          "result": "It is slow and dull. By the third day, the bridge flexes the way a living thing should.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "widow_bridge",
+              "tags": [
+                "stewardship",
+                "protect_weak",
+                "braced_structure"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The bridge lives another generation, and so does the lesson.",
+          "sets_flag": "cf_bridge_grafted"
+        },
+        {
+          "id": "third_way",
+          "label": "Look past both futures and cut a different crossing.",
+          "result": "Maren sighs. 'That is not on any map.' 'No,' you say, 'that is why it works.'",
+          "records": [
+            {
+              "type": "chose",
+              "target": "widow_bridge",
+              "tags": [
+                "chose_unseen",
+                "improvised",
+                "route_laid"
+              ],
+              "weight": 4
+            }
+          ],
+          "consequence": "A new crossing goes in where no one predicted, and stays.",
+          "sets_flag": "cf_bridge_unseen"
+        },
+        {
+          "id": "commit",
+          "label": "Trust the more certain vision, and cut the bridge early.",
+          "result": "It falls on schedule. Maren's grandchildren are safe, and she does not speak to you for a week.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "widow_bridge",
+              "tags": [
+                "certainty_trusted",
+                "route_closed"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The Quill family learns to cross at the new place. It is not the same.",
+          "sets_flag": "cf_bridge_cut"
+        }
+      ],
+      "cares": [
+        "cigarra",
+        "solthrin",
+        "zephyr"
+      ],
+      "reward_gear": [
+        "solthrin_closed_bough"
+      ]
+    },
+    {
+      "id": "cf_wren_cable",
+      "title": "Permanent Cable",
+      "giver": "Wren Calder, Dominion surveyor",
+      "landmark": "survey_camp",
+      "summary": "Wren is stringing steel cable through the Fold to make routes permanent for convoys. The trees will not survive the tension.",
+      "choices": [
+        {
+          "id": "help_wren",
+          "label": "Help her string it, and mark the weakest trees.",
+          "result": "The convoy routes are fast. The marked trees fall by autumn.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "survey_camp",
+              "tags": [
+                "extraction",
+                "dominion_favor",
+                "shortcut"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The Fold gets straighter and poorer.",
+          "sets_flag": "cf_cable_strung"
+        },
+        {
+          "id": "expose",
+          "label": "Document the damage and send it to the Stewardship Coalition.",
+          "result": "Wren is furious for an afternoon, and then, quietly, relieved.",
+          "records": [
+            {
+              "type": "talked",
+              "target": "wren_calder",
+              "tags": [
+                "rival_exposed",
+                "evidence",
+                "stewardship"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The permit is suspended, and Wren is reassigned to a desk she hates.",
+          "sets_flag": "cf_cable_exposed"
+        },
+        {
+          "id": "negotiate",
+          "label": "Offer her living-bridge routes that carry the same weight.",
+          "result": "She walks them twice and then admits, grudgingly, that they are better.",
+          "records": [
+            {
+              "type": "talked",
+              "target": "wren_calder",
+              "tags": [
+                "rival_negotiated",
+                "route_laid",
+                "stewardship"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "Convoys use growing bridges. Wren starts learning how to read them.",
+          "sets_flag": "cf_cable_traded"
+        }
+      ],
+      "cares": [
+        "cigarra",
+        "mara",
+        "nyxaris"
+      ],
+      "reward_gear": [
+        "cigarra_calder_compass"
+      ]
+    },
+    {
+      "id": "cf_charm_thief",
+      "title": "The Charm Line Thief",
+      "giver": "A child called Pip",
+      "landmark": "charm_line",
+      "summary": "Somebody has been taking small charms from the hanging lines at the crown. The charms are wishes. Their owners are upset.",
+      "choices": [
+        {
+          "id": "forgive",
+          "label": "Find Pip, give back the charms, and say nothing.",
+          "result": "Pip had taken them because the lines looked lonely. You re-hang them together.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "charm_line",
+              "tags": [
+                "spared",
+                "protect_weak",
+                "privacy_respected"
+              ],
+              "weight": 2
+            }
+          ],
+          "consequence": "Pip leaves a charm of their own on the line.",
+          "sets_flag": "cf_charm_forgiven"
+        },
+        {
+          "id": "trace",
+          "label": "Use Premonition to expose exactly who is taking them.",
+          "result": "It works. It also announces Pip's name to the crown before Pip is ready.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "charm_line",
+              "tags": [
+                "foresight_used",
+                "forced_exposure"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The charms come back. Pip does not come out of the roost for days.",
+          "sets_flag": "cf_charm_traced"
+        },
+        {
+          "id": "let_go",
+          "label": "Let the matter drop. Wishes belong to whoever needs them.",
+          "result": "The line grows a little thinner. Nobody ever finds out why.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "charm_line",
+              "tags": [
+                "neglect",
+                "darkness_kept"
+              ],
+              "weight": 1
+            }
+          ],
+          "consequence": "The charm line grows quieter.",
+          "sets_flag": "cf_charm_dropped"
+        }
+      ],
+      "cares": [
+        "cigarra",
+        "nerit"
+      ],
+      "reward_gear": [
+        "scarlith_wishline_pin"
+      ]
+    },
+    {
+      "id": "cf_skimmer_roost",
+      "title": "Skimmers on the Tower",
+      "giver": "Tomas Ver, a tower hand",
+      "landmark": "survey_tower",
+      "summary": "A flock of veil skimmers has roosted on a Dominion survey tower and the tower's sensors are overloaded. The crew wants them gone.",
+      "choices": [
+        {
+          "id": "coax",
+          "label": "Coax the flock to a quieter bough with song and fruit.",
+          "result": "They follow, slowly, in a drifting veil. The tower gets its quiet.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "veil_skimmer_flock",
+              "tags": [
+                "calmed_wildlife",
+                "nonviolent",
+                "spared"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The skimmers roost on the bough. Tomas leaves them fruit on Fridays.",
+          "sets_flag": "cf_skimmers_coaxed"
+        },
+        {
+          "id": "cut_roost",
+          "label": "Cut the roost down.",
+          "result": "It is done fast. The sound of the flock leaving is not something you will forget.",
+          "records": [
+            {
+              "type": "harmed",
+              "target": "veil_skimmer_flock",
+              "tags": [
+                "harm_wildlife"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The tower is quiet, and so is that part of the sky.",
+          "sets_flag": "cf_skimmers_driven"
+        },
+        {
+          "id": "move_tower",
+          "label": "Convince the crew to move the tower instead.",
+          "result": "It costs them a week. They grumble. The skimmers stay.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "survey_tower",
+              "tags": [
+                "stewardship",
+                "braced_structure"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The tower moves, and the roost stays.",
+          "sets_flag": "cf_tower_moved"
+        }
+      ],
+      "cares": [
+        "cigarra",
+        "mara",
+        "nerit"
+      ],
+      "reward_gear": [
+        "solmara_flock_chart"
+      ]
+    },
+    {
+      "id": "cf_limb_rescue",
+      "title": "Under the Limb",
+      "giver": "A root weaver family",
+      "landmark": "fallen_limb_site",
+      "summary": "A massive limb has fallen across a root weaver nest in the twilight layer. The family is alive under it. The limb is still moving.",
+      "choices": [
+        {
+          "id": "plan_rescue",
+          "label": "Plan the rescue: exits, timing, order of extraction.",
+          "result": "It takes ten minutes of careful talk. It saves everyone.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "root_weaver_family",
+              "tags": [
+                "exit_planned",
+                "rescue_civilians",
+                "evacuation"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The family is out, and the limb settles an hour later.",
+          "sets_flag": "cf_limb_planned"
+        },
+        {
+          "id": "hop_in",
+          "label": "Hop down and pull them out yourself, right now.",
+          "result": "You make it. Two of them make it. It was closer than you will say.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "root_weaver_family",
+              "tags": [
+                "glory_seeking",
+                "rescue_civilians"
+              ],
+              "weight": 2
+            }
+          ],
+          "consequence": "The rescue is celebrated, though it should not have been needed.",
+          "sets_flag": "cf_limb_rushed"
+        },
+        {
+          "id": "improvise_ropes",
+          "label": "Improvise a rope bridge with the nest's own silk.",
+          "result": "It is ugly and it works. The weavers are impressed in spite of themselves.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "root_weaver_family",
+              "tags": [
+                "improvised",
+                "rescue_civilians",
+                "shelter"
+              ],
+              "weight": 3
+            }
+          ],
+          "consequence": "The silk bridge stays up for years, and the family names it after you.",
+          "sets_flag": "cf_limb_roped"
+        }
+      ],
+      "cares": [
+        "bramvex",
+        "cigarra",
+        "mollusk"
+      ],
+      "reward_gear": [
+        "bramvex_rescue_harness"
+      ]
+    }
+  ],
+  "secrets": [
+    {
+      "id": "cf_silent_crown",
+      "name": "The Silent Crown",
+      "hint": "One bough where every Premonition ghost goes blank.",
+      "how_found": "Climb to the uppermost crown after the Long Bough migrates and use Premonition on the empty branch.",
+      "reward": "A place Cigarra cannot see, wrapped in old charms. It is quiet, and she hates it, and she cannot stop looking.",
+      "ledger_tags": [
+        "curiosity",
+        "discovery"
+      ],
+      "reward_gear": [
+        "pharilux_wrong_direction_lens"
+      ]
+    },
+    {
+      "id": "cf_route_archive",
+      "name": "The Glow-Fungus Archive",
+      "hint": "A wall of fungus that spells old routes when the lamps are dimmed.",
+      "how_found": "Dim the lamps in the lowest hall of the deep layer and read the pattern left by the shelf-keepers.",
+      "reward": "Hundreds of dead bridge routes, each marked with a name. One leads to a chamber nobody has visited.",
+      "ledger_tags": [
+        "discovery",
+        "curiosity"
+      ],
+      "reward_gear": [
+        "cigarra_dead_route_sphere"
+      ]
+    }
+  ],
+  "landmarks": [
+    {
+      "id": "widow_bridge",
+      "name": "Maren's Bridge",
+      "kind": "living bridge",
+      "desc": "A bridge trained by four generations of Quills. It sways like it is thinking."
+    },
+    {
+      "id": "glow_shelf_hall",
+      "name": "The Lantern Hall",
+      "kind": "settlement",
+      "desc": "A deep hall lit by terraced glow-fungus shelves tended by shelf-keepers."
+    },
+    {
+      "id": "charm_line",
+      "name": "The Charm Line",
+      "kind": "shrine",
+      "desc": "A line of wishes strung across the crown."
+    },
+    {
+      "id": "survey_tower",
+      "name": "Survey Tower Nine",
+      "kind": "extraction site",
+      "desc": "A Dominion tower the Fold has quietly adopted as a perch."
+    },
+    {
+      "id": "survey_camp",
+      "name": "Calder's Camp",
+      "kind": "camp",
+      "desc": "Cable spools, tarps and a very tidy kettle."
+    },
+    {
+      "id": "fallen_limb_site",
+      "name": "The Fallen Limb",
+      "kind": "hazard",
+      "desc": "A broad limb that came down in the last storm and nobody has dared to cut."
+    },
+    {
+      "id": "listening_house",
+      "name": "The Listening House",
+      "kind": "settlement",
+      "desc": "A hall where elders read the Fold's creaking and whisper decisions."
+    }
+  ],
+  "ambient": {
+    "npcs": [
+      {
+        "id": "cf_ottoline",
+        "name": "Ottoline Marr",
+        "species": "thread hopper",
+        "behavior": "Counts glowing shelves aloud and corrects anyone who miscounts.",
+        "schedule": "always in the hall, always counting",
+        "reacts": {
+          "flag": "cf_shelves_foreseen",
+          "line": "You were right, which is rude."
+        }
+      },
+      {
+        "id": "cf_maren",
+        "name": "Old Maren Quill",
+        "species": "root weaver",
+        "behavior": "Whispers to the bridge in a private language and refuses to translate.",
+        "schedule": "dawn and dusk on the bridge",
+        "reacts": {
+          "flag": "cf_bridge_unseen",
+          "line": "It is not on any map. Good."
+        }
+      },
+      {
+        "id": "cf_pip",
+        "name": "Pip",
+        "species": "juvenile thread hopper",
+        "behavior": "Hangs upside down from the charm line, adding and removing tiny wishes.",
+        "schedule": "afternoons in the crown",
+        "reacts": {
+          "flag": "cf_charm_forgiven",
+          "line": "I left you one. Do not read it yet."
+        }
+      }
+    ],
+    "creature_behaviors": [
+      {
+        "creature": "veil_skimmer",
+        "behavior": "Drift in veils that open as a flock turns, and close again when a predator passes below.",
+        "trigger": "midday crown"
+      },
+      {
+        "creature": "root_weaver",
+        "behavior": "Pause mid-weave when a bridge creaks, as if listening for a verdict.",
+        "trigger": "bridge flex"
+      },
+      {
+        "creature": "thread_hopper",
+        "behavior": "Follow the nearest bridge dying, and leave it a moment before it goes.",
+        "trigger": "bridge failure"
+      }
+    ]
+  },
+  "loot_table": [
+    {
+      "item": "thread_silk",
+      "weight": 5,
+      "source": "hopper nests",
+      "rarity": "common"
+    },
+    {
+      "item": "pale_orchid_spray",
+      "weight": 4,
+      "source": "crown branches",
+      "rarity": "common"
+    },
+    {
+      "item": "lantern_bracket",
+      "weight": 4,
+      "source": "glow-fungus shelves",
+      "rarity": "uncommon"
+    },
+    {
+      "item": "bridge_sap",
+      "weight": 3,
+      "source": "dying living bridges",
+      "rarity": "uncommon"
+    },
+    {
+      "item": "wing_veil_scrap",
+      "weight": 3,
+      "source": "veil skimmer molts",
+      "rarity": "uncommon"
+    },
+    {
+      "item": "hopper_bead",
+      "weight": 2,
+      "source": "charm line",
+      "rarity": "rare"
+    },
+    {
+      "item": "future_dust",
+      "weight": 2,
+      "source": "Premonition residue",
+      "rarity": "rare"
+    },
+    {
+      "item": "silent_leaf",
+      "weight": 1,
+      "source": "the Silent Crown",
+      "rarity": "epic"
+    }
+  ],
+  "mood": {
+    "palette": {
+      "primary": "#3d5a2e",
+      "secondary": "#b8c24a",
+      "accent": "#3b2a44",
+      "shadow": "#1e2b1c",
+      "highlight": "#efe6cf",
+      "crown_sky": "#a8c070",
+      "deep_glow": "#8f8a52"
+    },
+    "weather": [
+      "high thin sun through leaves",
+      "green mist that drifts upward",
+      "afternoon bough rain",
+      "night wind that sets the bridges singing"
+    ],
+    "sounds": [
+      "creaking living wood",
+      "glass harmonica wind chimes",
+      "hopper clicks across the boughs",
+      "distant hanging charms ticking",
+      "a sigh from a bridge settling"
+    ],
+    "music_slots": [
+      {
+        "slot": "crown_day",
+        "use": "crown and mid exploration",
+        "notes": "Glass harmonica over plucked fiber; slightly too busy, like an overactive mind."
+      },
+      {
+        "slot": "twilight_hush",
+        "use": "twilight layer and hall scenes",
+        "notes": "Bowed wood and breath whistle, long rests between phrases."
+      },
+      {
+        "slot": "premonition_echo",
+        "use": "Premonition active",
+        "notes": "Ghosted copy of the current cue, delayed and pitched down a third."
+      },
+      {
+        "slot": "bridge_peril",
+        "use": "bridge collapse and rescues",
+        "notes": "Rhythm in odd meters that never resolves to the downbeat."
+      },
+      {
+        "slot": "silent_crown",
+        "use": "Probability Blindness spaces",
+        "notes": "Everything drops out except one held note. The music pretends not to notice."
+      },
+      {
+        "slot": "long_bough",
+        "use": "Act 3 crossing",
+        "notes": "Full ensemble swelling, then a sudden unison on a single pitch."
+      }
+    ]
+  }
 }
