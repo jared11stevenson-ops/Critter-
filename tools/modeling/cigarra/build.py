@@ -506,13 +506,14 @@ def main():
     ob.data.materials.append(material("cigarra_wings", wing, alpha=True, emis=os.path.join(WORK, "cigarra_wing_emissive.webp")))
     ob.data.materials.append(material("cigarra_face", face, emis=os.path.join(WORK, "cigarra_face_emissive.webp")))
     texture.unwrap_body(ob)
-    tex = texture.paint_body(ob, names, COL, EMIT, WORK)
+    tex = texture.paint_body(ob, names, COL, EMIT, WORK, Image.open(face), Image.open(os.path.join(WORK, "cigarra_face_emissive.webp")))
     bk = texture.bake_normal(ob, WORK)
     if bk:
         texture.merge_normals(tex["normal"], bk, tex["normal"])
     for k in ("albedo", "normal", "orm", "emissive"):
         Image.open(tex[k]).convert("RGB").save(os.path.join(WORK, "cigarra_body_%s.webp" % k), quality=92)
     ob.data.materials[0] = body_material(tex)
+    texture.merge_face_into_body(ob)
     bpy.context.scene.render.engine = "BLENDER_EEVEE"
     # skin: inverse-distance weights over the part's candidate bones
     bones = {bn.name: (np.array(bn.head_local), np.array(bn.tail_local)) for bn in rig.data.bones}

@@ -2,19 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dui7yk3g4u6bi"
-path="res://.godot/imported/cigarra_cigarra_albedo.webp-abc329ea834e889176afb89411d5a2df.ctex"
+uid="uid://bagwo857miaiy"
+path="res://.godot/imported/x_00.png-97a8aa73612fad3ac86904cca7a4ad39.ctex"
 metadata={
 "vram_texture": false
-}
-generator_parameters={
-"md5": "542b77eb8956fba7b87bef810199b705"
 }
 
 [deps]
 
-source_file="res://game/art/models/cigarra/cigarra_cigarra_albedo.webp"
-dest_files=["res://.godot/imported/cigarra_cigarra_albedo.webp-abc329ea834e889176afb89411d5a2df.ctex"]
+source_file="res://x_00.png"
+dest_files=["res://.godot/imported/x_00.png-97a8aa73612fad3ac86904cca7a4ad39.ctex"]
 
 [params]
 
@@ -26,7 +23,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
