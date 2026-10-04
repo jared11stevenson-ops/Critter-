@@ -1,0 +1,777 @@
+{
+  "_doc": "Region recipe: Canopy Fold (Cigarra's homeland). Data only; the runtime (Agent 2) reads it. Schema: design/DATA_REQUESTS.md. Source: bible Book VI section 22. Event 'when' and choice 'requires' use the Ledger spec DSL; choice 'records' are Ledger.record() calls.",
+  "id": "canopy_fold",
+  "name": "The Canopy Fold",
+  "homeland_of": [
+    "cigarra"
+  ],
+  "tier": 2,
+  "summary": "A vertical continental ecology. Sunlit crowns above, green twilight below, deep settlements that never see sky. Routes are living bridges that grow, die and migrate, so every map is temporary.",
+  "layers": [
+    {
+      "id": "crown",
+      "depth": 0,
+      "light": "high sun, hard shadows",
+      "hazard": "wind and open drops",
+      "feel": "bright, exposed, airy"
+    },
+    {
+      "id": "mid",
+      "depth": 1,
+      "light": "dappled green",
+      "hazard": "living bridges that sag",
+      "feel": "busy, a little too loud"
+    },
+    {
+      "id": "twilight",
+      "depth": 2,
+      "light": "perpetual green dusk",
+      "hazard": "slick moss and unseen drops",
+      "feel": "close, quiet"
+    },
+    {
+      "id": "deep",
+      "depth": 3,
+      "light": "almost none; glow-fungus only",
+      "hazard": "no open sky, no landmarks",
+      "feel": "claustrophobic, hushed"
+    }
+  ],
+  "ground": {
+    "surfaces": [
+      {
+        "id": "living_bridge",
+        "desc": "A grown span of braided roots; flexes underfoot and creaks.",
+        "color": "#6b5a3a"
+      },
+      {
+        "id": "moss_bough",
+        "desc": "A thick limb carpeted in damp moss.",
+        "color": "#4f6b3a"
+      },
+      {
+        "id": "bark_plate",
+        "desc": "Overlapping ridges of old trunk bark, good traction.",
+        "color": "#5a4630"
+      },
+      {
+        "id": "leaf_litter_deep",
+        "desc": "Deep fallen-leaf drifts in the lower layers.",
+        "color": "#7a6a3e"
+      }
+    ],
+    "relief": "vertical; ramps are boughs and spiral trunks, drops are real",
+    "palette": [
+      "#1e2b1c",
+      "#3d5a2e",
+      "#6f8f3a",
+      "#b8c24a",
+      "#d9cf9a",
+      "#3b2a44"
+    ]
+  },
+  "sky": {
+    "time_by_layer": {
+      "crown": "midday",
+      "mid": "late afternoon",
+      "twilight": "dusk",
+      "deep": "night"
+    },
+    "fog_color": "#a8c070",
+    "fog_density": {
+      "crown": 0.004,
+      "mid": 0.012,
+      "twilight": 0.02,
+      "deep": 0.03
+    },
+    "ambient": "green-gold",
+    "motes": "drifting pollen and leaf fragments"
+  },
+  "props": [
+    {
+      "id": "living_bridge",
+      "kind": "bridge",
+      "density": "low",
+      "note": "The central traversal prop. Sags under weight; regrows."
+    },
+    {
+      "id": "listening_post",
+      "kind": "structure",
+      "density": "rare",
+      "note": "A hollow trunk with strung fibers; Listeners study vibration here."
+    },
+    {
+      "id": "glow_fungus_shelf",
+      "kind": "light",
+      "density": "medium (deep layers)",
+      "note": "Soft yellow-green light."
+    },
+    {
+      "id": "hanging_charm_line",
+      "kind": "decor",
+      "density": "low",
+      "note": "Cigarra's people hang small objects as cognitive anchors."
+    },
+    {
+      "id": "fallen_limb",
+      "kind": "obstacle",
+      "density": "medium",
+      "note": "Route blockers; routes change when limbs fall."
+    },
+    {
+      "id": "treehopper_husk",
+      "kind": "decor",
+      "density": "rare",
+      "note": "Empty exoskeletons, kept as inheritance."
+    }
+  ],
+  "flora": [
+    "broadleaf crown, ringed fern, thread-moss, lantern bracket fungus, pale orchid sprays"
+  ],
+  "creatures": [
+    {
+      "id": "thread_hopper",
+      "name": "Thread Hopper",
+      "class": "WILDLIFE",
+      "sapient": false,
+      "role": "skittish herd",
+      "desc": "Palm-sized hoppers that leap along silk guy-lines between boughs.",
+      "behavior": "Flees upward when frightened. Their droppings feed the moss that stabilizes bridges.",
+      "uses": {
+        "battle": "none",
+        "labor": "carries light loads along lines",
+        "ecology": "keeps bridge moss alive"
+      },
+      "weight": 3
+    },
+    {
+      "id": "veil_skimmer",
+      "name": "Veil Skimmer",
+      "class": "WILDLIFE",
+      "sapient": false,
+      "role": "glider",
+      "desc": "Translucent gliders that drift between layers.",
+      "behavior": "Passive. Gliding paths reveal safe airflow to those who watch.",
+      "uses": {
+        "battle": "none",
+        "labor": "scouting",
+        "ecology": "pollinates crown blooms"
+      },
+      "weight": 2
+    },
+    {
+      "id": "bough_stalker",
+      "name": "Bough Stalker",
+      "class": "WILDLIFE",
+      "sapient": false,
+      "role": "ambush predator",
+      "desc": "Long-limbed predator that waits motionless on a limb.",
+      "behavior": "Ambushes from above. Hesitates if the target moves unpredictably.",
+      "uses": {
+        "battle": "high",
+        "labor": "none",
+        "ecology": "keeps hopper numbers in check"
+      },
+      "weight": 2
+    },
+    {
+      "id": "root_weaver",
+      "name": "Root Weaver",
+      "class": "WILDLIFE",
+      "sapient": false,
+      "role": "builder",
+      "desc": "A slow, many-legged builder that braids roots into new spans.",
+      "behavior": "Ignores everything while it weaves. Harming it halts bridge growth.",
+      "uses": {
+        "battle": "low",
+        "labor": "construction",
+        "ecology": "keystone for living bridges"
+      },
+      "weight": 1
+    }
+  ],
+  "music": {
+    "mood": "suspended, curious, a little too busy",
+    "tempo": "68-92, shifts with layer",
+    "instruments": [
+      "glass harmonica",
+      "bowed wood",
+      "plucked fiber",
+      "breath whistle"
+    ],
+    "layers": {
+      "crown": "bright, sparse",
+      "mid": "layered, rhythmic",
+      "twilight": "low pulse",
+      "deep": "near silence plus drone"
+    },
+    "stinger_on_event": "a single high note that answers itself"
+  },
+  "encounters": {
+    "enemies": [
+      {
+        "species": "bough_stalker",
+        "weight": 3
+      },
+      {
+        "species": "dominion_drone",
+        "weight": 2
+      }
+    ],
+    "rivals": [
+      "wren_calder"
+    ],
+    "hazards": [
+      "sagging bridge",
+      "falling limb",
+      "slick moss",
+      "wind gust at the crown"
+    ],
+    "ambient": "listening houses tapping; distant bridge creak"
+  },
+  "world_states": [
+    {
+      "id": "overgrowth",
+      "label": "Overgrowth",
+      "effect": "New bridges everywhere, half of them wrong. Routes reshuffle each Descent; more roots block paths.",
+      "event_weight_mods": {
+        "canopy_new_bridge": 2
+      }
+    },
+    {
+      "id": "migration",
+      "label": "Migration",
+      "effect": "Hopper herds cross in waves. Bridges are crowded; encounters shift toward ambush predators.",
+      "event_weight_mods": {
+        "canopy_hopper_wave": 3
+      }
+    },
+    {
+      "id": "extraction",
+      "label": "Extraction",
+      "effect": "Dominion survey rigs bore into trunks. Drones patrol the mid layer.",
+      "event_weight_mods": {
+        "canopy_survey_convoy": 3
+      }
+    }
+  ],
+  "bondable_here": [
+    {
+      "character": "cigarra",
+      "hook": "Her homeland. Listeners can tell the Handler how her Knack began."
+    },
+    {
+      "character": "bramvex",
+      "hook": "Evacuation practice: sagging bridges are the best teachers."
+    }
+  ],
+  "descent_events": [
+    {
+      "id": "canopy_new_bridge",
+      "title": "A bridge that was not there yesterday",
+      "kind": "discovery",
+      "weight": 3,
+      "once": false,
+      "min_depth": 0,
+      "text": "A span of braided root crosses a drop that was empty on the last survey. It flexes when you step near it. The root weavers are still working on the far end.",
+      "choices": [
+        {
+          "id": "test_weight",
+          "label": "Test the span, one step at a time.",
+          "result": "It holds. You mark it for the others, and Cigarra marks it twice, just in case.",
+          "records": [
+            {
+              "type": "discovered",
+              "target": "new_bridge",
+              "tags": [
+                "discovery",
+                "curiosity",
+                "exit_planned"
+              ],
+              "weight": 2
+            }
+          ]
+        },
+        {
+          "id": "cross_fast",
+          "label": "Cross at a run.",
+          "result": "It sways, then settles. A root weaver stops weaving and watches you go.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "new_bridge",
+              "tags": [
+                "shortcut",
+                "speed_only"
+              ],
+              "weight": 2
+            }
+          ]
+        },
+        {
+          "id": "wait_for_weaver",
+          "label": "Wait until the weaver finishes.",
+          "result": "The bridge is stronger by morning. The route is also longer.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "root_weaver",
+              "tags": [
+                "stewardship",
+                "spared"
+              ],
+              "weight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "canopy_hopper_wave",
+      "title": "Hopper wave",
+      "kind": "migration",
+      "weight": 3,
+      "once": false,
+      "min_depth": 0,
+      "text": "Thread Hoppers pour across the nearest bough in their hundreds, along guy-lines that sing as they go. A Dominion lamp rig hangs ahead and its light is scattering them.",
+      "choices": [
+        {
+          "id": "kill_lamp",
+          "label": "Shut the lamp rig off.",
+          "result": "The hoppers regroup and cross in order. The Dominion log will list a fault.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "thread_hopper",
+              "tags": [
+                "calmed_wildlife",
+                "nonviolent",
+                "spared"
+              ],
+              "weight": 3
+            }
+          ]
+        },
+        {
+          "id": "hold_bridge",
+          "label": "Hold the bridge steady while they cross.",
+          "result": "Aruun braces the span with Morrow. Every hopper crosses.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "thread_hopper",
+              "tags": [
+                "protect_weak",
+                "burden",
+                "rescue_civilians"
+              ],
+              "weight": 3
+            }
+          ]
+        },
+        {
+          "id": "scatter",
+          "label": "Clear them off with force.",
+          "result": "They scatter into the dark. Some will not find their guy-lines.",
+          "records": [
+            {
+              "type": "harmed",
+              "target": "thread_hopper",
+              "tags": [
+                "harm_wildlife"
+              ],
+              "weight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "canopy_survey_convoy",
+      "title": "Dominion survey convoy",
+      "kind": "convoy",
+      "weight": 3,
+      "once": false,
+      "min_depth": 0,
+      "text": "A convoy of survey sleds rides a reinforced bough with a trunk-boring rig mounted on the lead sled. A Survey Chief waves a permit at the Gate pad's transponder.",
+      "choices": [
+        {
+          "id": "expose",
+          "label": "Log the rig as unpermitted and photograph the bore.",
+          "result": "The evidence is clean. Mara will have something to file.",
+          "records": [
+            {
+              "type": "discovered",
+              "target": "survey_convoy",
+              "tags": [
+                "evidence",
+                "discovery"
+              ],
+              "weight": 3
+            }
+          ]
+        },
+        {
+          "id": "negotiate",
+          "label": "Offer terms: a bypass for a pause in boring.",
+          "result": "The chief takes the deal. The trunk lives another season.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "survey_convoy",
+              "tags": [
+                "nonviolent",
+                "stewardship"
+              ],
+              "weight": 2
+            }
+          ]
+        },
+        {
+          "id": "sabotage",
+          "label": "Disable the rig by force.",
+          "result": "The rig is down. The drones are not pleased.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "survey_convoy",
+              "tags": [
+                "combat",
+                "kill_dominion"
+              ],
+              "weight": 2
+            }
+          ]
+        },
+        {
+          "id": "escort",
+          "label": "Pull the survey crew off the sagging bough before it drops them.",
+          "result": "The crew climbs down on your line. The chief says nothing, which for a chief is thanks.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "survey_convoy",
+              "tags": [
+                "protect_personnel",
+                "rescue_civilians"
+              ],
+              "weight": 3
+            }
+          ]
+        },
+        {
+          "id": "let_bore",
+          "label": "Let the survey run. Take the sample data.",
+          "result": "The data is excellent. The trunk is not.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "survey_convoy",
+              "tags": [
+                "extraction",
+                "dominion_favor"
+              ],
+              "weight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "canopy_stranded_hopper",
+      "title": "A treehopper alone on a snapped limb",
+      "kind": "stranded",
+      "weight": 3,
+      "once": false,
+      "min_depth": 0,
+      "text": "A young treehopper, crown not yet branched, clings to a limb that has snapped halfway. It buzzes in a pattern you almost recognize.",
+      "choices": [
+        {
+          "id": "rescue",
+          "label": "Carry it down to the next bough.",
+          "result": "It does not thank you. It hops once on your shoulder before it leaves.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "young_treehopper",
+              "tags": [
+                "protect_weak",
+                "rescue_civilians",
+                "stewardship"
+              ],
+              "weight": 3
+            }
+          ]
+        },
+        {
+          "id": "scan",
+          "label": "Scan it first.",
+          "result": "The scan frightens it. It jumps. The scan data is good.",
+          "records": [
+            {
+              "type": "discovered",
+              "target": "young_treehopper",
+              "tags": [
+                "discovery",
+                "curiosity"
+              ],
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "id": "leave",
+          "label": "Leave it. The limb is not your concern.",
+          "result": "The limb holds. You will never know.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "young_treehopper",
+              "tags": [
+                "neglect"
+              ],
+              "weight": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "canopy_old_road_marker",
+      "title": "A marker stone in the moss",
+      "kind": "marker",
+      "weight": 2,
+      "once": false,
+      "min_depth": 0,
+      "text": "A stone marker stands in the moss at the foot of a trunk. The symbols on it match a marker you saw in the Red Reaches, continents away. Nobody here knows what it says.",
+      "choices": [
+        {
+          "id": "read",
+          "label": "Read it with Cigarra.",
+          "result": "She finds a pattern: it describes a route by its probability of safe passage. The Fold has old words too.",
+          "records": [
+            {
+              "type": "discovered",
+              "target": "old_road_marker",
+              "tags": [
+                "discovery",
+                "curiosity",
+                "evidence"
+              ],
+              "weight": 3
+            }
+          ]
+        },
+        {
+          "id": "copy",
+          "label": "Copy it and move on.",
+          "result": "The copy is faithful. The stone is just a stone now.",
+          "records": [
+            {
+              "type": "discovered",
+              "target": "old_road_marker",
+              "tags": [
+                "discovery"
+              ],
+              "weight": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "canopy_listening_house",
+      "title": "The Listening House",
+      "kind": "social",
+      "weight": 2,
+      "once": false,
+      "min_depth": 0,
+      "text": "A Listener asks you to sit still for the length of three breaths. 'Tell me what you hear,' she says. She is not testing your ears.",
+      "choices": [
+        {
+          "id": "quiet",
+          "label": "Sit and listen.",
+          "result": "You hear a bridge tighten three boughs away. The Listener nods. 'Not everyone hears that.'",
+          "records": [
+            {
+              "type": "talked",
+              "target": "listener",
+              "tags": [
+                "social",
+                "curiosity",
+                "trust"
+              ],
+              "weight": 2
+            }
+          ]
+        },
+        {
+          "id": "foresight",
+          "label": "Ask Cigarra to look ahead, and pay the cost.",
+          "result": "She sees a falling limb. You step out of its way. It lands where she said it would.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "cigarra",
+              "tags": [
+                "foresight_used"
+              ],
+              "weight": 2
+            }
+          ]
+        },
+        {
+          "id": "unseen",
+          "label": "Ignore the vision. Take the other path anyway.",
+          "result": "The limb does not fall. Cigarra says nothing, and she is quietly delighted.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "cigarra",
+              "tags": [
+                "chose_unseen",
+                "improvised"
+              ],
+              "weight": 3
+            }
+          ]
+        }
+      ],
+      "when": {
+        "event": {
+          "tag": "foresight_used",
+          "count_min": 1
+        }
+      }
+    },
+    {
+      "id": "canopy_bridge_failure",
+      "title": "Bridge failure",
+      "kind": "hazard",
+      "weight": 3,
+      "once": false,
+      "min_depth": 1,
+      "text": "The mid bridge sags, then shears at the far anchor. A line of Canopy travelers is halfway across with no way back.",
+      "choices": [
+        {
+          "id": "evac",
+          "label": "Run the evacuation. Find the second exit first.",
+          "result": "Bramvex counts the exits out loud and finds a hollow trunk that leads down. Everyone gets out.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "canopy_travelers",
+              "tags": [
+                "evacuation",
+                "rescue_civilians",
+                "exit_planned"
+              ],
+              "weight": 4
+            }
+          ]
+        },
+        {
+          "id": "hold",
+          "label": "Brace the span and hold it.",
+          "result": "Aruun redistributes the load. It is not graceful. It works.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "canopy_travelers",
+              "tags": [
+                "burden",
+                "protect_weak",
+                "rescue_civilians"
+              ],
+              "weight": 4
+            }
+          ]
+        },
+        {
+          "id": "sprint",
+          "label": "Cross first and haul people over after.",
+          "result": "Two travelers are lost before you finish the haul.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "canopy_travelers",
+              "tags": [
+                "casualty",
+                "glory_seeking"
+              ],
+              "weight": 3
+            }
+          ]
+        },
+        {
+          "id": "watch",
+          "label": "Let it fall. It is not your bridge.",
+          "result": "It falls. The travelers fall with it.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "canopy_travelers",
+              "tags": [
+                "casualty"
+              ],
+              "weight": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "canopy_amends",
+      "title": "The squad that did not make it",
+      "kind": "bond_test",
+      "weight": 1,
+      "once": true,
+      "min_depth": 0,
+      "text": "A quiet, narrow limb. The place where you lost someone last time. Bramvex stops walking.",
+      "choices": [
+        {
+          "id": "debrief",
+          "label": "Sit with the squad and walk through what happened, step by step.",
+          "result": "Nobody speaks for a while. Then Bramvex starts counting, and the rest of the squad starts to answer.",
+          "records": [
+            {
+              "type": "talked",
+              "target": "bramvex",
+              "tags": [
+                "social",
+                "trust"
+              ],
+              "weight": 2
+            },
+            {
+              "type": "amends",
+              "target": "bramvex",
+              "tags": [
+                "amends"
+              ],
+              "weight": 3
+            }
+          ]
+        }
+      ],
+      "when": {
+        "all": [
+          {
+            "event": {
+              "tag": "casualty",
+              "count_min": 3
+            }
+          },
+          {
+            "not": {
+              "event": {
+                "type": "amends",
+                "target": "bramvex"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

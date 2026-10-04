@@ -1,0 +1,672 @@
+{
+  "_doc": "Region recipe: Lumen Depths (Nerit's homeland). Data only. Schema: design/DATA_REQUESTS.md. Source: bible section 24. Light is food, language, navigation and territory; darkness can mean privacy, rest, protection, mourning, intimacy.",
+  "id": "lumen_depths",
+  "name": "The Lumen Depths",
+  "homeland_of": [
+    "nerit"
+  ],
+  "tier": 2,
+  "summary": "A subterranean world of vertical oceans, mineral forests, hollow mountains and ceilings so distant they read as night skies. Bioluminescent colonies form living constellations whose movement marks season, migration and danger.",
+  "layers": [
+    {
+      "id": "vault",
+      "depth": 0,
+      "light": "constellation glow overhead",
+      "hazard": "long falls from ledges",
+      "feel": "vast, calm, a little lonely"
+    },
+    {
+      "id": "forest",
+      "depth": 1,
+      "light": "mineral crystal reflections",
+      "hazard": "crystal cutting edges",
+      "feel": "glittering, sharp, echoing"
+    },
+    {
+      "id": "shallows",
+      "depth": 2,
+      "light": "drifting plankton light",
+      "hazard": "deep water, currents",
+      "feel": "drifting"
+    },
+    {
+      "id": "dark",
+      "depth": 3,
+      "light": "none unless carried",
+      "hazard": "unseen drops, sleepers in the dark",
+      "feel": "private, deep, reverent"
+    }
+  ],
+  "ground": {
+    "surfaces": [
+      {
+        "id": "mineral_shelf",
+        "desc": "Flat crystalline ledges; ring when struck.",
+        "color": "#2a3a50"
+      },
+      {
+        "id": "glow_silt",
+        "desc": "Soft silt that lights where it is disturbed.",
+        "color": "#3a5a6a"
+      },
+      {
+        "id": "wet_basalt",
+        "desc": "Dark wet stone, easy to slip on.",
+        "color": "#1a1e2a"
+      },
+      {
+        "id": "crystal_flake",
+        "desc": "Loose plates of mineral; loud underfoot.",
+        "color": "#5a6a8a"
+      }
+    ],
+    "relief": "vertical shafts, long ledges, hanging walkways; water layers are walked by bridge or swum",
+    "palette": [
+      "#0a0e1a",
+      "#1a2a40",
+      "#3a5a8a",
+      "#6ab0c8",
+      "#b8e0d8",
+      "#e8e0a0"
+    ]
+  },
+  "sky": {
+    "time": "none",
+    "ceiling": "a far dome with living constellations",
+    "fog_color": "#0e1a2a",
+    "fog_density": 0.015,
+    "ambient": "cool blue-green, with warm pulses",
+    "motes": "floating plankton light; slow"
+  },
+  "props": [
+    {
+      "id": "glow_colony",
+      "kind": "light",
+      "density": "high",
+      "note": "Pulsing colonies. Their rhythm is language. Do not shine a lamp on them."
+    },
+    {
+      "id": "mineral_spire",
+      "kind": "obstacle",
+      "density": "medium",
+      "note": "Tall crystal columns; reflect and bend light."
+    },
+    {
+      "id": "hanging_walkway",
+      "kind": "bridge",
+      "density": "low",
+      "note": "Woven rope and silk, strung across shafts."
+    },
+    {
+      "id": "sleeping_den",
+      "kind": "structure",
+      "density": "low",
+      "note": "A dark hollow where something rests. Light disturbs it."
+    },
+    {
+      "id": "sealed_vault_door",
+      "kind": "threshold",
+      "density": "rare",
+      "note": "A sealed stone door with a pulse-lock. Closed is still working."
+    },
+    {
+      "id": "dark_pool",
+      "kind": "water",
+      "density": "medium",
+      "note": "Still pool; reflects the constellations."
+    }
+  ],
+  "flora": [
+    "lantern kelp, glass bloom, bell-moss, crystal fern (opens only under certain color frequencies)"
+  ],
+  "creatures": [
+    {
+      "id": "pulse_swarm",
+      "name": "Pulse Swarm",
+      "class": "WILDLIFE",
+      "sapient": false,
+      "role": "signal colony",
+      "desc": "A cloud of tiny emitters that communicate by pulse.",
+      "behavior": "Mimics the light it sees. Shining a lamp at it triggers a defensive flash.",
+      "uses": {
+        "battle": "low",
+        "labor": "signalling",
+        "ecology": "marks seasons"
+      },
+      "weight": 3
+    },
+    {
+      "id": "glass_eel",
+      "name": "Glass Eel",
+      "class": "WILDLIFE",
+      "sapient": false,
+      "role": "hunter in the vertical ocean",
+      "desc": "A transparent eel that hunts illumination.",
+      "behavior": "Strikes at lamps. Avoids darkness.",
+      "uses": {
+        "battle": "medium",
+        "labor": "none",
+        "ecology": "thins plankton blooms"
+      },
+      "weight": 2
+    },
+    {
+      "id": "bell_drifter",
+      "name": "Bell Drifter",
+      "class": "WILDLIFE",
+      "sapient": false,
+      "role": "grazer",
+      "desc": "Soft-bodied drifters that graze on glow-silt.",
+      "behavior": "Passive. Light-sensitive; hides from bright beams.",
+      "uses": {
+        "battle": "none",
+        "labor": "carries light cargo",
+        "ecology": "recycles silt"
+      },
+      "weight": 3
+    },
+    {
+      "id": "spire_sleeper",
+      "name": "Spire Sleeper",
+      "class": "WILDLIFE",
+      "sapient": false,
+      "role": "denning ambusher",
+      "desc": "A heavy, slow animal that sleeps in the dark and wakes angry when lit.",
+      "behavior": "Sleeps. If lit, wakes and charges. If left alone, ignores travelers.",
+      "uses": {
+        "battle": "high",
+        "labor": "none",
+        "ecology": "digs out new dens that become habitat"
+      },
+      "weight": 1
+    }
+  ],
+  "music": {
+    "mood": "deep, still, resonant, intimate",
+    "tempo": "50-70",
+    "instruments": [
+      "bowed glass",
+      "low choir pad",
+      "water drip percussion",
+      "bell tones"
+    ],
+    "layers": {
+      "vault": "wide drones",
+      "forest": "glittering arpeggios",
+      "shallows": "slow pulse",
+      "dark": "almost nothing; a single held tone"
+    },
+    "stinger_on_event": "a bell that decays into silence"
+  },
+  "encounters": {
+    "enemies": [
+      {
+        "species": "glass_eel",
+        "weight": 3
+      },
+      {
+        "species": "dominion_drone",
+        "weight": 2
+      }
+    ],
+    "rivals": [
+      "marek_vasko"
+    ],
+    "hazards": [
+      "unlit ledge",
+      "crystal flake slide",
+      "current in the shallows",
+      "light-triggered sleeper"
+    ],
+    "ambient": "water drip, distant pulse language"
+  },
+  "world_states": [
+    {
+      "id": "extraction",
+      "label": "Extraction",
+      "effect": "Dominion survey lamps flood the forest layer; Pulse Swarms are agitated.",
+      "event_weight_mods": {
+        "lumen_survey_lamps": 3
+      }
+    },
+    {
+      "id": "disease",
+      "label": "Disease",
+      "effect": "A pale blight dims the colonies. Light sources are scarcer; darkness is deeper.",
+      "event_weight_mods": {
+        "lumen_dimming": 2
+      }
+    },
+    {
+      "id": "migration",
+      "label": "Migration",
+      "effect": "The constellations move. Drifters and eels shift layers; routes flip.",
+      "event_weight_mods": {
+        "lumen_constellation_shift": 3
+      }
+    }
+  ],
+  "bondable_here": [
+    {
+      "character": "nerit",
+      "hook": "Their homeland. Tests of when not to turn the light on live here."
+    },
+    {
+      "character": "pharilux",
+      "hook": "A sealed vault door: a threshold to leave closed."
+    }
+  ],
+  "descent_events": [
+    {
+      "id": "lumen_sleeping_den",
+      "title": "The den in the dark",
+      "kind": "bond_test",
+      "weight": 4,
+      "once": false,
+      "min_depth": 0,
+      "text": "A hollow in the wet basalt. Something large breathes inside. A single lamp would reveal it, and the survey data you need would be on the lamp's first frame.",
+      "choices": [
+        {
+          "id": "dark",
+          "label": "Leave the lamp off. Note the den from its breathing.",
+          "result": "You walk past without a sound. Nerit's glow dims, politely, to match.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "sleeping_den",
+              "tags": [
+                "privacy_respected",
+                "darkness_kept",
+                "spared"
+              ],
+              "weight": 3
+            }
+          ]
+        },
+        {
+          "id": "lamp",
+          "label": "Light the den and take the data.",
+          "result": "The sleeper wakes. The lamp is on it. The data is perfect and the sleeper is furious.",
+          "records": [
+            {
+              "type": "harmed",
+              "target": "sleeping_den",
+              "tags": [
+                "forced_exposure",
+                "combat",
+                "harm_wildlife"
+              ],
+              "weight": 3
+            }
+          ]
+        },
+        {
+          "id": "promise",
+          "label": "Promise Nerit you will not light it while it sleeps.",
+          "result": "Nerit holds the promise like a small lantern.",
+          "records": [],
+          "promise": {
+            "id": "nerit_hold_the_dark",
+            "to": "nerit",
+            "template": "hold_the_dark"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lumen_constellation_shift",
+      "title": "The constellations move",
+      "kind": "migration",
+      "weight": 3,
+      "once": false,
+      "min_depth": 0,
+      "text": "The glow colonies overhead slide into a new shape. Below, drifters rise and eels sink to meet them. The path you planned now runs under a hungry mouth.",
+      "choices": [
+        {
+          "id": "follow",
+          "label": "Follow the drifters. They know the safe layer.",
+          "result": "They lead you around the eels' stretch of water, slowly.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "bell_drifter",
+              "tags": [
+                "tide_read",
+                "nonviolent"
+              ],
+              "weight": 2
+            }
+          ]
+        },
+        {
+          "id": "fast",
+          "label": "Take the old path before the migration finishes.",
+          "result": "You make it. A drifter does not.",
+          "records": [
+            {
+              "type": "harmed",
+              "target": "bell_drifter",
+              "tags": [
+                "harm_wildlife",
+                "shortcut"
+              ],
+              "weight": 2
+            }
+          ]
+        },
+        {
+          "id": "chart",
+          "label": "Chart the new shape for Mara and wait.",
+          "result": "The chart is the first of its kind. The wait is long and the log is full.",
+          "records": [
+            {
+              "type": "discovered",
+              "target": "constellation",
+              "tags": [
+                "discovery",
+                "curiosity",
+                "evidence"
+              ],
+              "weight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lumen_survey_lamps",
+      "title": "Survey lamps in the crystal forest",
+      "kind": "convoy",
+      "weight": 3,
+      "once": false,
+      "min_depth": 0,
+      "text": "A Dominion lamp rig floods the mineral forest with white light. Pulse Swarms flash in alarm. Somewhere beyond the glare, a Survey Chief is counting yield.",
+      "choices": [
+        {
+          "id": "kill",
+          "label": "Cut the rig's power.",
+          "result": "The swarm calms. The chief logs a fault.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "pulse_swarm",
+              "tags": [
+                "calmed_wildlife",
+                "nonviolent"
+              ],
+              "weight": 3
+            }
+          ]
+        },
+        {
+          "id": "expose",
+          "label": "Photograph the rig inside a protected colony.",
+          "result": "The evidence will hold in front of the Authority.",
+          "records": [
+            {
+              "type": "discovered",
+              "target": "lamp_rig",
+              "tags": [
+                "evidence",
+                "discovery"
+              ],
+              "weight": 3
+            }
+          ]
+        },
+        {
+          "id": "take",
+          "label": "Take the survey data and go.",
+          "result": "The Dominion is pleased. The colony is not.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "lamp_rig",
+              "tags": [
+                "extraction",
+                "dominion_favor"
+              ],
+              "weight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lumen_sealed_door",
+      "title": "A sealed door in the stone",
+      "kind": "bond_test",
+      "weight": 2,
+      "once": false,
+      "min_depth": 0,
+      "text": "A sealed stone door, older than the paths around it. A pulse-lock beats faintly behind it. Pharilux looks at it and then at you. 'Closed,' he says, 'is still working.'",
+      "choices": [
+        {
+          "id": "leave",
+          "label": "Leave it sealed.",
+          "result": "You mark it on the map as a place you did not go. Pharilux's beacon rests on you a little longer.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "sealed_door",
+              "tags": [
+                "sealed_kept",
+                "threshold_kept"
+              ],
+              "weight": 4
+            }
+          ]
+        },
+        {
+          "id": "press",
+          "label": "Ask him where it leads, and why he cares.",
+          "result": "He says nothing. The beacon turns away.",
+          "records": [
+            {
+              "type": "talked",
+              "target": "pharilux",
+              "tags": [
+                "pressed_origin"
+              ],
+              "weight": 2
+            }
+          ]
+        },
+        {
+          "id": "force",
+          "label": "Pry it open.",
+          "result": "The lock sings once. The sound goes a very long way.",
+          "records": [
+            {
+              "type": "harmed",
+              "target": "sealed_door",
+              "tags": [
+                "threshold_breached",
+                "extraction"
+              ],
+              "weight": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lumen_stranded_drifter",
+      "title": "A drifter in the glare",
+      "kind": "stranded",
+      "weight": 3,
+      "once": false,
+      "min_depth": 0,
+      "text": "A Bell Drifter has been caught by a lamp left on a ledge and is rising toward the heat of it. It is turning slowly, like it is dreaming.",
+      "choices": [
+        {
+          "id": "dim",
+          "label": "Put the lamp out and guide it down.",
+          "result": "It sinks into the dark and, after a while, glows a little.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "bell_drifter",
+              "tags": [
+                "protect_weak",
+                "privacy_respected",
+                "calmed_wildlife"
+              ],
+              "weight": 3
+            }
+          ]
+        },
+        {
+          "id": "scan",
+          "label": "Scan it while it is lit.",
+          "result": "The scan is clean. The drifter does not return to the dark for an hour.",
+          "records": [
+            {
+              "type": "discovered",
+              "target": "bell_drifter",
+              "tags": [
+                "discovery",
+                "forced_exposure"
+              ],
+              "weight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lumen_old_road_marker",
+      "title": "A marker half sunk in the silt",
+      "kind": "marker",
+      "weight": 2,
+      "once": false,
+      "min_depth": 0,
+      "text": "A stone marker, partly submerged in glow-silt, bears the same symbols as the one in the Red Reaches. Here they are inlaid with mineral that only shows in the dark.",
+      "choices": [
+        {
+          "id": "read",
+          "label": "Read it by darkness.",
+          "result": "Nerit drops the lamp and the marks light up. It is a warning about what the water remembers.",
+          "records": [
+            {
+              "type": "discovered",
+              "target": "old_road_marker",
+              "tags": [
+                "discovery",
+                "curiosity",
+                "evidence",
+                "darkness_kept"
+              ],
+              "weight": 3
+            }
+          ]
+        },
+        {
+          "id": "light",
+          "label": "Read it by lamp.",
+          "result": "The marks vanish under the glare. You copy what you can.",
+          "records": [
+            {
+              "type": "discovered",
+              "target": "old_road_marker",
+              "tags": [
+                "discovery"
+              ],
+              "weight": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lumen_amends_den",
+      "title": "The den you lit",
+      "kind": "bond_test",
+      "weight": 1,
+      "once": true,
+      "min_depth": 0,
+      "text": "You come back to a den you once lit. The sleeper is gone. A pale scar of light is still on the wall. Nerit stands beside it without speaking.",
+      "choices": [
+        {
+          "id": "dim",
+          "label": "Cover the scar with silt until it dims.",
+          "result": "Nerit lets the dark settle back. 'It was not the light,' they say. 'It was the not-asking.'",
+          "records": [
+            {
+              "type": "amends",
+              "target": "nerit",
+              "tags": [
+                "amends",
+                "privacy_respected"
+              ],
+              "weight": 3
+            }
+          ]
+        }
+      ],
+      "when": {
+        "all": [
+          {
+            "event": {
+              "tag": "forced_exposure",
+              "count_min": 1
+            }
+          },
+          {
+            "not": {
+              "event": {
+                "type": "amends",
+                "target": "nerit"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "lumen_amends_threshold",
+      "title": "The door you forced",
+      "kind": "bond_test",
+      "weight": 1,
+      "once": true,
+      "min_depth": 0,
+      "text": "The vault door you forced still hangs ajar. Its pulse has changed. Pharilux waits beside it with his lantern low.",
+      "choices": [
+        {
+          "id": "close",
+          "label": "Close it as well as you can and say nothing about it.",
+          "result": "The pulse steadies. Pharilux's lantern lifts, a little.",
+          "records": [
+            {
+              "type": "amends",
+              "target": "pharilux",
+              "tags": [
+                "amends",
+                "threshold_kept"
+              ],
+              "weight": 3
+            }
+          ]
+        }
+      ],
+      "when": {
+        "all": [
+          {
+            "event": {
+              "tag": "threshold_breached",
+              "count_min": 1
+            }
+          },
+          {
+            "not": {
+              "event": {
+                "type": "amends",
+                "target": "pharilux"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
