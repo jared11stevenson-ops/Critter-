@@ -17,7 +17,7 @@ CLIPS = ["idle", "walk", "run", "dash", "attack_1", "premonition", "false_memory
          "hit", "hit_back", "hit_left", "hit_right", "hit_heavy", "downed", "revive", "overwhelmed", "talk_idle"]
 
 # light, curious carriage: head slightly forward and tilted, shoulders dropped, chest open
-STYLE = {"chest": (-3, 0, 0), "neck1": (4, 0, 0), "head": (-2, 5, 0), "clavicle.L": (0, 0, -4),
+STYLE = {"chest": (-3, 0, 0), "neck1": (4, 0, 0), "head": (14, 3, 0), "clavicle.L": (0, 0, -4),
          "clavicle.R": (0, 0, 4)}
 WINGS_FOLDED = {"wing.L": (6, -4, 0), "wing.R": (6, 4, 0)}
 
