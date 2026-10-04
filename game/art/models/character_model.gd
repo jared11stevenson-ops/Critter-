@@ -571,8 +571,17 @@ func _process(delta: float) -> void:
 	# critically damped facing turn (no snapping, no overshoot)
 	var diff := wrapf(_yaw_target - rotation.y, -PI, PI)
 	var k := turn_speed
-	_yaw_vel += (diff * k * k - 2.0 * k * _yaw_vel) * delta
-	rotation.y += _yaw_vel * delta
+	# explicit integrator: sub-step so a long frame (hitch / slow device) cannot blow it up into NaN
+	var sd := minf(delta, 0.4)
+	while sd > 0.0:
+		var h := minf(sd, 0.02)
+		_yaw_vel += (diff * k * k - 2.0 * k * _yaw_vel) * h
+		rotation.y += _yaw_vel * h
+		diff = wrapf(_yaw_target - rotation.y, -PI, PI)
+		sd -= h
+	if not is_finite(rotation.y) or not is_finite(_yaw_vel):
+		rotation.y = _yaw_target if is_finite(_yaw_target) else 0.0
+		_yaw_vel = 0.0
 	_combo_timer -= delta
 	_act_clock += delta
 	_flash = move_toward(_flash, 0.0, delta * 5.0)
