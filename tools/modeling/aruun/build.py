@@ -51,6 +51,8 @@ def build_geometry():
     bu.reset_scene()
     mb = MeshBuilder()
     body.build_body(mb)
+    import extras
+    extras.build_extras(mb)
     snap_to_anatomy(mb, body.anatomy())
     mm = MeshBuilder()
     body.build_morrow(mm)

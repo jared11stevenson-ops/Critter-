@@ -23,7 +23,7 @@ const PALETTES := {
 		"sat_lift": 1.22, "val_lift": 1.14, "contrast": 1.12, "shadow_floor": 0.16,
 		"rim_color": Color(0.80, 1.0, 0.25), "rim_power": 2.2, "rim_strength": 0.75,
 		"accent_color": Color(0.78, 0.35, 1.0), "accent_strength": 1.6,
-		"outline_color": Color(0.06, 0.02, 0.12), "outline_width": 0.02,
+		"outline_color": Color(0.06, 0.02, 0.12), "outline_width": 0.011,
 	},
 }
 

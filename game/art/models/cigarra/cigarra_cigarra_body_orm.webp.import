@@ -2,19 +2,19 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7c42obxioibc"
-path="res://.godot/imported/aruun_aruun_emissive.webp-a604d116de21629e330c8ef5d47de507.ctex"
+uid="uid://bih0vgkex3lgo"
+path="res://.godot/imported/cigarra_cigarra_body_orm.webp-ad4855fce1507e37fc2f8852d87339ed.ctex"
 metadata={
 "vram_texture": false
 }
 generator_parameters={
-"md5": "bda3767d9f75fca99be7bec2a786d9e4"
+"md5": "eef89a8d81913f4da810a800365f4afd"
 }
 
 [deps]
 
-source_file="res://game/art/models/aruun/aruun_aruun_emissive.webp"
-dest_files=["res://.godot/imported/aruun_aruun_emissive.webp-a604d116de21629e330c8ef5d47de507.ctex"]
+source_file="res://game/art/models/cigarra/cigarra_cigarra_body_orm.webp"
+dest_files=["res://.godot/imported/cigarra_cigarra_body_orm.webp-ad4855fce1507e37fc2f8852d87339ed.ctex"]
 
 [params]
 

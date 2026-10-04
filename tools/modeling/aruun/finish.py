@@ -135,6 +135,104 @@ def _clean_paint(img, mask):
     return np.where(mask[..., None], res, img).astype(np.float32)
 
 
+REGION_PAINT = True
+
+
+def _paint_regions(P, part, mask, tid):
+    """Round 2: hand-authored region paint (paint2.py). Writes albedo / normal (paint height) / ORM / emissive."""
+    import paint2
+    col, h, rough, metal, em = paint2.region_paint(P, part, noise3)
+    paths = {}
+    img = np.zeros((TEX, TEX, 3), np.float32)
+    img[mask] = col
+    himg = np.zeros((TEX, TEX), np.float32)
+    himg[mask] = h
+    orm = np.zeros((TEX, TEX, 3), np.float32)
+    orm[mask] = np.stack([np.ones(len(P)), rough, metal], 1)
+    emis = np.zeros((TEX, TEX, 3), np.float32)
+    emis[mask] = em
+    img, _ = dilate(img, mask, 8)
+    himg, _ = dilate(himg, mask, 8)
+    orm, _ = dilate(orm, mask, 8)
+    emis, _ = dilate(emis, mask, 8)
+    np.save(os.path.join(WORK, "aruun_height.npy"), himg)
+    gy, gx = np.gradient(himg)
+    k = 5.0
+    nrm = np.stack([-gx * k, gy * k, np.ones_like(himg)], -1)
+    nrm /= np.linalg.norm(nrm, axis=-1, keepdims=True)
+    for nm, arr in (("albedo", img), ("normal", nrm * 0.5 + 0.5), ("orm", orm), ("emissive", emis)):
+        p = os.path.join(WORK, "aruun_%s.png" % nm)
+        Image.fromarray((np.clip(arr, 0, 1) * 255).astype(np.uint8)).save(p)
+        paths[nm] = p
+    return paths
+
+
+def bake_normal(ob, size=2048, name="aruun"):
+    """Tangent-space normal map baked (Cycles, selected-to-active) from a higher-poly copy: Catmull-Clark level 2 plus a
+    voronoi chitin-relief displacement. Returns the PNG path (or None if the bake is unavailable)."""
+    sc = bpy.context.scene
+    me_hi = ob.data.copy()
+    hi = bpy.data.objects.new(name + "_hi", me_hi)
+    sc.collection.objects.link(hi)
+    sub = hi.modifiers.new("sub", "SUBSURF")
+    sub.levels = sub.render_levels = 2
+    tex = bpy.data.textures.new(name + "_disp", "VORONOI")
+    tex.noise_scale = 0.045
+    tex.noise_intensity = 1.0
+    d = hi.modifiers.new("disp", "DISPLACE")
+    d.texture = tex
+    d.strength = 0.009
+    d.mid_level = 0.35
+    img = bpy.data.images.new(name + "_bake_n", size, size, alpha=False, float_buffer=False)
+    img.colorspace_settings.name = "Non-Color"
+    m = bpy.data.materials.new(name + "_bake")
+    m.use_nodes = True
+    n = m.node_tree.nodes.new("ShaderNodeTexImage")
+    n.image = img
+    m.node_tree.nodes.active = n
+    saved = list(ob.data.materials)
+    ob.data.materials.clear()
+    ob.data.materials.append(m)
+    sc.render.engine = "CYCLES"
+    sc.cycles.samples = 1
+    sc.cycles.device = "CPU"
+    sc.render.bake.margin = 10
+    sc.render.bake.use_selected_to_active = True
+    sc.render.bake.cage_extrusion = 0.03
+    sc.render.bake.max_ray_distance = 0.06
+    for o in bpy.context.view_layer.objects:
+        o.select_set(False)
+    hi.select_set(True)
+    ob.select_set(True)
+    bpy.context.view_layer.objects.active = ob
+    path = None
+    try:
+        bpy.ops.object.bake(type="NORMAL")
+        path = os.path.join(WORK, name + "_bake_normal.png")
+        img.filepath_raw = path
+        img.file_format = "PNG"
+        img.save()
+    except Exception as e:   # noqa: BLE001
+        print("BAKE FAILED", e)
+    ob.data.materials.clear()
+    for mm in saved:
+        ob.data.materials.append(mm)
+    hi.select_set(False)
+    sc.collection.objects.unlink(hi)
+    bpy.data.objects.remove(hi)
+    bpy.context.view_layer.update()
+    return path
+
+
+def merge_normals(paint_path, bake_path, out_path):
+    a = np.asarray(Image.open(paint_path).convert("RGB")).astype(np.float32) / 255 * 2 - 1
+    b = np.asarray(Image.open(bake_path).convert("RGB")).astype(np.float32) / 255 * 2 - 1
+    bxy = np.clip(b[..., :2] * 0.6, -0.45, 0.45)
+    n = np.stack([a[..., 0] + bxy[..., 0], a[..., 1] + bxy[..., 1], np.maximum(a[..., 2] * b[..., 2], 0.4)], -1)
+    n /= np.linalg.norm(n, axis=-1, keepdims=True)
+    Image.fromarray(((n * 0.5 + 0.5) * 255).astype(np.uint8)).save(out_path)
+
+
 def paint(ob):
     """Bake albedo / height via UV rasterisation; colour by part + mottling matched to the sheet palette."""
     me = ob.data
@@ -163,6 +261,8 @@ def paint(ob):
     b = bary[mask]
     P = (co[lv[tl[t, 0]]] * b[:, :1] + co[lv[tl[t, 1]]] * b[:, 1:2] + co[lv[tl[t, 2]]] * b[:, 2:3]).astype(np.float64)
     part = np.array([names[i].split(".")[0] for i in range(len(names))])[pa[tp[t]]]
+    if REGION_PAINT:
+        return _paint_regions(P, part, mask, tid)
     base = np.array([hex2(PART_COL.get(p, "#808080")) for p in part])
     col = base.copy()
     h = np.zeros(len(P))
@@ -619,6 +719,10 @@ def main():
     bu.pack_uvs(ob, density={"head": 1.8, "eye": 1.5, "brow": 1.5, "jaw": 1.4, "horn": 1.2, "morrow_head": 0.8,
                              "cloak": 0.7, "torso": 1.2})
     paths = paint(ob)
+    bk = bake_normal(ob, TEX)
+    if bk:
+        merge_normals(paths["normal"], bk, paths["normal"])
+        print("baked normal merged", bk)
     mat = make_material(paths)
     ob.data.materials.clear()
     ob.data.materials.append(mat)
