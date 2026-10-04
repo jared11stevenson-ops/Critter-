@@ -311,5 +311,24 @@
   "#b56e43",
   "#6f6a4c",
   "#5a4432"
- ]
+ ],
+ "game_palette": {
+  "intent": "Pop against warm Red Reaches (ochre/red/sand) and green/blue worlds: deep saturated end of his reds, near-white bone, cool ice-teal complement.",
+  "shader": "game/art/shaders/character_pop.gd PALETTES.aruun",
+  "sat_lift": 1.32,
+  "val_lift": 1.06,
+  "contrast": 1.08,
+  "hues": {
+   "carapace_red": "#8a1d1c",
+   "carapace_hot": "#c9402a",
+   "ochre": "#d8a15c",
+   "bone": "#d3bf98",
+   "chitin": "#2a2224",
+   "plum": "#3b3350"
+  },
+  "rim": "#6bf2ff",
+  "emissive_accent": "#2fe8d6 (horn tines, medallion, buckle)",
+  "outline": "#08050f",
+  "core_glow": "#c4301a (Morrow, kept from sheet)"
+ }
 }

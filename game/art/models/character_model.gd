@@ -66,6 +66,7 @@ var _player: AnimationPlayer
 var _tree: AnimationTree
 var _meshes: Array[MeshInstance3D] = []
 var _overlay: ShaderMaterial
+var _pop: Array[ShaderMaterial] = []   # CharacterPop materials (rim/outline/flash live in them; no overlay pass)
 var _ghost_mat: ShaderMaterial
 var _meta := {}
 var _move := 0.0
@@ -113,8 +114,10 @@ func _ready() -> void:
 	var sh := Shader.new()
 	sh.code = OVERLAY_CODE
 	_overlay.shader = sh
-	for m in _meshes:
-		m.material_overlay = _overlay
+	_pop = CharacterPop.apply(_model, character_id)
+	if _pop.is_empty():
+		for m in _meshes:
+			m.material_overlay = _overlay
 	if anim_json != "" and FileAccess.file_exists(anim_json):
 		var d = JSON.parse_string(FileAccess.get_file_as_string(anim_json))
 		if d is Dictionary:
@@ -364,6 +367,8 @@ func set_downed(downed: bool) -> void:
 
 func set_highlight(color: Color, on: bool) -> void:
 	_overlay.set_shader_parameter("highlight_color", color)
+	for pm in _pop:
+		pm.set_shader_parameter("highlight_color", color)
 	_hl_on = on
 
 
@@ -573,6 +578,9 @@ func _process(delta: float) -> void:
 	if _overlay:
 		_overlay.set_shader_parameter("flash", _flash * 0.6)
 		_overlay.set_shader_parameter("highlight", _hl)
+		for pm in _pop:
+			pm.set_shader_parameter("flash", _flash * 0.6)
+			pm.set_shader_parameter("highlight", _hl)
 	if _tree == null:
 		return
 	if _hit_pending > 0:

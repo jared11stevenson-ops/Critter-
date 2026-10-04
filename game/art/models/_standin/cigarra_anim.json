@@ -32,6 +32,18 @@
    "impact": 0.11,
    "cancel": 0.25
   },
+  "attack_2": {
+   "duration": 0.5333,
+   "loop": false,
+   "impact": 0.11,
+   "cancel": 0.25
+  },
+  "attack_3": {
+   "duration": 0.9667,
+   "loop": false,
+   "impact": 0.3,
+   "cancel": 0.62
+  },
   "premonition": {
    "duration": 1.1,
    "loop": false,
