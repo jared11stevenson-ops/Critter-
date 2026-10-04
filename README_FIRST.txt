@@ -1,4 +1,4 @@
-CRITTER — The Red Span Survey  ·  v0.7.0 PLAYTEST BUILD
+CRITTER — The Red Span Survey  ·  v0.8.0 PLAYTEST BUILD
 =======================================================
 HOW TO OPEN (Godot 4.7 mobile editor)
 1. Unzip this file.
@@ -35,3 +35,15 @@ NEW IN v0.7.0
 - Godot 4.7 is now the official engine.
 - PREVIEW: 3D Aruun model (rigged, 15 animations). Turn on in Settings -> "3D character models (preview)".
   Still being refined; Cigarra's 3D model is next. Tell me how Aruun looks/moves on your phone.
+
+
+NEW IN v0.8.0
+- LAG FIX: Graphics quality presets in Settings (Auto / Low / Medium / High) and a 30 / 60 FPS cap.
+  Auto starts at Medium on phones and drops itself to Low if your phone can't keep up.
+  If it still lags: Settings -> Graphics -> Low, and FPS cap -> 30.
+- Triangle count roughly 40% lower (222k -> ~140k) with chunked scatter, cheaper shaders and throttled CPU work.
+- Motion-capture animation for 3D Aruun (19 clips; hits land on the swing's impact frame; Gravity Pull is hold-to-slam).
+  3D Aruun is still an OPTIONAL PREVIEW (Settings -> "3D character models (preview)"): the motion is much better than
+  the cut-out's, but the model itself still reads pale at gameplay distance. Tell me what you think.
+- Sharper character cut-outs and portraits (4x AI upscale of your sheets).
+- Cigarra has no 3D model yet, so with the preview on she stays a cut-out.
