@@ -568,11 +568,18 @@ func _on_ability_used(char_id: String, ability_id: String) -> void:
 
 
 func _process(delta: float) -> void:
-	# critically damped facing turn (no snapping, no overshoot)
-	var diff := wrapf(_yaw_target - rotation.y, -PI, PI)
+	if not is_finite(rotation.y) or not is_finite(_yaw_vel):
+		rotation.y = 0.0
+		_yaw_vel = 0.0
+	# critically damped facing turn (no snapping, no overshoot); semi-implicit sub-steps keep it stable on frame hitches
 	var k := turn_speed
-	_yaw_vel += (diff * k * k - 2.0 * k * _yaw_vel) * delta
-	rotation.y += _yaw_vel * delta
+	var left := minf(delta, 0.5)
+	while left > 0.0:
+		var h := minf(left, 0.016)
+		left -= h
+		var diff := wrapf(_yaw_target - rotation.y, -PI, PI)
+		_yaw_vel += (diff * k * k - 2.0 * k * _yaw_vel) * h
+		rotation.y += _yaw_vel * h
 	_combo_timer -= delta
 	_act_clock += delta
 	_flash = move_toward(_flash, 0.0, delta * 5.0)
