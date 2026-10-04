@@ -35,12 +35,15 @@ var _force_place := true
 var _last_placed_focus := Vector3(1e9, 0, 0)
 var _pitch := -48.0
 var _dist := 24.0
+var life: HubLife = null
 
 func _ready() -> void:
+	var _t0 := Time.get_ticks_msec()
 	get_tree().paused = false
 	Engine.time_scale = 1.0
 	TouchInput.reset()
 	_build_visual()
+	var _t1 := Time.get_ticks_msec()
 	cam = Camera3D.new()
 	cam.fov = 42.0
 	cam.current = true
@@ -56,6 +59,7 @@ func _ready() -> void:
 	_build_ui()
 	_build_spots()
 	_compute_bounds()
+	_build_life()
 	GameState.flags["_scene"] = "hub"
 	GameState.chapter = "hub"
 	GameState.unlock_codex("place_terrarium_one")
@@ -70,6 +74,8 @@ func _ready() -> void:
 	Events.scene_ready.emit("hub")
 	_update_objective()
 	_auto_beats.call_deferred()
+	if OS.get_cmdline_user_args().has("qa"):
+		print("[PERF] hub _ready ms total=%d visual=%d" % [Time.get_ticks_msec() - _t0, _t1 - _t0])
 
 # ---------------- build ----------------
 func _build_visual() -> void:
@@ -81,6 +87,21 @@ func _build_visual() -> void:
 		visual = load(FALLBACK).new()
 	visual.name = "HubVisual"
 	add_child(visual)
+
+func _build_life() -> void:
+	if visual.get_script() and visual.get("_idle_t") != null:
+		visual.set_process(false)    # HubLife drives the cast now (glances + walks)
+	life = HubLife.new()
+	life.name = "HubLife"
+	add_child(life)
+	life.setup(self, visual, cam, ui_root, func(): return _focus, _label_rect)
+
+func _label_rect(id: String) -> Rect2:
+	for s in _spots:
+		if s["id"] == id and (s["button"] as Button).visible:
+			var b: Button = s["button"]
+			return Rect2(b.position, b.size)
+	return Rect2()
 
 func _marker(n: String) -> Node3D:
 	if visual == null:
@@ -208,6 +229,8 @@ func _process(delta: float) -> void:
 			for s in _spots:
 				(s["button"] as Button).visible = false
 			_objective_panel.visible = false
+			if life:
+				life.hide_all()
 			_labels_hidden = true
 		return
 	_labels_hidden = false
@@ -633,6 +656,11 @@ func qa_log_flags() -> void:
 
 ## QA: open the pause menu / codex / a dialogue without auto-advance (for screenshots).
 func qa_open(what: String) -> void:
+	var _t := Time.get_ticks_usec()
+	_qa_open(what)
+	print("[PERF] open %s ms=%.1f" % [what, (Time.get_ticks_usec() - _t) / 1000.0])
+
+func _qa_open(what: String) -> void:
 	match what:
 		"menu": add_child(PauseMenu.new())
 		"codex": _open_codex()
