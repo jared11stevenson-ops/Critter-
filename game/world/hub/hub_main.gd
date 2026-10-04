@@ -34,7 +34,7 @@ var _place_tick := 0
 var _force_place := true
 var _last_placed_focus := Vector3(1e9, 0, 0)
 var _pitch := -48.0
-var _dist := 24.0
+var _dist := 13.0
 var life: HubLife = null
 var _pulse_t := 0.0
 var _touches: Dictionary = {}
@@ -256,7 +256,32 @@ func _build_spots() -> void:
 			h = 4.8
 		elif d[0] in ["board", "stores", "ledger"]:
 			h = 3.2
-		_spots.append({"id": d[0], "name": d[1], "node": n, "button": b, "kind": d[3], "h": h})
+		var spot := {"id": d[0], "name": d[1], "node": n, "button": b, "kind": d[3], "h": h}
+		_spots.append(spot)
+		if d[3] == "npc":
+			_set_npc_tag(spot, false)
+
+## NPC labels: an invisible tap box over the person, and a small name tag above the head only for the nearest / focused NPC.
+func _set_npc_tag(s: Dictionary, on: bool) -> void:
+	if s.get("tag", null) == on:
+		return
+	s["tag"] = on
+	var b: Button = s["button"]
+	if on:
+		var col := UiKit.char_color(str(s["id"]))
+		b.text = str(s["name"])
+		b.add_theme_font_size_override("font_size", 20)
+		b.add_theme_stylebox_override("normal", UiKit.box(Color(UiKit.PARCHMENT, 0.92), col.darkened(0.2), 12, 2, 8))
+		b.add_theme_stylebox_override("hover", UiKit.box(UiKit.PARCHMENT, col, 12, 2, 8))
+		b.add_theme_stylebox_override("pressed", UiKit.box(col, UiKit.PARCHMENT, 12, 2, 8))
+		b.custom_minimum_size = Vector2(0, 36)
+	else:
+		b.text = ""
+		for k in ["normal", "hover", "pressed", "focus"]:
+			b.add_theme_stylebox_override(k, StyleBoxEmpty.new())
+		b.custom_minimum_size = Vector2(84, 150)
+	b.reset_size()
+	s["sz"] = b.size
 
 func _compute_bounds() -> void:
 	var r := Rect2()
@@ -325,6 +350,18 @@ func _place_labels() -> void:
 	for s in _spots:
 		if s["kind"] != "spot":
 			order.append(s)
+	var near_id := ""
+	var near_d := 300.0
+	for s in _spots:
+		if s["kind"] != "npc":
+			continue
+		var hp: Vector3 = s["node"].global_position + Vector3(0, s["h"], 0)
+		if cam.is_position_behind(hp):
+			continue
+		var dd := cam.unproject_position(hp).distance_to(vs * 0.5 + Vector2(0, -60))
+		if dd < near_d:
+			near_d = dd
+			near_id = str(s["id"])
 	for s in order:
 		var b: Button = s["button"]
 		var wp: Vector3 = s["node"].global_position + Vector3(0, s["h"], 0)
@@ -332,6 +369,13 @@ func _place_labels() -> void:
 			b.visible = false
 			continue
 		var sp := cam.unproject_position(wp)
+		if s["kind"] == "npc":
+			_set_npc_tag(s, str(s["id"]) == near_id)
+			var tagged: bool = str(s["id"]) == near_id
+			var nsz: Vector2 = s["sz"]
+			b.visible = sp.x > -40.0 and sp.x < vs.x + 40.0 and sp.y > 0.0 and sp.y < vs.y + 60.0
+			b.position = (sp - Vector2(nsz.x * 0.5, nsz.y + 4.0)) if tagged else (sp - Vector2(nsz.x * 0.5, 36.0))
+			continue
 		if not s.has("sz") or b.size.x < 2.0:
 			b.reset_size()
 			s["sz"] = b.size
@@ -394,7 +438,9 @@ func _place_labels() -> void:
 		b.position = r.position
 		placed.append(r)
 		var locked: bool = s["id"] == "gate" and not bool(GameState.get_flag("briefed", false))
-		b.modulate = Color(1, 1, 1, 0.55) if locked else Color.WHITE
+		var cd := sp.distance_to(vs * 0.5)
+		var fade := clampf(0.35 + (cd - 140.0) / 360.0, 0.35, 1.0)    # places fade as they get close to the focus
+		b.modulate = Color(1, 1, 1, minf(fade, 0.55 if locked else 1.0))
 	_objective_panel.reset_size()
 	_objective_panel.position = Vector2(20, 50)
 	# Toasts sit bottom-centre above the hint line, clear of the top bar and the hotspot labels' band.
@@ -447,7 +493,7 @@ func _unhandled_input(ev: InputEvent) -> void:
 			_focus_target += Vector3(mv.x, 0, mv.y) * 2.0
 
 func _zoom_by(d: float) -> void:
-	_dist = clampf(_dist + d, 15.0, 34.0)
+	_dist = clampf(_dist + d, 8.0, 34.0)
 	_force_place = true
 
 # ---------------- hotspots ----------------

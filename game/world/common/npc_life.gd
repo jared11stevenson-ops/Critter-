@@ -44,6 +44,11 @@ var _npcs: Dictionary = {}              # id -> record Dictionary
 var _order: Array = []                  # ids in file order
 var _pairs: Array = []
 var _registry: Dictionary = {}
+var _station_pos: Dictionary = {}
+var _ambient: Array = []
+var _amb_t := 20.0
+var _cur := ""
+var hide_fn: Callable             # (npc id) -> bool: hide this NPC right now (e.g. its rival form is on the field)
 var _bubbles: Array = []
 var _bark_t := 5.0
 var _pair_t := 25.0
@@ -58,7 +63,7 @@ var _pend_quest := ""
 var _pend_event := ""
 var _focus := Vector3.ZERO
 
-func setup(parent3d: Node3D, data_path: String, region_runner: Object, dlg: DialogueRunner, focus_cb: Callable, ground_cb: Callable, phase_cb: Callable, region: String) -> void:
+func setup(parent3d: Node3D, data_path: String, canon_path: String, region_runner: Object, dlg: DialogueRunner, focus_cb: Callable, ground_cb: Callable, phase_cb: Callable, region: String) -> void:
 	host = parent3d
 	quest_api = region_runner
 	runner = dlg
@@ -68,10 +73,12 @@ func setup(parent3d: Node3D, data_path: String, region_runner: Object, dlg: Dial
 	region_id = region
 	_rng.randomize()
 	var d: Variant = _read_json(data_path)
-	if not (d is Dictionary):
+	var canon: Variant = _read_json(canon_path)
+	if not (d is Dictionary) or not (canon is Dictionary):
 		enabled = false
 		return
 	_bark_range = float(d.get("bark_range", 13.0))
+	_station_pos = d.get("stations", {})
 	var reg: Variant = _read_json(REGISTRY)
 	if reg is Dictionary:
 		_registry = (reg as Dictionary).get("npcs", {})
@@ -83,13 +90,71 @@ func setup(parent3d: Node3D, data_path: String, region_runner: Object, dlg: Dial
 	_bubble_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_bubble_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ui_layer.add_child(_bubble_root)
-	for spec in d.get("npcs", []):
+	var cmap: Dictionary = {}
+	for c in canon.get("npcs", []):
+		cmap[str(c["id"])] = c
+	for entry in d.get("npcs", []):
+		var cid := str(entry["id"])
+		if not cmap.has(cid):
+			push_warning("NpcLife: %s is not in the canon NPC file" % cid)
+			continue
+		var spec: Dictionary = (cmap[cid] as Dictionary).duplicate()
+		spec.merge(entry, true)
+		_compose(spec)
 		_spawn(spec)
 	_pairs = d.get("pairs", [])
+	var amb: Variant = _read_json(str(d.get("ambient", "")))
+	if amb is Dictionary:
+		for l in (amb as Dictionary).get("lines", []):
+			var sp := _station_spot(str(l.get("station", "")), 0)
+			if not sp.is_empty():
+				var li: Dictionary = (l as Dictionary).duplicate()
+				li["pos"] = Vector3(sp["pos"].x, 0.0, sp["pos"].z)
+				_ambient.append(li)
 	for i in 2:
 		_bubbles.append(_make_bubble())
 	if runner and not runner.finished.is_connected(_on_finished):
 		runner.finished.connect(_on_finished)
+
+func _station_spot(station: String, slot: int) -> Dictionary:
+	var arr: Array = _station_pos.get(station, [])
+	if arr.is_empty():
+		return {}
+	var e: Array = arr[slot % arr.size()]
+	return {"pos": Vector3(float(e[0]), 0.0, float(e[1])), "face": Vector3(float(e[2]), 0.0, float(e[3])).normalized()}
+
+## Canon schedule (dawn|day|dusk|night + station) -> stations list + phase->station index; palette -> placeholder colours.
+func _compose(spec: Dictionary) -> void:
+	var sts: Array = []
+	var names: Array = []
+	var slot := int(spec.get("slot", 0))
+	var acts: Dictionary = spec.get("acts", {})
+	for sc in spec.get("schedule", []):
+		var st := str(sc["station"])
+		if names.has(st):
+			continue
+		var spot := _station_spot(st, slot)
+		if spot.is_empty():
+			push_warning("NpcLife: no station position for %s" % st)
+			continue
+		names.append(st)
+		sts.append({"pos": spot["pos"], "act": str(acts.get(st, "idle")), "face": spot["face"]})
+	spec["stations"] = sts
+	var by_when: Dictionary = {}
+	for sc in spec.get("schedule", []):
+		var i := names.find(str(sc["station"]))
+		if i >= 0:
+			by_when[str(sc["when"])] = i
+	var sched: Dictionary = {}
+	sched["day"] = by_when.get("day", 0)
+	sched["dawn"] = by_when.get("dawn", sched["day"])
+	sched["dusk"] = by_when.get("dusk", by_when.get("night", sched["day"]))
+	spec["schedule_idx"] = sched
+	var pal: Array = spec.get("look", {}).get("palette", ["#6b5a4a", "#d9a43a", "#c9a07a"])
+	spec["body"] = pal[0]
+	spec["acc"] = pal[1 % pal.size()]
+	spec["head"] = pal[2 % pal.size()]
+	spec["hotspot"] = {"label": "Talk to " + str(spec["name"]).replace("Mother ", "").replace("Warden ", "").replace("Clerk ", "").replace("Master ", ""), "r": 3.4}
 
 static func _read_json(path: String) -> Variant:
 	if not FileAccess.file_exists(path):
@@ -99,15 +164,11 @@ static func _read_json(path: String) -> Variant:
 # ------------------------------------------------------------------ build
 func _spawn(spec: Dictionary) -> void:
 	var id := str(spec["id"])
-	var sts: Array = []
-	for s in spec.get("stations", []):
-		var p: Array = s["p"]
-		var f: Array = s.get("face", [0.0, 1.0])
-		sts.append({"pos": Vector3(float(p[0]), 0.0, float(p[1])), "act": str(s.get("act", "idle")), "face": Vector3(float(f[0]), 0.0, float(f[1])).normalized()})
+	var sts: Array = spec.get("stations", [])
 	if sts.is_empty():
 		return
 	UiKit.npc_names[id] = str(spec.get("name", id))
-	UiKit.npc_colors[id] = Color(str(spec.get("acc", "#c9a05a")))
+	UiKit.npc_colors[id] = Color(str(spec.get("body", "#c9a05a"))).lightened(0.15)
 	var reg: Dictionary = _registry.get(id, {})
 	var root := Node3D.new()
 	root.name = "NPC_" + id
@@ -149,7 +210,7 @@ func _spawn(spec: Dictionary) -> void:
 		for c in body.find_children("*", "AnimationPlayer", true, false):
 			anim = c as AnimationPlayer
 			break
-	var sched: Dictionary = spec.get("schedule", {})
+	var sched: Dictionary = spec.get("schedule_idx", {})
 	var start := int(sched.get(phase_fn.call() if phase_fn.is_valid() else "day", 0))
 	start = clampi(start, 0, sts.size() - 1)
 	var sp: Vector3 = sts[start]["pos"]
@@ -157,7 +218,7 @@ func _spawn(spec: Dictionary) -> void:
 	var n := {"id": id, "node": root, "body": body, "tag": tag, "spec": spec, "stations": sts, "sched": sched,
 		"cur": start, "state": "idle", "target": root.position, "wait": _rng.randf_range(1.5, 6.0), "yaw": 0.0,
 		"act": str(sts[start]["act"]), "t": _rng.randf() * 10.0, "proc": proc, "anim": anim, "anim_cur": "", "h": h,
-		"reg_anim": reg.get("anim", {}), "tag_on": false, "active": true, "talk_t": 0.0, "move": 0.0}
+		"reg_anim": reg.get("anim", {}), "tag_on": false, "active": true, "talk_t": 0.0, "move": 0.0, "hidden": false}
 	_npcs[id] = n
 	_order.append(id)
 	_face(n, sts[start]["face"])
@@ -265,21 +326,17 @@ func npc_node(id: String) -> Node3D:
 	var n: Dictionary = _npcs.get(id, {})
 	return n["node"] if not n.is_empty() else null
 
-## Quest ids and descent-event ids owned by NPCs (the level hides their stand-alone sites).
+## Quest ids given by NPCs (the level hides their stand-alone quest sites).
 func owned_quests() -> Array:
 	var out: Array = []
 	for id in _order:
-		var q := str(_npcs[id]["spec"].get("quest", ""))
-		if q != "":
-			out.append(q)
+		for q in _npcs[id]["spec"].get("quests", {}).get("gives", []):
+			out.append(str(q))
 	return out
 
-func owned_events() -> Array:
-	var out: Array = []
-	for id in _order:
-		for e in _npcs[id]["spec"].get("events", []):
-			out.append(str(e))
-	return out
+func _gives(spec: Dictionary) -> String:
+	var g: Array = spec.get("quests", {}).get("gives", [])
+	return str(g[0]) if not g.is_empty() else ""
 
 func quest_state(qid: String) -> String:
 	if qid == "":
@@ -297,10 +354,10 @@ func interactables() -> Array:
 		var n: Dictionary = _npcs[id]
 		var hs: Dictionary = n["spec"].get("hotspot", {})
 		var node: Node3D = n["node"]
-		var qid := str(n["spec"].get("quest", ""))
+		var qid := _gives(n["spec"])
 		out.append({"id": "npc_" + str(id), "pos": node.position, "pos_fn": func() -> Vector3: return node.position,
 			"r": float(hs.get("r", 3.4)), "label": str(hs.get("label", "Talk")), "y_off": h_of(n) + 1.0,
-			"cond": func() -> bool: return enabled,
+			"cond": func() -> bool: return enabled and not bool(n["hidden"]),
 			"hot": func() -> bool: return qid != "" and quest_state(qid) == "open",
 			"act": talk.bind(str(id))})
 	return out
@@ -335,12 +392,20 @@ func _process(delta: float) -> void:
 		if not act:
 			continue
 		if tag_tick:
+			var hid: bool = hide_fn.is_valid() and bool(hide_fn.call(id))
+			if hid != bool(n["hidden"]):
+				n["hidden"] = hid
+				node.visible = not hid
 			var on := d2 < TAG_RANGE * TAG_RANGE
 			if on != bool(n["tag_on"]):
 				n["tag_on"] = on
 				(n["tag"] as Label3D).visible = on
 		_tick_npc(n, delta)
 	_tick_bubbles(delta)
+	_amb_t -= delta
+	if _amb_t <= 0.0:
+		_amb_t = 6.0
+		_ambient_tick()
 	_bark_t -= delta
 	if _bark_t <= 0.0:
 		_bark_t = _rng.randf_range(6.0, 11.0)
@@ -483,7 +548,10 @@ func _play(n: Dictionary, state: String) -> void:
 	ap.play(clip)
 
 # ------------------------------------------------------------------ talk
-## Player pressed Interact on an NPC: face the player, play the first matching dialogue entry.
+const REACT_FLAGS := ["rr_act1_done", "rr_act2_done", "rr_act3_done", "boss_defeated"]
+
+## Player pressed Interact on an NPC: face the player, then play (canon dialogue order) meet -> quest offer -> quest -> turn-in ->
+## react (an act / quest flag changed since last time) -> repeat.
 func talk(id: String) -> void:
 	var n: Dictionary = _npcs.get(id, {})
 	if n.is_empty() or runner == null or runner.active:
@@ -496,30 +564,46 @@ func talk(id: String) -> void:
 	n["move"] = 0.0
 	n["act"] = "idle"
 	_play(n, "idle")
-	var d := build_dialogue(id)
-	if d.is_empty():
-		return
-	GameState.flags["_npc_met_" + id] = true
-	runner.play_data("rrn_" + id, d)
+	_cur = id
+	var spec: Dictionary = n["spec"]
+	var dl: Dictionary = spec.get("dialogue", {})
+	var did := ""
+	var qid := _gives(spec)
+	if not _flag(str(spec.get("flag_met", "rrn_%s_met" % id))):
+		did = str(dl.get("meet", ""))
+	else:
+		var qs := quest_state(qid)
+		if qid != "" and qs == "open":
+			if not _flag("rrn_%s_offered" % qid):
+				did = str(dl.get("quest", ""))
+			elif quest_api:
+				quest_api.play_quest(qid)
+				return
+		elif qid != "" and qs == "done" and not bool(GameState.flags.get("_seen_" + str(dl.get("turnin", "")), false)):
+			did = str(dl.get("turnin", ""))
+		if did == "":
+			var sig := _react_sig(spec)
+			if sig != "" and sig != str(GameState.flags.get("_npc_react_" + id, "")):
+				GameState.flags["_npc_react_" + id] = sig
+				did = str(dl.get("react", ""))
+		if did == "":
+			did = str(dl.get("repeat", ""))
+	if did == "" or not runner.play(did):
+		Events.toast.emit("%s nods and says nothing." % str(spec.get("name", id)), "info")
 
-func _line(id: String, ln: Dictionary) -> Dictionary:
-	var out := ln.duplicate()
-	if not out.has("who"):
-		out["who"] = id
-	return out
-
-func _entry_ok(id: String, e: Dictionary, qstate: String) -> bool:
-	if bool(e.get("first", false)) and bool(GameState.flags.get("_npc_met_" + id, false)):
-		return false
-	if e.has("state") and str(e["state"]) != qstate:
-		return false
-	if e.has("if") and not _flag(str(e["if"])):
-		return false
-	if e.has("if_not") and _flag(str(e["if_not"])):
-		return false
-	return true
+func _react_sig(spec: Dictionary) -> String:
+	var parts: Array = []
+	for f in REACT_FLAGS:
+		if _flag(f):
+			parts.append(f)
+	for q in spec.get("quests", {}).get("reacts", []):
+		if bool(GameState.flags.get("_quest_" + str(q), false)):
+			parts.append(str(q))
+	return ",".join(parts)
 
 func _flag(f: String) -> bool:
+	if f.begins_with("ledger_"):
+		return Ledger.exists({"tag": f.substr(7)})
 	var v: Variant = GameState.get_flag(f, false)
 	if v is bool:
 		return v
@@ -527,64 +611,22 @@ func _flag(f: String) -> bool:
 		return v != ""
 	return v != null and v != 0
 
-func build_dialogue(id: String) -> Dictionary:
-	var n: Dictionary = _npcs.get(id, {})
-	if n.is_empty():
-		return {}
-	var spec: Dictionary = n["spec"]
-	var qid := str(spec.get("quest", ""))
-	var qs := quest_state(qid)
-	var entry: Dictionary = {}
-	for e in spec.get("talk", []):
-		if _entry_ok(id, e, qs):
-			entry = e
-			break
-	if entry.is_empty():
-		return {}
-	var lines: Array = []
-	for ln in entry.get("lines", []):
-		lines.append(_line(id, ln))
-	var choices: Array = entry.get("choices", [])
-	if not choices.is_empty():
-		var opts: Array = []
-		var acts: Array = []
-		for i in choices.size():
-			var c: Dictionary = choices[i]
-			opts.append({"text": str(c["text"]), "event": "npca:%s:%d" % [id, i], "goto": "c%d" % i})
-			acts.append(c.get("actions", []))
-		_ctx[id] = acts
-		lines.append({"choice": opts})
-		for i in choices.size():
-			var c: Dictionary = choices[i]
-			lines.append({"label": "c%d" % i})
-			for ln in c.get("reply", []):
-				lines.append(_line(id, ln))
-			for ln in c.get("reply_fail", []):
-				var f := _line(id, ln)
-				f["if_not"] = "_npc_ok"
-				lines.append(f)
-			lines.append({"goto": "end"})
-		lines.append({"label": "end"})
-	if bool(entry.get("quest", false)) and qid != "" and qs == "open":
-		lines.append({"event": "npcq:" + qid})
-	var pe := str(entry.get("play_event", ""))
-	if pe != "" and quest_api and quest_api.has_method("event_taken") and not quest_api.event_taken(pe):
-		lines.append({"event": "npce:" + pe})
-	lines.append({"end": true})
-	return {"lines": lines}
-
 ## Dialogue event hook: the level forwards every event string; returns true when it was ours.
+##   rec:<id>  -> Ledger.record from the current NPC's canon records{}      offer:<quest id> -> hand off to the quest after the line
+##   lead:<id> -> a journal lead toast
 func handle_event(ev: String) -> bool:
-	if ev.begins_with("npcq:"):
-		_pend_quest = ev.substr(5)
+	if ev.begins_with("rec:"):
+		var recs: Dictionary = _npcs.get(_cur, {}).get("spec", {}).get("records", {})
+		var r: Dictionary = recs.get(ev.substr(4), {})
+		if not r.is_empty():
+			Ledger.record(str(r["type"]), "player", str(r.get("target", "")), r.get("tags", []), {}, int(r.get("weight", 1)), region_id)
+			GameState.save_game()
 		return true
-	if ev.begins_with("npce:"):
-		_pend_event = ev.substr(5)
+	if ev.begins_with("offer:"):
+		_pend_quest = ev.substr(6)
 		return true
-	if ev.begins_with("npca:"):
-		var p := ev.substr(5).split(":")
-		if p.size() == 2 and _ctx.has(p[0]):
-			_run_actions(_ctx[p[0]][int(p[1])], p[0])
+	if ev.begins_with("lead:"):
+		Events.toast.emit("New lead: %s" % ev.substr(5).replace("rr_", "").replace("_", " "), "info")
 		return true
 	return false
 
@@ -594,49 +636,14 @@ func _on_finished(did: String) -> void:
 	if _pend_quest != "":
 		var q := _pend_quest
 		_pend_quest = ""
-		_pend_event = ""
 		if quest_api:
 			quest_api.play_quest.call_deferred(q)
-	elif _pend_event != "":
-		var e := _pend_event
-		_pend_event = ""
-		if quest_api:
-			quest_api.play_event.call_deferred(e)
-
-func _run_actions(acts: Array, who: String) -> void:
-	GameState.set_flag("_npc_ok", true)
-	for a in acts:
-		var p := str(a).split(":")
-		match p[0]:
-			"give":
-				GameState.add_item(p[1], int(p[2]))
-				Events.toast.emit("+%d %s" % [int(p[2]), UiKit.item_name(p[1])], "item")
-			"trade":
-				if GameState.spend_item(p[1], int(p[2])):
-					GameState.add_item(p[3], int(p[4]))
-					Events.toast.emit("-%d %s  +%d %s" % [int(p[2]), UiKit.item_name(p[1]), int(p[4]), UiKit.item_name(p[3])], "item")
-					Audio.sfx("pickup")
-				else:
-					GameState.set_flag("_npc_ok", false)
-					Events.toast.emit("You have no %s." % UiKit.item_name(p[1]), "info")
-			"flag":
-				if bool(GameState.flags.get("_npc_ok", true)):
-					GameState.set_flag(p[1], true)
-			"ledger":
-				if bool(GameState.flags.get("_npc_ok", true)):
-					Ledger.record(p[1], "player", p[2], Array(p[3].split(",")), {}, int(p[4]) if p.size() > 4 else 1, region_id)
-			"toast":
-				Events.toast.emit(str(a).substr(6), "info")
-	if who != "":
-		GameState.save_game()
 
 # ------------------------------------------------------------------ barks
 func _near(node: Node3D) -> bool:
 	return Vector2(node.global_position.x - _focus.x, node.global_position.z - _focus.z).length() < _bark_range
 
-func _eligible(line: Dictionary, ph: String) -> bool:
-	if line.has("phase") and str(line["phase"]) != ph:
-		return false
+func _eligible(line: Dictionary, _ph: String) -> bool:
 	if line.has("if") and not _flag(str(line["if"])):
 		return false
 	if line.has("if_not") and _flag(str(line["if_not"])):
@@ -775,3 +782,35 @@ func _tick_pair(delta: float) -> void:
 			if a["state"] == "idle":
 				_resume_act(b)
 				_pair = {}
+
+# ------------------------------------------------------------------ ambient environment lines (canon red_reaches_ambient.json)
+var _amb_last: Dictionary = {}
+
+func _ambient_tick() -> void:
+	var now := Time.get_ticks_msec()
+	for l in _ambient:
+		var k := str(l.get("kind", ""))
+		if k != "wind" and k != "overheard":
+			continue
+		var p: Vector3 = l["pos"]
+		if Vector2(p.x - _focus.x, p.z - _focus.z).length() > 12.0 or not _eligible(l, ""):
+			continue
+		if now - int(_amb_last.get(l["id"], -999999)) < 150000:
+			continue
+		_amb_last[l["id"]] = now
+		Events.toast.emit(str(l["text"]), "info")
+		return
+
+## Readable signs / placards as marker-less hotspots (level interactable format).
+func ambient_interactables() -> Array:
+	var out: Array = []
+	for l in _ambient:
+		var k := str(l.get("kind", ""))
+		if k != "sign" and k != "placard":
+			continue
+		var lc: Dictionary = l
+		var p: Vector3 = lc["pos"] + Vector3(2.0 + float(out.size() % 3), 0, 1.5)
+		out.append({"id": "amb_" + str(lc["id"]), "pos": p, "r": 2.6, "label": "Read", "nomark": true,
+			"cond": func() -> bool: return _eligible(lc, ""),
+			"act": func() -> void: Events.toast.emit(str(lc["text"]), "codex")})
+	return out

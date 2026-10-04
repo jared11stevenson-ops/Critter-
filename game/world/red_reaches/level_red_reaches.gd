@@ -47,6 +47,7 @@ var npcs: NpcLife = null
 var _marker_mesh: ArrayMesh = null
 var _marker_mats: Array = []
 const EXTRA := "res://game/world/red_reaches/world_extra.json"
+const CANON_NPCS := "res://game/canon/npcs/red_reaches.json"
 const NPC_DATA := "res://game/world/red_reaches/rr_npcs.json"
 
 # burden
@@ -378,14 +379,14 @@ func _build_interactables() -> void:
 		var drop: Array = []
 		for q in npcs.owned_quests():
 			drop.append("rg_quest_" + str(q))
-		for st in region.recipe.get("sites", []) if region else []:
-			if npcs.owned_events().has(str(st.get("event", "x"))):
-				drop.append("rg_" + str(st["id"]))
 		_interactables = _interactables.filter(func(it): return not drop.has(str(it["id"])))
 		_interactables.append_array(npcs.interactables())
+		_interactables.append_array(npcs.ambient_interactables())
 	_marker_mesh = _make_marker_mesh()
 	_marker_mats = [ToonKit.glow(UiKit.ACCENT_2, 1.4), ToonKit.glow(UiKit.PSI, 1.6)]
 	for it in _interactables:
+		if it.get("nomark", false):
+			continue
 		var mk := MeshInstance3D.new()
 		mk.mesh = _marker_mesh
 		mk.material_override = _marker_mats[0]
@@ -423,7 +424,10 @@ func _build_world_life() -> void:
 	npcs = NpcLife.new()
 	npcs.name = "Npcs"
 	add_child(npcs)
-	npcs.setup(self, NPC_DATA, region, runner, player_position, height_at, func() -> String: return ambient.phase, "red_reaches")
+	npcs.setup(self, NPC_DATA, CANON_NPCS, region, runner, player_position, height_at, func() -> String: return ambient.phase, "red_reaches")
+	npcs.hide_fn = func(id: String) -> bool:
+		# the claims broker is a truce form of the Undermarket rival: hide him while the rival fight is on the field
+		return id == "vesk_dunmore" and rivals != null and not rivals.live.is_empty() and rivals.any_engaged()
 	if OS.get_cmdline_user_args().has("qa"):
 		print("[PERF] world life (ambient+settlement dispatch+npcs) ms=%d" % (Time.get_ticks_msec() - _w0))
 
@@ -483,14 +487,16 @@ func _interact_tick(delta: float) -> void:
 	var bd := INF
 	for it in _interactables:
 		var ok: bool = (it["cond"] as Callable).call()
-		var mk: Node3D = _markers3d[it["id"]]
-		mk.visible = ok
+		var mk: Node3D = _markers3d.get(it["id"], null)
+		if mk:
+			mk.visible = ok
 		if not ok:
 			continue
 		var ip: Vector3 = (it["pos_fn"] as Callable).call() if it.has("pos_fn") else it["pos"]
-		mk.position = Vector3(ip.x, height_at(ip.x, ip.z) + float(it.get("y_off", 2.6)) + sin(Time.get_ticks_msec() * 0.004) * 0.2, ip.z)
-		mk.rotation.y += delta * 1.8
-		if it.has("hot"):
+		if mk:
+			mk.position = Vector3(ip.x, height_at(ip.x, ip.z) + float(it.get("y_off", 2.6)) + sin(Time.get_ticks_msec() * 0.004) * 0.2, ip.z)
+			mk.rotation.y += delta * 1.8
+		if mk and it.has("hot"):
 			var hot: bool = (it["hot"] as Callable).call()
 			(mk as MeshInstance3D).material_override = _marker_mats[1 if hot else 0]
 		var d := Vector2(l.global_position.x - ip.x, l.global_position.z - ip.z).length()
@@ -1162,11 +1168,14 @@ func qa_weather(w: String) -> void:
 	if ambient:
 		ambient.qa_set_weather(w)
 
+func qa_npcs() -> void:
+	qa_npc_log()
+
 func qa_npc_log() -> void:
 	if npcs == null:
 		return
 	for id in npcs.ids():
-		print("[QA] NPC ", id, " at ", npcs.npc_position(id), " quest=", npcs.quest_state(str(npcs._npcs[id]["spec"].get("quest", ""))))
+		print("[QA] NPC ", id, " at ", npcs.npc_position(id), " quest=", npcs.quest_state(npcs._gives(npcs._npcs[id]["spec"])))
 	print("[QA] items=", GameState.items)
 	var fl: Array = []
 	for k in GameState.flags:

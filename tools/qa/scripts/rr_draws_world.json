@@ -1,13 +1,13 @@
 [
  {"t":0.3,"call":"scene.qa_auto_dialogue","args":[true,0,0.15]},
- {"t":1.0,"call":"scene.qa_npc","args":["rr_tessaly"]},
+ {"t":1.0,"call":"scene.qa_npc","args":["nuru_tamsin"]},
  {"t":12.0,"call":"scene.qa_perf_breakdown"},
- {"t":40.0,"call":"scene.qa_npc","args":["rr_oda"]},
+ {"t":40.0,"call":"scene.qa_npc","args":["oda_keth"]},
  {"t":50.0,"call":"scene.qa_perf_breakdown"},
- {"t":80.0,"call":"scene.qa_npc","args":["rr_wick"]},
+ {"t":80.0,"call":"scene.qa_npc","args":["odalys_penhallow"]},
  {"t":90.0,"call":"scene.qa_perf_breakdown"},
- {"t":120.0,"call":"scene.qa_npc","args":["rr_ilsa"]},
+ {"t":120.0,"call":"scene.qa_npc","args":["ilsa_brandt"]},
  {"t":130.0,"call":"scene.qa_perf_breakdown"},
- {"t":160.0,"call":"scene.qa_npc","args":["rr_mags"]},
+ {"t":160.0,"call":"scene.qa_npc","args":["hobb_sarrane"]},
  {"t":170.0,"call":"scene.qa_perf_breakdown"}
 ]

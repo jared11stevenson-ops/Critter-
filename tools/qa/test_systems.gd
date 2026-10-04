@@ -1,6 +1,7 @@
 extends Node
 ## Headless unit tests for the Ledger / Promises / Bonds / Reactions / Rivals systems.
 ## Run: godot --headless --path . res://tools/qa/test_systems.tscn -- test_systems
+var runner: Variant = null   # region-runner host interface (the NPC test)
 var passed := 0
 var failed := 0
 
@@ -193,8 +194,8 @@ func _test_rivals() -> void:
 	Rivals.from_dict(json)
 	ok(Rivals.get_rival("foreman_orrin")["encounters"] == 1 and "erratic_timing" in Rivals.get_rival("foreman_orrin")["adaptations"], "rival roundtrip")
 
-## Red Reaches NPCs (NpcLife): every NPC builds a dialogue, quest givers hand off to their quest, trade actions move items,
-## placeholders bake to a single draw call, the registry + schedule data are consistent.
+## Red Reaches NPCs (NpcLife + canon NPC file): every canon NPC spawns, talk() follows meet -> quest offer -> repeat, rec:/offer:
+## events act on the Ledger / quest hand-off, registry covers every NPC.
 func _test_npcs() -> void:
 	fresh()
 	GameState.items = {}
@@ -203,42 +204,35 @@ func _test_npcs() -> void:
 	var dlg := DialogueRunner.new()
 	add_child(dlg)
 	var region := RegionRunner.new()
-	region.setup("red_reaches", host)
+	runner = dlg
+	region.setup("red_reaches", self)
 	var life := NpcLife.new()
 	host.add_child(life)
-	life.setup(host, "res://game/world/red_reaches/rr_npcs.json", region, dlg, func() -> Vector3: return Vector3.ZERO, func(_x: float, _z: float) -> float: return 0.0, func() -> String: return "day", "red_reaches")
-	ok(life.ids().size() >= 8, "npc count >= 8 (%d)" % life.ids().size())
-	for id in life.ids():
-		var d := life.build_dialogue(str(id))
-		ok(not d.is_empty() and (d["lines"] as Array).size() >= 2, "npc %s builds a dialogue" % id)
-		var n: Dictionary = life._npcs[id]
-		var meshes := (n["body"] as Node3D).find_children("*", "MeshInstance3D", true, false)
-		ok(meshes.size() >= 1, "npc %s has a visual (%d meshes)" % [id, meshes.size()])
-	GameState.set_flag("rr_act1_done", true)
-	var qd := life.build_dialogue("rr_oda")
-	var has_q := false
-	for ln in qd.get("lines", []):
-		if ln is Dictionary and str(ln.get("event", "")).begins_with("npc"):
-			has_q = true
-	ok(has_q, "first talk to Oda hands off (event or quest)")
-	GameState.flags["_npc_met_rr_tavik"] = true
-	var td := life.build_dialogue("rr_tavik")
-	var hq := false
-	for ln in td.get("lines", []):
-		if ln is Dictionary and str(ln.get("event", "")) == "npcq:rr_grazer_crossing":
-			hq = true
-	ok(hq, "Tavik (act 1 done) offers rr_grazer_crossing")
-	ok(life.quest_state("rr_apprentice_arch") == "locked", "act-2 quest stays locked in act 1")
-	# trade action
-	life.build_dialogue("rr_dunnock")
-	GameState.add_item("lichen_culture", 1)
-	ok(life.handle_event("npca:rr_dunnock:0"), "npc action event consumed")
-	ok(GameState.item_count("red_slate_plate") == 1 and GameState.item_count("lichen_culture") == 0, "Dunnock trade lichen -> slate plate")
-	life.handle_event("npca:rr_dunnock:0")
-	ok(not bool(GameState.get_flag("_npc_ok", true)), "failed trade flags _npc_ok=false")
-	# registry covers every npc
+	life.setup(host, "res://game/world/red_reaches/rr_npcs.json", "res://game/canon/npcs/red_reaches.json", region, dlg, func() -> Vector3: return Vector3.ZERO, func(_x: float, _z: float) -> float: return 0.0, func() -> String: return "day", "red_reaches")
+	ok(life.ids().size() == 12, "12 canon npcs spawned (%d)" % life.ids().size())
 	var reg: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://game/art/models/npcs/npc_registry.json"))
 	for id in life.ids():
 		ok(reg["npcs"].has(id), "registry has %s" % id)
+		ok(DialogueRunner.exists("rrn_%s_meet" % id), "dialogue meet exists for %s" % id)
+	life.talk("oda_keth")
+	ok(dlg.dialogue_id == "rrn_oda_keth_meet", "first talk plays meet (%s)" % dlg.dialogue_id)
+	dlg.skip_all()
+	GameState.set_flag("rr_act1_done", true)
+	ok(life.quest_state("rr_well_line") == "open", "act 1 opens the Well Line quest")
+	life.talk("oda_keth")
+	ok(dlg.dialogue_id == "rrn_oda_keth_quest", "second talk offers the quest (%s)" % dlg.dialogue_id)
+	life.handle_event("offer:rr_well_line")
+	dlg.skip_all()
+	ok(life.quest_state("rr_apprentice_arch") == "locked", "act-2 quest stays locked in act 1")
+	var before := Ledger.count({"type": "chose"})
+	life.handle_event("rec:oda_cup")
+	ok(Ledger.count({"type": "chose"}) == before + 1, "rec: event records in the Ledger")
+	region.apply_quest_choice("rr_well_line", "hand_crank")
+	life.talk("oda_keth")
+	ok(dlg.dialogue_id == "rrn_oda_keth_turnin", "finished quest plays turn-in (%s)" % dlg.dialogue_id)
+	dlg.skip_all()
+	life.talk("oda_keth")
+	ok(dlg.dialogue_id in ["rrn_oda_keth_react", "rrn_oda_keth_repeat"], "then react/repeat (%s)" % dlg.dialogue_id)
+	dlg.skip_all()
 	host.queue_free()
 	dlg.queue_free()

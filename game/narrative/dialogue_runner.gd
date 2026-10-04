@@ -170,6 +170,8 @@ func _gate_ok(ln: Dictionary) -> bool:
 	return true
 
 func _flag_true(fl: String) -> bool:
+	if fl.begins_with("ledger_"):
+		return Ledger.exists({"tag": fl.substr(7)})
 	var v: Variant = GameState.get_flag(fl, false)
 	if v is bool:
 		return v

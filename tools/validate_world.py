@@ -23,6 +23,7 @@ floors = {f["id"]: f for f in layout.get("floors", [])}
 
 def in_floor(x, z):
     import math
+    if 245 <= x <= 297 and abs(z) <= 3.5: return True   # Ochre Span deck
     for f in floors.values():
         if f["type"] == "disc":
             if math.hypot(x - f["c"][0], z - f["c"][1]) <= f["r"] + 0.5: return True
@@ -33,34 +34,32 @@ def in_floor(x, z):
             if math.hypot(x - (ax + t * dx), z - (az + t * dz)) <= f["r"] + 0.5: return True
     return False
 
+canon = load(os.path.join(ROOT, "game/canon/npcs/red_reaches.json"))
+cmap = {n["id"]: n for n in canon.get("npcs", [])}
 ids = set()
 n_quest = 0
+stations = npcs.get("stations", {})
+for st, spots in stations.items():
+    for sp in spots:
+        if not in_floor(sp[0], sp[1]): errors.append(f"station {st}: spot {sp[:2]} is off the walkable floor")
 for n in npcs.get("npcs", []):
     i = n.get("id", "?")
     if i in ids: errors.append(f"npc {i}: duplicate id")
     ids.add(i)
-    for k in ("name", "role", "stations", "talk", "barks", "hotspot"):
-        if not n.get(k): errors.append(f"npc {i}: missing '{k}'")
-    if n.get("quest"):
-        n_quest += 1
-        if n["quest"] not in quests: errors.append(f"npc {i}: unknown quest {n['quest']}")
-    for e in n.get("events", []):
-        if e not in events: errors.append(f"npc {i}: unknown event {e}")
-    for s in n.get("stations", []):
-        if not in_floor(*s["p"]): errors.append(f"npc {i}: station {s['p']} is off the walkable floor")
-    for ph, idx in n.get("schedule", {}).items():
-        if ph not in ("dawn", "day", "dusk") or idx >= len(n["stations"]): errors.append(f"npc {i}: bad schedule {ph}:{idx}")
-    for t in n.get("talk", []):
-        if t.get("quest") and not n.get("quest"): errors.append(f"npc {i}: talk entry has quest but npc has none")
-        if t.get("play_event") and t["play_event"] not in events: errors.append(f"npc {i}: unknown play_event {t['play_event']}")
-        for ln in t.get("lines", []):
-            if len(ln.get("text", "")) < 3: errors.append(f"npc {i}: empty line")
+    c = cmap.get(i)
+    if not c:
+        errors.append(f"npc {i}: not in game/canon/npcs/red_reaches.json"); continue
+    if c.get("quests", {}).get("gives"): n_quest += 1
+    for sc in c["schedule"]:
+        if sc["station"] not in stations: errors.append(f"npc {i}: station {sc['station']} has no position")
     if i not in reg.get("npcs", {}): errors.append(f"npc {i}: missing from npc_registry.json")
+    for q in c.get("quests", {}).get("gives", []):
+        if q not in quests: errors.append(f"npc {i}: unknown quest {q}")
 for p in npcs.get("pairs", []):
     for k in ("a", "b"):
         if p[k] not in ids: errors.append(f"pair: unknown npc {p[k]}")
-missing = quests - {n["quest"] for n in npcs.get("npcs", []) if n.get("quest")}
-if missing: errors.append(f"quests without an NPC giver: {sorted(missing)}")
+given = {q for c in canon.get("npcs", []) for q in c.get("quests", {}).get("gives", [])}
+if quests - given: errors.append(f"quests without an NPC giver: {sorted(quests - given)}")
 for l in extra.get("loot", []):
     if l["item"] not in loot_items: errors.append(f"loot: {l['item']} not in region loot_table")
     if not in_floor(*l["p"]): errors.append(f"loot {l['item']} at {l['p']} is off the walkable floor")
