@@ -118,9 +118,9 @@ def _head(mb):
     # horns: rise from the crown, spread outward, lean forward, tips curl back inward (back view: lyre/crescent)
     for sx in (1, -1):
         # hook: rise, sweep back over the skull, tip curls down/forward (side view + front-view crescent)
-        hp = [V(sx * 0.034, -0.005, 2.10), V(sx * 0.05, -0.01, 2.20), V(sx * 0.07, 0.015, 2.30),
-              V(sx * 0.085, 0.065, 2.375), V(sx * 0.088, 0.135, 2.40), V(sx * 0.078, 0.19, 2.37),
-              V(sx * 0.066, 0.205, 2.315)]
+        hp = [V(sx * 0.034, -0.005, 2.10), V(sx * 0.07, -0.01, 2.19), V(sx * 0.12, 0.015, 2.27),
+              V(sx * 0.155, 0.065, 2.34), V(sx * 0.155, 0.135, 2.40), V(sx * 0.12, 0.19, 2.385),
+              V(sx * 0.085, 0.215, 2.33)]
         rings = mb.loft(hp, [0.024, 0.021, 0.018, 0.015, 0.012, 0.009, 0.005], [0.022, 0.019, 0.016, 0.013, 0.011, 0.008, 0.004],
                         n=8, part="horn", mat=BODY, side=(1, 0, 0), front=(0, -1, 0), samples=18, cap0="flat",
                         cap1="point",

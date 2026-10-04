@@ -54,7 +54,7 @@
   "reaching_strike": {
    "duration": 0.9333,
    "loop": false,
-   "impact": 0.4,
+   "impact": 0.367,
    "cancel": 0.6
   },
   "gravity_pull": {

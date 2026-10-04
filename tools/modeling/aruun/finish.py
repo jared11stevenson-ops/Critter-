@@ -455,8 +455,8 @@ def asymmetric_shoulders(ob):
 
 
 # Posture (sheet SIDE view): chest pitched forward, neck thrust forward; head shortened toward a mask (detail_head).
-HUNCH_CHEST = (1.50, 0.10)   # pivot z, radians (top goes forward = -Y)
-HUNCH_NECK = (1.70, 0.20)
+HUNCH_CHEST = (1.50, 0.20)   # pivot z, radians (top goes forward = -Y)
+HUNCH_NECK = (1.70, 0.28)
 SNOUT_K = 0.8                # head/jaw lengths in front of the skull centre are scaled by this
 ARM_PARTS = ("upperarm", "forearm", "hand", "armplate", "bracer", "pauldron", "claw", "morrow")
 FACE_PARTS = ("head", "jaw", "fang", "brow", "eye")
