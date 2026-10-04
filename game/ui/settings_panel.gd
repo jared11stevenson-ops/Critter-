@@ -40,7 +40,7 @@ func _ready() -> void:
 	_toggle(right, "Damage numbers", "show_damage_numbers")
 	_toggle(right, "Left-handed layout", "left_handed")
 	_toggle(right, "Reduce flashing", "reduce_flashing")
-	_toggle(right, "3D character models (preview)", "use_3d_models")
+	_toggle(right, "3D character models ", "use_3d_models")
 	var back := UiKit.button("Back", Vector2(300, 88))
 	back.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	back.pressed.connect(_close)
