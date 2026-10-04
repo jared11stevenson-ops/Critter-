@@ -1613,7 +1613,7 @@
     "music_slots": [
       {
         "slot": "storm_day",
-        "use": "overworld exploration",
+        "use": "open-country exploration",
         "notes": "Marimba over a rolling log drum, restless but warm."
       },
       {

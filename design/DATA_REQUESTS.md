@@ -58,3 +58,44 @@ Region events create these via `promise` (ids `zephyr_carry_bloom_word`, `nerit_
 - `rivals.json`: 6 new authored rivals (wren_calder, marek_vasko, joss_harrow, agent_pemberton, poacher_dara, ayla_fenwick), per-archetype `lines` (flee / defeated / negotiate / expose / release / bond) and more greetings (`exposed`, `defeated`, `bonded`). `lines` is a new key; the AI/dialogue layer can read it. No new traits or tactic strings were added.
 - Portraits: Bramvex and Nyxaris have only `default`; Solthrin has none. Reactions use those names.
 - `bonds.json` entries carry an extra `stage_hints` object (one line per stage) for the Bond Contract UI.
+
+## 7. Region lore layer, Red Reaches recipe and gear (Agent 3, content)
+No engine code was changed. New data: `game/canon/regions/red_reaches.json` (full recipe, previously missing), `game/canon/gear.json`, and a lore layer
+on all six region files. Validate with `python3 tools/validate_regions.py`, `python3 tools/validate_gear.py`, `python3 tools/spellcheck_canon.py`
+(all three are called from `tools/validate.sh`; the spell pass needs `pip install pyspellchecker` and is skipped if absent; names live in `tools/lore_words.txt`).
+
+### 7.1 New region keys (all data)
+- `story {title, logline, acts[3]}`: each act has `trigger` (Ledger spec DSL), `completes_flag` (a bool flag; each one has a `ledger_rules.flag_events` entry, so setting it records a Ledger event), `unlocks[]` (side quest / secret ids), `reward_gear[]`, and for act 3 `variants[{id, when, text, sets_flag}]` (pick the first whose `when` matches; set its flag; show its text).
+- `side_quests[]`: `{id, title, giver, landmark, summary, choices[{id,label,result,records[],consequence,sets_flag}], cares[], reward_gear[]}`. Choices work like descent-event choices (`records` go to `Ledger.record`, region = current region). `sets_flag` is a bool `GameState.set_flag` call. `consequence` is the epilogue line to show later (hub, codex or journal). A quest is offered once the act that lists it in `unlocks` has completed; it is done when any choice is taken.
+- `secrets[]`: `{id, name, hint, how_found, reward, ledger_tags, reward_gear[]}`. Triggers are described in prose in `how_found`; Agent 2 needs a per-secret trigger (location + condition) when the level layout exists.
+- `landmarks[]`, `ambient {npcs[], creature_behaviors[]}` (NPC `reacts {flag, line}`: after that flag is set, the NPC may say the line), `loot_table[]` (`{item, weight, source, rarity}`; `item` is a `gear.json` material id), `mood {palette, weather[], sounds[], music_slots[]}`.
+- Act-completion flags: `rr_act1_done`.. `rr_act3_done`, `cf_`, `ld_`, `rw_`, `bw_`, `fb_` equivalents. Quest flags such as `rr_wells_kept` are plain bool flags; no `flag_events` entry is needed because the choice already records.
+- Red Reaches `world_states` `event_weight_mods` name events `rr_pylon_night` and `rr_grazer_run`, which exist in its `descent_events`.
+
+### 7.2 gear.json runtime
+- Slots: weapon, charm, garment; one of each slot equipped per character (suggest an equipment screen in the Bond/Party UI, plus a Handler inventory).
+- `stats[]` is `{stat, op: add|mult, value}`. `stat` is a `balance.json` path. Aruun and Cigarra paths resolve in `balance.json` today. All others use `<character>.<hp|speed|accel|friction|dash_dist|dash_time|dash_iframes|dash_cd|poise>`; **please add a `balance.json` section per remaining character** (nerit, mollusk, zephyr, nyxaris, pharilux, scarlith, solmara, bramvex, solthrin) with at least those keys, or read `Balance.v()` with a default so gear never errors. `global.*`, `pickups.magnet_radius` and `burden.*` apply to the whole party while the item is equipped.
+- Apply order: base, then all `add`, then all `mult`. Direction rules for "buff vs cost" are in `tools/validate_gear.py` (`LOWER_IS_BETTER`).
+- Equipment should be applied in `Actor` setup (`Balance.v("aruun.hp") + gear adds` ... ); the loadout can be stored in `GameState` as `{character: {weapon, charm, garment}}` and saved.
+- Items are granted by the `reward_gear` of the act, quest or secret that names them (grant on completion of any choice of a quest). Aruun's items are also the visible cosmetic set for his 3D model (cape, pauldrons, mace head); no art is made yet.
+
+### 7.3 Hook ids (`hooks[]`, special effects not expressible as stats; engine or kits must implement or ignore)
+| Hook | Item | Effect wanted |
+|---|---|---|
+| `morrow_brace_on_reaching_strike` | aruun_morrow_foundation | Reaching Strike leaves a 3 s brace field at the impact point that halves damage to allies standing in it |
+| `dead_route_replay` | cigarra_dead_route_sphere | Premonition also shows the last 2 s of each ghost's path in reverse |
+| `light_relocation_range` | nerit_stilled_lantern | Light Relocation range +30 percent; relocated light never wakes sleeping enemies |
+| `borrowed_seconds_extends_with_anchor` | mollusk_unfinished_anchor | Temporal Inertia duration +25 percent; ends with a visible "consequence" pulse |
+| `pollination_trail_on_dash` | zephyr_everbloom_sprig | Dash leaves a petal trail that slows enemies for 1.5 s |
+| `silk_pattern_zone_on_dash` | nyxaris_unworn_garment | Dash lays a short cold-silk strip that slows and marks enemies |
+| `sealed_oath_aura` | pharilux_amber_oath_mantle | Allies within 4 m take 10 percent less damage while a promise is active |
+| `ledger_blank_page_unsellable` | scarlith_not_for_sale_ledger | Item cannot be sold or traded (`not_for_sale` Ledger tag on first equip) |
+| `tide_read_preview` | solmara_brass_gauge | Shows the next hazard timing (flood, pulse, tremor) on the HUD 2 s early |
+| `diplomacy_stagger_instead_of_damage` | bramvex_vigil_diplomacy | Heavy hit staggers longer and records `nonviolent` on non-lethal clears |
+| `laid_path_can_be_closed_by_player` | solthrin_unlit_road_mantle | A path he lays can be closed by interacting with it (records `route_closed`) |
+
+### 7.4 Other asks
+- Materials (`gear.json materials`, 48 entries across six origin regions, plus the five existing `balance.json` pickups): add a crafting/inventory UI later; `consumable` kind items restore HP or a resource (`keth_water_flask`, `plankton_light_vial`, `taro_root`, `steam_lily_petal`, `honey_thistle_comb`). Loot tables use `weight`, `rarity` and `source` (drop source text), and should be rolled per region at chest, creature-drop and secret rewards.
+- New creature ids used by the lore layer exist as ambient behaviors only; `canon.json` species still lack them (see section 3).
+- Moods: `mood.palette` (primary, secondary, accent, shadow, highlight and region-specific keys) should drive the region's grading and fog; `mood.music_slots[].slot` names are the cue slot ids for the audio pass (`tools/audio`).
+- Ambient NPC `schedule` is descriptive text for now.
