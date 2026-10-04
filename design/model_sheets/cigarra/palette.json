@@ -76,5 +76,24 @@
    "hex": "#d2c578",
    "share": 0.025
   }
- ]
+ ],
+ "game_palette": {
+  "intent": "Pop against red/ochre desert: acid yellow-green wings + gold + violet glow; stays inside the sheet's olive/violet/white-blonde family.",
+  "shader": "game/art/shaders/character_pop.gd PALETTES.cigarra",
+  "sat_lift": 1.22,
+  "val_lift": 1.12,
+  "contrast": 1.12,
+  "hues": {
+   "wing_lime": "#b0d63a",
+   "wing_cell_violet": "#46286f",
+   "gold": "#ffc22e",
+   "jacket_violet": "#453559",
+   "hair": "#faf0c8",
+   "skin": "#e0a375",
+   "moss": "#a9b81f"
+  },
+  "rim": "#ccff40",
+  "emissive_accent": "#c75aff (third eye, crown highlights), gold ring",
+  "outline": "#0f051f"
+ }
 }
