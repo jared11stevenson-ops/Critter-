@@ -81,6 +81,7 @@ func _ready() -> void:
 		btn_ab.append(b)
 	btn_dash = _btn("dash", 96, "DASH")
 	btn_dash.base_col = UiKit.CARD_EDGE
+	btn_dash.icon = UiKit.ability_icon("dash")
 	btn_interact = _btn("interact", 96, "")
 	btn_interact.pill = true
 	btn_interact.custom_minimum_size = Vector2(230, 96)
@@ -98,6 +99,7 @@ func _ready() -> void:
 	btn_contain.visible = false
 	btn_scan = _btn("scan", 92, "SCAN")
 	btn_scan.base_col = Color("#183a42")
+	btn_scan.icon = UiKit.ability_icon("scan")
 	btn_scan.ring_col = UiKit.SCAN
 	btn_pause = _btn("", 88, "II")
 	btn_pause.ring_col = UiKit.PARCHMENT
@@ -275,6 +277,7 @@ func _refresh_ability_icons() -> void:
 		var b: TouchButton = btn_ab[i]
 		var aid: String = l.kit.ability_ids[i]
 		b.icon = UiKit.ability_icon(aid)
+		b.ring_col = UiKit.char_color(l.char_id).lightened(0.25)
 		b.glyph = UiKit.ability_glyph(aid)
 		b.caption = str(Canon.ability(aid).get("name", aid)).to_upper()
 		b.queue_redraw()
