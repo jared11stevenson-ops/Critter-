@@ -1,71 +1,565 @@
 {
-  "_doc": "Ledger rules (Lead-owned data; Agent 3 may extend 'values', 'summaries', 'dialogue_events'). Tags on events are the shared vocabulary: characters judge events through their 'values' (tag -> score), the debrief renders 'summaries' (tag -> template), flags become events via 'flag_events'.",
-  "initial_bonds": ["aruun", "cigarra"],
-
+  "_doc": "Ledger rules (Lead-owned data; Agent 3 may extend 'values', 'summaries', 'dialogue_events'). Tags on events are the shared vocabulary: characters judge events through their 'values' (tag -> score), the debrief renders 'summaries' (tag -> template), flags become events via 'flag_events'. Agent 3 round 2: values for the whole cast, new tag vocabulary (see design/DATA_REQUESTS.md for producers).",
+  "initial_bonds": [
+    "aruun",
+    "cigarra"
+  ],
   "flag_events": {
-    "grazers_harmed":      {"type": "harmed",  "target": "dust_grazer_herd", "tags": ["harm_wildlife", "keystone"], "weight": 3},
-    "beetles_calmed":      {"type": "helped",  "target": "plate_beetle_herd", "tags": ["calmed_wildlife", "nonviolent", "spared"], "weight": 3},
-    "burden_done":         {"type": "helped",  "target": "ochre_span", "tags": ["burden", "protect_weak", "stewardship"], "weight": 4},
-    "boss_defeated":       {"type": "defeated", "target": "augur_rig", "tags": ["combat", "boss"], "weight": 4},
-    "ochre_span=braced":   {"type": "chose",   "target": "ochre_span", "tags": ["braced_structure", "stewardship", "burden"], "weight": 5},
-    "ochre_span=failing":  {"type": "chose",   "target": "ochre_span", "tags": ["extraction", "dominion_favor"], "weight": 4},
-    "rescued_grazer":      {"type": "helped",  "target": "dust_grazer", "tags": ["protect_weak", "stewardship"], "weight": 2},
-    "first_scan_done":     {"type": "discovered", "target": "scanner", "tags": ["discovery", "curiosity"], "weight": 1},
-    "combo_unlocked":      {"type": "bonded_pair", "target": "aruun_cigarra", "tags": ["trust"], "weight": 2},
-    "promised_zephyr":     {"promise": {"id": "zephyr_bring_both_home", "to": "zephyr", "template": "bring_both_home"}}
+    "grazers_harmed": {
+      "type": "harmed",
+      "target": "dust_grazer_herd",
+      "tags": [
+        "harm_wildlife",
+        "keystone"
+      ],
+      "weight": 3
+    },
+    "beetles_calmed": {
+      "type": "helped",
+      "target": "plate_beetle_herd",
+      "tags": [
+        "calmed_wildlife",
+        "nonviolent",
+        "spared"
+      ],
+      "weight": 3
+    },
+    "burden_done": {
+      "type": "helped",
+      "target": "ochre_span",
+      "tags": [
+        "burden",
+        "protect_weak",
+        "stewardship"
+      ],
+      "weight": 4
+    },
+    "boss_defeated": {
+      "type": "defeated",
+      "target": "augur_rig",
+      "tags": [
+        "combat",
+        "boss"
+      ],
+      "weight": 4
+    },
+    "ochre_span=braced": {
+      "type": "chose",
+      "target": "ochre_span",
+      "tags": [
+        "braced_structure",
+        "stewardship",
+        "burden"
+      ],
+      "weight": 5
+    },
+    "ochre_span=failing": {
+      "type": "chose",
+      "target": "ochre_span",
+      "tags": [
+        "extraction",
+        "dominion_favor"
+      ],
+      "weight": 4
+    },
+    "rescued_grazer": {
+      "type": "helped",
+      "target": "dust_grazer",
+      "tags": [
+        "protect_weak",
+        "stewardship"
+      ],
+      "weight": 2
+    },
+    "first_scan_done": {
+      "type": "discovered",
+      "target": "scanner",
+      "tags": [
+        "discovery",
+        "curiosity"
+      ],
+      "weight": 1
+    },
+    "combo_unlocked": {
+      "type": "bonded_pair",
+      "target": "aruun_cigarra",
+      "tags": [
+        "trust"
+      ],
+      "weight": 2
+    },
+    "promised_zephyr": {
+      "promise": {
+        "id": "zephyr_bring_both_home",
+        "to": "zephyr",
+        "template": "bring_both_home"
+      }
+    }
   },
-
   "dialogue_events": {
-    "hub_lab_mara": {"type": "talked", "target": "mara", "tags": ["social"]}
+    "hub_lab_mara": {
+      "type": "talked",
+      "target": "mara",
+      "tags": [
+        "social"
+      ]
+    }
   },
-
   "values": {
-    "aruun":   {"protect_weak": 1.5, "burden": 2.0, "braced_structure": 3.0, "extraction": -2.5, "dominion_favor": -1.0,
-                "harm_wildlife": -2.0, "calmed_wildlife": 1.5, "spared": 1.0, "nonviolent": 0.5, "kill_wildlife": -0.1,
-                "promise_kept": 2.0, "promise_loophole": -1.0, "promise_bent": 1.0, "promise_broken": -4.0, "casualty": -2.0},
-    "cigarra": {"harm_wildlife": -1.0, "spared": 1.0, "nonviolent": 1.5, "curiosity": 1.0, "discovery": 0.4, "extraction": -0.5,
-                "braced_structure": 1.0, "promise_kept": 1.5, "promise_loophole": 1.0, "promise_bent": 0.5, "promise_broken": -3.0, "casualty": -2.0},
-    "zephyr":  {"promise_kept": 3.0, "promise_loophole": 2.5, "promise_bent": 0.5, "promise_broken": -6.0, "spared": 0.5, "curiosity": 0.5},
-    "bramvex": {"protect_weak": 1.0, "nonviolent": 0.5, "extraction": -1.0, "casualty": -3.0, "promise_kept": 2.0, "promise_broken": -3.0, "stewardship": 0.5},
-    "mara":    {"stewardship": 2.5, "extraction": -2.0, "harm_wildlife": -2.5, "spared": 1.5, "discovery": 0.5, "nonviolent": 1.0, "promise_kept": 1.5, "promise_broken": -2.0},
-    "dexter":  {"extraction": 2.0, "dominion_favor": 2.0, "braced_structure": -0.5, "discovery": 1.0, "combat": 0.2, "boss": 0.5}
+    "aruun": {
+      "protect_weak": 1.5,
+      "burden": 2.0,
+      "braced_structure": 3.0,
+      "extraction": -2.5,
+      "dominion_favor": -1.0,
+      "harm_wildlife": -2.0,
+      "calmed_wildlife": 1.5,
+      "spared": 1.0,
+      "nonviolent": 0.5,
+      "kill_wildlife": -0.1,
+      "promise_kept": 2.0,
+      "promise_loophole": -1.0,
+      "promise_bent": 1.0,
+      "promise_broken": -4.0,
+      "casualty": -2.0,
+      "evacuation": 1.5,
+      "rescue_civilians": 1.5,
+      "delay_used": 0.5,
+      "consequence_faced": 1.0,
+      "route_laid": 1.0,
+      "shortcut": -1.0,
+      "glory_seeking": -1.0,
+      "redundant_design": 2.0,
+      "amends": 1.0,
+      "neglect": -1.0
+    },
+    "cigarra": {
+      "harm_wildlife": -1.0,
+      "spared": 1.0,
+      "nonviolent": 1.5,
+      "curiosity": 1.0,
+      "discovery": 0.4,
+      "extraction": -0.5,
+      "braced_structure": 1.0,
+      "promise_kept": 1.5,
+      "promise_loophole": 1.0,
+      "promise_bent": 0.5,
+      "promise_broken": -3.0,
+      "casualty": -2.0,
+      "foresight_used": 0.5,
+      "improvised": 1.0,
+      "certainty_trusted": 0.5,
+      "chose_unseen": 1.5,
+      "forced_exposure": -1.0,
+      "privacy_respected": 0.5,
+      "trafficked": -2.0,
+      "amends": 1.0
+    },
+    "zephyr": {
+      "promise_kept": 3.0,
+      "promise_loophole": 2.5,
+      "promise_bent": 0.5,
+      "promise_broken": -6.0,
+      "spared": 0.5,
+      "curiosity": 0.5,
+      "courier_delivered": 2.0,
+      "promise_made": 1.0,
+      "coercion": -2.5,
+      "rules_bent_fun": 1.0,
+      "route_laid": 0.5,
+      "amends": 1.0
+    },
+    "bramvex": {
+      "protect_weak": 1.0,
+      "nonviolent": 0.5,
+      "extraction": -1.0,
+      "casualty": -3.0,
+      "promise_kept": 2.0,
+      "promise_broken": -3.0,
+      "stewardship": 0.5,
+      "evacuation": 2.5,
+      "exit_planned": 2.0,
+      "rescue_civilians": 1.5,
+      "glory_seeking": -2.5,
+      "rival_negotiated": 1.5,
+      "rival_released": 0.5,
+      "kill_wildlife": -0.3,
+      "shelter": 1.0,
+      "trafficked": -2.0,
+      "amends": 1.0,
+      "neglect": -1.5
+    },
+    "mara": {
+      "stewardship": 2.5,
+      "extraction": -2.0,
+      "harm_wildlife": -2.5,
+      "spared": 1.5,
+      "discovery": 0.5,
+      "nonviolent": 1.0,
+      "promise_kept": 1.5,
+      "promise_broken": -2.0,
+      "rescue_civilians": 1.5,
+      "trafficked": -3.0,
+      "claim_jump": -1.5,
+      "privacy_respected": 1.0,
+      "evidence": 1.0,
+      "rival_exposed": 1.0,
+      "rival_negotiated": 1.0,
+      "consent_asked": 2.0,
+      "amends": 1.0,
+      "neglect": -1.5
+    },
+    "dexter": {
+      "extraction": 2.0,
+      "dominion_favor": 2.0,
+      "braced_structure": -0.5,
+      "discovery": 1.0,
+      "combat": 0.2,
+      "boss": 0.5,
+      "leverage": 2.0,
+      "sacrifice_for_many": 1.5,
+      "protect_personnel": 2.0,
+      "waste": -2.0,
+      "cruelty": -3.0,
+      "evidence": 1.0,
+      "curiosity": 0.5,
+      "rival_negotiated": 1.0,
+      "promise_kept": 1.0,
+      "promise_loophole": 1.0,
+      "stewardship": -0.5,
+      "spared": -0.2
+    },
+    "nerit": {
+      "privacy_respected": 2.5,
+      "darkness_kept": 3.0,
+      "forced_exposure": -3.5,
+      "discovery": 0.3,
+      "curiosity": 0.5,
+      "protect_weak": 1.0,
+      "harm_wildlife": -1.0,
+      "calmed_wildlife": 1.0,
+      "spared": 0.5,
+      "nonviolent": 0.5,
+      "extraction": -1.0,
+      "dominion_favor": -1.0,
+      "evidence": -0.5,
+      "amends": 1.0,
+      "promise_kept": 1.0,
+      "promise_broken": -2.0,
+      "casualty": -1.5,
+      "neglect": -0.5
+    },
+    "mollusk": {
+      "delay_used": 1.5,
+      "consequence_faced": 3.0,
+      "consequence_dodged": -3.5,
+      "evacuation": 2.0,
+      "rescue_civilians": 2.0,
+      "protect_weak": 1.0,
+      "burden": 1.0,
+      "braced_structure": 2.0,
+      "redundant_design": 1.5,
+      "extraction": -1.0,
+      "casualty": -2.5,
+      "harm_wildlife": -0.5,
+      "promise_kept": 1.5,
+      "promise_loophole": -0.5,
+      "promise_broken": -3.0,
+      "amends": 1.0,
+      "neglect": -1.5
+    },
+    "nyxaris": {
+      "pattern_respected": 3.0,
+      "accepted_boundary": 2.5,
+      "silk_taken": -4.0,
+      "pattern_destroyed": -3.0,
+      "extraction": -3.0,
+      "extraction_refused": 3.0,
+      "dominion_favor": -1.5,
+      "harm_wildlife": -1.0,
+      "stewardship": 1.0,
+      "spared": 0.5,
+      "evidence": 1.0,
+      "rival_exposed": 1.5,
+      "claim_jump": -1.5,
+      "amends": 1.0,
+      "promise_kept": 1.5,
+      "promise_loophole": -0.5,
+      "promise_broken": -3.0,
+      "casualty": -1.0
+    },
+    "pharilux": {
+      "threshold_kept": 2.5,
+      "sealed_kept": 3.0,
+      "pressed_origin": -2.0,
+      "threshold_breached": -4.0,
+      "discovery": 0.2,
+      "curiosity": 0.3,
+      "evidence": -0.3,
+      "extraction": -1.0,
+      "stewardship": 1.0,
+      "protect_weak": 1.0,
+      "calmed_wildlife": 0.5,
+      "harm_wildlife": -0.5,
+      "casualty": -1.0,
+      "amends": 1.0,
+      "promise_kept": 1.5,
+      "promise_broken": -2.5
+    },
+    "scarlith": {
+      "salvage_fair": 2.5,
+      "not_for_sale": 3.0,
+      "claim_jump": -3.0,
+      "trafficked": -4.0,
+      "trafficking_exposed": 2.0,
+      "extraction": 0.5,
+      "dominion_favor": 0.3,
+      "leverage": 1.0,
+      "braced_structure": -0.3,
+      "discovery": 0.8,
+      "containment": 0.3,
+      "waste": -1.5,
+      "stewardship": 0.3,
+      "promise_kept": 1.5,
+      "promise_loophole": 1.5,
+      "promise_broken": -2.0,
+      "amends": 1.0,
+      "casualty": -0.5
+    },
+    "solmara": {
+      "tide_read": 2.5,
+      "emotion_translated": 3.0,
+      "tide_disturbed": -3.0,
+      "flood_averted": 2.0,
+      "curiosity": 1.0,
+      "discovery": 0.8,
+      "stewardship": 1.0,
+      "braced_structure": 1.0,
+      "harm_wildlife": -1.0,
+      "calmed_wildlife": 0.5,
+      "extraction": -0.5,
+      "amends": 1.0,
+      "promise_kept": 1.0,
+      "promise_broken": -1.5,
+      "casualty": -1.0
+    },
+    "solthrin": {
+      "route_laid": 2.5,
+      "route_closed": 2.0,
+      "delivered": 3.0,
+      "speed_only": -3.5,
+      "shortcut": -1.5,
+      "evacuation": 2.0,
+      "rescue_civilians": 1.5,
+      "burden": 1.0,
+      "stewardship": 1.0,
+      "extraction": -1.0,
+      "dominion_favor": -1.0,
+      "casualty": -1.5,
+      "amends": 1.0,
+      "promise_kept": 2.0,
+      "promise_loophole": -1.0,
+      "promise_broken": -3.0,
+      "harm_wildlife": -0.5,
+      "neglect": -1.0
+    }
   },
-
   "opinion_lines": {
-    "aruun":   {"up": "Aruun trusts your judgment more.", "down": "Aruun is quieter around you."},
-    "cigarra": {"up": "Cigarra finds you more interesting.", "down": "Cigarra's futures around you are getting noisier."},
-    "zephyr":  {"up": "Zephyr thinks you understand how promises work.", "down": "Zephyr is keeping count."},
-    "bramvex": {"up": "Bramvex nods when you pass.", "down": "Bramvex is counting exits again."},
-    "mara":    {"up": "Mara is proud of the work.", "down": "Mara is worried about your choices."},
-    "dexter":  {"up": "Dexter thinks you are more useful than expected.", "down": "Dexter is disappointed in you."}
+    "aruun": {
+      "up": "Aruun trusts your judgment more.",
+      "down": "Aruun is quieter around you."
+    },
+    "cigarra": {
+      "up": "Cigarra finds you more interesting.",
+      "down": "Cigarra's futures around you are getting noisier."
+    },
+    "zephyr": {
+      "up": "Zephyr thinks you understand how promises work.",
+      "down": "Zephyr is keeping count."
+    },
+    "bramvex": {
+      "up": "Bramvex nods when you pass.",
+      "down": "Bramvex is counting exits again."
+    },
+    "mara": {
+      "up": "Mara is proud of the work.",
+      "down": "Mara is worried about your choices."
+    },
+    "dexter": {
+      "up": "Dexter thinks you are more useful than expected.",
+      "down": "Dexter is disappointed in you."
+    },
+    "nerit": {
+      "up": "Nerit lets a little more of their light stay near you.",
+      "down": "Nerit has turned the lights down around you."
+    },
+    "mollusk": {
+      "up": "Mollusk walks at your pace now.",
+      "down": "Mollusk keeps a long, slow eye on you."
+    },
+    "nyxaris": {
+      "up": "Nyxaris has stopped counting the threads between you.",
+      "down": "Nyxaris adds a line to the pattern about you."
+    },
+    "pharilux": {
+      "up": "Pharilux's beacon rests on you a moment longer.",
+      "down": "Pharilux turns his lantern away."
+    },
+    "scarlith": {
+      "up": "Scarlith marks you down as a fair dealer.",
+      "down": "Scarlith is reassessing what you are worth."
+    },
+    "solmara": {
+      "up": "Solmara reads you with less static.",
+      "down": "Solmara senses a disturbance around you."
+    },
+    "solthrin": {
+      "up": "Solthrin's grove glows warmer when you walk beside it.",
+      "down": "A branch on Solthrin's grove goes dark."
+    }
   },
-
   "summaries": {
-    "harm_wildlife":    "The {target} was harmed. Their droppings seed the lichen that holds the soil together.",
-    "calmed_wildlife":  "The {target} walked away calm.",
+    "harm_wildlife": "The {target} was harmed. Their droppings seed the lichen that holds the soil together.",
+    "calmed_wildlife": "The {target} walked away calm.",
     "braced_structure": "The Ochre Span is braced. It will carry people for another generation.",
-    "extraction":       "The Dominion contract is satisfied. The Span will stand a season, maybe two.",
-    "burden":           "You held the span long enough for everyone to cross.",
-    "promise_kept":     "You kept your word to {target}, letter and spirit.",
+    "extraction": "The Dominion contract is satisfied. The Span will stand a season, maybe two.",
+    "burden": "You held the span long enough for everyone to cross.",
+    "promise_kept": "You kept your word to {target}, letter and spirit.",
     "promise_loophole": "You kept your word to {target} to the letter. They noticed the difference.",
-    "promise_bent":     "You kept the spirit of your word to {target}, not the wording.",
-    "promise_broken":   "You broke your word to {target}.",
-    "boss":             "AUGUR-7 is down.",
-    "containment":      "You contained a {target}. It will need a Habitat chain.",
-    "rival_released":   "You let {target} walk away.",
+    "promise_bent": "You kept the spirit of your word to {target}, not the wording.",
+    "promise_broken": "You broke your word to {target}.",
+    "boss": "AUGUR-7 is down.",
+    "containment": "You contained a {target}. It will need a Habitat chain.",
+    "rival_released": "You let {target} walk away.",
     "rival_negotiated": "You reached terms with {target}.",
-    "rival_exposed":    "You exposed {target}.",
-    "rival_escaped":    "{target} got away. They will remember how.",
-    "rival_defeated":   "{target} was stopped.",
-    "casualty":         "{target} went down. Every second you borrow is a debt."
+    "rival_exposed": "You exposed {target}.",
+    "rival_escaped": "{target} got away. They will remember how.",
+    "rival_defeated": "{target} was stopped.",
+    "casualty": "{target} went down. Every second you borrow is a debt.",
+    "privacy_respected": "You left something in the dark that deserved the dark.",
+    "darkness_kept": "You chose not to light the {target}. Nerit noticed.",
+    "forced_exposure": "You dragged something into the light that did not ask to be seen.",
+    "delay_used": "You bought time. Every borrowed second is a debt.",
+    "consequence_faced": "The delay ran out. You were standing there when it did.",
+    "consequence_dodged": "You used the delay to be somewhere else when it ended.",
+    "salvage_fair": "You took only what was truly abandoned.",
+    "claim_jump": "You took something that still had an owner.",
+    "not_for_sale": "You refused a sale. Some things are not inventory.",
+    "trafficked": "Someone was moved against their will, and you were part of it.",
+    "trafficking_exposed": "You exposed a trafficking line.",
+    "pattern_respected": "You read the silk before you touched it.",
+    "accepted_boundary": "You stayed behind the line the silk drew.",
+    "silk_taken": "You took silk that was not offered.",
+    "pattern_destroyed": "A pattern that took a season to weave is gone.",
+    "extraction_refused": "You turned down an extraction contract.",
+    "threshold_kept": "You crossed a threshold carefully.",
+    "sealed_kept": "You left a closed thing closed.",
+    "pressed_origin": "You pressed for an answer that was not offered.",
+    "threshold_breached": "You forced a threshold that was not yours.",
+    "tide_read": "You moved with the water instead of against it.",
+    "tide_disturbed": "You broke a tide, and the water remembers.",
+    "emotion_translated": "You explained a feeling to someone who counts in tides.",
+    "flood_averted": "The water went where it was needed.",
+    "exit_planned": "You found the second exit before you needed it.",
+    "evacuation": "Everyone who could be moved was moved.",
+    "rescue_civilians": "Civilians crossed because of you.",
+    "glory_seeking": "You chose the fight when you did not have to.",
+    "shelter": "You gave shelter to someone with nowhere to go.",
+    "route_laid": "You laid a road across hard ground.",
+    "route_closed": "You closed a road on purpose, and said why.",
+    "delivered": "What had to arrive, arrived.",
+    "speed_only": "You hurried a journey that did not need hurrying.",
+    "shortcut": "You took a shortcut that someone else will have to repair.",
+    "foresight_used": "You paid Future-Noise to look ahead.",
+    "improvised": "You skipped the plan, and it worked.",
+    "chose_unseen": "You chose the branch Cigarra could not see.",
+    "courier_delivered": "A message arrived because you carried it.",
+    "coercion": "You made someone agree who had no room to refuse.",
+    "consent_asked": "You asked before you took.",
+    "redundant_design": "You built it so one failure will not be the last.",
+    "leverage": "You now hold leverage over the {target}.",
+    "sacrifice_for_many": "A cost was accepted for a larger number.",
+    "protect_personnel": "You protected your own people first.",
+    "waste": "Something useful was thrown away.",
+    "cruelty": "A cruelty with no purpose was done.",
+    "amends": "You made amends to {target}.",
+    "rival_bonded": "{target} accepted a Bond Contract.",
+    "neglect": "You left someone behind that you could have carried."
   },
-
   "promise_templates": {
     "bring_both_home": {
       "wording": "I promise to bring them both home.",
       "resolve_on": "return",
-      "letter": [{"type": "return", "data_eq": {"all_conscious": true}}],
-      "spirit": [{"type": "return"}, {"none": {"tag": "casualty"}}],
+      "letter": [
+        {
+          "type": "return",
+          "data_eq": {
+            "all_conscious": true
+          }
+        }
+      ],
+      "spirit": [
+        {
+          "type": "return"
+        },
+        {
+          "none": {
+            "tag": "casualty"
+          }
+        }
+      ],
+      "break_on": []
+    },
+    "carry_bloom_word": {
+      "wording": "I promise to carry this word to the far bloom before it closes.",
+      "resolve_on": "",
+      "letter": [
+        {
+          "type": "helped",
+          "tag": "courier_delivered"
+        }
+      ],
+      "spirit": [
+        {
+          "type": "helped",
+          "tag": "courier_delivered"
+        },
+        {
+          "none": {
+            "tag": "coercion"
+          }
+        }
+      ],
+      "break_on": []
+    },
+    "hold_the_dark": {
+      "wording": "I promise not to light the den while it sleeps.",
+      "resolve_on": "return",
+      "letter": [
+        {
+          "type": "return"
+        },
+        {
+          "none": {
+            "tag": "forced_exposure"
+          }
+        }
+      ],
+      "spirit": [
+        {
+          "type": "return"
+        },
+        {
+          "none": {
+            "tag": "forced_exposure"
+          }
+        },
+        {
+          "none": {
+            "tag": "harm_wildlife"
+          }
+        }
+      ],
       "break_on": []
     }
   }

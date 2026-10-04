@@ -1,17 +1,864 @@
 {
-  "_doc": "Bond Contracts: how a sapient character is acquired. Each bond is a staged, character-specific trust quest built around their contradiction (Agent 3 authors the rest of the cast; Lead validates). 'requires' maps a stage to a spec (see design/LEDGER_SPEC.md). Empty requirement = advanced manually by gameplay (Ledger.set_bond). A bond never silently disappears: failing a test sends the character to 'estranged', with an optional 'reconcile_if'.",
+  "_doc": "Bond Contracts: how a sapient character is acquired. Each bond is a staged, character-specific trust quest built around their contradiction (Agent 3 authors the rest of the cast; Lead validates). 'requires' maps a stage to a spec (see design/LEDGER_SPEC.md). Empty requirement = advanced manually by gameplay (Ledger.set_bond). A bond never silently disappears: failing a test sends the character to 'estranged', with an optional 'reconcile_if'. Agent 3 round 2: estrange_if always carries a 'not amends' guard so a reconcile (event type 'amends' targeting the character) does not flip-flop; see DATA_REQUESTS.md. 'stage_hints' (extra key) are one-line UI hints per stage.",
   "zephyr": {
     "contradiction": "Treats rules as games but treats promises as sacred.",
-    "stages": ["unmet", "met", "interested", "tested", "bonded"],
+    "stages": [
+      "unmet",
+      "met",
+      "interested",
+      "tested",
+      "bonded"
+    ],
     "requires": {
-      "met":        {"event": {"type": "talked", "target": "zephyr"}},
-      "interested": {"promise": {"id": "zephyr_bring_both_home", "status_in": ["open", "kept", "loophole", "bent"]}},
-      "tested":     {"promise": {"id": "zephyr_bring_both_home", "status_in": ["kept", "loophole", "bent"]}},
-      "bonded":     {"all": [{"promise": {"id": "zephyr_bring_both_home", "status_in": ["kept", "loophole"]}}, {"opinion_min": {"character": "zephyr", "min": 3}}]}
+      "met": {
+        "event": {
+          "type": "talked",
+          "target": "zephyr"
+        }
+      },
+      "interested": {
+        "promise": {
+          "id": "zephyr_bring_both_home",
+          "status_in": [
+            "open",
+            "kept",
+            "loophole",
+            "bent"
+          ]
+        }
+      },
+      "tested": {
+        "promise": {
+          "id": "zephyr_bring_both_home",
+          "status_in": [
+            "kept",
+            "loophole",
+            "bent"
+          ]
+        }
+      },
+      "bonded": {
+        "all": [
+          {
+            "promise": {
+              "id": "zephyr_bring_both_home",
+              "status_in": [
+                "kept",
+                "loophole"
+              ]
+            }
+          },
+          {
+            "opinion_min": {
+              "character": "zephyr",
+              "min": 3
+            }
+          }
+        ]
+      }
     },
-    "estrange_if": {"promise": {"id": "zephyr_bring_both_home", "status_in": ["broken"]}},
-    "reconcile_if": {"event": {"type": "promised", "target": "zephyr", "count_min": 2}},
+    "estrange_if": {
+      "all": [
+        {
+          "promise": {
+            "id": "zephyr_bring_both_home",
+            "status_in": [
+              "broken"
+            ]
+          }
+        },
+        {
+          "not": {
+            "event": {
+              "type": "promised",
+              "target": "zephyr",
+              "count_min": 2
+            }
+          }
+        }
+      ]
+    },
+    "reconcile_if": {
+      "event": {
+        "type": "promised",
+        "target": "zephyr",
+        "count_min": 2
+      }
+    },
     "reconcile_to": "interested",
-    "test_hint": "Zephyr wants a promise, worded carefully. Wording is the whole art."
+    "test_hint": "Zephyr wants a promise, worded carefully. Wording is the whole art.",
+    "stage_hints": {
+      "met": "Talk to Zephyr in the Common.",
+      "interested": "Make a promise, worded carefully.",
+      "tested": "Keep it, to the letter or the spirit.",
+      "bonded": "Keep it well enough that Zephyr says so."
+    }
+  },
+  "nerit": {
+    "contradiction": "Nerit creates visibility while believing some things deserve darkness.",
+    "stages": [
+      "unmet",
+      "met",
+      "interested",
+      "tested",
+      "bonded"
+    ],
+    "requires": {
+      "met": {
+        "event": {
+          "type": "talked",
+          "target": "nerit"
+        }
+      },
+      "interested": {
+        "event": {
+          "tag": "privacy_respected"
+        }
+      },
+      "tested": {
+        "event": {
+          "tag": "darkness_kept",
+          "min_weight": 3
+        }
+      },
+      "bonded": {
+        "all": [
+          {
+            "event": {
+              "tag": "privacy_respected",
+              "count_min": 2
+            }
+          },
+          {
+            "none": {
+              "tag": "forced_exposure",
+              "min_weight": 3
+            }
+          },
+          {
+            "opinion_min": {
+              "character": "nerit",
+              "min": 6
+            }
+          }
+        ]
+      }
+    },
+    "estrange_if": {
+      "all": [
+        {
+          "event": {
+            "tag": "forced_exposure",
+            "count_min": 2
+          }
+        },
+        {
+          "not": {
+            "event": {
+              "type": "amends",
+              "target": "nerit"
+            }
+          }
+        }
+      ]
+    },
+    "reconcile_if": {
+      "event": {
+        "type": "amends",
+        "target": "nerit"
+      }
+    },
+    "reconcile_to": "interested",
+    "test_hint": "Nerit follows people who know when not to turn the light on.",
+    "stage_hints": {
+      "met": "Talk to Nerit in the Common.",
+      "interested": "Leave something in the dark that wants the dark.",
+      "tested": "Choose not to light a thing when lighting it would be easy and useful.",
+      "bonded": "Keep respecting the dark, and never force anything into the light."
+    }
+  },
+  "mollusk": {
+    "contradiction": "He can delay consequences but believes consequences must eventually be faced.",
+    "stages": [
+      "unmet",
+      "met",
+      "interested",
+      "tested",
+      "bonded"
+    ],
+    "requires": {
+      "met": {
+        "event": {
+          "type": "talked",
+          "target": "mollusk"
+        }
+      },
+      "interested": {
+        "event": {
+          "tag": "delay_used"
+        }
+      },
+      "tested": {
+        "event": {
+          "tag": "consequence_faced"
+        }
+      },
+      "bonded": {
+        "all": [
+          {
+            "event": {
+              "tag": "delay_used",
+              "count_min": 2
+            }
+          },
+          {
+            "event": {
+              "tag": "consequence_faced",
+              "count_min": 2
+            }
+          },
+          {
+            "none": {
+              "tag": "consequence_dodged",
+              "min_weight": 3
+            }
+          },
+          {
+            "opinion_min": {
+              "character": "mollusk",
+              "min": 5
+            }
+          }
+        ]
+      }
+    },
+    "estrange_if": {
+      "all": [
+        {
+          "event": {
+            "tag": "consequence_dodged",
+            "count_min": 2
+          }
+        },
+        {
+          "not": {
+            "event": {
+              "type": "amends",
+              "target": "mollusk"
+            }
+          }
+        }
+      ]
+    },
+    "reconcile_if": {
+      "event": {
+        "type": "amends",
+        "target": "mollusk"
+      }
+    },
+    "reconcile_to": "interested",
+    "test_hint": "Mollusk will trust you with borrowed seconds once you show you spend them.",
+    "stage_hints": {
+      "met": "Talk to Mollusk. Slowly.",
+      "interested": "Buy time on a descent: hold a structure, stall a hazard.",
+      "tested": "Be present when the delay ends, and carry the result.",
+      "bonded": "Spend two delays well, and never run from the bill."
+    }
+  },
+  "nyxaris": {
+    "contradiction": "She creates beautiful things specifically to control danger.",
+    "stages": [
+      "unmet",
+      "met",
+      "interested",
+      "tested",
+      "bonded"
+    ],
+    "requires": {
+      "met": {
+        "event": {
+          "type": "talked",
+          "target": "nyxaris"
+        }
+      },
+      "interested": {
+        "event": {
+          "tag": "pattern_respected"
+        }
+      },
+      "tested": {
+        "event": {
+          "tag": "accepted_boundary"
+        }
+      },
+      "bonded": {
+        "all": [
+          {
+            "event": {
+              "tag": "pattern_respected",
+              "count_min": 2
+            }
+          },
+          {
+            "event": {
+              "tag": "accepted_boundary",
+              "count_min": 2
+            }
+          },
+          {
+            "any": [
+              {
+                "event": {
+                  "tag": "extraction_refused"
+                }
+              },
+              {
+                "rival": {
+                  "id": "agent_pemberton",
+                  "state_in": [
+                    "exposed",
+                    "defeated",
+                    "negotiated"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "none": {
+              "tag": "silk_taken",
+              "min_weight": 2
+            }
+          },
+          {
+            "opinion_min": {
+              "character": "nyxaris",
+              "min": 5
+            }
+          }
+        ]
+      }
+    },
+    "estrange_if": {
+      "all": [
+        {
+          "event": {
+            "tag": "silk_taken",
+            "min_weight": 2
+          }
+        },
+        {
+          "not": {
+            "event": {
+              "type": "amends",
+              "target": "nyxaris"
+            }
+          }
+        }
+      ]
+    },
+    "reconcile_if": {
+      "event": {
+        "type": "amends",
+        "target": "nyxaris"
+      }
+    },
+    "reconcile_to": "interested",
+    "test_hint": "Nyxaris keeps her distance until you can read a boundary and stay behind it.",
+    "stage_hints": {
+      "met": "Talk to Nyxaris. Do not step on the silk.",
+      "interested": "Read a silk pattern before you touch it.",
+      "tested": "Stay behind a boundary the silk drew, even when you could cross it.",
+      "bonded": "Refuse an extraction contract or deal with Helix's recovery agent, and take no silk uninvited."
+    }
+  },
+  "pharilux": {
+    "contradiction": "He guides others while refusing to explain where he came from.",
+    "stages": [
+      "unmet",
+      "met",
+      "interested",
+      "tested",
+      "bonded"
+    ],
+    "requires": {
+      "met": {
+        "event": {
+          "type": "talked",
+          "target": "pharilux"
+        }
+      },
+      "interested": {
+        "event": {
+          "tag": "threshold_kept"
+        }
+      },
+      "tested": {
+        "event": {
+          "tag": "sealed_kept",
+          "min_weight": 3
+        }
+      },
+      "bonded": {
+        "all": [
+          {
+            "event": {
+              "tag": "threshold_kept",
+              "count_min": 2
+            }
+          },
+          {
+            "event": {
+              "tag": "sealed_kept"
+            }
+          },
+          {
+            "none": {
+              "tag": "pressed_origin",
+              "count_min": 2
+            }
+          },
+          {
+            "none": {
+              "tag": "threshold_breached"
+            }
+          },
+          {
+            "opinion_min": {
+              "character": "pharilux",
+              "min": 5
+            }
+          }
+        ]
+      }
+    },
+    "estrange_if": {
+      "all": [
+        {
+          "any": [
+            {
+              "event": {
+                "tag": "pressed_origin",
+                "count_min": 3
+              }
+            },
+            {
+              "event": {
+                "tag": "threshold_breached"
+              }
+            }
+          ]
+        },
+        {
+          "not": {
+            "event": {
+              "type": "amends",
+              "target": "pharilux"
+            }
+          }
+        }
+      ]
+    },
+    "reconcile_if": {
+      "event": {
+        "type": "amends",
+        "target": "pharilux"
+      }
+    },
+    "reconcile_to": "interested",
+    "test_hint": "Pharilux walks with those who let a closed thing stay closed.",
+    "stage_hints": {
+      "met": "Talk to Pharilux. Watch more than you ask.",
+      "interested": "Cross a threshold carefully: a ruin, a shoreline, a seal.",
+      "tested": "Leave a sealed place sealed, though you could open it.",
+      "bonded": "Never press for his origin, never force a threshold."
+    }
+  },
+  "scarlith": {
+    "contradiction": "He believes everything has value and therefore risks treating everything as merchandise.",
+    "stages": [
+      "unmet",
+      "met",
+      "interested",
+      "tested",
+      "bonded"
+    ],
+    "requires": {
+      "met": {
+        "event": {
+          "type": "talked",
+          "target": "scarlith"
+        }
+      },
+      "interested": {
+        "event": {
+          "tag": "salvage_fair"
+        }
+      },
+      "tested": {
+        "event": {
+          "tag": "not_for_sale"
+        }
+      },
+      "bonded": {
+        "all": [
+          {
+            "event": {
+              "tag": "salvage_fair",
+              "count_min": 2
+            }
+          },
+          {
+            "event": {
+              "tag": "not_for_sale"
+            }
+          },
+          {
+            "none": {
+              "tag": "claim_jump",
+              "min_weight": 3
+            }
+          },
+          {
+            "none": {
+              "tag": "trafficked"
+            }
+          },
+          {
+            "opinion_min": {
+              "character": "scarlith",
+              "min": 5
+            }
+          }
+        ]
+      }
+    },
+    "estrange_if": {
+      "all": [
+        {
+          "any": [
+            {
+              "event": {
+                "tag": "trafficked"
+              }
+            },
+            {
+              "event": {
+                "tag": "claim_jump",
+                "count_min": 3
+              }
+            }
+          ]
+        },
+        {
+          "not": {
+            "event": {
+              "type": "amends",
+              "target": "scarlith"
+            }
+          }
+        }
+      ]
+    },
+    "reconcile_if": {
+      "event": {
+        "type": "amends",
+        "target": "scarlith"
+      }
+    },
+    "reconcile_to": "interested",
+    "test_hint": "Scarlith bonds with a fair dealer: take what is truly abandoned, and know what is not for sale.",
+    "stage_hints": {
+      "met": "Talk to Scarlith. Look down.",
+      "interested": "Salvage something that is truly abandoned.",
+      "tested": "Refuse a profitable sale because the thing is not inventory.",
+      "bonded": "Deal fairly twice, and never take what still has an owner."
+    }
+  },
+  "solmara": {
+    "contradiction": "Solmara understands enormous celestial systems but can misread individual emotion.",
+    "stages": [
+      "unmet",
+      "met",
+      "interested",
+      "tested",
+      "bonded"
+    ],
+    "requires": {
+      "met": {
+        "event": {
+          "type": "talked",
+          "target": "solmara"
+        }
+      },
+      "interested": {
+        "event": {
+          "tag": "tide_read"
+        }
+      },
+      "tested": {
+        "event": {
+          "tag": "emotion_translated"
+        }
+      },
+      "bonded": {
+        "all": [
+          {
+            "event": {
+              "tag": "tide_read",
+              "count_min": 2
+            }
+          },
+          {
+            "event": {
+              "tag": "emotion_translated",
+              "count_min": 2
+            }
+          },
+          {
+            "none": {
+              "tag": "tide_disturbed",
+              "min_weight": 3
+            }
+          },
+          {
+            "opinion_min": {
+              "character": "solmara",
+              "min": 5
+            }
+          }
+        ]
+      }
+    },
+    "estrange_if": {
+      "all": [
+        {
+          "event": {
+            "tag": "tide_disturbed",
+            "count_min": 2
+          }
+        },
+        {
+          "not": {
+            "event": {
+              "type": "amends",
+              "target": "solmara"
+            }
+          }
+        }
+      ]
+    },
+    "reconcile_if": {
+      "event": {
+        "type": "amends",
+        "target": "solmara"
+      }
+    },
+    "reconcile_to": "interested",
+    "test_hint": "Solmara warms to anyone who will translate a feeling into a tide.",
+    "stage_hints": {
+      "met": "Talk to Solmara. Mind the pipes.",
+      "interested": "Act with a tide instead of against it.",
+      "tested": "Explain what a person feels in terms Solmara can follow.",
+      "bonded": "Do it again, and never break a tide for convenience."
+    }
+  },
+  "bramvex": {
+    "contradiction": "A professional soldier who distrusts anyone eager for war.",
+    "stages": [
+      "unmet",
+      "met",
+      "interested",
+      "tested",
+      "bonded"
+    ],
+    "requires": {
+      "met": {
+        "event": {
+          "type": "talked",
+          "target": "bramvex"
+        }
+      },
+      "interested": {
+        "event": {
+          "tag": "exit_planned"
+        }
+      },
+      "tested": {
+        "event": {
+          "tag": "evacuation"
+        }
+      },
+      "bonded": {
+        "all": [
+          {
+            "event": {
+              "tag": "exit_planned",
+              "count_min": 2
+            }
+          },
+          {
+            "event": {
+              "tag": "evacuation",
+              "count_min": 2
+            }
+          },
+          {
+            "none": {
+              "tag": "casualty",
+              "count_min": 2
+            }
+          },
+          {
+            "none": {
+              "tag": "glory_seeking",
+              "count_min": 2
+            }
+          },
+          {
+            "opinion_min": {
+              "character": "bramvex",
+              "min": 5
+            }
+          }
+        ]
+      }
+    },
+    "estrange_if": {
+      "all": [
+        {
+          "any": [
+            {
+              "event": {
+                "tag": "casualty",
+                "count_min": 3
+              }
+            },
+            {
+              "event": {
+                "tag": "glory_seeking",
+                "count_min": 3
+              }
+            }
+          ]
+        },
+        {
+          "not": {
+            "event": {
+              "type": "amends",
+              "target": "bramvex"
+            }
+          }
+        }
+      ]
+    },
+    "reconcile_if": {
+      "event": {
+        "type": "amends",
+        "target": "bramvex"
+      }
+    },
+    "reconcile_to": "interested",
+    "test_hint": "Bramvex counts exits. Count them with him, and do not ask for a fight you can avoid.",
+    "stage_hints": {
+      "met": "Talk to Bramvex. Count the exits.",
+      "interested": "Find and mark a second exit before you need it.",
+      "tested": "Run an evacuation and get everyone out.",
+      "bonded": "Keep your squad on its feet and your ego out of the fight."
+    }
+  },
+  "solthrin": {
+    "contradiction": "Solthrin exists to carry paths forward, yet does not believe every path should remain open.",
+    "stages": [
+      "unmet",
+      "met",
+      "interested",
+      "tested",
+      "bonded"
+    ],
+    "requires": {
+      "met": {
+        "event": {
+          "type": "talked",
+          "target": "solthrin"
+        }
+      },
+      "interested": {
+        "event": {
+          "tag": "route_laid"
+        }
+      },
+      "tested": {
+        "event": {
+          "tag": "route_closed",
+          "min_weight": 3
+        }
+      },
+      "bonded": {
+        "all": [
+          {
+            "event": {
+              "tag": "route_laid",
+              "count_min": 2
+            }
+          },
+          {
+            "event": {
+              "tag": "route_closed"
+            }
+          },
+          {
+            "event": {
+              "tag": "delivered",
+              "count_min": 2
+            }
+          },
+          {
+            "none": {
+              "tag": "speed_only",
+              "count_min": 2
+            }
+          },
+          {
+            "opinion_min": {
+              "character": "solthrin",
+              "min": 5
+            }
+          }
+        ]
+      }
+    },
+    "estrange_if": {
+      "all": [
+        {
+          "event": {
+            "tag": "speed_only",
+            "count_min": 2
+          }
+        },
+        {
+          "not": {
+            "event": {
+              "type": "amends",
+              "target": "solthrin"
+            }
+          }
+        }
+      ]
+    },
+    "reconcile_if": {
+      "event": {
+        "type": "amends",
+        "target": "solthrin"
+      }
+    },
+    "reconcile_to": "interested",
+    "test_hint": "Solthrin asks what must arrive. He closes the roads that should not stay open.",
+    "stage_hints": {
+      "met": "Find Solthrin and talk. (Hub dialogue requested.)",
+      "interested": "Lay a route across hard ground for someone who needs to cross.",
+      "tested": "Close a road on purpose, and say why.",
+      "bonded": "Deliver what must arrive twice, and never hurry a journey for speed alone."
+    }
   }
 }

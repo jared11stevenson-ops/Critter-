@@ -1,84 +1,416 @@
 {
   "_doc": "Ledger Rivals (Lead-owned design; Agent 3 may extend names/traits/lines). DESIGN RULES that keep this system distinct from other studios' patented designs: (1) a SMALL authored cast per Era, not an army hierarchy; (2) no ranks / promotions / power-ups gained by defeating the player; (3) no rival-vs-rival vendettas; (4) rivals pursue FACTION OBJECTIVES (extraction plans) and are driven by the Consequence Ledger, not by personal revenge loops; (5) the player's moral/non-lethal options (negotiate, expose, release, bond) are first-class outcomes, not alternatives to a kill. Not legal advice: have an IP attorney review before launch.",
-
   "archetypes": {
     "survey_chief": {
-      "label": "Dominion Survey Chief", "faction": "dominion", "cultures": ["human"],
-      "aggression": 0.55, "flee_at": 0.25, "base_tactics": ["hold_ground", "call_drones"],
+      "label": "Dominion Survey Chief",
+      "faction": "dominion",
+      "cultures": [
+        "human"
+      ],
+      "aggression": 0.55,
+      "flee_at": 0.25,
+      "base_tactics": [
+        "hold_ground",
+        "call_drones"
+      ],
       "bondable": false,
-      "names": {"first": ["Hale", "Marek", "Ines", "Tobias", "Renna", "Calder", "Oksana", "Wren"],
-                "last": ["Orrin", "Vasko", "Thane", "Merrow", "Lindqvist", "Okafor", "Brandt", "Aldous"]},
+      "names": {
+        "first": [
+          "Hale",
+          "Marek",
+          "Ines",
+          "Tobias",
+          "Renna",
+          "Calder",
+          "Oksana",
+          "Wren",
+          "Idris",
+          "Petra",
+          "Soren",
+          "Maren"
+        ],
+        "last": [
+          "Orrin",
+          "Vasko",
+          "Thane",
+          "Merrow",
+          "Lindqvist",
+          "Okafor",
+          "Brandt",
+          "Aldous",
+          "Halloran",
+          "Quist",
+          "Varga",
+          "Eskil"
+        ]
+      },
       "title": "Survey Chief",
-      "intro": ["{title} {name}. This permit covers every rock you are standing on.", "Handler. {title} {name}, Dominion survey. You are standing in my site."]
+      "intro": [
+        "{title} {name}. This permit covers every rock you are standing on.",
+        "Handler. {title} {name}, Dominion survey. You are standing in my site.",
+        "Permit seven-one-four. Read it, then step back.",
+        "This bough is under survey. Walk around it, Handler.",
+        "Do you know how many people stand behind this permit? Neither do I. That is the point."
+      ],
+      "lines": {
+        "flee": [
+          "Fall back to the camp. Call the drones.",
+          "This is above my pay grade. Permit stands. I do not."
+        ],
+        "defeated": [
+          "Log it. Log all of it.",
+          "You will get a fine. I will get a promotion."
+        ],
+        "negotiate": [
+          "Tell me what you need. I will tell you what I can lose.",
+          "A schedule. Fine. I will put it in writing."
+        ],
+        "expose": [
+          "That file is not mine. That file is Dexter's. Ask him."
+        ],
+        "release": [
+          "I will remember this. I am not sure how."
+        ]
+      }
     },
     "contract_poacher": {
-      "label": "Contract Poacher", "faction": "undermarket", "cultures": ["human", "critter"],
-      "aggression": 0.7, "flee_at": 0.35, "base_tactics": ["ambush", "snare_traps"],
+      "label": "Contract Poacher",
+      "faction": "undermarket",
+      "cultures": [
+        "human",
+        "critter"
+      ],
+      "aggression": 0.7,
+      "flee_at": 0.35,
+      "base_tactics": [
+        "ambush",
+        "snare_traps"
+      ],
       "bondable": true,
-      "names": {"first": ["Vesk", "Dara", "Joss", "Mina", "Rook", "Sable", "Teague", "Lio"],
-                "last": ["Dunmore", "Quill", "Harrow", "Pike", "Sorrel", "Vance", "Marl", "Ketch"]},
+      "names": {
+        "first": [
+          "Vesk",
+          "Dara",
+          "Joss",
+          "Mina",
+          "Rook",
+          "Sable",
+          "Teague",
+          "Lio",
+          "Cade",
+          "Wilda",
+          "Ross",
+          "Tamsin"
+        ],
+        "last": [
+          "Dunmore",
+          "Quill",
+          "Harrow",
+          "Pike",
+          "Sorrel",
+          "Vance",
+          "Marl",
+          "Ketch",
+          "Fallow",
+          "Brack",
+          "Thorne",
+          "Hollis"
+        ]
+      },
       "title": "Poacher",
-      "intro": ["You are bad for business, Handler.", "Criminal extraction? Please. I call it supply."]
+      "intro": [
+        "You are bad for business, Handler.",
+        "Criminal extraction? Please. I call it supply.",
+        "Everything in that cage has a buyer. You are costing me their names.",
+        "I am not a villain, Handler. I am a delivery with an invoice.",
+        "Walk on. You did not see me."
+      ],
+      "lines": {
+        "flee": [
+          "Not worth it. Not worth it.",
+          "I have another route."
+        ],
+        "defeated": [
+          "That is the last of my stock.",
+          "My buyers will not like this."
+        ],
+        "negotiate": [
+          "Cut me in and I will point you at the real traffickers.",
+          "A fair price for the cage. I can live with that."
+        ],
+        "expose": [
+          "Do not post my face. I have a family."
+        ],
+        "release": [
+          "You are a soft one, Handler. I mean it kindly."
+        ],
+        "bond": [
+          "A Bond Contract. Voluntary. In writing. I have never signed one."
+        ]
+      }
     },
     "free_scale_radical": {
-      "label": "Free Scale Radical", "faction": "free_scale", "cultures": ["human", "critter"],
-      "aggression": 0.6, "flee_at": 0.3, "base_tactics": ["sabotage", "hit_and_fade"],
+      "label": "Free Scale Radical",
+      "faction": "free_scale",
+      "cultures": [
+        "human",
+        "critter"
+      ],
+      "aggression": 0.6,
+      "flee_at": 0.3,
+      "base_tactics": [
+        "sabotage",
+        "hit_and_fade"
+      ],
       "bondable": true,
-      "names": {"first": ["Ayla", "Corin", "Ysolde", "Bram", "Nadia", "Tavi", "Eben", "Sora"],
-                "last": ["Fenwick", "Ashgrove", "Moreau", "Ibarra", "Kessel", "Rowan", "Lund", "Adeyemi"]},
+      "names": {
+        "first": [
+          "Ayla",
+          "Corin",
+          "Ysolde",
+          "Bram",
+          "Nadia",
+          "Tavi",
+          "Eben",
+          "Sora",
+          "Lior",
+          "Maeve",
+          "Tomasz",
+          "Imani"
+        ],
+        "last": [
+          "Fenwick",
+          "Ashgrove",
+          "Moreau",
+          "Ibarra",
+          "Kessel",
+          "Rowan",
+          "Lund",
+          "Adeyemi",
+          "Adair",
+          "Brennan",
+          "Okonkwo",
+          "Sato"
+        ]
+      },
       "title": "Cell Leader",
-      "intro": ["I will not be your good side, Handler.", "Everyone who says they are protecting this place is selling it."]
+      "intro": [
+        "I will not be your good side, Handler.",
+        "Everyone who says they are protecting this place is selling it.",
+        "You carry a Dominion permit. That is a choice.",
+        "Free Scale does not need a Handler. Free Scale needs the door shut.",
+        "I will say this once: leave the rig."
+      ],
+      "lines": {
+        "flee": [
+          "Pull back. We will be at the next one.",
+          "I was never here."
+        ],
+        "defeated": [
+          "The cause is not a person.",
+          "You are saving a cage with a nicer lock."
+        ],
+        "negotiate": [
+          "Put the extraction on hold and I stand down.",
+          "If Mara's name is on the file, I will read it."
+        ],
+        "expose": [
+          "Fine. Expose me. Then expose your own."
+        ],
+        "release": [
+          "I did not expect that."
+        ],
+        "bond": [
+          "Bond. Not owned. Say it back."
+        ]
+      }
     },
     "helix_recovery_agent": {
-      "label": "Helix Recovery Agent", "faction": "helix", "cultures": ["human"],
-      "aggression": 0.45, "flee_at": 0.3, "base_tactics": ["legal_pressure", "recovery_drones"],
+      "label": "Helix Recovery Agent",
+      "faction": "helix",
+      "cultures": [
+        "human"
+      ],
+      "aggression": 0.45,
+      "flee_at": 0.3,
+      "base_tactics": [
+        "legal_pressure",
+        "recovery_drones"
+      ],
       "bondable": false,
-      "names": {"first": ["Julian", "Priya", "Desmond", "Lena", "Everett", "Mira", "Cassius", "Noor"],
-                "last": ["Whitlock", "Chandra", "Rourke", "Sato", "Pemberton", "Valdis", "Okoye", "Frost"]},
+      "names": {
+        "first": [
+          "Julian",
+          "Priya",
+          "Desmond",
+          "Lena",
+          "Everett",
+          "Mira",
+          "Cassius",
+          "Noor",
+          "Hollis",
+          "Anneke",
+          "Rafael",
+          "Ingrid"
+        ],
+        "last": [
+          "Whitlock",
+          "Chandra",
+          "Rourke",
+          "Sato",
+          "Pemberton",
+          "Valdis",
+          "Okoye",
+          "Frost",
+          "Brandvold",
+          "Castellan",
+          "Dray",
+          "Mbeki"
+        ]
+      },
       "title": "Recovery Agent",
-      "intro": ["Everything in this crate has a chain of custody. Yours is incomplete.", "I am authorized to recover company property, Handler. That includes the rock."]
+      "intro": [
+        "Everything in this crate has a chain of custody. Yours is incomplete.",
+        "I am authorized to recover company property, Handler. That includes the rock.",
+        "This silk is Helix-licensed. The license is on file. Would you like to see the file?",
+        "I do not take things, Handler. I recover them.",
+        "Your name is on the incident report. Mine is on the solution."
+      ],
+      "lines": {
+        "flee": [
+          "Recovery drones, withdraw to the sled.",
+          "I will file for the rest."
+        ],
+        "defeated": [
+          "Chain of custody is broken. That is a very expensive sentence."
+        ],
+        "negotiate": [
+          "Helix has a division for voluntary supply. I will make a call."
+        ],
+        "expose": [
+          "That contract is not mine. I only deliver it."
+        ],
+        "release": [
+          "I would like to say thank you. The form does not have a box for that."
+        ]
+      }
     }
   },
-
   "traits": {
-    "meticulous":   {"aggression": -0.05, "flee": 0.0,  "tactics": ["plans_ahead"],        "taunt": "I have a contingency for the contingency."},
-    "debt_ridden":  {"aggression": 0.05,  "flee": 0.05, "tactics": ["takes_bribes"],       "taunt": "Every hour on this site is money I do not have."},
-    "reckless":     {"aggression": 0.15,  "flee": -0.1, "tactics": ["rush"],               "taunt": "Hold still!"},
-    "superstitious":{"aggression": -0.05, "flee": 0.1,  "tactics": ["avoids_old_stone"],   "taunt": "The stone is watching us."},
-    "idealist":     {"aggression": 0.05,  "flee": -0.05,"tactics": ["rallies_allies"],     "taunt": "Somebody has to say no."},
-    "proud":        {"aggression": 0.1,   "flee": -0.1, "tactics": ["refuses_retreat"],    "taunt": "You do not walk away from me."},
-    "cautious":     {"aggression": -0.1,  "flee": 0.15, "tactics": ["keeps_distance"],     "taunt": "Distance is a kind of armor."},
-    "cruel":        {"aggression": 0.1,   "flee": 0.0,  "tactics": ["targets_weakest"],    "taunt": "Which one of you is slower?"}
+    "meticulous": {
+      "aggression": -0.05,
+      "flee": 0.0,
+      "tactics": [
+        "plans_ahead"
+      ],
+      "taunt": "I have a contingency for the contingency."
+    },
+    "debt_ridden": {
+      "aggression": 0.05,
+      "flee": 0.05,
+      "tactics": [
+        "takes_bribes"
+      ],
+      "taunt": "Every hour on this site is money I do not have."
+    },
+    "reckless": {
+      "aggression": 0.15,
+      "flee": -0.1,
+      "tactics": [
+        "rush"
+      ],
+      "taunt": "Hold still!"
+    },
+    "superstitious": {
+      "aggression": -0.05,
+      "flee": 0.1,
+      "tactics": [
+        "avoids_old_stone"
+      ],
+      "taunt": "The stone is watching us."
+    },
+    "idealist": {
+      "aggression": 0.05,
+      "flee": -0.05,
+      "tactics": [
+        "rallies_allies"
+      ],
+      "taunt": "Somebody has to say no."
+    },
+    "proud": {
+      "aggression": 0.1,
+      "flee": -0.1,
+      "tactics": [
+        "refuses_retreat"
+      ],
+      "taunt": "You do not walk away from me."
+    },
+    "cautious": {
+      "aggression": -0.1,
+      "flee": 0.15,
+      "tactics": [
+        "keeps_distance"
+      ],
+      "taunt": "Distance is a kind of armor."
+    },
+    "cruel": {
+      "aggression": 0.1,
+      "flee": 0.0,
+      "tactics": [
+        "targets_weakest"
+      ],
+      "taunt": "Which one of you is slower?"
+    }
   },
-
   "counters": {
-    "combo": "shielded_advance", "reaching_strike": "stay_off_the_line", "gravity_pull": "spread_formation",
-    "beetle_rage": "kite_and_wait", "probable_impact": "break_the_pairing",
-    "bad_thought": "bait_projectiles", "premonition": "erratic_timing", "false_memory": "ignore_echoes",
-    "brain_skip": "stagger_guard", "grasshopper_thought": "hunt_the_landing"
+    "combo": "shielded_advance",
+    "reaching_strike": "stay_off_the_line",
+    "gravity_pull": "spread_formation",
+    "beetle_rage": "kite_and_wait",
+    "probable_impact": "break_the_pairing",
+    "bad_thought": "bait_projectiles",
+    "premonition": "erratic_timing",
+    "false_memory": "ignore_echoes",
+    "brain_skip": "stagger_guard",
+    "grasshopper_thought": "hunt_the_landing"
   },
-
   "adapt_lines": {
-    "shielded_advance":  "Heavy swings. I stay inside the arc.",
+    "shielded_advance": "Heavy swings. I stay inside the arc.",
     "stay_off_the_line": "I watched you throw that mace down a straight line. I am not standing on one.",
-    "spread_formation":  "Do not bunch up. He pulls.",
-    "kite_and_wait":     "Let him burn himself out. That rage is not free.",
+    "spread_formation": "Do not bunch up. He pulls.",
+    "kite_and_wait": "Let him burn himself out. That rage is not free.",
     "break_the_pairing": "Split them. They only work together.",
-    "bait_projectiles":  "Her little spheres curve. I know where they curve.",
-    "erratic_timing":    "She sees what I will do. So I do not decide until I move.",
-    "ignore_echoes":     "The double shimmers wrong. I ignore it.",
-    "stagger_guard":     "She can skip a heartbeat of mine. I keep two guards up.",
-    "hunt_the_landing":  "She has to land somewhere."
+    "bait_projectiles": "Her little spheres curve. I know where they curve.",
+    "erratic_timing": "She sees what I will do. So I do not decide until I move.",
+    "ignore_echoes": "The double shimmers wrong. I ignore it.",
+    "stagger_guard": "She can skip a heartbeat of mine. I keep two guards up.",
+    "hunt_the_landing": "She has to land somewhere."
   },
-
   "scars": {
-    "reaching_strike": ["dented_pauldron", "cracked_visor"],
-    "gravity_pull": ["bruised_ribs", "torn_sleeve"],
-    "combo": ["limp", "split_lip"],
-    "beetle_rage": ["singed_coat"],
-    "bad_thought": ["burn_mark"],
-    "brain_skip": ["trembling_hand"],
-    "premonition": ["tired_eyes"]
+    "reaching_strike": [
+      "dented_pauldron",
+      "cracked_visor"
+    ],
+    "gravity_pull": [
+      "bruised_ribs",
+      "torn_sleeve"
+    ],
+    "combo": [
+      "limp",
+      "split_lip"
+    ],
+    "beetle_rage": [
+      "singed_coat"
+    ],
+    "bad_thought": [
+      "burn_mark"
+    ],
+    "brain_skip": [
+      "trembling_hand"
+    ],
+    "premonition": [
+      "tired_eyes"
+    ]
   },
   "scar_phrases": {
     "dented_pauldron": "This pauldron is still dented from your mace.",
@@ -92,27 +424,184 @@
     "trembling_hand": "My hand still trembles when I think of that skip.",
     "tired_eyes": "I have not slept since she watched me."
   },
-
   "greetings": {
-    "escaped":    ["Back again. {scar_phrase} {adapt_line}", "You let me walk. {scar_phrase} I used the time."],
-    "negotiated": ["We have terms, Handler. Do not make me regret them.", "A deal is a deal. I am checking yours."],
-    "released":   ["I have not forgotten that you could have finished it.", "You let me go. I am still deciding what that means."],
-    "default_return": ["Handler. {scar_phrase}"]
+    "escaped": [
+      "Back again. {scar_phrase} {adapt_line}",
+      "You let me walk. {scar_phrase} I used the time.",
+      "Same site. Different plan. {adapt_line}",
+      "You did not stop me. {scar_phrase}"
+    ],
+    "negotiated": [
+      "We have terms, Handler. Do not make me regret them.",
+      "A deal is a deal. I am checking yours.",
+      "Our terms stand. I am watching yours.",
+      "Terms. I read them again this morning."
+    ],
+    "released": [
+      "I have not forgotten that you could have finished it.",
+      "You let me go. I am still deciding what that means.",
+      "You could have ended it. I have been thinking about that for days."
+    ],
+    "default_return": [
+      "Handler. {scar_phrase}",
+      "Handler. This site again.",
+      "Handler. I have your file."
+    ],
+    "exposed": [
+      "Everything I was hiding is public. I am still standing here. Make of that what you will.",
+      "You made me honest. I did not ask."
+    ],
+    "defeated": [
+      "Back on my feet. {scar_phrase}",
+      "You won. I am still here. {adapt_line}"
+    ],
+    "bonded": [
+      "Handler. I am keeping my word."
+    ]
   },
-
   "resolutions": [
-    {"id": "fight",     "label": "Stop them by force", "outcome": "defeated"},
-    {"id": "negotiate", "label": "Offer terms",        "outcome": "negotiated", "needs_trait_any": ["debt_ridden", "idealist", "meticulous", "cautious"]},
-    {"id": "expose",    "label": "Expose them",        "outcome": "exposed", "requires": {"event": {"type": "discovered", "tag": "evidence"}}},
-    {"id": "release",   "label": "Let them walk",      "outcome": "released"},
-    {"id": "bond",      "label": "Offer a Bond Contract", "outcome": "bonded", "needs_bondable": true,
-     "requires": {"event": {"type": "rival_resolved", "target": "$rival", "tag": "rival_released"}}}
+    {
+      "id": "fight",
+      "label": "Stop them by force",
+      "outcome": "defeated"
+    },
+    {
+      "id": "negotiate",
+      "label": "Offer terms",
+      "outcome": "negotiated",
+      "needs_trait_any": [
+        "debt_ridden",
+        "idealist",
+        "meticulous",
+        "cautious"
+      ]
+    },
+    {
+      "id": "expose",
+      "label": "Expose them",
+      "outcome": "exposed",
+      "requires": {
+        "event": {
+          "type": "discovered",
+          "tag": "evidence"
+        }
+      }
+    },
+    {
+      "id": "release",
+      "label": "Let them walk",
+      "outcome": "released"
+    },
+    {
+      "id": "bond",
+      "label": "Offer a Bond Contract",
+      "outcome": "bonded",
+      "needs_bondable": true,
+      "requires": {
+        "event": {
+          "type": "rival_resolved",
+          "target": "$rival",
+          "tag": "rival_released"
+        }
+      }
+    }
   ],
-
   "authored": [
-    {"id": "foreman_orrin", "archetype": "survey_chief", "seed": 4172, "name": "Hale Orrin", "title": "Survey Chief",
-     "traits": ["meticulous", "debt_ridden"], "region": "red_reaches"},
-    {"id": "poacher_vesk", "archetype": "contract_poacher", "seed": 9031, "name": "Vesk Dunmore", "title": "Poacher",
-     "traits": ["reckless", "superstitious"], "region": "red_reaches"}
+    {
+      "id": "foreman_orrin",
+      "archetype": "survey_chief",
+      "seed": 4172,
+      "name": "Hale Orrin",
+      "title": "Survey Chief",
+      "traits": [
+        "meticulous",
+        "debt_ridden"
+      ],
+      "region": "red_reaches"
+    },
+    {
+      "id": "poacher_vesk",
+      "archetype": "contract_poacher",
+      "seed": 9031,
+      "name": "Vesk Dunmore",
+      "title": "Poacher",
+      "traits": [
+        "reckless",
+        "superstitious"
+      ],
+      "region": "red_reaches"
+    },
+    {
+      "id": "wren_calder",
+      "archetype": "survey_chief",
+      "seed": 2201,
+      "name": "Wren Calder",
+      "title": "Survey Chief",
+      "traits": [
+        "cautious",
+        "proud"
+      ],
+      "region": "canopy_fold"
+    },
+    {
+      "id": "marek_vasko",
+      "archetype": "survey_chief",
+      "seed": 2202,
+      "name": "Marek Vasko",
+      "title": "Survey Chief",
+      "traits": [
+        "meticulous",
+        "superstitious"
+      ],
+      "region": "lumen_depths"
+    },
+    {
+      "id": "joss_harrow",
+      "archetype": "contract_poacher",
+      "seed": 2203,
+      "name": "Joss Harrow",
+      "title": "Poacher",
+      "traits": [
+        "debt_ridden",
+        "cruel"
+      ],
+      "region": "rainward"
+    },
+    {
+      "id": "agent_pemberton",
+      "archetype": "helix_recovery_agent",
+      "seed": 2204,
+      "name": "Julian Pemberton",
+      "title": "Recovery Agent",
+      "traits": [
+        "meticulous",
+        "cautious"
+      ],
+      "region": "frostbloom"
+    },
+    {
+      "id": "poacher_dara",
+      "archetype": "contract_poacher",
+      "seed": 2205,
+      "name": "Dara Quill",
+      "title": "Poacher",
+      "traits": [
+        "reckless",
+        "cruel"
+      ],
+      "region": "briarwild"
+    },
+    {
+      "id": "ayla_fenwick",
+      "archetype": "free_scale_radical",
+      "seed": 2206,
+      "name": "Ayla Fenwick",
+      "title": "Cell Leader",
+      "traits": [
+        "idealist",
+        "proud"
+      ],
+      "region": "briarwild"
+    }
   ]
 }

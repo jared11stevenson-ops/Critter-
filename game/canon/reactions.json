@@ -1,22 +1,1419 @@
 {
   "_doc": "Reaction Matrix: companion x trigger x condition -> bark. Agent 3 authors the full matrix per voice sheet; Agent 2 displays them (hub idle, return from a descent, camp conversations). 'when' is a Ledger spec; 'once' reactions fire a single time; higher 'priority' wins.",
   "aruun": [
-    {"id": "aruun_grazers", "trigger": "return", "priority": 5, "once": true, "expr": "aggressive",
-     "when": {"event": {"type": "harmed", "target": "dust_grazer_herd"}},
-     "text": "You hurt the grazers. I haven't forgotten."},
-    {"id": "aruun_braced", "trigger": "return", "priority": 4, "once": true, "expr": "calm",
-     "when": {"event": {"type": "chose", "tag": "braced_structure"}},
-     "text": "A structure should sacrifice itself before it sacrifices the people inside it. You understood that."},
-    {"id": "aruun_extraction", "trigger": "return", "priority": 4, "once": true, "expr": "focused",
-     "when": {"event": {"type": "chose", "tag": "extraction"}},
-     "text": "It'll stand a season. I'll remember who chose the season."}
+    {
+      "id": "aruun_grazers",
+      "trigger": "return",
+      "priority": 5,
+      "once": true,
+      "expr": "aggressive",
+      "when": {
+        "event": {
+          "type": "harmed",
+          "target": "dust_grazer_herd"
+        }
+      },
+      "text": "You hurt the grazers. I haven't forgotten."
+    },
+    {
+      "id": "aruun_braced",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "calm",
+      "when": {
+        "event": {
+          "type": "chose",
+          "tag": "braced_structure"
+        }
+      },
+      "text": "A structure should sacrifice itself before it sacrifices the people inside it. You understood that."
+    },
+    {
+      "id": "aruun_extraction",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "focused",
+      "when": {
+        "event": {
+          "type": "chose",
+          "tag": "extraction"
+        }
+      },
+      "text": "It'll stand a season. I'll remember who chose the season."
+    },
+    {
+      "id": "aruun_all_home",
+      "trigger": "return",
+      "priority": 3,
+      "once": true,
+      "expr": "calm",
+      "when": {
+        "event": {
+          "type": "return",
+          "data_eq": {
+            "all_conscious": true
+          }
+        }
+      },
+      "text": "Everyone walked back. That is the only measure I trust."
+    },
+    {
+      "id": "aruun_burden_done",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "calm",
+      "when": {
+        "event": {
+          "type": "helped",
+          "target": "ochre_span"
+        }
+      },
+      "text": "I held it until the last of them crossed. Mollusk would say the second after that was borrowed. He would be right."
+    },
+    {
+      "id": "aruun_kill_wildlife",
+      "trigger": "return",
+      "priority": 3,
+      "once": true,
+      "expr": "focused",
+      "when": {
+        "event": {
+          "tag": "kill_wildlife",
+          "count_min": 3
+        }
+      },
+      "text": "We killed more than we needed. A wall does not need to bleed to stand."
+    },
+    {
+      "id": "aruun_beetles_calmed",
+      "trigger": "return",
+      "priority": 3,
+      "once": true,
+      "expr": "amused",
+      "when": {
+        "event": {
+          "type": "helped",
+          "target": "plate_beetle_herd"
+        }
+      },
+      "text": "The beetles were never the enemy. The pylons were."
+    },
+    {
+      "id": "aruun_promise_broken",
+      "trigger": "return",
+      "priority": 5,
+      "once": true,
+      "expr": "aggressive",
+      "when": {
+        "event": {
+          "tag": "promise_broken"
+        }
+      },
+      "text": "You broke your word. A bridge that fails once is not trusted again. Remember that."
+    },
+    {
+      "id": "aruun_redundant",
+      "trigger": "camp",
+      "priority": 3,
+      "once": true,
+      "expr": "calm",
+      "when": {
+        "event": {
+          "tag": "redundant_design"
+        }
+      },
+      "text": "You built it to fail in pieces. That is how you build for people."
+    },
+    {
+      "id": "aruun_bramvex_bond",
+      "trigger": "bond_up",
+      "priority": 3,
+      "once": true,
+      "expr": "amused",
+      "when": {
+        "event": {
+          "type": "bond_stage",
+          "target": "bramvex",
+          "tag": "bond_bonded"
+        }
+      },
+      "text": "Bramvex is with us. Good. He counts what I forget."
+    },
+    {
+      "id": "aruun_mollusk_bond",
+      "trigger": "bond_up",
+      "priority": 3,
+      "once": true,
+      "expr": "calm",
+      "when": {
+        "event": {
+          "type": "bond_stage",
+          "target": "mollusk",
+          "tag": "bond_bonded"
+        }
+      },
+      "text": "Mollusk tests what I build. Now he will test it from the inside."
+    },
+    {
+      "id": "aruun_hub_idle",
+      "trigger": "hub_idle",
+      "priority": 1,
+      "once": false,
+      "expr": "calm",
+      "when": {},
+      "text": "The Common holds. I checked the joints this morning."
+    },
+    {
+      "id": "aruun_boss",
+      "trigger": "boss",
+      "priority": 2,
+      "once": false,
+      "expr": "focused",
+      "when": {},
+      "text": "Its foundation is resonating. Find where the load goes. Then we move it."
+    },
+    {
+      "id": "aruun_descent",
+      "trigger": "descent",
+      "priority": 1,
+      "once": false,
+      "expr": "focused",
+      "when": {},
+      "text": "Further than you think. Stay in the line of the bridge."
+    },
+    {
+      "id": "aruun_pause",
+      "trigger": "pause_menu",
+      "priority": 1,
+      "once": false,
+      "expr": "calm",
+      "when": {},
+      "text": "Rest. A structure that never unloads cracks."
+    }
   ],
   "cigarra": [
-    {"id": "cigarra_nonviolent", "trigger": "return", "priority": 3, "once": true, "expr": "happy",
-     "when": {"event": {"type": "helped", "tag": "nonviolent"}},
-     "text": "You let the beetles walk. That was a surprising branch."},
-    {"id": "cigarra_noisy", "trigger": "return", "priority": 2, "once": true, "expr": "annoyed",
-     "when": {"event": {"type": "harmed", "tag": "harm_wildlife"}},
-     "text": "The futures around you got louder after that."}
+    {
+      "id": "cigarra_nonviolent",
+      "trigger": "return",
+      "priority": 3,
+      "once": true,
+      "expr": "happy",
+      "when": {
+        "event": {
+          "type": "helped",
+          "tag": "nonviolent"
+        }
+      },
+      "text": "You let the beetles walk. That was a surprising branch."
+    },
+    {
+      "id": "cigarra_noisy",
+      "trigger": "return",
+      "priority": 2,
+      "once": true,
+      "expr": "annoyed",
+      "when": {
+        "event": {
+          "type": "harmed",
+          "tag": "harm_wildlife"
+        }
+      },
+      "text": "The futures around you got louder after that."
+    },
+    {
+      "id": "cigarra_promise_kept",
+      "trigger": "return",
+      "priority": 3,
+      "once": true,
+      "expr": "happy",
+      "when": {
+        "event": {
+          "tag": "promise_kept"
+        }
+      },
+      "text": "You kept it. The branch where you didn't was loud. This one is quiet. I like quiet."
+    },
+    {
+      "id": "cigarra_promise_broken",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "annoyed",
+      "when": {
+        "event": {
+          "tag": "promise_broken"
+        }
+      },
+      "text": "I saw that one coming. I hoped I was wrong. That is the worst kind of right."
+    },
+    {
+      "id": "cigarra_boss_down",
+      "trigger": "boss",
+      "priority": 2,
+      "once": false,
+      "expr": "unhinged",
+      "when": {},
+      "text": "Big beam. Stand in the ones without holes. Trust me. Or do not. Both branches are fun."
+    },
+    {
+      "id": "cigarra_combo",
+      "trigger": "bond_up",
+      "priority": 3,
+      "once": true,
+      "expr": "happy",
+      "when": {
+        "event": {
+          "type": "bonded_pair",
+          "target": "aruun_cigarra"
+        }
+      },
+      "text": "Aruun hits the place I saw. Probable Impact. Rude. Wonderful."
+    },
+    {
+      "id": "cigarra_braced",
+      "trigger": "return",
+      "priority": 3,
+      "once": true,
+      "expr": "curious",
+      "when": {
+        "event": {
+          "type": "chose",
+          "tag": "braced_structure"
+        }
+      },
+      "text": "You braced the span. A whole crowd of futures collapsed into one. I did not know you could do that."
+    },
+    {
+      "id": "cigarra_extraction",
+      "trigger": "return",
+      "priority": 3,
+      "once": true,
+      "expr": "shocked",
+      "when": {
+        "event": {
+          "type": "chose",
+          "tag": "extraction"
+        }
+      },
+      "text": "The Span will stand a season. I saw the season end. It is a short season."
+    },
+    {
+      "id": "cigarra_improvised",
+      "trigger": "return",
+      "priority": 2,
+      "once": true,
+      "expr": "unhinged",
+      "when": {
+        "event": {
+          "tag": "improvised"
+        }
+      },
+      "text": "You skipped the plan. Bramvex is going to have a face about that. Delightful."
+    },
+    {
+      "id": "cigarra_trafficked",
+      "trigger": "return",
+      "priority": 5,
+      "once": true,
+      "expr": "annoyed",
+      "when": {
+        "event": {
+          "tag": "trafficked"
+        }
+      },
+      "text": "I know what you are doing. I wrote that sentence once. Do not make me write it again."
+    },
+    {
+      "id": "cigarra_hub_idle",
+      "trigger": "hub_idle",
+      "priority": 1,
+      "once": false,
+      "expr": "neutral",
+      "when": {},
+      "text": "Stand on the other side of the table, please. Your side is crowded with futures."
+    },
+    {
+      "id": "cigarra_camp",
+      "trigger": "camp",
+      "priority": 1,
+      "once": false,
+      "expr": "curious",
+      "when": {},
+      "text": "Make a small arbitrary choice for me. Left or right. I will not look."
+    },
+    {
+      "id": "cigarra_rival",
+      "trigger": "rival_met",
+      "priority": 2,
+      "once": false,
+      "expr": "focused",
+      "when": {
+        "event": {
+          "type": "rival_encounter"
+        }
+      },
+      "text": "He already decided what he will do. That is not how I like my people."
+    },
+    {
+      "id": "cigarra_pharilux",
+      "trigger": "hub_idle",
+      "priority": 2,
+      "once": true,
+      "expr": "shocked",
+      "when": {
+        "event": {
+          "type": "talked",
+          "target": "pharilux"
+        }
+      },
+      "text": "Pharilux. Nothing. Not dark. Absent. Wrong direction, he says. Fine. I will keep looking."
+    }
+  ],
+  "zephyr": [
+    {
+      "id": "zephyr_kept",
+      "trigger": "return",
+      "priority": 5,
+      "once": true,
+      "expr": "calm",
+      "when": {
+        "event": {
+          "type": "promise_resolved",
+          "target": "zephyr",
+          "tag": "promise_kept"
+        }
+      },
+      "text": "You kept it. To the letter and the spirit. I like you a measurable amount more."
+    },
+    {
+      "id": "zephyr_loophole",
+      "trigger": "return",
+      "priority": 5,
+      "once": true,
+      "expr": "curious",
+      "when": {
+        "event": {
+          "type": "promise_resolved",
+          "target": "zephyr",
+          "tag": "promise_loophole"
+        }
+      },
+      "text": "The wording held. The wording was the whole art. I noticed. I am delighted."
+    },
+    {
+      "id": "zephyr_bent",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "focused",
+      "when": {
+        "event": {
+          "type": "promise_resolved",
+          "target": "zephyr",
+          "tag": "promise_bent"
+        }
+      },
+      "text": "The spirit, not the wording. I will allow it. This once."
+    },
+    {
+      "id": "zephyr_broken",
+      "trigger": "return",
+      "priority": 6,
+      "once": true,
+      "expr": "haunted",
+      "when": {
+        "event": {
+          "type": "promise_resolved",
+          "target": "zephyr",
+          "tag": "promise_broken"
+        }
+      },
+      "text": "I counted. I do not need to say the number."
+    },
+    {
+      "id": "zephyr_bonded",
+      "trigger": "bond_up",
+      "priority": 5,
+      "once": true,
+      "expr": "calm",
+      "when": {
+        "event": {
+          "type": "bond_stage",
+          "target": "zephyr",
+          "tag": "bond_bonded"
+        }
+      },
+      "text": "Witnessed. I will carry your word anywhere you ask. Ask carefully."
+    },
+    {
+      "id": "zephyr_estranged",
+      "trigger": "bond_up",
+      "priority": 5,
+      "once": true,
+      "expr": "haunted",
+      "when": {
+        "event": {
+          "type": "bond_stage",
+          "target": "zephyr",
+          "tag": "bond_estranged"
+        }
+      },
+      "text": "No more promises for now. Unless you want to make a better one."
+    },
+    {
+      "id": "zephyr_coercion",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "aggressive",
+      "when": {
+        "event": {
+          "tag": "coercion"
+        }
+      },
+      "text": "You made someone say yes with no room to say no. That is not an agreement. That is a leash."
+    },
+    {
+      "id": "zephyr_courier",
+      "trigger": "return",
+      "priority": 3,
+      "once": true,
+      "expr": "calm",
+      "when": {
+        "event": {
+          "tag": "courier_delivered"
+        }
+      },
+      "text": "Delivered. Hold the next one for me, I need to stretch my wings."
+    },
+    {
+      "id": "zephyr_hub_idle",
+      "trigger": "hub_idle",
+      "priority": 1,
+      "once": false,
+      "expr": "curious",
+      "when": {},
+      "text": "That drink on the table was unattended. That is practically a gift."
+    },
+    {
+      "id": "zephyr_camp",
+      "trigger": "camp",
+      "priority": 1,
+      "once": false,
+      "expr": "calm",
+      "when": {},
+      "text": "Promise me something small. You would be surprised how few people do."
+    },
+    {
+      "id": "zephyr_descent",
+      "trigger": "descent",
+      "priority": 1,
+      "once": false,
+      "expr": "focused",
+      "when": {},
+      "text": "I will race you to the first marker. No promises. Not yet."
+    },
+    {
+      "id": "zephyr_solthrin",
+      "trigger": "camp",
+      "priority": 2,
+      "once": true,
+      "expr": "curious",
+      "when": {
+        "event": {
+          "type": "talked",
+          "target": "solthrin"
+        }
+      },
+      "text": "Astral Roads. I will race one. I have not said that out loud to him. Do not tell him."
+    }
+  ],
+  "bramvex": [
+    {
+      "id": "bramvex_all_home",
+      "trigger": "return",
+      "priority": 3,
+      "once": true,
+      "expr": "default",
+      "when": {
+        "event": {
+          "type": "return",
+          "data_eq": {
+            "all_conscious": true
+          }
+        }
+      },
+      "text": "You brought both of them back. That is the job. The rest is paperwork."
+    },
+    {
+      "id": "bramvex_casualty",
+      "trigger": "return",
+      "priority": 5,
+      "once": true,
+      "expr": "default",
+      "when": {
+        "event": {
+          "tag": "casualty"
+        }
+      },
+      "text": "Someone went down. How many exits did we have? Answer. Then we do it better."
+    },
+    {
+      "id": "bramvex_wipe",
+      "trigger": "return",
+      "priority": 6,
+      "once": true,
+      "expr": "default",
+      "when": {
+        "event": {
+          "type": "party_wipe"
+        }
+      },
+      "text": "Wipe. Sit down. Eat something. We go through it, step by step, no blame."
+    },
+    {
+      "id": "bramvex_exit",
+      "trigger": "return",
+      "priority": 3,
+      "once": true,
+      "expr": "default",
+      "when": {
+        "event": {
+          "tag": "exit_planned"
+        }
+      },
+      "text": "You found the second exit. Good. Write it on the map."
+    },
+    {
+      "id": "bramvex_evac",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "default",
+      "when": {
+        "event": {
+          "tag": "evacuation"
+        }
+      },
+      "text": "Everyone who could move, moved. That is a better result than victory."
+    },
+    {
+      "id": "bramvex_negotiated",
+      "trigger": "rival_met",
+      "priority": 3,
+      "once": true,
+      "expr": "default",
+      "when": {
+        "event": {
+          "tag": "rival_negotiated"
+        }
+      },
+      "text": "Terms beat a firefight. Do not tell Aruun I said so."
+    },
+    {
+      "id": "bramvex_glory",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "default",
+      "when": {
+        "event": {
+          "tag": "glory_seeking"
+        }
+      },
+      "text": "You started it because you wanted it. I notice who wants it."
+    },
+    {
+      "id": "bramvex_boss",
+      "trigger": "boss",
+      "priority": 2,
+      "once": false,
+      "expr": "default",
+      "when": {},
+      "text": "One exit behind us. Two to the left. Do not stand where the drill lands."
+    },
+    {
+      "id": "bramvex_hub_idle",
+      "trigger": "hub_idle",
+      "priority": 1,
+      "once": false,
+      "expr": "default",
+      "when": {},
+      "text": "Count the exits. Every room, every time."
+    },
+    {
+      "id": "bramvex_camp",
+      "trigger": "camp",
+      "priority": 1,
+      "once": false,
+      "expr": "default",
+      "when": {},
+      "text": "Who has eaten? Who is tired? Say it out loud."
+    },
+    {
+      "id": "bramvex_cigarra",
+      "trigger": "camp",
+      "priority": 2,
+      "once": true,
+      "expr": "default",
+      "when": {
+        "event": {
+          "type": "bonded_pair",
+          "target": "aruun_cigarra"
+        }
+      },
+      "text": "Cigarra Holes. I leave them in the plan now. She finds them. It is irritating."
+    },
+    {
+      "id": "bramvex_bonded",
+      "trigger": "bond_up",
+      "priority": 5,
+      "once": true,
+      "expr": "default",
+      "when": {
+        "event": {
+          "type": "bond_stage",
+          "target": "bramvex",
+          "tag": "bond_bonded"
+        }
+      },
+      "text": "Sergeant, reporting. You are a reasonable officer. Do not make me reconsider."
+    }
+  ],
+  "mara": [
+    {
+      "id": "mara_all_home",
+      "trigger": "return",
+      "priority": 3,
+      "once": true,
+      "expr": "soft",
+      "when": {
+        "event": {
+          "type": "return",
+          "data_eq": {
+            "all_conscious": true
+          }
+        }
+      },
+      "text": "You came back. Both of them came back. On a descent, that is the whole score."
+    },
+    {
+      "id": "mara_wipe",
+      "trigger": "return",
+      "priority": 5,
+      "once": true,
+      "expr": "tired",
+      "when": {
+        "event": {
+          "type": "party_wipe"
+        }
+      },
+      "text": "The log says everyone went down. I am less interested in the log than in whether you are all right."
+    },
+    {
+      "id": "mara_grazers",
+      "trigger": "return",
+      "priority": 5,
+      "once": true,
+      "expr": "annoyed",
+      "when": {
+        "event": {
+          "type": "harmed",
+          "target": "dust_grazer_herd"
+        }
+      },
+      "text": "The grazers seed the lichen. I flagged them on the survey. You walked through them anyway."
+    },
+    {
+      "id": "mara_beetles",
+      "trigger": "return",
+      "priority": 3,
+      "once": true,
+      "expr": "curious",
+      "when": {
+        "event": {
+          "type": "helped",
+          "target": "plate_beetle_herd"
+        }
+      },
+      "text": "You calmed the beetles. Not with force. I want that in the field notes, in your words."
+    },
+    {
+      "id": "mara_braced",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "soft",
+      "when": {
+        "event": {
+          "type": "chose",
+          "tag": "braced_structure"
+        }
+      },
+      "text": "A braced span is worth a season of data. You made the right trade."
+    },
+    {
+      "id": "mara_extraction",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "tired",
+      "when": {
+        "event": {
+          "type": "chose",
+          "tag": "extraction"
+        }
+      },
+      "text": "Dexter's contract is satisfied. I am sorry. I will reopen the file."
+    },
+    {
+      "id": "mara_evidence",
+      "trigger": "return",
+      "priority": 3,
+      "once": true,
+      "expr": "focused",
+      "when": {
+        "event": {
+          "tag": "evidence"
+        }
+      },
+      "text": "Evidence, properly logged. That is how this stops being an argument and becomes a record."
+    },
+    {
+      "id": "mara_trafficked",
+      "trigger": "return",
+      "priority": 6,
+      "once": true,
+      "expr": "annoyed",
+      "when": {
+        "event": {
+          "tag": "trafficked"
+        }
+      },
+      "text": "This is a line I do not cross and you will not cross while you carry my permit."
+    },
+    {
+      "id": "mara_hub_idle",
+      "trigger": "hub_idle",
+      "priority": 1,
+      "once": false,
+      "expr": "neutral",
+      "when": {},
+      "text": "Curiosity always wins. It just usually costs more than people expect."
+    },
+    {
+      "id": "mara_camp",
+      "trigger": "camp",
+      "priority": 1,
+      "once": false,
+      "expr": "soft",
+      "when": {},
+      "text": "Sit. Eat. The data will still be wrong in the morning."
+    },
+    {
+      "id": "mara_dexter",
+      "trigger": "hub_idle",
+      "priority": 2,
+      "once": true,
+      "expr": "tired",
+      "when": {
+        "event": {
+          "type": "talked",
+          "target": "mara"
+        }
+      },
+      "text": "If you see Dexter, tell him the whiteboard is still here. He will know what I mean."
+    },
+    {
+      "id": "mara_era",
+      "trigger": "era_start",
+      "priority": 2,
+      "once": false,
+      "expr": "focused",
+      "when": {},
+      "text": "Another Era. Another set of permits. Let us make this one count."
+    }
+  ],
+  "dexter": [
+    {
+      "id": "dexter_extraction",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "amused",
+      "when": {
+        "event": {
+          "type": "chose",
+          "tag": "extraction"
+        }
+      },
+      "text": "The contract is satisfied. Good. I will not pretend it is pretty. It is on time."
+    },
+    {
+      "id": "dexter_braced",
+      "trigger": "return",
+      "priority": 3,
+      "once": true,
+      "expr": "irritated",
+      "when": {
+        "event": {
+          "type": "chose",
+          "tag": "braced_structure"
+        }
+      },
+      "text": "You braced it. Admirable. It also cost the project six weeks. Admirable. Six weeks."
+    },
+    {
+      "id": "dexter_boss",
+      "trigger": "boss",
+      "priority": 3,
+      "once": true,
+      "expr": "serious",
+      "when": {
+        "event": {
+          "type": "defeated",
+          "target": "augur_rig"
+        }
+      },
+      "text": "AUGUR-7 is a very expensive lesson. I would be angry if it were not so instructive."
+    },
+    {
+      "id": "dexter_grazers",
+      "trigger": "return",
+      "priority": 2,
+      "once": true,
+      "expr": "neutral",
+      "when": {
+        "event": {
+          "type": "harmed",
+          "target": "dust_grazer_herd"
+        }
+      },
+      "text": "Grazers. Fine. Keystone species, I know. It is a cost. Everything is."
+    },
+    {
+      "id": "dexter_wipe",
+      "trigger": "return",
+      "priority": 5,
+      "once": true,
+      "expr": "tired",
+      "when": {
+        "event": {
+          "type": "party_wipe"
+        }
+      },
+      "text": "Your whole squad down. I have lost people on my own projects. It does not get cheaper."
+    },
+    {
+      "id": "dexter_cruelty",
+      "trigger": "return",
+      "priority": 6,
+      "once": true,
+      "expr": "serious",
+      "when": {
+        "event": {
+          "tag": "cruelty"
+        }
+      },
+      "text": "No. That did not buy anything. I will tolerate a cost. I will not tolerate a waste."
+    },
+    {
+      "id": "dexter_discovery",
+      "trigger": "return",
+      "priority": 2,
+      "once": true,
+      "expr": "genuine",
+      "when": {
+        "event": {
+          "tag": "discovery",
+          "count_min": 3
+        }
+      },
+      "text": "That scan. Where did you get the sample rate? Do not tell me. I want to guess."
+    },
+    {
+      "id": "dexter_rival",
+      "trigger": "rival_met",
+      "priority": 2,
+      "once": false,
+      "expr": "amused",
+      "when": {
+        "event": {
+          "type": "rival_encounter"
+        }
+      },
+      "text": "Ah, one of mine. Try not to ruin his week."
+    },
+    {
+      "id": "dexter_hub_idle",
+      "trigger": "hub_idle",
+      "priority": 1,
+      "once": false,
+      "expr": "neutral",
+      "when": {},
+      "text": "Morality is a luxury. So is time. I am short on both. Hello."
+    },
+    {
+      "id": "dexter_camp",
+      "trigger": "camp",
+      "priority": 1,
+      "once": false,
+      "expr": "genuine",
+      "when": {},
+      "text": "I remember your name. I remember everyone's name. Do not make that weird."
+    },
+    {
+      "id": "dexter_negotiated",
+      "trigger": "rival_met",
+      "priority": 3,
+      "once": true,
+      "expr": "genuine",
+      "when": {
+        "event": {
+          "tag": "rival_negotiated"
+        }
+      },
+      "text": "You made a deal instead of a mess. That is the part of you I would hire."
+    },
+    {
+      "id": "dexter_era",
+      "trigger": "era_start",
+      "priority": 2,
+      "once": false,
+      "expr": "serious",
+      "when": {},
+      "text": "A frontier ignored is a frontier surrendered. Sorry. Occupational hazard. Welcome back."
+    }
+  ],
+  "nerit": [
+    {
+      "id": "nerit_kept_dark",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "calm",
+      "when": {
+        "event": {
+          "tag": "darkness_kept"
+        }
+      },
+      "text": "You left it dark. Thank you. Some things are quiet on purpose."
+    },
+    {
+      "id": "nerit_forced",
+      "trigger": "return",
+      "priority": 5,
+      "once": true,
+      "expr": "unsettling",
+      "when": {
+        "event": {
+          "tag": "forced_exposure"
+        }
+      },
+      "text": "You lit what did not ask to be lit. I am still looking at where you stood."
+    },
+    {
+      "id": "nerit_camp",
+      "trigger": "camp",
+      "priority": 1,
+      "once": false,
+      "expr": "playful",
+      "when": {},
+      "text": "There is a corner in the Common where light forgets to go. Sit with me."
+    },
+    {
+      "id": "nerit_bonded",
+      "trigger": "bond_up",
+      "priority": 4,
+      "once": true,
+      "expr": "calm",
+      "when": {
+        "event": {
+          "type": "bond_stage",
+          "target": "nerit",
+          "tag": "bond_bonded"
+        }
+      },
+      "text": "Light remembers the dark. So will I. I will walk with you."
+    }
+  ],
+  "mollusk": [
+    {
+      "id": "mollusk_delay",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "focused",
+      "when": {
+        "event": {
+          "tag": "delay_used"
+        }
+      },
+      "text": "You bought time. Good. Did you use it? That is the whole question."
+    },
+    {
+      "id": "mollusk_dodged",
+      "trigger": "return",
+      "priority": 5,
+      "once": true,
+      "expr": "angry",
+      "when": {
+        "event": {
+          "tag": "consequence_dodged"
+        }
+      },
+      "text": "You ran before it ended. The bill still comes. It comes to someone else."
+    },
+    {
+      "id": "mollusk_faced",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "serene",
+      "when": {
+        "event": {
+          "tag": "consequence_faced"
+        }
+      },
+      "text": "You were there when it landed. That is rarer than strength."
+    },
+    {
+      "id": "mollusk_hub_idle",
+      "trigger": "hub_idle",
+      "priority": 1,
+      "once": false,
+      "expr": "curious",
+      "when": {},
+      "text": "Have you seen the new forklift in Bay Four? Do not answer. I am going to go look at it again."
+    },
+    {
+      "id": "mollusk_aruun",
+      "trigger": "camp",
+      "priority": 2,
+      "once": true,
+      "expr": "serene",
+      "when": {
+        "event": {
+          "type": "helped",
+          "target": "ochre_span"
+        }
+      },
+      "text": "Aruun held a bridge again. Tell him I am proud. Do not tell him I said proud."
+    }
+  ],
+  "nyxaris": [
+    {
+      "id": "nyxaris_respected",
+      "trigger": "return",
+      "priority": 3,
+      "once": true,
+      "expr": "default",
+      "when": {
+        "event": {
+          "tag": "pattern_respected"
+        }
+      },
+      "text": "You read before you touched. Few do. I will remember the tension of your hands."
+    },
+    {
+      "id": "nyxaris_silk",
+      "trigger": "return",
+      "priority": 5,
+      "once": true,
+      "expr": "default",
+      "when": {
+        "event": {
+          "tag": "silk_taken"
+        }
+      },
+      "text": "You took what was woven. Ask me who gave you permission. Ask it slowly."
+    },
+    {
+      "id": "nyxaris_extraction",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "default",
+      "when": {
+        "event": {
+          "type": "chose",
+          "tag": "extraction"
+        }
+      },
+      "text": "Another extraction contract. At least this one is written down."
+    },
+    {
+      "id": "nyxaris_helix",
+      "trigger": "rival_met",
+      "priority": 3,
+      "once": false,
+      "expr": "default",
+      "when": {},
+      "text": "Helix. They call my work secretion. The court will learn to read."
+    },
+    {
+      "id": "nyxaris_scarlith",
+      "trigger": "camp",
+      "priority": 2,
+      "once": true,
+      "expr": "default",
+      "when": {
+        "event": {
+          "type": "talked",
+          "target": "scarlith"
+        }
+      },
+      "text": "Scarlith teaches me how ownership hides in contracts. I teach him what cannot be owned. Neither of us admits it."
+    }
+  ],
+  "pharilux": [
+    {
+      "id": "pharilux_kept",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "calm",
+      "when": {
+        "event": {
+          "tag": "sealed_kept"
+        }
+      },
+      "text": "Closed is still working. You understood."
+    },
+    {
+      "id": "pharilux_breach",
+      "trigger": "return",
+      "priority": 5,
+      "once": true,
+      "expr": "aggressive",
+      "when": {
+        "event": {
+          "tag": "threshold_breached"
+        }
+      },
+      "text": "That door was not yours. Remember where you stood when it opened."
+    },
+    {
+      "id": "pharilux_pressed",
+      "trigger": "hub_idle",
+      "priority": 3,
+      "once": true,
+      "expr": "watchful",
+      "when": {
+        "event": {
+          "tag": "pressed_origin"
+        }
+      },
+      "text": "Wrong direction."
+    },
+    {
+      "id": "pharilux_cigarra",
+      "trigger": "hub_idle",
+      "priority": 2,
+      "once": true,
+      "expr": "curious",
+      "when": {
+        "event": {
+          "type": "talked",
+          "target": "cigarra"
+        }
+      },
+      "text": "She looks where I will be. I am elsewhere. She is persistent. Good."
+    },
+    {
+      "id": "pharilux_solthrin",
+      "trigger": "camp",
+      "priority": 2,
+      "once": true,
+      "expr": "watchful",
+      "when": {
+        "event": {
+          "type": "talked",
+          "target": "solthrin"
+        }
+      },
+      "text": "Different road."
+    }
+  ],
+  "scarlith": [
+    {
+      "id": "scarlith_salvage",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "satisfied",
+      "when": {
+        "event": {
+          "tag": "salvage_fair"
+        }
+      },
+      "text": "Truly abandoned. Clean paperwork. I could weep."
+    },
+    {
+      "id": "scarlith_claim_jump",
+      "trigger": "return",
+      "priority": 5,
+      "once": true,
+      "expr": "aggressive",
+      "when": {
+        "event": {
+          "tag": "claim_jump"
+        }
+      },
+      "text": "You took what still had an owner. I sell that kind of thing. Not to you."
+    },
+    {
+      "id": "scarlith_not_for_sale",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "curious",
+      "when": {
+        "event": {
+          "tag": "not_for_sale"
+        }
+      },
+      "text": "You refused a sale. A good price, too. I am revising my estimate of you upward."
+    },
+    {
+      "id": "scarlith_dominion",
+      "trigger": "hub_idle",
+      "priority": 2,
+      "once": true,
+      "expr": "calculating",
+      "when": {
+        "event": {
+          "type": "chose",
+          "tag": "extraction"
+        }
+      },
+      "text": "The Dominion bought a whole cache? Excellent customers. Terrible precedent."
+    },
+    {
+      "id": "scarlith_camp",
+      "trigger": "camp",
+      "priority": 1,
+      "once": false,
+      "expr": "neutral",
+      "when": {},
+      "text": "Down here, Handler. Lower. On the table."
+    }
+  ],
+  "solmara": [
+    {
+      "id": "solmara_tide",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "calm",
+      "when": {
+        "event": {
+          "tag": "tide_read"
+        }
+      },
+      "text": "You moved with the water. I felt it. It is a small thing and it is very large."
+    },
+    {
+      "id": "solmara_disturbed",
+      "trigger": "return",
+      "priority": 5,
+      "once": true,
+      "expr": "defensive",
+      "when": {
+        "event": {
+          "tag": "tide_disturbed"
+        }
+      },
+      "text": "The tide was disturbed. It was not your tide to disturb."
+    },
+    {
+      "id": "solmara_translated",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "curious",
+      "when": {
+        "event": {
+          "tag": "emotion_translated"
+        }
+      },
+      "text": "So that is what it feels like when someone smiles and is afraid. I will log it."
+    },
+    {
+      "id": "solmara_camp",
+      "trigger": "camp",
+      "priority": 1,
+      "once": false,
+      "expr": "ritual",
+      "when": {},
+      "text": "Your plumbers are magnificent. I would like to meet the pump."
+    }
+  ],
+  "solthrin": [
+    {
+      "id": "solthrin_laid",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "default",
+      "when": {
+        "event": {
+          "tag": "route_laid"
+        }
+      },
+      "text": "A road laid is a promise made. I will carry that."
+    },
+    {
+      "id": "solthrin_closed",
+      "trigger": "return",
+      "priority": 4,
+      "once": true,
+      "expr": "default",
+      "when": {
+        "event": {
+          "tag": "route_closed"
+        }
+      },
+      "text": "You closed a road and told them why. That is the harder part."
+    },
+    {
+      "id": "solthrin_speed",
+      "trigger": "return",
+      "priority": 5,
+      "once": true,
+      "expr": "default",
+      "when": {
+        "event": {
+          "tag": "speed_only"
+        }
+      },
+      "text": "A journey is not a race. You asked it to be one."
+    },
+    {
+      "id": "solthrin_pharilux",
+      "trigger": "camp",
+      "priority": 2,
+      "once": true,
+      "expr": "default",
+      "when": {
+        "event": {
+          "type": "talked",
+          "target": "pharilux"
+        }
+      },
+      "text": "Same mistake."
+    },
+    {
+      "id": "solthrin_hub_idle",
+      "trigger": "hub_idle",
+      "priority": 1,
+      "once": false,
+      "expr": "default",
+      "when": {},
+      "text": "What must arrive today? Say it. I will plan the road."
+    }
   ]
 }

@@ -1,0 +1,703 @@
+{
+  "_doc": "Region recipe: Briarwild (Zephyr's homeland). Data only. Schema: design/DATA_REQUESTS.md. Source: bible section 26. An immense flowering ecosystem where many routes exist only while particular plants bloom. Movement is seasonal; territory is hard to define; agreements matter more than borders. A spoken promise functions as contract, reputation and identity. Wording matters; witnesses matter; intent matters.",
+  "id": "briarwild",
+  "name": "The Briarwild",
+  "homeland_of": [
+    "zephyr"
+  ],
+  "tier": 2,
+  "summary": "A flowering world where paths open and close with the bloom. People trade in promises rather than borders. The honey is excellent. The wording is more important than the honey.",
+  "layers": [
+    {
+      "id": "bloom_meadow",
+      "depth": 0,
+      "light": "warm sun, saturated color",
+      "hazard": "pollen haze, hidden thorns",
+      "feel": "sweet, open, lively"
+    },
+    {
+      "id": "thicket",
+      "depth": 1,
+      "light": "gold in green",
+      "hazard": "thorn tangles",
+      "feel": "close, buzzing"
+    },
+    {
+      "id": "bramble_canyon",
+      "depth": 2,
+      "light": "narrow shafts of light",
+      "hazard": "snares, steep thorn walls",
+      "feel": "tense, sharp"
+    },
+    {
+      "id": "night_bloom",
+      "depth": 3,
+      "light": "moonlit, with glowing night flowers",
+      "hazard": "night hunters",
+      "feel": "quiet, intimate, strange"
+    }
+  ],
+  "ground": {
+    "surfaces": [
+      {
+        "id": "petal_drift",
+        "desc": "Soft banks of fallen petals; muffle sound.",
+        "color": "#d08aa0"
+      },
+      {
+        "id": "briar_path",
+        "desc": "A cleared path between thorn walls; narrow.",
+        "color": "#5a4a2a"
+      },
+      {
+        "id": "honey_stone",
+        "desc": "Amber-glazed flat stones, sticky when warm.",
+        "color": "#c8a040"
+      },
+      {
+        "id": "bloom_bridge",
+        "desc": "A bridge of interlaced stems that exists only while the bloom lasts.",
+        "color": "#6a8a3a"
+      }
+    ],
+    "relief": "rolling meadows, thorn canyons, seasonal bridges over gorges",
+    "palette": [
+      "#2a1f2a",
+      "#5a3a4a",
+      "#c8608a",
+      "#e0a040",
+      "#9ac060",
+      "#f0e0b0"
+    ]
+  },
+  "sky": {
+    "time": "day, with a bloom-glow night",
+    "fog_color": "#e8c8c0",
+    "fog_density": 0.006,
+    "ambient": "warm, with floating pollen",
+    "motes": "pollen, petals, seeds"
+  },
+  "props": [
+    {
+      "id": "bloom_gate",
+      "kind": "threshold",
+      "density": "low",
+      "note": "A bridge or gate that only exists during a particular bloom."
+    },
+    {
+      "id": "witness_post",
+      "kind": "structure",
+      "density": "low",
+      "note": "A carved post where promises are spoken and witnessed."
+    },
+    {
+      "id": "thorn_wall",
+      "kind": "obstacle",
+      "density": "high",
+      "note": "Dense, living walls."
+    },
+    {
+      "id": "honey_press",
+      "kind": "structure",
+      "density": "low",
+      "note": "Communal honey press, a trade hub."
+    },
+    {
+      "id": "poacher_snare",
+      "kind": "hazard",
+      "density": "low",
+      "note": "A cruel trap, not made locally."
+    },
+    {
+      "id": "night_bloom_flower",
+      "kind": "light",
+      "density": "medium (night layer)",
+      "note": "Glowing flowers that open at dusk."
+    }
+  ],
+  "flora": [
+    "bell briar, honey thistle, dusk lily, ladder vine, silk poppy"
+  ],
+  "creatures": [
+    {
+      "id": "nectar_wasp",
+      "name": "Nectar Wasp",
+      "class": "WILDLIFE",
+      "sapient": false,
+      "role": "pollinator",
+      "desc": "A small striped wasp that tends the blooms.",
+      "behavior": "Peaceful unless a nest is disturbed.",
+      "uses": {
+        "battle": "low",
+        "labor": "pollination",
+        "ecology": "keeps blooms open"
+      },
+      "weight": 3
+    },
+    {
+      "id": "briar_hare",
+      "name": "Briar Hare",
+      "class": "WILDLIFE",
+      "sapient": false,
+      "role": "grazer",
+      "desc": "A long-eared grazer that moves through thorn walls with ease.",
+      "behavior": "Skittish. Marks safe paths with scent.",
+      "uses": {
+        "battle": "none",
+        "labor": "scouting",
+        "ecology": "thins briar"
+      },
+      "weight": 3
+    },
+    {
+      "id": "thorn_mantis",
+      "name": "Thorn Mantis",
+      "class": "WILDLIFE",
+      "sapient": false,
+      "role": "ambusher",
+      "desc": "A mantis camouflaged as a thorn.",
+      "behavior": "Strikes at anything that touches the briar wall.",
+      "uses": {
+        "battle": "high",
+        "labor": "none",
+        "ecology": "controls grazers"
+      },
+      "weight": 2
+    },
+    {
+      "id": "dusk_moth",
+      "name": "Dusk Moth",
+      "class": "WILDLIFE",
+      "sapient": false,
+      "role": "night pollinator",
+      "desc": "A large moth that comes with the night blooms.",
+      "behavior": "Gentle. Follows lanterns.",
+      "uses": {
+        "battle": "none",
+        "labor": "guides at night",
+        "ecology": "pollinates night flowers"
+      },
+      "weight": 2
+    }
+  ],
+  "music": {
+    "mood": "bright, bouncy, honey-warm, with a sly turn",
+    "tempo": "92-124",
+    "instruments": [
+      "pizzicato strings",
+      "wooden flute",
+      "hand drum",
+      "thumb piano",
+      "glockenspiel"
+    ],
+    "layers": {
+      "bloom_meadow": "bouncy lead",
+      "thicket": "syncopated plucks",
+      "bramble_canyon": "tense pulse",
+      "night_bloom": "slow, warm drones"
+    },
+    "stinger_on_event": "a plucked string that bends at the end"
+  },
+  "encounters": {
+    "enemies": [
+      {
+        "species": "thorn_mantis",
+        "weight": 3
+      },
+      {
+        "species": "dominion_drone",
+        "weight": 1
+      }
+    ],
+    "rivals": [
+      "poacher_dara",
+      "ayla_fenwick"
+    ],
+    "hazards": [
+      "thorn snare",
+      "bloom collapse",
+      "pollen haze",
+      "night hunter"
+    ],
+    "ambient": "bees, distant song, thorn rustle"
+  },
+  "world_states": [
+    {
+      "id": "migration",
+      "label": "Migration",
+      "effect": "The bloom front moves; routes open and close along it.",
+      "event_weight_mods": {
+        "briar_bloom_front": 4
+      }
+    },
+    {
+      "id": "disease",
+      "label": "Disease",
+      "effect": "A wilt travels the blooms, closing routes behind it.",
+      "event_weight_mods": {
+        "briar_wilt": 2
+      }
+    },
+    {
+      "id": "political_control",
+      "label": "Political Control",
+      "effect": "A faction tries to own a bloom route; witnesses are scarce.",
+      "event_weight_mods": {
+        "briar_promise_dispute": 3
+      }
+    }
+  ],
+  "bondable_here": [
+    {
+      "character": "zephyr",
+      "hook": "Promise Law. Wording, witnesses and intent are the whole test."
+    },
+    {
+      "character": "scarlith",
+      "hook": "Trafficking lines: expose them and he trusts you more."
+    }
+  ],
+  "descent_events": [
+    {
+      "id": "briar_bloom_front",
+      "title": "The bloom front",
+      "kind": "migration",
+      "weight": 3,
+      "once": false,
+      "min_depth": 0,
+      "text": "A band of pink silk poppies opens along the ridge, and a bridge of interlaced stems forms across the gorge below it. It will last a few hours. A courier waits at the near end with a sealed word for a family across.",
+      "choices": [
+        {
+          "id": "promise",
+          "label": "Promise to carry the word before the bridge closes.",
+          "result": "'Witnessed,' says Zephyr, who has appeared from nowhere. 'Wording noted.'",
+          "records": [],
+          "promise": {
+            "id": "zephyr_carry_bloom_word",
+            "to": "zephyr",
+            "template": "carry_bloom_word"
+          }
+        },
+        {
+          "id": "carry",
+          "label": "Carry it now.",
+          "result": "You make it across with minutes to spare. The family is delighted. The bridge folds up behind you.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "far_bloom",
+              "tags": [
+                "courier_delivered",
+                "delivered",
+                "route_laid"
+              ],
+              "weight": 3
+            }
+          ]
+        },
+        {
+          "id": "race",
+          "label": "Race it just to see how fast you can cross.",
+          "result": "You cross in record time. The word arrives late and slightly crumpled.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "far_bloom",
+              "tags": [
+                "speed_only",
+                "rules_bent_fun"
+              ],
+              "weight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "briar_promise_dispute",
+      "title": "A promise in dispute",
+      "kind": "social",
+      "weight": 3,
+      "once": false,
+      "min_depth": 0,
+      "text": "Two traders argue at a witness post. One says the other promised 'a full cask of honey by the third bloom.' The other says the cask arrived, and the honey was slightly less than full. The post's witness is a Briarwild elder who looks delighted.",
+      "choices": [
+        {
+          "id": "letter",
+          "label": "Rule for the letter: the cask arrived.",
+          "result": "Technically correct. The trader who lost looks stunned and the elder looks impressed.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "honey_traders",
+              "tags": [
+                "rules_bent_fun"
+              ],
+              "weight": 2
+            }
+          ]
+        },
+        {
+          "id": "spirit",
+          "label": "Rule for the spirit: the buyer asked for honey.",
+          "result": "The buyer is satisfied. The seller grumbles, then tops up the cask.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "honey_traders",
+              "tags": [
+                "stewardship",
+                "trust"
+              ],
+              "weight": 2
+            }
+          ]
+        },
+        {
+          "id": "force",
+          "label": "Order the seller to pay double or be shamed.",
+          "result": "They pay. Everyone in the room hates it.",
+          "records": [
+            {
+              "type": "harmed",
+              "target": "honey_traders",
+              "tags": [
+                "coercion",
+                "dominion_favor"
+              ],
+              "weight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "briar_poacher_snares",
+      "title": "Poacher snare line",
+      "kind": "convoy",
+      "weight": 4,
+      "once": false,
+      "min_depth": 1,
+      "text": "A line of snares, steel and wire, is set across the briar hare trails. A cage-sled sits at the end. Three hares are in it, and so is a small creature that does not belong on a sled at all: a sapient, with a bad ear tag.",
+      "choices": [
+        {
+          "id": "free",
+          "label": "Free everyone and cut the line.",
+          "result": "The hares run. The sapient stands very still and then walks up to Zephyr and bows, once.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "poacher_sled",
+              "tags": [
+                "protect_weak",
+                "rescue_civilians",
+                "trafficking_exposed",
+                "nonviolent"
+              ],
+              "weight": 4
+            }
+          ]
+        },
+        {
+          "id": "evidence",
+          "label": "Photograph the sled and tags, then free everyone.",
+          "result": "Mara will have a file. Scarlith will, shortly, have an opinion.",
+          "records": [
+            {
+              "type": "discovered",
+              "target": "poacher_sled",
+              "tags": [
+                "evidence",
+                "trafficking_exposed",
+                "discovery"
+              ],
+              "weight": 4
+            }
+          ]
+        },
+        {
+          "id": "leave_cruelty",
+          "label": "Leave the animals in the cage and go on.",
+          "result": "The hares do not run. The sapient watches you leave.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "poacher_sled",
+              "tags": [
+                "cruelty",
+                "trafficked"
+              ],
+              "weight": 4
+            }
+          ]
+        },
+        {
+          "id": "sell",
+          "label": "Take the cage to a buyer in the Common.",
+          "result": "It pays. Everyone in the cage knows what you did.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "poacher_sled",
+              "tags": [
+                "trafficked",
+                "extraction"
+              ],
+              "weight": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "briar_stranded_pollinator",
+      "title": "Wasp nest on a failing bridge",
+      "kind": "stranded",
+      "weight": 3,
+      "once": false,
+      "min_depth": 0,
+      "text": "A nectar wasp nest hangs under a bloom bridge that is beginning to fold. The wasps circle in alarm, as if they have already counted the minutes.",
+      "choices": [
+        {
+          "id": "move",
+          "label": "Move the nest to the far bank before the bridge folds.",
+          "result": "It takes both hands and a lot of patience. The wasps follow in a cloud.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "nectar_wasp",
+              "tags": [
+                "protect_weak",
+                "stewardship",
+                "rescue_civilians"
+              ],
+              "weight": 3
+            }
+          ]
+        },
+        {
+          "id": "smoke",
+          "label": "Smoke them out and leave.",
+          "result": "The nest is abandoned. The wasps resettle elsewhere, angry.",
+          "records": [
+            {
+              "type": "harmed",
+              "target": "nectar_wasp",
+              "tags": [
+                "harm_wildlife"
+              ],
+              "weight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "briar_old_road_marker",
+      "title": "A marker among the thistles",
+      "kind": "marker",
+      "weight": 2,
+      "once": false,
+      "min_depth": 0,
+      "text": "A marker stone stands in a thistle patch, and every bloom near it is the same species. The symbols match the Red Reaches. The thistles lean toward it.",
+      "choices": [
+        {
+          "id": "read",
+          "label": "Read it with Zephyr.",
+          "result": "'Roads are promises between places,' Zephyr says, quoting someone who is not in the party. 'This one is old. It still keeps its word.'",
+          "records": [
+            {
+              "type": "discovered",
+              "target": "old_road_marker",
+              "tags": [
+                "discovery",
+                "curiosity",
+                "evidence"
+              ],
+              "weight": 3
+            }
+          ]
+        },
+        {
+          "id": "lay",
+          "label": "Mark the route from the stone to the nearest bloom bridge.",
+          "result": "Now other travelers can find it.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "old_road_marker",
+              "tags": [
+                "route_laid",
+                "stewardship"
+              ],
+              "weight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "briar_wilt",
+      "title": "The wilt",
+      "kind": "hazard",
+      "weight": 2,
+      "once": false,
+      "min_depth": 0,
+      "text": "A band of brown spreads across the nearest bloom ridge. The wasps are leaving. A bridge folds up early.",
+      "choices": [
+        {
+          "id": "cull",
+          "label": "Cut the sick blooms to save the rest.",
+          "result": "It hurts to watch. It also stops the wilt.",
+          "records": [
+            {
+              "type": "helped",
+              "target": "bloom_ridge",
+              "tags": [
+                "stewardship",
+                "consequence_faced"
+              ],
+              "weight": 3
+            }
+          ]
+        },
+        {
+          "id": "wait",
+          "label": "Wait and hope it stops.",
+          "result": "It does not stop.",
+          "records": [
+            {
+              "type": "chose",
+              "target": "bloom_ridge",
+              "tags": [
+                "consequence_dodged"
+              ],
+              "weight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "briar_night_walk",
+      "title": "Night bloom walk",
+      "kind": "social",
+      "weight": 2,
+      "once": false,
+      "min_depth": 0,
+      "text": "At dusk the night flowers open and the dusk moths come. Zephyr walks ahead, quiet for once. 'Tell me,' they say, 'something you will not break.'",
+      "choices": [
+        {
+          "id": "promise",
+          "label": "Make a small promise out loud and word it carefully.",
+          "result": "'Witnessed,' Zephyr says. 'And wording noted. It is a good one.'",
+          "records": [
+            {
+              "type": "talked",
+              "target": "zephyr",
+              "tags": [
+                "promise_made",
+                "trust"
+              ],
+              "weight": 2
+            }
+          ]
+        },
+        {
+          "id": "joke",
+          "label": "Tell them a joke.",
+          "result": "They laugh. It is not a promise. It is nice anyway.",
+          "records": [
+            {
+              "type": "talked",
+              "target": "zephyr",
+              "tags": [
+                "social"
+              ],
+              "weight": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "briar_amends_promise",
+      "title": "A promise made twice",
+      "kind": "bond_test",
+      "weight": 1,
+      "once": true,
+      "min_depth": 0,
+      "text": "You return to the witness post where the promise broke. Zephyr is already there, sweeping petals off the carved wood with one wing.",
+      "choices": [
+        {
+          "id": "remake",
+          "label": "Make a new promise and word it better.",
+          "result": "'Witnessed,' they say, very quietly.",
+          "records": [],
+          "promise": {
+            "id": "zephyr_carry_bloom_word_2",
+            "to": "zephyr",
+            "template": "carry_bloom_word"
+          }
+        }
+      ],
+      "when": {
+        "all": [
+          {
+            "promise": {
+              "id": "zephyr_bring_both_home",
+              "status_in": [
+                "broken"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "briar_amends_trade",
+      "title": "The cage you left behind",
+      "kind": "bond_test",
+      "weight": 1,
+      "once": true,
+      "min_depth": 0,
+      "text": "The sled is still where you left it. The tag on the ear is gone. Scarlith sits on the front rail, holding his tiny cane.",
+      "choices": [
+        {
+          "id": "return",
+          "label": "Find the one who was in the cage and make it right with their family.",
+          "result": "It takes a day. Scarlith writes the whole thing off his books, which, for him, is a big deal.",
+          "records": [
+            {
+              "type": "amends",
+              "target": "scarlith",
+              "tags": [
+                "amends",
+                "trafficking_exposed"
+              ],
+              "weight": 3
+            }
+          ]
+        }
+      ],
+      "when": {
+        "all": [
+          {
+            "event": {
+              "tag": "trafficked",
+              "count_min": 1
+            }
+          },
+          {
+            "not": {
+              "event": {
+                "type": "amends",
+                "target": "scarlith"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
