@@ -24,6 +24,7 @@ uniform float rim_power = 2.6;
 uniform float rim_strength = 0.55;
 uniform vec4 accent_color : source_color = vec4(0.3, 1.0, 0.9, 1.0);
 uniform float accent_strength = 1.4;
+uniform float accent_mix = 0.4;       // how much of the baked emissive hue is replaced by accent_color
 uniform float alpha_cut = 0.0;          // >0: leaf-cut membrane
 // gameplay feedback (driven by CharacterModel)
 uniform vec4 highlight_color : source_color = vec4(0.4, 0.9, 1.0, 1.0);
@@ -59,7 +60,7 @@ void pop_fragment(vec2 uv, vec3 nrm, vec3 view, out vec3 albedo, out float rough
 	if (use_emis > 0.5) {
 		vec3 e = texture(emis_tex, uv).rgb;
 		float m = max(e.r, max(e.g, e.b));
-		emis += mix(e, accent_color.rgb * m, 0.65) * accent_strength;
+		emis += mix(e, accent_color.rgb * m, accent_mix) * accent_strength;
 	}
 	float f3 = pow(1.0 - ndv, 3.0);
 	emis += highlight_color.rgb * f3 * highlight * 1.6 + vec3(1.0, 0.85, 0.8) * flash;

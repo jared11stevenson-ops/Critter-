@@ -38,6 +38,10 @@ STANDINS = {
             "hip.L": (0.085, 0.0, 0.89), "knee.L": (0.095, -0.015, 0.485), "ankle.L": (0.10, 0.02, 0.085),
             "ball.L": (0.105, -0.085, 0.02), "toe_end.L": (0.11, -0.15, 0.015),
             "wing_root.L": (0.05, 0.075, 1.31), "wing_end.L": (0.13, 0.13, 0.80),
+            # secondary-motion chains (v4): second wing panel, crown stalks, back hair
+            "wing2_root.L": (0.07, 0.10, 1.22), "wing2_end.L": (0.16, 0.15, 0.55),
+            "stalk_root.L": (0.06, 0.045, 1.60), "stalk_end.L": (0.22, 0.05, 1.70),
+            "hair_root": (0.0, 0.075, 1.60), "hair_end": (0.0, 0.13, 1.37),
         },
         # name, head joint, tail joint, parent
         "bones": [
@@ -50,6 +54,9 @@ STANDINS = {
             ("thigh.L", "hip.L", "knee.L", "hips"), ("shin.L", "knee.L", "ankle.L", "thigh.L"),
             ("foot.L", "ankle.L", "ball.L", "shin.L"), ("toe.L", "ball.L", "toe_end.L", "foot.L"),
             ("wing.L", "wing_root.L", "wing_end.L", "chest"),
+            ("wing2.L", "wing2_root.L", "wing2_end.L", "chest"),
+            ("stalk.L", "stalk_root.L", "stalk_end.L", "head"),
+            ("hair.B", "hair_root", "hair_end", "head"),
         ],
         # bone: (radius at head, radius at tail, colour)
         "shape": {
@@ -59,10 +66,11 @@ STANDINS = {
             "upperarm.L": (0.042, 0.034, "cloth"), "forearm.L": (0.032, 0.026, "skin"), "hand.L": (0.025, 0.018, "skin"),
             "thigh.L": (0.06, 0.042, "cloth"), "shin.L": (0.04, 0.03, "cloth"), "foot.L": (0.032, 0.026, "skin"),
             "toe.L": (0.024, 0.014, "skin"), "wing.L": (0.0, 0.0, "wing"),
+            "wing2.L": (0.0, 0.0, "wing"), "stalk.L": (0.012, 0.008, "crown"), "hair.B": (0.0, 0.0, "wing"),
         },
         # Bad Thought / abilities all call play_attack("cast"); the kit's ability_used picks the ability clip
-        "tscn_extra": 'combo_clips = PackedStringArray("attack_1", "attack_1")\n'
-                      'attack_map = {"cast": "attack_1", "heavy": "attack_1", "leap": "leap"}\nmax_speed = 5.4\n',
+        "tscn_extra": 'combo_clips = PackedStringArray("attack_1", "attack_2")\n'
+                      'attack_map = {"cast": "attack_1", "heavy": "attack_3", "leap": "leap"}\nmax_speed = 5.4\n',
         "colours": {"cloth": (0.16, 0.13, 0.12, 1), "skin": (0.62, 0.72, 0.52, 1), "collar": (0.06, 0.05, 0.06, 1),
                     "crown": (0.05, 0.04, 0.05, 1), "wing": (0.45, 0.85, 0.45, 0.45), "eye": (0.85, 0.95, 0.2, 1)},
     }
@@ -100,7 +108,7 @@ def build_armature(name, J, B):
         b = eb.new(n)
         b.head, b.tail = Vector(J[h]), Vector(J[t])
         b.parent = eb[p]
-        if n not in ("thigh.L", "thigh.R", "clavicle.L", "clavicle.R", "wing.L", "wing.R", "hips") and \
+        if n not in ("thigh.L", "thigh.R", "clavicle.L", "clavicle.R", "wing.L", "wing.R", "wing2.L", "wing2.R", "stalk.L", "stalk.R", "hair.B", "hips") and \
                 (b.head - eb[p].tail).length < 1e-4:
             b.use_connect = True
         b.align_roll(Vector((0, -1, 0)) if abs(b.vector.normalized().y) < 0.9 else Vector((0, 0, 1)))

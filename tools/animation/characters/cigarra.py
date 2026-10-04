@@ -13,7 +13,7 @@ import lib
 import retarget as rt
 from retarget import FPS
 
-CLIPS = ["idle", "walk", "run", "dash", "attack_1", "premonition", "false_memory", "brain_skip", "leap",
+CLIPS = ["idle", "walk", "run", "dash", "attack_1", "attack_2", "attack_3", "premonition", "false_memory", "brain_skip", "leap",
          "hit", "hit_back", "hit_left", "hit_right", "hit_heavy", "downed", "revive", "overwhelmed", "talk_idle"]
 
 # light, curious carriage: head slightly forward and tilted, shoulders dropped, chest open
@@ -59,9 +59,15 @@ def flutter(tr, amp=6.0, hz=9.0, w=None):
 
 
 def wing_lag(tr, cyclic=False):
-    if has(tr, "wing.L"):
-        for b in ("wing.L", "wing.R"):
-            rt.pendulum(tr, b, stiffness=60, damping=7, cyclic=cyclic, max_deg=18)
+    """Secondary motion (idempotent): wing panels, crown stalks, crown tip and back hair trail the body with damped springs.
+    Each chain has its own stiffness so they overlap instead of moving as one lump (follow-through)."""
+    if getattr(tr, "_lagged", False):
+        return
+    tr._lagged = True
+    for b, st, dm, mx in (("wing.L", 60, 7, 18), ("wing.R", 60, 7, 18), ("wing2.L", 42, 6, 26), ("wing2.R", 42, 6, 26),
+                          ("stalk.L", 95, 5, 28), ("stalk.R", 95, 5, 28), ("crown", 120, 6, 22), ("hair.B", 48, 6, 30)):
+        if has(tr, b):
+            rt.pendulum(tr, b, stiffness=st, damping=dm, cyclic=cyclic, max_deg=mx)
 
 
 def base(sk, clip, t0=None, t1=None, warp=None, timescale=1.0, face=0.0, loop=False, style=True):
@@ -231,6 +237,53 @@ def attack_1(sk):
     return tr, meta(tr, impact=0.11, cancel=0.25)
 
 
+def attack_2(sk):
+    """Bad Thought, left hand: mirrored flick with a counter-twist so the combo reads as a see-saw."""
+    tr = base(sk, "137_41", 4.3, 4.3 + 0.55)
+    lib.remove_root_xy(tr, keep=0.0)
+    lib.layer(tr, {
+        "neck1": [(0, (0, 0, 0)), (0.06, (-8, 0, 0)), (0.11, (12, 0, 0)), (0.2, (5, 0, 0)), (0.5, (0, 0, 0))],
+        "head": [(0, (0, 0, 0)), (0.06, (-12, 0, 8)), (0.11, (18, 0, -8)), (0.22, (6, 0, -2)), (0.5, (0, 0, 0))],
+        "spine1": [(0, (0, 0, 0)), (0.06, (-4, 0, -6)), (0.12, (6, 0, 9)), (0.5, (0, 0, 0))],
+        "hand.L": [(0, (0, 0, 0)), (0.07, (0, 0, 30)), (0.12, (0, 0, -40)), (0.3, (0, 0, 0))],
+    })
+    hand_ik(tr, "L", [(0, (0.22, -0.05, 0.85)), (0.07, (0.18, -0.1, 1.30)), (0.12, (0.12, -0.45, 1.25)),
+                      (0.3, (0.15, -0.3, 1.1)), (0.55, (0.22, -0.05, 0.85))],
+            curve1(tr, [(0, 0.0), (0.05, 1.0), (0.3, 1.0), (0.5, 0.0)]))
+    lib.layer(tr, {"crown": [(0, (0, 0, 0)), (0.06, (-12, 0, 0)), (0.11, (18, 0, 0)), (0.3, (0, 0, 0))]})
+    wings(tr, [(0, (0, 0, 0)), (0.11, (-8, 10, 0)), (0.4, (0, 0, 0))])
+    from_idle(tr, sk, 0.04)
+    settle(tr, sk, 0.35)
+    plant(tr)
+    wing_lag(tr)
+    return tr, meta(tr, impact=0.11, cancel=0.25)
+
+
+def attack_3(sk):
+    """Heavy: anticipation crouch with both palms drawn back (wings tucked), then a two-handed psychic shove; the crown
+    stalks and wing cloak blast open on release and settle with overshoot."""
+    tr = base(sk, "137_41", 4.3, 4.3 + 0.95)
+    lib.remove_root_xy(tr, keep=0.0)
+    lib.shift(tr, lib.curve(tr.F, [(0, (0, 0, 0)), (0.2, (0, 0.05, -0.09)), (0.3, (0, -0.1, -0.04)), (0.95, (0, 0, 0))]))
+    lib.layer(tr, {
+        "spine1": [(0, (0, 0, 0)), (0.2, (-8, 0, 0)), (0.3, (16, 0, 0)), (0.5, (8, 0, 0)), (0.95, (0, 0, 0))],
+        "chest": [(0, (0, 0, 0)), (0.2, (-6, 0, 0)), (0.3, (8, 0, 0)), (0.95, (0, 0, 0))],
+        "head": [(0, (0, 0, 0)), (0.2, (-12, 0, 0)), (0.3, (14, 0, 0)), (0.5, (6, 0, 0)), (0.95, (0, 0, 0))],
+    })
+    for s, x in (("L", 0.14), ("R", -0.14)):
+        hand_ik(tr, s, [(0, (x * 1.5, -0.03, 0.85)), (0.2, (x, 0.12, 1.15)), (0.3, (x * 0.7, -0.55, 1.28)),
+                        (0.6, (x * 0.8, -0.42, 1.22)), (0.95, (x * 1.5, -0.03, 0.85))],
+                curve1(tr, [(0, 0.0), (0.12, 1.0), (0.7, 1.0), (0.92, 0.0)]))
+    wings(tr, [(0, (0, 0, 0)), (0.2, (-10, -8, 0)), (0.3, (25, 60, 0)), (0.6, (14, 30, 0)), (0.95, (0, 0, 0))])
+    lib.layer(tr, {"crown": [(0, (0, 0, 0)), (0.2, (10, 0, 0)), (0.3, (-24, 0, 0)), (0.6, (6, 0, 0)), (0.95, (0, 0, 0))]})
+    flutter(tr, amp=6.0, hz=13.0, w=curve1(tr, [(0, 0), (0.3, 1), (0.7, 0.6), (0.9, 0)]))
+    from_idle(tr, sk, 0.05)
+    settle(tr, sk, 0.7)
+    plant(tr)
+    wing_lag(tr)
+    return tr, meta(tr, impact=0.3, cancel=0.62)
+
+
 def premonition(sk):
     """Fingertips to temples, head tips back as the futures flood in, wing cloak flares open and shivers."""
     tr = base(sk, "137_41", 5.0, 5.0 + 1.1)
@@ -397,4 +450,6 @@ def overwhelmed(sk):
 def build(name, sk):
     if name == "idle":
         _cache.clear()
-    return globals()[name](sk)
+    tr, m = globals()[name](sk)
+    wing_lag(tr, cyclic=bool(m.get("loop")))      # every clip gets secondary motion (no-op if the clip already did)
+    return tr, m

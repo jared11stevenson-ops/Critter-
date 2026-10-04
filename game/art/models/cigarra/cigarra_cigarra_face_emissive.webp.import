@@ -2,19 +2,19 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dui7yk3g4u6bi"
-path="res://.godot/imported/cigarra_cigarra_albedo.webp-abc329ea834e889176afb89411d5a2df.ctex"
+uid="uid://ckj7751avar5m"
+path="res://.godot/imported/cigarra_cigarra_face_emissive.webp-2a0523f612a61d639dcb3565b1696292.ctex"
 metadata={
 "vram_texture": false
 }
 generator_parameters={
-"md5": "542b77eb8956fba7b87bef810199b705"
+"md5": "5d07619c3c3578b5d04ad31e62928081"
 }
 
 [deps]
 
-source_file="res://game/art/models/cigarra/cigarra_cigarra_albedo.webp"
-dest_files=["res://.godot/imported/cigarra_cigarra_albedo.webp-abc329ea834e889176afb89411d5a2df.ctex"]
+source_file="res://game/art/models/cigarra/cigarra_cigarra_face_emissive.webp"
+dest_files=["res://.godot/imported/cigarra_cigarra_face_emissive.webp-2a0523f612a61d639dcb3565b1696292.ctex"]
 
 [params]
 
