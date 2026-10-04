@@ -1,0 +1,750 @@
+{
+ "_doc": "Region recipe: The Red Reaches (Aruun's homeland). Data only; schema in design/DATA_REQUESTS.md. Extra keys read by game/world/region/region_runner.gd: 'spokes' (named side areas hanging off the critical path: geometry lives in the level layout.json floors, this file holds the entry trigger, blurb and codex), 'sites' (interactable points: event / cache / lore, optionally secret = revealed by SCAN or proximity). Critical path beats stay in the level script; spokes are optional.",
+ "id": "red_reaches",
+ "name": "The Red Reaches",
+ "homeland_of": [
+  "aruun"
+ ],
+ "tier": 1,
+ "summary": "Plateaus, mineral deserts and fracture valleys. Settlements survive because generations maintain the bridges, wells and roads. Strength is the burden you can accept without forcing it onto someone weaker.",
+ "layers": [
+  {
+   "id": "gate_pad",
+   "depth": 0,
+   "light": "hard noon, red dust haze",
+   "hazard": "none",
+   "feel": "open, exposed"
+  },
+  {
+   "id": "valley",
+   "depth": 1,
+   "light": "slanted amber",
+   "hazard": "mite swarms",
+   "feel": "narrow, echoing"
+  },
+  {
+   "id": "waystation",
+   "depth": 2,
+   "light": "warm, dusty",
+   "hazard": "none",
+   "feel": "a crossroads; paths lead off in every direction"
+  },
+  {
+   "id": "basin",
+   "depth": 3,
+   "light": "flat, red-orange",
+   "hazard": "Dominion drill resonance",
+   "feel": "loud, tense"
+  }
+ ],
+ "ground": {
+  "surfaces": [
+   {
+    "id": "red_dirt",
+    "desc": "Packed red dirt, firm",
+    "color": "#8a4a32"
+   },
+   {
+    "id": "survey_stone",
+    "desc": "Old cut stone of the Spanwrights",
+    "color": "#b09a82"
+   }
+  ],
+  "relief": "mesa plateaus cut by fracture valleys",
+  "palette": [
+   "#3a2018",
+   "#8a4a32",
+   "#c4683f",
+   "#e0b080",
+   "#7fe0ff",
+   "#5a5048"
+  ]
+ },
+ "sky": {
+  "time": "day",
+  "fog_color": "#c98a64",
+  "fog_density": 0.006,
+  "ambient": "warm, dry wind"
+ },
+ "props": [
+  {
+   "id": "marker_stone",
+   "kind": "structure",
+   "density": "rare",
+   "note": "Old Road markers; glyphs seen continents apart."
+  },
+  {
+   "id": "survey_flag",
+   "kind": "structure",
+   "density": "low",
+   "note": "Dominion survey flags."
+  }
+ ],
+ "flora": [
+  "flat tree",
+  "reach shrub",
+  "lichen mat"
+ ],
+ "creatures": [
+  {
+   "id": "skitter_mite",
+   "name": "Skitter Mite",
+   "class": "WILDLIFE",
+   "sapient": false,
+   "role": "mineral grazer; swarms",
+   "uses": {
+    "battle": "swarm pressure",
+    "labor": "crust cleaning",
+    "ecology": "mineral cycle"
+   }
+  },
+  {
+   "id": "dust_grazer",
+   "name": "Dust Grazer",
+   "class": "WILDLIFE",
+   "sapient": false,
+   "role": "keystone herd",
+   "uses": {
+    "battle": "none",
+    "labor": "none",
+    "ecology": "keeps the waystation basin open"
+   }
+  },
+  {
+   "id": "plate_beetle",
+   "name": "Plate Beetle",
+   "class": "WILDLIFE",
+   "sapient": false,
+   "role": "lichen grazer",
+   "uses": {
+    "battle": "slow tank",
+    "labor": "hauling",
+    "ecology": "lichen control"
+   }
+  }
+ ],
+ "music": {
+  "explore": "explore_reaches",
+  "boss": "boss_augur"
+ },
+ "encounters": {
+  "enemies": [
+   {
+    "species": "skitter_mite",
+    "weight": 3
+   },
+   {
+    "species": "dominion_drone",
+    "weight": 1
+   }
+  ],
+  "rivals": [
+   "wren_calder",
+   "marek_vasko"
+  ],
+  "hazards": [
+   "chasm edge",
+   "resonance field"
+  ],
+  "ambient": "wind, distant drilling"
+ },
+ "world_states": [
+  {
+   "id": "extraction",
+   "label": "Extraction",
+   "effect": "Dominion surveyors work the side valleys; salvage is contested.",
+   "event_weight_mods": {
+    "rr_drover_cart": 2
+   }
+  }
+ ],
+ "bondable_here": [
+  {
+   "character": "aruun",
+   "note": "homeland"
+  }
+ ],
+ "spokes": [
+  {
+   "id": "echo_hollow",
+   "name": "Echo Hollow",
+   "hub": "fracture_valley",
+   "blurb": "A dry side-cut off the valley. Sound carries strangely here.",
+   "trigger": {
+    "pos": [
+     64,
+     -4,
+     -22
+    ],
+    "r": 8
+   },
+   "codex": "place_echo_hollow",
+   "fresh": "A side-cut leads off the valley. Optional."
+  },
+  {
+   "id": "drovers_rest",
+   "name": "Drover's Rest",
+   "hub": "waystation",
+   "blurb": "The north spur from the Waystation. A cart road, stalled.",
+   "trigger": {
+    "pos": [
+     128,
+     -3.5,
+     -28
+    ],
+    "r": 8
+   },
+   "codex": "place_drovers_rest",
+   "fresh": "Cart ruts lead north from the Waystation. Optional."
+  },
+  {
+   "id": "salt_pans",
+   "name": "The Salt Pans",
+   "hub": "waystation",
+   "blurb": "The south spur. White flats, an old well, and something glinting under the crust.",
+   "trigger": {
+    "pos": [
+     111,
+     -3.5,
+     28
+    ],
+    "r": 9
+   },
+   "codex": "place_salt_pans",
+   "fresh": "A white salt flat lies south of the Waystation. Optional."
+  },
+  {
+   "id": "thought_vault",
+   "name": "The Thoughtstone Vault",
+   "hub": "boulder_pass",
+   "blurb": "A sealed spanwright vault off the Boulder Pass. Closed is still working.",
+   "trigger": {
+    "pos": [
+     160,
+     -4,
+     -26
+    ],
+    "r": 7
+   },
+   "codex": "place_thought_vault",
+   "fresh": "A sealed door waits north of the pass. Optional."
+  },
+  {
+   "id": "cistern",
+   "name": "The Drowned Cistern",
+   "hub": "drill_basin",
+   "blurb": "A hidden cleft behind the survey camp. Cold air, still water, no light.",
+   "trigger": {
+    "pos": [
+     186,
+     -6,
+     -36
+    ],
+    "r": 7
+   },
+   "codex": "place_cistern",
+   "fresh": "A hidden cleft opens in the basin wall."
+  },
+  {
+   "id": "overlook",
+   "name": "Spanwright Overlook",
+   "hub": "span_approach",
+   "blurb": "A ledge above the Ochre Span. The whole crossing is visible from here.",
+   "trigger": {
+    "pos": [
+     238,
+     -3,
+     -30
+    ],
+    "r": 8
+   },
+   "codex": "place_overlook",
+   "fresh": "A ledge climbs north of the Span approach. Optional."
+  }
+ ],
+ "sites": [
+  {
+   "id": "echo_wall",
+   "spoke": "echo_hollow",
+   "pos": [
+    64,
+    -4,
+    -34
+   ],
+   "kind": "event",
+   "event": "rr_echo_wall",
+   "label": "Read the wall",
+   "r": 4.0
+  },
+  {
+   "id": "echo_cache",
+   "spoke": "echo_hollow",
+   "pos": [
+    58,
+    -4,
+    -30
+   ],
+   "kind": "cache",
+   "item": "thoughtstone_dust",
+   "n": 2,
+   "label": "Dig",
+   "r": 3.0,
+   "secret": true,
+   "text": "A seam of Thoughtstone dust under the glyphs."
+  },
+  {
+   "id": "drover_cart",
+   "spoke": "drovers_rest",
+   "pos": [
+    132,
+    -3.5,
+    -38
+   ],
+   "kind": "event",
+   "event": "rr_drover_cart",
+   "label": "Help the drover",
+   "r": 4.0
+  },
+  {
+   "id": "drover_stash",
+   "spoke": "drovers_rest",
+   "pos": [
+    138,
+    -3.5,
+    -34
+   ],
+   "kind": "cache",
+   "item": "salvage",
+   "n": 2,
+   "label": "Search",
+   "r": 3.0,
+   "text": "Spare axle parts. The drover waves you on."
+  },
+  {
+   "id": "salt_well",
+   "spoke": "salt_pans",
+   "pos": [
+    110,
+    -3.5,
+    34
+   ],
+   "kind": "event",
+   "event": "rr_well_keeper",
+   "label": "Speak to the keeper",
+   "r": 4.0
+  },
+  {
+   "id": "salt_glint",
+   "spoke": "salt_pans",
+   "pos": [
+    116,
+    -3.5,
+    40
+   ],
+   "kind": "cache",
+   "item": "lichen_culture",
+   "n": 3,
+   "label": "Dig",
+   "r": 3.0,
+   "secret": true,
+   "text": "A buried lichen bed, perfectly preserved in salt."
+  },
+  {
+   "id": "vault_door",
+   "spoke": "thought_vault",
+   "pos": [
+    160,
+    -4,
+    -30
+   ],
+   "kind": "event",
+   "event": "rr_vault_door",
+   "label": "Examine the door",
+   "r": 4.0,
+   "requires_flag": "boulder_broken"
+  },
+  {
+   "id": "cistern_pool",
+   "spoke": "cistern",
+   "pos": [
+    186,
+    -6,
+    -38
+   ],
+   "kind": "event",
+   "event": "rr_cistern_dark",
+   "label": "Look into the water",
+   "r": 4.0,
+   "secret": true
+  },
+  {
+   "id": "overlook_rail",
+   "spoke": "overlook",
+   "pos": [
+    238,
+    -3,
+    -32
+   ],
+   "kind": "event",
+   "event": "rr_span_overlook",
+   "label": "Study the Span",
+   "r": 4.0
+  },
+  {
+   "id": "overlook_cairn",
+   "spoke": "overlook",
+   "pos": [
+    244,
+    -3,
+    -36
+   ],
+   "kind": "lore",
+   "codex": "place_overlook",
+   "label": "Read the cairn",
+   "r": 3.0,
+   "text": "A cairn of survey stones, one for every crew that crossed. The newest is three weeks old."
+  }
+ ],
+ "descent_events": [
+  {
+   "id": "rr_echo_wall",
+   "title": "The echo wall",
+   "kind": "marker",
+   "weight": 3,
+   "once": true,
+   "min_depth": 0,
+   "text": "A wall of Old Road glyphs, older than the valley's present shape. Speak near it and the glyphs answer in your own voice, a half-second late.",
+   "choices": [
+    {
+     "id": "copy",
+     "label": "Copy the glyphs into the Codex.",
+     "result": "Aruun traces them with a steady hand. 'Maintenance marks. Someone was keeping this road for people they would never meet.'",
+     "records": [
+      {
+       "type": "discovered",
+       "target": "echo_wall",
+       "tags": [
+        "discovery",
+        "curiosity",
+        "stewardship"
+       ],
+       "weight": 2
+      }
+     ]
+    },
+    {
+     "id": "seal",
+     "label": "Leave the wall as it is.",
+     "result": "You step back. The echo settles into silence, as if grateful.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "echo_wall",
+       "tags": [
+        "accepted_boundary",
+        "sealed_kept"
+       ],
+       "weight": 2
+      }
+     ]
+    },
+    {
+     "id": "scrape",
+     "label": "Pry the glyph plates off for salvage.",
+     "result": "The plates come away easily. The echo does not come back.",
+     "records": [
+      {
+       "type": "harmed",
+       "target": "echo_wall",
+       "tags": [
+        "extraction",
+        "pattern_destroyed"
+       ],
+       "weight": 3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rr_drover_cart",
+   "title": "A stalled cart",
+   "kind": "stranded",
+   "weight": 3,
+   "once": true,
+   "min_depth": 0,
+   "text": "A drover's cart sits axle-deep in a rut, a day's flour sacks tied on top. The drover is trying to unload it alone, one sack at a time.",
+   "choices": [
+    {
+     "id": "brace",
+     "label": "Brace the cart while the drover re-sets the wheel.",
+     "result": "Aruun takes the weight without being asked. The wheel goes on; the drover says nothing, which is the highest compliment on the road.",
+     "records": [
+      {
+       "type": "helped",
+       "target": "drover",
+       "tags": [
+        "braced_structure",
+        "protect_weak",
+        "stewardship"
+       ],
+       "weight": 3
+      }
+     ]
+    },
+    {
+     "id": "fair",
+     "label": "Offer salvage for a share of the flour.",
+     "result": "A fair trade. Everyone keeps something.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "drover",
+       "tags": [
+        "salvage_fair",
+        "stewardship"
+       ],
+       "weight": 2
+      }
+     ]
+    },
+    {
+     "id": "take",
+     "label": "Take the flour and leave the cart.",
+     "result": "The drover watches you go. He does not shout.",
+     "records": [
+      {
+       "type": "harmed",
+       "target": "drover",
+       "tags": [
+        "claim_jump",
+        "extraction"
+       ],
+       "weight": 3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rr_well_keeper",
+   "title": "The well keeper",
+   "kind": "social",
+   "weight": 3,
+   "once": true,
+   "min_depth": 0,
+   "text": "A keeper sits by the Salt Pans well with a patch kit. The well still gives water, but the pump housing is cracked, and the Dominion survey wants it condemned.",
+   "choices": [
+    {
+     "id": "repair",
+     "label": "Help patch the housing.",
+     "result": "An afternoon of work. The keeper writes your crew's mark on the well stone: one more name in the repair record.",
+     "records": [
+      {
+       "type": "helped",
+       "target": "salt_well",
+       "tags": [
+        "braced_structure",
+        "stewardship",
+        "route_laid"
+       ],
+       "weight": 3
+      }
+     ]
+    },
+    {
+     "id": "report",
+     "label": "Sign the Dominion condemnation.",
+     "result": "The survey is pleased. The keeper pours the water out slowly.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "salt_well",
+       "tags": [
+        "dominion_favor",
+        "extraction"
+       ],
+       "weight": 3
+      }
+     ]
+    },
+    {
+     "id": "ask",
+     "label": "Ask what the keeper needs first.",
+     "result": "'A hand, mostly,' the keeper says, surprised to be asked. You get a better patch than you would have made alone.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "salt_well",
+       "tags": [
+        "consent_asked",
+        "stewardship"
+       ],
+       "weight": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rr_vault_door",
+   "title": "The sealed vault",
+   "kind": "hazard",
+   "weight": 3,
+   "once": true,
+   "min_depth": 0,
+   "text": "A Spanwright vault door, closed but humming. Its pulse-lock is still working. Behind it, something stores weight the way a bridge does: carefully.",
+   "choices": [
+    {
+     "id": "keep",
+     "label": "Leave it sealed.",
+     "result": "A closed vault is still doing its job. The hum steadies.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "vault",
+       "tags": [
+        "threshold_kept",
+        "sealed_kept"
+       ],
+       "weight": 3
+      }
+     ]
+    },
+    {
+     "id": "ask",
+     "label": "Press at the lock to learn where it came from.",
+     "result": "The lock yields its maker's mark and nothing else. You learn a name and open nothing.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "vault",
+       "tags": [
+        "pressed_origin",
+        "curiosity"
+       ],
+       "weight": 2
+      }
+     ]
+    },
+    {
+     "id": "breach",
+     "label": "Force the door.",
+     "result": "It opens on a rush of cold air and a small stash of dust. The humming stops. You feel it stop.",
+     "records": [
+      {
+       "type": "harmed",
+       "target": "vault",
+       "tags": [
+        "threshold_breached",
+        "extraction"
+       ],
+       "weight": 4
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rr_cistern_dark",
+   "title": "The dark water",
+   "kind": "discovery",
+   "weight": 3,
+   "once": true,
+   "min_depth": 0,
+   "text": "The cistern is dark and perfectly still. Something rests below the surface. Cigarra's scanner is already warming; the rest of the party is quiet.",
+   "choices": [
+    {
+     "id": "dark",
+     "label": "Leave the water dark.",
+     "result": "Nobody says anything. You back out as you came in. Whatever slept there goes on sleeping.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "cistern",
+       "tags": [
+        "privacy_respected",
+        "darkness_kept"
+       ],
+       "weight": 3
+      }
+     ]
+    },
+    {
+     "id": "scan",
+     "label": "Shine a lamp and scan it.",
+     "result": "The water lights up: a sleeper, curled, startled. It does not forgive the light.",
+     "records": [
+      {
+       "type": "harmed",
+       "target": "cistern",
+       "tags": [
+        "forced_exposure",
+        "curiosity"
+       ],
+       "weight": 3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rr_span_overlook",
+   "title": "The load marks",
+   "kind": "marker",
+   "weight": 3,
+   "once": true,
+   "min_depth": 0,
+   "text": "From the overlook the Ochre Span looks like a held breath. Past crews scratched their load limits into the rail. Some of the numbers have been scored out and re-written, bigger.",
+   "choices": [
+    {
+     "id": "plan",
+     "label": "Mark a safe crossing order and an exit for the convoy.",
+     "result": "Aruun adds his number below the others, in smaller letters than they used. It is the only one that is still correct.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "span_overlook",
+       "tags": [
+        "exit_planned",
+        "braced_structure"
+       ],
+       "weight": 3
+      }
+     ]
+    },
+    {
+     "id": "glory",
+     "label": "Scratch in a heavier number than anyone's.",
+     "result": "It looks impressive. It is not accurate.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "span_overlook",
+       "tags": [
+        "glory_seeking"
+       ],
+       "weight": 2
+      }
+     ]
+    },
+    {
+     "id": "leave",
+     "label": "Take note of the rail and move on.",
+     "result": "You note the numbers and say nothing.",
+     "records": [
+      {
+       "type": "discovered",
+       "target": "span_overlook",
+       "tags": [
+        "discovery",
+        "evidence"
+       ],
+       "weight": 1
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
