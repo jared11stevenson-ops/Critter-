@@ -1,0 +1,7 @@
+[
+ {"t":0.3,"call":"GameState.new_game"},
+ {"t":1.5,"call":"scene.qa_press","args":["NewGame"]},
+ {"t":3.0,"print":"session zero open"},
+ {"t":6.0,"call":"scene.qa_press","args":["Begin"]},
+ {"t":9.0,"print":"hub"}
+]

@@ -34,7 +34,9 @@ func _ready() -> void:
 	gap.custom_minimum_size = Vector2(0, 18)
 	vb.add_child(gap)
 	for line in _summary():
-		var l := UiKit.label(line, 24, UiKit.PARCHMENT.darkened(0.1), "dialogue")
+		var l := UiKit.label(line, 22, UiKit.PARCHMENT.darkened(0.1), "dialogue")
+		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		l.custom_minimum_size = Vector2(1000, 0)
 		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		vb.add_child(l)
 	var gap2 := Control.new()
@@ -49,17 +51,23 @@ func _ready() -> void:
 
 func _summary() -> Array:
 	var out: Array = []
-	var st := str(GameState.get_flag("ochre_span", ""))
-	if st == "braced":
-		out.append("The Ochre Span is braced. It will carry people for another generation.")
-	elif st == "failing":
-		out.append("The Ochre Span is failing. The Dominion contract is satisfied.")
-	out.append("The Dust Grazer herd was harmed." if bool(GameState.get_flag("grazers_harmed", false)) else "The Dust Grazer herd was left in peace.")
-	if bool(GameState.get_flag("beetles_calmed", false)):
-		out.append("The Plate Beetles walked away calm.")
-	out.append("Specimens in your Terrarium: %d" % GameState.specimens.size())
-	out.append("Trust — Aruun %d · Cigarra %d · Dominion standing %d" % [GameState.get_trust("aruun"), GameState.get_trust("cigarra"), GameState.dominion_standing])
-	out.append("Codex entries: %d" % GameState.codex.size())
+	# Everything the Ledger remembers about this playthrough (same facts as the hub debrief card).
+	var lines: Array = Ledger.debrief_lines(5, 0)
+	if lines.is_empty():
+		var st := str(GameState.get_flag("ochre_span", ""))
+		if st == "braced":
+			lines.append("The Ochre Span is braced. It will carry people for another generation.")
+		elif st == "failing":
+			lines.append("The Ochre Span is failing. The Dominion contract is satisfied.")
+		lines.append("The Dust Grazer herd was harmed." if bool(GameState.get_flag("grazers_harmed", false)) else "The Dust Grazer herd was left in peace.")
+	out.append_array(lines)
+	var shifts: Array = Ledger.opinion_shift_lines(0)
+	for l in shifts.slice(0, 2):
+		out.append(l)
+	var rl: Array = LedgerCard.rival_lines(0)
+	for l in rl.slice(0, 2):
+		out.append(l)
+	out.append("Specimens %d · Trust Aruun %d, Cigarra %d · Codex %d" % [GameState.specimens.size(), GameState.get_trust("aruun"), GameState.get_trust("cigarra"), GameState.codex.size()])
 	return out
 
 func close() -> void:

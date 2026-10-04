@@ -128,7 +128,7 @@ func _style(style: String, who: String) -> void:
 	match style:
 		"narration": nm = ""
 		"handler": nm = "Handler"
-		_: nm = Canon.display_name(who)
+		_: nm = UiKit.speaker_name(who)
 	_name.text = nm
 	_name.visible = nm != ""
 	var col := UiKit.char_color(who)

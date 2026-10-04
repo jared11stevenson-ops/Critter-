@@ -1,0 +1,106 @@
+[
+ {
+  "t": 0.3,
+  "call": "GameState.set_flag",
+  "args": [
+   "briefed",
+   true
+  ]
+ },
+ {
+  "t": 0.4,
+  "call": "GameState.set_flag",
+  "args": [
+   "promised_zephyr",
+   true
+  ]
+ },
+ {
+  "t": 0.5,
+  "call": "Ledger.begin_run",
+  "args": [
+   "red_reaches"
+  ]
+ },
+ {
+  "t": 0.6,
+  "call": "scene.qa_open",
+  "args": [
+   "bonds"
+  ]
+ },
+ {
+  "t": 3.0,
+  "call": "scene.qa_close_all"
+ },
+ {
+  "t": 3.1,
+  "call": "Ledger.record",
+  "args": [
+   "helped",
+   "player",
+   "ochre_span",
+   [
+    "burden",
+    "protect_weak",
+    "stewardship"
+   ],
+   {},
+   4
+  ]
+ },
+ {
+  "t": 3.2,
+  "call": "Ledger.record",
+  "args": [
+   "harmed",
+   "player",
+   "dust_grazer_herd",
+   [
+    "harm_wildlife"
+   ],
+   {},
+   3
+  ]
+ },
+ {
+  "t": 3.3,
+  "call": "GameState.set_flag",
+  "args": [
+   "rr_complete",
+   true
+  ]
+ },
+ {
+  "t": 3.4,
+  "call": "Ledger.end_run",
+  "args": [
+   true
+  ]
+ },
+ {
+  "t": 3.5,
+  "call": "scene.qa_return"
+ },
+ {
+  "t": 6.0,
+  "call": "scene.qa_card_close"
+ },
+ {
+  "t": 6.5,
+  "call": "scene.qa_auto_dialogue",
+  "args": [
+   false,
+   0,
+   0.7
+  ]
+ },
+ {
+  "t": 10.0,
+  "call": "scene.qa_card_close"
+ },
+ {
+  "t": 12,
+  "call": "Ledger.qa_dump"
+ }
+]

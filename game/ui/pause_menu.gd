@@ -25,7 +25,7 @@ func _ready() -> void:
 	_panel.custom_minimum_size = Vector2(460, 0)
 	root.add_child(_panel)
 	var vb := VBoxContainer.new()
-	vb.add_theme_constant_override("separation", 16)
+	vb.add_theme_constant_override("separation", 10)
 	_panel.add_child(vb)
 	var t := UiKit.label("PAUSED", 48, UiKit.INK, "title")
 	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -33,9 +33,9 @@ func _ready() -> void:
 	var sub := UiKit.label("Handler's field tablet", 22, UiKit.MUTED, "ui")
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vb.add_child(sub)
-	var items := [["Resume", _resume], ["Field Codex", _codex], ["Settings", _settings], ["Return to Title", _title]]
+	var items := [["Resume", _resume], ["Field Codex", _codex], ["Bonds", _bonds], ["Session Zero", _session_zero], ["Settings", _settings], ["Return to Title", _title]]
 	for it in items:
-		var b := UiKit.button(it[0], Vector2(400, 88))
+		var b := UiKit.button(it[0], Vector2(400, 70), 28)
 		b.pressed.connect(it[1])
 		vb.add_child(b)
 	_panel.reset_size.call_deferred()
@@ -57,6 +57,20 @@ func _codex() -> void:
 	Audio.sfx("ui_confirm")
 	_panel.visible = false
 	_sub = CodexScreen.new()
+	add_child(_sub)
+	_sub.tree_exited.connect(func(): _panel.visible = true)
+
+func _bonds() -> void:
+	Audio.sfx("ui_confirm")
+	_panel.visible = false
+	_sub = BondScreen.new()
+	add_child(_sub)
+	_sub.tree_exited.connect(func(): _panel.visible = true)
+
+func _session_zero() -> void:
+	Audio.sfx("ui_confirm")
+	_panel.visible = false
+	_sub = SessionZero.new(true)
 	add_child(_sub)
 	_sub.tree_exited.connect(func(): _panel.visible = true)
 

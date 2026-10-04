@@ -65,3 +65,22 @@ Run `/opt/godot/Godot_v4.7.2-stable_linux.x86_64 --headless --editor --quit --pa
 ## Known issues
 - Agent 1 `character_billboard.gd:423` freed-instance spam in hub (REQUESTS.md).
 - QA `choice_point` teleport lands beside the dead rig; party sometimes hidden by the rig's occlusion fade.
+
+## Ledger integration (Phase 1) — what exists now
+- **Run flow**: level `_begin_ledger_run` (Ledger.begin_run once per descent, resume-safe), `_end_ledger_run` in `_exfil`
+  (all_conscious = nobody downed), `party_wipe` recorded on wipe. Hub `_return_sequence`: LedgerCard (debrief_lines +
+  opinion_shift_lines + rival outcomes) -> Reaction Matrix barks (`take_reaction(char,"return")`, count by Story tone) ->
+  hub_debrief the first time. End card shows the same Ledger facts.
+- **Rivals**: `game/enemies/rival_enemy.gd` (AI; tactic->behaviour map in its header), `game/world/red_reaches/rival_encounters.gd`
+  (spawn from `Rivals.active_in` + released bondables, greeting, resolution panel, outcomes). Orrin at the Drill Site,
+  Vesk (ambush) near the Waystation. Rivals never die: at flee_at they yield; 12 s to choose or they escape. Scanning
+  the Survey Camp records `evidence` (unlocks "Expose them"). "Return Descent" (Gate Map, after rr_complete) drops you at the
+  Waystation with every unresolved rival already out there, adapted.
+- **Bond Contracts**: `BondScreen` (hub "Bonds" button + pause menu): stage track, contradiction, test hint, opinion, live promise.
+- **Session Zero + Director**: `SessionZero` after New Game (pause menu to revisit); `Director` (static) scales enemy HP/damage,
+  pickups, scan radius, burden hold time, return barks, and shows the ONE rule (advantage/disadvantage toast).
+- **Gate Map**: `GateMap` replaces the Gate confirm dialogue: blank / rumored / charted homelands, Red Reaches route fills in.
+- QA: `tools/qa/scripts/{rival_orrin,rival_return,hub_ledger,session_zero,gate_map}.json`. Title skips Session Zero in QA
+  unless `qa_session_zero` is passed.
+- Known: full flow peak draw calls 155 (hub/habitat, was 154 before); rival body is a primitive placeholder (FallbackVisual
+  "rival_<faction>") until Agent 1/4 supply art.
