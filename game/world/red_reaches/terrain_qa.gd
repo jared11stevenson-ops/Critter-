@@ -37,8 +37,7 @@ func _ready() -> void:
 	add_child(cam)
 	cam.current = true
 	for id in ["aruun", "cigarra"]:
-		var bb: Node3D = load("res://game/art/characters/character_billboard.tscn").instantiate()
-		bb.set("character_id", id)
+		var bb: Node3D = VisualFactory.character(id)
 		add_child(bb)
 		_bb.append(bb)
 	_goto(0)

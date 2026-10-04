@@ -37,13 +37,11 @@ func _ready() -> void:
 		if g == 3:
 			spacing = 4.2
 		for i in ids.size():
-			var bb: CharacterBillboard = preload("res://game/art/characters/character_billboard.tscn").instantiate()
-			bb.character_id = ids[i]
+			var bb: Node3D = VisualFactory.character(ids[i])
 			var x := (float(i) - (ids.size() - 1) * 0.5) * spacing
 			var y := 0.0
 			if ids[i] == "scarlith":
-				# 12 cm canon: shown at 8x so the texture can be judged (QA only)
-				bb.height_override = 0.96
+				bb.scale = Vector3.ONE * 8.0   # 12 cm canon: shown at 8x so the model can be judged (QA only)
 			bb.position = Vector3(base.x + x, y, 0)
 			add_child(bb)
 			bb.set_facing(Vector3(0, 0, 1))

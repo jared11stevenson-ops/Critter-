@@ -9,16 +9,26 @@
  },
  "npcs": {
   "rr_oda": {
-   "scene": "res://game/art/models/npcs/rr_oda/rr_oda.tscn",
-   "height_m": 1.6,
+   "scene": "res://game/art/models/npcs/oda_keth/oda_keth_model.tscn",
+   "height_m": 1.5,
    "scale": 1.0,
-   "anim": {}
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   }
   },
   "rr_tavik": {
-   "scene": "res://game/art/models/npcs/rr_tavik/rr_tavik.tscn",
-   "height_m": 1.8,
+   "scene": "res://game/art/models/npcs/tavik_roon/tavik_roon_model.tscn",
+   "height_m": 1.9,
    "scale": 1.0,
-   "anim": {}
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   }
   },
   "rr_tessaly": {
    "scene": "res://game/art/models/npcs/rr_tessaly/rr_tessaly.tscn",
@@ -39,16 +49,26 @@
    "anim": {}
   },
   "rr_vesk": {
-   "scene": "res://game/art/models/npcs/rr_vesk/rr_vesk.tscn",
-   "height_m": 1.8,
+   "scene": "res://game/art/models/npcs/vesk_dunmore/vesk_dunmore_model.tscn",
+   "height_m": 1.75,
    "scale": 1.0,
-   "anim": {}
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   }
   },
   "rr_imre": {
-   "scene": "res://game/art/models/npcs/rr_imre/rr_imre.tscn",
+   "scene": "res://game/art/models/npcs/imre_dahl/imre_dahl_model.tscn",
    "height_m": 1.78,
    "scale": 1.0,
-   "anim": {}
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   }
   },
   "rr_wick": {
    "scene": "res://game/art/models/npcs/rr_wick/rr_wick.tscn",
@@ -57,16 +77,586 @@
    "anim": {}
   },
   "rr_ilsa": {
-   "scene": "res://game/art/models/npcs/rr_ilsa/rr_ilsa.tscn",
-   "height_m": 1.95,
+   "scene": "res://game/art/models/npcs/ilsa_brandt/ilsa_brandt_model.tscn",
+   "height_m": 2.0,
    "scale": 1.0,
-   "anim": {}
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   }
   },
   "rr_pel": {
-   "scene": "res://game/art/models/npcs/rr_pel/rr_pel.tscn",
-   "height_m": 2.35,
+   "scene": "res://game/art/models/npcs/pel_narr/pel_narr_model.tscn",
+   "height_m": 2.6,
    "scale": 1.0,
-   "anim": {}
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   }
+  },
+  "bede_alcott": {
+   "scene": "res://game/art/models/npcs/bede_alcott/bede_alcott_model.tscn",
+   "height_m": 1.8,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "bramvex": {
+   "scene": "res://game/art/models/npcs/bramvex/bramvex_model.tscn",
+   "height_m": 2.3,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "dessa_harl": {
+   "scene": "res://game/art/models/npcs/dessa_harl/dessa_harl_model.tscn",
+   "height_m": 1.5,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "dexter": {
+   "scene": "res://game/art/models/npcs/dexter/dexter_model.tscn",
+   "height_m": 1.85,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "hobb_sarrane": {
+   "scene": "res://game/art/models/npcs/hobb_sarrane/hobb_sarrane_model.tscn",
+   "height_m": 1.25,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "idris_voll": {
+   "scene": "res://game/art/models/npcs/idris_voll/idris_voll_model.tscn",
+   "height_m": 2.3,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "ilsa_brandt": {
+   "scene": "res://game/art/models/npcs/ilsa_brandt/ilsa_brandt_model.tscn",
+   "height_m": 2.0,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "imre_dahl": {
+   "scene": "res://game/art/models/npcs/imre_dahl/imre_dahl_model.tscn",
+   "height_m": 1.78,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "mara": {
+   "scene": "res://game/art/models/npcs/mara/mara_model.tscn",
+   "height_m": 1.7,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "mollusk": {
+   "scene": "res://game/art/models/npcs/mollusk/mollusk_model.tscn",
+   "height_m": 2.2,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "nerit": {
+   "scene": "res://game/art/models/npcs/nerit/nerit_model.tscn",
+   "height_m": 1.75,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "nuru_tamsin": {
+   "scene": "res://game/art/models/npcs/nuru_tamsin/nuru_tamsin_model.tscn",
+   "height_m": 1.25,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "nyxaris": {
+   "scene": "res://game/art/models/npcs/nyxaris/nyxaris_model.tscn",
+   "height_m": 2.0,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "oda_keth": {
+   "scene": "res://game/art/models/npcs/oda_keth/oda_keth_model.tscn",
+   "height_m": 1.5,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "odalys_penhallow": {
+   "scene": "res://game/art/models/npcs/odalys_penhallow/odalys_penhallow_model.tscn",
+   "height_m": 1.7,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "pel_narr": {
+   "scene": "res://game/art/models/npcs/pel_narr/pel_narr_model.tscn",
+   "height_m": 2.6,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "pharilux": {
+   "scene": "res://game/art/models/npcs/pharilux/pharilux_model.tscn",
+   "height_m": 2.6,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "rival_dominion": {
+   "scene": "res://game/art/models/npcs/rival_dominion/rival_dominion_model.tscn",
+   "height_m": 1.85,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "attack_1",
+    "attack_2",
+    "attack_3",
+    "downed",
+    "gesture",
+    "hit",
+    "hit_back",
+    "hit_left",
+    "hit_right",
+    "idle",
+    "jog",
+    "react",
+    "revive",
+    "run",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "rival_free_scale": {
+   "scene": "res://game/art/models/npcs/rival_free_scale/rival_free_scale_model.tscn",
+   "height_m": 1.75,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "attack_1",
+    "attack_2",
+    "attack_3",
+    "downed",
+    "gesture",
+    "hit",
+    "hit_back",
+    "hit_left",
+    "hit_right",
+    "idle",
+    "jog",
+    "react",
+    "revive",
+    "run",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "rival_helix": {
+   "scene": "res://game/art/models/npcs/rival_helix/rival_helix_model.tscn",
+   "height_m": 1.85,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "attack_1",
+    "attack_2",
+    "attack_3",
+    "downed",
+    "gesture",
+    "hit",
+    "hit_back",
+    "hit_left",
+    "hit_right",
+    "idle",
+    "jog",
+    "react",
+    "revive",
+    "run",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "rival_undermarket": {
+   "scene": "res://game/art/models/npcs/rival_undermarket/rival_undermarket_model.tscn",
+   "height_m": 1.8,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "attack_1",
+    "attack_2",
+    "attack_3",
+    "downed",
+    "gesture",
+    "hit",
+    "hit_back",
+    "hit_left",
+    "hit_right",
+    "idle",
+    "jog",
+    "react",
+    "revive",
+    "run",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "scarlith": {
+   "scene": "res://game/art/models/npcs/scarlith/scarlith_model.tscn",
+   "height_m": 0.12,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "solmara": {
+   "scene": "res://game/art/models/npcs/solmara/solmara_model.tscn",
+   "height_m": 5.5,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "tavik_roon": {
+   "scene": "res://game/art/models/npcs/tavik_roon/tavik_roon_model.tscn",
+   "height_m": 1.9,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "vesk_dunmore": {
+   "scene": "res://game/art/models/npcs/vesk_dunmore/vesk_dunmore_model.tscn",
+   "height_m": 1.75,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
+  },
+  "zephyr": {
+   "scene": "res://game/art/models/npcs/zephyr/zephyr_model.tscn",
+   "height_m": 1.65,
+   "scale": 1.0,
+   "anim": {
+    "idle": "idle",
+    "walk": "walk",
+    "work": "talk_idle",
+    "rest": "idle"
+   },
+   "clips": [
+    "gesture",
+    "hit",
+    "idle",
+    "react",
+    "talk_idle",
+    "walk",
+    "wave"
+   ]
   }
  }
 }

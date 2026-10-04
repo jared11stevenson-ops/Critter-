@@ -60,12 +60,24 @@ func _ready() -> void:
 		lighting.set("preset", "hub")
 		add_child(lighting)
 		_tune_lighting()
+	_spawn_cast()
 	_face_npcs()
+
+
+## The cast are skinned 3D models (res://game/art/models/npcs/<id>), spawned as NPC_<id>/Model.
+func _spawn_cast() -> void:
+	for id in NPC_FACING:
+		var marker := get_node_or_null("NPC_%s" % id)
+		if marker == null or marker.get_node_or_null("Model"):
+			continue
+		var m := VisualFactory.character(id)
+		m.name = "Model"
+		marker.add_child(m)
 
 
 func _face_npcs() -> void:
 	for id in NPC_FACING:
-		var bb := get_node_or_null("NPC_%s/Billboard" % id)
+		var bb := get_node_or_null("NPC_%s/Model" % id)
 		if bb and bb.has_method("set_facing"):
 			bb.set_facing(NPC_FACING[id])
 
@@ -78,7 +90,7 @@ func _process(delta: float) -> void:
 	_idle_t = _rng.randf_range(2.5, 5.0)
 	var ids: Array = NPC_FACING.keys()
 	var id: String = ids[_rng.randi() % ids.size()]
-	var bb := get_node_or_null("NPC_%s/Billboard" % id)
+	var bb := get_node_or_null("NPC_%s/Model" % id)
 	if bb == null or not bb.has_method("set_facing"):
 		return
 	var base: Vector3 = NPC_FACING[id]

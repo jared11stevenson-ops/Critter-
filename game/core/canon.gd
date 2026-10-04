@@ -27,6 +27,24 @@ func species(id: String) -> Dictionary:
 func place(id: String) -> Dictionary:
 	return data.get("places", {}).get(id, {})
 
+## Red Reaches living NPCs (game/canon/npcs/*.json): { id: npc def }, loaded lazily.
+var _npcs: Dictionary = {}
+var _npcs_loaded := false
+
+func npc(id: String) -> Dictionary:
+	if not _npcs_loaded:
+		_npcs_loaded = true
+		var f := FileAccess.open("res://game/canon/npcs/red_reaches.json", FileAccess.READ)
+		var d: Variant = JSON.parse_string(f.get_as_text()) if f else null
+		if d is Dictionary:
+			for n in d.get("npcs", []):
+				_npcs[str(n.get("id", ""))] = n
+	return _npcs.get(id, {})
+
 func display_name(id: String) -> String:
 	var c := character(id)
+	if c.is_empty():
+		var n := npc(id)
+		if not n.is_empty():
+			return str(n.get("name", id.capitalize()))
 	return c.get("name", id.capitalize())

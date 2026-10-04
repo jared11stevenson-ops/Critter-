@@ -1,0 +1,6 @@
+[
+ {"t": 0.3, "call": "scene.qa_auto_dialogue", "args": [true, 0, 0.2]},
+ {"t": 1.0, "call": "scene.qa_teleport", "args": ["t_waystation"]},
+ {"t": 2.0, "call": "scene.qa_npcs"},
+ {"t": 8.0, "call": "scene.qa_perf_breakdown"}
+]

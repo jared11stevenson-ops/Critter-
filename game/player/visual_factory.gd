@@ -3,7 +3,6 @@ extends RefCounted
 ## Creates visuals by path (Agent 1's art when merged) with in-house fallbacks. Never references
 ## Agent 1 class_names; everything is loaded by path and called duck-typed.
 
-const BILLBOARD := "res://game/art/characters/character_billboard.tscn"
 static var _scene_cache: Dictionary = {}
 
 static func _scene(path: String) -> PackedScene:
@@ -18,24 +17,17 @@ static func _scene(path: String) -> PackedScene:
 	return ps
 
 static func character(id: String) -> Node3D:
-	# Preview: full 3D character models (Agent 3) when enabled in Settings.
-	if GameState.settings.get("use_3d_models", false):
-		var mps := _scene("res://game/art/models/%s/%s_model.tscn" % [id, id])
-		if mps:
-			var mn: Node = mps.instantiate()
-			if mn is Node3D:
-				if "character_id" in mn:
-					mn.set("character_id", id)
-				return mn as Node3D
-			mn.free()
-	var ps := _scene(BILLBOARD)
-	if ps:
-		var n: Node = ps.instantiate()
-		if n is Node3D:
-			if "character_id" in n:
-				n.set("character_id", id)
-			return n as Node3D
-		n.free()
+	# World characters are always skinned 3D models (res://game/art/models/<id>/<id>_model.tscn, CharacterModel).
+	var mps := _scene("res://game/art/models/npcs/%s/%s_model.tscn" % [id, id])
+	if mps == null:
+		mps = _scene("res://game/art/models/%s/%s_model.tscn" % [id, id])
+	if mps:
+		var mn: Node = mps.instantiate()
+		if mn is Node3D:
+			if "character_id" in mn:
+				mn.set("character_id", id)
+			return mn as Node3D
+		mn.free()
 	var fb := FallbackVisual.new()
 	fb.setup(id, "character")
 	return fb

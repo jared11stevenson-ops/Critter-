@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://game/art/models/character_model.gd" id="1"]
+[ext_resource type="PackedScene" path="res://game/art/models/npcs/rival_helix/rival_helix.glb" id="2"]
+
+[node name="Rival_helixModel" type="Node3D"]
+script = ExtResource("1")
+model_scene = ExtResource("2")
+anim_json = "res://game/art/models/npcs/rival_helix/rival_helix_anim.json"
+height_m = 1.850
+character_id = "rival_helix"
+combo_clips = PackedStringArray("attack_1", "attack_2")
+attack_map = {"heavy": "attack_3", "cast": "attack_1", "leap": "attack_2", "light": "attack_1"}
+max_speed = 5.0
