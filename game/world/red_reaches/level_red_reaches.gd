@@ -32,7 +32,6 @@ var pylons: Array = []
 var grazers: Array = []
 var boss: AugurRig = null
 var rivals: RivalEncounters = null
-var npcs: RrNpcs = null
 var replay := false                  # Return Descent: the Reaches are cleared; the rivals are out there
 var _run_ended := false
 var _barrier_boulder: StaticBody3D = null
@@ -101,10 +100,6 @@ func _ready() -> void:
 	rivals.name = "Rivals"
 	add_child(rivals)
 	rivals.setup(self, runner)
-	npcs = RrNpcs.new()
-	npcs.name = "RrNpcs"
-	add_child(npcs)
-	npcs.setup(self, runner, region)
 	hud = Hud.new()
 	hud.name = "HUD"
 	hud.setup(field, party)

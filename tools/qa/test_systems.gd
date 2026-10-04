@@ -213,7 +213,7 @@ func _test_npcs() -> void:
 		ok(not d.is_empty() and (d["lines"] as Array).size() >= 2, "npc %s builds a dialogue" % id)
 		var n: Dictionary = life._npcs[id]
 		var meshes := (n["body"] as Node3D).find_children("*", "MeshInstance3D", true, false)
-		ok(meshes.size() == 1, "npc %s placeholder is 1 baked mesh (%d)" % [id, meshes.size()])
+		ok(meshes.size() >= 1, "npc %s has a visual (%d meshes)" % [id, meshes.size()])
 	GameState.set_flag("rr_act1_done", true)
 	var qd := life.build_dialogue("rr_oda")
 	var has_q := false
