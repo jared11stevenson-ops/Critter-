@@ -39,11 +39,21 @@ func goto(path: String, transition: String = "fade") -> void:
 		tilt_material.set_shader_parameter("strength", 0.0)
 		var tw0 := create_tween()
 		tw0.tween_method(func(v): tilt_material.set_shader_parameter("strength", v), 0.0, 1.0, dur)
+	# Load the next scene's resources on a worker thread while the screen fades out, so the swap itself is short.
+	var threaded := ResourceLoader.load_threaded_request(path) == OK
 	var tw := create_tween()
 	tw.tween_property(_rect, "color:a", 1.0, dur)
 	await tw.finished
 	get_tree().paused = false
-	var err := get_tree().change_scene_to_file(path)
+	var packed: PackedScene = null
+	if threaded:
+		var guard := 0
+		while ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_IN_PROGRESS and guard < 600:
+			guard += 1
+			await get_tree().process_frame
+		if ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_LOADED:
+			packed = ResourceLoader.load_threaded_get(path) as PackedScene
+	var err := get_tree().change_scene_to_packed(packed) if packed else get_tree().change_scene_to_file(path)
 	if err != OK:
 		push_error("Router: failed to load %s (%d)" % [path, err])
 	await get_tree().process_frame
