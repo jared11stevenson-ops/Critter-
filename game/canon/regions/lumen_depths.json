@@ -130,7 +130,7 @@
       "behavior": "Mimics the light it sees. Shining a lamp at it triggers a defensive flash.",
       "uses": {
         "battle": "low",
-        "labor": "signalling",
+        "labor": "signaling",
         "ecology": "marks seasons"
       },
       "weight": 3

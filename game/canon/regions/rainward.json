@@ -18,7 +18,7 @@
     {
       "id": "floodplain",
       "depth": 1,
-      "light": "grey-green overcast",
+      "light": "gray-green overcast",
       "hazard": "rising water, mud",
       "feel": "wet, busy, alive"
     },
@@ -80,7 +80,7 @@
     ],
     "fog_color": "#8aa0a0",
     "fog_density": 0.012,
-    "ambient": "cool grey-green with warm breaks",
+    "ambient": "cool gray-green with warm breaks",
     "motes": "rain, spray, steam"
   },
   "props": [
