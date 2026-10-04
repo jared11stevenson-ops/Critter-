@@ -21,6 +21,7 @@ var glyph_size := 26
 var _touch := -1
 var _pressed := false
 var _pulse := 0.0
+var _ready_flash := 0.0
 var _font: Font
 var _tex_up: Texture2D
 var _tex_down: Texture2D
@@ -86,9 +87,14 @@ func _process(delta: float) -> void:
 	if _pulse > 0.0:
 		_pulse = maxf(0.0, _pulse - delta * 5.0)
 		queue_redraw()
+	if _ready_flash > 0.0:
+		_ready_flash = maxf(0.0, _ready_flash - delta * 3.0)
+		queue_redraw()
 
 func set_state(cd: float, tint: Color, en: bool) -> void:
 	if absf(cd - cd_frac) > 0.004 or tint != cost_tint or en != enabled:
+		if cd_frac > 0.001 and cd <= 0.001 and en:
+			_ready_flash = 1.0   # ability just came off cooldown
 		cd_frac = cd
 		cost_tint = tint
 		enabled = en
@@ -126,6 +132,9 @@ func _draw() -> void:
 			var a := start + TAU * cd_frac * float(i) / float(seg)
 			pts.append(c + Vector2(cos(a), sin(a)) * (r - 4.0) * scale_k)
 		draw_colored_polygon(pts, Color(0.05, 0.03, 0.03, 0.62))
+		# bright leading edge of the sweep + rim ring in the ability colour: readable at a glance
+		draw_line(c, pts[pts.size() - 1], Color(1.0, 0.92, 0.7, 0.9), 3.0)
+		draw_arc(c, r - 4.0, start, start + TAU * cd_frac, 32, Color(ring_col.r, ring_col.g, ring_col.b, 0.35), 6.0)
 	var fs2 := 22
 	var cap_w := 0.0
 	var cap_y := s.y + 22.0
@@ -136,7 +145,7 @@ func _draw() -> void:
 		else:
 			draw_rect(Rect2(Vector2(c.x - cap_w * 0.5 - 8.0, cap_y - fs2 * 0.92), Vector2(cap_w + 16.0, fs2 * 1.25)), Color(0.06, 0.04, 0.035, 0.72))
 	if icon:
-		var isz := r * 1.25 * scale_k
+		var isz := r * (1.4 if not pill else 1.1) * scale_k
 		draw_texture_rect(icon, Rect2(c - Vector2(isz, isz) * 0.5, Vector2(isz, isz)), false, Color(1, 1, 1, 1 if enabled else 0.5))
 	elif glyph != "" and _font:
 		var fs := glyph_size
@@ -144,5 +153,7 @@ func _draw() -> void:
 		draw_string(_font, Vector2(c.x - w * 0.5, c.y + fs * 0.36), glyph, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, UiKit.PARCHMENT if enabled else UiKit.MUTED)
 	if caption != "" and _font:
 		draw_string(_font, Vector2(c.x - cap_w * 0.5, cap_y), caption, HORIZONTAL_ALIGNMENT_LEFT, -1, fs2, UiKit.PARCHMENT)
+	if _ready_flash > 0.0 and not bool(GameState.settings.get("reduce_flashing", false)):
+		draw_arc(c, r * (0.9 + (1.0 - _ready_flash) * 0.3), 0, TAU, 40, Color(1.0, 0.95, 0.6, _ready_flash * 0.9), 5.0 * _ready_flash + 1.0, true)
 	if _pulse > 0.0 and not bool(GameState.settings.get("reduce_flashing", false)):
 		draw_arc(c, r + (1.0 - _pulse) * 16.0, 0, TAU, 40, Color(1, 0.9, 0.7, _pulse * 0.8), 3.0, true)

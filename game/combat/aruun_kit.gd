@@ -57,6 +57,9 @@ func _swing(i: int) -> void:
 	c.face_toward(dir)
 	var heavy := i == 2
 	c.vis("play_attack", "heavy" if heavy else "light")
+	if Field.current:
+		# anticipation: ember sparks gather at the mace as the wind-up reads
+		Field.current.vfx("windup_glint", c.global_position + Vector3(0, 1.4, 0) - dir * 0.5, {"scale": 1.5 if heavy else 1.0, "color": Color(1.0, 0.5, 0.12)})
 	Audio.sfx_at("swing_heavy" if heavy else "swing_light", c.global_position)
 	# small forward lunge for weight
 	var lunge := Balance.arr("aruun.combo.lunge", i, 1.0)
@@ -77,7 +80,9 @@ func _swing(i: int) -> void:
 	if Field.current:
 		Field.current.vfx("mace_arc", origin + Vector3(0, 1.1, 0) + dir * 0.8, {"angle": arc, "radius": rng, "dir": dir, "heavy": heavy})
 		if heavy:
+			Field.current.vfx("shockwave", origin + dir * rng * 0.7, {"radius": 2.8})
 			Field.current.vfx("dust_puff", origin + dir * rng * 0.7)
+			Field.current.punch(0.6)
 	if n == 0 and heavy:
 		Field.current.shake(0.12)
 	await wait(active + recover * 0.45)
@@ -127,7 +132,8 @@ func _reaching_strike() -> void:
 	c.vis("play_attack", "heavy")
 	Audio.sfx_at("mace_extend", c.global_position)
 	if Field.current:
-		Field.current.telegraph_rect(c.global_position, dir, length, float(b.get("width", 1.8)), windup, Color(1.0, 0.65, 0.3, 0.8))
+		Field.current.telegraph_rect(c.global_position, dir, length, float(b.get("width", 1.8)), windup, Color(1.0, 0.6, 0.15, 0.9))
+		Field.current.vfx("windup_glint", c.global_position + Vector3(0, 1.4, 0) + dir * 0.6, {"scale": 2.2, "color": Color(1.0, 0.55, 0.15)})
 	await wait(windup)
 	if not c.action_valid(tok):
 		return
@@ -138,7 +144,9 @@ func _reaching_strike() -> void:
 	if f:
 		f.vfx("reach_line", origin + Vector3(0, 1.2, 0), {"length": length, "dir": dir})
 		f.vfx("heavy_impact", origin + dir * length + Vector3(0, 0.8, 0))
+		f.vfx("shockwave", origin + dir * length, {"radius": 3.4})
 		f.shake(0.3)
+		f.punch(1.0)
 		if f.level and f.level.has_method("on_line_strike"):
 			f.level.on_line_strike(origin, dir, length, "reaching_strike")
 
@@ -164,7 +172,8 @@ func _gravity_pull() -> void:
 	var well: Node = null
 	if f:
 		well = f.vfx("gravity_well", point + Vector3(0, 1.5, 0), {"radius": radius, "duration": pull_time})
-		f.telegraph_circle(point, radius, pull_time, Color(0.62, 0.45, 1.0, 0.7))
+		f.telegraph_circle(point, radius, pull_time, Color(0.72, 0.38, 1.0, 0.9))
+		f.vfx("windup_glint", c.global_position + Vector3(0, 1.4, 0), {"scale": 1.8, "color": Color(0.72, 0.38, 1.0)})
 	var t := 0.0
 	while t < pull_time:
 		if f == null or not is_instance_valid(c) or c.downed:
@@ -193,6 +202,8 @@ func _gravity_pull() -> void:
 	Audio.sfx_at("slam", point)
 	f.vfx("heavy_impact", point + Vector3(0, 0.4, 0))
 	f.vfx("dust_puff", point)
+	f.vfx("shockwave", point, {"radius": 5.5, "color": Color(0.72, 0.38, 1.0)})
+	f.punch(1.2)
 	f.impact("boss" if combo else "heavy")
 	if combo:
 		f.float_text(point + Vector3(0, 2.6, 0), "PROBABLE IMPACT!", Color(0.85, 0.95, 0.4), 60)
@@ -211,7 +222,9 @@ func _beetle_rage() -> void:
 	Audio.sfx_at("rage_roar", c.global_position)
 	if Field.current:
 		Field.current.shake(0.35)
-		Field.current.float_text(c.global_position + Vector3(0, c.height + 0.7, 0), "BEETLE RAGE", Color(1.0, 0.45, 0.25), 52)
+		Field.current.punch(1.0)
+		Field.current.vfx("rage_burst", c.global_position)
+		Field.current.float_text(c.global_position + Vector3(0, c.height + 0.7, 0), "BEETLE RAGE", Color(1.0, 0.5, 0.1), 52)
 		_rage_fx = Field.current.vfx("rage_aura", c.global_position, {}, c)
 	c.vis("set_highlight", Color(1.0, 0.3, 0.1), true)
 

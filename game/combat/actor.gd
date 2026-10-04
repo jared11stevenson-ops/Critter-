@@ -109,7 +109,7 @@ func receive_hit(hit: Dictionary) -> float:
 			else:
 				f.impact("light")
 		var spot := global_position + Vector3(0, aim_height(), 0)
-		f.vfx("heavy_impact" if hit.get("kind", "light") == "heavy" or crit else "hit_spark", spot)
+		f.hit_vfx(hit, spot, crit)
 	vis("flash_hit")
 	_play_hit_sfx(hit)
 	# knockback / stagger (poise resists)

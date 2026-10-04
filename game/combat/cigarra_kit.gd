@@ -88,6 +88,8 @@ func basic_pressed() -> void:
 	c.vis("play_attack", "cast")
 	Audio.sfx_at("psychic_bolt", c.global_position, -3.0)
 	var from := c.global_position + Vector3(0, c.height * 0.85, 0) + dir * 0.4
+	if Field.current:
+		Field.current.vfx("windup_glint", from, {"scale": 0.55, "color": Color(0.8, 1.0, 0.25)})
 	var hit := c.make_hit(float(b.get("damage", 16)), "light", "bad_thought", {"knockback": float(b.get("knockback", 1.2)), "stagger": float(b.get("stagger", 0.12))})
 	if Field.current:
 		Field.current.spawn_projectile(from, dir, float(b.get("speed", 26.0)), rng + 2.0, hit, "party", a[1], "psychic")
@@ -111,8 +113,8 @@ func _premonition() -> bool:
 	c.begin_action(0.25, 0.0)
 	c.vis("play_attack", "cast")
 	Audio.sfx("premonition")
-	f.vfx("psychic_burst", c.global_position + Vector3(0, 1.2, 0))
-	f.float_text(c.global_position + Vector3(0, c.height + 0.6, 0), "PREMONITION", Color(0.75, 0.95, 1.0), 48)
+	f.vfx("premonition_pulse", c.global_position + Vector3(0, 0.2, 0))
+	f.float_text(c.global_position + Vector3(0, c.height + 0.6, 0), "PREMONITION", Color(0.4, 1.0, 0.95), 48)
 	add_noise(float(b.get("noise", 30.0)))
 	_spawn_ghosts()
 	return true
@@ -196,6 +198,8 @@ func _false_memory() -> bool:
 		p.y = Field.current.height_at(p.x, p.z)
 	c.begin_action(0.2, 0.0)
 	c.vis("play_attack", "cast")
+	if Field.current:
+		Field.current.vfx("windup_glint", c.global_position + Vector3(0, 1.3, 0) + dir * 0.6, {"scale": 1.2, "color": Color(0.25, 1.0, 0.9)})
 	Audio.sfx_at("false_memory", p)
 	var d := Decoy.new()
 	c.get_parent().add_child(d)
@@ -216,6 +220,8 @@ func _brain_skip() -> bool:
 	c.face_toward(a[0])
 	c.begin_action(0.25, 0.0)
 	c.vis("play_attack", "cast")
+	if Field.current:
+		Field.current.vfx("windup_glint", t.global_position + Vector3(0, t.aim_height(), 0), {"scale": 1.6, "color": Color(0.25, 1.0, 0.9)})
 	Audio.sfx_at("brain_skip", t.global_position)
 	if t.has_method("skip_action"):
 		t.skip_action()
@@ -224,7 +230,7 @@ func _brain_skip() -> bool:
 	t.receive_hit(h)
 	if Field.current:
 		Field.current.vfx("brain_skip_glitch", t.global_position + Vector3(0, t.aim_height(), 0))
-		Field.current.float_text(t.global_position + Vector3(0, t.height + 0.9, 0), "SKIPPED", Color(0.6, 1.0, 0.9), 44)
+		Field.current.float_text(t.global_position + Vector3(0, t.height + 0.9, 0), "SKIPPED", Color(0.25, 1.0, 0.9), 44)
 	add_noise(float(b.get("noise", 20.0)))
 	return true
 

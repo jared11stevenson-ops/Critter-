@@ -235,6 +235,31 @@ static func ability_glyph(ability_id: String) -> String:
 static func ability_icon(ability_id: String) -> Texture2D:
 	return tex("res://game/art/icons/%s.png" % ability_id)
 
+## Row of ability icons (+ names) for every canon ability owned by `owner_id` (character id). Null if none.
+static func ability_row(owner_id: String, icon_px: float = 64.0, with_names: bool = true) -> Control:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 14)
+	var abilities: Dictionary = Canon.data.get("abilities", {})
+	for aid in abilities:
+		var ab: Dictionary = abilities[aid]
+		if str(ab.get("owner", "")) != owner_id:
+			continue
+		var cell := VBoxContainer.new()
+		cell.add_theme_constant_override("separation", 2)
+		var tr := TextureRect.new()
+		tr.texture = ability_icon(aid)
+		tr.custom_minimum_size = Vector2(icon_px, icon_px)
+		tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		tr.tooltip_text = str(ab.get("desc", ""))
+		cell.add_child(tr)
+		if with_names:
+			var l := label(str(ab.get("name", aid)), 16, INK, "bold")
+			l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			cell.add_child(l)
+		row.add_child(cell)
+	return row if row.get_child_count() > 0 else null
+
 static func item_name(item_id: String) -> String:
 	var names := {
 		"reach_soil": "Reach Soil", "lichen_culture": "Lichen Culture", "thoughtstone_dust": "Thoughtstone Dust",

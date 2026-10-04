@@ -165,6 +165,11 @@ func shake(amount: float) -> void:
 	if camera_rig and camera_rig.has_method("add_shake"):
 		camera_rig.add_shake(amount)
 
+## Camera FOV kick on heavy impacts (decays fast). amount ~0.3..1.5.
+func punch(amount: float) -> void:
+	if camera_rig and camera_rig.has_method("add_punch"):
+		camera_rig.add_punch(amount)
+
 func impact(kind: String) -> void:
 	match kind:
 		"light":
@@ -352,6 +357,30 @@ func vfx(vfx_name: String, pos: Vector3, params: Dictionary = {}, parent: Node =
 			return n
 	_fallback_fx(vfx_name, pos, params)
 	return null
+
+## Per-ability impact: distinct silhouette + colour so each attack reads on its own at phone size.
+## ability -> [preset, tint (Color or null)]
+const ABILITY_HIT := {
+	"aruun_combo": ["hit_slash", Color(1.0, 0.55, 0.15)],
+	"reaching_strike": ["heavy_impact", Color(1.0, 0.6, 0.2)],
+	"gravity_pull": ["heavy_impact", Color(0.72, 0.38, 1.0)],
+	"bad_thought": ["psychic_burst", null],
+	"brain_skip": ["psychic_burst", Color(0.25, 1.0, 0.9)],
+}
+
+func hit_vfx(hit: Dictionary, spot: Vector3, crit: bool) -> void:
+	var def: Variant = ABILITY_HIT.get(str(hit.get("ability", "")), null)
+	var heavy: bool = hit.get("kind", "light") == "heavy" or crit
+	if def == null:
+		vfx("heavy_impact" if heavy else "hit_spark", spot)
+		return
+	var p: Dictionary = {}
+	if def[1] != null and not (heavy and def[0] == "hit_slash"):
+		p["color"] = def[1]
+	var name: String = def[0]
+	if heavy and name == "hit_slash":
+		name = "heavy_impact"   # third combo swing / crits land as a heavy crack
+	vfx(name, spot, p)
 
 func _fallback_fx(vfx_name: String, pos: Vector3, params: Dictionary) -> void:
 	var flashing_ok := not bool(GameState.settings.get("reduce_flashing", false))

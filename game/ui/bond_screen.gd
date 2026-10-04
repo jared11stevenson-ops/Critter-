@@ -108,6 +108,10 @@ func select(c: String) -> void:
 		ct.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		ct.custom_minimum_size = Vector2(700, 0)
 		_page.add_child(ct)
+	var arow := UiKit.ability_row(c, 56.0, true)
+	if arow:
+		_page.add_child(UiKit.label("KNACK", 20, UiKit.ACCENT, "bold"))
+		_page.add_child(arow)
 	_page.add_child(_stage_track(def, stage))
 	if def.has("test_hint"):
 		_page.add_child(UiKit.label("THE TEST", 20, UiKit.ACCENT, "bold"))

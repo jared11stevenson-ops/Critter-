@@ -33,6 +33,15 @@ func _ready() -> void:
 	var sub := UiKit.label("Handler's field tablet", 22, UiKit.MUTED, "ui")
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vb.add_child(sub)
+	var kn := HBoxContainer.new()
+	kn.alignment = BoxContainer.ALIGNMENT_CENTER
+	kn.add_theme_constant_override("separation", 22)
+	for cid in ["aruun", "cigarra"]:
+		var ar := UiKit.ability_row(cid, 44.0, false)
+		if ar:
+			kn.add_child(ar)
+	if kn.get_child_count() > 0:
+		vb.add_child(kn)
 	var items := [["Resume", _resume], ["Field Codex", _codex], ["Bonds", _bonds], ["Session Zero", _session_zero], ["Settings", _settings], ["Return to Title", _title]]
 	for it in items:
 		var b := UiKit.button(it[0], Vector2(400, 70), 28)
@@ -40,7 +49,7 @@ func _ready() -> void:
 		vb.add_child(b)
 	_panel.reset_size.call_deferred()
 	_center.call_deferred()
-	(vb.get_child(2) as Button).grab_focus.call_deferred()
+	(vb.get_child(vb.get_child_count() - 6) as Button).grab_focus.call_deferred()
 	Audio.sfx("ui_tap")
 
 func _center() -> void:
