@@ -1,0 +1,10 @@
+[
+ {"t":0.5,"call":"scene.qa_auto_dialogue","args":[true,0,0.8]},
+ {"t":0.8,"call":"scene.qa_prime_rivals"},
+ {"t":1.5,"call":"scene.qa_rival_log"},
+ {"t":2.0,"call":"scene.qa_rival_meet","args":["poacher_vesk"]},
+ {"t":14.0,"call":"scene.qa_rival_log"},
+ {"t":20.0,"call":"scene.qa_rival_log"},
+ {"t":21.0,"call":"scene.qa_rival_meet","args":["foreman_orrin"]},
+ {"t":34.0,"call":"scene.qa_rival_log"}
+]

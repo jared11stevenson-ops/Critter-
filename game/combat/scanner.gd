@@ -47,7 +47,7 @@ func scan(from: Node3D) -> void:
 		return
 	_cd = 0.8
 	var f := Field.current
-	var radius := Balance.f("global.scan_radius", 25.0)
+	var radius := Balance.f("global.scan_radius", 25.0) * Director.scan_radius_mult()
 	f.request_time_scale("scan", Balance.f("global.scan_slowmo_scale", 0.3), Balance.f("global.scan_slowmo_time", 0.4))
 	f.vfx("scan_ping", from.global_position + Vector3(0, 0.3, 0), {"radius": radius})
 	Audio.sfx("scan")

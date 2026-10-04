@@ -421,6 +421,8 @@ func _return_sequence() -> void:
 	var card := LedgerCard.debrief(-1, "Continue")
 	card.subtitle = "Back at the Common. The Ledger remembers."
 	add_child(card)
+	if _qa_auto:
+		get_tree().create_timer(1.2, true, false, true).timeout.connect(card.close)
 	await card.closed
 	var barks := _collect_return_barks()
 	if not barks.is_empty():
@@ -538,6 +540,8 @@ var _qa_choice := 0
 
 func qa_auto_dialogue(on: bool, choice: int = 0, delay: float = 0.6) -> void:
 	_qa_auto = on
+	if on:
+		get_tree().create_timer(1.2, true, false, true).timeout.connect(qa_card_close)
 	_qa_choice = choice
 	if on and not runner.started.is_connected(_qa_on_started):
 		runner.started.connect(_qa_on_started.bind(delay))

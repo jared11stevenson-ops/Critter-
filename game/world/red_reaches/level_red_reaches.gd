@@ -236,6 +236,7 @@ func spawn_enemy(species: String, pos: Vector3) -> EnemyBase:
 
 func spawn_pickup(kind: String, pos: Vector3, n: int = -1, key: String = "") -> LevelPickup:
 	var amt := n if n > 0 else int(Balance.v("pickups.amount." + kind, 1))
+	amt = maxi(1, roundi(float(amt) * Director.pickup_mult()))
 	var p := LevelPickup.new()
 	p.setup(kind, amt, key)
 	actors_root.add_child(p)
@@ -758,7 +759,7 @@ func _burden_tick(delta: float) -> void:
 	var a := party.get_member("aruun")
 	var c := party.get_member("cigarra")
 	var holding := hud.hold_pressed() or Input.is_action_pressed("attack") or Input.is_action_pressed("interact")
-	var hold_time := Balance.f("burden.hold_time", 6.0)
+	var hold_time := Balance.f("burden.hold_time", 6.0) * Director.hold_time_mult()
 	if holding:
 		_burden_p = minf(1.0, _burden_p + delta / hold_time)
 	_burden_tremor -= delta
@@ -1173,3 +1174,19 @@ func qa_rival_log() -> void:
 		print("[QA] RIVAL ", id, " state=", e.state, " hp=", snappedf(e.hp, 0.1), "/", snappedf(e.max_hp, 0.1), " tactics=", e.tactics, " kind=", e.attack_kind)
 	for r in Rivals.all():
 		print("[QA] ROSTER ", r["id"], " state=", r["state"], " enc=", r["encounters"], " adapt=", r["adaptations"], " scars=", r["scars"], " grudge=", r["grudge"])
+
+## QA: make Orrin an escaped rival who learned two counters, then re-spawn everyone (Return Descent look).
+func qa_prime_rivals() -> void:
+	var o := Rivals.get_rival("foreman_orrin")
+	o["state"] = "escaped"
+	o["last_outcome"] = "escaped"
+	o["encounters"] = 1
+	o["grudge"] = 1
+	o["adaptations"] = ["stay_off_the_line", "kite_and_wait", "bait_projectiles"]
+	o["scars"] = ["dented_pauldron"]
+	for id in rivals.live.keys():
+		if is_instance_valid(rivals.live[id]):
+			rivals.live[id].queue_free()
+	rivals.live.clear()
+	rivals._spawned.clear()
+	rivals.spawn_all()

@@ -62,6 +62,14 @@ func _ready() -> void:
 		s.custom_minimum_size = Vector2(420, 64)
 		s.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		s.focus_mode = Control.FOCUS_ALL
+		s.add_theme_icon_override("grabber", UiKit._circle_icon(44, UiKit.ACCENT))
+		s.add_theme_icon_override("grabber_highlight", UiKit._circle_icon(48, UiKit.ACCENT_2))
+		s.add_theme_icon_override("grabber_disabled", UiKit._circle_icon(44, UiKit.MUTED))
+		for sn in [["slider", UiKit.INK.lightened(0.3)], ["grabber_area", UiKit.ACCENT.darkened(0.2)], ["grabber_area_highlight", UiKit.ACCENT_2]]:
+			var sb := UiKit.box(sn[1], Color(0, 0, 0, 0), 6, 0, 0)
+			sb.content_margin_top = 7
+			sb.content_margin_bottom = 7
+			s.add_theme_stylebox_override(sn[0], sb)
 		s.name = "Slider_" + k
 		s.value_changed.connect(_on_changed.bind(k))
 		row.add_child(s)
