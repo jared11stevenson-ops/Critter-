@@ -20,6 +20,9 @@ class Track:
         return self.Q, self.locs
 
 
+_SPIN = None
+
+
 def _compose(sk, F, pose_fn):
     """pose_fn(f) -> {bone: (rx, ry, rz) deg, "hips_loc": (x, y, z)} for frame f."""
     nb = len(sk.names)
@@ -28,7 +31,10 @@ def _compose(sk, F, pose_fn):
     locs = {}
     hl = np.zeros((F, 3))
     for f in range(F):
-        p = pose_fn(f)
+        p = dict(pose_fn(f))
+        if _SPIN:
+            for k, v in _SPIN(f / FPS / 0.25).items():
+                p.setdefault(k, v)
         for bn, v in p.items():
             if bn == "hips_loc":
                 hl[f] = v
@@ -52,6 +58,8 @@ def _meta(F, loop, impact=None, **kw):
 
 
 def clips(spec, sk):
+    global _SPIN
+    _SPIN = getattr(spec, "spin_pose", None)
     legs = spec.LEGS
     speed = getattr(spec, "WALK_SPEED", 1.0)
     swing = getattr(spec, "SWING", 20.0)
@@ -90,7 +98,7 @@ def clips(spec, sk):
         return d
 
     # idle (breathing, tiny weight shift), loops
-    T = 3.2
+    T = getattr(spec, "IDLE_T", 3.2)
     F = int(T * FPS) + 1
     out["idle"] = (Track(sk, F, *_compose(sk, F, lambda f: merge(
         leg_pose(f / FPS / T, 0.06, 4.0, 4.0), body(f / FPS, T, 0.0, 0.0),
@@ -98,9 +106,9 @@ def clips(spec, sk):
         getattr(spec, "idle_pose", lambda w: {})(2 * math.pi * f / FPS / T)))), _meta(F, True))
 
     # walk: swing amplitude gives the speed; period from v = 4 s / T
-    Lmean = float(np.mean([l[3] for l in legs]))
+    Lmean = float(np.mean([l[3] for l in legs])) if legs else 1.0
     s_half = Lmean * math.sin(math.radians(swing))
-    T = max(0.5, 4 * s_half / speed)
+    T = max(0.5, 4 * s_half / speed) if legs else getattr(spec, "WALK_PERIOD", 1.0)
     F = int(round(T * FPS))
     F += 1
     out["walk"] = (Track(sk, F, *_compose(sk, F, lambda f: merge(
@@ -130,4 +138,13 @@ def clips(spec, sk):
                      getattr(spec, "react_pose", lambda k: {})(k))
     out["react"] = (Track(sk, F, *_compose(sk, F, react)), _meta(F, False, 0.07))
     out["hit"] = out["react"]
+    # creature extras: attack (one-shot lunge/bite) and telegraph (rear-up hold, loops)
+    T = getattr(spec, "ATTACK_T", 0.7)
+    F = int(T * FPS) + 1
+    ap = getattr(spec, "attack_pose", getattr(spec, "gesture_pose", lambda u: {}))
+    out["attack"] = (Track(sk, F, *_compose(sk, F, lambda f: merge(ap(f / FPS / T)))), _meta(F, False, getattr(spec, "ATTACK_IMPACT", 0.4)))
+    T = 1.0
+    F = int(T * FPS) + 1
+    tp = getattr(spec, "telegraph_pose", getattr(spec, "gesture_pose", lambda u: {}))
+    out["telegraph"] = (Track(sk, F, *_compose(sk, F, lambda f: merge(tp(f / FPS / T)))), _meta(F, True))
     return out

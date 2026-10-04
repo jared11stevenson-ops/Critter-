@@ -10,6 +10,7 @@ var _spin := 0.0
 
 
 func _init() -> void:
+	model_path = "res://game/art/creatures/models/dominion_drone/dominion_drone.glb"
 	radius = 0.6
 	hover_height = 1.6
 	gait_stride = 0.0

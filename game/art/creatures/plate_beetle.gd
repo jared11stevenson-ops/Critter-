@@ -9,6 +9,7 @@ const LICHEN := Color(0.56, 0.66, 0.42)
 
 
 func _init() -> void:
+	model_path = "res://game/art/creatures/models/plate_beetle/plate_beetle.glb"
 	radius = 1.4
 	gait_speed = 1.5
 	gait_stride = 0.32

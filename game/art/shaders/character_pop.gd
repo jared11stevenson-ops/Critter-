@@ -28,10 +28,17 @@ const PALETTES := {
 }
 
 
+## Cheap pop for the world cast (NPCs, rivals): one pass per surface (rim folded into the shader, no outline hull, no overlay),
+## and meshes stop rendering past `cull_m`. Used for every id without its own PALETTES entry (Agent 1, perf budget).
+const NPC_DEFAULT := {
+	"sat_lift": 1.12, "val_lift": 1.05, "contrast": 1.06, "shadow_floor": 0.18,
+	"rim_color": Color(1.0, 0.92, 0.72), "rim_power": 2.6, "rim_strength": 0.5, "no_outline": true, "cull_m": 80.0,
+}
+
 ## Returns the pop materials created (so the caller can drive flash/highlight on them).
 static func apply(root: Node, id: String) -> Array[ShaderMaterial]:
 	var out: Array[ShaderMaterial] = []
-	var pal: Dictionary = PALETTES.get(id, {})
+	var pal: Dictionary = PALETTES.get(id, NPC_DEFAULT)
 	if pal.is_empty():
 		return out
 	var cache := {}
@@ -42,6 +49,10 @@ static func apply(root: Node, id: String) -> Array[ShaderMaterial]:
 static func _walk(n: Node, pal: Dictionary, out: Array[ShaderMaterial], cache: Dictionary) -> void:
 	if n is MeshInstance3D:
 		var mi := n as MeshInstance3D
+		if pal.has("cull_m"):
+			mi.visibility_range_end = float(pal["cull_m"])
+			mi.visibility_range_end_margin = 6.0
+			mi.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
 		if mi.mesh:
 			for s in mi.mesh.get_surface_count():
 				var src := mi.mesh.surface_get_material(s)
@@ -83,7 +94,7 @@ static func _convert(src: Material, pal: Dictionary) -> ShaderMaterial:
 	for k in ["sat_lift", "val_lift", "contrast", "shadow_floor", "rim_color", "rim_power", "rim_strength", "accent_color", "accent_strength", "accent_mix"]:
 		if pal.has(k):
 			m.set_shader_parameter(k, pal[k])
-	if not scissor:   # hull on single-sided leaf membranes looks wrong; the wings get a stronger rim instead
+	if not scissor and not pal.get("no_outline", false):   # hull on single-sided leaf membranes looks wrong; the wings get a stronger rim instead
 		var om := ShaderMaterial.new()
 		om.shader = OUTLINE
 		om.set_shader_parameter("outline_color", pal.get("outline_color", Color(0.05, 0.02, 0.08)))

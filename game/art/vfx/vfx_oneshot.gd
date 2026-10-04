@@ -538,6 +538,8 @@ func _p_brain_skip_glitch() -> void:
 	var tw := create_tween()
 	for k in 6:
 		tw.tween_callback(func() -> void:
+			if not is_instance_valid(mi):
+				return
 			mi.position.x = randf_range(-0.25, 0.25)
 			m.albedo_color = (_tint(Color(0.5, 0.95, 1.0)) if k % 2 == 0 else _tint(Color(0.85, 0.4, 1.0))) * 1.8)
 		tw.tween_interval(0.05)
