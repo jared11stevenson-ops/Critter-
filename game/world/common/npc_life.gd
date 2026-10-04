@@ -10,9 +10,9 @@ extends Node
 
 const REGISTRY := "res://game/art/models/npcs/npc_registry.json"
 const WALK_SPEED := 1.3
-const ACTIVE_RANGE := 75.0
+const ACTIVE_RANGE := 60.0
 const TAG_RANGE := 11.0
-const FADE_RANGE := 90.0
+const FADE_RANGE := 38.0           # beyond this the model is not rendered at all (the gameplay camera sees ~25 m)
 
 ## act -> procedural motion for the baked placeholders: bob (m), hz, lean (rad, forward), nod (rad), sway (rad), sweep (yaw rad)
 const ACTS := {
@@ -814,3 +814,19 @@ func ambient_interactables() -> Array:
 			"cond": func() -> bool: return _eligible(lc, ""),
 			"act": func() -> void: Events.toast.emit(str(lc["text"]), "codex")})
 	return out
+
+## QA: line every NPC up in a row (two rows) at `origin` for model / animation screenshots.
+func qa_lineup(origin: Vector3) -> void:
+	var i := 0
+	for id in _order:
+		var n: Dictionary = _npcs[id]
+		var node: Node3D = n["node"]
+		var x := origin.x + (float(i % 6) - 2.5) * 2.6
+		var z := origin.z + 5.0 + float(i / 6) * 3.6
+		node.position = Vector3(x, float(ground_fn.call(x, z)), z)
+		node.visible = true
+		n["state"] = "talk"
+		n["talk_t"] = 9999.0
+		n["active"] = true
+		_face_dir(n, 0.0, 1.0)
+		i += 1

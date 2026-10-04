@@ -1,0 +1,1 @@
+[{"t":0.3,"call":"scene.qa_auto_dialogue","args":[true,0,0.2]},{"t":1.0,"call":"scene.qa_npc","args":["imre_dahl"]},{"t":5.0,"call":"scene.qa_npc","args":["ilsa_brandt"]},{"t":9.0,"call":"scene.qa_npc","args":["pel_narr"]}]

@@ -1168,9 +1168,6 @@ func qa_weather(w: String) -> void:
 	if ambient:
 		ambient.qa_set_weather(w)
 
-func qa_npcs() -> void:
-	qa_npc_log()
-
 func qa_npc_log() -> void:
 	if npcs == null:
 		return

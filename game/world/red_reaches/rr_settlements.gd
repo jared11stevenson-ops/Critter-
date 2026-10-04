@@ -136,6 +136,7 @@ func _attach(j: Dictionary) -> void:
 	mi.mesh = mesh
 	mi.material_override = _mat
 	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	mi.visibility_range_end = 62.0     # distance cull: nothing past the gameplay camera reach is drawn
 	add_child(mi)
 	tri_count += int(out.get("tris", 0))
 	for c in out.get("colliders", []):
