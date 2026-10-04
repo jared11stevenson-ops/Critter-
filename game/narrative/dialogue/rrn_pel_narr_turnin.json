@@ -1,0 +1,68 @@
+{
+ "id": "rrn_pel_narr_turnin",
+ "lines": [
+  {
+   "who": "pel_narr",
+   "expr": "warm",
+   "text": "Drill complete. Four minutes ten. Two stragglers. A good bore.",
+   "if": "rr_drill_run"
+  },
+  {
+   "who": "pel_narr",
+   "expr": "stern",
+   "text": "You told the guild the Span was fine. It is fine. Today.",
+   "if": "rr_drill_skipped"
+  },
+  {
+   "who": "pel_narr",
+   "expr": "grave",
+   "text": "You stood on the weakest span. I watched. It did not move. Do not do that again.",
+   "if": "rr_drill_borne"
+  },
+  {
+   "who": "pel_narr",
+   "expr": "default",
+   "text": "I carry a whistle. It is the clapper from the Red Span's rope-bell. I have not blown it in nine years."
+  },
+  {
+   "choice": [
+    {
+     "text": "Blow it for the drill. I will stand with you.",
+     "goto": "t_whistle"
+    },
+    {
+     "text": "Keep it. You do not owe the Span a sound.",
+     "goto": "t_spare"
+    }
+   ]
+  },
+  {
+   "label": "t_whistle"
+  },
+  {
+   "who": "pel_narr",
+   "expr": "grave",
+   "text": "...Count with me. One. Two. Three."
+  },
+  {
+   "event": "rec:pel_whistle"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "t_spare"
+  },
+  {
+   "who": "pel_narr",
+   "expr": "warm",
+   "text": "...Thank you. I will blow it when I am ready."
+  },
+  {
+   "event": "rec:pel_spare"
+  },
+  {
+   "end": true
+  }
+ ]
+}

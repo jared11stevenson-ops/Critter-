@@ -1,0 +1,36 @@
+{
+ "id": "rrn_bede_alcott_quest",
+ "lines": [
+  {
+   "who": "bede_alcott",
+   "expr": "tired",
+   "text": "Their herd is cut off east of the gap. I cannot move my transport. The calves cannot walk it."
+  },
+  {
+   "who": "bede_alcott",
+   "expr": "wary",
+   "text": "If Tavik can open the road, I can walk them home. But then... I will not have them."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Strength is the burden you can accept without forcing it onto someone weaker."
+  },
+  {
+   "who": "bede_alcott",
+   "expr": "warm",
+   "text": "That is... painfully correct. Talk to Tavik. Please."
+  },
+  {
+   "set": {
+    "rrn_bede_calves_offered": true
+   }
+  },
+  {
+   "event": "lead:rr_grazer_crossing"
+  },
+  {
+   "end": true
+  }
+ ]
+}

@@ -1,0 +1,28 @@
+{
+ "id": "rrn_hobb_sarrane_repeat",
+ "lines": [
+  {
+   "who": "hobb_sarrane",
+   "expr": "default",
+   "text": "Wheel's on."
+  },
+  {
+   "who": "hobb_sarrane",
+   "expr": "warm",
+   "text": "Whole road knows your crew's name.",
+   "if": "ledger_braced_structure"
+  },
+  {
+   "who": "hobb_sarrane",
+   "expr": "stern",
+   "text": "Flour in the sack. Flour in my pocket. You, I watch.",
+   "if": "ledger_claim_jump"
+  },
+  {
+   "who": "hobb_sarrane",
+   "expr": "amused",
+   "text": "Fair trade last time. Fair trade this time.",
+   "if": "ledger_salvage_fair"
+  }
+ ]
+}

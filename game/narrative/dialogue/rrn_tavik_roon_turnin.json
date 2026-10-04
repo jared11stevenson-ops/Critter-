@@ -1,0 +1,63 @@
+{
+ "id": "rrn_tavik_roon_turnin",
+ "lines": [
+  {
+   "who": "tavik_roon",
+   "expr": "warm",
+   "text": "Easy. Easy. ...They are over. Every head.",
+   "if": "rr_herd_saved"
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "warm",
+   "text": "A new road. A real deck. They are using it.",
+   "if": "rr_road_rebuilt"
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "stern",
+   "text": "Most. Not all. You can stop talking now.",
+   "if": "rr_herd_hurt"
+  },
+  {
+   "choice": [
+    {
+     "text": "Let me pay for the stone. Fair price.",
+     "goto": "t_pay"
+    },
+    {
+     "text": "Keep the stone. Tell me what the terraces need next.",
+     "goto": "t_ask"
+    }
+   ]
+  },
+  {
+   "label": "t_pay"
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "default",
+   "text": "...Fair. Fine. Fair."
+  },
+  {
+   "event": "rec:tavik_pay"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "t_ask"
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "warm",
+   "text": "Nobody asks. Seed. Green seed on the east side. Do not step on the sprouts."
+  },
+  {
+   "event": "rec:tavik_road"
+  },
+  {
+   "end": true
+  }
+ ]
+}

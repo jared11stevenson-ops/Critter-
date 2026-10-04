@@ -1,0 +1,46 @@
+{
+ "id": "rrn_ilsa_brandt_quest",
+ "lines": [
+  {
+   "who": "ilsa_brandt",
+   "expr": "amused",
+   "text": "I want to build an arch at the yard gate. Not a mending. An arch. Something people look at."
+  },
+  {
+   "who": "ilsa_brandt",
+   "expr": "wary",
+   "text": "The pylons under it are rotting. I know. I KNOW. But the arch is the thing they will remember."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "I wanted monuments too."
+  },
+  {
+   "who": "ilsa_brandt",
+   "expr": "stern",
+   "text": "And?"
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "Choose carefully. I will help with any of the three."
+  },
+  {
+   "who": "cigarra",
+   "expr": "happy",
+   "text": "He just said three. He has a list."
+  },
+  {
+   "set": {
+    "rrn_rr_apprentice_arch_offered": true
+   }
+  },
+  {
+   "event": "offer:rr_apprentice_arch"
+  },
+  {
+   "end": true
+  }
+ ]
+}

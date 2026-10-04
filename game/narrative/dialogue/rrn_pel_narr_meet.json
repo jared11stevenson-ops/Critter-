@@ -1,0 +1,75 @@
+{
+ "id": "rrn_pel_narr_meet",
+ "lines": [
+  {
+   "who": "pel_narr",
+   "expr": "stern",
+   "text": "Halt. Step one: name. Step two: purpose. Step three: do not touch the cables."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Aruun. Spanwright apprentice. Reacher."
+  },
+  {
+   "who": "pel_narr",
+   "expr": "default",
+   "text": "...Apprentice. Of which yard."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "This one."
+  },
+  {
+   "who": "pel_narr",
+   "expr": "warm",
+   "text": "Welcome back. Step four: you are standing on cable two. Step off."
+  },
+  {
+   "set": {
+    "rrn_pel_narr_met": true
+   }
+  },
+  {
+   "choice": [
+    {
+     "text": "What do you need from me, Warden?",
+     "goto": "m_listen"
+    },
+    {
+     "text": "The Span looks fine. Are the drills really necessary?",
+     "goto": "m_skip"
+    }
+   ]
+  },
+  {
+   "label": "m_listen"
+  },
+  {
+   "who": "pel_narr",
+   "expr": "default",
+   "text": "...A listener. Good. Come to the barrier at noon. I will explain the drill."
+  },
+  {
+   "event": "rec:pel_listen"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "m_skip"
+  },
+  {
+   "who": "pel_narr",
+   "expr": "grave",
+   "text": "The Red Span looked fine. Thousands crossed. Hundreds did not."
+  },
+  {
+   "event": "rec:pel_skip"
+  },
+  {
+   "end": true
+  }
+ ]
+}

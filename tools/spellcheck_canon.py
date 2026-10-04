@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Spell pass over player-facing text in game/canon/gear.json and game/canon/regions/*.json.
+"""Spell pass over player-facing text in game/canon/gear.json, regions/*.json, npcs/*.json, game/narrative/dialogue/rrn_*.json and the Red Reaches codex entries.
 Needs `pip install pyspellchecker`; skips (exit 0) with a note if it is not installed.
 Lore words (names, invented terms) live in tools/lore_words.txt, one per line. Also flags British spellings.
 Run: python3 tools/spellcheck_canon.py [--list]"""
@@ -15,7 +15,7 @@ except ImportError:
 
 SKIP_KEYS = {"id", "stat", "op", "slot", "rarity", "character", "region", "kind", "ref", "landmark", "target", "type", "template",
              "item", "origin_region", "completes_flag", "sets_flag", "flag", "species_id", "creature", "tags", "ledger_tags",
-             "unlocks", "reward_gear", "cares", "hooks", "uses", "color", "palette", "density", "fog_color", "sky", "relief", "layers", "stinger_on_event", "tempo", "trigger", "when", "requires", "records"}
+             "unlocks", "reward_gear", "cares", "hooks", "uses", "color", "palette", "density", "fog_color", "sky", "relief", "layers", "stinger_on_event", "tempo", "trigger", "when", "requires", "records", "station", "site", "dialogue", "flag_met", "portrait_expressions", "quests", "if", "if_not", "goto", "label", "event", "who", "expr", "set", "when_", "race_note"}
 spell = SpellChecker()
 lore = set()
 lw = os.path.join(os.path.dirname(__file__), "lore_words.txt")
@@ -40,9 +40,14 @@ def walk(o, key=None):
 bad = {}
 brit = []
 files = [os.path.join(C, "gear.json")] + sorted(glob.glob(os.path.join(C, "regions", "*.json")))
-for f in files:
+files += sorted(glob.glob(os.path.join(C, "npcs", "*.json")))
+files += sorted(glob.glob(os.path.join(ROOT, "game", "narrative", "dialogue", "rrn_*.json")))
+CODEX = os.path.join(C, "codex.json")  # only the Red Reaches entries added with the NPC pass
+for f in files + [CODEX]:
     d = json.load(open(f, encoding="utf8"))
     n = os.path.basename(f)
+    if f == CODEX:
+        d = {k: v for k, v in d["entries"].items() if k in ("place_red_span_remnant", "place_spanwright_yard", "place_well_line", "place_grazer_flats", "place_augur_pit", "place_waystation", "place_boulder_pass", "lore_load_marks", "lore_keth_tally", "lore_permit_7k")}
     for text in walk(d):
         for m in BRIT.finditer(text): brit.append((n, m.group(0)))
         for w in re.findall(r"[A-Za-z][A-Za-z']*", text.replace("’", "'")):

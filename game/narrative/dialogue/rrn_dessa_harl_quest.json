@@ -1,0 +1,36 @@
+{
+ "id": "rrn_dessa_harl_quest",
+ "lines": [
+  {
+   "who": "dessa_harl",
+   "expr": "stern",
+   "text": "Something is buried under the pans. A lichen bed, preserved in salt. Hundreds of years."
+  },
+  {
+   "who": "dessa_harl",
+   "expr": "wary",
+   "text": "If the Dominion hears, the pans are a survey site. If the crew hears, they will sell it."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "What do you want?"
+  },
+  {
+   "who": "dessa_harl",
+   "expr": "default",
+   "text": "Someone with a steady hand. Dig it out whole. Plant half back in the grazer terraces."
+  },
+  {
+   "set": {
+    "rrn_dessa_bed_offered": true
+   }
+  },
+  {
+   "event": "lead:salt_glint"
+  },
+  {
+   "end": true
+  }
+ ]
+}

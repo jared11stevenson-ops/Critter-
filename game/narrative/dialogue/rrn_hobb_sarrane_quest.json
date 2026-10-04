@@ -1,0 +1,31 @@
+{
+ "id": "rrn_hobb_sarrane_quest",
+ "lines": [
+  {
+   "who": "hobb_sarrane",
+   "expr": "tired",
+   "text": "Cart wants three more hands. Mine are two."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "Brace the cart. Re-set the wheel."
+  },
+  {
+   "who": "hobb_sarrane",
+   "expr": "amused",
+   "text": "You carry weight without asking. Stop."
+  },
+  {
+   "who": "hobb_sarrane",
+   "expr": "default",
+   "text": "Spare axle parts in the stash. Take two. For the crew."
+  },
+  {
+   "event": "lead:rr_drover_cart"
+  },
+  {
+   "end": true
+  }
+ ]
+}

@@ -1,0 +1,62 @@
+{
+ "id": "rrn_nuru_tamsin_turnin",
+ "lines": [
+  {
+   "who": "nuru_tamsin",
+   "expr": "warm",
+   "text": "The water stayed dark. Good. The cell will move the scouts away.",
+   "if": "ledger_darkness_kept"
+  },
+  {
+   "who": "nuru_tamsin",
+   "expr": "stern",
+   "text": "You lit it. Something saw the light. The cell does not forgive that easily.",
+   "if": "ledger_forced_exposure"
+  },
+  {
+   "who": "nuru_tamsin",
+   "expr": "default",
+   "text": "One more thing. The cell keeps an evidence cylinder for you. Trafficking records. Do you want them?"
+  },
+  {
+   "choice": [
+    {
+     "text": "Give them to the Terrarium Authority. In writing.",
+     "goto": "t_evidence"
+    },
+    {
+     "text": "Keep them. I do not want to hold what I cannot protect.",
+     "goto": "t_leave"
+    }
+   ]
+  },
+  {
+   "label": "t_evidence"
+  },
+  {
+   "who": "nuru_tamsin",
+   "expr": "amused",
+   "text": "Authority. In writing. Fine. The cell is going to hate you for this. Slightly."
+  },
+  {
+   "event": "rec:nuru_evidence"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "t_leave"
+  },
+  {
+   "who": "nuru_tamsin",
+   "expr": "warm",
+   "text": "Respectful. Annoying. The cell holds it."
+  },
+  {
+   "event": "rec:nuru_leave"
+  },
+  {
+   "end": true
+  }
+ ]
+}

@@ -1,0 +1,75 @@
+{
+ "id": "rrn_odalys_penhallow_meet",
+ "lines": [
+  {
+   "who": "odalys_penhallow",
+   "expr": "stern",
+   "text": "Permit. Please."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "This is my homeland. I do not carry a permit."
+  },
+  {
+   "who": "odalys_penhallow",
+   "expr": "amused",
+   "text": "Section nine, homeland clause. You are exempt. I wrote that clause. I write most of the clauses nobody reads."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "You are on the Dominion side."
+  },
+  {
+   "who": "odalys_penhallow",
+   "expr": "wary",
+   "text": "I stamp what I am told to stamp. I file what I am not told not to file."
+  },
+  {
+   "set": {
+    "rrn_odalys_penhallow_met": true
+   }
+  },
+  {
+   "choice": [
+    {
+     "text": "Show me the permit 7-K exemptions. I want to read them.",
+     "goto": "m_ask"
+    },
+    {
+     "text": "Sign the survey permit for my crew. Quickly.",
+     "goto": "m_sign"
+    }
+   ]
+  },
+  {
+   "label": "m_ask"
+  },
+  {
+   "who": "odalys_penhallow",
+   "expr": "warm",
+   "text": "Appendix C. Nobody reads Appendix C. Come back at dusk and I will explain it."
+  },
+  {
+   "event": "rec:pen_ask"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "m_sign"
+  },
+  {
+   "who": "odalys_penhallow",
+   "expr": "default",
+   "text": "Signed. And logged. You now owe the office a favor. It is in section four."
+  },
+  {
+   "event": "rec:pen_sign"
+  },
+  {
+   "end": true
+  }
+ ]
+}

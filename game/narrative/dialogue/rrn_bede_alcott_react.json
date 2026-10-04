@@ -1,0 +1,25 @@
+{
+ "id": "rrn_bede_alcott_react",
+ "lines": [
+  {
+   "who": "bede_alcott",
+   "expr": "wary",
+   "text": "The calves hear the pylon. They shake. Is that the beetles' trouble too?",
+   "if": "rr_act1_done",
+   "if_not": "rr_act2_done"
+  },
+  {
+   "who": "bede_alcott",
+   "expr": "tired",
+   "text": "I heard the Span sing from here. The calves hid under my coat.",
+   "if": "rr_act2_done",
+   "if_not": "rr_act3_done"
+  },
+  {
+   "who": "bede_alcott",
+   "expr": "warm",
+   "text": "It is quiet. For the first time in weeks. The calves are asleep.",
+   "if": "boss_defeated"
+  }
+ ]
+}

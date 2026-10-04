@@ -1,0 +1,69 @@
+{
+ "id": "rrn_vesk_dunmore_turnin",
+ "lines": [
+  {
+   "who": "vesk_dunmore",
+   "expr": "tired",
+   "text": "Claim struck. Not a cent. You are a hard people.",
+   "if": "rr_cache_kept"
+  },
+  {
+   "who": "vesk_dunmore",
+   "expr": "wary",
+   "text": "Fair price. Half to the families. I am going to be sick.",
+   "if": "rr_cache_fair"
+  },
+  {
+   "who": "vesk_dunmore",
+   "expr": "amused",
+   "text": "Sold on. The Undermarket thanks you. So do I.",
+   "if": "rr_cache_sold"
+  },
+  {
+   "choice": [
+    {
+     "text": "Tell me who is buying. The families deserve to know.",
+     "goto": "t_expose",
+     "if": "rr_cache_sold"
+    },
+    {
+     "text": "Tell me who is buying. The Warden should know.",
+     "goto": "t_expose",
+     "if_not": "rr_cache_sold"
+    },
+    {
+     "text": "Take the money and keep quiet.",
+     "goto": "t_deal"
+    }
+   ]
+  },
+  {
+   "label": "t_expose"
+  },
+  {
+   "who": "vesk_dunmore",
+   "expr": "wary",
+   "text": "...A Helix broker with a long coat. I will say it once. Once."
+  },
+  {
+   "event": "rec:vesk_expose"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "t_deal"
+  },
+  {
+   "who": "vesk_dunmore",
+   "expr": "amused",
+   "text": "Knock on wood. Good doing business."
+  },
+  {
+   "event": "rec:vesk_deal"
+  },
+  {
+   "end": true
+  }
+ ]
+}

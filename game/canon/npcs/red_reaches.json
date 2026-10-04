@@ -1,0 +1,1437 @@
+{
+ "_doc": "Red Reaches living NPCs (Agent 3 content for Agent 2 runtime). One entry per NPC. schedule[] = {when: dawn|day|dusk|night, station, site?}: 'station' is a Red Reaches hub id (a region layer id, spoke id, spoke hub id or landmark id from game/canon/regions/red_reaches.json), 'site' an optional site id from the same file's sites[]. barks[] = idle lines, gated by flags (if/if_not). Flags named ledger_<tag> are derived: true when the Ledger holds any event carrying <tag> (see design/DATA_REQUESTS.md section 8). records{} = Ledger.record specs fired by dialogue events 'rec:<id>'. Dialogue events: 'offer:<quest id>' (quest offered), 'lead:<event|site|act id>' (hook only), 'rec:<record id>'. dialogue = ids of files in game/narrative/dialogue/. look = brief for modelers/portrait artists.",
+ "region": "red_reaches",
+ "npcs": [
+  {
+   "id": "oda_keth",
+   "name": "Mother Oda Keth",
+   "species": "Keth (sapient, slate-shelled; kin to, but not, the wildlife plate beetle)",
+   "role": "Well-keeper of the Well Line",
+   "faction": "Reach settlements (Well Line families)",
+   "sapient": true,
+   "personality": "Lectures in numbered points. Proud, exacting, impatient with idleness, generous only in deeds.",
+   "contradiction": "Insists water belongs to nobody, yet counts every cup she gives away.",
+   "voice": "Numbered points ('Point one'). Water and stone metaphors. Never says thanks; says 'Adequate.' Calls Aruun 'Span-boy' until the wells are safe.",
+   "schedule": [
+    {
+     "when": "dawn",
+     "station": "salt_pans",
+     "site": "salt_well"
+    },
+    {
+     "when": "day",
+     "station": "well_line"
+    },
+    {
+     "when": "dusk",
+     "station": "spanwright_yard"
+    }
+   ],
+   "barks": [
+    {
+     "text": "Point one: drink slowly. Point two: there is no point two. Drink slowly."
+    },
+    {
+     "text": "Wells stay when people do.",
+     "if": "rr_wells_kept"
+    },
+    {
+     "text": "Three families can read this line now. Three. I counted twice.",
+     "if": "rr_wells_shared"
+    },
+    {
+     "text": "The Dominion's seal on my cistern. Look at it. Go on.",
+     "if": "rr_wells_leased"
+    },
+    {
+     "text": "Somebody drained a flask and did not carry it back.",
+     "if": "ledger_claim_jump"
+    }
+   ],
+   "look": {
+    "silhouette": "Low, broad, domed slate shell carried like a pack; long forearms with cranking-callused hands.",
+    "palette": [
+     "#4b5d73",
+     "#19c3c9",
+     "#f4f1e8",
+     "#2a1a16"
+    ],
+    "pops_against_ochre": "Slate-blue shell and a turquoise water flask against red dirt; white headcloth catches noon.",
+    "props": "Well crank, copper dipper, tally knots on a cord at her belt."
+   },
+   "quests": {
+    "gives": [
+     "rr_well_line"
+    ],
+    "reacts": [
+     "rr_well_line"
+    ],
+    "acts": [
+     "rr_act1",
+     "rr_act3"
+    ],
+    "events": [
+     "rr_well_keeper"
+    ],
+    "sites": [
+     "salt_well",
+     "quest_rr_well_line"
+    ]
+   },
+   "records": {
+    "oda_cup": {
+     "type": "chose",
+     "target": "oda_keth",
+     "tags": [
+      "consent_asked",
+      "stewardship"
+     ],
+     "weight": 1
+    },
+    "oda_grab": {
+     "type": "harmed",
+     "target": "oda_keth",
+     "tags": [
+      "claim_jump"
+     ],
+     "weight": 1
+    },
+    "oda_names": {
+     "type": "helped",
+     "target": "well_line",
+     "tags": [
+      "stewardship",
+      "protect_weak"
+     ],
+     "weight": 2
+    },
+    "oda_blank": {
+     "type": "chose",
+     "target": "well_line",
+     "tags": [
+      "accepted_boundary"
+     ],
+     "weight": 1
+    }
+   },
+   "dialogue": {
+    "meet": "rrn_oda_keth_meet",
+    "repeat": "rrn_oda_keth_repeat",
+    "quest": "rrn_oda_keth_quest",
+    "turnin": "rrn_oda_keth_turnin",
+    "react": "rrn_oda_keth_react"
+   },
+   "portrait_expressions": [
+    "default",
+    "stern",
+    "amused",
+    "warm",
+    "wary"
+   ],
+   "flag_met": "rrn_oda_keth_met",
+   "race_note": "Sapient person, never owned or collected."
+  },
+  {
+   "id": "tavik_roon",
+   "name": "Tavik Roon",
+   "species": "Human (Reach-born)",
+   "role": "Dust grazer herder",
+   "faction": "Reach settlements (drovers)",
+   "sapient": true,
+   "personality": "Flat, short-spoken, endlessly patient with animals and brittle with people.",
+   "contradiction": "Hums to the herd all day but cannot answer a person without snapping; claims to hate the smell and sleeps among them.",
+   "voice": "Clipped. Herd-talk ('easy, easy') leaks into conversation. Never asks questions; states things.",
+   "schedule": [
+    {
+     "when": "dawn",
+     "station": "grazer_flats"
+    },
+    {
+     "when": "day",
+     "station": "waystation",
+     "site": "quest_rr_grazer_crossing"
+    },
+    {
+     "when": "dusk",
+     "station": "drovers_rest"
+    }
+   ],
+   "barks": [
+    {
+     "text": "Easy. Easy. Not you. The herd."
+    },
+    {
+     "text": "Terraces are seeding. Do not step on the green."
+    },
+    {
+     "text": "Four days laying that deck. First time anyone asked me how.",
+     "if": "rr_road_rebuilt"
+    },
+    {
+     "text": "Eleven did not make it over. I count them at night.",
+     "if": "rr_herd_hurt"
+    },
+    {
+     "text": "You walked slow. They noticed.",
+     "if": "rr_herd_saved"
+    }
+   ],
+   "look": {
+    "silhouette": "Tall and stooped, a long herding crook, a brass bell at the belt that never rings.",
+    "palette": [
+     "#2e3a8c",
+     "#efe6cf",
+     "#d4a017",
+     "#3a2018"
+    ],
+    "pops_against_ochre": "Cobalt poncho and a bone-white bandana; brass bell glints.",
+    "props": "Crook, ration pouch, a lichen-seed satchel."
+   },
+   "quests": {
+    "gives": [
+     "rr_grazer_crossing"
+    ],
+    "reacts": [
+     "rr_grazer_crossing",
+     "rr_vesk_cache"
+    ],
+    "acts": [
+     "rr_act1"
+    ],
+    "events": [],
+    "sites": [
+     "quest_rr_grazer_crossing"
+    ]
+   },
+   "records": {
+    "tavik_listen": {
+     "type": "chose",
+     "target": "tavik_roon",
+     "tags": [
+      "consent_asked",
+      "stewardship"
+     ],
+     "weight": 1
+    },
+    "tavik_hurry": {
+     "type": "chose",
+     "target": "dust_grazer_herd",
+     "tags": [
+      "speed_only"
+     ],
+     "weight": 1
+    },
+    "tavik_road": {
+     "type": "helped",
+     "target": "grazer_flats",
+     "tags": [
+      "stewardship",
+      "protect_weak"
+     ],
+     "weight": 2
+    },
+    "tavik_pay": {
+     "type": "chose",
+     "target": "tavik_roon",
+     "tags": [
+      "salvage_fair"
+     ],
+     "weight": 1
+    }
+   },
+   "dialogue": {
+    "meet": "rrn_tavik_roon_meet",
+    "repeat": "rrn_tavik_roon_repeat",
+    "quest": "rrn_tavik_roon_quest",
+    "turnin": "rrn_tavik_roon_turnin",
+    "react": "rrn_tavik_roon_react"
+   },
+   "portrait_expressions": [
+    "default",
+    "stern",
+    "tired",
+    "warm",
+    "wary"
+   ],
+   "flag_met": "rrn_tavik_roon_met",
+   "race_note": "Sapient person, never owned or collected."
+  },
+  {
+   "id": "hobb_sarrane",
+   "name": "Hobb Sarrane",
+   "species": "Ridge badger (sapient)",
+   "role": "Cart drover",
+   "faction": "Reach settlements (drovers)",
+   "sapient": true,
+   "personality": "Stoic, dry, self-sufficient. Hates being seen needing anything.",
+   "contradiction": "Never thanks a helper to their face, then tells the whole road which crews stopped for him.",
+   "voice": "Three-word sentences. Road slang ('axle-deep', 'a good crew'). Understatement as praise.",
+   "schedule": [
+    {
+     "when": "day",
+     "station": "drovers_rest",
+     "site": "drover_cart"
+    },
+    {
+     "when": "dusk",
+     "station": "waystation"
+    }
+   ],
+   "barks": [
+    {
+     "text": "Axle-deep. Fine. Axle-deep is fine."
+    },
+    {
+     "text": "A good crew stopped for me. Name of Aruun.",
+     "if": "ledger_braced_structure"
+    },
+    {
+     "text": "Somebody took the flour and left the cart. I remember faces.",
+     "if": "ledger_claim_jump"
+    },
+    {
+     "text": "Fair trade, that crew. Everyone keeps something.",
+     "if": "ledger_salvage_fair"
+    }
+   ],
+   "look": {
+    "silhouette": "Squat, wide-shouldered badger with a hauling harness and a battered wide-brim hat.",
+    "palette": [
+     "#6a3fa0",
+     "#b8d94a",
+     "#3a2018",
+     "#e8e2d4"
+    ],
+    "pops_against_ochre": "Violet hood and a lime neckerchief against red dust.",
+    "props": "Spare wheel hub, a notched tally stick tied at the hip."
+   },
+   "quests": {
+    "gives": [],
+    "reacts": [],
+    "acts": [
+     "rr_act1"
+    ],
+    "events": [
+     "rr_drover_cart"
+    ],
+    "sites": [
+     "drover_cart",
+     "drover_stash"
+    ]
+   },
+   "records": {
+    "hobb_ask": {
+     "type": "chose",
+     "target": "hobb_sarrane",
+     "tags": [
+      "consent_asked",
+      "stewardship"
+     ],
+     "weight": 1
+    },
+    "hobb_brace": {
+     "type": "helped",
+     "target": "drover",
+     "tags": [
+      "braced_structure",
+      "protect_weak"
+     ],
+     "weight": 2
+    }
+   },
+   "dialogue": {
+    "meet": "rrn_hobb_sarrane_meet",
+    "repeat": "rrn_hobb_sarrane_repeat",
+    "quest": "rrn_hobb_sarrane_quest",
+    "turnin": "rrn_hobb_sarrane_turnin",
+    "react": "rrn_hobb_sarrane_react"
+   },
+   "portrait_expressions": [
+    "default",
+    "stern",
+    "amused",
+    "warm",
+    "tired"
+   ],
+   "flag_met": "rrn_hobb_sarrane_met",
+   "race_note": "Sapient person, never owned or collected."
+  },
+  {
+   "id": "imre_dahl",
+   "name": "Imre Dahl",
+   "species": "Human",
+   "role": "Dominion surveyor",
+   "faction": "Human Dominion (survey)",
+   "sapient": true,
+   "personality": "Exhausted, scrupulous, soft-spoken. Does exactly what the permit says and not one line more.",
+   "contradiction": "Believes in the permit as a shield, yet quietly writes margin notes that undermine the dig.",
+   "voice": "Passive voice, apologies, field-log phrasing ('noted', 'per the permit'). Whispers the dangerous parts.",
+   "schedule": [
+    {
+     "when": "day",
+     "station": "drill_basin",
+     "site": "quest_rr_beetle_pylon"
+    },
+    {
+     "when": "dusk",
+     "station": "augur_pit"
+    },
+    {
+     "when": "night",
+     "station": "drill_basin"
+    }
+   ],
+   "barks": [
+    {
+     "text": "Per the permit. Noted. Per the permit."
+    },
+    {
+     "text": "The beetles graze at the pylons now. I am afraid to look away.",
+     "if": "rr_beetles_calmed"
+    },
+    {
+     "text": "I am sorry about the herd. It is in my log. I wrote it in ink.",
+     "if": "rr_beetles_culled"
+    },
+    {
+     "text": "A fault, not a person. That is what the logs will say.",
+     "if": "rr_pylon_pulled"
+    }
+   ],
+   "look": {
+    "silhouette": "Narrow-shouldered, stooped under a survey backpack; clipboard gripped like a shield.",
+    "palette": [
+     "#d9dde2",
+     "#7fe0ff",
+     "#5a5048",
+     "#2a1a16"
+    ],
+    "pops_against_ochre": "Pale gray Dominion coat with a high-visibility cyan vest; cyan survey flags in the pack.",
+    "props": "Clipboard, tuning fork, folded Permit 7-K."
+   },
+   "quests": {
+    "gives": [
+     "rr_beetle_pylon"
+    ],
+    "reacts": [
+     "rr_beetle_pylon",
+     "rr_well_line"
+    ],
+    "acts": [
+     "rr_act1",
+     "rr_act2"
+    ],
+    "events": [],
+    "sites": [
+     "quest_rr_beetle_pylon"
+    ]
+   },
+   "records": {
+    "dahl_listen": {
+     "type": "chose",
+     "target": "imre_dahl",
+     "tags": [
+      "consent_asked",
+      "evidence"
+     ],
+     "weight": 1
+    },
+    "dahl_report": {
+     "type": "chose",
+     "target": "imre_dahl",
+     "tags": [
+      "dominion_favor"
+     ],
+     "weight": 1
+    },
+    "dahl_log": {
+     "type": "helped",
+     "target": "plate_beetle_herd",
+     "tags": [
+      "evidence",
+      "stewardship"
+     ],
+     "weight": 2
+    },
+    "dahl_silent": {
+     "type": "chose",
+     "target": "imre_dahl",
+     "tags": [
+      "accepted_boundary"
+     ],
+     "weight": 1
+    }
+   },
+   "dialogue": {
+    "meet": "rrn_imre_dahl_meet",
+    "repeat": "rrn_imre_dahl_repeat",
+    "quest": "rrn_imre_dahl_quest",
+    "turnin": "rrn_imre_dahl_turnin",
+    "react": "rrn_imre_dahl_react"
+   },
+   "portrait_expressions": [
+    "default",
+    "tired",
+    "warm",
+    "wary",
+    "amused",
+    "stern"
+   ],
+   "flag_met": "rrn_imre_dahl_met",
+   "race_note": "Sapient person, never owned or collected."
+  },
+  {
+   "id": "ilsa_brandt",
+   "name": "Ilsa Brandt",
+   "species": "Stick mantis (sapient)",
+   "role": "Second-year Spanwright apprentice",
+   "faction": "Spanwrights",
+   "sapient": true,
+   "personality": "Brilliant, restless, ambitious. Sketches monuments and rubs them out when watched.",
+   "contradiction": "Trained to be unnoticed, she wants more than anything to be remembered.",
+   "voice": "Quick, breathless, trails into technical jargon. Self-interrupts ('no, wait'). Calls loads 'the weight', never 'the load'.",
+   "schedule": [
+    {
+     "when": "dawn",
+     "station": "spanwright_yard"
+    },
+    {
+     "when": "day",
+     "station": "span_approach",
+     "site": "quest_rr_apprentice_arch"
+    },
+    {
+     "when": "dusk",
+     "station": "overlook"
+    }
+   ],
+   "barks": [
+    {
+     "text": "No, wait. If the keystone takes the weight here, then... no."
+    },
+    {
+     "text": "I still think it looks incredible.",
+     "if": "rr_arch_hidden"
+    },
+    {
+     "text": "Repair first. Fine. Fine. The pylons are good, though.",
+     "if": "rr_arch_deferred"
+    },
+    {
+     "text": "Visitors cry at the arch. I do not look at the pier two valleys over.",
+     "if": "rr_arch_built"
+    }
+   ],
+   "look": {
+    "silhouette": "Tall, thin stick-limbed mantis in a chalk-dusted apprentice apron, forelimbs always holding a stick of chalk or a plumb line.",
+    "palette": [
+     "#8bd13f",
+     "#d1327f",
+     "#efe6cf",
+     "#2a1a16"
+    ],
+    "pops_against_ochre": "Leaf-green body and a magenta chalk apron, readable at long range against red rock.",
+    "props": "Chalk, plumb line, a roll of rubbed-out sketches."
+   },
+   "quests": {
+    "gives": [
+     "rr_apprentice_arch"
+    ],
+    "reacts": [
+     "rr_apprentice_arch",
+     "rr_drill_drill"
+    ],
+    "acts": [
+     "rr_act2"
+    ],
+    "events": [],
+    "sites": [
+     "quest_rr_apprentice_arch"
+    ]
+   },
+   "records": {
+    "ilsa_praise": {
+     "type": "chose",
+     "target": "ilsa_brandt",
+     "tags": [
+      "glory_seeking"
+     ],
+     "weight": 1
+    },
+    "ilsa_teach": {
+     "type": "helped",
+     "target": "ilsa_brandt",
+     "tags": [
+      "redundant_design",
+      "stewardship"
+     ],
+     "weight": 2
+    },
+    "ilsa_credit": {
+     "type": "chose",
+     "target": "ilsa_brandt",
+     "tags": [
+      "consent_asked",
+      "burden"
+     ],
+     "weight": 1
+    }
+   },
+   "dialogue": {
+    "meet": "rrn_ilsa_brandt_meet",
+    "repeat": "rrn_ilsa_brandt_repeat",
+    "quest": "rrn_ilsa_brandt_quest",
+    "turnin": "rrn_ilsa_brandt_turnin",
+    "react": "rrn_ilsa_brandt_react"
+   },
+   "portrait_expressions": [
+    "default",
+    "amused",
+    "warm",
+    "wary",
+    "tired",
+    "stern"
+   ],
+   "flag_met": "rrn_ilsa_brandt_met",
+   "race_note": "Sapient person, never owned or collected."
+  },
+  {
+   "id": "pel_narr",
+   "name": "Warden Pel Narr",
+   "species": "Long-legged crane (sapient)",
+   "role": "Warden of the Ochre Span",
+   "faction": "Spanwrights (Span wardens)",
+   "sapient": true,
+   "personality": "Dutiful, deliberate, humorless on duty. Treats boredom as the highest compliment a bridge can pay.",
+   "contradiction": "Preaches the boring drill, yet carries the whistle from the Red Span and cannot hear it without freezing.",
+   "voice": "Procedure voice: numbered steps, countdowns. Plucks cables and hums the note mid-sentence. Never raises his voice.",
+   "schedule": [
+    {
+     "when": "day",
+     "station": "span_approach",
+     "site": "quest_rr_drill_drill"
+    },
+    {
+     "when": "dusk",
+     "station": "ochre_span"
+    },
+    {
+     "when": "night",
+     "station": "overlook"
+    }
+   ],
+   "barks": [
+    {
+     "text": "Cable three: flat. Cable four: sharp. Walk it back."
+    },
+    {
+     "text": "Practice makes boring. Boring is a gift.",
+     "if": "rr_drill_run"
+    },
+    {
+     "text": "A day's trade. That is what it cost to skip the drill. I hope that is all.",
+     "if": "rr_drill_skipped"
+    },
+    {
+     "text": "The Span held. You held the Span. I am not sure who is the bridge.",
+     "if": "rr_drill_borne"
+    }
+   ],
+   "look": {
+    "silhouette": "Very tall, thin crane in a long drab warden coat; one leg often hooked on a cable as he listens.",
+    "palette": [
+     "#f4f4f0",
+     "#1f5fd1",
+     "#c0c8d0",
+     "#2a1a16"
+    ],
+    "pops_against_ochre": "White plumage and a cobalt sash against the red span stone; a silver whistle flashes.",
+    "props": "Silver whistle (the Red Span's rope-bell clapper), cable key, a clipboard of exits."
+   },
+   "quests": {
+    "gives": [
+     "rr_drill_drill"
+    ],
+    "reacts": [
+     "rr_drill_drill",
+     "rr_apprentice_arch"
+    ],
+    "acts": [
+     "rr_act2",
+     "rr_act3"
+    ],
+    "events": [
+     "rr_span_overlook"
+    ],
+    "sites": [
+     "quest_rr_drill_drill"
+    ]
+   },
+   "records": {
+    "pel_listen": {
+     "type": "chose",
+     "target": "pel_narr",
+     "tags": [
+      "consent_asked",
+      "exit_planned"
+     ],
+     "weight": 1
+    },
+    "pel_skip": {
+     "type": "chose",
+     "target": "pel_narr",
+     "tags": [
+      "shortcut"
+     ],
+     "weight": 1
+    },
+    "pel_whistle": {
+     "type": "helped",
+     "target": "pel_narr",
+     "tags": [
+      "protect_personnel",
+      "consequence_faced"
+     ],
+     "weight": 2
+    },
+    "pel_spare": {
+     "type": "chose",
+     "target": "pel_narr",
+     "tags": [
+      "accepted_boundary"
+     ],
+     "weight": 1
+    }
+   },
+   "dialogue": {
+    "meet": "rrn_pel_narr_meet",
+    "repeat": "rrn_pel_narr_repeat",
+    "quest": "rrn_pel_narr_quest",
+    "turnin": "rrn_pel_narr_turnin",
+    "react": "rrn_pel_narr_react"
+   },
+   "portrait_expressions": [
+    "default",
+    "stern",
+    "tired",
+    "warm",
+    "grave"
+   ],
+   "flag_met": "rrn_pel_narr_met",
+   "race_note": "Sapient person, never owned or collected."
+  },
+  {
+   "id": "vesk_dunmore",
+   "name": "Vesk Dunmore",
+   "species": "Human",
+   "role": "Claims broker (poacher)",
+   "faction": "Undermarket (independent)",
+   "sapient": true,
+   "personality": "Fast-talking, reckless, superstitious. Reads omens in dust and never sells at a grave without a charm.",
+   "contradiction": "A claim-jumper who will not touch a grave himself and wants someone else to do it.",
+   "voice": "Salesman patter, knocks on wood mid-sentence, 'friend' as a weapon. Drops the grin when cornered.",
+   "schedule": [
+    {
+     "when": "day",
+     "station": "drovers_rest",
+     "site": "quest_rr_vesk_cache"
+    },
+    {
+     "when": "dusk",
+     "station": "waystation"
+    },
+    {
+     "when": "night",
+     "station": "red_span_remnant"
+    }
+   ],
+   "barks": [
+    {
+     "text": "Knock on wood. Friend. Everything is for sale at the right grave."
+    },
+    {
+     "text": "The claim got struck. Fine. I will find another grave.",
+     "if": "rr_cache_kept"
+    },
+    {
+     "text": "Half to the families. Never thought I would see it. Do not tell my mother.",
+     "if": "rr_cache_fair"
+    },
+    {
+     "text": "You sold the stone on. Welcome to the Undermarket, friend.",
+     "if": "rr_cache_sold"
+    },
+    {
+     "text": "I heard about the vault door. Not touching that one.",
+     "if": "ledger_threshold_breached"
+    }
+   ],
+   "look": {
+    "silhouette": "Wiry, hunched, with too many pockets; a long coat hung with charms and tally beads.",
+    "palette": [
+     "#c8e600",
+     "#2a2d33",
+     "#e8d24a",
+     "#8a4a32"
+    ],
+    "pops_against_ochre": "Acid-yellow scarf and a charcoal coat; glass charms catch the light.",
+    "props": "Survey stake, bundle of charms, a claim-flag tied with red cord."
+   },
+   "quests": {
+    "gives": [
+     "rr_vesk_cache"
+    ],
+    "reacts": [
+     "rr_vesk_cache",
+     "rr_well_line"
+    ],
+    "acts": [
+     "rr_act2"
+    ],
+    "events": [],
+    "sites": [
+     "quest_rr_vesk_cache"
+    ]
+   },
+   "records": {
+    "vesk_charm": {
+     "type": "chose",
+     "target": "vesk_dunmore",
+     "tags": [
+      "consent_asked"
+     ],
+     "weight": 1
+    },
+    "vesk_bribe": {
+     "type": "chose",
+     "target": "vesk_dunmore",
+     "tags": [
+      "leverage"
+     ],
+     "weight": 1
+    },
+    "vesk_expose": {
+     "type": "helped",
+     "target": "red_span_remnant",
+     "tags": [
+      "trafficking_exposed",
+      "stewardship"
+     ],
+     "weight": 3
+    },
+    "vesk_deal": {
+     "type": "chose",
+     "target": "vesk_dunmore",
+     "tags": [
+      "trafficked"
+     ],
+     "weight": 2
+    }
+   },
+   "dialogue": {
+    "meet": "rrn_vesk_dunmore_meet",
+    "repeat": "rrn_vesk_dunmore_repeat",
+    "quest": "rrn_vesk_dunmore_quest",
+    "turnin": "rrn_vesk_dunmore_turnin",
+    "react": "rrn_vesk_dunmore_react"
+   },
+   "portrait_expressions": [
+    "default",
+    "amused",
+    "wary",
+    "stern",
+    "tired"
+   ],
+   "flag_met": "rrn_vesk_dunmore_met",
+   "race_note": "Sapient person, never owned or collected."
+  },
+  {
+   "id": "nuru_tamsin",
+   "name": "Nuru Tamsin",
+   "species": "Dune skink (sapient)",
+   "role": "Free Scale contact (anti-trafficking cell)",
+   "faction": "Free Scale (independent anti-trafficking cell)",
+   "sapient": true,
+   "personality": "Quick, wry, vigilant. Collects evidence the way others collect coin and spends it more carefully.",
+   "contradiction": "Distrusts any human faction calling itself the good side, yet her network runs on Coalition grants she will not name.",
+   "voice": "Short, sardonic sentences. Never says 'we'; says 'the cell'. Tests strangers with a trick question.",
+   "schedule": [
+    {
+     "when": "day",
+     "station": "waystation"
+    },
+    {
+     "when": "dusk",
+     "station": "echo_hollow"
+    },
+    {
+     "when": "night",
+     "station": "cistern"
+    }
+   ],
+   "barks": [
+    {
+     "text": "The cell sees everything. The cell says nothing. That is why it is still here."
+    },
+    {
+     "text": "Somebody sold stone on the Undermarket. We have the receipt.",
+     "if": "ledger_trafficked"
+    },
+    {
+     "text": "You exposed the trafficker. The cell owes you one. The cell does not owe often.",
+     "if": "ledger_trafficking_exposed"
+    },
+    {
+     "text": "Dominion permit ink on your hands. The cell noticed.",
+     "if": "ledger_dominion_favor"
+    }
+   ],
+   "look": {
+    "silhouette": "Small, long-tailed dune skink in a layered travel wrap; ear studs and a bandolier of slim evidence cylinders.",
+    "palette": [
+     "#00b8a9",
+     "#e8e2d4",
+     "#ff8f00",
+     "#2a1a16"
+    ],
+    "pops_against_ochre": "Teal scarf and silver rings against red dirt; a hot-orange cylinder strap.",
+    "props": "Evidence cylinders, a folded route map, a hand lens."
+   },
+   "quests": {
+    "gives": [],
+    "reacts": [
+     "rr_vesk_cache",
+     "rr_well_line"
+    ],
+    "acts": [
+     "rr_act2"
+    ],
+    "events": [
+     "rr_cistern_dark"
+    ],
+    "sites": [
+     "cistern_pool",
+     "echo_wall"
+    ]
+   },
+   "records": {
+    "nuru_trust": {
+     "type": "chose",
+     "target": "nuru_tamsin",
+     "tags": [
+      "consent_asked",
+      "trust"
+     ],
+     "weight": 1
+    },
+    "nuru_evidence": {
+     "type": "helped",
+     "target": "nuru_tamsin",
+     "tags": [
+      "evidence",
+      "trafficking_exposed"
+     ],
+     "weight": 3
+    },
+    "nuru_leave": {
+     "type": "chose",
+     "target": "nuru_tamsin",
+     "tags": [
+      "privacy_respected"
+     ],
+     "weight": 1
+    }
+   },
+   "dialogue": {
+    "meet": "rrn_nuru_tamsin_meet",
+    "repeat": "rrn_nuru_tamsin_repeat",
+    "quest": "rrn_nuru_tamsin_quest",
+    "turnin": "rrn_nuru_tamsin_turnin",
+    "react": "rrn_nuru_tamsin_react"
+   },
+   "portrait_expressions": [
+    "default",
+    "amused",
+    "wary",
+    "stern",
+    "warm",
+    "tired"
+   ],
+   "flag_met": "rrn_nuru_tamsin_met",
+   "race_note": "Sapient person, never owned or collected."
+  },
+  {
+   "id": "odalys_penhallow",
+   "name": "Clerk Odalys Penhallow",
+   "species": "Human",
+   "role": "Dominion permit clerk",
+   "faction": "Human Dominion (permits office)",
+   "sapient": true,
+   "personality": "Prim, precise, dryly funny. Believes a good form is a shield and a bad one is a weapon.",
+   "contradiction": "Stamps the permits that hurt locals while quietly filing every exemption clause that could protect them.",
+   "voice": "Bureaucratic precision with a sting ('per section nine', 'noted for the record'). Never raises her voice; lowers it.",
+   "schedule": [
+    {
+     "when": "day",
+     "station": "drill_basin"
+    },
+    {
+     "when": "dusk",
+     "station": "augur_pit"
+    },
+    {
+     "when": "night",
+     "station": "basin"
+    }
+   ],
+   "barks": [
+    {
+     "text": "Form 7-K, subsection nine. Nobody reads subsection nine."
+    },
+    {
+     "text": "I was told the Well Line is condemned. I have not found the form.",
+     "if_not": "rr_wells_leased"
+    },
+    {
+     "text": "I stamped the pump contract. I filed the exemption alongside. Do not ask.",
+     "if": "rr_wells_leased"
+    },
+    {
+     "text": "A Dominion favor on your ledger. The office files such things. The office does not forget.",
+     "if": "ledger_dominion_favor"
+    }
+   ],
+   "look": {
+    "silhouette": "Upright, narrow, prim, a stamp case clipped to a belt; always carrying a rolled permit scroll.",
+    "palette": [
+     "#e8e2f0",
+     "#7fe0ff",
+     "#8a1c3a",
+     "#2a1a16"
+    ],
+    "pops_against_ochre": "Pale lavender suit and a cyan lanyard; a crimson stamp pad.",
+    "props": "Brass stamp, stamp pad, permit scrolls, reading glasses on a chain."
+   },
+   "quests": {
+    "gives": [],
+    "reacts": [
+     "rr_beetle_pylon",
+     "rr_well_line"
+    ],
+    "acts": [
+     "rr_act1",
+     "rr_act2"
+    ],
+    "events": [],
+    "sites": []
+   },
+   "records": {
+    "pen_ask": {
+     "type": "chose",
+     "target": "odalys_penhallow",
+     "tags": [
+      "consent_asked",
+      "evidence"
+     ],
+     "weight": 1
+    },
+    "pen_sign": {
+     "type": "chose",
+     "target": "odalys_penhallow",
+     "tags": [
+      "dominion_favor"
+     ],
+     "weight": 2
+    },
+    "pen_exempt": {
+     "type": "helped",
+     "target": "odalys_penhallow",
+     "tags": [
+      "evidence",
+      "protect_weak"
+     ],
+     "weight": 2
+    },
+    "pen_burn": {
+     "type": "chose",
+     "target": "odalys_penhallow",
+     "tags": [
+      "kill_dominion"
+     ],
+     "weight": 1
+    }
+   },
+   "dialogue": {
+    "meet": "rrn_odalys_penhallow_meet",
+    "repeat": "rrn_odalys_penhallow_repeat",
+    "quest": "rrn_odalys_penhallow_quest",
+    "turnin": "rrn_odalys_penhallow_turnin",
+    "react": "rrn_odalys_penhallow_react"
+   },
+   "portrait_expressions": [
+    "default",
+    "stern",
+    "amused",
+    "warm",
+    "tired",
+    "wary"
+   ],
+   "flag_met": "rrn_odalys_penhallow_met",
+   "race_note": "Sapient person, never owned or collected."
+  },
+  {
+   "id": "bede_alcott",
+   "name": "Bede Alcott",
+   "species": "Human",
+   "role": "Terrarium Authority keeper (stranded)",
+   "faction": "Terrarium Authority (Habitat keepers)",
+   "sapient": true,
+   "personality": "Gentle, stubborn, sleep-starved. Talks to the calves in complete sentences.",
+   "contradiction": "Sworn to Protective Extraction law, yet cannot bring himself to give the orphaned calves back to the wild.",
+   "voice": "Gentle, apologetic. Field-vet vocabulary ('weanling', 'electrolytes'). Names things, then corrects himself.",
+   "schedule": [
+    {
+     "when": "day",
+     "station": "drovers_rest"
+    },
+    {
+     "when": "dusk",
+     "station": "drovers_rest"
+    },
+    {
+     "when": "night",
+     "station": "drovers_rest"
+    }
+   ],
+   "barks": [
+    {
+     "text": "Come on, Biscuit. No. Not Biscuit. Calf Two. Come on, Calf Two."
+    },
+    {
+     "text": "Transport is axle-deep in the rut. I am a keeper, not a mechanic.",
+     "if_not": "ledger_braced_structure"
+    },
+    {
+     "text": "They went back to the herd. I did not cry. I have a cold.",
+     "if": "rr_herd_saved"
+    },
+    {
+     "text": "The herd is hurt. The calves are all I have saved. I am not saved.",
+     "if": "rr_herd_hurt"
+    }
+   ],
+   "look": {
+    "silhouette": "Heavy-shouldered keeper in a stained field coat, always one hand on a calf's neck; two small dust grazer calves in tow.",
+    "palette": [
+     "#1f8a5b",
+     "#efe6cf",
+     "#f06292",
+     "#3a2018"
+    ],
+    "pops_against_ochre": "Bottle-green coat with a pink calf blanket; both stand out hard against red dirt.",
+    "props": "Feed bottles, a calf halter he never closes, a dented transport crate."
+   },
+   "quests": {
+    "gives": [],
+    "reacts": [
+     "rr_grazer_crossing"
+    ],
+    "acts": [
+     "rr_act1"
+    ],
+    "events": [
+     "rr_drover_cart"
+    ],
+    "sites": [
+     "drover_stash"
+    ]
+   },
+   "records": {
+    "bede_free": {
+     "type": "helped",
+     "target": "dust_grazer_herd",
+     "tags": [
+      "calmed_wildlife",
+      "protect_weak",
+      "spared"
+     ],
+     "weight": 3
+    },
+    "bede_keep": {
+     "type": "chose",
+     "target": "bede_alcott",
+     "tags": [
+      "containment"
+     ],
+     "weight": 2
+    },
+    "bede_ask": {
+     "type": "chose",
+     "target": "bede_alcott",
+     "tags": [
+      "consent_asked",
+      "stewardship"
+     ],
+     "weight": 1
+    }
+   },
+   "dialogue": {
+    "meet": "rrn_bede_alcott_meet",
+    "repeat": "rrn_bede_alcott_repeat",
+    "quest": "rrn_bede_alcott_quest",
+    "turnin": "rrn_bede_alcott_turnin",
+    "react": "rrn_bede_alcott_react"
+   },
+   "portrait_expressions": [
+    "default",
+    "warm",
+    "tired",
+    "wary",
+    "stern",
+    "amused"
+   ],
+   "flag_met": "rrn_bede_alcott_met",
+   "race_note": "Sapient person, never owned or collected."
+  },
+  {
+   "id": "idris_voll",
+   "name": "Master Idris Voll",
+   "species": "Cable weaver (sapient, spider-kin)",
+   "role": "Master of the Spanwright Yard; Aruun's teacher",
+   "faction": "Spanwrights",
+   "sapient": true,
+   "personality": "Austere, patient, dry. Teaches by silence and by making apprentices carry the wrong end.",
+   "contradiction": "Preaches that good infrastructure goes unnoticed, yet keeps a locked book of every name he has ever mended for.",
+   "voice": "Spare aphorisms, long pauses. Answers questions with questions, then with a task. Never praises; says 'Adequate to the load.'",
+   "schedule": [
+    {
+     "when": "dawn",
+     "station": "spanwright_yard"
+    },
+    {
+     "when": "day",
+     "station": "span_approach"
+    },
+    {
+     "when": "dusk",
+     "station": "overlook"
+    }
+   ],
+   "barks": [
+    {
+     "text": "Infrastructure succeeds when people stop noticing the danger it protects them from."
+    },
+    {
+     "text": "Too perfect. A single load path and nothing behind it. That is the real problem.",
+     "if": "rr_act1_done",
+     "if_not": "rr_act3_done"
+    },
+    {
+     "text": "You carried only what you could. The yard took the rest. Adequate to the load.",
+     "if": "rr_ending_braced"
+    },
+    {
+     "text": "You held it alone. It will hold the yard's silence a long time.",
+     "if": "rr_ending_borne"
+    }
+   ],
+   "look": {
+    "silhouette": "Tall, long-limbed weaver in layered indigo robes; six cable-threads trail from the sleeves like a loom in motion.",
+    "palette": [
+     "#2a2f6e",
+     "#dfe8f0",
+     "#e0903a",
+     "#1a1a22"
+    ],
+    "pops_against_ochre": "Deep indigo robes and silver cable threads; a copper-thread collar picks up the yard's forge-glow.",
+    "props": "Cable-thread bundle, a bound ledger of mended names, a plumb weight on a cord."
+   },
+   "quests": {
+    "gives": [],
+    "reacts": [
+     "rr_apprentice_arch",
+     "rr_well_line",
+     "rr_drill_drill"
+    ],
+    "acts": [
+     "rr_act1",
+     "rr_act2",
+     "rr_act3"
+    ],
+    "events": [
+     "rr_span_overlook"
+    ],
+    "sites": [
+     "overlook_cairn"
+    ]
+   },
+   "records": {
+    "voll_listen": {
+     "type": "chose",
+     "target": "idris_voll",
+     "tags": [
+      "consent_asked",
+      "burden"
+     ],
+     "weight": 1
+    },
+    "voll_name": {
+     "type": "helped",
+     "target": "idris_voll",
+     "tags": [
+      "redundant_design",
+      "stewardship"
+     ],
+     "weight": 3
+    },
+    "voll_brace": {
+     "type": "chose",
+     "target": "idris_voll",
+     "tags": [
+      "redundant_design",
+      "braced_structure"
+     ],
+     "weight": 2
+    }
+   },
+   "dialogue": {
+    "meet": "rrn_idris_voll_meet",
+    "repeat": "rrn_idris_voll_repeat",
+    "quest": "rrn_idris_voll_quest",
+    "turnin": "rrn_idris_voll_turnin",
+    "react": "rrn_idris_voll_react"
+   },
+   "portrait_expressions": [
+    "default",
+    "stern",
+    "warm",
+    "grave",
+    "amused",
+    "tired"
+   ],
+   "flag_met": "rrn_idris_voll_met",
+   "race_note": "Sapient person, never owned or collected."
+  },
+  {
+   "id": "dessa_harl",
+   "name": "Dessa Harl",
+   "species": "Dune hare (sapient)",
+   "role": "Salt raker crew chief",
+   "faction": "Reach settlements (salt pan crews)",
+   "sapient": true,
+   "personality": "Sharp-tongued, tireless, protective. Complains loudly so nobody notices how much she does.",
+   "contradiction": "Grumbles about wages and the crust, yet runs an unlicensed school for the crew's kids at the pans.",
+   "voice": "Fast, sarcastic, workmates' slang. Counts in rake-lengths. Swears at the sun by name.",
+   "schedule": [
+    {
+     "when": "dawn",
+     "station": "salt_pans"
+    },
+    {
+     "when": "day",
+     "station": "salt_pans",
+     "site": "salt_glint"
+    },
+    {
+     "when": "dusk",
+     "station": "well_line"
+    }
+   ],
+   "barks": [
+    {
+     "text": "Rake, rake, rake. The crust does not care about my feelings."
+    },
+    {
+     "text": "The well still runs. The kids still read. Do not tell the inspector.",
+     "if": "rr_wells_kept"
+    },
+    {
+     "text": "A Dominion seal on my cistern. Look at it. The sun looks at it too.",
+     "if": "rr_wells_leased"
+    },
+    {
+     "text": "Glints in the crust. Mine. Well, nobody's. Well, mine.",
+     "if_not": "rr_act2_done"
+    }
+   ],
+   "look": {
+    "silhouette": "Wiry hare with tall ears wrapped in a salt-stained cloth; carries a long wooden rake like a staff.",
+    "palette": [
+     "#ff4f9a",
+     "#f4f1e8",
+     "#5a5048",
+     "#00b8a9"
+    ],
+    "pops_against_ochre": "Fuchsia head wrap against white salt and red rock; a white dust cloak.",
+    "props": "Salt rake, brine flask, a slate for the kids' lessons tucked under her arm."
+   },
+   "quests": {
+    "gives": [],
+    "reacts": [
+     "rr_well_line"
+    ],
+    "acts": [
+     "rr_act1"
+    ],
+    "events": [
+     "rr_well_keeper"
+    ],
+    "sites": [
+     "salt_glint"
+    ]
+   },
+   "records": {
+    "dessa_school": {
+     "type": "helped",
+     "target": "dessa_harl",
+     "tags": [
+      "stewardship",
+      "protect_weak"
+     ],
+     "weight": 2
+    },
+    "dessa_ask": {
+     "type": "chose",
+     "target": "dessa_harl",
+     "tags": [
+      "consent_asked"
+     ],
+     "weight": 1
+    },
+    "dessa_dig": {
+     "type": "chose",
+     "target": "salt_pans",
+     "tags": [
+      "claim_jump"
+     ],
+     "weight": 2
+    },
+    "dessa_share": {
+     "type": "chose",
+     "target": "salt_pans",
+     "tags": [
+      "salvage_fair"
+     ],
+     "weight": 2
+    }
+   },
+   "dialogue": {
+    "meet": "rrn_dessa_harl_meet",
+    "repeat": "rrn_dessa_harl_repeat",
+    "quest": "rrn_dessa_harl_quest",
+    "turnin": "rrn_dessa_harl_turnin",
+    "react": "rrn_dessa_harl_react"
+   },
+   "portrait_expressions": [
+    "default",
+    "amused",
+    "stern",
+    "warm",
+    "tired",
+    "wary"
+   ],
+   "flag_met": "rrn_dessa_harl_met",
+   "race_note": "Sapient person, never owned or collected."
+  }
+ ]
+}

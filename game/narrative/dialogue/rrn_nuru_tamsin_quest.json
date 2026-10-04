@@ -1,0 +1,46 @@
+{
+ "id": "rrn_nuru_tamsin_quest",
+ "lines": [
+  {
+   "who": "nuru_tamsin",
+   "expr": "stern",
+   "text": "The cell has a problem. Something sleeps in the drowned cistern. Sapient. We do not know what."
+  },
+  {
+   "who": "nuru_tamsin",
+   "expr": "wary",
+   "text": "Someone has been scouting it. A Helix recovery team, maybe. We need to know before they do."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Looking is not always kind."
+  },
+  {
+   "who": "nuru_tamsin",
+   "expr": "amused",
+   "text": "I know. That is why I am asking a Spanwright. Light it, or leave it dark. I will not tell you which."
+  },
+  {
+   "who": "cigarra",
+   "expr": "focused",
+   "text": "I can scan without waking it. Maybe."
+  },
+  {
+   "who": "nuru_tamsin",
+   "expr": "wary",
+   "text": "Maybe is how the last one went wrong."
+  },
+  {
+   "set": {
+    "rrn_nuru_cistern_offered": true
+   }
+  },
+  {
+   "event": "lead:rr_cistern_dark"
+  },
+  {
+   "end": true
+  }
+ ]
+}

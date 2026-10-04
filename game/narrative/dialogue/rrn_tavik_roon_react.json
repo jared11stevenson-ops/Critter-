@@ -1,0 +1,31 @@
+{
+ "id": "rrn_tavik_roon_react",
+ "lines": [
+  {
+   "who": "tavik_roon",
+   "expr": "wary",
+   "text": "The beetles are screaming at the pit. The herd hears it too.",
+   "if": "rr_act1_done",
+   "if_not": "rr_act2_done"
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "stern",
+   "text": "Span's singing. Stock is nervous. Get them across before market day.",
+   "if": "rr_act2_done",
+   "if_not": "rr_act3_done"
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "warm",
+   "text": "They grazed the plateau all day. Calm. Whatever you did.",
+   "if": "boss_defeated"
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "warm",
+   "text": "You are the one who carries slow things. The herd said so. Not out loud.",
+   "if": "ledger_protect_weak"
+  }
+ ]
+}

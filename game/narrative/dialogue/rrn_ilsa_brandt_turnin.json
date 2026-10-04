@@ -1,0 +1,63 @@
+{
+ "id": "rrn_ilsa_brandt_turnin",
+ "lines": [
+  {
+   "who": "ilsa_brandt",
+   "expr": "amused",
+   "text": "It is up. It looks incredible. I may cry. I am going to cry.",
+   "if": "rr_arch_built"
+  },
+  {
+   "who": "ilsa_brandt",
+   "expr": "warm",
+   "text": "Repair first. The pylons hold. The arch is next spring. I can wait. I will complain while I wait.",
+   "if": "rr_arch_deferred"
+  },
+  {
+   "who": "ilsa_brandt",
+   "expr": "amused",
+   "text": "A second path in the keystone. Nobody will see it. I will see it.",
+   "if": "rr_arch_hidden"
+  },
+  {
+   "choice": [
+    {
+     "text": "Put your name on the keystone. It is yours.",
+     "goto": "t_credit"
+    },
+    {
+     "text": "Let it go unsigned. Like the best of them.",
+     "goto": "t_unsigned"
+    }
+   ]
+  },
+  {
+   "label": "t_credit"
+  },
+  {
+   "who": "ilsa_brandt",
+   "expr": "warm",
+   "text": "...I will. Small. Underneath."
+  },
+  {
+   "event": "rec:ilsa_credit"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "t_unsigned"
+  },
+  {
+   "who": "ilsa_brandt",
+   "expr": "wary",
+   "text": "Unsigned. That is the whole tradition, is it not. I hate it. I understand it."
+  },
+  {
+   "event": "rec:ilsa_teach"
+  },
+  {
+   "end": true
+  }
+ ]
+}

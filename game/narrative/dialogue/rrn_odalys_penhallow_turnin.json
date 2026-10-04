@@ -1,0 +1,62 @@
+{
+ "id": "rrn_odalys_penhallow_turnin",
+ "lines": [
+  {
+   "who": "odalys_penhallow",
+   "expr": "warm",
+   "text": "Exemption filed. The herd is protected under clause 9(c). Do not tell Foreman Orrin.",
+   "if": "rr_beetles_calmed"
+  },
+  {
+   "who": "odalys_penhallow",
+   "expr": "tired",
+   "text": "The slot is still empty. I will keep it open.",
+   "if": "rr_beetles_culled"
+  },
+  {
+   "who": "odalys_penhallow",
+   "expr": "default",
+   "text": "One more thing. I have a blank stamp. It does nothing. It could do something, in the right hands."
+  },
+  {
+   "choice": [
+    {
+     "text": "Use it for the Well Line exemption.",
+     "goto": "t_exempt"
+    },
+    {
+     "text": "Burn the blank stamp. Nobody should hold that.",
+     "goto": "t_burn"
+    }
+   ]
+  },
+  {
+   "label": "t_exempt"
+  },
+  {
+   "who": "odalys_penhallow",
+   "expr": "amused",
+   "text": "Hm. Section four, paragraph two. That could work."
+  },
+  {
+   "event": "rec:pen_exempt"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "t_burn"
+  },
+  {
+   "who": "odalys_penhallow",
+   "expr": "stern",
+   "text": "That would be an act against the Dominion. Noted. Not reported."
+  },
+  {
+   "event": "rec:pen_burn"
+  },
+  {
+   "end": true
+  }
+ ]
+}

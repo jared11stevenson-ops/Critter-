@@ -1,0 +1,34 @@
+{
+ "id": "rrn_dessa_harl_repeat",
+ "lines": [
+  {
+   "who": "dessa_harl",
+   "expr": "default",
+   "text": "Rake, rake, rake."
+  },
+  {
+   "who": "dessa_harl",
+   "expr": "warm",
+   "text": "The well runs. The kids read. Do not tell the inspector.",
+   "if": "rr_wells_kept"
+  },
+  {
+   "who": "dessa_harl",
+   "expr": "tired",
+   "text": "The cisterns fill. Everybody is thrilled. I do not know why I am not.",
+   "if": "rr_wells_leased"
+  },
+  {
+   "who": "dessa_harl",
+   "expr": "amused",
+   "text": "Three families know the Line now. Mine was the second.",
+   "if": "rr_wells_shared"
+  },
+  {
+   "who": "dessa_harl",
+   "expr": "wary",
+   "text": "Somebody dug where I did not say. The crust remembers.",
+   "if": "ledger_claim_jump"
+  }
+ ]
+}

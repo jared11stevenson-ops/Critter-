@@ -1,0 +1,34 @@
+{
+ "id": "rrn_vesk_dunmore_repeat",
+ "lines": [
+  {
+   "who": "vesk_dunmore",
+   "expr": "amused",
+   "text": "Friend! Knock on wood. Do not step on the red thread."
+  },
+  {
+   "who": "vesk_dunmore",
+   "expr": "tired",
+   "text": "Struck claim. Fine. Fine. A man has to eat.",
+   "if": "rr_cache_kept"
+  },
+  {
+   "who": "vesk_dunmore",
+   "expr": "amused",
+   "text": "Half to the families. I have never been so poor and so well-liked.",
+   "if": "rr_cache_fair"
+  },
+  {
+   "who": "vesk_dunmore",
+   "expr": "amused",
+   "text": "Pleasure doing business. The Undermarket sends its regards.",
+   "if": "rr_cache_sold"
+  },
+  {
+   "who": "vesk_dunmore",
+   "expr": "wary",
+   "text": "They say you walked past a free vault. Respect. Superstitious respect.",
+   "if": "ledger_threshold_kept"
+  }
+ ]
+}

@@ -1,0 +1,25 @@
+{
+ "id": "rrn_nuru_tamsin_react",
+ "lines": [
+  {
+   "who": "nuru_tamsin",
+   "expr": "stern",
+   "text": "The rig is not just a rig. It is a permit. Permits sell. The cell is watching who buys.",
+   "if": "rr_act1_done",
+   "if_not": "rr_act2_done"
+  },
+  {
+   "who": "nuru_tamsin",
+   "expr": "wary",
+   "text": "Orrin offered Master Voll a cheaper fix. A cheaper fix always costs somebody.",
+   "if": "rr_act2_done",
+   "if_not": "rr_act3_done"
+  },
+  {
+   "who": "nuru_tamsin",
+   "expr": "warm",
+   "text": "The Span stood. The cell sends two cylinders of thanks. They are empty. It is a joke.",
+   "if": "boss_defeated"
+  }
+ ]
+}

@@ -1,0 +1,25 @@
+{
+ "id": "rrn_odalys_penhallow_react",
+ "lines": [
+  {
+   "who": "odalys_penhallow",
+   "expr": "stern",
+   "text": "The AUGUR-7 permit allows resonance up to forty percent of load. The Span tolerates twenty. I flagged it. Twice.",
+   "if": "rr_act1_done",
+   "if_not": "rr_act2_done"
+  },
+  {
+   "who": "odalys_penhallow",
+   "expr": "wary",
+   "text": "Orrin's cheaper fix is on my desk. I misfiled it. Deliberately.",
+   "if": "rr_act2_done",
+   "if_not": "rr_act3_done"
+  },
+  {
+   "who": "odalys_penhallow",
+   "expr": "amused",
+   "text": "The rig is down. The permit is void. I have never been so productive.",
+   "if": "boss_defeated"
+  }
+ ]
+}

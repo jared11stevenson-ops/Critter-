@@ -1,0 +1,75 @@
+{
+ "id": "rrn_imre_dahl_meet",
+ "lines": [
+  {
+   "who": "imre_dahl",
+   "expr": "tired",
+   "text": "Oh. You are not on the roster. Per the permit I should ask you to leave. I am asking. Quietly."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "I am Aruun. This is my homeland."
+  },
+  {
+   "who": "imre_dahl",
+   "expr": "wary",
+   "text": "Yes. I read about the homeland clause. It is in section nine. Nobody reads section nine."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "What is he asking?"
+  },
+  {
+   "who": "imre_dahl",
+   "expr": "tired",
+   "text": "The beetles. They keep throwing themselves at the pylons. I was told to keep them out of the dig. I do not know how."
+  },
+  {
+   "set": {
+    "rrn_imre_dahl_met": true
+   }
+  },
+  {
+   "choice": [
+    {
+     "text": "Tell me what you have seen. I will listen first.",
+     "goto": "m_listen"
+    },
+    {
+     "text": "Your pylons are hurting them. I can report that to the Dominion for you.",
+     "goto": "m_report"
+    }
+   ]
+  },
+  {
+   "label": "m_listen"
+  },
+  {
+   "who": "imre_dahl",
+   "expr": "warm",
+   "text": "...Thank you. It is the hum. They run toward it and then they cannot stop."
+  },
+  {
+   "event": "rec:dahl_listen"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "m_report"
+  },
+  {
+   "who": "imre_dahl",
+   "expr": "wary",
+   "text": "Please do not. The report is how I lose this post. I would rather lose it for a reason."
+  },
+  {
+   "event": "rec:dahl_report"
+  },
+  {
+   "end": true
+  }
+ ]
+}

@@ -1,0 +1,40 @@
+{
+ "id": "rrn_nuru_tamsin_repeat",
+ "lines": [
+  {
+   "who": "nuru_tamsin",
+   "expr": "amused",
+   "text": "The cell is listening."
+  },
+  {
+   "who": "nuru_tamsin",
+   "expr": "wary",
+   "text": "A broker is selling cut stone off a grave. The cell has been following him for months.",
+   "if_not": "rr_act2_done"
+  },
+  {
+   "who": "nuru_tamsin",
+   "expr": "stern",
+   "text": "You sold the stone on. I have the receipt. I am not going to say anything. I just have it.",
+   "if": "rr_cache_sold"
+  },
+  {
+   "who": "nuru_tamsin",
+   "expr": "warm",
+   "text": "You named the Helix broker. That went into the file. Twice.",
+   "if": "ledger_trafficking_exposed"
+  },
+  {
+   "who": "nuru_tamsin",
+   "expr": "stern",
+   "text": "Those Dominion seals on the cisterns. They are cataloguing wells. Wells are routes.",
+   "if": "rr_wells_leased"
+  },
+  {
+   "who": "nuru_tamsin",
+   "expr": "amused",
+   "text": "The wells stand because the Keths decided. The cell approves of the Keths.",
+   "if": "rr_wells_kept"
+  }
+ ]
+}

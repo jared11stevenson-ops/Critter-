@@ -1,0 +1,74 @@
+{
+ "id": "rrn_oda_keth_turnin",
+ "lines": [
+  {
+   "who": "oda_keth",
+   "expr": "stern",
+   "text": "Point one: the Line runs. Point two: I will tell the whole yard how crooked your stonework was.",
+   "if": "rr_wells_kept"
+  },
+  {
+   "who": "oda_keth",
+   "expr": "stern",
+   "text": "The Line runs. The pump runs. The seal sits on my cistern like a hand on a shoulder.",
+   "if": "rr_wells_leased"
+  },
+  {
+   "who": "oda_keth",
+   "expr": "stern",
+   "text": "Three apprentices. One crooked, one fine, one I corrected. The Line is theirs now.",
+   "if": "rr_wells_shared"
+  },
+  {
+   "who": "oda_keth",
+   "expr": "warm",
+   "text": "There is a stone by the well. Hand-width. I cut it for names."
+  },
+  {
+   "choice": [
+    {
+     "text": "Carve the apprentices' names. Mine can wait.",
+     "goto": "t_names",
+     "if": "rr_wells_shared"
+    },
+    {
+     "text": "Carve the Keth family's mark first. It is their line.",
+     "goto": "t_names",
+     "if_not": "rr_wells_shared"
+    },
+    {
+     "text": "Leave it blank. Names on wells draw attention.",
+     "goto": "t_blank"
+    }
+   ]
+  },
+  {
+   "label": "t_names"
+  },
+  {
+   "who": "oda_keth",
+   "expr": "warm",
+   "text": "Adequate. More than adequate. Do not repeat that."
+  },
+  {
+   "event": "rec:oda_names"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "t_blank"
+  },
+  {
+   "who": "oda_keth",
+   "expr": "amused",
+   "text": "A blank stone. Fine. The well will remember without us."
+  },
+  {
+   "event": "rec:oda_blank"
+  },
+  {
+   "end": true
+  }
+ ]
+}

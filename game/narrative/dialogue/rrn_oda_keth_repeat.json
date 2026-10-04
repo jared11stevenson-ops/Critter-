@@ -1,0 +1,47 @@
+{
+ "id": "rrn_oda_keth_repeat",
+ "lines": [
+  {
+   "who": "oda_keth",
+   "expr": "stern",
+   "text": "Point one: keep moving. Point two: do not lean on the pump housing."
+  },
+  {
+   "who": "oda_keth",
+   "expr": "warm",
+   "text": "Wells stay when people do. You stayed. Adequate.",
+   "if": "rr_wells_kept"
+  },
+  {
+   "who": "oda_keth",
+   "expr": "amused",
+   "text": "Three crooked apprentices and every one of them can read a gravity line. I am insufferable about it.",
+   "if": "rr_wells_shared"
+  },
+  {
+   "who": "oda_keth",
+   "expr": "wary",
+   "text": "The cisterns fill by evening now. Look at the seals. I look every morning.",
+   "if": "rr_wells_leased"
+  },
+  {
+   "who": "oda_keth",
+   "expr": "wary",
+   "text": "You smell of drill grease and permit paper. The wells notice.",
+   "if": "ledger_extraction",
+   "if_not": "rr_wells_kept"
+  },
+  {
+   "who": "oda_keth",
+   "expr": "warm",
+   "text": "You asked what the keeper needed before you touched anything. Rarer than rain.",
+   "if": "ledger_consent_asked"
+  },
+  {
+   "who": "oda_keth",
+   "expr": "stern",
+   "text": "And the grazers. Whoever scares the herd drinks from my cisterns last.",
+   "if": "grazers_harmed"
+  }
+ ]
+}

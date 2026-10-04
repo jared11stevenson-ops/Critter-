@@ -1,0 +1,31 @@
+{
+ "id": "rrn_pel_narr_react",
+ "lines": [
+  {
+   "who": "pel_narr",
+   "expr": "stern",
+   "text": "The rig hum is in the cables. Two notes off. I am counting.",
+   "if": "rr_act1_done",
+   "if_not": "rr_act2_done"
+  },
+  {
+   "who": "pel_narr",
+   "expr": "grave",
+   "text": "Master Voll says it is too perfect. He has never said that about anything. I believe him.",
+   "if": "rr_act2_done",
+   "if_not": "rr_act3_done"
+  },
+  {
+   "who": "pel_narr",
+   "expr": "warm",
+   "text": "Boring. The best word I know. Thank you.",
+   "if": "boss_defeated"
+  },
+  {
+   "who": "pel_narr",
+   "expr": "default",
+   "text": "Eleven minutes. I counted from the barrier. We made it.",
+   "if": "burden_done"
+  }
+ ]
+}

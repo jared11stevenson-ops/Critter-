@@ -1,0 +1,56 @@
+{
+ "id": "rrn_idris_voll_turnin",
+ "lines": [
+  {
+   "who": "idris_voll",
+   "expr": "grave",
+   "text": "The Span is not perfect. Good. Nothing behind it was the danger. Now there is something behind it.",
+   "if": "rr_act2_done"
+  },
+  {
+   "who": "idris_voll",
+   "expr": "default",
+   "text": "There is a book. Locked. Names of everyone we mended for. I have never shown it."
+  },
+  {
+   "choice": [
+    {
+     "text": "Write the apprentices' names in it. They belong there.",
+     "goto": "t_name"
+    },
+    {
+     "text": "Keep it locked. A bridge does not need to be thanked.",
+     "goto": "t_lock"
+    }
+   ]
+  },
+  {
+   "label": "t_name"
+  },
+  {
+   "who": "idris_voll",
+   "expr": "warm",
+   "text": "...Ilsa. Pel. Even Oda. I will add them. Do not tell anyone."
+  },
+  {
+   "event": "rec:voll_name"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "t_lock"
+  },
+  {
+   "who": "idris_voll",
+   "expr": "amused",
+   "text": "You are my student. I am proud. I will not say it twice."
+  },
+  {
+   "event": "rec:voll_brace"
+  },
+  {
+   "end": true
+  }
+ ]
+}

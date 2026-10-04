@@ -1,0 +1,34 @@
+{
+ "id": "rrn_ilsa_brandt_repeat",
+ "lines": [
+  {
+   "who": "ilsa_brandt",
+   "expr": "default",
+   "text": "No, wait. Hold that thought. I am rubbing something out."
+  },
+  {
+   "who": "ilsa_brandt",
+   "expr": "warm",
+   "text": "I still think it looks incredible. Do not tell Master Voll. He already knows.",
+   "if": "rr_arch_hidden"
+  },
+  {
+   "who": "ilsa_brandt",
+   "expr": "tired",
+   "text": "Repair first, he said. Then the arch. Six weeks of scaffolding I did not want to do.",
+   "if": "rr_arch_deferred"
+  },
+  {
+   "who": "ilsa_brandt",
+   "expr": "wary",
+   "text": "A crack in a pier two valleys over. I heard. I am not going to look. I am going to look.",
+   "if": "rr_arch_built"
+  },
+  {
+   "who": "ilsa_brandt",
+   "expr": "warm",
+   "text": "You hold things. I heard about the hold. How do you stand it?",
+   "if": "burden_done"
+  }
+ ]
+}
