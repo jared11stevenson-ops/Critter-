@@ -34,3 +34,14 @@ Grade = average. **A ≥ 4.5 · B ≥ 3.5 · C ≥ 2.5 · D < 2.5**
 - Agent 4: mocap pipeline (BVH, retarget, foot-lock IK, Morrow pendulum) + 19 Aruun clips from CMU mocap in one run; Lead in-engine check shows a real walk cycle and full mace arcs.
 - Agent 1: all 10 art deliverables, occlusion fade, realism pass under budget; but the PBR/scatter pass raised primitives to 222k and the creator reports lag.
 - Agent 3: honest reports and good reference packs, but three passes have not yet produced a model that beats the 2D cut-out.
+
+
+## Round 3 results (v0.8.0) — graded by Lead after merge + playthrough
+All three agents were cut off by the usage limit before filing final reports; Lead verified their commits directly.
+
+| Agent | Delivered (verified) | Not delivered / issues | Grade | Next |
+|---|---|---|---|---|
+| **Agent 2 — Perf** | Quality autoload (Auto/Low/Medium/High + 30/60 FPS cap), cheaper shader variants, chunked scatter, throttled CPU. Measured: Low ≈4× faster than High in test, primitives 222k→140k default / 62k Low; full flow 0 SCRIPT ERRORs | Draw calls at default 153 (budget 150); no real-phone numbers yet | **A (4.6)** | Confirmed. Next: tune on real-phone feedback |
+| **Agent 4 — Animation** | Mocap pipeline + 19 Aruun clips, impact-frame hit timing, hold-to-slam Gravity Pull, SOURCES.md with licenses; Cigarra retarget prep | 3D Aruun model reads pale at gameplay distance (inherited from Agent 3); no Cigarra model yet | **A− (4.3)** | Keep. Next: model quality (materials) + Cigarra |
+| **Agent 3 — Canon Art (retrained)** | HD billboards (x4 ESRGAN) for 7+ characters under size budget, Mara/Dexter/Bramvex reference packs | Canon audit file incomplete; remaining characters/portraits unverified in-engine | **B (3.8) provisional** | Continue; graded again next round |
+| **Agent 1 — Art/World** | (benched) | — | B+ (unchanged) | Reactivate for bridge planks, ground variety, creature models, combat VFX realism pass |
