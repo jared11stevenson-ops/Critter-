@@ -1,0 +1,72 @@
+{
+ "id": "rrn_nuru_tamsin_meet",
+ "lines": [
+  {
+   "who": "nuru_tamsin",
+   "expr": "wary",
+   "text": "Stop. Quick question. A buyer, a seller and a sapient on the table. Who is the thief?"
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Whoever put them on the table."
+  },
+  {
+   "who": "nuru_tamsin",
+   "expr": "amused",
+   "text": "...Good enough. Nuru. You have not met me. The cell has not met you."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "Free Scale."
+  },
+  {
+   "who": "nuru_tamsin",
+   "expr": "stern",
+   "text": "The cell. Free Scale is a coalition. I only run a corner of it."
+  },
+  {
+   "set": {
+    "rrn_nuru_tamsin_met": true
+   }
+  },
+  {
+   "choice": [
+    {
+     "text": "I am not here for the Dominion or the Coalition. I am here for the road.",
+     "goto": "m_trust"
+    },
+    {
+     "text": "I work for the Coalition. We could share information.",
+     "goto": "m_coalition"
+    }
+   ]
+  },
+  {
+   "label": "m_trust"
+  },
+  {
+   "who": "nuru_tamsin",
+   "expr": "warm",
+   "text": "The road. Fine. The road is who I work for too."
+  },
+  {
+   "event": "rec:nuru_trust"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "m_coalition"
+  },
+  {
+   "who": "nuru_tamsin",
+   "expr": "wary",
+   "text": "Everyone is somebody's coalition. I will take your information. I will not take your handshake."
+  },
+  {
+   "end": true
+  }
+ ]
+}

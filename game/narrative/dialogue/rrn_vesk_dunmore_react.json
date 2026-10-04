@@ -1,0 +1,25 @@
+{
+ "id": "rrn_vesk_dunmore_react",
+ "lines": [
+  {
+   "who": "vesk_dunmore",
+   "expr": "wary",
+   "text": "Foreman Orrin is buying every permit in the basin. Do not sell to him.",
+   "if": "rr_act1_done",
+   "if_not": "rr_act2_done"
+  },
+  {
+   "who": "vesk_dunmore",
+   "expr": "stern",
+   "text": "The Span is singing. I smell a lot of dust in the wind. I am leaving before market day.",
+   "if": "rr_act2_done",
+   "if_not": "rr_act3_done"
+  },
+  {
+   "who": "vesk_dunmore",
+   "expr": "tired",
+   "text": "Rig down. Price of Thoughtstone is up. Funny how that works.",
+   "if": "boss_defeated"
+  }
+ ]
+}

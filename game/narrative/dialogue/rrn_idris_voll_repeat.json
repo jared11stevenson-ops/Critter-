@@ -1,0 +1,40 @@
+{
+ "id": "rrn_idris_voll_repeat",
+ "lines": [
+  {
+   "who": "idris_voll",
+   "expr": "default",
+   "text": "The weight is the weight."
+  },
+  {
+   "who": "idris_voll",
+   "expr": "warm",
+   "text": "The Keth line stays. I listened for it every dawn. Adequate.",
+   "if": "rr_wells_kept"
+  },
+  {
+   "who": "idris_voll",
+   "expr": "stern",
+   "text": "The arch rose. The pylons did not. I will not say a word. I will say three.",
+   "if": "rr_arch_built"
+  },
+  {
+   "who": "idris_voll",
+   "expr": "amused",
+   "text": "A second path in the keystone. Ilsa thinks I do not know. I taught her to hide it.",
+   "if": "rr_arch_hidden"
+  },
+  {
+   "who": "idris_voll",
+   "expr": "grave",
+   "text": "You stood on the weakest span. I will not call it courage. I will call it a mistake you survived.",
+   "if": "rr_drill_borne"
+  },
+  {
+   "who": "idris_voll",
+   "expr": "stern",
+   "text": "A Dominion seal on your name. The yard remembers. So do I.",
+   "if": "ledger_dominion_favor"
+  }
+ ]
+}

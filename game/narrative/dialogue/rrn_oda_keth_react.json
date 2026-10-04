@@ -1,0 +1,31 @@
+{
+ "id": "rrn_oda_keth_react",
+ "lines": [
+  {
+   "who": "oda_keth",
+   "expr": "wary",
+   "text": "The hum in the stone. I hear it in the crank. Find what is making it.",
+   "if": "rr_act1_done",
+   "if_not": "rr_act2_done"
+  },
+  {
+   "who": "oda_keth",
+   "expr": "stern",
+   "text": "Master Voll says the Span is too perfect. I told him that about his cooking for years.",
+   "if": "rr_act2_done",
+   "if_not": "rr_act3_done"
+  },
+  {
+   "who": "oda_keth",
+   "expr": "warm",
+   "text": "The Span stood. The wells stood. Do not make me say more than that.",
+   "if": "boss_defeated"
+  },
+  {
+   "who": "oda_keth",
+   "expr": "amused",
+   "text": "Span-boy. No. Aruun. You have earned a name.",
+   "if": "ledger_braced_structure"
+  }
+ ]
+}

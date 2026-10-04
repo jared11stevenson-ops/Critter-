@@ -1,0 +1,46 @@
+{
+ "id": "rrn_idris_voll_quest",
+ "lines": [
+  {
+   "who": "idris_voll",
+   "expr": "grave",
+   "text": "The Span has one problem. It is too perfect. A single load path. Nothing behind it."
+  },
+  {
+   "who": "idris_voll",
+   "expr": "default",
+   "text": "Foreman Orrin has a faster fix. He wants the Span tuned to the rig. That makes it worse."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "What do you want from me?"
+  },
+  {
+   "who": "idris_voll",
+   "expr": "stern",
+   "text": "I want you to choose between a monument and a mending. I have not decided myself. That is why I need you to."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "He asked you for an opinion."
+  },
+  {
+   "who": "idris_voll",
+   "expr": "amused",
+   "text": "I asked for a choice. They are not the same."
+  },
+  {
+   "set": {
+    "rrn_voll_act2_offered": true
+   }
+  },
+  {
+   "event": "lead:rr_act2"
+  },
+  {
+   "end": true
+  }
+ ]
+}

@@ -1,0 +1,67 @@
+{
+ "id": "rrn_hobb_sarrane_meet",
+ "lines": [
+  {
+   "who": "hobb_sarrane",
+   "expr": "default",
+   "text": "Cart's stuck."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "I see."
+  },
+  {
+   "who": "hobb_sarrane",
+   "expr": "stern",
+   "text": "Fine. Doing it alone."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "He is unloading sacks one at a time."
+  },
+  {
+   "set": {
+    "rrn_hobb_sarrane_met": true
+   }
+  },
+  {
+   "choice": [
+    {
+     "text": "Would you like a hand with the wheel?",
+     "goto": "m_ask"
+    },
+    {
+     "text": "Tell me what you are hauling first.",
+     "goto": "m_what"
+    }
+   ]
+  },
+  {
+   "label": "m_ask"
+  },
+  {
+   "who": "hobb_sarrane",
+   "expr": "amused",
+   "text": "...Asked. Not told. Good. Left side."
+  },
+  {
+   "event": "rec:hobb_ask"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "m_what"
+  },
+  {
+   "who": "hobb_sarrane",
+   "expr": "default",
+   "text": "Flour. Day's worth for the pans. Heavy."
+  },
+  {
+   "end": true
+  }
+ ]
+}

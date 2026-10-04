@@ -1,0 +1,55 @@
+{
+ "id": "rrn_dessa_harl_turnin",
+ "lines": [
+  {
+   "who": "dessa_harl",
+   "expr": "warm",
+   "text": "Half back to the terraces. Half to the school. The kids will name it. God help us."
+  },
+  {
+   "who": "dessa_harl",
+   "expr": "default",
+   "text": "The school. You saw it. A slate, a bench, six kids. It is not licensed."
+  },
+  {
+   "choice": [
+    {
+     "text": "I will not report it. The Reaches need more of these.",
+     "goto": "t_school"
+    },
+    {
+     "text": "Share the bed with the families and the yard, evenly.",
+     "goto": "t_share"
+    }
+   ]
+  },
+  {
+   "label": "t_school"
+  },
+  {
+   "who": "dessa_harl",
+   "expr": "warm",
+   "text": "...Fine. Fine. Do not make it weird."
+  },
+  {
+   "event": "rec:dessa_school"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "t_share"
+  },
+  {
+   "who": "dessa_harl",
+   "expr": "amused",
+   "text": "Even shares. The crew will argue about the evens for a year."
+  },
+  {
+   "event": "rec:dessa_share"
+  },
+  {
+   "end": true
+  }
+ ]
+}

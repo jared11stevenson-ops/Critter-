@@ -1,0 +1,68 @@
+{
+ "id": "rrn_bede_alcott_turnin",
+ "lines": [
+  {
+   "who": "bede_alcott",
+   "expr": "warm",
+   "text": "The herd took them back without a sound. The sentinel dropped its head.",
+   "if": "rr_herd_saved"
+  },
+  {
+   "who": "bede_alcott",
+   "expr": "warm",
+   "text": "The new deck. We walked them across. I held a halter that was not closed.",
+   "if": "rr_road_rebuilt"
+  },
+  {
+   "who": "bede_alcott",
+   "expr": "tired",
+   "text": "The calves are the only two that made it. I do not know what to do with that.",
+   "if": "rr_herd_hurt"
+  },
+  {
+   "who": "bede_alcott",
+   "expr": "default",
+   "text": "I filed Protective Extraction. I can renew it for six months. Or I can close the file."
+  },
+  {
+   "choice": [
+    {
+     "text": "Close the file. Let them go home.",
+     "goto": "t_free"
+    },
+    {
+     "text": "Renew it. They are safer in your care.",
+     "goto": "t_keep"
+    }
+   ]
+  },
+  {
+   "label": "t_free"
+  },
+  {
+   "who": "bede_alcott",
+   "expr": "warm",
+   "text": "...Closed. Calf One. Calf Two. Go on. Go on."
+  },
+  {
+   "event": "rec:bede_free"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "t_keep"
+  },
+  {
+   "who": "bede_alcott",
+   "expr": "wary",
+   "text": "Renewed. I am not sure that was the answer."
+  },
+  {
+   "event": "rec:bede_keep"
+  },
+  {
+   "end": true
+  }
+ ]
+}

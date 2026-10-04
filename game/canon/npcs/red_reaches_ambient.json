@@ -1,0 +1,156 @@
+{
+ "_doc": "Environmental and ambient lines for Red Reaches. kind: sign (readable prop, interact), placard (landmark text), wind (ambient subtitle or world bark), overheard (barked from nearby when no NPC is in range). station is a hub/landmark id from red_reaches.json. Gating flags as in red_reaches.json NPC barks.",
+ "region": "red_reaches",
+ "lines": [
+  {
+   "id": "rr_amb_wind_cable",
+   "station": "span_approach",
+   "kind": "sign",
+   "text": "Cable hum, a quarter tone flat. Somebody should walk it."
+  },
+  {
+   "id": "rr_amb_cairn_new",
+   "station": "overlook",
+   "kind": "placard",
+   "text": "A cairn of survey stones. The newest is three weeks old."
+  },
+  {
+   "id": "rr_amb_cairn_blank",
+   "station": "overlook",
+   "kind": "placard",
+   "text": "One flat stone left blank, exactly where a hand would reach."
+  },
+  {
+   "id": "rr_amb_marker_glyph",
+   "station": "fracture_valley",
+   "kind": "sign",
+   "text": "An Old Road marker. The glyphs match a marker you saw continents away."
+  },
+  {
+   "id": "rr_amb_well_tally",
+   "station": "salt_pans",
+   "kind": "sign",
+   "text": "Tally knots hang from the crank: one for every cup carried away. None are crossed out."
+  },
+  {
+   "id": "rr_amb_well_stone",
+   "station": "salt_pans",
+   "kind": "sign",
+   "text": "A hand-wide stone by the well. Names are scratched in, small, in different hands.",
+   "if": "rr_wells_kept"
+  },
+  {
+   "id": "rr_amb_seal_cistern",
+   "station": "salt_pans",
+   "kind": "sign",
+   "text": "A Dominion seal stamped on the cistern lid, bright and new.",
+   "if": "rr_wells_leased"
+  },
+  {
+   "id": "rr_amb_flour_ruts",
+   "station": "drovers_rest",
+   "kind": "overheard",
+   "text": "Cart ruts, deep and fresh. Somebody here says nothing and remembers everything."
+  },
+  {
+   "id": "rr_amb_calf_bottles",
+   "station": "drovers_rest",
+   "kind": "sign",
+   "text": "Two empty feed bottles on a transport crate. Small hoof prints around it."
+  },
+  {
+   "id": "rr_amb_calves_gone",
+   "station": "drovers_rest",
+   "kind": "sign",
+   "text": "The calf blanket is folded on the crate. The hoof prints lead east.",
+   "if": "rr_herd_saved"
+  },
+  {
+   "id": "rr_amb_survey_flag",
+   "station": "drill_basin",
+   "kind": "sign",
+   "text": "Survey flags in a perfect line. Every third one has a note tucked in the cleft stick."
+  },
+  {
+   "id": "rr_amb_pylon_drone",
+   "station": "drill_basin",
+   "kind": "wind",
+   "text": "A low pylon drone. The slate underfoot ticks in time.",
+   "if_not": "rr_beetles_calmed"
+  },
+  {
+   "id": "rr_amb_beetles_lean",
+   "station": "drill_basin",
+   "kind": "wind",
+   "text": "Plate beetles rest against warm slate at dusk, leaning on each other like dropped books.",
+   "if": "rr_beetles_calmed"
+  },
+  {
+   "id": "rr_amb_permit_board",
+   "station": "drill_basin",
+   "kind": "sign",
+   "text": "A permit board. Section nine is underlined in red ink, small, in a clerk's hand."
+  },
+  {
+   "id": "rr_amb_chalk_arch",
+   "station": "span_approach",
+   "kind": "sign",
+   "text": "A chalk arch on the yard wall, half rubbed out. Someone drew a second path inside it."
+  },
+  {
+   "id": "rr_amb_echo_back",
+   "station": "echo_hollow",
+   "kind": "wind",
+   "text": "Your footsteps come back half a second late, as if someone is walking behind you, carefully."
+  },
+  {
+   "id": "rr_amb_vault_hum",
+   "station": "thought_vault",
+   "kind": "wind",
+   "text": "A hum behind the stone. Closed is still working."
+  },
+  {
+   "id": "rr_amb_cistern_drip",
+   "station": "cistern",
+   "kind": "wind",
+   "text": "One drop, then a long still. The water holds the dark like a held breath."
+  },
+  {
+   "id": "rr_amb_red_span_stumps",
+   "station": "red_span_remnant",
+   "kind": "sign",
+   "text": "Broken stumps of the bridge that failed. Locals walk around them in silence."
+  },
+  {
+   "id": "rr_amb_grazer_sentinel",
+   "station": "grazer_flats",
+   "kind": "wind",
+   "text": "One sentinel stares at the horizon. When it drops its head, the herd is safe."
+  },
+  {
+   "id": "rr_amb_mite_crack",
+   "station": "valley",
+   "kind": "wind",
+   "text": "Skitter mites trace the outline of a fresh crack and gather there, ticking."
+  },
+  {
+   "id": "rr_amb_span_load",
+   "station": "ochre_span",
+   "kind": "sign",
+   "text": "Load marks cut into the rail, one for every crossing the Span has been asked to bear."
+  },
+  {
+   "id": "rr_amb_boulder_dust",
+   "station": "boulder_pass",
+   "kind": "wind",
+   "text": "Fine red grit sifts down from the wedged boulder. Something up there is still settling.",
+   "if_not": "boulder_broken"
+  },
+  {
+   "id": "rr_amb_waystation_rope",
+   "station": "waystation",
+   "kind": "sign",
+   "text": "A coil of spare rope hangs by the well, with a tag: 'Mend before you take.'"
+  }
+ ]
+}

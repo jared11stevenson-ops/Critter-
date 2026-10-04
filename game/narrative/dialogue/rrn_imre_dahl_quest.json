@@ -1,0 +1,46 @@
+{
+ "id": "rrn_imre_dahl_quest",
+ "lines": [
+  {
+   "who": "imre_dahl",
+   "expr": "tired",
+   "text": "Plate Beetles throw themselves at the pylons. Forty in a week. I do not know how to keep them out of the dig."
+  },
+  {
+   "who": "imre_dahl",
+   "expr": "wary",
+   "text": "The permit says: remove the herd. The permit does not say how."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "The herd is not the problem. The pylon is."
+  },
+  {
+   "who": "imre_dahl",
+   "expr": "default",
+   "text": "I know. I have a tuning fork and no authority. Show me. Or thin the herd. Or break the thing. I will not stop you from any of them."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "You really will not stop us?"
+  },
+  {
+   "who": "imre_dahl",
+   "expr": "amused",
+   "text": "I will write down that I tried."
+  },
+  {
+   "set": {
+    "rrn_rr_beetle_pylon_offered": true
+   }
+  },
+  {
+   "event": "offer:rr_beetle_pylon"
+  },
+  {
+   "end": true
+  }
+ ]
+}

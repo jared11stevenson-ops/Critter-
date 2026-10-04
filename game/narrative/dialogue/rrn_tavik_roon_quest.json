@@ -1,0 +1,51 @@
+{
+ "id": "rrn_tavik_roon_quest",
+ "lines": [
+  {
+   "who": "tavik_roon",
+   "expr": "tired",
+   "text": "Road went. East terrace trail. Forty head cut off from the lichen."
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "stern",
+   "text": "A week. Then they start eating dirt."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "How many ways across?"
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "default",
+   "text": "Three. Lead them round the long way. Scare them over the gap. Or lay the road again."
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "warm",
+   "text": "I would pick the third. It takes four days. I will carry stone."
+  },
+  {
+   "who": "cigarra",
+   "expr": "happy",
+   "text": "Did you just ask for help?"
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "stern",
+   "text": "No."
+  },
+  {
+   "set": {
+    "rrn_rr_grazer_crossing_offered": true
+   }
+  },
+  {
+   "event": "offer:rr_grazer_crossing"
+  },
+  {
+   "end": true
+  }
+ ]
+}

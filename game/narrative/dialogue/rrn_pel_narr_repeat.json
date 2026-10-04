@@ -1,0 +1,34 @@
+{
+ "id": "rrn_pel_narr_repeat",
+ "lines": [
+  {
+   "who": "pel_narr",
+   "expr": "default",
+   "text": "Cable three: flat. Cable four: sharp. Walk it back."
+  },
+  {
+   "who": "pel_narr",
+   "expr": "warm",
+   "text": "Practice makes boring. Boring is a gift. The drill ran like a clock.",
+   "if": "rr_drill_run"
+  },
+  {
+   "who": "pel_narr",
+   "expr": "stern",
+   "text": "No drill. One day's trade saved. I log it. I am logging it very carefully.",
+   "if": "rr_drill_skipped"
+  },
+  {
+   "who": "pel_narr",
+   "expr": "grave",
+   "text": "You said you would hold the weakest span. I am logging that, too. In ink.",
+   "if": "rr_drill_borne"
+  },
+  {
+   "who": "pel_narr",
+   "expr": "stern",
+   "text": "The arch at the yard gate. Has someone checked the second path?",
+   "if": "rr_arch_built"
+  }
+ ]
+}

@@ -1,0 +1,40 @@
+{
+ "id": "rrn_imre_dahl_repeat",
+ "lines": [
+  {
+   "who": "imre_dahl",
+   "expr": "tired",
+   "text": "Noted. Per the permit. Noted."
+  },
+  {
+   "who": "imre_dahl",
+   "expr": "warm",
+   "text": "The beetles lean on each other at dusk. I wrote it down. It is not in my brief.",
+   "if": "rr_beetles_calmed"
+  },
+  {
+   "who": "imre_dahl",
+   "expr": "tired",
+   "text": "I put the cull in my log with a margin note. A long one.",
+   "if": "rr_beetles_culled"
+  },
+  {
+   "who": "imre_dahl",
+   "expr": "wary",
+   "text": "The pylon faulted. Nobody has ever checked a fault twice. Do not make them start.",
+   "if": "rr_pylon_pulled"
+  },
+  {
+   "who": "imre_dahl",
+   "expr": "wary",
+   "text": "Your crew has a Dominion contract on file. I am sorry. It colors how people talk to you.",
+   "if": "ledger_dominion_favor"
+  },
+  {
+   "who": "imre_dahl",
+   "expr": "warm",
+   "text": "The Keth well. You patched it. That went in the margin, too.",
+   "if": "rr_wells_kept"
+  }
+ ]
+}

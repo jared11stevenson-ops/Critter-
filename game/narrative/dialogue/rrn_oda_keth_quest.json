@@ -1,0 +1,46 @@
+{
+ "id": "rrn_oda_keth_quest",
+ "lines": [
+  {
+   "who": "oda_keth",
+   "expr": "stern",
+   "text": "Point one: the Line is old. Point two: a Dominion contractor wants to replace it with a pump that fills the cisterns in a week."
+  },
+  {
+   "who": "oda_keth",
+   "expr": "wary",
+   "text": "Point three: the pump empties the aquifer in ten years. The contractor will be somewhere else by then. Keths will not."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "What do you need?"
+  },
+  {
+   "who": "oda_keth",
+   "expr": "stern",
+   "text": "Hands. Stone. A choice, and I will not make it for you. Repair the gravity line, sign the pump, or teach three families the Line and step back."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "Which one do you want?"
+  },
+  {
+   "who": "oda_keth",
+   "expr": "amused",
+   "text": "I want to be asked less. That is not on the list."
+  },
+  {
+   "set": {
+    "rrn_rr_well_line_offered": true
+   }
+  },
+  {
+   "event": "offer:rr_well_line"
+  },
+  {
+   "end": true
+  }
+ ]
+}

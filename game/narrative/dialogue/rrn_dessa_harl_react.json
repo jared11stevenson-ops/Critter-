@@ -1,0 +1,25 @@
+{
+ "id": "rrn_dessa_harl_react",
+ "lines": [
+  {
+   "who": "dessa_harl",
+   "expr": "wary",
+   "text": "The pans hum at night. The crust cracks along the lines. I am telling the kids to stay off the east flat.",
+   "if": "rr_act1_done",
+   "if_not": "rr_act2_done"
+  },
+  {
+   "who": "dessa_harl",
+   "expr": "stern",
+   "text": "The Span is singing. The kids can hear it from here. I am not teaching today.",
+   "if": "rr_act2_done",
+   "if_not": "rr_act3_done"
+  },
+  {
+   "who": "dessa_harl",
+   "expr": "warm",
+   "text": "School is open again. Do not tell the inspector.",
+   "if": "boss_defeated"
+  }
+ ]
+}

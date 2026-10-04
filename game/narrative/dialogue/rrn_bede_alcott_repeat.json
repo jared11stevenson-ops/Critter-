@@ -1,0 +1,34 @@
+{
+ "id": "rrn_bede_alcott_repeat",
+ "lines": [
+  {
+   "who": "bede_alcott",
+   "expr": "default",
+   "text": "Calf Two ate. Calf One is sulking. It is going fine."
+  },
+  {
+   "who": "bede_alcott",
+   "expr": "warm",
+   "text": "They went back. The sentinel dropped its head. I did not cry. I have a cold.",
+   "if": "rr_herd_saved"
+  },
+  {
+   "who": "bede_alcott",
+   "expr": "tired",
+   "text": "The herd is hurt. The calves are all I have kept. It is not a comfort.",
+   "if": "rr_herd_hurt"
+  },
+  {
+   "who": "bede_alcott",
+   "expr": "warm",
+   "text": "The road was rebuilt. The calves can walk home. I was avoiding the thought.",
+   "if": "rr_road_rebuilt"
+  },
+  {
+   "who": "bede_alcott",
+   "expr": "wary",
+   "text": "Somebody scared the herd. I can tell. The calves flinch at your boots.",
+   "if": "grazers_harmed"
+  }
+ ]
+}

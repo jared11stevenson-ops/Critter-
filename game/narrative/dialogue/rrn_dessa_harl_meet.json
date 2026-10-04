@@ -1,0 +1,75 @@
+{
+ "id": "rrn_dessa_harl_meet",
+ "lines": [
+  {
+   "who": "dessa_harl",
+   "expr": "amused",
+   "text": "Mind the crust. It bites. So do I. Dessa Harl. Rake chief."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "I am looking for the well."
+  },
+  {
+   "who": "dessa_harl",
+   "expr": "stern",
+   "text": "Everybody is. The well is Oda's. The salt is mine. The water is neither. Do not tell her I said that."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "What is under the crust?"
+  },
+  {
+   "who": "dessa_harl",
+   "expr": "wary",
+   "text": "...Why?"
+  },
+  {
+   "set": {
+    "rrn_dessa_harl_met": true
+   }
+  },
+  {
+   "choice": [
+    {
+     "text": "I would like to ask your crew before I dig. It is your flats.",
+     "goto": "m_ask"
+    },
+    {
+     "text": "Something is glinting under the crust. I am digging.",
+     "goto": "m_dig"
+    }
+   ]
+  },
+  {
+   "label": "m_ask"
+  },
+  {
+   "who": "dessa_harl",
+   "expr": "warm",
+   "text": "Asking. Huh. Fine. Fourteen paces south. Leave the lichen bed whole."
+  },
+  {
+   "event": "rec:dessa_ask"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "m_dig"
+  },
+  {
+   "who": "dessa_harl",
+   "expr": "stern",
+   "text": "Mine, friend. Whatever it is. You ask first."
+  },
+  {
+   "event": "rec:dessa_dig"
+  },
+  {
+   "end": true
+  }
+ ]
+}

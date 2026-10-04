@@ -1,0 +1,70 @@
+{
+ "id": "rrn_vesk_dunmore_meet",
+ "lines": [
+  {
+   "who": "vesk_dunmore",
+   "expr": "amused",
+   "text": "Friend. Friends. Hands where I can see them, mine are visible, and look: no weapons. Broker's flag. Truce. Knock on wood."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "You are the poacher."
+  },
+  {
+   "who": "vesk_dunmore",
+   "expr": "wary",
+   "text": "Broker. Claims broker. The poacher is on leave."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "He knocked on the cart. Twice."
+  },
+  {
+   "set": {
+    "rrn_vesk_dunmore_met": true
+   }
+  },
+  {
+   "choice": [
+    {
+     "text": "State your claim and your terms. I will listen.",
+     "goto": "m_listen"
+    },
+    {
+     "text": "I could report you to the Warden right now.",
+     "goto": "m_threat"
+    }
+   ]
+  },
+  {
+   "label": "m_listen"
+  },
+  {
+   "who": "vesk_dunmore",
+   "expr": "amused",
+   "text": "A gentleman. Salvage rights on the wreck of the Red Span. Cut stone under it. I can show you."
+  },
+  {
+   "event": "rec:vesk_charm"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "m_threat"
+  },
+  {
+   "who": "vesk_dunmore",
+   "expr": "stern",
+   "text": "You could. Then nobody gets the stone and nobody gets paid. Think it over."
+  },
+  {
+   "event": "rec:vesk_bribe"
+  },
+  {
+   "end": true
+  }
+ ]
+}

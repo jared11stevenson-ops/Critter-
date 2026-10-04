@@ -1,0 +1,63 @@
+{
+ "id": "rrn_imre_dahl_turnin",
+ "lines": [
+  {
+   "who": "imre_dahl",
+   "expr": "warm",
+   "text": "Tuned below their hearing. Is that all? ...That is all.",
+   "if": "rr_beetles_calmed"
+  },
+  {
+   "who": "imre_dahl",
+   "expr": "tired",
+   "text": "It is done. I wrote it down. I will not forget the quiet.",
+   "if": "rr_beetles_culled"
+  },
+  {
+   "who": "imre_dahl",
+   "expr": "wary",
+   "text": "The pylon is dark. I am logging a fault. I am also logging that I did not see anything.",
+   "if": "rr_pylon_pulled"
+  },
+  {
+   "choice": [
+    {
+     "text": "Let me read your margin notes. They matter.",
+     "goto": "t_log"
+    },
+    {
+     "text": "Keep your notes. I did not hear any of this.",
+     "goto": "t_silent"
+    }
+   ]
+  },
+  {
+   "label": "t_log"
+  },
+  {
+   "who": "imre_dahl",
+   "expr": "warm",
+   "text": "...They are in the appendix. Appendix C. Nobody reads Appendix C."
+  },
+  {
+   "event": "rec:dahl_log"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "t_silent"
+  },
+  {
+   "who": "imre_dahl",
+   "expr": "default",
+   "text": "Understood. Thank you. For the nothing."
+  },
+  {
+   "event": "rec:dahl_silent"
+  },
+  {
+   "end": true
+  }
+ ]
+}

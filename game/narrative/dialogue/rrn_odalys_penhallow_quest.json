@@ -1,0 +1,36 @@
+{
+ "id": "rrn_odalys_penhallow_quest",
+ "lines": [
+  {
+   "who": "odalys_penhallow",
+   "expr": "stern",
+   "text": "The office has an exemption slot for the beetle herd. Nobody has filed in it. I cannot file for them. A witness could."
+  },
+  {
+   "who": "odalys_penhallow",
+   "expr": "default",
+   "text": "Imre Dahl has the field notes. If he signs them as evidence, I can stamp the exemption."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "Why not do it yourself?"
+  },
+  {
+   "who": "odalys_penhallow",
+   "expr": "wary",
+   "text": "Because I would lose the post. Then somebody less careful would hold it."
+  },
+  {
+   "set": {
+    "rrn_odalys_exemption_offered": true
+   }
+  },
+  {
+   "event": "lead:rr_beetle_pylon"
+  },
+  {
+   "end": true
+  }
+ ]
+}

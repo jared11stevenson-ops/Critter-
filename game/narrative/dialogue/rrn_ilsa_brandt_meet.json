@@ -1,0 +1,70 @@
+{
+ "id": "rrn_ilsa_brandt_meet",
+ "lines": [
+  {
+   "who": "ilsa_brandt",
+   "expr": "default",
+   "text": "No, wait. If the weight goes down the second pier and... oh. You are looking. Hello."
+  },
+  {
+   "who": "ilsa_brandt",
+   "expr": "wary",
+   "text": "That is nothing. A doodle. Please do not look at the doodle."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "It is an arch. A big arch."
+  },
+  {
+   "who": "ilsa_brandt",
+   "expr": "amused",
+   "text": "...It is the arch. The Arch. Do you like it?"
+  },
+  {
+   "set": {
+    "rrn_ilsa_brandt_met": true
+   }
+  },
+  {
+   "choice": [
+    {
+     "text": "It is beautiful. People will remember it.",
+     "goto": "m_praise"
+    },
+    {
+     "text": "Show me where the weight goes. I want to understand it.",
+     "goto": "m_teach"
+    }
+   ]
+  },
+  {
+   "label": "m_praise"
+  },
+  {
+   "who": "ilsa_brandt",
+   "expr": "warm",
+   "text": "Really? Nobody says that. Master Voll just says 'load path' and walks away."
+  },
+  {
+   "event": "rec:ilsa_praise"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "m_teach"
+  },
+  {
+   "who": "ilsa_brandt",
+   "expr": "amused",
+   "text": "Oh no. Oh yes. Here. The weight goes here, then here, then... there is a second path. I forgot the second path."
+  },
+  {
+   "event": "rec:ilsa_teach"
+  },
+  {
+   "end": true
+  }
+ ]
+}

@@ -1,0 +1,37 @@
+{
+ "id": "rrn_idris_voll_react",
+ "lines": [
+  {
+   "who": "idris_voll",
+   "expr": "grave",
+   "text": "The hum has not stopped. Every stone knows the note. Find the rig.",
+   "if": "rr_act1_done",
+   "if_not": "rr_act2_done"
+  },
+  {
+   "who": "idris_voll",
+   "expr": "stern",
+   "text": "The yard waits. Eleven minutes is a long time to wait for the answer.",
+   "if": "rr_act2_done",
+   "if_not": "rr_act3_done"
+  },
+  {
+   "who": "idris_voll",
+   "expr": "warm",
+   "text": "The yard took the second and third pier. You took what you could. It stands, and nobody sings about it. Adequate.",
+   "if": "rr_ending_braced"
+  },
+  {
+   "who": "idris_voll",
+   "expr": "grave",
+   "text": "The Span holds under Dominion bracing. It will need its own by winter. We will do that.",
+   "if": "rr_ending_leased"
+  },
+  {
+   "who": "idris_voll",
+   "expr": "grave",
+   "text": "You held it alone. We arrived late. I am sorry. I am also angry. Both.",
+   "if": "rr_ending_borne"
+  }
+ ]
+}

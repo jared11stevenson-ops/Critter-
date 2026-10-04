@@ -1,0 +1,100 @@
+{
+ "id": "rrn_oda_keth_meet",
+ "lines": [
+  {
+   "who": "oda_keth",
+   "expr": "stern",
+   "text": "You are standing on my line. Not that one. The gravity channel under your feet. Step left."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Mother Oda Keth."
+  },
+  {
+   "who": "oda_keth",
+   "expr": "stern",
+   "text": "Sixteen generations of Keths have kept these wells. Point one: water belongs to nobody. Point two: I count every cup. Do not ask me to reconcile them."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "If it is nobody's, why count?"
+  },
+  {
+   "who": "oda_keth",
+   "expr": "amused",
+   "text": "Because nobody's water still runs out. Good question, girl. Do not let it go to your head."
+  },
+  {
+   "set": {
+    "rrn_oda_keth_met": true
+   }
+  },
+  {
+   "choice": [
+    {
+     "text": "Could we carry a flask back for the crew? I will bring it back full.",
+     "goto": "m_ask"
+    },
+    {
+     "text": "Just take a flask from the stack.",
+     "goto": "m_grab"
+    },
+    {
+     "text": "The Dominion offered you a pump, I hear.",
+     "goto": "m_pump"
+    }
+   ]
+  },
+  {
+   "label": "m_ask"
+  },
+  {
+   "who": "oda_keth",
+   "expr": "warm",
+   "text": "Asking first. Adequate. One flask. The flask returns or I come looking."
+  },
+  {
+   "event": "rec:oda_cup"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "m_grab"
+  },
+  {
+   "who": "oda_keth",
+   "expr": "stern",
+   "text": "Put. It. Back."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Understood."
+  },
+  {
+   "event": "rec:oda_grab"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "m_pump"
+  },
+  {
+   "who": "oda_keth",
+   "expr": "wary",
+   "text": "They offered. I listened. Listening is free. Signing is not."
+  },
+  {
+   "set": {
+    "rrn_oda_pump_heard": true
+   }
+  },
+  {
+   "end": true
+  }
+ ]
+}

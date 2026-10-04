@@ -1,0 +1,37 @@
+{
+ "id": "rrn_ilsa_brandt_react",
+ "lines": [
+  {
+   "who": "ilsa_brandt",
+   "expr": "wary",
+   "text": "Everyone in the yard has stopped sleeping. The stone is humming. I can feel it in my forelimbs.",
+   "if": "rr_act1_done",
+   "if_not": "rr_act2_done"
+  },
+  {
+   "who": "ilsa_brandt",
+   "expr": "stern",
+   "text": "Master Voll said the Span is too perfect. I wrote that on the wall in chalk. He made me rub it out. Then he copied it.",
+   "if": "rr_act2_done",
+   "if_not": "rr_act3_done"
+  },
+  {
+   "who": "ilsa_brandt",
+   "expr": "warm",
+   "text": "Nobody sings about it. That is the point, is it? I did not understand until now.",
+   "if": "rr_ending_braced"
+  },
+  {
+   "who": "ilsa_brandt",
+   "expr": "tired",
+   "text": "It stood. But the yard went quiet when you walked past. I did too.",
+   "if": "rr_ending_leased"
+  },
+  {
+   "who": "ilsa_brandt",
+   "expr": "wary",
+   "text": "You held it alone. I took the third pier. Next time, call me sooner.",
+   "if": "rr_ending_borne"
+  }
+ ]
+}

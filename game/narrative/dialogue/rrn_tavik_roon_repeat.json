@@ -1,0 +1,40 @@
+{
+ "id": "rrn_tavik_roon_repeat",
+ "lines": [
+  {
+   "who": "tavik_roon",
+   "expr": "default",
+   "text": "Slow. Always slow."
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "warm",
+   "text": "They follow you now. I noticed.",
+   "if": "rr_herd_saved"
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "tired",
+   "text": "The deck holds. The herd uses it. People nod at me. I do not know what to do with my face.",
+   "if": "rr_road_rebuilt"
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "stern",
+   "text": "Do not talk to me about the gap.",
+   "if": "rr_herd_hurt"
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "stern",
+   "text": "I smell Dust Grazer on your boots and none of it is friendly. Wash it off.",
+   "if": "grazers_harmed"
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "wary",
+   "text": "A broker is circling the old bridge. Do not let him tell you the herd is salvage.",
+   "if": "rr_act2_done"
+  }
+ ]
+}

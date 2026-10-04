@@ -1,0 +1,32 @@
+{
+ "id": "rrn_imre_dahl_react",
+ "lines": [
+  {
+   "who": "imre_dahl",
+   "expr": "wary",
+   "text": "Foreman Orrin wants the rig online by month's end. I am to sign.",
+   "if": "rr_act1_done",
+   "if_not": "rr_act2_done"
+  },
+  {
+   "who": "imre_dahl",
+   "expr": "tired",
+   "text": "Orrin offered the Span a cheaper fix. I read the load tables. I did not sign.",
+   "if": "rr_act2_done",
+   "if_not": "rr_act3_done"
+  },
+  {
+   "who": "imre_dahl",
+   "expr": "warm",
+   "text": "The rig is down. I am being reassigned for being too efficient. I would like that on a plaque.",
+   "if": "boss_defeated",
+   "if_not": "rr_ending_leased"
+  },
+  {
+   "who": "imre_dahl",
+   "expr": "tired",
+   "text": "The Span holds under Dominion bracing. It will need its own bracing by winter. I wrote that down too.",
+   "if": "rr_ending_leased"
+  }
+ ]
+}

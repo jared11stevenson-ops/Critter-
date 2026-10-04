@@ -1,0 +1,25 @@
+{
+ "id": "rrn_hobb_sarrane_react",
+ "lines": [
+  {
+   "who": "hobb_sarrane",
+   "expr": "stern",
+   "text": "Pylon drone on the north cut. Road's thin. Drive slow.",
+   "if": "rr_act1_done",
+   "if_not": "rr_act2_done"
+  },
+  {
+   "who": "hobb_sarrane",
+   "expr": "default",
+   "text": "Span's loud. Axles feel it. Hauling light.",
+   "if": "rr_act2_done",
+   "if_not": "rr_act3_done"
+  },
+  {
+   "who": "hobb_sarrane",
+   "expr": "warm",
+   "text": "Flour made it. So did we. Good.",
+   "if": "boss_defeated"
+  }
+ ]
+}

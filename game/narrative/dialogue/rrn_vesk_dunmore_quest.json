@@ -1,0 +1,41 @@
+{
+ "id": "rrn_vesk_dunmore_quest",
+ "lines": [
+  {
+   "who": "vesk_dunmore",
+   "expr": "amused",
+   "text": "Cut Thoughtstone. Under the Red Span. Prime stuff. Sells itself."
+  },
+  {
+   "who": "vesk_dunmore",
+   "expr": "wary",
+   "text": "...I will not dig it. A grave is a grave. But if somebody did..."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "The yard treats that place as a grave."
+  },
+  {
+   "who": "vesk_dunmore",
+   "expr": "stern",
+   "text": "I know. I know. That is why my hands are clean. Strike the claim, buy at a fair price, or take it to the Undermarket. Three roads, friend."
+  },
+  {
+   "who": "cigarra",
+   "expr": "annoyed",
+   "text": "He wants us to dig it up."
+  },
+  {
+   "set": {
+    "rrn_rr_vesk_cache_offered": true
+   }
+  },
+  {
+   "event": "offer:rr_vesk_cache"
+  },
+  {
+   "end": true
+  }
+ ]
+}

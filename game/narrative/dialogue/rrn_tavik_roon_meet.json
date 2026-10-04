@@ -1,0 +1,75 @@
+{
+ "id": "rrn_tavik_roon_meet",
+ "lines": [
+  {
+   "who": "tavik_roon",
+   "expr": "stern",
+   "text": "Stop. They have not decided about you."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "I will wait."
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "default",
+   "text": "Easy. Easy. ...Tavik Roon. The herd is mine to walk. Not mine."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "Which is it?"
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "tired",
+   "text": "Walk. They are nobody's. They just go where I go because I go slow."
+  },
+  {
+   "set": {
+    "rrn_tavik_roon_met": true
+   }
+  },
+  {
+   "choice": [
+    {
+     "text": "How do I know when they have decided?",
+     "goto": "m_listen"
+    },
+    {
+     "text": "We are in a hurry. Can you move them?",
+     "goto": "m_hurry"
+    }
+   ]
+  },
+  {
+   "label": "m_listen"
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "warm",
+   "text": "...The sentinel drops its head. That is yes. Wait for it."
+  },
+  {
+   "event": "rec:tavik_listen"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "m_hurry"
+  },
+  {
+   "who": "tavik_roon",
+   "expr": "stern",
+   "text": "No. Hurry is how Dust Grazers die. Do not do it."
+  },
+  {
+   "event": "rec:tavik_hurry"
+  },
+  {
+   "end": true
+  }
+ ]
+}

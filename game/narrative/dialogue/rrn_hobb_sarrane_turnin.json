@@ -1,0 +1,62 @@
+{
+ "id": "rrn_hobb_sarrane_turnin",
+ "lines": [
+  {
+   "who": "hobb_sarrane",
+   "expr": "default",
+   "text": "Good wheel."
+  },
+  {
+   "who": "hobb_sarrane",
+   "expr": "warm",
+   "text": "Not saying thanks. Saying: good wheel.",
+   "if": "ledger_braced_structure"
+  },
+  {
+   "who": "hobb_sarrane",
+   "expr": "default",
+   "text": "Fair trade. Sacks are yours. Share is mine.",
+   "if": "ledger_salvage_fair"
+  },
+  {
+   "choice": [
+    {
+     "text": "The stash is yours. I will take only what you offer.",
+     "goto": "t_leave"
+    },
+    {
+     "text": "Mind if I take the spare axle?",
+     "goto": "t_ask"
+    }
+   ]
+  },
+  {
+   "label": "t_leave"
+  },
+  {
+   "who": "hobb_sarrane",
+   "expr": "warm",
+   "text": "Told you. A good crew."
+  },
+  {
+   "event": "rec:hobb_brace"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "t_ask"
+  },
+  {
+   "who": "hobb_sarrane",
+   "expr": "amused",
+   "text": "Ask first. Always. Yes."
+  },
+  {
+   "event": "rec:hobb_ask"
+  },
+  {
+   "end": true
+  }
+ ]
+}

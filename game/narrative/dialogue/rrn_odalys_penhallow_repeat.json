@@ -1,0 +1,41 @@
+{
+ "id": "rrn_odalys_penhallow_repeat",
+ "lines": [
+  {
+   "who": "odalys_penhallow",
+   "expr": "default",
+   "text": "Noted for the record."
+  },
+  {
+   "who": "odalys_penhallow",
+   "expr": "warm",
+   "text": "The Well Line stays unrecorded. A clerical oversight. I make several each week.",
+   "if": "rr_wells_kept"
+  },
+  {
+   "who": "odalys_penhallow",
+   "expr": "stern",
+   "text": "Pump contract stamped. The aquifer clause is in Appendix F. I read it. Nobody else will.",
+   "if": "rr_wells_leased"
+  },
+  {
+   "who": "odalys_penhallow",
+   "expr": "amused",
+   "text": "The pylon faulted. A fault, not a person. I entered it as such. I entered it twice.",
+   "if": "rr_pylon_pulled"
+  },
+  {
+   "who": "odalys_penhallow",
+   "expr": "wary",
+   "text": "Foreman Orrin read your file. I would be careful about the word 'burden'.",
+   "if": "rr_act2_done",
+   "if_not": "rr_act3_done"
+  },
+  {
+   "who": "odalys_penhallow",
+   "expr": "tired",
+   "text": "A cull was recorded against your crew's name. I could not make it disappear. I tried.",
+   "if": "rr_beetles_culled"
+  }
+ ]
+}

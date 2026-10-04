@@ -311,6 +311,86 @@
    "body": "A ledge above the Ochre Span. Past crews scratched load limits into the rail, and a cairn marks each crew that crossed.",
    "portrait": "",
    "unlock": "found"
+  },
+  "place_red_span_remnant": {
+   "category": "places",
+   "title": "The Red Span Remnant",
+   "subtitle": "Red Reaches",
+   "body": "The broken stumps of the bridge that failed. Locals walk around it in silence.\n\nTHOUSANDS CROSSED. HUNDREDS DID NOT. A cairn of names stands beside it; one flat stone is left blank on purpose.",
+   "portrait": "",
+   "unlock": "found"
+  },
+  "place_spanwright_yard": {
+   "category": "places",
+   "title": "The Spanwright Yard",
+   "subtitle": "Red Reaches",
+   "body": "A stone workshop cut into the plateau, where apprentices learn to be unnoticed.\n\nMASTER'S RULE: Infrastructure succeeds when people stop noticing the danger it protects them from.\n\nNOTE: Every yard keeps a book of the names it has mended for. Not every yard admits it.",
+   "portrait": "",
+   "unlock": "found"
+  },
+  "place_well_line": {
+   "category": "places",
+   "title": "The Well Line",
+   "subtitle": "Red Reaches",
+   "body": "A chain of hand-cranked wells strung across the dry flats, kept for sixteen generations by the Keth families.\n\nTALLY KNOTS: Each cup carried away is a knot on the crank cord. None are ever crossed out.",
+   "portrait": "",
+   "unlock": "found"
+  },
+  "place_grazer_flats": {
+   "category": "places",
+   "title": "The Grazer Flats",
+   "subtitle": "Red Reaches",
+   "body": "Lichen terraces and herd trails that hold the plateau together.\n\nFIELD NOTE: A herd feeds in a wedge. One sentinel watches the horizon and drops its head when the herd is safe.",
+   "portrait": "",
+   "unlock": "found"
+  },
+  "place_augur_pit": {
+   "category": "places",
+   "title": "The AUGUR Pit",
+   "subtitle": "Red Reaches",
+   "body": "The deepcore rig's crater, ringed with pylons and quiet beetles.\n\nPERMIT 7-K: Allows resonance up to forty percent of load. The Ochre Span tolerates twenty.",
+   "portrait": "",
+   "unlock": "found"
+  },
+  "place_waystation": {
+   "category": "places",
+   "title": "The Waystation",
+   "subtitle": "Red Reaches",
+   "body": "A Spanwright waystation: wells, shade, and a place to mend rope. Paths lead off in every direction.\n\nSIGN: 'Mend before you take.'",
+   "portrait": "",
+   "unlock": "found"
+  },
+  "place_boulder_pass": {
+   "category": "places",
+   "title": "The Boulder Pass",
+   "subtitle": "Red Reaches",
+   "body": "A fracture-valley neck choked with a wedged boulder of cracked Thoughtstone. Heavy hands shatter it; careful ones read where it will fall.\n\nA sealed Spanwright vault waits north of the pass.",
+   "portrait": "",
+   "unlock": "found"
+  },
+  "lore_load_marks": {
+   "category": "lore",
+   "title": "Load Marks",
+   "subtitle": "Spanwrights",
+   "body": "Cut into the rail of every Spanwright crossing: one mark for every crowd the bridge has been asked to carry.\n\nThe oldest marks are worn smooth. The newest are cut small, and slightly crooked, by apprentices who were told not to sign them.",
+   "portrait": "",
+   "unlock": "found"
+  },
+  "lore_keth_tally": {
+   "category": "lore",
+   "title": "The Keth Tally",
+   "subtitle": "Red Reaches",
+   "body": "Sixteen generations of Keths have counted every cup drawn from the Well Line, though they say water belongs to nobody.\n\nThe knots are not a debt. They are a record that the water was shared.",
+   "portrait": "",
+   "unlock": "found"
+  },
+  "lore_permit_7k": {
+   "category": "lore",
+   "title": "Permit 7-K",
+   "subtitle": "Human Dominion",
+   "body": "The Dominion extraction permit that licenses the AUGUR-7 rig. Section nine, the homeland clause, exempts local residents from survey restrictions. Appendix C lists exemptions for wildlife herds.\n\nNOTE: Clerks write most of the clauses nobody reads. Some of them write them on purpose.",
+   "portrait": "",
+   "unlock": "found"
   }
  }
 }

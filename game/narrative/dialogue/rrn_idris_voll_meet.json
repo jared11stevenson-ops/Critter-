@@ -1,0 +1,72 @@
+{
+ "id": "rrn_idris_voll_meet",
+ "lines": [
+  {
+   "who": "idris_voll",
+   "expr": "stern",
+   "text": "You have grown. I did not say you could."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Master Voll."
+  },
+  {
+   "who": "idris_voll",
+   "expr": "default",
+   "text": "The yard hears the hum. Every stone. You came for a reason or by accident."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "Both."
+  },
+  {
+   "who": "idris_voll",
+   "expr": "amused",
+   "text": "Good. Both is the only honest answer."
+  },
+  {
+   "set": {
+    "rrn_idris_voll_met": true
+   }
+  },
+  {
+   "choice": [
+    {
+     "text": "Teach me again. I think I understood too late.",
+     "goto": "m_listen"
+    },
+    {
+     "text": "I came to build something that will be remembered.",
+     "goto": "m_monument"
+    }
+   ]
+  },
+  {
+   "label": "m_listen"
+  },
+  {
+   "who": "idris_voll",
+   "expr": "warm",
+   "text": "...Then carry this end. No. The other end."
+  },
+  {
+   "event": "rec:voll_listen"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "m_monument"
+  },
+  {
+   "who": "idris_voll",
+   "expr": "grave",
+   "text": "Then you did not understand at all. Go and look at the Span."
+  },
+  {
+   "end": true
+  }
+ ]
+}

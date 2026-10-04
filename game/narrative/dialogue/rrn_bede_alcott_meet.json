@@ -1,0 +1,72 @@
+{
+ "id": "rrn_bede_alcott_meet",
+ "lines": [
+  {
+   "who": "bede_alcott",
+   "expr": "tired",
+   "text": "Oh. Hello. Sorry. I am Bede. Terrarium Authority. I have two calves and one broken transport."
+  },
+  {
+   "who": "cigarra",
+   "expr": "curious",
+   "text": "Dust Grazers. Keystone."
+  },
+  {
+   "who": "bede_alcott",
+   "expr": "warm",
+   "text": "Yes. Orphaned. Their herd was cut off at the gap. Protective Extraction. All paperwork filed."
+  },
+  {
+   "who": "aruun",
+   "expr": "calm",
+   "text": "They are not property."
+  },
+  {
+   "who": "bede_alcott",
+   "expr": "wary",
+   "text": "No. No, of course not. They are... in my care. Which is different. Is it different?"
+  },
+  {
+   "set": {
+    "rrn_bede_alcott_met": true
+   }
+  },
+  {
+   "choice": [
+    {
+     "text": "What do they need most from you?",
+     "goto": "m_ask"
+    },
+    {
+     "text": "The herd needs them back, soon. For the lichen.",
+     "goto": "m_herd"
+    }
+   ]
+  },
+  {
+   "label": "m_ask"
+  },
+  {
+   "who": "bede_alcott",
+   "expr": "warm",
+   "text": "...Water. Milk replacer. Someone to say it will be fine."
+  },
+  {
+   "event": "rec:bede_ask"
+  },
+  {
+   "end": true
+  },
+  {
+   "label": "m_herd"
+  },
+  {
+   "who": "bede_alcott",
+   "expr": "tired",
+   "text": "I know. I do know. Give me a few more days."
+  },
+  {
+   "end": true
+  }
+ ]
+}

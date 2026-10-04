@@ -1,0 +1,46 @@
+{
+ "id": "rrn_pel_narr_quest",
+ "lines": [
+  {
+   "who": "pel_narr",
+   "expr": "stern",
+   "text": "Market day. Eleven thousand crossings. One exit road each end."
+  },
+  {
+   "who": "pel_narr",
+   "expr": "default",
+   "text": "I want a drill. Five minutes. Marked exits, marked timing. The guild says it costs a day's trade."
+  },
+  {
+   "who": "aruun",
+   "expr": "focused",
+   "text": "How long to clear the span?"
+  },
+  {
+   "who": "pel_narr",
+   "expr": "grave",
+   "text": "Eleven minutes. If the load is even."
+  },
+  {
+   "who": "cigarra",
+   "expr": "shocked",
+   "text": "Eleven minutes."
+  },
+  {
+   "who": "pel_narr",
+   "expr": "default",
+   "text": "You know the number. Good. Plan the drill, tell the guild it is fine, or stand on the weakest span. Your call. I will log it."
+  },
+  {
+   "set": {
+    "rrn_rr_drill_drill_offered": true
+   }
+  },
+  {
+   "event": "offer:rr_drill_drill"
+  },
+  {
+   "end": true
+  }
+ ]
+}
