@@ -496,7 +496,20 @@ def downed(sk):
     return tr, meta(tr, impact=0.85)
 
 
+def cloak_lag(tr, cyclic=False):
+    """Secondary motion (idempotent): the ragged cloak is a two-bone chain; each bone lags the body with its own spring,
+    so a turn or a swing whips the hem after the shoulders (follow-through)."""
+    if getattr(tr, "_cloak", False) or "cloak" not in tr.sk.index:
+        return
+    tr._cloak = True
+    rt.pendulum(tr, "cloak", stiffness=36, damping=5, cyclic=cyclic, max_deg=24)
+    if "cloak2" in tr.sk.index:
+        rt.pendulum(tr, "cloak2", stiffness=24, damping=4, cyclic=cyclic, max_deg=38)
+
+
 def build(name, sk):
     if name == "idle":
         _cache.clear()
-    return globals()[name](sk)
+    tr, m = globals()[name](sk)
+    cloak_lag(tr, cyclic=bool(m.get("loop")))
+    return tr, m

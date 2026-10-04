@@ -15,7 +15,7 @@ const PALETTES := {
 	"aruun": {
 		"sat_lift": 1.32, "val_lift": 1.06, "contrast": 1.08, "shadow_floor": 0.12,
 		"rim_color": Color(0.42, 0.95, 1.0), "rim_power": 2.4, "rim_strength": 0.7,
-		"accent_color": Color(0.30, 0.95, 1.0), "accent_strength": 1.5,
+		"accent_color": Color(0.30, 0.95, 1.0), "accent_strength": 1.5, "accent_mix": 0.0,
 		"outline_color": Color(0.03, 0.02, 0.06), "outline_width": 0.022,
 	},
 	# Cigarra: sheet is violet-black / white-blonde / olive-gold. Pop = acid yellow-green wings + gold + violet glow.
@@ -80,7 +80,7 @@ static func _convert(src: Material, pal: Dictionary) -> ShaderMaterial:
 	if b.emission_enabled and b.emission_texture:
 		m.set_shader_parameter("emis_tex", b.emission_texture)
 		m.set_shader_parameter("use_emis", 1.0)
-	for k in ["sat_lift", "val_lift", "contrast", "shadow_floor", "rim_color", "rim_power", "rim_strength", "accent_color", "accent_strength"]:
+	for k in ["sat_lift", "val_lift", "contrast", "shadow_floor", "rim_color", "rim_power", "rim_strength", "accent_color", "accent_strength", "accent_mix"]:
 		if pal.has(k):
 			m.set_shader_parameter(k, pal[k])
 	if not scissor:   # hull on single-sided leaf membranes looks wrong; the wings get a stronger rim instead

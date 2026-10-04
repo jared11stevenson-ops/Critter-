@@ -120,6 +120,21 @@ def project_sheet(P, N, co, tris, allow):
     return out, valid
 
 
+def _clean_paint(img, mask):
+    """The raw sheet projection is mottled (ESRGAN artefacts, 3/4-pose mismatch). Median + palette pull gives the clean,
+    graphic plate/patch read of the sheet: flat reds, bone, ochre, near-black, with crisp edges."""
+    from scipy import ndimage
+    out = np.stack([ndimage.median_filter(img[..., c], size=9) for c in range(3)], -1)
+    pal = np.array([hex2(h) for h in ("#8a1d1c", "#c9402a", "#d8a15c", "#d3bf98", "#2a2224", "#3b3350", "#5a3b2a")], np.float32)
+    flat = out.reshape(-1, 3)
+    d = ((flat[:, None, :] - pal[None]) ** 2).sum(-1)
+    near = pal[np.argmin(d, 1)]
+    k = 0.4
+    res = (flat * (1 - k) + near * k).reshape(out.shape)
+    res = ndimage.gaussian_filter(res, sigma=(1.2, 1.2, 0))
+    return np.where(mask[..., None], res, img).astype(np.float32)
+
+
 def paint(ob):
     """Bake albedo / height via UV rasterisation; colour by part + mottling matched to the sheet palette."""
     me = ob.data
@@ -171,8 +186,8 @@ def paint(ob):
     col[is_car & (n1 < -0.7)] = deep
     h[is_car] = np.clip(n1[is_car], -1, 1) * 0.5 + 0.3
     # dark chitin: cream plates and red bands
-    col[is_dark & (n1 > 0.12)] = cream
-    col[is_dark & (n2 < -0.3)] = red
+    col[is_dark & (n1 > 0.62)] = cream
+    col[is_dark & (n2 < -0.55)] = red
     col[is_dark & (n3 > 1.05)] = ochre * 0.9
     h[is_dark] = (n1[is_dark] > 0.65) * 0.6 + n3[is_dark] * 0.1
     # bone: subtle grain
@@ -211,6 +226,7 @@ def paint(ob):
     nop = np.zeros((TEX, TEX), dtype=bool)
     nop[mask] = ~allow
     img[nop] = proc[nop]
+    img = _clean_paint(img, mask)
     himg = np.zeros((TEX, TEX), dtype=np.float32)
     himg[mask] = h
     rough = np.full(len(P), 0.72)
@@ -256,6 +272,7 @@ def paint(ob):
     core = part == "morrow_core"
     em[isface] = hex2("#ffd24a")
     em[core] = np.array(hex2("#c4301a")) * 0.6
+    em[np.isin(part, ["tine", "medallion", "buckle"])] = np.array(hex2("#2fe8d6")) * 0.85     # game palette: ice-teal accents
     emis[mask] = em
     emis[spot] = img[spot] * 0.55
     emis, _ = dilate(emis, mask, 6)
@@ -333,7 +350,8 @@ for s in ("L", "R"):
         ("toe." + s, "toe." + s, "toe_end." + s, "foot." + s),
     ]
 BONES += [("weapon", "wrist.R", None, "hand.R"), ("weapon_ext1", None, None, "weapon"),
-          ("weapon_ext2", None, None, "weapon_ext1"), ("cloak", "neck1", None, "chest")]
+          ("weapon_ext2", None, None, "weapon_ext1"), ("cloak", "neck1", None, "chest"),
+          ("cloak2", None, None, "cloak")]
 
 HEAD_PARTS = {"head", "eye", "brow", "crest", "horn", "tine", "fringe_cream", "fringe_olive"}
 JAW_PARTS = {"jaw", "fang"}
@@ -367,11 +385,14 @@ def build_armature():
             b.head, b.tail = hp, hp + ax * 0.3
         elif name == "cloak":
             b.head, b.tail = body.jm("neck1") + Vector((0, 0.12, 0)), body.jm("neck1") + Vector((0, 0.15, -0.5))
+        elif name == "cloak2":     # lower cloak: hangs from the upper cloak bone's tail (secondary-motion chain)
+            h0 = body.jm("neck1") + Vector((0, 0.15, -0.5))
+            b.head, b.tail = h0, h0 + Vector((0, 0.08, -0.65))
         else:
             b.head, b.tail = body.jm(h), body.jm(t)
         if par:
             b.parent = eb[par]
-            if name not in ("root", "weapon", "weapon_ext1", "weapon_ext2", "cloak", "thigh.L", "thigh.R", "clavicle.L", "clavicle.R", "jaw") and \
+            if name not in ("root", "weapon", "weapon_ext1", "weapon_ext2", "cloak", "cloak2", "thigh.L", "thigh.R", "clavicle.L", "clavicle.R", "jaw") and \
                     (b.head - eb[par].tail).length < 1e-4:
                 b.use_connect = True
         # roll so local X points to world +X for everything (consistent signs in anims.py)
@@ -399,7 +420,7 @@ def skin(mesh_ob, rig):
         for v in p.vertices:
             vpart[v] = names[pa[p.index]]
     bones = {b.name: (np.array(b.head_local), np.array(b.tail_local)) for b in rig.data.bones}
-    deform = [n for n in bones if n not in ("root", "cloak", "weapon_ext1", "weapon_ext2")]
+    deform = [n for n in bones if n not in ("root", "cloak", "cloak2", "weapon_ext1", "weapon_ext2")]
     D = np.stack([seg_dist(co, *bones[n]) for n in deform], 1)
     groups = {n: mesh_ob.vertex_groups.new(name=n) for n in bones if n != "root"}
     torso = ["hips", "spine1", "spine2", "chest", "clavicle.L", "clavicle.R"]
@@ -451,9 +472,20 @@ def skin(mesh_ob, rig):
         for k, j in enumerate(order):
             if w[k] > 0.02:
                 groups[deform[allowed[j]]].add([vi], float(w[k]), "REPLACE")
-        # cloak tail also swings a little with the cloak bone
-        if base == "cloak_tail" or base == "cloak_back":
-            groups["cloak"].add([vi], 0.6, "ADD")
+        # cloak: the lower the vertex, the more it follows the cloak chain (cloak -> cloak2) instead of the body
+        if base in ("cloak_tail", "cloak_back"):
+            z = co[vi, 2]
+            a = float(np.clip((1.62 - z) / 0.5, 0, 0.9))
+            t = float(np.clip((1.15 - z) / 0.55, 0, 1))
+            for gn in list(groups):
+                try:
+                    w0 = groups[gn].weight(vi)
+                except RuntimeError:
+                    continue
+                groups[gn].add([vi], w0 * (1 - a), "REPLACE")
+            groups["cloak"].add([vi], a * (1 - t), "REPLACE")
+            if a * t > 1e-3:
+                groups["cloak2"].add([vi], a * t, "REPLACE")
     mod = mesh_ob.modifiers.new("Armature", "ARMATURE")
     mod.object = rig
     mesh_ob.parent = rig
