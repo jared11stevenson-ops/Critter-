@@ -127,6 +127,8 @@ func _ready() -> void:
 		_build_tree()
 	if cast_blob_shadow:
 		_add_shadow()
+	if _tree:
+		Events.ability_used.connect(_on_ability_used)
 	if "qa_anim_log" in OS.get_cmdline_user_args():
 		_log = true
 		Events.actor_damaged.connect(func(_a, amt, src):
@@ -283,8 +285,11 @@ func _choose_clip(kind: String, advance: bool) -> String:
 		if advance and h == "attack_3":
 			_combo = 0
 		return h
-	if kind == "leap" and pstate == "leap" and has_anim("dash"):
-		return "dash"
+	if kind == "leap" and pstate == "leap":
+		if has_anim("leap"):
+			return "leap"
+		if has_anim("dash"):
+			return "dash"
 	return attack_map.get(kind, "attack_1")
 
 
@@ -319,6 +324,13 @@ func _infer_heavy(p: Node) -> String:
 
 ## Gameplay time (s after the visual starts) at which the hit lands, or -1 if not timed by gameplay.
 func _game_impact(clip: String) -> float:
+	if character_id == "cigarra":
+		match clip:
+			"attack_1":
+				return 0.05                    # Bad Thought's bolt leaves on the press: flick as fast as allowed
+			"leap":
+				return Balance.f("cigarra.grasshopper_thought.time", 1.15)   # touch-down = arc landing
+		return -1.0
 	if character_id != "aruun" and character_id != "":
 		return -1.0
 	match clip:
@@ -529,6 +541,25 @@ func _pick_hit() -> void:
 	play_anim(clip)
 
 
+func _state_clip() -> String:
+	var p := get_parent()
+	if p == null or _downed:
+		return ""
+	if p.get("state") == "burden" and has_anim("burden_hold"):
+		return "burden_hold"
+	var kit = p.get("kit")
+	if kit and kit.get("overwhelmed_t") != null and float(kit.get("overwhelmed_t")) > 0.0 and has_anim("overwhelmed"):
+		return "overwhelmed"
+	return ""
+
+
+## Kits announce abilities after play_attack(): when the generic clip it picked differs, switch to the ability's own.
+func _on_ability_used(char_id: String, ability_id: String) -> void:
+	if char_id != character_id or not has_anim(ability_id) or _act_name == ability_id or _downed:
+		return
+	play_anim(ability_id, -1.0, _game_impact(ability_id))
+
+
 func _process(delta: float) -> void:
 	# critically damped facing turn (no snapping, no overshoot)
 	var diff := wrapf(_yaw_target - rotation.y, -PI, PI)
@@ -548,15 +579,15 @@ func _process(delta: float) -> void:
 		_hit_pending -= 1
 		if _hit_pending == 0:
 			_pick_hit()
-	# scripted states from the parent (Burden moments)
-	var p := get_parent()
-	var st = p.get("state") if p else null
-	if st == "burden" and _ext_state != "burden" and has_anim("burden_hold"):
-		play_anim("burden_hold")
-	elif st != "burden" and _ext_state == "burden" and _act_name == "burden_hold":
-		_act_len = minf(_act_len, _act_t + FADE_OUT)
-		_act_loop = false
-	_ext_state = str(st)
+	# looping state clips driven by the parent (Burden moments, Cigarra's future-noise overload)
+	var want := _state_clip()
+	if want != _ext_state:
+		if _ext_state != "" and _act_name == _ext_state:
+			_act_len = minf(_act_len, _act_t + FADE_OUT)
+			_act_loop = false
+		if want != "":
+			play_anim(want)
+		_ext_state = want
 	# locomotion
 	_speed = lerpf(_speed, _measure_speed(), clampf(delta * 12.0, 0.0, 1.0))
 	_update_loco(_speed)
@@ -599,6 +630,6 @@ func _process(delta: float) -> void:
 	_set_p("mix/blend_amount", _act_w)
 	# legs keep running under upper-body actions while the body is actually travelling
 	var legs_w := _act_w * _move_w
-	if _act_name in ["downed", "revive", "burden_hold", "beetle_rage", "dash"]:
+	if _act_name in ["downed", "revive", "burden_hold", "beetle_rage", "dash", "leap"]:
 		legs_w = 0.0
 	_set_p("legs/blend_amount", legs_w)

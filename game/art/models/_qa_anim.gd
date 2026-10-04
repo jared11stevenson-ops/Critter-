@@ -22,6 +22,9 @@ const SEQS := {
 		[8.0, "anim", "talk_idle"], [11.0, "anim", "idle"]],
 	"react": [[0.5, "anim", "hit"], [1.3, "anim", "hit_back"], [2.1, "anim", "hit_left"], [2.9, "anim", "hit_right"],
 		[3.7, "anim", "hit_heavy"], [5.0, "downed", true], [7.0, "downed", false], [9.0, "anim", "burden_hold"]],
+	"cig_abilities": [[0.5, "attack", "cast"], [1.3, "anim", "premonition"], [2.8, "anim", "false_memory"],
+		[4.2, "anim", "brain_skip"], [5.4, "attack", "cast"], [6.0, "anim", "talk_idle"], [8.0, "anim", "idle"]],
+	"cig_move": [[0.3, "anim", "dash"], [1.2, "leap", ""], [3.4, "anim", "overwhelmed"], [5.4, "anim", "idle"]],
 	"walkcombo": [[0.0, "move", 0.3], [1.0, "attack", "light"], [1.28, "attack", "light"], [1.56, "attack", "heavy"],
 		[3.5, "move", 0.0]],
 }
@@ -38,7 +41,10 @@ func _ready() -> void:
 			_feet = true
 		elif a.begins_with("qa_char="):
 			char_id = a.substr(8)
-	var ps: PackedScene = load("res://game/art/models/%s/%s_model.tscn" % [char_id, char_id])
+	var path := "res://game/art/models/%s/%s_model.tscn" % [char_id, char_id]
+	if not ResourceLoader.exists(path):
+		path = "res://game/art/models/_standin/%s_standin.tscn" % char_id     # pre-model stand-in rig
+	var ps: PackedScene = load(path)
 	model = ps.instantiate()
 	add_child(model)
 	model.set_facing(Vector3(0, 0, 1))
@@ -58,6 +64,8 @@ func _process(delta: float) -> void:
 				model.play_anim(e[2])
 			"downed":
 				model.set_downed(e[2])
+			"leap":
+				model.play_anim("leap", -1.0, 1.15)
 			"heavy_reach":
 				model.play_anim("reaching_strike", -1.0, 0.26)
 	_move = move_toward(_move, _move_target, delta * 1.5)

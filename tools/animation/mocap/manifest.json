@@ -7,6 +7,14 @@
    1.633
   ]
  },
+ "111_06": {
+  "offset": 5.7,
+  "source": "https://raw.githubusercontent.com/una-dinosauria/cmu-mocap/master/data/111/111_06.bvh",
+  "window": [
+   5.7,
+   11.1
+  ]
+ },
  "124_07": {
   "offset": 1.8,
   "source": "https://raw.githubusercontent.com/una-dinosauria/cmu-mocap/master/data/124/124_07.bvh",
@@ -28,7 +36,15 @@
   "source": "https://raw.githubusercontent.com/una-dinosauria/cmu-mocap/master/data/137/137_41.bvh",
   "window": [
    3.8,
-   7.733
+   10.733
+  ]
+ },
+ "138_11": {
+  "offset": 0.0,
+  "source": "https://raw.githubusercontent.com/una-dinosauria/cmu-mocap/master/data/138/138_11.bvh",
+  "window": [
+   0.0,
+   4.167
   ]
  },
  "139_16": {
@@ -45,6 +61,38 @@
   "window": [
    1.533,
    5.533
+  ]
+ },
+ "13_11": {
+  "offset": 1.05,
+  "source": "https://raw.githubusercontent.com/una-dinosauria/cmu-mocap/master/data/013/13_11.bvh",
+  "window": [
+   1.05,
+   3.458
+  ]
+ },
+ "16_01": {
+  "offset": 0.0,
+  "source": "https://raw.githubusercontent.com/una-dinosauria/cmu-mocap/master/data/016/16_01.bvh",
+  "window": [
+   0.0,
+   2.434
+  ]
+ },
+ "16_17": {
+  "offset": 0.0333,
+  "source": "https://raw.githubusercontent.com/una-dinosauria/cmu-mocap/master/data/016/16_17.bvh",
+  "window": [
+   0.033,
+   2.167
+  ]
+ },
+ "16_35": {
+  "offset": 0.0,
+  "source": "https://raw.githubusercontent.com/una-dinosauria/cmu-mocap/master/data/016/16_35.bvh",
+  "window": [
+   0.0,
+   1.7
   ]
  },
  "35_01": {
