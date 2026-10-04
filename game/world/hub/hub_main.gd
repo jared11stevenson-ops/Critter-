@@ -202,7 +202,6 @@ func _process(delta: float) -> void:
 	cam.global_position = _focus + Vector3(0, -sin(p) * _dist, cos(p) * _dist)
 	cam.rotation = Vector3(p, 0, 0)
 	var modal := runner.active or habitat != null or _end_card != null or get_tree().paused
-	Quality.set_modal(modal)
 	if modal:
 		# Nothing to place while a dialogue/menu is up: hide the labels once and do no per-frame layout work.
 		if not _labels_hidden:
@@ -272,8 +271,6 @@ func _place_labels() -> void:
 	_toast_box.reset_size()
 	_toast_box.position = Vector2(vs.x * 0.5 - 260, vs.y - 56.0 - _toast_box.size.y)
 
-func _exit_tree() -> void:
-	Quality.set_modal(false)
 
 func _unhandled_input(ev: InputEvent) -> void:
 	if runner.active or habitat != null or _end_card != null or _returning:

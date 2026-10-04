@@ -47,6 +47,7 @@ var _polys: Dictionary = {}     # id -> PackedVector2Array (local to the map con
 var _centers: Dictionary = {}
 
 func _ready() -> void:
+	Quality.set_covered(true)
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	theme = UiKit.theme()
@@ -340,3 +341,6 @@ func _draw_route(c: Vector2, rad: float, small: Font) -> void:
 			have_prev = true
 		else:
 			break
+
+func _exit_tree() -> void:
+	Quality.set_covered(false)

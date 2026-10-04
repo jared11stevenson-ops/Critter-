@@ -88,6 +88,30 @@ func _ready() -> void:
 		mi.visible = false
 		add_child(mi)
 		_fx_pool.append(mi)
+	_prewarm_vfx.call_deferred()
+
+const WARM_VFX := ["hit_spark", "heavy_impact", "dust_puff", "mace_arc", "reach_line", "gravity_well", "psychic_bolt", "psychic_burst",
+	"false_memory_echo", "brain_skip_glitch", "capture_beam", "scan_ping", "pickup_glint", "drill_sparks", "coolant_vent", "leap_trail",
+	"heal_motes", "rage_aura"]
+
+## Compatibility compiles a material's shader the first time it is drawn, and loads scene files synchronously: both showed up as
+## a hitch on the first hit/ability. Instantiate each effect once, right in front of the camera, while the transition fade still
+## covers the screen (Router waits two frames before fading in), then free them.
+func _prewarm_vfx() -> void:
+	var cam := get_viewport().get_camera_3d() if is_inside_tree() else null
+	if cam == null:
+		return
+	var at := cam.global_position - cam.global_transform.basis.z * 5.0
+	var made: Array = []
+	for n in WARM_VFX:
+		var node := vfx(n, at, {}, self)
+		if node:
+			made.append(node)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	for m in made:
+		if is_instance_valid(m):
+			m.queue_free()
 
 func _process(delta: float) -> void:
 	_update_time_scale()

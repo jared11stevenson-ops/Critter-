@@ -12,6 +12,7 @@ var _tabs: HBoxContainer
 var _portrait_holder: Control
 
 func _ready() -> void:
+	Quality.set_covered(true)
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	theme = UiKit.theme()
@@ -173,3 +174,6 @@ func _unhandled_input(ev: InputEvent) -> void:
 	if ev.is_action_pressed("ui_cancel") or ev.is_action_pressed("pause"):
 		_close()
 		get_viewport().set_input_as_handled()
+
+func _exit_tree() -> void:
+	Quality.set_covered(false)

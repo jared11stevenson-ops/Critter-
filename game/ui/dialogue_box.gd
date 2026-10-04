@@ -23,6 +23,7 @@ var _line: Dictionary = {}
 var _comms_tag: Label
 var _input_cool := 0.0
 var _last_n := 0
+var _pcache: Dictionary = {}   # holder id -> {portrait key -> Control}
 
 func bind(r: DialogueRunner) -> void:
 	runner = r
@@ -37,9 +38,8 @@ func _ready() -> void:
 	theme = UiKit.theme()
 	visible = false
 	# dim backdrop that also catches taps
-	var catcher := ColorRect.new()
+	var catcher := Control.new()   # input catcher only: no full-screen blended quad to fill every frame
 	catcher.name = "Catcher"
-	catcher.color = Color(0, 0, 0, 0.18)
 	catcher.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	catcher.mouse_filter = Control.MOUSE_FILTER_STOP
 	catcher.gui_input.connect(_on_catcher_input)
@@ -152,14 +152,22 @@ func _on_line(line: Dictionary) -> void:
 		holder.visible = true
 		var key := "%s|%s|%s" % [who, str(line["expr"]), style]
 		if holder.get_meta("pkey", "") != key:
-			for c in holder.get_children():
-				holder.remove_child(c)
-				c.queue_free()
-			var p := UiKit.portrait_control(who, line["expr"], 170)
-			p.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-			if style == "comms":
-				p.modulate = Color(0.75, 1.0, 1.0)
-			holder.add_child(p)
+			# Portrait controls are cached and toggled (no node churn or texture rebuild when speakers alternate).
+			var cur: Variant = holder.get_meta("pcur", null)
+			if cur is Control and is_instance_valid(cur):
+				(cur as Control).visible = false
+			var cache: Dictionary = _pcache.get(holder.get_instance_id(), {})
+			var p: Control = cache.get(key, null)
+			if p == null:
+				p = UiKit.portrait_control(who, line["expr"], 170)
+				p.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+				if style == "comms":
+					p.modulate = Color(0.75, 1.0, 1.0)
+				holder.add_child(p)
+				cache[key] = p
+				_pcache[holder.get_instance_id()] = cache
+			p.visible = true
+			holder.set_meta("pcur", p)
 			holder.set_meta("pkey", key)
 		# small pop (cheap: one tween on the holder)
 		holder.pivot_offset = Vector2(85, 85)
