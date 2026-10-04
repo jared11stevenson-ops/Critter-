@@ -37,6 +37,9 @@ var _run_ended := false
 var _barrier_boulder: StaticBody3D = null
 var _events_seen: Dictionary = {}
 var _fade: ColorRect
+var region: RegionRunner = null      # generic region recipe runner (side areas, sites, descent events)
+var _spoke_signs: Array = []
+var _spoke_tick := 0.0
 
 # burden
 var burden_active := false
@@ -77,6 +80,8 @@ func _ready() -> void:
 	add_child(runner)
 	runner.event_emitted.connect(_on_dialogue_event)
 	runner.finished.connect(_on_dialogue_finished)
+	region = RegionRunner.new()
+	region.setup("red_reaches", self)
 	rivals = RivalEncounters.new()
 	rivals.name = "Rivals"
 	add_child(rivals)
@@ -90,6 +95,7 @@ func _ready() -> void:
 	_build_interactables()
 	replay = bool(GameState.get_flag("rr_complete", false))
 	_spawn_content()
+	_spawn_spokes()
 	if replay:
 		rivals.spawn_all()
 	_apply_world_state()
@@ -339,6 +345,8 @@ func _build_interactables() -> void:
 		{"id": "choice", "pos": marker("choice_point"), "r": 3.6, "label": "Decide", "cond": func(): return bool(GameState.get_flag("boss_defeated", false)) and str(GameState.get_flag("ochre_span", "")) == "", "act": _do_choice},
 		{"id": "exfil", "pos": marker("exfil_beacon"), "r": 3.6, "label": "Exfil", "cond": func(): return str(GameState.get_flag("ochre_span", "")) != "", "act": _do_exfil},
 	]
+	if region:
+		_interactables.append_array(region.interactables())
 	for it in _interactables:
 		var l := Label3D.new()
 		l.text = "◆"
@@ -352,6 +360,49 @@ func _build_interactables() -> void:
 		add_child(l)
 		l.global_position = ground(it["pos"], 2.6)
 		_markers3d[it["id"]] = l
+
+## Optional side areas: a faint signpost at each unvisited spoke entrance, plus the spoke's guardians/wildlife.
+func _spawn_spokes() -> void:
+	if region == null:
+		return
+	for sid in region.recipe.get("spokes", []).map(func(x): return x["id"]):
+		var sp: Dictionary = region.spoke(sid)
+		var tp: Array = sp["trigger"]["pos"]
+		if not bool(GameState.flags.get("_spoke_" + sid, false)):
+			var l := Label3D.new()
+			l.text = "< %s >" % str(sp.get("name", sid))
+			l.font_size = 48
+			l.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+			l.fixed_size = true
+			l.pixel_size = 0.0009
+			l.no_depth_test = true
+			l.outline_size = 8
+			l.modulate = Color(UiKit.PARCHMENT, 0.8)
+			l.visible = false
+			add_child(l)
+			# The sign stands at the junction on the critical path, not at the spoke itself.
+			l.global_position = ground(Vector3(float(tp[0]), float(tp[1]), float(tp[2])), 3.2)
+			_spoke_signs.append({"node": l, "id": sid})
+		var swarm: Array = []
+		for sw in sp.get("spawn", []):
+			var at: Array = sw.get("at", tp)
+			for k in int(sw.get("n", 1)):
+				var a := TAU * float(k) / float(maxi(1, int(sw.get("n", 1))))
+				var e := spawn_enemy(str(sw["species"]), Vector3(float(at[0]) + cos(a) * 2.5, float(at[1]), float(at[2]) + sin(a) * 2.5))
+				if e is SkitterMite:
+					(e as SkitterMite).swarm = swarm
+					swarm.append(e)
+
+func _spoke_sign_tick() -> void:
+	var l := party.get_leader()
+	for ss in _spoke_signs:
+		var n: Label3D = ss["node"]
+		var gone: bool = bool(GameState.flags.get("_spoke_" + str(ss["id"]), false))
+		n.visible = not gone and n.global_position.distance_squared_to(l.global_position) < 2500.0
+		if gone:
+			_spoke_signs.erase(ss)
+			n.queue_free()
+			return
 
 func _interact_tick(delta: float) -> void:
 	var l := party.get_leader()
@@ -425,6 +476,8 @@ func get_scannables() -> Array:
 	return out
 
 func on_scan(first_species: Array) -> void:
+	if region and party and party.get_leader():
+		region.reveal_near(party.get_leader().global_position, 18.0)
 	if not bool(GameState.get_flag("first_scan_done", false)):
 		GameState.set_flag("first_scan_done", true)
 		_say("rr_first_scan")
@@ -509,6 +562,10 @@ func _physics_process(_delta: float) -> void:
 
 func _fire_trigger(id: String, ev: String) -> void:
 	Events.trigger_entered.emit(ev)
+	if ev.begins_with("spoke:"):
+		if region:
+			region.enter_spoke(ev.substr(6))
+		return
 	_checkpoint(id)
 	if rivals:
 		rivals.on_trigger(ev)
@@ -577,6 +634,8 @@ func _say(id: String, force: bool = false) -> bool:
 	return ok
 
 func _on_dialogue_event(ev: String) -> void:
+	if region and region.handle_dialogue_event(ev):
+		return
 	_events_seen[ev] = true
 	match ev:
 		"drop_rope": _drop_rope()
@@ -922,6 +981,10 @@ func _process(delta: float) -> void:
 	if party == null or party.members.is_empty():
 		return
 	_interact_tick(delta)
+	_spoke_tick -= delta
+	if _spoke_tick <= 0.0:
+		_spoke_tick = 0.4
+		_spoke_sign_tick()
 	if burden_active:
 		_burden_tick(delta)
 	_obj_t -= delta
@@ -969,10 +1032,14 @@ func _compute_objective() -> String:
 
 # ================= QA helpers =================
 func qa_teleport(marker_name: String) -> void:
-	var p := marker(marker_name)
+	var p := Vector3.ZERO if marker_name.begins_with("site:") else marker(marker_name)
 	var t := _trigger(marker_name)
 	if not t.is_empty():
 		p = _tpos(t)
+	if marker_name.begins_with("site:") and region:
+		for st in region.recipe.get("sites", []):
+			if st["id"] == marker_name.substr(5):
+				p = Vector3(st["pos"][0], st["pos"][1], st["pos"][2]) + Vector3(1.0, 0, 0)
 	var l := party.get_leader()
 	l.teleport(ground(p, 0.4))
 	party.get_partner().teleport(ground(p + Vector3(-2, 0, 1.2), 0.4))
@@ -1078,6 +1145,10 @@ func qa_debug() -> void:
 	print("[QA] terrain h at leader ", height_at(l.global_position.x, l.global_position.z), " boss ", (boss.global_position if boss and is_instance_valid(boss) else Vector3.ZERO), " boss h ", (height_at(boss.global_position.x, boss.global_position.z) if boss and is_instance_valid(boss) else 0.0))
 
 func qa_log_flags() -> void:
+	if region:
+		print("[QA] REGION spokes=%d/%d sites=%d/%d" % [region.visited_spokes(), region.total_spokes(), region.sites_done(), region.total_sites()])
+		for e in Ledger.events_where({"type": "descent_event"}):
+			print("[QA] REGION event ", e["target"], " -> ", e["data"])
 	var keys := ["briefed", "arrived_rr", "valley_clear", "first_scan_done", "rope_dropped", "combo_unlocked", "grazers_harmed",
 		"boulder_broken", "beetle_scanned", "pylons_down", "beetles_calmed", "drill_clear", "burden_done", "boss_defeated",
 		"ochre_span", "ochre_span_braced", "ochre_span_failing", "rr_complete", "debriefed", "habitat_built", "slice_complete"]

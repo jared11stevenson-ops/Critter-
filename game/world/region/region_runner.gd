@@ -107,9 +107,11 @@ func build_dialogue(e: Dictionary) -> Dictionary:
 		opts.append({"text": str(c["label"]), "event": "%s%s:%s" % [PICK, e["id"], c["id"]], "goto": "res_" + str(c["id"])})
 	lines.append({"choice": opts})
 	for c in e.get("choices", []):
-		lines.append({"label": "res_" + str(c["id"]), "who": "narration", "text": str(c.get("result", "..."))})
+		lines.append({"label": "res_" + str(c["id"])})
+		lines.append({"who": "narration", "text": str(c.get("result", "..."))})
 		lines.append({"goto": "end"})
-	lines.append({"label": "end", "end": true})
+	lines.append({"label": "end"})
+	lines.append({"end": true})
 	return {"lines": lines}
 
 func play_event(event_id: String) -> bool:

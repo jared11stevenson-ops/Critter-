@@ -179,7 +179,18 @@
     "r": 8
    },
    "codex": "place_echo_hollow",
-   "fresh": "A side-cut leads off the valley. Optional."
+   "fresh": "A side-cut leads off the valley. Optional.",
+   "spawn": [
+    {
+     "species": "skitter_mite",
+     "n": 3,
+     "at": [
+      60,
+      -4,
+      -31
+     ]
+    }
+   ]
   },
   {
    "id": "drovers_rest",
@@ -195,7 +206,18 @@
     "r": 8
    },
    "codex": "place_drovers_rest",
-   "fresh": "Cart ruts lead north from the Waystation. Optional."
+   "fresh": "Cart ruts lead north from the Waystation. Optional.",
+   "spawn": [
+    {
+     "species": "dust_grazer",
+     "n": 2,
+     "at": [
+      136,
+      -3.5,
+      -40
+     ]
+    }
+   ]
   },
   {
    "id": "salt_pans",
@@ -227,7 +249,18 @@
     "r": 7
    },
    "codex": "place_thought_vault",
-   "fresh": "A sealed door waits north of the pass. Optional."
+   "fresh": "A sealed door waits north of the pass. Optional.",
+   "spawn": [
+    {
+     "species": "skitter_mite",
+     "n": 4,
+     "at": [
+      158,
+      -4,
+      -27
+     ]
+    }
+   ]
   },
   {
    "id": "cistern",
