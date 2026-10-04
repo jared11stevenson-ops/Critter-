@@ -16,3 +16,10 @@
 7. Backups to user: `tools/package.sh /home/user/critter_builds` → send zip.
 8. GitHub: remote `origin` = jared11stevenson-ops/critter- (push needs the Claude GitHub App installed with write access).
 Pending from user: Youngyumeprophecy music files (6 slots: title, hub, explore_reaches, combat, boss, ending).
+
+## Creator feedback on v0.8.0 (Oct 4)
+- Low graphics preset fixed the lag (keep Auto→Medium default, Low as fallback).
+- 3D Aruun is "a good start": keep making him match his reference art and the hi-res reference pack
+  (design/model_sheets/aruun/): hunched posture, hook horns, beetle-mask head, chitin plates, ragged cloak, not pale.
+- Everything else fine for now. **Tomorrow: complete overhaul of all graphics** (world, characters, creatures, VFX).
+- Status: no agents running; all work committed on master (v0.8.0) + agent branches; autosave script running.
