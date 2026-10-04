@@ -249,6 +249,8 @@ func _set_p(path: String, v: Variant) -> void:
 
 # ------------------------------------------------------------------ CharacterBillboard API
 func set_facing(dir: Vector3) -> void:
+	if not dir.is_finite():
+		return
 	dir.y = 0.0
 	if dir.length_squared() < 1e-6:
 		return
