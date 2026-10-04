@@ -128,6 +128,8 @@ func _build_environment() -> void:
 	sun.shadow_enabled = true
 	sun.directional_shadow_max_distance = 60.0
 	add_child(sun)
+	if ToonKit.quality():
+		ToonKit.quality().call("setup_sun", sun, 60.0)
 
 func _color_for(x: float, z: float, h: float) -> Color:
 	if h < -12.0:

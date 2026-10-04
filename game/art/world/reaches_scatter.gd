@@ -33,6 +33,12 @@ var _bb: Array = []        # [Transform3D, Color, rect Color]
 var _props: Dictionary = {}  # kind -> Array[Transform3D]
 var _clear: Array = []     # [Vector2 center, radius]
 var _t: Node
+## Spatial chunking (Agent 2 perf pass): every kind is split into CHUNK_X-metre slices along the level so frustum
+## culling skips off-screen instances (was one level-wide MultiMesh per kind = every instance drawn + shadowed
+## every frame). Instances are shuffled per chunk so `visible_instance_count` thins them evenly for the graphics
+## quality scatter density (Quality.scatter_density()).
+const CHUNK_X := 48.0
+var _mms: Array = []       # [MultiMesh, full count, is_cover]
 
 
 func populate(t: Node) -> void:
@@ -58,6 +64,52 @@ func populate(t: Node) -> void:
 	_ground_cover(t, floors)
 	_commit_billboards()
 	_commit_props()
+	var q := ToonKit.quality()
+	if q:
+		q.connect("changed", _apply_density)
+	_apply_density()
+
+
+## Scatter density for the graphics quality level. Big silhouettes (trees, spires, pillars) are kept; small cover
+## (pebbles, grass, small rocks, shrubs) thins out.
+func _apply_density(_lv: int = -1) -> void:
+	var q := ToonKit.quality()
+	var d: float = q.call("scatter_density") if q else 1.0
+	for e in _mms:
+		var mm: MultiMesh = e[0]
+		var n: int = e[1]
+		var k: float = d if e[2] else clampf(d * 1.6, 0.0, 1.0)
+		mm.visible_instance_count = -1 if k >= 0.999 else int(ceil(n * k))
+
+
+## Splits [Transform3D or Array] entries into X slices -> {chunk index: Array}, shuffled deterministically.
+func _bucket(list: Array) -> Dictionary:
+	var out := {}
+	for e in list:
+		var xf: Transform3D = e if e is Transform3D else e[0]
+		var ci := int(floor(xf.origin.x / CHUNK_X))
+		if not out.has(ci):
+			out[ci] = []
+		out[ci].append(e)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 4242
+	for ci in out:
+		var a: Array = out[ci]
+		for i in range(a.size() - 1, 0, -1):
+			var j := rng.randi_range(0, i)
+			var tmp: Variant = a[i]
+			a[i] = a[j]
+			a[j] = tmp
+	return out
+
+
+static func _aabb_of(list: Array, pad: float) -> AABB:
+	var first: Transform3D = list[0] if list[0] is Transform3D else list[0][0]
+	var box := AABB(first.origin, Vector3.ZERO)
+	for e in list:
+		var xf: Transform3D = e if e is Transform3D else e[0]
+		box = box.expand(xf.origin)
+	return box.grow(pad)
 
 
 func _build_clear_zones(layout: Dictionary) -> void:
@@ -268,52 +320,64 @@ func _commit_billboards() -> void:
 	var q := QuadMesh.new()
 	q.size = Vector2(1, 1)
 	q.center_offset = Vector3(0, 0.5, 0)
-	var mm := MultiMesh.new()
-	mm.transform_format = MultiMesh.TRANSFORM_3D
-	mm.use_colors = true
-	mm.use_custom_data = true
-	mm.mesh = q
-	mm.instance_count = _bb.size()
-	for i in _bb.size():
-		var e: Array = _bb[i]
-		mm.set_instance_transform(i, e[0])
-		mm.set_instance_color(i, e[1])
-		mm.set_instance_custom_data(i, e[2])
 	var mat := ShaderMaterial.new()
 	mat.shader = ToonKit.occluding_shader(SCATTER_SHADER_PATH)
 	mat.set_shader_parameter("atlas", ATLAS_TEX)
-	var mmi := MultiMeshInstance3D.new()
-	mmi.name = "PaintedProps"
-	mmi.multimesh = mm
-	mmi.material_override = mat
-	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	mmi.custom_aabb = AABB(Vector3(-400, -80, -300), Vector3(1200, 200, 600))
-	add_child(mmi)
+	var buckets := _bucket(_bb)
+	for ci in buckets:
+		var list: Array = buckets[ci]
+		var mm := MultiMesh.new()
+		mm.transform_format = MultiMesh.TRANSFORM_3D
+		mm.use_colors = true
+		mm.use_custom_data = true
+		mm.mesh = q
+		mm.instance_count = list.size()
+		for i in list.size():
+			var e: Array = list[i]
+			mm.set_instance_transform(i, e[0])
+			mm.set_instance_color(i, e[1])
+			mm.set_instance_custom_data(i, e[2])
+		var mmi := MultiMeshInstance3D.new()
+		mmi.name = "PaintedProps_%d" % ci
+		mmi.multimesh = mm
+		mmi.material_override = mat
+		mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		# billboards rotate in the vertex shader: pad by the tallest card
+		mmi.custom_aabb = _aabb_of(list, 8.0)
+		add_child(mmi)
+		_mms.append([mm, list.size(), false])
 
 
 func _commit_props() -> void:
+	var grass_mat := _grass_material()
 	for kind in _props:
 		var mesh := _prop_mesh(kind)
-		var list: Array = _props[kind]
-		var mm := MultiMesh.new()
-		mm.transform_format = MultiMesh.TRANSFORM_3D
-		mm.mesh = mesh
-		mm.instance_count = list.size()
-		for i in list.size():
-			mm.set_instance_transform(i, list[i])
-		var mmi := MultiMeshInstance3D.new()
-		mmi.name = "Props_" + kind
-		mmi.multimesh = mm
+		var mat: Material
 		if kind == "grass_tuft":
-			mmi.material_override = _grass_material()
+			mat = grass_mat
 		elif kind in ["crate", "survey_flag"]:
-			mmi.material_override = ToonKit.material({"roughness": 0.7, "detail": 0.35})
+			mat = ToonKit.material({"roughness": 0.7, "detail": 0.35})
 		else:
-			mmi.material_override = ToonKit.material({"strata": 0.35, "roughness": 0.9})
-		mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		if kind in ["spire", "rock_a", "rock_b", "pillar_broken"]:
-			mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-		add_child(mmi)
+			mat = ToonKit.material({"strata": 0.35, "roughness": 0.9})
+		var cover: bool = kind in ["grass_tuft", "pebbles", "rock_c", "lichen_rock", "rock_a"]
+		var buckets := _bucket(_props[kind])
+		for ci in buckets:
+			var list: Array = buckets[ci]
+			var mm := MultiMesh.new()
+			mm.transform_format = MultiMesh.TRANSFORM_3D
+			mm.mesh = mesh
+			mm.instance_count = list.size()
+			for i in list.size():
+				mm.set_instance_transform(i, list[i])
+			var mmi := MultiMeshInstance3D.new()
+			mmi.name = "Props_%s_%d" % [kind, ci]
+			mmi.multimesh = mm
+			mmi.material_override = mat
+			mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			if kind in ["spire", "rock_a", "rock_b", "pillar_broken"]:
+				mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+			add_child(mmi)
+			_mms.append([mm, list.size(), cover])
 
 
 static func _grass_material() -> StandardMaterial3D:

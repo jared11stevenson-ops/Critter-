@@ -628,6 +628,9 @@ class DominionCamp extends Node3D:
 			ol.omni_attenuation = 1.4
 			ol.shadow_enabled = false
 			add_child(ol)
+			var q := ToonKit.quality()
+			if q:
+				q.call("track_light", ol, 1)
 		# beacons
 		var gs := ToonKit.begin()
 		ToonKit.rock(gs, dp + Vector3(0, Ht + 0.8, 0), Vector3(0.3, 0.3, 0.3), DOM_RED, 1, 1)

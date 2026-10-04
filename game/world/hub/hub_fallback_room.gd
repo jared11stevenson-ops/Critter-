@@ -123,6 +123,8 @@ func _env() -> void:
 	sun.light_color = Color("#ffe8cc")
 	sun.shadow_enabled = true
 	add_child(sun)
+	if ToonKit.quality():
+		ToonKit.quality().call("setup_sun", sun, 40.0)
 
 func _ground() -> void:
 	var g := MeshInstance3D.new()

@@ -1,7 +1,16 @@
 shader_type spatial;
 // CRITTER prop / creature shader (Agent 1, v0.7 painterly realism): vertex-colour albedo with tri-planar painted
 // detail (prop_detail) + tri-planar rock normal, Burley/GGX lighting, soft rim so forms read against the sky.
+// Quality variants (Agent 2 perf pass; defines injected by the Quality autoload):
+//   HIGH: tri-planar detail + grain + detail normal (9-10 samples). MEDIUM: tri-planar detail albedo only (3).
+//   LOW: detail albedo on the dominant plane (1 sample), no normal map, Lambert, no specular.
+#if defined(QUALITY_LOW)
+render_mode diffuse_lambert, specular_disabled;
+#elif defined(QUALITY_MEDIUM)
+render_mode diffuse_lambert, specular_schlick_ggx;
+#else
 render_mode diffuse_burley, specular_schlick_ggx;
+#endif
 
 uniform vec4 albedo : source_color = vec4(1.0);
 uniform sampler2D noise_tex : filter_linear_mipmap, repeat_enable;
@@ -62,6 +71,22 @@ void fragment() {
 		discard;
 	}
 	vec3 base = albedo.rgb * mix(vec3(1.0), COLOR.rgb, use_vertex_color);
+#if defined(QUALITY_LOW) || defined(QUALITY_MEDIUM)
+	vec3 an = abs(w_nrm);
+#ifdef QUALITY_LOW
+	vec2 duv = an.y > max(an.x, an.z) ? w_pos.xz : (an.z > an.x ? w_pos.xy : w_pos.zy);
+	vec4 dt = texture(detail_tex, duv * detail_scale);
+#else
+	vec3 bw = pow(an, vec3(4.0));
+	bw /= (bw.x + bw.y + bw.z);
+	vec4 dt = texture(detail_tex, w_pos.xz * detail_scale) * bw.y + texture(detail_tex, w_pos.xy * detail_scale) * bw.z
+		+ texture(detail_tex, w_pos.zy * detail_scale) * bw.x;
+#endif
+	base *= mix(1.0, 0.55 + dt.r * 0.9, detail_strength);
+	base *= mix(1.0, 0.7 + dt.a * 0.5, detail_strength * 0.6);
+	base = mix(base, vec3(0.80, 0.60, 0.46), smoothstep(0.6, 0.95, w_nrm.y) * 0.18 * detail_strength);
+	ROUGHNESS = clamp(roughness + (dt.g - 0.5) * 0.2, 0.05, 1.0);
+#else
 	vec3 an = abs(w_nrm);
 	vec3 bw = pow(an, vec3(4.0));
 	bw /= (bw.x + bw.y + bw.z);
@@ -82,9 +107,14 @@ void fragment() {
 		+ vec3(0.0, nx_.y, nx_.x) * bw.x) * normal_depth);
 	NORMAL = normalize(mix(NORMAL, (VIEW_MATRIX * vec4(wn, 0.0)).xyz, 1.0));
 	ROUGHNESS = clamp(roughness + (dt.g - 0.5) * 0.2, 0.05, 1.0);
+#endif
 	METALLIC = metallic;
 	if (strata > 0.0) {
+#ifdef QUALITY_LOW
+		float s = fract(w_pos.y * 0.9 + sin(w_pos.x * 0.31 + w_pos.z * 0.23) * 0.4);
+#else
 		float s = fract(w_pos.y * 0.9 + texture(noise_tex, w_pos.xz * 0.05).r * 1.5);
+#endif
 		base *= 1.0 - strata * 0.22 * step(0.5, s);
 		base = mix(base, vec3(0.16, 0.07, 0.07), strata * (1.0 - smoothstep(0.0, 0.06, s)) * 0.6);
 	}

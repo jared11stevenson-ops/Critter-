@@ -83,15 +83,25 @@ func _sc() -> float:
 	return float(params.get("scale", 1.0))
 
 
+static var _quad: QuadMesh
+
+
+## Particle count for the graphics quality preset (Low halves, Medium 75 %).
+static func _scaled_amount(n: int) -> int:
+	var q := ToonKit.quality()
+	return q.call("particles", n) if q else n
+
+
 ## opts: amount, life, tex, add, c0, c1, size (Vector2 min/max), vel (Vector2), dir, spread, gravity (Vector3),
 ## expl, box/sphere (emission), damping, radial, tangential, one_shot, local, delay
 func _emit(o: Dictionary) -> CPUParticles3D:
 	var p := CPUParticles3D.new()
-	var q := QuadMesh.new()
-	q.size = Vector2(1, 1)
-	p.mesh = q
+	if _quad == null:
+		_quad = QuadMesh.new()
+		_quad.size = Vector2(1, 1)
+	p.mesh = _quad
 	p.material_override = mat(o.get("tex", TEX_DOT), bool(o.get("add", true)))
-	p.amount = int(o.get("amount", 12))
+	p.amount = _scaled_amount(int(o.get("amount", 12)))
 	p.lifetime = float(o.get("life", 0.6))
 	p.one_shot = bool(o.get("one_shot", true))
 	p.explosiveness = float(o.get("expl", 0.9))
@@ -452,7 +462,7 @@ func _p_thoughtstone_shards() -> void:
 	var p := CPUParticles3D.new()
 	p.mesh = ToonKit.finish(st)
 	p.material_override = _glow_mat(Color(0.55, 0.88, 1.0), 1.5)
-	p.amount = 14
+	p.amount = _scaled_amount(14)
 	p.lifetime = 1.2
 	p.one_shot = true
 	p.explosiveness = 1.0

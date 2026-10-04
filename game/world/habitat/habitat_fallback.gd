@@ -18,6 +18,8 @@ func _ready() -> void:
 	sun.light_energy = 0.85
 	sun.shadow_enabled = true
 	add_child(sun)
+	if ToonKit.quality():
+		ToonKit.quality().call("setup_sun", sun, 30.0)
 	var lamp := OmniLight3D.new()
 	lamp.position = Vector3(0, 4, 0)
 	lamp.light_color = Color(0.8, 1.0, 0.85)

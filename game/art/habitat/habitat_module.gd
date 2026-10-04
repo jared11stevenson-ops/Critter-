@@ -167,7 +167,7 @@ func _mist() -> CPUParticles3D:
 	q.size = Vector2(1, 1)
 	p.mesh = q
 	p.material_override = CritterVFX.mat(load("res://game/art/vfx/tex/puff.png"), false)
-	p.amount = 24
+	p.amount = CritterVFX._scaled_amount(24)
 	p.lifetime = 1.8
 	p.emission_shape = CPUParticles3D.EMISSION_SHAPE_BOX
 	p.emission_box_extents = Vector3(1.0, 0.05, 0.1)

@@ -270,19 +270,32 @@ func _process(delta: float) -> void:
 	sx *= lerpf(1.0, 1.08, _downed_amt)
 	shear += 0.1 * _downed_amt
 	_highlight_amt = move_toward(_highlight_amt, 1.0 if _highlight_on else 0.0, delta * 6.0)
+	# Perf (Agent 2): only push uniforms that changed — every set_shader_parameter re-uploads the material.
 	var mat: ShaderMaterial = _mesh.material_override
-	mat.set_shader_parameter("anim_scale", Vector2(sx, sy))
-	mat.set_shader_parameter("anim_offset", Vector2(ox, oy))
-	mat.set_shader_parameter("anim_shear", shear)
-	mat.set_shader_parameter("flash", _flash)
-	mat.set_shader_parameter("flash_color", Color(1, 1, 1) if _flash > 0.6 else Color(1.0, 0.35, 0.3))
-	mat.set_shader_parameter("desaturate", _downed_amt * 0.8)
-	mat.set_shader_parameter("darken", _downed_amt * 0.25)
-	mat.set_shader_parameter("highlight", _highlight_amt * (0.75 + 0.25 * sin(_t * 8.0)))
-	mat.set_shader_parameter("highlight_color", _highlight_col)
+	_set_u(mat, "anim_scale", Vector2(sx, sy))
+	_set_u(mat, "anim_offset", Vector2(ox, oy))
+	_set_u(mat, "anim_shear", shear)
+	_set_u(mat, "flash", _flash)
+	_set_u(mat, "flash_color", Color(1, 1, 1) if _flash > 0.6 else Color(1.0, 0.35, 0.3))
+	_set_u(mat, "desaturate", _downed_amt * 0.8)
+	_set_u(mat, "darken", _downed_amt * 0.25)
+	_set_u(mat, "highlight", _highlight_amt * (0.75 + 0.25 * sin(_t * 8.0)) if _highlight_amt > 0.0 else 0.0)
+	_set_u(mat, "highlight_color", _highlight_col)
 	_shadow.scale.y = 1.0
 	var sh_mat: ShaderMaterial = _shadow.material_override
-	sh_mat.set_shader_parameter("strength", 0.5 * (1.0 - clampf(oy / maxf(h, 0.1), 0.0, 0.6)))
+	_set_u(sh_mat, "strength", 0.5 * (1.0 - clampf(oy / maxf(h, 0.1), 0.0, 0.6)))
+
+
+var _u_cache: Dictionary = {}   # material -> {param: value}
+
+func _set_u(m: ShaderMaterial, param: StringName, v: Variant) -> void:
+	var c: Dictionary = _u_cache.get(m, {})
+	if c.is_empty():
+		_u_cache[m] = c
+	elif c.get(param) == v:
+		return
+	c[param] = v
+	m.set_shader_parameter(param, v)
 
 
 ## Returns [scale_x, scale_y, offset_x(toward facing), offset_y, shear(toward facing)] or [] when finished.

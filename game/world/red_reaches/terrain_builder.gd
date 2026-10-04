@@ -17,7 +17,7 @@ signal built
 const LAYOUT_PATH := "res://game/world/red_reaches/layout.json"
 const TERRAIN_SHADER := preload("res://game/art/shaders/terrain_pbr.gdshader")
 const PBR_DIR := "res://game/art/world/pbr/"
-const CHUNK := 64
+const CHUNK := 48   # 48 m chunks: tighter frustum culling + shadow-pass culling (was 64)
 
 @export var layout_path: String = LAYOUT_PATH
 @export var with_lighting: bool = true
@@ -373,7 +373,8 @@ func _make_material() -> ShaderMaterial:
 	if terrain_material:
 		return terrain_material
 	terrain_material = ShaderMaterial.new()
-	terrain_material.shader = TERRAIN_SHADER
+	var q := ToonKit.quality()
+	terrain_material.shader = q.call("shader", TERRAIN_SHADER.resource_path, TERRAIN_SHADER.code) if q else TERRAIN_SHADER
 	for set_name in ["dirt", "flag", "scrub", "cliff"]:
 		var file: String = {"dirt": "ground_dirt", "flag": "ground_flag", "scrub": "scrub", "cliff": "cliff_rock"}[set_name]
 		terrain_material.set_shader_parameter(set_name + "_albedo", load(PBR_DIR + file + "_albedo.webp"))

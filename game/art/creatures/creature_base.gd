@@ -35,6 +35,7 @@ var _ghost := 0.0
 var _t := 0.0
 var _built := false
 var _tw: Tween
+var _vis: VisibleOnScreenNotifier3D
 
 
 func _ready() -> void:
@@ -68,6 +69,11 @@ func _build() -> void:
 		glow_mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		pose.add_child(glow_mesh)
 	_add_shadow()
+	# Perf (Agent 2): creatures off screen skip their per-frame shader uniform animation.
+	_vis = VisibleOnScreenNotifier3D.new()
+	_vis.name = "OnScreen"
+	_vis.aabb = AABB(Vector3(-radius * 1.5, -0.5, -radius * 1.5), Vector3(radius * 3.0, radius * 3.0 + 1.0, radius * 3.0))
+	add_child(_vis)
 	_after_build()
 
 
@@ -229,10 +235,11 @@ func _process(delta: float) -> void:
 	# gait
 	var amt := 0.0 if _dead else _move
 	_phase = fmod(_phase + delta * gait_speed * (0.25 + amt), 1000.0)
-	mat.set_shader_parameter("gait_phase", _phase)
-	mat.set_shader_parameter("gait_amp", gait_stride * amt)
-	_opset("gait_phase", _phase)
-	_opset("gait_amp", gait_stride * amt)
+	if _vis == null or _vis.is_on_screen():
+		mat.set_shader_parameter("gait_phase", _phase)
+		mat.set_shader_parameter("gait_amp", gait_stride * amt)
+		_opset("gait_phase", _phase)
+		_opset("gait_amp", gait_stride * amt)
 	if not _dead and (_tw == null or not _tw.is_running()):
 		var bob := sin(_phase * TAU * 2.0) * bob_amount * amt
 		var idle := sin(_t * 2.1) * bob_amount * 0.35
