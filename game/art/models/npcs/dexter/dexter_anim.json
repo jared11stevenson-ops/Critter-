@@ -1,0 +1,44 @@
+{
+ "height_m": 1.85,
+ "tris": 1812,
+ "texture_px": 128,
+ "fps": 30,
+ "animations": {
+  "idle": {
+   "duration": 3.0,
+   "loop": true,
+   "impact": null
+  },
+  "walk": {
+   "duration": 1.1333,
+   "loop": true,
+   "impact": null,
+   "speed": 1.28
+  },
+  "talk_idle": {
+   "duration": 1.9667,
+   "loop": true,
+   "impact": null
+  },
+  "gesture": {
+   "duration": 1.4,
+   "loop": false,
+   "impact": 0.6
+  },
+  "wave": {
+   "duration": 1.6667,
+   "loop": false,
+   "impact": 0.5
+  },
+  "react": {
+   "duration": 0.5,
+   "loop": false,
+   "impact": 0.07
+  },
+  "hit": {
+   "duration": 0.4333,
+   "loop": false,
+   "impact": 0.06
+  }
+ }
+}

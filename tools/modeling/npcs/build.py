@@ -20,7 +20,7 @@ import npc_lib as L  # noqa: E402
 
 ROOT = L.ROOT
 WORK = os.path.join(HERE, "work")
-ALL = ["mara", "dexter", "mollusk", "bramvex", "nerit", "zephyr", "nyxaris", "pharilux", "solmara", "scarlith"]
+ALL = ["mara", "dexter", "mollusk", "bramvex", "nerit", "zephyr", "nyxaris", "pharilux", "solmara", "scarlith", "oda_keth", "tavik_roon", "hobb_sarrane", "imre_dahl", "ilsa_brandt", "pel_narr", "vesk_dunmore", "nuru_tamsin", "odalys_penhallow", "bede_alcott", "idris_voll", "dessa_harl", "rival_dominion", "rival_undermarket", "rival_free_scale", "rival_helix"]
 
 
 def preview(cid, out):
@@ -66,7 +66,7 @@ def build(cid, do_preview=False, do_anim=True):
     meta = {}
     if do_anim:
         meta = animate(spec, rig, cid)
-    out = os.path.join(ROOT, "game", "art", "models", cid)
+    out = os.path.join(ROOT, "game", "art", "models", "npcs", cid)
     os.makedirs(out, exist_ok=True)
     for o in bpy.data.objects:
         o.select_set(o in (ob, rig))
@@ -81,9 +81,9 @@ def build(cid, do_preview=False, do_anim=True):
     open(os.path.join(out, cid + "_model.tscn"), "w").write(
         '[gd_scene load_steps=3 format=3]\n\n'
         '[ext_resource type="Script" path="res://game/art/models/character_model.gd" id="1"]\n'
-        '[ext_resource type="PackedScene" path="res://game/art/models/%s/%s.glb" id="2"]\n\n'
+        '[ext_resource type="PackedScene" path="res://game/art/models/npcs/%s/%s.glb" id="2"]\n\n'
         '[node name="%sModel" type="Node3D"]\nscript = ExtResource("1")\nmodel_scene = ExtResource("2")\n'
-        'anim_json = "res://game/art/models/%s/%s_anim.json"\nheight_m = %.3f\ncharacter_id = "%s"\n%s'
+        'anim_json = "res://game/art/models/npcs/%s/%s_anim.json"\nheight_m = %.3f\ncharacter_id = "%s"\n%s'
         % (cid, cid, cid.capitalize(), cid, cid, spec.HEIGHT, cid, extra))
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(WORK, cid + ".blend"))
     print("[%s] wrote %s" % (cid, glb))
@@ -104,7 +104,7 @@ def animate(spec, rig, cid):
         npc.STYLE = dict(getattr(spec, "STYLE", {}))
         npc.SECONDARY = list(getattr(spec, "SECONDARY", []))
         npc.TALK_WINDOW = getattr(spec, "TALK_WINDOW", (1.7, 3.6667))
-        for name in npc.CLIPS:
+        for name in npc.CLIPS + (npc.COMBAT_CLIPS if getattr(spec, 'COMBAT', False) else []):
             tr, m = npc.build(name, sk)
             bake(rig, name, tr)
             meta[name] = m

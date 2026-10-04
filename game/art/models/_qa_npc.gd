@@ -21,6 +21,7 @@ func _ready() -> void:
 	wl.set_script(load("res://game/world/common/world_lighting.gd"))
 	wl.set("preset", preset)
 	add_child(wl)
+	wl.call("apply_preset", preset)
 	var g := MeshInstance3D.new()
 	var p := PlaneMesh.new()
 	p.size = Vector2(80, 80)

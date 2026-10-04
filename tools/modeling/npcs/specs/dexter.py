@@ -19,28 +19,22 @@ def build():
     b = hu.new(ID, H, PAL, legs=1.02, torso=1.0, shoulders=1.05, hipw=0.95)
     J = b.j
     b.add_bone("coat", tuple(J("hips")), tuple(J("hips") + (0, 0.08, -0.55)), "hips")
-    hu.body(b, "skin", "shirt", arms="coat", legs="trouser", boots="boot", hands="glove", tw=1.0, arm_r=1.05, hips_col="trouser")
-    hc = hu.head_center(b, 0.42)
-    # sleeves pushed up: bare forearms
+    hu.body(b, "skin", "coat", arms="coat", fore="skin", legs="trouser", boots="boot", hands="glove", tw=1.0, arm_r=1.05, hips_col="trouser")
+    P = lambda x, y, z: hu.hp(b, x, y, z)  # noqa: E731
     for s in (".L", ".R"):
-        b.limb(J("elbow" + s) * 0.9 + J("wrist" + s) * 0.1, "wrist" + s, 0.029 * H, 0.023 * H, "forearm" + s, "skin", seg=6)
         b.ball(J("elbow" + s), 0.034 * H, "forearm" + s, "coat", seg=6, rings=4)
-    # face: eyes, stubble, scar-brow, cigarette + ember
+    b.box(J("chest") + (0, -0.075, -0.02), (0.1, 0.03, 0.34), "chest", "shirt")
     for sg in (1, -1):
-        b.ball(hc + (sg * 0.028, -0.057, 0.012), (0.01, 0.006, 0.012), "head", "eye", seg=5, rings=3)
-    b.ball(hc + (0, -0.04, -0.045), (0.05, 0.03, 0.032), "head", "stubble", seg=7, rings=3)
-    b.limb(hc + (-0.015, -0.068, -0.045), hc + (-0.05, -0.115, -0.04), 0.006, 0.006, "head", "cig", seg=4)
-    b.ball(hc + (-0.05, -0.117, -0.04), 0.007, "head", "ember", seg=4, rings=3)
-    # swept-back dark hair with a grey streak
-    b.ball(hc + (0, 0.018, 0.026), (0.07, 0.07, 0.064), "head", "hair", seg=9, rings=4)
-    b.ball(hc + (0.03, -0.03, 0.065), (0.02, 0.05, 0.012), "head", "streak", seg=5, rings=3, rot=(0, 0, 15))
+        b.ball(P(sg * 0.42, -0.93, 0.08), (0.011, 0.007, 0.014), "head", "eye", seg=5, rings=3)
+        b.ball(P(sg * 0.42, -0.9, 0.3), (0.022, 0.006, 0.006), "head", "hair", seg=4, rings=2)
+    b.ball(P(0, -0.8, -0.55), (0.045, 0.03, 0.03), "head", "stubble", seg=7, rings=3)
+    b.limb(P(-0.2, -1.0, -0.5), P(-0.7, -1.7, -0.45), 0.006, 0.006, "head", "cig", seg=4)
+    b.ball(P(-0.7, -1.74, -0.45), 0.007, "head", "ember", seg=4, rings=3)
+    b.ball(P(0, 0.12, 0.3), (0.057, 0.058, 0.052), "head", "hair", seg=9, rings=4)
+    b.ball(P(0.35, -0.55, 0.9), (0.016, 0.04, 0.01), "head", "streak", seg=5, rings=3, rot=(0, 0, 15))
     for sg in (1, -1):
-        b.spike(hc + (sg * 0.04, 0.05, 0.05), hc + (sg * 0.08, 0.09, 0.0), 0.02, "head", "hair", seg=4)
-    # collar up (hood-like popped collar, red inside)
-    for sg in (1, -1):
-        b.leaf(J("neck1") + (sg * 0.06, -0.01, -0.03), J("neck1") + (sg * 0.075, 0.03, 0.1), 0.1, (0, 1, 0), "chest", "coat2", n=2)
-        b.leaf(J("neck1") + (sg * 0.055, 0.0, -0.02), J("neck1") + (sg * 0.068, 0.035, 0.09), 0.07, (0, 1, 0), "chest", "lining", n=2)
-    b.leaf(J("neck1") + (0, 0.07, -0.03), J("neck1") + (0, 0.1, 0.11), 0.16, (1, 0, 0), "chest", "coat2", n=2)
+        b.spike(P(sg * 0.7, 0.55, 0.5), P(sg * 1.2, 1.1, 0.0), 0.016, "head", "hair", seg=4)
+        b.spike(P(sg * 0.3, -0.7, 0.95), P(sg * 0.1, -1.05, 0.6), 0.012, "head", "hair", seg=4)
     # coat: open front flaps + back panel (red lining panel on the back) falling to the knee
     zt, zb = J("hips")[2] + 0.04, 0.40
     wt = hu.hang_weights(b, zt, zb, 0.7)

@@ -47,7 +47,7 @@ func setup(hub_node: Node3D, visual: Node3D, camera: Camera3D, ui: Control, focu
 		var n := visual.find_child("NPC_" + str(id), true, false) as Node3D
 		if n == null:
 			continue
-		var bb := n.get_node_or_null("Billboard")
+		var bb := n.get_node_or_null("Model")
 		var st: Array = []
 		for p in stations[id]:
 			st.append(Vector3(float(p[0]), n.position.y, float(p[1])))

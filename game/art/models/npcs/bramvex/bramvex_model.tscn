@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://game/art/models/character_model.gd" id="1"]
+[ext_resource type="PackedScene" path="res://game/art/models/npcs/bramvex/bramvex.glb" id="2"]
+
+[node name="BramvexModel" type="Node3D"]
+script = ExtResource("1")
+model_scene = ExtResource("2")
+anim_json = "res://game/art/models/npcs/bramvex/bramvex_anim.json"
+height_m = 2.300
+character_id = "bramvex"

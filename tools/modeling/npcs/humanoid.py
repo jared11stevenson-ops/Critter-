@@ -29,6 +29,10 @@ def body(b, skin, torso, arms=None, legs=None, boots=None, hands=None, fore=None
     hips_col = hips_col or legs
     neck_col = neck_col or skin
     R = H * rs
+    arm_r *= 1.18
+    leg_r *= 1.12
+    tw *= 1.18
+    head_r = tuple(x * 1.1 for x in head_r)
     J = b.j
     b.ball(J("hips") + (0, 0.0, 0.0), (0.075 * R * tw, 0.055 * R, 0.05 * R), "hips", hips_col, seg=seg, rings=4)
     b.limb("spine1", "spine2", (0.07 * R * tw, 0.05 * R), (0.078 * R * tw, 0.055 * R), "spine1", torso, seg=seg)

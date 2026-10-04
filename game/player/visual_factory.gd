@@ -18,7 +18,9 @@ static func _scene(path: String) -> PackedScene:
 
 static func character(id: String) -> Node3D:
 	# World characters are always skinned 3D models (res://game/art/models/<id>/<id>_model.tscn, CharacterModel).
-	var mps := _scene("res://game/art/models/%s/%s_model.tscn" % [id, id])
+	var mps := _scene("res://game/art/models/npcs/%s/%s_model.tscn" % [id, id])
+	if mps == null:
+		mps = _scene("res://game/art/models/%s/%s_model.tscn" % [id, id])
 	if mps:
 		var mn: Node = mps.instantiate()
 		if mn is Node3D:

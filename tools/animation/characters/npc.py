@@ -12,6 +12,7 @@ import retarget as rt
 from retarget import FPS
 
 CLIPS = ["idle", "walk", "talk_idle", "gesture", "wave", "react", "hit"]
+COMBAT_CLIPS = ["jog", "run", "attack_1", "attack_2", "attack_3", "downed", "revive", "hit_left", "hit_right", "hit_back"]
 
 STYLE = {}
 SECONDARY = []       # [(bone, stiffness, damping, max_deg)]
@@ -145,6 +146,112 @@ def react(sk):
 
 def hit(sk):
     return _react(sk, 0.42, 0.06)
+
+
+# ------------------------------------------------------------------------------------------- combat set (rivals)
+def _blend_idle(tr, sk, k):
+    if "idle" not in _cache:
+        _cache["idle"] = idle(sk)[0]
+    Qi, li = _cache["idle"].local_quats()
+    Q, locs = tr.local_quats()
+    for i in range(Q.shape[1]):
+        rt.blend_local(Q, i, Qi[0, i], k)
+    for b, L in list(locs.items()) + [(b, np.zeros((tr.F, 3))) for b in li if b not in locs]:
+        tgt = li.get(b, np.zeros((1, 3)))[0]
+        locs[b] = L * (1 - k[:, None]) + tgt[None] * k[:, None]
+    rt.from_local(tr, Q, locs)
+
+
+def settle(tr, sk, t_from):
+    t = np.arange(tr.F) / FPS
+    T = (tr.F - 1) / FPS
+    _blend_idle(tr, sk, lib.smoothstep(np.clip((t - t_from) / max(T - t_from, 1e-3), 0, 1)))
+
+
+def from_idle(tr, sk, t_to):
+    t = np.arange(tr.F) / FPS
+    _blend_idle(tr, sk, lib.smoothstep(1 - np.clip(t / max(t_to, 1e-3), 0, 1)))
+
+
+def _gait(sk, clip, t0, t1, lean):
+    tr = base(sk, clip, t0, t1, loop=True)
+    lib.layer(tr, lean)
+    v = lib.make_inplace(tr)
+    plant(tr, cyclic=True, v=v)
+    secondary(tr, True)
+    lib.loop_blend(tr, 3)
+    lib.phase_to_left_contact(tr, v)
+    return tr, meta(tr, True, speed=_speed(v))
+
+
+def jog(sk):
+    return _gait(sk, "35_17", 0.6, 1.3667, {"spine1": (8, 0, 0), "head": (-8, 0, 0)})
+
+
+def run(sk):
+    return _gait(sk, "09_01", 0.4, 1.1333, {"spine1": (12, 0, 0), "chest": (4, 0, 0), "head": (-12, 0, 0)})
+
+
+def _swing(sk, clip, warp, face, impact_t, cancel):
+    tr = base(sk, clip, warp=warp, face=face)
+    lib.remove_root_xy(tr, keep=0.2)
+    from_idle(tr, sk, 0.1)
+    settle(tr, sk, impact_t + 0.25)
+    plant(tr)
+    secondary(tr)
+    return tr, meta(tr, False, impact=impact_t, cancel=cancel)
+
+
+def attack_1(sk):
+    return _swing(sk, "124_07", [(0.0, 2.30), (0.16, 2.72), (0.22, 2.86), (0.27, 2.98), (0.38, 3.10), (0.55, 3.25), (0.85, 3.50)], -70, 0.27, 0.4)
+
+
+def attack_2(sk):
+    return _swing(sk, "79_01", [(0.0, 0.55), (0.12, 0.80), (0.18, 0.90), (0.26, 1.03), (0.40, 1.20), (0.75, 1.55)], 0, 0.28, 0.4)
+
+
+def attack_3(sk):
+    return _swing(sk, "79_01", [(0.0, 2.30), (0.18, 2.62), (0.30, 2.70), (0.38, 2.80), (0.44, 2.86), (0.62, 3.00), (1.0, 3.35)], 0, 0.42, 0.55)
+
+
+def downed(sk):
+    tr = base(sk, "139_16", warp=[(0.0, 3.7), (0.15, 3.45), (0.45, 2.75), (0.7, 2.25), (0.85, 1.95), (1.1, 1.8)])
+    lib.remove_root_xy(tr, keep=0.0)
+    from_idle(tr, sk, 0.1)
+    lib.ground_body(tr)
+    plant(tr)
+    return tr, meta(tr, False, impact=0.85)
+
+
+def revive(sk):
+    tr = base(sk, "139_16", warp=[(0.0, 1.8), (0.3, 2.1), (0.6, 2.6), (0.9, 3.3), (1.2, 3.8), (1.4, 4.1)])
+    lib.remove_root_xy(tr, keep=0.0)
+    lib.ground_body(tr)
+    settle(tr, sk, 1.0)
+    plant(tr)
+    return tr, meta(tr, False, impact=1.2)
+
+
+def hit_left(sk):
+    return _react_dir(sk, {"spine1": (-4, -14, -12), "head": (0, -16, -12), "upperarm.L": (0, -30, 0)}, (-0.07, 0, -0.03))
+
+
+def hit_right(sk):
+    return _react_dir(sk, {"spine1": (-4, 14, 12), "head": (0, 16, 12), "upperarm.R": (0, 30, 0)}, (0.07, 0, -0.03))
+
+
+def hit_back(sk):
+    return _react_dir(sk, {"spine1": (16, 0, 0), "chest": (8, 0, 0), "head": (14, 0, 0)}, (0, -0.07, -0.04))
+
+
+def _react_dir(sk, rec, hips, dur=0.42, peak=0.06):
+    tr = base(sk, "137_41", 7.3, 7.3 + dur)
+    lib.remove_root_xy(tr, keep=0.0)
+    lib.layer(tr, {b: [(0, (0, 0, 0)), (peak, tuple(v)), (peak + 0.1, tuple(np.array(v) * 0.5)), (dur, (0, 0, 0))] for b, v in rec.items()})
+    lib.shift(tr, lib.curve(tr.F, [(0, (0, 0, 0)), (peak, tuple(hips)), (dur, (0, 0, 0))]))
+    plant(tr)
+    secondary(tr)
+    return tr, meta(tr, False, impact=peak)
 
 
 def build(name, sk):

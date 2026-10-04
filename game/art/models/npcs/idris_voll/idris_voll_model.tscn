@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://game/art/models/character_model.gd" id="1"]
+[ext_resource type="PackedScene" path="res://game/art/models/npcs/idris_voll/idris_voll.glb" id="2"]
+
+[node name="Idris_vollModel" type="Node3D"]
+script = ExtResource("1")
+model_scene = ExtResource("2")
+anim_json = "res://game/art/models/npcs/idris_voll/idris_voll_anim.json"
+height_m = 2.300
+character_id = "idris_voll"
