@@ -545,7 +545,8 @@ func _break_boulder(bp: Vector3) -> void:
 		_barrier_boulder = null
 	Audio.sfx_at("boulder_break", bp)
 	field.vfx("thoughtstone_shards", bp + Vector3(0, 1.5, 0))
-	field.vfx("heavy_impact", bp + Vector3(0, 1.5, 0))
+	# the impact puff follows a beat later so the shards, the strike beam and the puff never share one frame's draw budget
+	get_tree().create_timer(0.3).timeout.connect(func(): field.vfx("heavy_impact", bp + Vector3(0, 1.5, 0)))
 	field.impact("boss")
 	spawn_pickup("thoughtstone_dust", bp + Vector3(-3.5, 0, -1.5), 2)
 	_say("rr_boulder_broken")

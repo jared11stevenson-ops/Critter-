@@ -354,6 +354,11 @@ func _place(c: Control, center: Vector2, lh: bool, W: float) -> void:
 var _last_vs := Vector2.ZERO
 
 func _process(delta: float) -> void:
+	# While a dialogue is up the touch controls are not usable: stop drawing them (saves ~12 batches, less overdraw).
+	var talking := DialogueRunner.current != null and DialogueRunner.current.active
+	if _batch and _batch.visible == talking:
+		_batch.visible = not talking
+		joystick.visible = not talking
 	var vs := root.get_viewport_rect().size
 	if vs != _last_vs:
 		_last_vs = vs
