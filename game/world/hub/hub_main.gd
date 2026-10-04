@@ -28,6 +28,7 @@ var habitat: Node = null
 var _end_card: Node = null
 var _returning := false
 var _bonds_screen: Node = null
+var _gate_layer: CanvasLayer = null
 var _pitch := -48.0
 var _dist := 24.0
 
@@ -246,7 +247,9 @@ func _process(delta: float) -> void:
 	_toast_box.position = Vector2(vs.x * 0.5 - 260, vs.y - 56.0 - _toast_box.size.y)
 
 func _unhandled_input(ev: InputEvent) -> void:
-	if runner.active or habitat != null or _end_card != null:
+	if runner.active or habitat != null or _end_card != null or _returning:
+		return
+	if (_gate_layer and is_instance_valid(_gate_layer)) or (_bonds_screen and is_instance_valid(_bonds_screen)):
 		return
 	if ev is InputEventScreenTouch:
 		var t := ev as InputEventScreenTouch
@@ -314,10 +317,28 @@ func _gate() -> void:
 			if s["id"] == "table":
 				_focus_target = s["node"].global_position
 		return
-	runner.play_data("hub_gate_confirm", {"lines": [
-		{"who": "comms:mara", "expr": "focused", "text": "Gate is calibrated for the Red Reaches. Descend?" if not bool(GameState.get_flag("rr_complete", false)) else "The Reaches remember what you did there, and so do the people you met. Return Descent?"},
-		{"choice": [{"text": "Descend" if not bool(GameState.get_flag("rr_complete", false)) else "Return Descent", "event": "descend"}, {"text": "Not yet"}]},
-	]})
+	open_gate_map()
+
+## The Gate Map replaces the old confirm dialogue: pick a homeland, then Descend / Return Descent.
+func open_gate_map() -> void:
+	if _gate_layer and is_instance_valid(_gate_layer):
+		return
+	_gate_layer = CanvasLayer.new()
+	_gate_layer.layer = 70
+	add_child(_gate_layer)
+	var m := GateMap.new()
+	_gate_layer.add_child(m)
+	m.descend.connect(_on_gate_descend)
+	m.closed.connect(func(): _gate_layer.queue_free())
+	if _qa_auto:
+		get_tree().create_timer(0.8, true, false, true).timeout.connect(m.qa_descend)
+
+func _on_gate_descend(region: String) -> void:
+	if region != "red_reaches":
+		return
+	if _gate_layer and is_instance_valid(_gate_layer):
+		_gate_layer.queue_free()
+	_descend.call_deferred()
 
 func _descend() -> void:
 	GameState.flags["_scene"] = "red_reaches"
@@ -542,6 +563,8 @@ func qa_auto_dialogue(on: bool, choice: int = 0, delay: float = 0.6) -> void:
 	_qa_auto = on
 	if on:
 		get_tree().create_timer(1.2, true, false, true).timeout.connect(qa_card_close)
+		if _gate_layer and is_instance_valid(_gate_layer) and _gate_layer.get_child_count() > 0:
+			(_gate_layer.get_child(0) as GateMap).qa_descend()
 	_qa_choice = choice
 	if on and not runner.started.is_connected(_qa_on_started):
 		runner.started.connect(_qa_on_started.bind(delay))
@@ -590,12 +613,13 @@ func qa_open(what: String) -> void:
 		"habitat": open_habitat()
 		"end_card": _show_end_card()
 		"bonds": _open_bonds()
+		"gate": open_gate_map()
 
 func qa_close_all() -> void:
 	for c in get_children():
 		if c is PauseMenu:
 			c.queue_free()
-		elif c is CanvasLayer and c.get_child_count() > 0 and (c.get_child(0) is CodexScreen or c.get_child(0) is BondScreen):
+		elif c is CanvasLayer and c.get_child_count() > 0 and (c.get_child(0) is CodexScreen or c.get_child(0) is BondScreen or c.get_child(0) is GateMap):
 			c.queue_free()
 	get_tree().paused = false
 
