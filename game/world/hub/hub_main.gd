@@ -193,6 +193,16 @@ func _build_ui() -> void:
 	bonds.pressed.connect(_open_bonds)
 	bonds.name = "BondsButton"
 	ui_root.add_child(bonds)
+	var gear := UiKit.button("Gear", Vector2(150, 88), 28)
+	gear.anchor_left = 1.0
+	gear.anchor_right = 1.0
+	gear.offset_left = -502
+	gear.offset_right = -352
+	gear.offset_top = 16
+	gear.offset_bottom = 104
+	gear.name = "GearButton"
+	gear.pressed.connect(_open_gear)
+	ui_root.add_child(gear)
 	var hint := UiKit.label("Drag to look around · tap a place or a person", 22, UiKit.PARCHMENT.darkened(0.15), "ui", 6, Color(0, 0, 0, 0.8))
 	hint.anchor_top = 1.0
 	hint.anchor_bottom = 1.0
@@ -565,6 +575,17 @@ func _open_codex() -> void:
 	cl.add_child(c)
 	c.tree_exited.connect(cl.queue_free)
 
+func _open_gear() -> void:
+	if runner.active or habitat != null or _returning:
+		return
+	Audio.sfx("ui_tap")
+	var cl := CanvasLayer.new()
+	cl.layer = 70
+	add_child(cl)
+	var g := GearScreen.new()
+	cl.add_child(g)
+	g.tree_exited.connect(cl.queue_free)
+
 func _open_bonds() -> void:
 	if runner.active or habitat != null or _returning or (_bonds_screen and is_instance_valid(_bonds_screen)):
 		return
@@ -827,6 +848,7 @@ func _qa_open(what: String) -> void:
 		"habitat": open_habitat()
 		"end_card": _show_end_card()
 		"bonds": _open_bonds()
+		"gear": _open_gear()
 		"gate": open_gate_map()
 
 func qa_close_all() -> void:

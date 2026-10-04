@@ -100,6 +100,7 @@ func new_game() -> void:
 		if sys:
 			sys.reset()
 	save_now()
+	Gear.refresh()
 
 func has_save() -> bool:
 	return FileAccess.file_exists(SAVE_PATH)
@@ -162,6 +163,8 @@ func load_game() -> void:
 
 # ---------------- Input ----------------
 ## Touch is primary. Keyboard/gamepad bindings exist for desktop testing and controller players.
+	Gear.refresh()
+
 func _setup_input_map() -> void:
 	var binds := {
 		"move_left": [KEY_A, KEY_LEFT], "move_right": [KEY_D, KEY_RIGHT],

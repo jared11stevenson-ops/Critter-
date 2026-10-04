@@ -42,7 +42,7 @@ func _ready() -> void:
 			kn.add_child(ar)
 	if kn.get_child_count() > 0:
 		vb.add_child(kn)
-	var items := [["Resume", _resume], ["Field Codex", _codex], ["Bonds", _bonds], ["Session Zero", _session_zero], ["Settings", _settings], ["Return to Title", _title]]
+	var items := [["Resume", _resume], ["Field Codex", _codex], ["Bonds", _bonds], ["Gear", _gear], ["Session Zero", _session_zero], ["Settings", _settings], ["Return to Title", _title]]
 	for it in items:
 		var b := UiKit.button(it[0], Vector2(400, 70), 28)
 		b.pressed.connect(it[1])
@@ -73,6 +73,13 @@ func _bonds() -> void:
 	Audio.sfx("ui_confirm")
 	_panel.visible = false
 	_sub = BondScreen.new()
+	add_child(_sub)
+	_sub.tree_exited.connect(func(): _panel.visible = true)
+
+func _gear() -> void:
+	Audio.sfx("ui_confirm")
+	_panel.visible = false
+	_sub = GearScreen.new()
 	add_child(_sub)
 	_sub.tree_exited.connect(func(): _panel.visible = true)
 

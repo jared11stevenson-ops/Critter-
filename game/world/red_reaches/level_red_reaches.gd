@@ -397,12 +397,15 @@ func _spawn_spokes() -> void:
 					(e as SkitterMite).swarm = swarm
 					swarm.append(e)
 
+func player_position() -> Vector3:
+	return party.get_leader().global_position if party and party.get_leader() else Vector3.ZERO
+
 func _spoke_sign_tick() -> void:
 	var l := party.get_leader()
 	for ss in _spoke_signs:
 		var n: Label3D = ss["node"]
 		var gone: bool = bool(GameState.flags.get("_spoke_" + str(ss["id"]), false))
-		n.visible = not gone and n.global_position.distance_squared_to(l.global_position) < 2500.0
+		n.visible = not gone and n.global_position.distance_squared_to(l.global_position) < 1400.0
 		if gone:
 			_spoke_signs.erase(ss)
 			n.queue_free()
@@ -985,6 +988,8 @@ func _process(delta: float) -> void:
 	if party == null or party.members.is_empty():
 		return
 	_interact_tick(delta)
+	if region:
+		region.tick(party.get_leader().global_position, delta)
 	_spoke_tick -= delta
 	if _spoke_tick <= 0.0:
 		_spoke_tick = 0.4
@@ -1150,6 +1155,7 @@ func qa_debug() -> void:
 
 func qa_log_flags() -> void:
 	if region:
+		print("[QA] REGION acts=%s secrets=%d gear=%s" % [[region.act_done(1), region.act_done(2), region.act_done(3)], region.secrets_found(), str(Gear.owned())])
 		print("[QA] REGION spokes=%d/%d sites=%d/%d" % [region.visited_spokes(), region.total_spokes(), region.sites_done(), region.total_sites()])
 		for e in Ledger.events_where({"type": "descent_event"}):
 			print("[QA] REGION event ", e["target"], " -> ", e["data"])

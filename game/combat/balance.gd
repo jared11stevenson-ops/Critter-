@@ -29,7 +29,11 @@ static func v(path: String, default: Variant = null) -> Variant:
 	return cur
 
 static func f(path: String, default: float = 0.0) -> float:
-	return float(v(path, default))
+	return float(Gear.modify(path, v(path, default)))
+
+## Raw access (no gear applied).
+static func raw(path: String, default: Variant = null) -> Variant:
+	return v(path, default)
 
 static func arr(path: String, idx: int, default: float = 0.0) -> float:
 	var a: Variant = v(path, null)
@@ -39,4 +43,11 @@ static func arr(path: String, idx: int, default: float = 0.0) -> float:
 
 static func section(path: String) -> Dictionary:
 	var d: Variant = v(path, {})
-	return d if d is Dictionary else {}
+	if not (d is Dictionary):
+		return {}
+	if Gear.touches(path):
+		var c: Dictionary = (d as Dictionary).duplicate()
+		for k in c:
+			c[k] = Gear.modify(path + "." + str(k), c[k])
+		return c
+	return d
