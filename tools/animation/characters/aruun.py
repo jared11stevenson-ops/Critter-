@@ -220,13 +220,13 @@ def _gait(sk, clip, t0, t1, lean, hold, haft, stiff, ts=1.0, sink=0.05):
 
 def jog(sk):
     return _gait(sk, "35_17", 0.6, 1.3667, {"spine1": (10, 0, 0), "chest": (4, 0, 0), "head": (-10, 0, 0)},
-                 0.35, (-0.45, 0.1, -0.85), 45)
+                 0.35, (-0.62, 0.1, -0.78), 45)
 
 
 def run(sk):
     # heavy run: strong forward lean from the hips, head held level, Morrow trailing low
     return _gait(sk, "09_01", 0.4, 1.1333, {"spine1": (14, 0, 0), "chest": (6, 0, 0), "neck1": (-4, 0, 0),
-                                            "head": (-14, 0, 0)}, 0.4, (-0.45, 0.35, -0.8), 40, sink=0.07)
+                                            "head": (-14, 0, 0)}, 0.4, (-0.78, 0.25, -0.58), 40, sink=0.07)
 
 
 def idle(sk):
