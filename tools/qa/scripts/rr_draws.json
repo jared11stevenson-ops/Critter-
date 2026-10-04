@@ -1,0 +1,9 @@
+[
+ {"t":0.3,"call":"scene.qa_auto_dialogue","args":[true,0,0.2]},
+ {"t":1.0,"call":"scene.qa_teleport","args":["t_waystation"]},
+ {"t":6.0,"call":"scene.qa_perf_breakdown"},
+ {"t":30.0,"call":"scene.qa_skip_to","args":["drill"]},
+ {"t":33.0,"call":"scene.qa_perf_breakdown"},
+ {"t":60.0,"call":"scene.qa_skip_to","args":["boss"]},
+ {"t":63.0,"call":"scene.qa_perf_breakdown"}
+]

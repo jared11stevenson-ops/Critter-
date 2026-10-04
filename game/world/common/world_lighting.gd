@@ -159,7 +159,7 @@ func _build() -> void:
 	sun.name = "Sun"
 	sun.shadow_enabled = true
 	sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS
-	sun.directional_shadow_max_distance = 46.0
+	sun.directional_shadow_max_distance = 36.0
 	sun.directional_shadow_split_1 = 0.32
 	sun.directional_shadow_blend_splits = true
 	sun.directional_shadow_fade_start = 0.85
@@ -187,7 +187,7 @@ func _apply_quality(_lv: int = -1) -> void:
 	var q := ToonKit.quality()
 	if q == null or sun == null:
 		return
-	q.call("setup_sun", sun, 46.0)
+	q.call("setup_sun", sun, 36.0)
 	q.call("setup_environment", env)
 	if motes:
 		var lv: int = q.get("level")

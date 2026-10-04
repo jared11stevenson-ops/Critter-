@@ -109,6 +109,12 @@ func _ready() -> void:
 	btn_hold.base_col = UiKit.ACCENT.darkened(0.2)
 	btn_hold.ring_col = UiKit.PARCHMENT
 	btn_hold.visible = false
+	_batch = HudButtonBatch.new()
+	_batch.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_batch.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(_batch)
+	for bt in [btn_attack, btn_ab[0], btn_ab[1], btn_ab[2], btn_dash, btn_interact, btn_contain, btn_scan, btn_pause, btn_hold]:
+		_batch.add_button(bt)
 	_build_top()
 	_build_burden()
 	Events.objective_changed.connect(set_objective)
@@ -119,6 +125,8 @@ func _ready() -> void:
 		party.leader_changed.connect(func(_m): _rebuild_portraits())
 	_rebuild_portraits()
 	set_objective(str(GameState.get_flag("_objective", "")))
+
+var _batch: HudButtonBatch
 
 func _btn(act: String, d: float, g: String) -> TouchButton:
 	var b := TouchButton.new(act, d, g)
@@ -280,11 +288,11 @@ func _refresh_ability_icons() -> void:
 		b.ring_col = UiKit.char_color(l.char_id).lightened(0.25)
 		b.glyph = UiKit.ability_glyph(aid)
 		b.caption = str(Canon.ability(aid).get("name", aid)).to_upper()
-		b.queue_redraw()
+		b.redraw()
 	btn_attack.icon = UiKit.ability_icon("aruun_combo" if l.char_id == "aruun" else "bad_thought")
 	btn_attack.glyph = "MORROW" if l.char_id == "aruun" else "BAD THOUGHT"
 	btn_attack.glyph_size = 26
-	btn_attack.queue_redraw()
+	btn_attack.redraw()
 
 # ---------------- layout ----------------
 func _layout() -> void:
@@ -328,6 +336,8 @@ func _layout() -> void:
 	_toast_box.size = Vector2(520, 10)
 	_boss_panel.position = Vector2(W * 0.5 - 320, 80)
 	_revive_label.position = Vector2(W * 0.5 - 250, H * 0.36)
+	if _batch:
+		_batch.queue_redraw()
 	_revive_label.size = Vector2(500, 40)
 	_contain_bar.position = Vector2(W * 0.5 - 130, H * 0.42)
 	_burden_panel.position = Vector2(W * 0.5 - 260, H - 236)
@@ -344,6 +354,11 @@ func _place(c: Control, center: Vector2, lh: bool, W: float) -> void:
 var _last_vs := Vector2.ZERO
 
 func _process(delta: float) -> void:
+	# While a dialogue is up the touch controls are not usable: stop drawing them (saves ~12 batches, less overdraw).
+	var talking := DialogueRunner.current != null and DialogueRunner.current.active
+	if _batch and _batch.visible == talking:
+		_batch.visible = not talking
+		joystick.visible = not talking
 	var vs := root.get_viewport_rect().size
 	if vs != _last_vs:
 		_last_vs = vs
@@ -434,7 +449,7 @@ func set_objective(text: String) -> void:
 func set_interact(text: String) -> void:
 	btn_interact.visible = text != ""
 	btn_interact.caption = text.to_upper()
-	btn_interact.queue_redraw()
+	btn_interact.redraw()
 
 func toast(text: String, kind: String = "info") -> void:
 	if _toast_box == null:
@@ -522,3 +537,22 @@ func _unhandled_input(ev: InputEvent) -> void:
 	if ev.is_action_pressed("pause"):
 		open_pause()
 		get_viewport().set_input_as_handled()
+
+
+## Paints all round HUD buttons in phases (see TouchButton.paint). The buttons stay real Controls for input and layout.
+class HudButtonBatch extends Control:
+	var buttons: Array = []
+	func add_button(b: TouchButton) -> void:
+		buttons.append(b)
+		b.batcher = self
+		b.visibility_changed.connect(queue_redraw)
+		b.resized.connect(queue_redraw)
+	func _draw() -> void:
+		for ph in 5:
+			for b in buttons:
+				var bt: TouchButton = b
+				if not bt.visible:
+					continue
+				draw_set_transform(bt.position, 0.0, Vector2.ONE)
+				bt.paint(self, ph)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)

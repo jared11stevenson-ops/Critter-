@@ -95,7 +95,10 @@ func _process(delta: float) -> void:
 	_t += delta
 	_log_fps.append(Engine.get_frames_per_second())
 	if _t > 1.0:
-		_max_draw = max(_max_draw, int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)))
+		var _dc := int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME))
+		if _dc > 150 and _dc > _max_draw:
+			print("[QA] DRAWS %d at t=%.1f scene=%s" % [_dc, _t, str(get_tree().current_scene.name) if get_tree().current_scene else "-"])
+		_max_draw = max(_max_draw, _dc)
 		_max_prims = max(_max_prims, int(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME)))
 		_max_objs = max(_max_objs, int(Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME)))
 	_bench_tick(delta)

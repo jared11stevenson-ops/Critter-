@@ -36,6 +36,8 @@ var _last_placed_focus := Vector3(1e9, 0, 0)
 var _pitch := -48.0
 var _dist := 24.0
 var life: HubLife = null
+var _pulse_t := 0.0
+var _touches: Dictionary = {}
 
 func _ready() -> void:
 	var _t0 := Time.get_ticks_msec()
@@ -87,6 +89,7 @@ func _build_visual() -> void:
 		visual = load(FALLBACK).new()
 	visual.name = "HubVisual"
 	add_child(visual)
+	_add_hub_props()
 
 func _build_life() -> void:
 	if visual.get_script() and visual.get("_idle_t") != null:
@@ -102,6 +105,45 @@ func _label_rect(id: String) -> Rect2:
 			var b: Button = s["button"]
 			return Rect2(b.position, b.size)
 	return Rect2()
+
+## Three extra places with a purpose, built from plain boxes (a handful of draw calls): the Rumor Board points at optional
+## side areas in the Reaches, the Supply Stores show what the Habitat can be built from, the Ledger Wall shows what the world
+## remembers about you.
+func _add_hub_props() -> void:
+	var defs := [
+		["Hotspot_Board", Vector3(3.0, 0, 7.0), Color(0.5, 0.33, 0.22), Color(0.92, 0.85, 0.66)],
+		["Hotspot_Stores", Vector3(17.0, 0, -0.5), Color(0.42, 0.44, 0.48), Color(0.8, 0.55, 0.25)],
+		["Hotspot_Ledger", Vector3(0.2, 0, -15.3), Color(0.66, 0.52, 0.34), Color(0.55, 1.0, 0.85)],
+	]
+	for d in defs:
+		var m := Marker3D.new()
+		m.name = d[0]
+		visual.add_child(m)
+		m.position = d[1]
+		var base := MeshInstance3D.new()
+		var bm := BoxMesh.new()
+		bm.size = Vector3(1.8, 1.0, 0.9)
+		base.mesh = bm
+		var mat := StandardMaterial3D.new()
+		mat.albedo_color = d[2]
+		mat.roughness = 0.9
+		base.material_override = mat
+		base.position = Vector3(0, 0.5, 0)
+		m.add_child(base)
+		var top := MeshInstance3D.new()
+		var tm := BoxMesh.new()
+		tm.size = Vector3(1.5, 1.1, 0.12)
+		top.mesh = tm
+		var tmat := StandardMaterial3D.new()
+		tmat.albedo_color = d[3]
+		tmat.emission_enabled = true
+		tmat.emission = Color(d[3]) * 0.35
+		top.material_override = tmat
+		top.position = Vector3(0, 1.6, 0.2)
+		top.rotation_degrees = Vector3(-12, 0, 0)
+		m.add_child(top)
+		base.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		top.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
 func _marker(n: String) -> Node3D:
 	if visual == null:
@@ -151,6 +193,16 @@ func _build_ui() -> void:
 	bonds.pressed.connect(_open_bonds)
 	bonds.name = "BondsButton"
 	ui_root.add_child(bonds)
+	var gear := UiKit.button("Gear", Vector2(150, 88), 28)
+	gear.anchor_left = 1.0
+	gear.anchor_right = 1.0
+	gear.offset_left = -502
+	gear.offset_right = -352
+	gear.offset_top = 16
+	gear.offset_bottom = 104
+	gear.name = "GearButton"
+	gear.pressed.connect(_open_gear)
+	ui_root.add_child(gear)
 	var hint := UiKit.label("Drag to look around · tap a place or a person", 22, UiKit.PARCHMENT.darkened(0.15), "ui", 6, Color(0, 0, 0, 0.8))
 	hint.anchor_top = 1.0
 	hint.anchor_bottom = 1.0
@@ -165,6 +217,9 @@ func _build_spots() -> void:
 		["habitat", "Habitat Wing", "Hotspot_Habitat", "spot"],
 		["codex", "Field Codex", "Hotspot_Codex", "spot"],
 		["lab", "Mara's Lab", "Hotspot_Lab", "spot"],
+		["board", "Rumor Board", "Hotspot_Board", "spot"],
+		["stores", "Supply Stores", "Hotspot_Stores", "spot"],
+		["ledger", "Ledger Wall", "Hotspot_Ledger", "spot"],
 	]
 	for id in NPC_IDS:
 		defs.append([id, Canon.display_name(id), "NPC_" + id, "npc"])
@@ -188,7 +243,7 @@ func _build_spots() -> void:
 			b.add_theme_stylebox_override("pressed", UiKit.box(col, UiKit.PARCHMENT, 20, 3, 16))
 			b.add_theme_color_override("font_color", UiKit.INK)
 			b.add_theme_color_override("font_hover_color", UiKit.INK)
-		b.pressed.connect(_on_spot.bind(d[0]))
+		b.pressed.connect(_on_label.bind(d[0]))
 		b.name = "Spot_" + d[0]
 		ui_root.add_child(b)
 		var h := 2.6
@@ -199,7 +254,9 @@ func _build_spots() -> void:
 			h = 8.4
 		elif d[0] == "habitat":
 			h = 4.8
-		_spots.append({"id": d[0], "node": n, "button": b, "kind": d[3], "h": h})
+		elif d[0] in ["board", "stores", "ledger"]:
+			h = 3.2
+		_spots.append({"id": d[0], "name": d[1], "node": n, "button": b, "kind": d[3], "h": h})
 
 func _compute_bounds() -> void:
 	var r := Rect2()
@@ -236,6 +293,7 @@ func _process(delta: float) -> void:
 	_labels_hidden = false
 	# Hotspot labels only move when the camera does; re-place them when the focus moved, else every 8th frame.
 	_place_tick += 1
+	_pulse_t += delta
 	var moved := _focus.distance_squared_to(_last_placed_focus) > 0.0001
 	if moved or _place_tick % 8 == 0 or _force_place:
 		_last_placed_focus = _focus
@@ -243,11 +301,23 @@ func _process(delta: float) -> void:
 		_place_labels()
 	_objective_panel.visible = true
 
+func _objective_id() -> String:
+	if not bool(GameState.get_flag("briefed", false)):
+		return "table"
+	if not bool(GameState.get_flag("rr_complete", false)):
+		return "gate"
+	if not bool(GameState.get_flag("debriefed", false)):
+		return "table"
+	if not bool(GameState.get_flag("habitat_built", false)):
+		return "habitat"
+	return ""
+
 func _place_labels() -> void:
 	var vs := ui_root.get_viewport_rect().size
 	# Place hotspot labels: big places first, then people; nudge overlapping labels apart and keep
 	# them clear of the top bar (title/objective/menu) and the screen edges.
 	var placed: Array = []
+	var obj := _objective_id()
 	var order: Array = []
 	for s in _spots:
 		if s["kind"] == "spot":
@@ -281,6 +351,43 @@ func _place_labels() -> void:
 		r.position.x = clampf(r.position.x, 8.0, vs.x - r.size.x - 8.0)
 		r.position.y = clampf(r.position.y, TOP_SAFE, vs.y - r.size.y - 52.0)
 		var onscreen := sp.x > -40.0 and sp.x < vs.x + 40.0 and sp.y > 0.0 and sp.y < vs.y + 60.0
+		var is_obj: bool = s["id"] == obj
+		if not onscreen and s["kind"] == "spot":
+			# Signpost: a chip on the screen edge pointing toward the place; tapping it pans the camera there.
+			var dir := (sp - vs * 0.5)
+			if cam.is_position_behind(wp):
+				dir = -dir
+			var arrow := "◀ " if dir.x < -absf(dir.y) * 0.6 else ("▶ " if dir.x > absf(dir.y) * 0.6 else ("▲ " if dir.y < 0 else "▼ "))
+			var label_txt: String = arrow + ("★ " if is_obj else "") + str(s["name"])
+			if b.text != label_txt:
+				b.text = label_txt
+				b.reset_size()
+				s["sz"] = b.size
+			s["off"] = true
+			bsz = s["sz"]
+			var edge := Vector2(clampf(vs.x * 0.5 + dir.x * 4.0, 8.0 + bsz.x * 0.5, vs.x - 8.0 - bsz.x * 0.5), clampf(vs.y * 0.5 + dir.y * 4.0, TOP_SAFE + 8.0, vs.y - 60.0 - bsz.y))
+			var er := Rect2(edge - Vector2(bsz.x * 0.5, 0), bsz)
+			for _a in 4:
+				var hit2 := false
+				for pr in placed:
+					if er.grow(3.0).intersects(pr):
+						er.position.y += pr.size.y + 6.0 if er.position.y < vs.y * 0.5 else -(pr.size.y + 6.0)
+						hit2 = true
+						break
+				if not hit2:
+					break
+			b.visible = true
+			b.position = er.position
+			placed.append(er)
+			b.modulate = Color(1, 1, 1, 0.9 if is_obj else 0.6)
+			continue
+		var want: String = ("★ " if is_obj else "") + str(s["name"])
+		if s.get("off", false) or b.text != want:
+			s["off"] = false
+			b.text = want
+			b.reset_size()
+			s["sz"] = b.size
+			r.size = b.size
 		b.visible = onscreen
 		if not onscreen:
 			continue
@@ -302,6 +409,10 @@ func _unhandled_input(ev: InputEvent) -> void:
 		return
 	if ev is InputEventScreenTouch:
 		var t := ev as InputEventScreenTouch
+		if t.pressed:
+			_touches[t.index] = t.position
+		else:
+			_touches.erase(t.index)
 		if t.pressed and _drag_id == -1:
 			_drag_id = t.index
 			_drag_last = t.position
@@ -310,18 +421,34 @@ func _unhandled_input(ev: InputEvent) -> void:
 			_drag_id = -1
 	elif ev is InputEventScreenDrag:
 		var d := ev as InputEventScreenDrag
-		if d.index == _drag_id:
+		if _touches.size() == 2 and _touches.has(d.index):
+			var ks: Array = _touches.keys()
+			var before: float = (_touches[ks[0]] as Vector2).distance_to(_touches[ks[1]])
+			_touches[d.index] = d.position
+			var after: float = (_touches[ks[0]] as Vector2).distance_to(_touches[ks[1]])
+			_zoom_by((before - after) * 0.03)
+			_drag_last = d.position
+		elif d.index == _drag_id:
+			_touches[d.index] = d.position
 			var delta := d.position - _drag_last
 			_drag_last = d.position
 			_drag_moved += delta.length()
 			var k := _dist / 520.0
 			_focus_target -= Vector3(delta.x, 0, delta.y) * k
+	elif ev is InputEventMouseButton and ev.pressed and (ev.button_index == MOUSE_BUTTON_WHEEL_UP or ev.button_index == MOUSE_BUTTON_WHEEL_DOWN):
+		_zoom_by(-2.0 if ev.button_index == MOUSE_BUTTON_WHEEL_UP else 2.0)
+	elif ev is InputEventMagnifyGesture:
+		_zoom_by((1.0 - (ev as InputEventMagnifyGesture).factor) * 12.0)
 	elif ev.is_action_pressed("pause"):
 		_open_menu()
 	elif ev is InputEventKey and ev.pressed:
 		var mv := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 		if mv != Vector2.ZERO:
 			_focus_target += Vector3(mv.x, 0, mv.y) * 2.0
+
+func _zoom_by(d: float) -> void:
+	_dist = clampf(_dist + d, 15.0, 34.0)
+	_force_place = true
 
 # ---------------- hotspots ----------------
 func _on_spot(id: String) -> void:
@@ -337,10 +464,53 @@ func _on_spot(id: String) -> void:
 		"habitat": open_habitat()
 		"codex": _open_codex()
 		"lab": runner.play("hub_lab_mara")
+		"board": _read_board()
+		"stores": _read_stores()
+		"ledger": _open_ledger()
 		_:
 			GameState.unlock_codex("char_" + id)
 			if not runner.play("hub_npc_" + id):
 				_toast("%s nods at you." % Canon.display_name(id), "info")
+
+func _on_label(id: String) -> void:
+	# an off-screen place only pans the camera to it (the edge chip is a signpost); on-screen labels act
+	for sp in _spots:
+		if sp["id"] == id and bool(sp.get("off", false)):
+			Audio.sfx("ui_tap")
+			_focus_target = sp["node"].global_position
+			return
+	_on_spot(id)
+
+## The Rumor Board: what people are saying about the Reaches' optional places you have not seen yet.
+func _read_board() -> void:
+	var rr := RegionRunner.load_recipe("red_reaches")
+	var lines: Array = []
+	for sp in rr.get("spokes", []):
+		if not bool(GameState.flags.get("_spoke_" + str(sp["id"]), false)):
+			lines.append({"who": "narration", "text": "%s: %s" % [str(sp["name"]), str(sp.get("fresh", sp.get("blurb", "")))]})
+	var seen := 0
+	for sp in rr.get("spokes", []):
+		if bool(GameState.flags.get("_spoke_" + str(sp["id"]), false)):
+			seen += 1
+	if lines.is_empty():
+		lines.append({"who": "narration", "text": "Every notice on the board is stamped DONE. Someone has drawn a small, smug cairn in the corner."})
+	else:
+		lines.push_front({"who": "narration", "text": "Rumor Board. Pinned notices about the Red Reaches (%d of %d side areas found):" % [seen, rr.get("spokes", []).size()]})
+	runner.play_data("hub_board", {"lines": lines})
+
+func _read_stores() -> void:
+	var parts: Array = []
+	for k in GameState.items:
+		if int(GameState.items[k]) > 0:
+			parts.append("%s x%d" % [UiKit.item_name(str(k)), int(GameState.items[k])])
+	var t := "The stores are empty. Gather materials in the field." if parts.is_empty() else "Stores: " + ", ".join(parts) + "."
+	runner.play_data("hub_stores", {"lines": [{"who": "narration", "text": t}]})
+
+func _open_ledger() -> void:
+	var card := LedgerCard.debrief(-1, "Close")
+	card.title = "WHAT THE WORLD REMEMBERS"
+	card.subtitle = "The Ledger Wall"
+	add_child(card)
 
 func _talk_table() -> void:
 	if _returning:
@@ -404,6 +574,17 @@ func _open_codex() -> void:
 	var c := CodexScreen.new()
 	cl.add_child(c)
 	c.tree_exited.connect(cl.queue_free)
+
+func _open_gear() -> void:
+	if runner.active or habitat != null or _returning:
+		return
+	Audio.sfx("ui_tap")
+	var cl := CanvasLayer.new()
+	cl.layer = 70
+	add_child(cl)
+	var g := GearScreen.new()
+	cl.add_child(g)
+	g.tree_exited.connect(cl.queue_free)
 
 func _open_bonds() -> void:
 	if runner.active or habitat != null or _returning or (_bonds_screen and is_instance_valid(_bonds_screen)):
@@ -667,6 +848,7 @@ func _qa_open(what: String) -> void:
 		"habitat": open_habitat()
 		"end_card": _show_end_card()
 		"bonds": _open_bonds()
+		"gear": _open_gear()
 		"gate": open_gate_map()
 
 func qa_close_all() -> void:

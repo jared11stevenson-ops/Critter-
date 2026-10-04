@@ -71,14 +71,14 @@ func _press() -> void:
 	if action != "" and enabled:
 		Input.action_press(action)
 	tapped.emit()
-	queue_redraw()
+	redraw()
 
 func _release() -> void:
 	_touch = -1
 	if _pressed and action != "":
 		Input.action_release(action)
 	_pressed = false
-	queue_redraw()
+	redraw()
 
 func is_held() -> bool:
 	return _pressed
@@ -86,10 +86,10 @@ func is_held() -> bool:
 func _process(delta: float) -> void:
 	if _pulse > 0.0:
 		_pulse = maxf(0.0, _pulse - delta * 5.0)
-		queue_redraw()
+		redraw()
 	if _ready_flash > 0.0:
 		_ready_flash = maxf(0.0, _ready_flash - delta * 3.0)
-		queue_redraw()
+		redraw()
 
 func set_state(cd: float, tint: Color, en: bool) -> void:
 	if absf(cd - cd_frac) > 0.004 or tint != cost_tint or en != enabled:
@@ -98,9 +98,27 @@ func set_state(cd: float, tint: Color, en: bool) -> void:
 		cd_frac = cd
 		cost_tint = tint
 		enabled = en
+		redraw()
+
+## When set (the HUD does this), the button draws nothing itself: the batcher paints every button in phases so that all
+## textured discs, then all shapes, then all icons, then all text are consecutive. Compatibility only merges neighbouring
+## draws that share a texture, so interleaving them per button cost ~4 batches per button.
+var batcher: Control = null
+
+func redraw() -> void:
+	if batcher:
+		batcher.queue_redraw()
+	else:
 		queue_redraw()
 
 func _draw() -> void:
+	if batcher:
+		return
+	for ph in 5:
+		paint(self, ph)
+
+## Phases: 0 base disc/pill + cost ring, 1 cooldown sweep + caption plate, 2 icon, 3 text, 4 flash/pulse rings.
+func paint(ci: CanvasItem, phase: int) -> void:
 	var s := size
 	var c := s * 0.5
 	var r := minf(s.x, s.y) * 0.5
@@ -108,33 +126,6 @@ func _draw() -> void:
 	var col := base_col
 	if not enabled:
 		col = col.darkened(0.4)
-	if pill:
-		var sb := UiKit.box(col.lerp(UiKit.ACCENT, 0.25 if _pressed else 0.0), ring_col, int(s.y * 0.5), 4)
-		draw_style_box(sb, Rect2(Vector2.ZERO, s))
-	else:
-		var tex := _tex_down if _pressed and _tex_down else _tex_up
-		if tex:
-			draw_texture_rect(tex, Rect2(c - Vector2(r, r) * scale_k, Vector2(r, r) * 2.0 * scale_k), false, col.lightened(0.6))
-		else:
-			draw_circle(c, r * scale_k, Color(0, 0, 0, 0.35))
-			draw_circle(c, (r - 3.0) * scale_k, col.lerp(UiKit.ACCENT, 0.3 if _pressed else 0.0))
-			draw_arc(c, (r - 3.0) * scale_k, 0, TAU, 48, ring_col if enabled else UiKit.MUTED, 4.0, false)
-		if cost_tint.a > 0.0:
-			draw_arc(c, (r - 9.0) * scale_k, 0, TAU, 48, cost_tint, 5.0, false)
-	# Perf (Compatibility batches by texture): every untextured shape first, then text grouped by
-	# size, no outline passes. Captions sit on a dark plate instead of an outline.
-	if cd_frac > 0.001 and not pill:
-		var pts := PackedVector2Array()
-		pts.append(c)
-		var seg := 32
-		var start := -PI * 0.5
-		for i in seg + 1:
-			var a := start + TAU * cd_frac * float(i) / float(seg)
-			pts.append(c + Vector2(cos(a), sin(a)) * (r - 4.0) * scale_k)
-		draw_colored_polygon(pts, Color(0.05, 0.03, 0.03, 0.62))
-		# bright leading edge of the sweep + rim ring in the ability colour: readable at a glance
-		draw_line(c, pts[pts.size() - 1], Color(1.0, 0.92, 0.7, 0.9), 3.0)
-		draw_arc(c, r - 4.0, start, start + TAU * cd_frac, 32, Color(ring_col.r, ring_col.g, ring_col.b, 0.35), 6.0)
 	var fs2 := 22
 	var cap_w := 0.0
 	var cap_y := s.y + 22.0
@@ -142,18 +133,48 @@ func _draw() -> void:
 		cap_w = _font.get_string_size(caption, HORIZONTAL_ALIGNMENT_CENTER, -1, fs2).x
 		if pill:
 			cap_y = c.y + fs2 * 0.36
-		else:
-			draw_rect(Rect2(Vector2(c.x - cap_w * 0.5 - 8.0, cap_y - fs2 * 0.92), Vector2(cap_w + 16.0, fs2 * 1.25)), Color(0.06, 0.04, 0.035, 0.72))
-	if icon:
-		var isz := r * (1.4 if not pill else 1.1) * scale_k
-		draw_texture_rect(icon, Rect2(c - Vector2(isz, isz) * 0.5, Vector2(isz, isz)), false, Color(1, 1, 1, 1 if enabled else 0.5))
-	elif glyph != "" and _font:
-		var fs := glyph_size
-		var w := _font.get_string_size(glyph, HORIZONTAL_ALIGNMENT_CENTER, -1, fs).x
-		draw_string(_font, Vector2(c.x - w * 0.5, c.y + fs * 0.36), glyph, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, UiKit.PARCHMENT if enabled else UiKit.MUTED)
-	if caption != "" and _font:
-		draw_string(_font, Vector2(c.x - cap_w * 0.5, cap_y), caption, HORIZONTAL_ALIGNMENT_LEFT, -1, fs2, UiKit.PARCHMENT)
-	if _ready_flash > 0.0 and not bool(GameState.settings.get("reduce_flashing", false)):
-		draw_arc(c, r * (0.9 + (1.0 - _ready_flash) * 0.3), 0, TAU, 40, Color(1.0, 0.95, 0.6, _ready_flash * 0.9), 5.0 * _ready_flash + 1.0, true)
-	if _pulse > 0.0 and not bool(GameState.settings.get("reduce_flashing", false)):
-		draw_arc(c, r + (1.0 - _pulse) * 16.0, 0, TAU, 40, Color(1, 0.9, 0.7, _pulse * 0.8), 3.0, true)
+	match phase:
+		0:
+			if pill:
+				var sb := UiKit.box(col.lerp(UiKit.ACCENT, 0.25 if _pressed else 0.0), ring_col, int(s.y * 0.5), 4)
+				ci.draw_style_box(sb, Rect2(Vector2.ZERO, s))
+			else:
+				var tex := _tex_down if _pressed and _tex_down else _tex_up
+				if tex:
+					ci.draw_texture_rect(tex, Rect2(c - Vector2(r, r) * scale_k, Vector2(r, r) * 2.0 * scale_k), false, col.lightened(0.6))
+				else:
+					ci.draw_circle(c, r * scale_k, Color(0, 0, 0, 0.35))
+					ci.draw_circle(c, (r - 3.0) * scale_k, col.lerp(UiKit.ACCENT, 0.3 if _pressed else 0.0))
+					ci.draw_arc(c, (r - 3.0) * scale_k, 0, TAU, 48, ring_col if enabled else UiKit.MUTED, 4.0, false)
+				if cost_tint.a > 0.0:
+					ci.draw_arc(c, (r - 9.0) * scale_k, 0, TAU, 48, cost_tint, 5.0, false)
+		1:
+			if cd_frac > 0.001 and not pill:
+				var pts := PackedVector2Array()
+				pts.append(c)
+				var seg := 32
+				var start := -PI * 0.5
+				for i in seg + 1:
+					var a := start + TAU * cd_frac * float(i) / float(seg)
+					pts.append(c + Vector2(cos(a), sin(a)) * (r - 4.0) * scale_k)
+				ci.draw_colored_polygon(pts, Color(0.05, 0.03, 0.03, 0.62))
+				ci.draw_line(c, pts[pts.size() - 1], Color(1.0, 0.92, 0.7, 0.9), 3.0)
+				ci.draw_arc(c, r - 4.0, start, start + TAU * cd_frac, 32, Color(ring_col.r, ring_col.g, ring_col.b, 0.35), 6.0)
+			if caption != "" and _font and not pill:
+				ci.draw_rect(Rect2(Vector2(c.x - cap_w * 0.5 - 8.0, cap_y - fs2 * 0.92), Vector2(cap_w + 16.0, fs2 * 1.25)), Color(0.06, 0.04, 0.035, 0.72))
+		2:
+			if icon:
+				var isz := r * (1.4 if not pill else 1.1) * scale_k
+				ci.draw_texture_rect(icon, Rect2(c - Vector2(isz, isz) * 0.5, Vector2(isz, isz)), false, Color(1, 1, 1, 1 if enabled else 0.5))
+		3:
+			if not icon and glyph != "" and _font:
+				var fs := glyph_size
+				var w := _font.get_string_size(glyph, HORIZONTAL_ALIGNMENT_CENTER, -1, fs).x
+				ci.draw_string(_font, Vector2(c.x - w * 0.5, c.y + fs * 0.36), glyph, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, UiKit.PARCHMENT if enabled else UiKit.MUTED)
+			if caption != "" and _font:
+				ci.draw_string(_font, Vector2(c.x - cap_w * 0.5, cap_y), caption, HORIZONTAL_ALIGNMENT_LEFT, -1, fs2, UiKit.PARCHMENT)
+		4:
+			if _ready_flash > 0.0 and not bool(GameState.settings.get("reduce_flashing", false)):
+				ci.draw_arc(c, r * (0.9 + (1.0 - _ready_flash) * 0.3), 0, TAU, 40, Color(1.0, 0.95, 0.6, _ready_flash * 0.9), 5.0 * _ready_flash + 1.0, true)
+			if _pulse > 0.0 and not bool(GameState.settings.get("reduce_flashing", false)):
+				ci.draw_arc(c, r + (1.0 - _pulse) * 16.0, 0, TAU, 40, Color(1, 0.9, 0.7, _pulse * 0.8), 3.0, true)

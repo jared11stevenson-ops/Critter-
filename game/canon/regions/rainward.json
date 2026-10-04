@@ -1,1646 +1,1669 @@
 {
-  "_doc": "Region recipe: Rainward (Mollusk's homeland). Data only. Schema: design/DATA_REQUESTS.md. Source: bible section 25. A tropical storm continent of volcanic soil, enormous vegetation, floodplains and waterways that regularly redraw the landscape. Permanent architecture is difficult; cultures build for movement, repair and adaptation.",
-  "id": "rainward",
-  "name": "Rainward",
-  "homeland_of": [
-    "mollusk"
+ "_doc": "Region recipe: Rainward (Mollusk's homeland). Data only. Schema: design/DATA_REQUESTS.md. Source: bible section 25. A tropical storm continent of volcanic soil, enormous vegetation, floodplains and waterways that regularly redraw the landscape. Permanent architecture is difficult; cultures build for movement, repair and adaptation.",
+ "id": "rainward",
+ "name": "Rainward",
+ "homeland_of": [
+  "mollusk"
+ ],
+ "tier": 2,
+ "summary": "A tropical storm continent. Rain is the clock. Rivers change course in a season; roads are rebuilt after every flood. Shell-marks record journeys and obligations.",
+ "layers": [
+  {
+   "id": "ridge",
+   "depth": 0,
+   "light": "storm light, broken cloud",
+   "hazard": "lightning and wind",
+   "feel": "loud, open"
+  },
+  {
+   "id": "floodplain",
+   "depth": 1,
+   "light": "gray-green overcast",
+   "hazard": "rising water, mud",
+   "feel": "wet, busy, alive"
+  },
+  {
+   "id": "canal",
+   "depth": 2,
+   "light": "reflective, bright",
+   "hazard": "current, floating debris",
+   "feel": "fast"
+  },
+  {
+   "id": "undergrowth",
+   "depth": 3,
+   "light": "dim green under huge leaves",
+   "hazard": "sinkholes, tangles",
+   "feel": "close, dripping"
+  }
+ ],
+ "ground": {
+  "surfaces": [
+   {
+    "id": "volcanic_soil",
+    "desc": "Dark, rich soil; slick when wet, firm when it dries.",
+    "color": "#3a2a22"
+   },
+   {
+    "id": "flood_mud",
+    "desc": "Deep mud left by the last flood. Slows movement.",
+    "color": "#5a4a38"
+   },
+   {
+    "id": "planked_walk",
+    "desc": "Quick wooden walkways rebuilt every season.",
+    "color": "#7a5a3a"
+   },
+   {
+    "id": "leaf_mat",
+    "desc": "Floating mats of huge leaves; hold light weight.",
+    "color": "#3d7a3a"
+   }
   ],
-  "tier": 2,
-  "summary": "A tropical storm continent. Rain is the clock. Rivers change course in a season; roads are rebuilt after every flood. Shell-marks record journeys and obligations.",
-  "layers": [
-    {
-      "id": "ridge",
-      "depth": 0,
-      "light": "storm light, broken cloud",
-      "hazard": "lightning and wind",
-      "feel": "loud, open"
-    },
-    {
-      "id": "floodplain",
-      "depth": 1,
-      "light": "gray-green overcast",
-      "hazard": "rising water, mud",
-      "feel": "wet, busy, alive"
-    },
-    {
-      "id": "canal",
-      "depth": 2,
-      "light": "reflective, bright",
-      "hazard": "current, floating debris",
-      "feel": "fast"
-    },
-    {
-      "id": "undergrowth",
-      "depth": 3,
-      "light": "dim green under huge leaves",
-      "hazard": "sinkholes, tangles",
-      "feel": "close, dripping"
-    }
+  "relief": "gentle plains cut by canals and levees; ridges to the east",
+  "palette": [
+   "#1a2a1f",
+   "#2a4a3a",
+   "#4f8a4a",
+   "#c8c27a",
+   "#7a5a3a",
+   "#5a8aa0"
+  ]
+ },
+ "sky": {
+  "time": "day, storm-cycled",
+  "weather_cycle": [
+   "downpour",
+   "drizzle",
+   "clearing",
+   "heat haze"
   ],
-  "ground": {
-    "surfaces": [
+  "fog_color": "#8aa0a0",
+  "fog_density": 0.012,
+  "ambient": "cool gray-green with warm breaks",
+  "motes": "rain, spray, steam"
+ },
+ "props": [
+  {
+   "id": "stilt_house",
+   "kind": "structure",
+   "density": "medium",
+   "note": "A home on stilts; rebuilt after floods. Built for movement."
+  },
+  {
+   "id": "shell_marker",
+   "kind": "decor",
+   "density": "low",
+   "note": "A carved shell fragment recording a journey or an obligation."
+  },
+  {
+   "id": "levee_wall",
+   "kind": "structure",
+   "density": "low",
+   "note": "A mud-and-reed barrier. Needs constant repair."
+  },
+  {
+   "id": "ferry_raft",
+   "kind": "vehicle",
+   "density": "low",
+   "note": "A floating platform for moving between canals."
+  },
+  {
+   "id": "giant_leaf",
+   "kind": "cover",
+   "density": "high",
+   "note": "Leaves the size of rooms; rain gutters and shelter."
+  },
+  {
+   "id": "market_stall_wet",
+   "kind": "decor",
+   "density": "low",
+   "note": "Produce stalls under tarps; Mollusk likes them."
+  },
+  {
+   "id": "abandoned_forklift",
+   "kind": "decor",
+   "density": "rare",
+   "note": "Earth cargo equipment dropped through a Gate. Not an explainable object."
+  }
+ ],
+ "flora": [
+  "giant taro, rain palm, tiderush, sunflower bracken, drip orchids"
+ ],
+ "creatures": [
+  {
+   "id": "levee_mole",
+   "name": "Levee Mole",
+   "class": "WILDLIFE",
+   "sapient": false,
+   "role": "burrower",
+   "desc": "Broad-handed diggers that tunnel into levees.",
+   "behavior": "Passive. Their burrows can weaken a levee, or channel its water safely, depending on the Habitat.",
+   "uses": {
+    "battle": "low",
+    "labor": "digging",
+    "ecology": "drains and aerates soil"
+   },
+   "weight": 3
+  },
+  {
+   "id": "rain_strider",
+   "name": "Rain Strider",
+   "class": "WILDLIFE",
+   "sapient": false,
+   "role": "surface skater",
+   "desc": "Long-legged skaters that cross floodwater.",
+   "behavior": "Gathers before a flood. Their gathering is a warning.",
+   "uses": {
+    "battle": "none",
+    "labor": "carries messages along water",
+    "ecology": "predicts floods"
+   },
+   "weight": 3
+  },
+  {
+   "id": "mudback_crab",
+   "name": "Mudback Crab",
+   "class": "WILDLIFE",
+   "sapient": false,
+   "role": "scavenger",
+   "desc": "A heavy crab that clears the post-flood mud.",
+   "behavior": "Defensive when cornered. Peaceful when given a way out.",
+   "uses": {
+    "battle": "medium",
+    "labor": "cleanup",
+    "ecology": "recycles flood debris"
+   },
+   "weight": 2
+  },
+  {
+   "id": "storm_heron",
+   "name": "Storm Heron",
+   "class": "WILDLIFE",
+   "sapient": false,
+   "role": "apex hunter",
+   "desc": "A tall hunter that stalks the canals during storms.",
+   "behavior": "Strikes from stillness. Targets whatever moves fastest.",
+   "uses": {
+    "battle": "high",
+    "labor": "none",
+    "ecology": "controls skater numbers"
+   },
+   "weight": 1
+  }
+ ],
+ "music": {
+  "mood": "warm, rolling, restless, resilient",
+  "tempo": "72-100, storm-synced",
+  "instruments": [
+   "marimba",
+   "log drum",
+   "rain stick",
+   "reed flute",
+   "low brass"
+  ],
+  "layers": {
+   "ridge": "big, rolling percussion",
+   "floodplain": "busy marimba",
+   "canal": "fast reed runs",
+   "undergrowth": "dripping, sparse"
+  },
+  "stinger_on_event": "a rolling drum fill that resolves"
+ },
+ "encounters": {
+  "enemies": [
+   {
+    "species": "storm_heron",
+    "weight": 2
+   },
+   {
+    "species": "mudback_crab",
+    "weight": 2
+   },
+   {
+    "species": "dominion_drone",
+    "weight": 2
+   }
+  ],
+  "rivals": [
+   "joss_harrow"
+  ],
+  "hazards": [
+   "flash flood",
+   "mud trap",
+   "lightning on the ridge",
+   "floating debris"
+  ],
+  "ambient": "rain, frog chorus, distant thunder"
+ },
+ "world_states": [
+  {
+   "id": "flood",
+   "label": "Flood",
+   "effect": "Water rises over the whole plain. Canals merge; ferries replace roads.",
+   "event_weight_mods": {
+    "rainward_flash_flood": 4
+   }
+  },
+  {
+   "id": "overgrowth",
+   "label": "Overgrowth",
+   "effect": "The leaf layer thickens; paths close behind you.",
+   "event_weight_mods": {
+    "rainward_tangle": 2
+   }
+  },
+  {
+   "id": "extraction",
+   "label": "Extraction",
+   "effect": "Dominion pumps drain a floodplain for ore. The soil cracks.",
+   "event_weight_mods": {
+    "rainward_pump_site": 3
+   }
+  }
+ ],
+ "bondable_here": [
+  {
+   "character": "mollusk",
+   "hook": "Shell memory: his tests are about using borrowed seconds and facing the bill."
+  },
+  {
+   "character": "solmara",
+   "hook": "A flooded canal is a small tide; she reads it."
+  },
+  {
+   "character": "scarlith",
+   "hook": "A salvage cache after the flood: abandoned or not?"
+  }
+ ],
+ "descent_events": [
+  {
+   "id": "rainward_flash_flood",
+   "title": "Flash flood on the plain",
+   "kind": "hazard",
+   "weight": 4,
+   "once": false,
+   "min_depth": 1,
+   "text": "The rain strider herd bunches up on the nearest levee, which is the only warning you get. The sky to the east is the wrong color. Mollusk plants one foot and says, quietly, 'We have a few seconds. Do not waste them.'",
+   "choices": [
+    {
+     "id": "use",
+     "label": "Hold the water and evacuate the stilt houses.",
+     "result": "Mollusk stretches the surge until the last household crosses the levee. When the delay ends, you are on the ridge with them.",
+     "records": [
       {
-        "id": "volcanic_soil",
-        "desc": "Dark, rich soil; slick when wet, firm when it dries.",
-        "color": "#3a2a22"
+       "type": "helped",
+       "target": "stilt_village",
+       "tags": [
+        "delay_used",
+        "evacuation",
+        "rescue_civilians"
+       ],
+       "weight": 4
       },
       {
-        "id": "flood_mud",
-        "desc": "Deep mud left by the last flood. Slows movement.",
-        "color": "#5a4a38"
-      },
-      {
-        "id": "planked_walk",
-        "desc": "Quick wooden walkways rebuilt every season.",
-        "color": "#7a5a3a"
-      },
-      {
-        "id": "leaf_mat",
-        "desc": "Floating mats of huge leaves; hold light weight.",
-        "color": "#3d7a3a"
+       "type": "chose",
+       "target": "stilt_village",
+       "tags": [
+        "consequence_faced"
+       ],
+       "weight": 3
       }
-    ],
-    "relief": "gentle plains cut by canals and levees; ridges to the east",
-    "palette": [
-      "#1a2a1f",
-      "#2a4a3a",
-      "#4f8a4a",
-      "#c8c27a",
-      "#7a5a3a",
-      "#5a8aa0"
+     ]
+    },
+    {
+     "id": "brace",
+     "label": "Brace the levee and let the water through the spillway.",
+     "result": "The levee takes the water and gives some of it up. The village is wet, not drowned.",
+     "records": [
+      {
+       "type": "helped",
+       "target": "levee_wall",
+       "tags": [
+        "braced_structure",
+        "redundant_design",
+        "stewardship",
+        "flood_averted"
+       ],
+       "weight": 4
+      }
+     ]
+    },
+    {
+     "id": "hide",
+     "label": "Use the delay to get out of the plain before it breaks.",
+     "result": "You make it to the ridge. The village does not.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "stilt_village",
+       "tags": [
+        "delay_used",
+        "consequence_dodged",
+        "casualty"
+       ],
+       "weight": 4
+      }
+     ]
+    },
+    {
+     "id": "dump",
+     "label": "Dump the surge into the next valley's canal and save this one.",
+     "result": "This valley is dry. The next one is not. The water remembers where it was sent.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "next_valley",
+       "tags": [
+        "tide_disturbed",
+        "flood_averted"
+       ],
+       "weight": 4
+      }
+     ]
+    },
+    {
+     "id": "read",
+     "label": "Read the surge with Solmara and steer it into the old canal.",
+     "result": "Solmara counts the pulses and points. The water goes where it is needed.",
+     "records": [
+      {
+       "type": "helped",
+       "target": "old_canal",
+       "tags": [
+        "tide_read",
+        "flood_averted",
+        "stewardship"
+       ],
+       "weight": 4
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rainward_ferry",
+   "title": "The ferry that will not wait",
+   "kind": "stranded",
+   "weight": 3,
+   "once": false,
+   "min_depth": 0,
+   "text": "A ferry crew is stuck on a mud flat with the water rising. They are trying to push the raft by hand. Their shell-marks say they have done this before.",
+   "choices": [
+    {
+     "id": "push",
+     "label": "Help push, and take their cargo ledger as thanks.",
+     "result": "The raft floats. They give you a carved shell fragment.",
+     "records": [
+      {
+       "type": "helped",
+       "target": "ferry_crew",
+       "tags": [
+        "protect_weak",
+        "rescue_civilians",
+        "social"
+       ],
+       "weight": 3
+      }
+     ]
+    },
+    {
+     "id": "hold",
+     "label": "Ask Mollusk to slow the flood, then shove together.",
+     "result": "The raft slides free a breath before the surge hits.",
+     "records": [
+      {
+       "type": "helped",
+       "target": "ferry_crew",
+       "tags": [
+        "delay_used",
+        "rescue_civilians"
+       ],
+       "weight": 3
+      }
+     ]
+    },
+    {
+     "id": "pass",
+     "label": "Cross on the raft's cargo bridge and leave them to it.",
+     "result": "You get across. They do not thank you.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "ferry_crew",
+       "tags": [
+        "neglect",
+        "shortcut"
+       ],
+       "weight": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rainward_pump_site",
+   "title": "Dominion pump site",
+   "kind": "convoy",
+   "weight": 3,
+   "once": false,
+   "min_depth": 0,
+   "text": "A row of Dominion pumps drains a floodplain for the ore under it. The soil is cracking. A Survey Chief leans on a sluice gate and hums.",
+   "choices": [
+    {
+     "id": "negotiate",
+     "label": "Offer a schedule: pumps off at flood season.",
+     "result": "The chief takes it. The plain breathes.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "pump_site",
+       "tags": [
+        "nonviolent",
+        "stewardship"
+       ],
+       "weight": 3
+      }
+     ]
+    },
+    {
+     "id": "expose",
+     "label": "Log the drainage as unpermitted.",
+     "result": "The permit was for the next valley. Mara can use this.",
+     "records": [
+      {
+       "type": "discovered",
+       "target": "pump_site",
+       "tags": [
+        "evidence",
+        "discovery"
+       ],
+       "weight": 3
+      }
+     ]
+    },
+    {
+     "id": "let",
+     "label": "Let it run and take the ore sample.",
+     "result": "The sample is rich. The soil is not.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "pump_site",
+       "tags": [
+        "extraction",
+        "dominion_favor"
+       ],
+       "weight": 3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rainward_drum_night",
+   "title": "Drum night after the water",
+   "kind": "social",
+   "weight": 2,
+   "once": false,
+   "min_depth": 0,
+   "text": "The village drums the night after the flood: log drums, shell rattles, a lot of people hugging. Solmara watches with her legs folded, very still. 'Is it a threat display?' she asks. 'Several of them are crying.'",
+   "choices": [
+    {
+     "id": "explain",
+     "label": "Explain that they are relieved and a little afraid, both at once.",
+     "result": "She considers this. 'A tide with two directions. I understand that one.' She logs it.",
+     "records": [
+      {
+       "type": "talked",
+       "target": "solmara",
+       "tags": [
+        "emotion_translated",
+        "social",
+        "trust"
+       ],
+       "weight": 3
+      }
+     ]
+    },
+    {
+     "id": "tide",
+     "label": "Tell her the drum rhythm follows the water level.",
+     "result": "She listens for a while and agrees. 'Yes. They are counting the river.'",
+     "records": [
+      {
+       "type": "talked",
+       "target": "solmara",
+       "tags": [
+        "tide_read",
+        "social"
+       ],
+       "weight": 2
+      }
+     ]
+    },
+    {
+     "id": "skip",
+     "label": "Say it is a local custom.",
+     "result": "She thanks you, and she is still confused.",
+     "records": [
+      {
+       "type": "talked",
+       "target": "solmara",
+       "tags": [
+        "social"
+       ],
+       "weight": 1
+      }
+     ]
+    }
+   ],
+   "when": {
+    "event": {
+     "tag": "flood_averted"
+    }
+   }
+  },
+  {
+   "id": "rainward_forklift",
+   "title": "A forklift in the reeds",
+   "kind": "discovery",
+   "weight": 2,
+   "once": true,
+   "min_depth": 0,
+   "text": "There is a forklift in the reeds. It is orange, upright and entirely undamaged. Mollusk stares at it for a long time.",
+   "choices": [
+    {
+     "id": "look",
+     "label": "Let him look.",
+     "result": "He circles it twice, notes the hydraulics, and says it is the best thing he has seen all week.",
+     "records": [
+      {
+       "type": "talked",
+       "target": "mollusk",
+       "tags": [
+        "social",
+        "trust"
+       ],
+       "weight": 1
+      }
+     ]
+    },
+    {
+     "id": "salvage",
+     "label": "Strip it for parts.",
+     "result": "Mollusk says nothing. Scarlith would call this fair, if it were abandoned. It does not look abandoned.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "forklift",
+       "tags": [
+        "claim_jump"
+       ],
+       "weight": 2
+      }
+     ]
+    },
+    {
+     "id": "report",
+     "label": "Report it to the Authority as Earth cargo lost through a Gate.",
+     "result": "A short, correct report. The forklift returns to Earth with a tag.",
+     "records": [
+      {
+       "type": "helped",
+       "target": "forklift",
+       "tags": [
+        "salvage_fair",
+        "evidence"
+       ],
+       "weight": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rainward_salvage_cache",
+   "title": "A flooded cache",
+   "kind": "discovery",
+   "weight": 3,
+   "once": false,
+   "min_depth": 0,
+   "text": "A stilt cache, half sunk. Jars, tools, a few sealed sacks. No owner in sight, but the shell-marks on the posts are fresh.",
+   "choices": [
+    {
+     "id": "leave",
+     "label": "Leave it. The marks say it belongs to somebody.",
+     "result": "You note the marks. Scarlith writes a number in the air. It is not a rude number.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "cache",
+       "tags": [
+        "not_for_sale",
+        "salvage_fair"
+       ],
+       "weight": 3
+      }
+     ]
+    },
+    {
+     "id": "take_old",
+     "label": "Take only what is rotted through and has no mark.",
+     "result": "You take the spoiled crates. Scarlith nods, once.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "cache",
+       "tags": [
+        "salvage_fair"
+       ],
+       "weight": 3
+      }
+     ]
+    },
+    {
+     "id": "take_all",
+     "label": "Take it all.",
+     "result": "The tools are good. The marks are fresh. Someone will come looking.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "cache",
+       "tags": [
+        "claim_jump",
+        "extraction"
+       ],
+       "weight": 3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rainward_old_road_marker",
+   "title": "A marker above the waterline",
+   "kind": "marker",
+   "weight": 2,
+   "once": false,
+   "min_depth": 0,
+   "text": "A marker stone stands above the highest known flood line. Its symbols match markers a continent away. Rainward is a place where nothing stays; this has.",
+   "choices": [
+    {
+     "id": "read",
+     "label": "Read it with Mollusk.",
+     "result": "He reads it slowly. It is a record of a flood that came before the oldest shell.",
+     "records": [
+      {
+       "type": "discovered",
+       "target": "old_road_marker",
+       "tags": [
+        "discovery",
+        "curiosity",
+        "evidence"
+       ],
+       "weight": 3
+      }
+     ]
+    },
+    {
+     "id": "add",
+     "label": "Add a shell-mark of your own.",
+     "result": "Mollusk carves it. The marker looks a little less alone.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "old_road_marker",
+       "tags": [
+        "stewardship",
+        "social"
+       ],
+       "weight": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rainward_tangle",
+   "title": "Leaf-mat crossing",
+   "kind": "hazard",
+   "weight": 2,
+   "once": false,
+   "min_depth": 0,
+   "text": "A canal's surface is a floating mat of huge leaves. A trail of footprints leads out across it, and none come back.",
+   "choices": [
+    {
+     "id": "lay",
+     "label": "Lay a guide line across for those behind you.",
+     "result": "You rig a rope and flags. The next group crosses on it.",
+     "records": [
+      {
+       "type": "helped",
+       "target": "leaf_mat",
+       "tags": [
+        "route_laid",
+        "stewardship"
+       ],
+       "weight": 3
+      }
+     ]
+    },
+    {
+     "id": "cross",
+     "label": "Cross quickly and say nothing.",
+     "result": "You make it across. The mat closes behind you.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "leaf_mat",
+       "tags": [
+        "shortcut"
+       ],
+       "weight": 1
+      }
+     ]
+    },
+    {
+     "id": "deliver",
+     "label": "Carry a sealed message across for a family on the far bank.",
+     "result": "It arrives dry. The family sends a basket back.",
+     "records": [
+      {
+       "type": "helped",
+       "target": "far_bank_family",
+       "tags": [
+        "delivered",
+        "route_laid"
+       ],
+       "weight": 3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rainward_amends_delay",
+   "title": "The bill that came due",
+   "kind": "bond_test",
+   "weight": 1,
+   "once": true,
+   "min_depth": 0,
+   "text": "You return to the place where the flood broke. The levee is half rebuilt. Mollusk is carving a new mark into his shell.",
+   "choices": [
+    {
+     "id": "help",
+     "label": "Help rebuild. Carry mud, set stakes, and listen.",
+     "result": "He says nothing for a long time. Then he hands you a stake.",
+     "records": [
+      {
+       "type": "amends",
+       "target": "mollusk",
+       "tags": [
+        "amends",
+        "consequence_faced"
+       ],
+       "weight": 3
+      }
+     ]
+    }
+   ],
+   "when": {
+    "all": [
+     {
+      "event": {
+       "tag": "consequence_dodged",
+       "count_min": 1
+      }
+     },
+     {
+      "not": {
+       "event": {
+        "type": "amends",
+        "target": "mollusk"
+       }
+      }
+     }
     ]
+   }
   },
-  "sky": {
-    "time": "day, storm-cycled",
-    "weather_cycle": [
-      "downpour",
-      "drizzle",
-      "clearing",
-      "heat haze"
-    ],
-    "fog_color": "#8aa0a0",
-    "fog_density": 0.012,
-    "ambient": "cool gray-green with warm breaks",
-    "motes": "rain, spray, steam"
-  },
-  "props": [
+  {
+   "id": "rainward_amends_tide",
+   "title": "The tide you broke",
+   "kind": "bond_test",
+   "weight": 1,
+   "once": true,
+   "min_depth": 0,
+   "text": "A canal you once rerouted now runs the wrong way. Solmara hovers over it with her body angled to the water, quietly bothered.",
+   "choices": [
     {
-      "id": "stilt_house",
-      "kind": "structure",
-      "density": "medium",
-      "note": "A home on stilts; rebuilt after floods. Built for movement."
-    },
-    {
-      "id": "shell_marker",
-      "kind": "decor",
-      "density": "low",
-      "note": "A carved shell fragment recording a journey or an obligation."
-    },
-    {
-      "id": "levee_wall",
-      "kind": "structure",
-      "density": "low",
-      "note": "A mud-and-reed barrier. Needs constant repair."
-    },
-    {
-      "id": "ferry_raft",
-      "kind": "vehicle",
-      "density": "low",
-      "note": "A floating platform for moving between canals."
-    },
-    {
-      "id": "giant_leaf",
-      "kind": "cover",
-      "density": "high",
-      "note": "Leaves the size of rooms; rain gutters and shelter."
-    },
-    {
-      "id": "market_stall_wet",
-      "kind": "decor",
-      "density": "low",
-      "note": "Produce stalls under tarps; Mollusk likes them."
-    },
-    {
-      "id": "abandoned_forklift",
-      "kind": "decor",
-      "density": "rare",
-      "note": "Earth cargo equipment dropped through a Gate. Not an explainable object."
+     "id": "restore",
+     "label": "Reopen the old channel and restore the flow.",
+     "result": "The water settles. Solmara says, 'The relationship is repaired,' then adds, 'I think you were sad about it. Was that correct?'",
+     "records": [
+      {
+       "type": "amends",
+       "target": "solmara",
+       "tags": [
+        "amends",
+        "tide_read",
+        "emotion_translated"
+       ],
+       "weight": 3
+      }
+     ]
     }
-  ],
-  "flora": [
-    "giant taro, rain palm, tiderush, sunflower bracken, drip orchids"
-  ],
-  "creatures": [
-    {
-      "id": "levee_mole",
-      "name": "Levee Mole",
-      "class": "WILDLIFE",
-      "sapient": false,
-      "role": "burrower",
-      "desc": "Broad-handed diggers that tunnel into levees.",
-      "behavior": "Passive. Their burrows can weaken a levee, or channel its water safely, depending on the Habitat.",
-      "uses": {
-        "battle": "low",
-        "labor": "digging",
-        "ecology": "drains and aerates soil"
-      },
-      "weight": 3
-    },
-    {
-      "id": "rain_strider",
-      "name": "Rain Strider",
-      "class": "WILDLIFE",
-      "sapient": false,
-      "role": "surface skater",
-      "desc": "Long-legged skaters that cross floodwater.",
-      "behavior": "Gathers before a flood. Their gathering is a warning.",
-      "uses": {
-        "battle": "none",
-        "labor": "carries messages along water",
-        "ecology": "predicts floods"
-      },
-      "weight": 3
-    },
-    {
-      "id": "mudback_crab",
-      "name": "Mudback Crab",
-      "class": "WILDLIFE",
-      "sapient": false,
-      "role": "scavenger",
-      "desc": "A heavy crab that clears the post-flood mud.",
-      "behavior": "Defensive when cornered. Peaceful when given a way out.",
-      "uses": {
-        "battle": "medium",
-        "labor": "cleanup",
-        "ecology": "recycles flood debris"
-      },
-      "weight": 2
-    },
-    {
-      "id": "storm_heron",
-      "name": "Storm Heron",
-      "class": "WILDLIFE",
-      "sapient": false,
-      "role": "apex hunter",
-      "desc": "A tall hunter that stalks the canals during storms.",
-      "behavior": "Strikes from stillness. Targets whatever moves fastest.",
-      "uses": {
-        "battle": "high",
-        "labor": "none",
-        "ecology": "controls skater numbers"
-      },
-      "weight": 1
-    }
-  ],
-  "music": {
-    "mood": "warm, rolling, restless, resilient",
-    "tempo": "72-100, storm-synced",
-    "instruments": [
-      "marimba",
-      "log drum",
-      "rain stick",
-      "reed flute",
-      "low brass"
-    ],
-    "layers": {
-      "ridge": "big, rolling percussion",
-      "floodplain": "busy marimba",
-      "canal": "fast reed runs",
-      "undergrowth": "dripping, sparse"
-    },
-    "stinger_on_event": "a rolling drum fill that resolves"
-  },
-  "encounters": {
-    "enemies": [
-      {
-        "species": "storm_heron",
-        "weight": 2
-      },
-      {
-        "species": "mudback_crab",
-        "weight": 2
-      },
-      {
-        "species": "dominion_drone",
-        "weight": 2
+   ],
+   "when": {
+    "all": [
+     {
+      "event": {
+       "tag": "tide_disturbed",
+       "count_min": 1
       }
-    ],
-    "rivals": [
-      "joss_harrow"
-    ],
-    "hazards": [
-      "flash flood",
-      "mud trap",
-      "lightning on the ridge",
-      "floating debris"
-    ],
-    "ambient": "rain, frog chorus, distant thunder"
-  },
-  "world_states": [
-    {
-      "id": "flood",
-      "label": "Flood",
-      "effect": "Water rises over the whole plain. Canals merge; ferries replace roads.",
-      "event_weight_mods": {
-        "rainward_flash_flood": 4
+     },
+     {
+      "not": {
+       "event": {
+        "type": "amends",
+        "target": "solmara"
+       }
       }
-    },
-    {
-      "id": "overgrowth",
-      "label": "Overgrowth",
-      "effect": "The leaf layer thickens; paths close behind you.",
-      "event_weight_mods": {
-        "rainward_tangle": 2
-      }
-    },
-    {
-      "id": "extraction",
-      "label": "Extraction",
-      "effect": "Dominion pumps drain a floodplain for ore. The soil cracks.",
-      "event_weight_mods": {
-        "rainward_pump_site": 3
-      }
-    }
-  ],
-  "bondable_here": [
-    {
-      "character": "mollusk",
-      "hook": "Shell memory: his tests are about using borrowed seconds and facing the bill."
-    },
-    {
-      "character": "solmara",
-      "hook": "A flooded canal is a small tide; she reads it."
-    },
-    {
-      "character": "scarlith",
-      "hook": "A salvage cache after the flood: abandoned or not?"
-    }
-  ],
-  "descent_events": [
-    {
-      "id": "rainward_flash_flood",
-      "title": "Flash flood on the plain",
-      "kind": "hazard",
-      "weight": 4,
-      "once": false,
-      "min_depth": 1,
-      "text": "The rain strider herd bunches up on the nearest levee, which is the only warning you get. The sky to the east is the wrong color. Mollusk plants one foot and says, quietly, 'We have a few seconds. Do not waste them.'",
-      "choices": [
-        {
-          "id": "use",
-          "label": "Hold the water and evacuate the stilt houses.",
-          "result": "Mollusk stretches the surge until the last household crosses the levee. When the delay ends, you are on the ridge with them.",
-          "records": [
-            {
-              "type": "helped",
-              "target": "stilt_village",
-              "tags": [
-                "delay_used",
-                "evacuation",
-                "rescue_civilians"
-              ],
-              "weight": 4
-            },
-            {
-              "type": "chose",
-              "target": "stilt_village",
-              "tags": [
-                "consequence_faced"
-              ],
-              "weight": 3
-            }
-          ]
-        },
-        {
-          "id": "brace",
-          "label": "Brace the levee and let the water through the spillway.",
-          "result": "The levee takes the water and gives some of it up. The village is wet, not drowned.",
-          "records": [
-            {
-              "type": "helped",
-              "target": "levee_wall",
-              "tags": [
-                "braced_structure",
-                "redundant_design",
-                "stewardship",
-                "flood_averted"
-              ],
-              "weight": 4
-            }
-          ]
-        },
-        {
-          "id": "hide",
-          "label": "Use the delay to get out of the plain before it breaks.",
-          "result": "You make it to the ridge. The village does not.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "stilt_village",
-              "tags": [
-                "delay_used",
-                "consequence_dodged",
-                "casualty"
-              ],
-              "weight": 4
-            }
-          ]
-        },
-        {
-          "id": "dump",
-          "label": "Dump the surge into the next valley's canal and save this one.",
-          "result": "This valley is dry. The next one is not. The water remembers where it was sent.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "next_valley",
-              "tags": [
-                "tide_disturbed",
-                "flood_averted"
-              ],
-              "weight": 4
-            }
-          ]
-        },
-        {
-          "id": "read",
-          "label": "Read the surge with Solmara and steer it into the old canal.",
-          "result": "Solmara counts the pulses and points. The water goes where it is needed.",
-          "records": [
-            {
-              "type": "helped",
-              "target": "old_canal",
-              "tags": [
-                "tide_read",
-                "flood_averted",
-                "stewardship"
-              ],
-              "weight": 4
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "rainward_ferry",
-      "title": "The ferry that will not wait",
-      "kind": "stranded",
-      "weight": 3,
-      "once": false,
-      "min_depth": 0,
-      "text": "A ferry crew is stuck on a mud flat with the water rising. They are trying to push the raft by hand. Their shell-marks say they have done this before.",
-      "choices": [
-        {
-          "id": "push",
-          "label": "Help push, and take their cargo ledger as thanks.",
-          "result": "The raft floats. They give you a carved shell fragment.",
-          "records": [
-            {
-              "type": "helped",
-              "target": "ferry_crew",
-              "tags": [
-                "protect_weak",
-                "rescue_civilians",
-                "social"
-              ],
-              "weight": 3
-            }
-          ]
-        },
-        {
-          "id": "hold",
-          "label": "Ask Mollusk to slow the flood, then shove together.",
-          "result": "The raft slides free a breath before the surge hits.",
-          "records": [
-            {
-              "type": "helped",
-              "target": "ferry_crew",
-              "tags": [
-                "delay_used",
-                "rescue_civilians"
-              ],
-              "weight": 3
-            }
-          ]
-        },
-        {
-          "id": "pass",
-          "label": "Cross on the raft's cargo bridge and leave them to it.",
-          "result": "You get across. They do not thank you.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "ferry_crew",
-              "tags": [
-                "neglect",
-                "shortcut"
-              ],
-              "weight": 2
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "rainward_pump_site",
-      "title": "Dominion pump site",
-      "kind": "convoy",
-      "weight": 3,
-      "once": false,
-      "min_depth": 0,
-      "text": "A row of Dominion pumps drains a floodplain for the ore under it. The soil is cracking. A Survey Chief leans on a sluice gate and hums.",
-      "choices": [
-        {
-          "id": "negotiate",
-          "label": "Offer a schedule: pumps off at flood season.",
-          "result": "The chief takes it. The plain breathes.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "pump_site",
-              "tags": [
-                "nonviolent",
-                "stewardship"
-              ],
-              "weight": 3
-            }
-          ]
-        },
-        {
-          "id": "expose",
-          "label": "Log the drainage as unpermitted.",
-          "result": "The permit was for the next valley. Mara can use this.",
-          "records": [
-            {
-              "type": "discovered",
-              "target": "pump_site",
-              "tags": [
-                "evidence",
-                "discovery"
-              ],
-              "weight": 3
-            }
-          ]
-        },
-        {
-          "id": "let",
-          "label": "Let it run and take the ore sample.",
-          "result": "The sample is rich. The soil is not.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "pump_site",
-              "tags": [
-                "extraction",
-                "dominion_favor"
-              ],
-              "weight": 3
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "rainward_drum_night",
-      "title": "Drum night after the water",
-      "kind": "social",
-      "weight": 2,
-      "once": false,
-      "min_depth": 0,
-      "text": "The village drums the night after the flood: log drums, shell rattles, a lot of people hugging. Solmara watches with her legs folded, very still. 'Is it a threat display?' she asks. 'Several of them are crying.'",
-      "choices": [
-        {
-          "id": "explain",
-          "label": "Explain that they are relieved and a little afraid, both at once.",
-          "result": "She considers this. 'A tide with two directions. I understand that one.' She logs it.",
-          "records": [
-            {
-              "type": "talked",
-              "target": "solmara",
-              "tags": [
-                "emotion_translated",
-                "social",
-                "trust"
-              ],
-              "weight": 3
-            }
-          ]
-        },
-        {
-          "id": "tide",
-          "label": "Tell her the drum rhythm follows the water level.",
-          "result": "She listens for a while and agrees. 'Yes. They are counting the river.'",
-          "records": [
-            {
-              "type": "talked",
-              "target": "solmara",
-              "tags": [
-                "tide_read",
-                "social"
-              ],
-              "weight": 2
-            }
-          ]
-        },
-        {
-          "id": "skip",
-          "label": "Say it is a local custom.",
-          "result": "She thanks you, and she is still confused.",
-          "records": [
-            {
-              "type": "talked",
-              "target": "solmara",
-              "tags": [
-                "social"
-              ],
-              "weight": 1
-            }
-          ]
-        }
-      ],
-      "when": {
-        "event": {
-          "tag": "flood_averted"
-        }
-      }
-    },
-    {
-      "id": "rainward_forklift",
-      "title": "A forklift in the reeds",
-      "kind": "discovery",
-      "weight": 2,
-      "once": true,
-      "min_depth": 0,
-      "text": "There is a forklift in the reeds. It is orange, upright and entirely undamaged. Mollusk stares at it for a long time.",
-      "choices": [
-        {
-          "id": "look",
-          "label": "Let him look.",
-          "result": "He circles it twice, notes the hydraulics, and says it is the best thing he has seen all week.",
-          "records": [
-            {
-              "type": "talked",
-              "target": "mollusk",
-              "tags": [
-                "social",
-                "trust"
-              ],
-              "weight": 1
-            }
-          ]
-        },
-        {
-          "id": "salvage",
-          "label": "Strip it for parts.",
-          "result": "Mollusk says nothing. Scarlith would call this fair, if it were abandoned. It does not look abandoned.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "forklift",
-              "tags": [
-                "claim_jump"
-              ],
-              "weight": 2
-            }
-          ]
-        },
-        {
-          "id": "report",
-          "label": "Report it to the Authority as Earth cargo lost through a Gate.",
-          "result": "A short, correct report. The forklift returns to Earth with a tag.",
-          "records": [
-            {
-              "type": "helped",
-              "target": "forklift",
-              "tags": [
-                "salvage_fair",
-                "evidence"
-              ],
-              "weight": 2
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "rainward_salvage_cache",
-      "title": "A flooded cache",
-      "kind": "discovery",
-      "weight": 3,
-      "once": false,
-      "min_depth": 0,
-      "text": "A stilt cache, half sunk. Jars, tools, a few sealed sacks. No owner in sight, but the shell-marks on the posts are fresh.",
-      "choices": [
-        {
-          "id": "leave",
-          "label": "Leave it. The marks say it belongs to somebody.",
-          "result": "You note the marks. Scarlith writes a number in the air. It is not a rude number.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "cache",
-              "tags": [
-                "not_for_sale",
-                "salvage_fair"
-              ],
-              "weight": 3
-            }
-          ]
-        },
-        {
-          "id": "take_old",
-          "label": "Take only what is rotted through and has no mark.",
-          "result": "You take the spoiled crates. Scarlith nods, once.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "cache",
-              "tags": [
-                "salvage_fair"
-              ],
-              "weight": 3
-            }
-          ]
-        },
-        {
-          "id": "take_all",
-          "label": "Take it all.",
-          "result": "The tools are good. The marks are fresh. Someone will come looking.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "cache",
-              "tags": [
-                "claim_jump",
-                "extraction"
-              ],
-              "weight": 3
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "rainward_old_road_marker",
-      "title": "A marker above the waterline",
-      "kind": "marker",
-      "weight": 2,
-      "once": false,
-      "min_depth": 0,
-      "text": "A marker stone stands above the highest known flood line. Its symbols match markers a continent away. Rainward is a place where nothing stays; this has.",
-      "choices": [
-        {
-          "id": "read",
-          "label": "Read it with Mollusk.",
-          "result": "He reads it slowly. It is a record of a flood that came before the oldest shell.",
-          "records": [
-            {
-              "type": "discovered",
-              "target": "old_road_marker",
-              "tags": [
-                "discovery",
-                "curiosity",
-                "evidence"
-              ],
-              "weight": 3
-            }
-          ]
-        },
-        {
-          "id": "add",
-          "label": "Add a shell-mark of your own.",
-          "result": "Mollusk carves it. The marker looks a little less alone.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "old_road_marker",
-              "tags": [
-                "stewardship",
-                "social"
-              ],
-              "weight": 2
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "rainward_tangle",
-      "title": "Leaf-mat crossing",
-      "kind": "hazard",
-      "weight": 2,
-      "once": false,
-      "min_depth": 0,
-      "text": "A canal's surface is a floating mat of huge leaves. A trail of footprints leads out across it, and none come back.",
-      "choices": [
-        {
-          "id": "lay",
-          "label": "Lay a guide line across for those behind you.",
-          "result": "You rig a rope and flags. The next group crosses on it.",
-          "records": [
-            {
-              "type": "helped",
-              "target": "leaf_mat",
-              "tags": [
-                "route_laid",
-                "stewardship"
-              ],
-              "weight": 3
-            }
-          ]
-        },
-        {
-          "id": "cross",
-          "label": "Cross quickly and say nothing.",
-          "result": "You make it across. The mat closes behind you.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "leaf_mat",
-              "tags": [
-                "shortcut"
-              ],
-              "weight": 1
-            }
-          ]
-        },
-        {
-          "id": "deliver",
-          "label": "Carry a sealed message across for a family on the far bank.",
-          "result": "It arrives dry. The family sends a basket back.",
-          "records": [
-            {
-              "type": "helped",
-              "target": "far_bank_family",
-              "tags": [
-                "delivered",
-                "route_laid"
-              ],
-              "weight": 3
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "rainward_amends_delay",
-      "title": "The bill that came due",
-      "kind": "bond_test",
-      "weight": 1,
-      "once": true,
-      "min_depth": 0,
-      "text": "You return to the place where the flood broke. The levee is half rebuilt. Mollusk is carving a new mark into his shell.",
-      "choices": [
-        {
-          "id": "help",
-          "label": "Help rebuild. Carry mud, set stakes, and listen.",
-          "result": "He says nothing for a long time. Then he hands you a stake.",
-          "records": [
-            {
-              "type": "amends",
-              "target": "mollusk",
-              "tags": [
-                "amends",
-                "consequence_faced"
-              ],
-              "weight": 3
-            }
-          ]
-        }
-      ],
-      "when": {
-        "all": [
-          {
-            "event": {
-              "tag": "consequence_dodged",
-              "count_min": 1
-            }
-          },
-          {
-            "not": {
-              "event": {
-                "type": "amends",
-                "target": "mollusk"
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "id": "rainward_amends_tide",
-      "title": "The tide you broke",
-      "kind": "bond_test",
-      "weight": 1,
-      "once": true,
-      "min_depth": 0,
-      "text": "A canal you once rerouted now runs the wrong way. Solmara hovers over it with her body angled to the water, quietly bothered.",
-      "choices": [
-        {
-          "id": "restore",
-          "label": "Reopen the old channel and restore the flow.",
-          "result": "The water settles. Solmara says, 'The relationship is repaired,' then adds, 'I think you were sad about it. Was that correct?'",
-          "records": [
-            {
-              "type": "amends",
-              "target": "solmara",
-              "tags": [
-                "amends",
-                "tide_read",
-                "emotion_translated"
-              ],
-              "weight": 3
-            }
-          ]
-        }
-      ],
-      "when": {
-        "all": [
-          {
-            "event": {
-              "tag": "tide_disturbed",
-              "count_min": 1
-            }
-          },
-          {
-            "not": {
-              "event": {
-                "type": "amends",
-                "target": "solmara"
-              }
-            }
-          }
-        ]
-      }
-    }
-  ],
-  "story": {
-    "title": "The Bill Comes Due",
-    "logline": "Every delay Mollusk buys is a debt in someone's shell. In Rainward the flood arrives to collect.",
-    "acts": [
-      {
-        "id": "rw_act1",
-        "act": 1,
-        "title": "Rain Is the Clock",
-        "beat": "The season's first storm has redrawn the river, and the levee is cracking under a lazy, patient pressure. Mollusk can hold the fracture open for a few hours, and the stilt towns want him to. Nobody has asked what happens when the hours end.",
-        "trigger": {
-          "event": {
-            "region": "rainward"
-          }
-        },
-        "completes_flag": "rw_act1_done",
-        "unlocks": [
-          "rw_shell_marks",
-          "rw_levee_patch",
-          "rw_forklift"
-        ],
-        "reward_gear": [
-          "mollusk_palm_cloak"
-        ]
-      },
-      {
-        "id": "rw_act2",
-        "act": 2,
-        "title": "Interest",
-        "beat": "Three delayed consequences are now due at the same dock. The ferry keepers have stopped repairing things because 'the big slow one will hold it.' Mollusk reads the tally in his own shell, and does not like the total.",
-        "trigger": {
-          "all": [
-            {
-              "flag": "rw_act1_done"
-            },
-            {
-              "event": {
-                "tags_any": [
-                  "delay_used",
-                  "consequence_faced",
-                  "consequence_dodged",
-                  "evacuation"
-                ]
-              }
-            }
-          ]
-        },
-        "completes_flag": "rw_act2_done",
-        "unlocks": [
-          "rw_stilt_evac",
-          "rw_pump_dispute",
-          "rw_tide_gauge",
-          "rw_shell_vault"
-        ],
-        "reward_gear": [
-          "mollusk_interest_bead"
-        ]
-      },
-      {
-        "id": "rw_act3",
-        "act": 3,
-        "title": "The Reckoning Flood",
-        "beat": "The river returns for the oldest debt on the plain. Mollusk can hold the wall for one more night, or let it fall in an orderly way. Everything he has delayed arrives together.",
-        "trigger": {
-          "flag": "rw_act2_done"
-        },
-        "completes_flag": "rw_act3_done",
-        "variants": [
-          {
-            "id": "faced",
-            "when": {
-              "event": {
-                "tag": "consequence_faced"
-              }
-            },
-            "text": "Mollusk lets the wall fall in order, with every household already uphill. The flood is loud and enormous, and nobody is in it. He carves a new mark in his shell and does not hide it.",
-            "sets_flag": "rw_ending_faced"
-          },
-          {
-            "id": "dodged",
-            "when": {
-              "event": {
-                "tag": "consequence_dodged"
-              }
-            },
-            "text": "He holds the wall one more night. The debt is only larger in the morning, and the stilt towns learn what it means to be rescued by something that cannot do it twice.",
-            "sets_flag": "rw_ending_dodged"
-          },
-          {
-            "id": "averted",
-            "when": {
-              "event": {
-                "tag": "flood_averted"
-              }
-            },
-            "text": "The delay buys enough time to cut a spillway through the old taro fields. The flood finds somewhere to go. The fields drown, and the town does not.",
-            "sets_flag": "rw_ending_spillway"
-          }
-        ],
-        "unlocks": [
-          "rw_eye_of_storm"
-        ],
-        "reward_gear": [
-          "mollusk_faced_tide_wrap"
-        ]
-      }
+     }
     ]
-  },
-  "side_quests": [
+   }
+  }
+ ],
+ "story": {
+  "title": "The Bill Comes Due",
+  "logline": "Every delay Mollusk buys is a debt in someone's shell. In Rainward the flood arrives to collect.",
+  "acts": [
+   {
+    "id": "rw_act1",
+    "act": 1,
+    "title": "Rain Is the Clock",
+    "beat": "The season's first storm has redrawn the river, and the levee is cracking under a lazy, patient pressure. Mollusk can hold the fracture open for a few hours, and the stilt towns want him to. Nobody has asked what happens when the hours end.",
+    "trigger": {
+     "event": {
+      "region": "rainward"
+     }
+    },
+    "completes_flag": "rw_act1_done",
+    "unlocks": [
+     "rw_shell_marks",
+     "rw_levee_patch",
+     "rw_forklift"
+    ],
+    "reward_gear": [
+     "mollusk_palm_cloak"
+    ]
+   },
+   {
+    "id": "rw_act2",
+    "act": 2,
+    "title": "Interest",
+    "beat": "Three delayed consequences are now due at the same dock. The ferry keepers have stopped repairing things because 'the big slow one will hold it.' Mollusk reads the tally in his own shell, and does not like the total.",
+    "trigger": {
+     "all": [
+      {
+       "flag": "rw_act1_done"
+      },
+      {
+       "event": {
+        "tags_any": [
+         "delay_used",
+         "consequence_faced",
+         "consequence_dodged",
+         "evacuation"
+        ]
+       }
+      }
+     ]
+    },
+    "completes_flag": "rw_act2_done",
+    "unlocks": [
+     "rw_stilt_evac",
+     "rw_pump_dispute",
+     "rw_tide_gauge",
+     "rw_shell_vault"
+    ],
+    "reward_gear": [
+     "mollusk_interest_bead"
+    ]
+   },
+   {
+    "id": "rw_act3",
+    "act": 3,
+    "title": "The Reckoning Flood",
+    "beat": "The river returns for the oldest debt on the plain. Mollusk can hold the wall for one more night, or let it fall in an orderly way. Everything he has delayed arrives together.",
+    "trigger": {
+     "flag": "rw_act2_done"
+    },
+    "completes_flag": "rw_act3_done",
+    "variants": [
+     {
+      "id": "faced",
+      "when": {
+       "event": {
+        "tag": "consequence_faced"
+       }
+      },
+      "text": "Mollusk lets the wall fall in order, with every household already uphill. The flood is loud and enormous, and nobody is in it. He carves a new mark in his shell and does not hide it.",
+      "sets_flag": "rw_ending_faced"
+     },
+     {
+      "id": "dodged",
+      "when": {
+       "event": {
+        "tag": "consequence_dodged"
+       }
+      },
+      "text": "He holds the wall one more night. The debt is only larger in the morning, and the stilt towns learn what it means to be rescued by something that cannot do it twice.",
+      "sets_flag": "rw_ending_dodged"
+     },
+     {
+      "id": "averted",
+      "when": {
+       "event": {
+        "tag": "flood_averted"
+       }
+      },
+      "text": "The delay buys enough time to cut a spillway through the old taro fields. The flood finds somewhere to go. The fields drown, and the town does not.",
+      "sets_flag": "rw_ending_spillway"
+     }
+    ],
+    "unlocks": [
+     "rw_eye_of_storm"
+    ],
+    "reward_gear": [
+     "mollusk_faced_tide_wrap"
+    ]
+   }
+  ]
+ },
+ "side_quests": [
+  {
+   "id": "rw_shell_marks",
+   "title": "A Debt in the Shell",
+   "giver": "Aunt Neema Tull, shell-carver",
+   "landmark": "shell_marker_site",
+   "summary": "Neema's shell carries an unpaid obligation from a flood forty years ago: a ferry owed to a family that moved away. She is dying and wants it settled.",
+   "choices": [
     {
-      "id": "rw_shell_marks",
-      "title": "A Debt in the Shell",
-      "giver": "Aunt Neema Tull, shell-carver",
-      "landmark": "shell_marker_site",
-      "summary": "Neema's shell carries an unpaid obligation from a flood forty years ago: a ferry owed to a family that moved away. She is dying and wants it settled.",
-      "choices": [
-        {
-          "id": "repay",
-          "label": "Find the family and deliver the ferry's worth in labor.",
-          "result": "It takes a week. The daughter weeps, and then laughs at the size of the debt.",
-          "records": [
-            {
-              "type": "helped",
-              "target": "shell_marker",
-              "tags": [
-                "promise_kept",
-                "consequence_faced"
-              ],
-              "weight": 3
-            }
-          ],
-          "consequence": "Neema carves the last mark herself.",
-          "sets_flag": "rw_debt_repaid"
-        },
-        {
-          "id": "forgive",
-          "label": "Tell Neema the debt is forgiven by those who could collect.",
-          "result": "She looks at you for a long time. 'That is not yours to say,' she says, but she smiles.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "shell_marker",
-              "tags": [
-                "spared",
-                "consequence_dodged"
-              ],
-              "weight": 2
-            }
-          ],
-          "consequence": "The mark stays uncarved. Some people say that matters.",
-          "sets_flag": "rw_debt_forgiven"
-        },
-        {
-          "id": "bury_it",
-          "label": "Say nothing, and let the debt die with her.",
-          "result": "The shell goes into the river with the rest of her.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "shell_marker",
-              "tags": [
-                "promise_broken",
-                "neglect"
-              ],
-              "weight": 3
-            }
-          ],
-          "consequence": "The obligation is not paid and not forgotten.",
-          "sets_flag": "rw_debt_buried"
-        }
-      ],
-      "cares": [
-        "mollusk",
-        "zephyr",
-        "bramvex"
-      ],
-      "reward_gear": [
-        "mollusk_carving_point"
-      ]
+     "id": "repay",
+     "label": "Find the family and deliver the ferry's worth in labor.",
+     "result": "It takes a week. The daughter weeps, and then laughs at the size of the debt.",
+     "records": [
+      {
+       "type": "helped",
+       "target": "shell_marker",
+       "tags": [
+        "promise_kept",
+        "consequence_faced"
+       ],
+       "weight": 3
+      }
+     ],
+     "consequence": "Neema carves the last mark herself.",
+     "sets_flag": "rw_debt_repaid"
     },
     {
-      "id": "rw_levee_patch",
-      "title": "Hold the Levee",
-      "giver": "Levee-captain Ruan Oke",
-      "landmark": "levee_site",
-      "summary": "A crack in the levee is widening. A crew can fix it in three days, but the river will be here in one.",
-      "choices": [
-        {
-          "id": "hold_it",
-          "label": "Use Borrowed Seconds to hold the crack open until the crew arrives.",
-          "result": "It works. It works exactly as long as you can hold it.",
-          "records": [
-            {
-              "type": "helped",
-              "target": "levee_wall",
-              "tags": [
-                "delay_used",
-                "rescue_civilians",
-                "protect_weak"
-              ],
-              "weight": 3
-            }
-          ],
-          "consequence": "The crew finishes with an hour to spare. You are exhausted and the crack is not.",
-          "sets_flag": "rw_levee_held"
-        },
-        {
-          "id": "rebuild_now",
-          "label": "Skip the delay and rebuild now with every hand you can find.",
-          "result": "It is messier and slower. It is also permanent.",
-          "records": [
-            {
-              "type": "helped",
-              "target": "levee_wall",
-              "tags": [
-                "consequence_faced",
-                "braced_structure",
-                "stewardship"
-              ],
-              "weight": 4
-            }
-          ],
-          "consequence": "The levee is rebuilt in two days of cursing and soup.",
-          "sets_flag": "rw_levee_rebuilt"
-        },
-        {
-          "id": "sacrifice_field",
-          "label": "Cut a spillway through a taro field to relieve the pressure.",
-          "result": "The farmer is unhappy and understands.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "levee_wall",
-              "tags": [
-                "flood_averted",
-                "sacrifice_for_many"
-              ],
-              "weight": 3
-            }
-          ],
-          "consequence": "The field drowns. The town stays dry.",
-          "sets_flag": "rw_levee_spillway"
-        }
-      ],
-      "cares": [
-        "mollusk",
-        "aruun",
-        "solmara"
-      ],
-      "reward_gear": [
-        "mollusk_levee_spade"
-      ]
+     "id": "forgive",
+     "label": "Tell Neema the debt is forgiven by those who could collect.",
+     "result": "She looks at you for a long time. 'That is not yours to say,' she says, but she smiles.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "shell_marker",
+       "tags": [
+        "spared",
+        "consequence_dodged"
+       ],
+       "weight": 2
+      }
+     ],
+     "consequence": "The mark stays uncarved. Some people say that matters.",
+     "sets_flag": "rw_debt_forgiven"
     },
     {
-      "id": "rw_forklift",
-      "title": "The Good Forklift",
-      "giver": "A retired Dominion loader named Ferris",
-      "landmark": "forklift_site",
-      "summary": "An abandoned forklift sits half-sunk in the mud. Ferris says it still runs. Mollusk, in some deeply sincere way, loves it.",
-      "choices": [
-        {
-          "id": "restore",
-          "label": "Dig it out and restore it for the community.",
-          "result": "It starts on the ninth try. The whole village comes out to watch.",
-          "records": [
-            {
-              "type": "helped",
-              "target": "forklift",
-              "tags": [
-                "salvage_fair",
-                "stewardship"
-              ],
-              "weight": 3
-            }
-          ],
-          "consequence": "The forklift hauls grain and children. Mollusk visits it daily.",
-          "sets_flag": "rw_forklift_restored"
-        },
-        {
-          "id": "strip",
-          "label": "Strip it for parts.",
-          "result": "The parts sell well. Ferris says nothing.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "forklift",
-              "tags": [
-                "claim_jump",
-                "extraction"
-              ],
-              "weight": 2
-            }
-          ],
-          "consequence": "A good machine ends its life as a rumor.",
-          "sets_flag": "rw_forklift_stripped"
-        },
-        {
-          "id": "leave_it",
-          "label": "Leave it, but promise to return.",
-          "result": "You promise. Ferris holds you to it.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "forklift",
-              "tags": [
-                "promise_kept"
-              ],
-              "weight": 2
-            }
-          ],
-          "consequence": "The forklift waits, and so does the promise.",
-          "sets_flag": "rw_forklift_promise"
-        }
-      ],
-      "cares": [
-        "mollusk",
-        "scarlith",
-        "mara"
-      ],
-      "reward_gear": [
-        "scarlith_loader_cap"
-      ]
-    },
-    {
-      "id": "rw_stilt_evac",
-      "title": "Stilts and Timing",
-      "giver": "Stilt-house elder Kofi Rane",
-      "landmark": "stilt_house_site",
-      "summary": "A row of stilt houses is going under before the ferries can come. Mollusk can hold one wall of water for twenty minutes.",
-      "choices": [
-        {
-          "id": "delay_evac",
-          "label": "Hold the water and run a planned evacuation, house by house.",
-          "result": "Twenty minutes is plenty if nobody panics. They do not panic.",
-          "records": [
-            {
-              "type": "helped",
-              "target": "stilt_houses",
-              "tags": [
-                "delay_used",
-                "evacuation",
-                "exit_planned"
-              ],
-              "weight": 4
-            }
-          ],
-          "consequence": "Every household gets out. The wall falls on empty rooms.",
-          "sets_flag": "rw_stilt_planned"
-        },
-        {
-          "id": "rush",
-          "label": "Rush everyone out as fast as possible, no plan.",
-          "result": "It is chaos, but everyone is outside the line when the water comes.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "stilt_houses",
-              "tags": [
-                "speed_only",
-                "rescue_civilians"
-              ],
-              "weight": 2
-            }
-          ],
-          "consequence": "Two elders are shaken but safe.",
-          "sets_flag": "rw_stilt_rushed"
-        },
-        {
-          "id": "keep_holding",
-          "label": "Keep holding the wall until the ferries arrive, however long.",
-          "result": "It lasts forty minutes. Your legs are gone.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "stilt_houses",
-              "tags": [
-                "consequence_dodged",
-                "delay_used"
-              ],
-              "weight": 3
-            }
-          ],
-          "consequence": "The wall falls later, and harder, onto a very tired you.",
-          "sets_flag": "rw_stilt_held"
-        }
-      ],
-      "cares": [
-        "mollusk",
-        "bramvex",
-        "aruun"
-      ],
-      "reward_gear": [
-        "bramvex_stilt_whistle"
-      ]
-    },
-    {
-      "id": "rw_pump_dispute",
-      "title": "The Pump War",
-      "giver": "Joss Harrow, Dominion site manager",
-      "landmark": "pump_site",
-      "summary": "Harrow's drainage pump keeps one village dry and floods three others downstream. He insists it is a net positive.",
-      "choices": [
-        {
-          "id": "expose",
-          "label": "Publish the flood maps and the pump log.",
-          "result": "Harrow reads it twice and does not argue.",
-          "records": [
-            {
-              "type": "talked",
-              "target": "joss_harrow",
-              "tags": [
-                "rival_exposed",
-                "evidence",
-                "stewardship"
-              ],
-              "weight": 3
-            }
-          ],
-          "consequence": "The pump is rescheduled.",
-          "sets_flag": "rw_pump_exposed"
-        },
-        {
-          "id": "negotiate",
-          "label": "Negotiate a pumping schedule that spreads the burden.",
-          "result": "It takes four meetings and one terrible lunch.",
-          "records": [
-            {
-              "type": "talked",
-              "target": "joss_harrow",
-              "tags": [
-                "rival_negotiated",
-                "consent_asked"
-              ],
-              "weight": 3
-            }
-          ],
-          "consequence": "All four villages share the water and the risk.",
-          "sets_flag": "rw_pump_shared"
-        },
-        {
-          "id": "side_harrow",
-          "label": "Side with Harrow. The numbers say he is right.",
-          "result": "They do. They also say three villages are under water.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "pump_site",
-              "tags": [
-                "extraction",
-                "dominion_favor",
-                "leverage"
-              ],
-              "weight": 3
-            }
-          ],
-          "consequence": "The pump runs unchanged.",
-          "sets_flag": "rw_pump_kept"
-        }
-      ],
-      "cares": [
-        "mollusk",
-        "mara",
-        "dexter"
-      ],
-      "reward_gear": [
-        "solthrin_schedule_lantern"
-      ]
-    },
-    {
-      "id": "rw_tide_gauge",
-      "title": "The Gauge Keeper",
-      "giver": "Keeper Linh Orsolya",
-      "landmark": "tide_gauge_site",
-      "summary": "Linh has kept the river gauge for thirty years. She is sure the water is rising wrong, and everyone thinks she is panicking.",
-      "choices": [
-        {
-          "id": "read_it",
-          "label": "Read the gauge with her and confirm the pattern.",
-          "result": "You see it too. The river is following something larger than rain.",
-          "records": [
-            {
-              "type": "helped",
-              "target": "tide_gauge",
-              "tags": [
-                "tide_read",
-                "discovery",
-                "curiosity"
-              ],
-              "weight": 3
-            }
-          ],
-          "consequence": "The warning goes out a day early.",
-          "sets_flag": "rw_gauge_read"
-        },
-        {
-          "id": "translate",
-          "label": "Help her explain it to the town in words they will believe.",
-          "result": "She stops shaking. They listen.",
-          "records": [
-            {
-              "type": "helped",
-              "target": "tide_gauge",
-              "tags": [
-                "emotion_translated",
-                "protect_weak",
-                "evacuation"
-              ],
-              "weight": 3
-            }
-          ],
-          "consequence": "The town prepares, and Linh is thanked.",
-          "sets_flag": "rw_gauge_translated"
-        },
-        {
-          "id": "open_gates",
-          "label": "Open the river gates early to relieve it.",
-          "result": "The river swells downstream faster than anyone predicted.",
-          "records": [
-            {
-              "type": "chose",
-              "target": "tide_gauge",
-              "tags": [
-                "tide_disturbed",
-                "shortcut"
-              ],
-              "weight": 3
-            }
-          ],
-          "consequence": "A smaller flood becomes a bigger one somewhere else.",
-          "sets_flag": "rw_gates_opened"
-        }
-      ],
-      "cares": [
-        "solmara",
-        "mollusk",
-        "mara"
-      ],
-      "reward_gear": [
-        "solmara_brass_gauge"
-      ]
+     "id": "bury_it",
+     "label": "Say nothing, and let the debt die with her.",
+     "result": "The shell goes into the river with the rest of her.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "shell_marker",
+       "tags": [
+        "promise_broken",
+        "neglect"
+       ],
+       "weight": 3
+      }
+     ],
+     "consequence": "The obligation is not paid and not forgotten.",
+     "sets_flag": "rw_debt_buried"
     }
-  ],
-  "secrets": [
+   ],
+   "cares": [
+    "mollusk",
+    "zephyr",
+    "bramvex"
+   ],
+   "reward_gear": [
+    "mollusk_carving_point"
+   ]
+  },
+  {
+   "id": "rw_levee_patch",
+   "title": "Hold the Levee",
+   "giver": "Levee-captain Ruan Oke",
+   "landmark": "levee_site",
+   "summary": "A crack in the levee is widening. A crew can fix it in three days, but the river will be here in one.",
+   "choices": [
     {
-      "id": "rw_shell_vault",
-      "name": "The Shell Vault",
-      "hint": "A drowned chapel whose walls are made of carved shell, glimpsed only at low tide.",
-      "how_found": "Visit the drowned chapel at the lowest tide of the dry season after resolving a debt in someone's shell.",
-      "reward": "Generations of obligations, each paid. A single blank shell is left for Mollusk, and a stout, quiet mace is waiting.",
-      "ledger_tags": [
+     "id": "hold_it",
+     "label": "Use Borrowed Seconds to hold the crack open until the crew arrives.",
+     "result": "It works. It works exactly as long as you can hold it.",
+     "records": [
+      {
+       "type": "helped",
+       "target": "levee_wall",
+       "tags": [
+        "delay_used",
+        "rescue_civilians",
+        "protect_weak"
+       ],
+       "weight": 3
+      }
+     ],
+     "consequence": "The crew finishes with an hour to spare. You are exhausted and the crack is not.",
+     "sets_flag": "rw_levee_held"
+    },
+    {
+     "id": "rebuild_now",
+     "label": "Skip the delay and rebuild now with every hand you can find.",
+     "result": "It is messier and slower. It is also permanent.",
+     "records": [
+      {
+       "type": "helped",
+       "target": "levee_wall",
+       "tags": [
         "consequence_faced",
-        "promise_kept"
-      ],
-      "reward_gear": [
-        "mollusk_unfinished_anchor"
-      ]
+        "braced_structure",
+        "stewardship"
+       ],
+       "weight": 4
+      }
+     ],
+     "consequence": "The levee is rebuilt in two days of cursing and soup.",
+     "sets_flag": "rw_levee_rebuilt"
     },
     {
-      "id": "rw_eye_of_storm",
-      "name": "The Hour of No Rain",
-      "hint": "A circle of clear sky above the old taro fields, once a year, for exactly an hour.",
-      "how_found": "Be at the old taro fields when the storm cycle clears at the end of the season, and stand still for the full hour.",
-      "reward": "A rainbow bridge of mist crosses the river for one hour. On the far bank, a cache left by the first stilt-builders.",
-      "ledger_tags": [
+     "id": "sacrifice_field",
+     "label": "Cut a spillway through a taro field to relieve the pressure.",
+     "result": "The farmer is unhappy and understands.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "levee_wall",
+       "tags": [
+        "flood_averted",
+        "sacrifice_for_many"
+       ],
+       "weight": 3
+      }
+     ],
+     "consequence": "The field drowns. The town stays dry.",
+     "sets_flag": "rw_levee_spillway"
+    }
+   ],
+   "cares": [
+    "mollusk",
+    "aruun",
+    "solmara"
+   ],
+   "reward_gear": [
+    "mollusk_levee_spade"
+   ]
+  },
+  {
+   "id": "rw_forklift",
+   "title": "The Good Forklift",
+   "giver": "A retired Dominion loader named Ferris",
+   "landmark": "forklift_site",
+   "summary": "An abandoned forklift sits half-sunk in the mud. Ferris says it still runs. Mollusk, in some deeply sincere way, loves it.",
+   "choices": [
+    {
+     "id": "restore",
+     "label": "Dig it out and restore it for the community.",
+     "result": "It starts on the ninth try. The whole village comes out to watch.",
+     "records": [
+      {
+       "type": "helped",
+       "target": "forklift",
+       "tags": [
+        "salvage_fair",
+        "stewardship"
+       ],
+       "weight": 3
+      }
+     ],
+     "consequence": "The forklift hauls grain and children. Mollusk visits it daily.",
+     "sets_flag": "rw_forklift_restored"
+    },
+    {
+     "id": "strip",
+     "label": "Strip it for parts.",
+     "result": "The parts sell well. Ferris says nothing.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "forklift",
+       "tags": [
+        "claim_jump",
+        "extraction"
+       ],
+       "weight": 2
+      }
+     ],
+     "consequence": "A good machine ends its life as a rumor.",
+     "sets_flag": "rw_forklift_stripped"
+    },
+    {
+     "id": "leave_it",
+     "label": "Leave it, but promise to return.",
+     "result": "You promise. Ferris holds you to it.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "forklift",
+       "tags": [
+        "promise_kept"
+       ],
+       "weight": 2
+      }
+     ],
+     "consequence": "The forklift waits, and so does the promise.",
+     "sets_flag": "rw_forklift_promise"
+    }
+   ],
+   "cares": [
+    "mollusk",
+    "scarlith",
+    "mara"
+   ],
+   "reward_gear": [
+    "scarlith_loader_cap"
+   ]
+  },
+  {
+   "id": "rw_stilt_evac",
+   "title": "Stilts and Timing",
+   "giver": "Stilt-house elder Kofi Rane",
+   "landmark": "stilt_house_site",
+   "summary": "A row of stilt houses is going under before the ferries can come. Mollusk can hold one wall of water for twenty minutes.",
+   "choices": [
+    {
+     "id": "delay_evac",
+     "label": "Hold the water and run a planned evacuation, house by house.",
+     "result": "Twenty minutes is plenty if nobody panics. They do not panic.",
+     "records": [
+      {
+       "type": "helped",
+       "target": "stilt_houses",
+       "tags": [
+        "delay_used",
+        "evacuation",
+        "exit_planned"
+       ],
+       "weight": 4
+      }
+     ],
+     "consequence": "Every household gets out. The wall falls on empty rooms.",
+     "sets_flag": "rw_stilt_planned"
+    },
+    {
+     "id": "rush",
+     "label": "Rush everyone out as fast as possible, no plan.",
+     "result": "It is chaos, but everyone is outside the line when the water comes.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "stilt_houses",
+       "tags": [
+        "speed_only",
+        "rescue_civilians"
+       ],
+       "weight": 2
+      }
+     ],
+     "consequence": "Two elders are shaken but safe.",
+     "sets_flag": "rw_stilt_rushed"
+    },
+    {
+     "id": "keep_holding",
+     "label": "Keep holding the wall until the ferries arrive, however long.",
+     "result": "It lasts forty minutes. Your legs are gone.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "stilt_houses",
+       "tags": [
+        "consequence_dodged",
+        "delay_used"
+       ],
+       "weight": 3
+      }
+     ],
+     "consequence": "The wall falls later, and harder, onto a very tired you.",
+     "sets_flag": "rw_stilt_held"
+    }
+   ],
+   "cares": [
+    "mollusk",
+    "bramvex",
+    "aruun"
+   ],
+   "reward_gear": [
+    "bramvex_stilt_whistle"
+   ]
+  },
+  {
+   "id": "rw_pump_dispute",
+   "title": "The Pump War",
+   "giver": "Joss Harrow, Dominion site manager",
+   "landmark": "pump_site",
+   "summary": "Harrow's drainage pump keeps one village dry and floods three others downstream. He insists it is a net positive.",
+   "choices": [
+    {
+     "id": "expose",
+     "label": "Publish the flood maps and the pump log.",
+     "result": "Harrow reads it twice and does not argue.",
+     "records": [
+      {
+       "type": "talked",
+       "target": "joss_harrow",
+       "tags": [
+        "rival_exposed",
+        "evidence",
+        "stewardship"
+       ],
+       "weight": 3
+      }
+     ],
+     "consequence": "The pump is rescheduled.",
+     "sets_flag": "rw_pump_exposed"
+    },
+    {
+     "id": "negotiate",
+     "label": "Negotiate a pumping schedule that spreads the burden.",
+     "result": "It takes four meetings and one terrible lunch.",
+     "records": [
+      {
+       "type": "talked",
+       "target": "joss_harrow",
+       "tags": [
+        "rival_negotiated",
+        "consent_asked"
+       ],
+       "weight": 3
+      }
+     ],
+     "consequence": "All four villages share the water and the risk.",
+     "sets_flag": "rw_pump_shared"
+    },
+    {
+     "id": "side_harrow",
+     "label": "Side with Harrow. The numbers say he is right.",
+     "result": "They do. They also say three villages are under water.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "pump_site",
+       "tags": [
+        "extraction",
+        "dominion_favor",
+        "leverage"
+       ],
+       "weight": 3
+      }
+     ],
+     "consequence": "The pump runs unchanged.",
+     "sets_flag": "rw_pump_kept"
+    }
+   ],
+   "cares": [
+    "mollusk",
+    "mara",
+    "dexter"
+   ],
+   "reward_gear": [
+    "solthrin_schedule_lantern"
+   ]
+  },
+  {
+   "id": "rw_tide_gauge",
+   "title": "The Gauge Keeper",
+   "giver": "Keeper Linh Orsolya",
+   "landmark": "tide_gauge_site",
+   "summary": "Linh has kept the river gauge for thirty years. She is sure the water is rising wrong, and everyone thinks she is panicking.",
+   "choices": [
+    {
+     "id": "read_it",
+     "label": "Read the gauge with her and confirm the pattern.",
+     "result": "You see it too. The river is following something larger than rain.",
+     "records": [
+      {
+       "type": "helped",
+       "target": "tide_gauge",
+       "tags": [
+        "tide_read",
         "discovery",
         "curiosity"
-      ],
-      "reward_gear": [
-        "pharilux_hour_beacon"
-      ]
-    }
-  ],
-  "landmarks": [
-    {
-      "id": "shell_marker_site",
-      "name": "The Shell Marker",
-      "kind": "memorial",
-      "desc": "A carved shell wall where journeys and debts are recorded."
-    },
-    {
-      "id": "levee_site",
-      "name": "The Long Levee",
-      "kind": "infrastructure",
-      "desc": "A vast earth wall repaired after every flood. It has never quite been finished."
-    },
-    {
-      "id": "forklift_site",
-      "name": "The Mud Dock",
-      "kind": "dock",
-      "desc": "A half-sunk loading dock and a very patient forklift."
-    },
-    {
-      "id": "stilt_house_site",
-      "name": "Stilt Row",
-      "kind": "settlement",
-      "desc": "A line of houses on tall posts above the floodplain."
-    },
-    {
-      "id": "pump_site",
-      "name": "Harrow's Pump",
-      "kind": "extraction site",
-      "desc": "A Dominion drainage station that hums at night."
-    },
-    {
-      "id": "tide_gauge_site",
-      "name": "The Gauge House",
-      "kind": "observatory",
-      "desc": "A narrow hut over the river, with brass gauges older than the town."
-    }
-  ],
-  "ambient": {
-    "npcs": [
-      {
-        "id": "rw_neema",
-        "name": "Aunt Neema Tull",
-        "species": "giant snail",
-        "behavior": "Carves tiny marks into old shell growth with a bone point, humming softly.",
-        "schedule": "afternoons at the shell marker",
-        "reacts": {
-          "flag": "rw_debt_repaid",
-          "line": "That mark is the lightest thing I carry."
-        }
-      },
-      {
-        "id": "rw_ferris",
-        "name": "Ferris",
-        "species": "retired loader",
-        "behavior": "Polishes the forklift's side mirror every morning.",
-        "schedule": "dawn at the mud dock",
-        "reacts": {
-          "flag": "rw_forklift_restored",
-          "line": "She starts, you know. Every time."
-        }
-      },
-      {
-        "id": "rw_linh",
-        "name": "Keeper Linh Orsolya",
-        "species": "heron-folk",
-        "behavior": "Reads brass gauges aloud and corrects the date for the third time.",
-        "schedule": "all hours at the gauge house",
-        "reacts": {
-          "flag": "rw_gauge_translated",
-          "line": "They believed me. I still cannot quite believe that."
-        }
+       ],
+       "weight": 3
       }
-    ],
-    "creature_behaviors": [
+     ],
+     "consequence": "The warning goes out a day early.",
+     "sets_flag": "rw_gauge_read"
+    },
+    {
+     "id": "translate",
+     "label": "Help her explain it to the town in words they will believe.",
+     "result": "She stops shaking. They listen.",
+     "records": [
       {
-        "creature": "storm_heron",
-        "behavior": "Stand motionless on the levee and take off a minute before the rain arrives.",
-        "trigger": "incoming storm"
-      },
-      {
-        "creature": "levee_mole",
-        "behavior": "Patch the wall's weakest point from within, then politely leave a sign of where.",
-        "trigger": "after heavy rain"
-      },
-      {
-        "creature": "mudback_crab",
-        "behavior": "Carry bright shell scraps to the dock and arrange them in orderly rows.",
-        "trigger": "clearing weather"
+       "type": "helped",
+       "target": "tide_gauge",
+       "tags": [
+        "emotion_translated",
+        "protect_weak",
+        "evacuation"
+       ],
+       "weight": 3
       }
-    ]
-  },
-  "loot_table": [
-    {
-      "item": "rain_palm_fiber",
-      "weight": 5,
-      "source": "palm groves",
-      "rarity": "common"
+     ],
+     "consequence": "The town prepares, and Linh is thanked.",
+     "sets_flag": "rw_gauge_translated"
     },
     {
-      "item": "taro_root",
-      "weight": 4,
-      "source": "flooded fields",
-      "rarity": "common"
-    },
-    {
-      "item": "mudback_shell",
-      "weight": 4,
-      "source": "mudback crabs",
-      "rarity": "uncommon"
-    },
-    {
-      "item": "levee_clay",
-      "weight": 3,
-      "source": "levee repairs",
-      "rarity": "common"
-    },
-    {
-      "item": "storm_heron_plume",
-      "weight": 3,
-      "source": "storm heron nests",
-      "rarity": "uncommon"
-    },
-    {
-      "item": "shell_mark_blank",
-      "weight": 2,
-      "source": "shell marker",
-      "rarity": "rare"
-    },
-    {
-      "item": "forklift_part",
-      "weight": 2,
-      "source": "abandoned loaders",
-      "rarity": "uncommon"
-    },
-    {
-      "item": "hour_mist",
-      "weight": 1,
-      "source": "the Hour of No Rain",
-      "rarity": "epic"
+     "id": "open_gates",
+     "label": "Open the river gates early to relieve it.",
+     "result": "The river swells downstream faster than anyone predicted.",
+     "records": [
+      {
+       "type": "chose",
+       "target": "tide_gauge",
+       "tags": [
+        "tide_disturbed",
+        "shortcut"
+       ],
+       "weight": 3
+      }
+     ],
+     "consequence": "A smaller flood becomes a bigger one somewhere else.",
+     "sets_flag": "rw_gates_opened"
     }
-  ],
-  "mood": {
-    "palette": {
-      "primary": "#2a4a3a",
-      "secondary": "#5a8aa0",
-      "accent": "#c8c27a",
-      "shadow": "#1a2a1f",
-      "highlight": "#e8e8c0",
-      "storm": "#8aa0a0",
-      "mud": "#7a5a3a"
-    },
-    "weather": [
-      "downpour that arrives like a curtain",
-      "warm drizzle with steam",
-      "bright clearing with rainbows",
-      "heat haze over standing water"
-    ],
-    "sounds": [
-      "rain on giant leaves",
-      "frog and cicada chorus",
-      "log drum signals between stilt towns",
-      "river current under floorboards",
-      "forklift beeper somewhere, regularly"
-    ],
-    "music_slots": [
-      {
-        "slot": "storm_day",
-        "use": "open-country exploration",
-        "notes": "Marimba over a rolling log drum, restless but warm."
-      },
-      {
-        "slot": "canal_clear",
-        "use": "clearing weather and canals",
-        "notes": "Reed flute and rain stick. The mood lifts, briefly."
-      },
-      {
-        "slot": "levee_watch",
-        "use": "levee scenes and flood events",
-        "notes": "Low brass with a steady log-drum pulse that gets slower as the water rises."
-      },
-      {
-        "slot": "borrowed_seconds",
-        "use": "when Temporal Inertia is active",
-        "notes": "Everything stretches: the marimba loses its attack, and the reverb tail triples."
-      },
-      {
-        "slot": "shell_memory",
-        "use": "shell-marks and old obligations",
-        "notes": "Solo marimba, played very softly, with silence between notes."
-      },
-      {
-        "slot": "reckoning",
-        "use": "Act 3 flood",
-        "notes": "Full percussion crash, then a single sustained brass chord that does not resolve."
-      }
-    ]
+   ],
+   "cares": [
+    "solmara",
+    "mollusk",
+    "mara"
+   ],
+   "reward_gear": [
+    "solmara_brass_gauge"
+   ]
   }
+ ],
+ "secrets": [
+  {
+   "id": "rw_shell_vault",
+   "name": "The Shell Vault",
+   "hint": "A drowned chapel whose walls are made of carved shell, glimpsed only at low tide.",
+   "how_found": "Visit the drowned chapel at the lowest tide of the dry season after resolving a debt in someone's shell.",
+   "reward": "Generations of obligations, each paid. A single blank shell is left for Mollusk, and a stout, quiet mace is waiting.",
+   "ledger_tags": [
+    "consequence_faced",
+    "promise_kept"
+   ],
+   "reward_gear": [
+    "mollusk_unfinished_anchor"
+   ],
+   "trigger": {
+    "pos": null,
+    "r": 4.0,
+    "mode": "interact",
+    "label": "Enter the drowned chapel",
+    "when": {
+     "event": {
+      "tag": "consequence_faced"
+     }
+    },
+    "needs": "low_tide"
+   }
+  },
+  {
+   "id": "rw_eye_of_storm",
+   "name": "The Hour of No Rain",
+   "hint": "A circle of clear sky above the old taro fields, once a year, for exactly an hour.",
+   "how_found": "Be at the old taro fields when the storm cycle clears at the end of the season, and stand still for the full hour.",
+   "reward": "A rainbow bridge of mist crosses the river for one hour. On the far bank, a cache left by the first stilt-builders.",
+   "ledger_tags": [
+    "discovery",
+    "curiosity"
+   ],
+   "reward_gear": [
+    "pharilux_hour_beacon"
+   ],
+   "trigger": {
+    "pos": null,
+    "r": 5.0,
+    "mode": "stand",
+    "stand_s": 60.0,
+    "label": "Stand still",
+    "when": {
+     "flag": "rw_act1_done"
+    },
+    "needs": "storm_clear"
+   }
+  }
+ ],
+ "landmarks": [
+  {
+   "id": "shell_marker_site",
+   "name": "The Shell Marker",
+   "kind": "memorial",
+   "desc": "A carved shell wall where journeys and debts are recorded."
+  },
+  {
+   "id": "levee_site",
+   "name": "The Long Levee",
+   "kind": "infrastructure",
+   "desc": "A vast earth wall repaired after every flood. It has never quite been finished."
+  },
+  {
+   "id": "forklift_site",
+   "name": "The Mud Dock",
+   "kind": "dock",
+   "desc": "A half-sunk loading dock and a very patient forklift."
+  },
+  {
+   "id": "stilt_house_site",
+   "name": "Stilt Row",
+   "kind": "settlement",
+   "desc": "A line of houses on tall posts above the floodplain."
+  },
+  {
+   "id": "pump_site",
+   "name": "Harrow's Pump",
+   "kind": "extraction site",
+   "desc": "A Dominion drainage station that hums at night."
+  },
+  {
+   "id": "tide_gauge_site",
+   "name": "The Gauge House",
+   "kind": "observatory",
+   "desc": "A narrow hut over the river, with brass gauges older than the town."
+  }
+ ],
+ "ambient": {
+  "npcs": [
+   {
+    "id": "rw_neema",
+    "name": "Aunt Neema Tull",
+    "species": "giant snail",
+    "behavior": "Carves tiny marks into old shell growth with a bone point, humming softly.",
+    "schedule": "afternoons at the shell marker",
+    "reacts": {
+     "flag": "rw_debt_repaid",
+     "line": "That mark is the lightest thing I carry."
+    }
+   },
+   {
+    "id": "rw_ferris",
+    "name": "Ferris",
+    "species": "retired loader",
+    "behavior": "Polishes the forklift's side mirror every morning.",
+    "schedule": "dawn at the mud dock",
+    "reacts": {
+     "flag": "rw_forklift_restored",
+     "line": "She starts, you know. Every time."
+    }
+   },
+   {
+    "id": "rw_linh",
+    "name": "Keeper Linh Orsolya",
+    "species": "heron-folk",
+    "behavior": "Reads brass gauges aloud and corrects the date for the third time.",
+    "schedule": "all hours at the gauge house",
+    "reacts": {
+     "flag": "rw_gauge_translated",
+     "line": "They believed me. I still cannot quite believe that."
+    }
+   }
+  ],
+  "creature_behaviors": [
+   {
+    "creature": "storm_heron",
+    "behavior": "Stand motionless on the levee and take off a minute before the rain arrives.",
+    "trigger": "incoming storm"
+   },
+   {
+    "creature": "levee_mole",
+    "behavior": "Patch the wall's weakest point from within, then politely leave a sign of where.",
+    "trigger": "after heavy rain"
+   },
+   {
+    "creature": "mudback_crab",
+    "behavior": "Carry bright shell scraps to the dock and arrange them in orderly rows.",
+    "trigger": "clearing weather"
+   }
+  ]
+ },
+ "loot_table": [
+  {
+   "item": "rain_palm_fiber",
+   "weight": 5,
+   "source": "palm groves",
+   "rarity": "common"
+  },
+  {
+   "item": "taro_root",
+   "weight": 4,
+   "source": "flooded fields",
+   "rarity": "common"
+  },
+  {
+   "item": "mudback_shell",
+   "weight": 4,
+   "source": "mudback crabs",
+   "rarity": "uncommon"
+  },
+  {
+   "item": "levee_clay",
+   "weight": 3,
+   "source": "levee repairs",
+   "rarity": "common"
+  },
+  {
+   "item": "storm_heron_plume",
+   "weight": 3,
+   "source": "storm heron nests",
+   "rarity": "uncommon"
+  },
+  {
+   "item": "shell_mark_blank",
+   "weight": 2,
+   "source": "shell marker",
+   "rarity": "rare"
+  },
+  {
+   "item": "forklift_part",
+   "weight": 2,
+   "source": "abandoned loaders",
+   "rarity": "uncommon"
+  },
+  {
+   "item": "hour_mist",
+   "weight": 1,
+   "source": "the Hour of No Rain",
+   "rarity": "epic"
+  }
+ ],
+ "mood": {
+  "palette": {
+   "primary": "#2a4a3a",
+   "secondary": "#5a8aa0",
+   "accent": "#c8c27a",
+   "shadow": "#1a2a1f",
+   "highlight": "#e8e8c0",
+   "storm": "#8aa0a0",
+   "mud": "#7a5a3a"
+  },
+  "weather": [
+   "downpour that arrives like a curtain",
+   "warm drizzle with steam",
+   "bright clearing with rainbows",
+   "heat haze over standing water"
+  ],
+  "sounds": [
+   "rain on giant leaves",
+   "frog and cicada chorus",
+   "log drum signals between stilt towns",
+   "river current under floorboards",
+   "forklift beeper somewhere, regularly"
+  ],
+  "music_slots": [
+   {
+    "slot": "storm_day",
+    "use": "open-country exploration",
+    "notes": "Marimba over a rolling log drum, restless but warm."
+   },
+   {
+    "slot": "canal_clear",
+    "use": "clearing weather and canals",
+    "notes": "Reed flute and rain stick. The mood lifts, briefly."
+   },
+   {
+    "slot": "levee_watch",
+    "use": "levee scenes and flood events",
+    "notes": "Low brass with a steady log-drum pulse that gets slower as the water rises."
+   },
+   {
+    "slot": "borrowed_seconds",
+    "use": "when Temporal Inertia is active",
+    "notes": "Everything stretches: the marimba loses its attack, and the reverb tail triples."
+   },
+   {
+    "slot": "shell_memory",
+    "use": "shell-marks and old obligations",
+    "notes": "Solo marimba, played very softly, with silence between notes."
+   },
+   {
+    "slot": "reckoning",
+    "use": "Act 3 flood",
+    "notes": "Full percussion crash, then a single sustained brass chord that does not resolve."
+   }
+  ]
+ }
 }
