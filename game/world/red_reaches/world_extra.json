@@ -1,0 +1,1426 @@
+{
+ "_doc": "World content layered on the Red Reaches by Agent 2 (game/world/red_reaches/level_red_reaches.gd): settlements/props for rr_settlements.gd, cairn_trail, loot (placed from the region loot_table; item, p=[x,z]), extra lore sites and secrets merged into the RegionRunner recipe (kept out of game/canon so Agent 3's data is untouched). Prop kinds: see RrSettlements._prop.",
+ "settlements": [
+  {
+   "id": "waystation_camp",
+   "name": "Waystation Camp",
+   "center": [
+    118,
+    -2
+   ],
+   "props": [
+    {
+     "k": "tent",
+     "p": [
+      8,
+      -4.8
+     ],
+     "r": 80,
+     "c": "#3f7a52"
+    },
+    {
+     "k": "tent",
+     "p": [
+      -9.6,
+      -5.2
+     ],
+     "r": -20,
+     "c": "#d1b88a"
+    },
+    {
+     "k": "fire",
+     "p": [
+      5.4,
+      -7.2
+     ]
+    },
+    {
+     "k": "rack",
+     "p": [
+      -7,
+      5.5
+     ]
+    },
+    {
+     "k": "barrels",
+     "p": [
+      -8.6,
+      -2.6
+     ],
+     "n": 3
+    },
+    {
+     "k": "cart",
+     "p": [
+      -3.5,
+      8.5
+     ],
+     "r": 160,
+     "n": 2
+    },
+    {
+     "k": "lantern",
+     "p": [
+      -1,
+      5
+     ]
+    },
+    {
+     "k": "lantern",
+     "p": [
+      5.5,
+      5
+     ]
+    },
+    {
+     "k": "trough",
+     "p": [
+      9.5,
+      8.5
+     ]
+    },
+    {
+     "k": "terrace",
+     "p": [
+      3.5,
+      11.8
+     ],
+     "r": 90
+    },
+    {
+     "k": "sacks",
+     "p": [
+      -6.5,
+      6.8
+     ],
+     "n": 5,
+     "seed": 3
+    },
+    {
+     "k": "banner",
+     "p": [
+      -1.5,
+      -7.4
+     ],
+     "c": "#c47a2a"
+    }
+   ]
+  },
+  {
+   "id": "drovers_rest",
+   "name": "Drover's Rest",
+   "center": [
+    133,
+    -38
+   ],
+   "props": [
+    {
+     "k": "cart",
+     "p": [
+      -1,
+      0
+     ],
+     "n": 2
+    },
+    {
+     "k": "tent",
+     "p": [
+      6.2,
+      2.5
+     ],
+     "r": 200,
+     "c": "#c9904a"
+    },
+    {
+     "k": "fire",
+     "p": [
+      3.2,
+      -3.2
+     ]
+    },
+    {
+     "k": "hitch",
+     "p": [
+      -5,
+      -3
+     ],
+     "r": 90,
+     "len": 3
+    },
+    {
+     "k": "sacks",
+     "p": [
+      -4,
+      2.5
+     ],
+     "n": 4,
+     "seed": 5
+    },
+    {
+     "k": "barrels",
+     "p": [
+      -2,
+      -4.5
+     ],
+     "n": 2
+    },
+    {
+     "k": "lantern",
+     "p": [
+      1,
+      -5.5
+     ]
+    },
+    {
+     "k": "stump",
+     "p": [
+      -6.2,
+      1.8
+     ],
+     "s": 0.8,
+     "seed": 2
+    },
+    {
+     "k": "stump",
+     "p": [
+      -4.4,
+      5.2
+     ],
+     "r": 40,
+     "s": 0.7,
+     "seed": 4
+    },
+    {
+     "k": "stakes",
+     "p": [
+      -3.4,
+      3.0
+     ],
+     "len": 2.2
+    }
+   ]
+  },
+  {
+   "id": "salt_pans_works",
+   "name": "Salt Pans work-site",
+   "center": [
+    110,
+    34
+   ],
+   "props": [
+    {
+     "k": "well",
+     "p": [
+      0,
+      0
+     ]
+    },
+    {
+     "k": "salt_basin",
+     "p": [
+      -4,
+      7
+     ],
+     "seed": 1
+    },
+    {
+     "k": "salt_basin",
+     "p": [
+      2.2,
+      8.8
+     ],
+     "seed": 2
+    },
+    {
+     "k": "salt_basin",
+     "p": [
+      -8,
+      0.5
+     ],
+     "r": 90,
+     "seed": 3
+    },
+    {
+     "k": "salt_pile",
+     "p": [
+      7,
+      -4
+     ]
+    },
+    {
+     "k": "salt_pile",
+     "p": [
+      -8,
+      -5.5
+     ],
+     "s": 0.8
+    },
+    {
+     "k": "rake",
+     "p": [
+      -1,
+      5
+     ],
+     "r": 40
+    },
+    {
+     "k": "rack",
+     "p": [
+      5,
+      -5.5
+     ],
+     "c": "#8d9a4a"
+    },
+    {
+     "k": "awning",
+     "p": [
+      7.2,
+      1.2
+     ],
+     "c": "#d9a45a"
+    },
+    {
+     "k": "sacks",
+     "p": [
+      -3,
+      -4.5
+     ],
+     "n": 4,
+     "seed": 9,
+     "c": "#efe9d8"
+    },
+    {
+     "k": "lantern",
+     "p": [
+      -6,
+      -1
+     ]
+    }
+   ]
+  },
+  {
+   "id": "well_line",
+   "name": "The Well Line",
+   "center": [
+    0,
+    0
+   ],
+   "props": [
+    {
+     "k": "crank_well",
+     "p": [
+      117.8,
+      17.2
+     ]
+    },
+    {
+     "k": "crank_well",
+     "p": [
+      116.3,
+      22.0
+     ]
+    },
+    {
+     "k": "crank_well",
+     "p": [
+      114.6,
+      26.6
+     ]
+    }
+   ]
+  },
+  {
+   "id": "survey_camp",
+   "name": "Survey Camp",
+   "center": [
+    206,
+    22
+   ],
+   "props": [
+    {
+     "k": "tent",
+     "p": [
+      -2,
+      -5.5
+     ],
+     "s": 1.15,
+     "c": "#4f5560"
+    },
+    {
+     "k": "table",
+     "p": [
+      -2,
+      -1.8
+     ]
+    },
+    {
+     "k": "permit_board",
+     "p": [
+      2.5,
+      -2.2
+     ],
+     "r": 180
+    },
+    {
+     "k": "tripod",
+     "p": [
+      -7,
+      -6
+     ]
+    },
+    {
+     "k": "tripod",
+     "p": [
+      6.5,
+      -6.5
+     ]
+    },
+    {
+     "k": "mast",
+     "p": [
+      10,
+      -4
+     ]
+    },
+    {
+     "k": "crates",
+     "p": [
+      7,
+      1
+     ],
+     "r": 10
+    },
+    {
+     "k": "spool",
+     "p": [
+      -6.2,
+      3
+     ]
+    },
+    {
+     "k": "spool",
+     "p": [
+      -4.6,
+      4.4
+     ]
+    },
+    {
+     "k": "cot",
+     "p": [
+      -8,
+      -1.8
+     ],
+     "r": 90,
+     "c": "#4f5560"
+    },
+    {
+     "k": "lantern",
+     "p": [
+      0.3,
+      -3.2
+     ]
+    },
+    {
+     "k": "lantern",
+     "p": [
+      4.5,
+      -3.6
+     ]
+    },
+    {
+     "k": "stakes",
+     "p": [
+      -10,
+      6
+     ],
+     "len": 3
+    },
+    {
+     "k": "barrels",
+     "p": [
+      8,
+      -8
+     ],
+     "n": 2
+    }
+   ]
+  },
+  {
+   "id": "pylon_watch",
+   "name": "Pylon watch post",
+   "center": [
+    196,
+    -12
+   ],
+   "props": [
+    {
+     "k": "tripod",
+     "p": [
+      -3.2,
+      -1.3
+     ]
+    },
+    {
+     "k": "tent",
+     "p": [
+      5,
+      -5.5
+     ],
+     "c": "#4f5560"
+    },
+    {
+     "k": "crates",
+     "p": [
+      -5,
+      2.5
+     ],
+     "r": -20
+    },
+    {
+     "k": "stakes",
+     "p": [
+      1.6,
+      2.4
+     ],
+     "len": 2.0
+    },
+    {
+     "k": "lantern",
+     "p": [
+      3.2,
+      -0.8
+     ]
+    },
+    {
+     "k": "spool",
+     "p": [
+      -2,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "id": "overlook_works",
+   "name": "Spanwright Overlook",
+   "center": [
+    238,
+    -31
+   ],
+   "props": [
+    {
+     "k": "rail",
+     "p": [
+      7.2,
+      0
+     ],
+     "r": 90,
+     "len": 10
+    },
+    {
+     "k": "telescope",
+     "p": [
+      5,
+      -2.8
+     ]
+    },
+    {
+     "k": "plinth",
+     "p": [
+      -1,
+      -7
+     ]
+    },
+    {
+     "k": "bench",
+     "p": [
+      -5,
+      -1.5
+     ],
+     "r": 90
+    },
+    {
+     "k": "table",
+     "p": [
+      -2.6,
+      3.4
+     ]
+    },
+    {
+     "k": "cairn",
+     "p": [
+      6,
+      -5
+     ],
+     "s": 1.4
+    },
+    {
+     "k": "cairn",
+     "p": [
+      6.8,
+      -2
+     ],
+     "r": 20,
+     "s": 0.7,
+     "seed": 2
+    },
+    {
+     "k": "cairn",
+     "p": [
+      6.8,
+      2.2
+     ],
+     "r": 70,
+     "s": 0.7,
+     "seed": 3
+    },
+    {
+     "k": "flagline",
+     "p": [
+      -5.5,
+      -4.8
+     ],
+     "len": 5
+    },
+    {
+     "k": "lantern",
+     "p": [
+      -4,
+      5
+     ]
+    },
+    {
+     "k": "lantern",
+     "p": [
+      4,
+      5.2
+     ]
+    }
+   ]
+  },
+  {
+   "id": "span_market",
+   "name": "Ochre Span market",
+   "center": [
+    233,
+    2
+   ],
+   "props": [
+    {
+     "k": "stall",
+     "p": [
+      -6.5,
+      -6.2
+     ],
+     "c": "#c8803a"
+    },
+    {
+     "k": "stall",
+     "p": [
+      -1.8,
+      -6.3
+     ],
+     "c": "#a8452f"
+    },
+    {
+     "k": "stall",
+     "p": [
+      3.0,
+      -6.2
+     ],
+     "c": "#d9b36a"
+    },
+    {
+     "k": "banner",
+     "p": [
+      10.5,
+      4.2
+     ],
+     "c": "#b0462a"
+    },
+    {
+     "k": "banner",
+     "p": [
+      10.5,
+      -3.8
+     ],
+     "c": "#d9a43a"
+    },
+    {
+     "k": "spool",
+     "p": [
+      8.5,
+      3.2
+     ]
+    },
+    {
+     "k": "flagline",
+     "p": [
+      -7,
+      7
+     ],
+     "len": 8
+    },
+    {
+     "k": "lantern",
+     "p": [
+      -8,
+      -2
+     ]
+    },
+    {
+     "k": "lantern",
+     "p": [
+      7,
+      -2.5
+     ]
+    }
+   ]
+  },
+  {
+   "id": "echo_hollow_wall",
+   "name": "Echo Hollow",
+   "center": [
+    64,
+    -33
+   ],
+   "props": [
+    {
+     "k": "glyph_wall",
+     "p": [
+      0,
+      -1
+     ]
+    },
+    {
+     "k": "standing_stone",
+     "p": [
+      -5,
+      2
+     ],
+     "seed": 1
+    },
+    {
+     "k": "standing_stone",
+     "p": [
+      5.6,
+      1
+     ],
+     "s": 0.9,
+     "seed": 2
+    },
+    {
+     "k": "standing_stone",
+     "p": [
+      -3,
+      6.5
+     ],
+     "s": 0.8,
+     "seed": 3
+    },
+    {
+     "k": "cairn",
+     "p": [
+      4.5,
+      5.5
+     ]
+    }
+   ]
+  },
+  {
+   "id": "vault_gate",
+   "name": "Thoughtstone Vault",
+   "center": [
+    160,
+    -29
+   ],
+   "props": [
+    {
+     "k": "vault_door",
+     "p": [
+      0,
+      -3.4
+     ]
+    },
+    {
+     "k": "cairn",
+     "p": [
+      -4.2,
+      2
+     ],
+     "s": 0.9
+    },
+    {
+     "k": "cairn",
+     "p": [
+      4.2,
+      2.4
+     ],
+     "r": 40,
+     "s": 0.9,
+     "seed": 2
+    },
+    {
+     "k": "standing_stone",
+     "p": [
+      -4.5,
+      -2
+     ],
+     "s": 0.9,
+     "seed": 4
+    },
+    {
+     "k": "standing_stone",
+     "p": [
+      4.6,
+      -2.4
+     ],
+     "s": 0.9,
+     "seed": 5
+    }
+   ]
+  },
+  {
+   "id": "cistern_basin",
+   "name": "The Cistern",
+   "center": [
+    186,
+    -37
+   ],
+   "props": [
+    {
+     "k": "pool",
+     "p": [
+      0,
+      -0.5
+     ]
+    },
+    {
+     "k": "slate",
+     "p": [
+      -5.5,
+      3.5
+     ],
+     "seed": 1
+    },
+    {
+     "k": "slate",
+     "p": [
+      5.5,
+      3
+     ],
+     "r": 30,
+     "s": 0.8,
+     "seed": 2
+    },
+    {
+     "k": "cairn",
+     "p": [
+      -5.5,
+      -3.8
+     ],
+     "s": 0.9,
+     "seed": 3
+    }
+   ]
+  },
+  {
+   "id": "stranded_cart",
+   "name": "Stranded hauler",
+   "center": [
+    72,
+    0
+   ],
+   "props": [
+    {
+     "k": "broken_cart",
+     "p": [
+      3.2,
+      2.4
+     ],
+     "r": 15
+    },
+    {
+     "k": "sacks",
+     "p": [
+      0.5,
+      6.0
+     ],
+     "n": 3,
+     "seed": 7
+    },
+    {
+     "k": "cairn",
+     "p": [
+      -3,
+      -5
+     ],
+     "s": 0.8,
+     "seed": 5
+    },
+    {
+     "k": "barrels",
+     "p": [
+      -1.5,
+      4.5
+     ],
+     "n": 2
+    }
+   ]
+  },
+  {
+   "id": "beetle_slates",
+   "name": "Beetle slates",
+   "center": [
+    197,
+    9
+   ],
+   "props": [
+    {
+     "k": "slate",
+     "p": [
+      -5,
+      -5
+     ],
+     "s": 1.2,
+     "seed": 1
+    },
+    {
+     "k": "slate",
+     "p": [
+      5.5,
+      5
+     ],
+     "r": 40,
+     "seed": 2
+    },
+    {
+     "k": "slate",
+     "p": [
+      0.5,
+      1
+     ],
+     "s": 1.4,
+     "seed": 3
+    },
+    {
+     "k": "slate",
+     "p": [
+      -9,
+      10
+     ],
+     "r": 20,
+     "seed": 4
+    }
+   ]
+  },
+  {
+   "id": "wayfinding",
+   "name": "Wayfinding",
+   "center": [
+    0,
+    0
+   ],
+   "props": [
+    {
+     "k": "signpost",
+     "p": [
+      66.0,
+      -4.0
+     ],
+     "r": 90
+    },
+    {
+     "k": "signpost",
+     "p": [
+      125.0,
+      -17.0
+     ],
+     "r": 70
+    },
+    {
+     "k": "signpost",
+     "p": [
+      118.0,
+      13.5
+     ],
+     "r": -80
+    },
+    {
+     "k": "signpost",
+     "p": [
+      162.0,
+      -2.0
+     ],
+     "r": 90
+    },
+    {
+     "k": "signpost",
+     "p": [
+      192.5,
+      -13.0
+     ],
+     "r": 100
+    },
+    {
+     "k": "signpost",
+     "p": [
+      234.0,
+      -5.0
+     ],
+     "r": 92
+    },
+    {
+     "k": "signpost",
+     "p": [
+      20.0,
+      5.0
+     ]
+    },
+    {
+     "k": "signpost",
+     "p": [
+      108.0,
+      -2.0
+     ]
+    },
+    {
+     "k": "signpost",
+     "p": [
+      216.0,
+      3.5
+     ]
+    }
+   ]
+  }
+ ],
+ "cairn_trail": {
+  "path": [
+   [
+    12,
+    4
+   ],
+   [
+    34,
+    3
+   ],
+   [
+    58,
+    1
+   ],
+   [
+    80,
+    -1
+   ],
+   [
+    100,
+    -1
+   ],
+   [
+    118,
+    -1
+   ],
+   [
+    134,
+    -2
+   ],
+   [
+    150,
+    1
+   ],
+   [
+    164,
+    6
+   ],
+   [
+    184,
+    8
+   ],
+   [
+    214,
+    3
+   ],
+   [
+    246,
+    0
+   ]
+  ],
+  "step": 17,
+  "side": 3.4
+ },
+ "loot": [
+  {
+   "item": "reach_soil",
+   "p": [
+    121,
+    4
+   ]
+  },
+  {
+   "item": "reach_soil",
+   "p": [
+    130,
+    12
+   ]
+  },
+  {
+   "item": "reach_soil",
+   "p": [
+    142,
+    -4
+   ]
+  },
+  {
+   "item": "lichen_culture",
+   "p": [
+    52,
+    -4
+   ]
+  },
+  {
+   "item": "lichen_culture",
+   "p": [
+    190,
+    6
+   ]
+  },
+  {
+   "item": "lichen_culture",
+   "p": [
+    204,
+    13
+   ]
+  },
+  {
+   "item": "thoughtstone_dust",
+   "p": [
+    162,
+    -14
+   ]
+  },
+  {
+   "item": "thoughtstone_dust",
+   "p": [
+    68,
+    -30
+   ]
+  },
+  {
+   "item": "thoughtstone_dust",
+   "p": [
+    246,
+    -30
+   ]
+  },
+  {
+   "item": "salvage",
+   "p": [
+    188,
+    18
+   ]
+  },
+  {
+   "item": "salvage",
+   "p": [
+    214,
+    1
+   ]
+  },
+  {
+   "item": "salvage",
+   "p": [
+    200,
+    27
+   ]
+  },
+  {
+   "item": "salvage",
+   "p": [
+    87,
+    0
+   ]
+  },
+  {
+   "item": "spanwright_cable",
+   "p": [
+    228,
+    5
+   ]
+  },
+  {
+   "item": "spanwright_cable",
+   "p": [
+    240,
+    5
+   ]
+  },
+  {
+   "item": "spanwright_cable",
+   "p": [
+    236,
+    -26
+   ]
+  },
+  {
+   "item": "spanwright_cable",
+   "p": [
+    132,
+    -44
+   ]
+  },
+  {
+   "item": "red_slate_plate",
+   "p": [
+    192,
+    0
+   ]
+  },
+  {
+   "item": "red_slate_plate",
+   "p": [
+    200,
+    16
+   ]
+  },
+  {
+   "item": "red_slate_plate",
+   "p": [
+    198,
+    9
+   ]
+  },
+  {
+   "item": "keth_water_flask",
+   "p": [
+    117.5,
+    19.5
+   ]
+  },
+  {
+   "item": "keth_water_flask",
+   "p": [
+    114.6,
+    28.0
+   ]
+  },
+  {
+   "item": "thoughtstone_cache",
+   "p": [
+    312,
+    -12
+   ]
+  }
+ ],
+ "sites": [
+  {
+   "id": "survey_board",
+   "spoke": "",
+   "pos": [
+    208.5,
+    -6,
+    20.5
+   ],
+   "kind": "lore",
+   "label": "Read the permit board",
+   "r": 3.0,
+   "text": "Permit seven-one-four, stamped again. Under it, in pencil: 'the beetles are not trespassing'."
+  },
+  {
+   "id": "way_notice",
+   "spoke": "",
+   "pos": [
+    112,
+    -3,
+    -9
+   ],
+   "kind": "lore",
+   "label": "Read the notice",
+   "r": 3.0,
+   "text": "A Spanwright notice: wells by the day, bridges by the generation. Whoever mends the rope first signs last."
+  },
+  {
+   "id": "salt_tally",
+   "spoke": "",
+   "pos": [
+    104,
+    -3.5,
+    38.5
+   ],
+   "kind": "lore",
+   "label": "Read the tally marks",
+   "r": 3.0,
+   "text": "Sixteen columns of tally marks, one per Keth. The newest column is still wet."
+  },
+  {
+   "id": "overlook_plinth",
+   "spoke": "",
+   "pos": [
+    237,
+    -3,
+    -37.5
+   ],
+   "kind": "lore",
+   "label": "Read the plinth",
+   "r": 3.0,
+   "text": "Load limits scratched into the stone, some scored out and written larger. Someone has written 'no' beside the last one."
+  },
+  {
+   "id": "drover_tally",
+   "spoke": "",
+   "pos": [
+    131,
+    -3.5,
+    -42.5
+   ],
+   "kind": "lore",
+   "label": "Read the tally",
+   "r": 3.0,
+   "text": "A drover's tally: flour, rope, rope, rope. Under it: 'mind the third rut, it has opinions'."
+  }
+ ],
+ "secrets": [
+  {
+   "id": "rr_wayfarer_stone",
+   "name": "The Wayfarer's Capstone",
+   "hint": "A loose capstone in the Waystation ruin's shade.",
+   "how_found": "Stand in the old ruin's shadow and push at the loose capstone.",
+   "reward": "Behind the capstone: a rolled coil of spanwright cable, left for whoever mends the road next.",
+   "ledger_tags": [
+    "discovery",
+    "stewardship"
+   ],
+   "reward_items": {
+    "spanwright_cable": 2
+   },
+   "trigger": {
+    "pos": [
+     121,
+     -3,
+     -7
+    ],
+    "r": 3.4,
+    "mode": "interact",
+    "label": "Push the capstone"
+   }
+  },
+  {
+   "id": "rr_ticking_seam",
+   "name": "The Ticking Seam",
+   "hint": "The mites gather where the valley floor has cracked.",
+   "how_found": "Stand still at the fresh crack in the Fracture Valley while the mites tick.",
+   "reward": "The crack ticks, then stops. A seam of Thoughtstone dust is exposed, still warm.",
+   "ledger_tags": [
+    "discovery",
+    "curiosity"
+   ],
+   "reward_items": {
+    "thoughtstone_dust": 2
+   },
+   "trigger": {
+    "pos": [
+     50,
+     -4,
+     -5
+    ],
+    "r": 3.0,
+    "mode": "stand",
+    "stand_s": 3.0
+   }
+  },
+  {
+   "id": "rr_salt_names",
+   "name": "The Salt Names",
+   "hint": "Names pressed into the salt crust by generations of keepers.",
+   "how_found": "Read the oldest row of salt marks at the Salt Pans.",
+   "reward": "The oldest names are a family's. The flask beneath them is still sealed and cold.",
+   "ledger_tags": [
+    "discovery",
+    "stewardship"
+   ],
+   "reward_items": {
+    "keth_water_flask": 1
+   },
+   "trigger": {
+    "pos": [
+     104,
+     -3.5,
+     41
+    ],
+    "r": 3.2,
+    "mode": "interact",
+    "label": "Read the salt names"
+   }
+  },
+  {
+   "id": "rr_vault_hum",
+   "name": "What the Vault Stores",
+   "hint": "A hum under the sealed door, stored carefully.",
+   "how_found": "Stand quietly at the sealed vault door once the boulder is broken.",
+   "reward": "The hum steadies. A shard hums back from between the door stones and falls into your hand.",
+   "ledger_tags": [
+    "discovery",
+    "burden"
+   ],
+   "reward_items": {
+    "thoughtstone_cache": 1
+   },
+   "trigger": {
+    "pos": [
+     160,
+     -4,
+     -33
+    ],
+    "r": 3.4,
+    "mode": "stand",
+    "stand_s": 4.0,
+    "when": {
+     "flag": "boulder_broken"
+    }
+   }
+  }
+ ],
+ "signs": [
+  {
+   "spoke": "echo_hollow",
+   "p": [
+    66.0,
+    -4.0
+   ]
+  },
+  {
+   "spoke": "drovers_rest",
+   "p": [
+    125.0,
+    -17.0
+   ]
+  },
+  {
+   "spoke": "salt_pans",
+   "p": [
+    118.0,
+    13.5
+   ]
+  },
+  {
+   "spoke": "thought_vault",
+   "p": [
+    162.0,
+    -2.0
+   ]
+  },
+  {
+   "spoke": "cistern",
+   "p": [
+    192.5,
+    -13.0
+   ]
+  },
+  {
+   "spoke": "overlook",
+   "p": [
+    234.0,
+    -5.0
+   ]
+  }
+ ]
+}

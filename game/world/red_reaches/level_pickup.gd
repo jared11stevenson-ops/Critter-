@@ -7,6 +7,7 @@ signal collected(pickup)
 const COLORS := {
 	"reach_soil": Color("#c4683f"), "lichen_culture": Color("#9ccf5a"), "thoughtstone_dust": Color("#8fd0ef"),
 	"salvage": Color("#9aa3ad"), "thoughtstone_cache": Color("#7fe0ff"),
+	"spanwright_cable": Color("#d9b36a"), "red_slate_plate": Color("#8a8296"), "keth_water_flask": Color("#7fc8d8"),
 }
 
 var kind := "salvage"
@@ -17,6 +18,8 @@ var _mesh: MeshInstance3D
 var _magnet := false
 var _glint_t := 0.0
 var _done := false
+var _label: Label3D
+var _near_t := 0.0
 
 func setup(k: String, n: int, save_key: String) -> void:
 	kind = k
@@ -27,7 +30,7 @@ func _ready() -> void:
 	_t = randf() * 3.0
 	_mesh = MeshInstance3D.new()
 	var col: Color = COLORS.get(kind, Color.WHITE)
-	if kind == "thoughtstone_cache":
+	if kind == "thoughtstone_cache" or kind == "keth_water_flask":
 		var pm := PrismMesh.new()
 		pm.size = Vector3(0.7, 1.1, 0.7)
 		_mesh.mesh = pm
@@ -56,6 +59,8 @@ func _ready() -> void:
 	var f := UiKit.font("bold")
 	if f:
 		l.font = f
+	l.visible = false
+	_label = l
 	add_child(l)
 
 func _process(delta: float) -> void:
@@ -76,6 +81,10 @@ func _process(delta: float) -> void:
 	if l == null:
 		return
 	var d := global_position.distance_to(l.global_position + Vector3(0, 0.3, 0))
+	_near_t -= delta
+	if _near_t <= 0.0:
+		_near_t = 0.25
+		_label.visible = d < 9.0       # the name tag only shows up close (draw-call budget)
 	var mr := Balance.f("pickups.magnet_radius", 4.5)
 	if kind == "thoughtstone_cache":
 		mr *= 2.0

@@ -36,6 +36,10 @@ const CHAR_SPECS := {
 	"rival_helix": {"h": 1.85, "r": 0.38, "body": "#cfd5d8", "acc": "#2a8f9a", "head": "#d8b48c"},
 }
 
+## NPC placeholder specs registered at runtime by NpcLife (id -> {h, r, body, acc, head, shape}); real models replace them
+## through game/art/models/npcs/npc_registry.json. shape: human | beetle | mantis | crane | herder.
+static var extra_specs: Dictionary = {}
+
 func setup(id: String, as_kind: String) -> void:
 	character_id = id
 	kind = as_kind
@@ -147,7 +151,7 @@ func _cyl(r_top: float, r_bot: float, h: float, segs: int = 10) -> CylinderMesh:
 	return c
 
 func _build_character() -> void:
-	var spec: Dictionary = CHAR_SPECS.get(character_id, {})
+	var spec: Dictionary = CHAR_SPECS.get(character_id, extra_specs.get(character_id, {}))
 	var col := UiKit.char_color(character_id)
 	_height = float(spec.get("h", float(Canon.character(character_id).get("height_m", 1.8))))
 	_height = clampf(_height, 0.3, 6.0)
@@ -184,12 +188,50 @@ func _build_character() -> void:
 		wp.position = Vector3(-_radius - 0.12, _height * 0.55, -0.1)
 		_pivot.add_child(wp)
 		_mesh(_box(Vector3(0.1, 0.1, 0.7)), _mat(Color("#2a2a30")), Vector3(0, 0, -0.35), Vector3.ZERO, Vector3.ONE, wp)
+	elif spec.has("shape"):
+		_npc_shape(str(spec["shape"]), acc, body, headm, head_r)
 	elif character_id == "cigarra":
 		var crown := _mat(Color("#b8c24a"), 0.6)
 		for i in 5:
 			var a := TAU * float(i) / 5.0
 			_mesh(_sphere(0.09, 6), crown, Vector3(cos(a) * 0.32, _height + 0.12, sin(a) * 0.32))
 		_mesh(_box(Vector3(_radius * 2.6, _height * 0.55, 0.08)), _mat(Color("#8f8a52")), Vector3(0, _height * 0.5, _radius * 0.9), Vector3(10, 0, 0))
+
+## Species silhouettes for named NPCs (placeholders until Agent 1's models land): readable at 15 m, <= 4 draws after bake.
+func _npc_shape(shape: String, acc: Material, body: Material, headm: Material, head_r: float) -> void:
+	match shape:
+		"beetle":
+			# plate-beetle elder: domed slate shell on the back, two short antennae
+			_mesh(_sphere(_radius * 1.25, 10), acc, Vector3(0, _height * 0.52, _radius * 0.55), Vector3.ZERO, Vector3(1.0, 0.8, 0.7))
+			_mesh(_cyl(0.03, 0.04, 0.45), acc, Vector3(0.12, _height + 0.1, -0.05), Vector3(-20, 0, -18))
+			_mesh(_cyl(0.03, 0.04, 0.45), acc, Vector3(-0.12, _height + 0.1, -0.05), Vector3(-20, 0, 18))
+		"mantis":
+			# stick mantis: folded forearms, long thin limbs, a wide brow
+			_mesh(_cyl(0.04, 0.05, _height * 0.5), acc, Vector3(_radius + 0.08, _height * 0.55, -0.12), Vector3(-35, 0, -8))
+			_mesh(_cyl(0.04, 0.05, _height * 0.5), acc, Vector3(-_radius - 0.08, _height * 0.55, -0.12), Vector3(-35, 0, 8))
+			_mesh(_box(Vector3(head_r * 2.2, 0.06, head_r * 0.8)), acc, Vector3(0, _height - head_r * 0.4, -head_r * 0.5))
+		"crane":
+			# long-legged crane: stilt legs, a beak and a cable coil at the hip
+			_mesh(_cyl(0.03, 0.04, _height * 0.42), acc, Vector3(0.14, _height * 0.2, 0), Vector3.ZERO)
+			_mesh(_cyl(0.03, 0.04, _height * 0.42), acc, Vector3(-0.14, _height * 0.2, 0), Vector3.ZERO)
+			_mesh(_cyl(0.0, 0.07, 0.5), acc, Vector3(0, _height - head_r * 0.9, -head_r - 0.2), Vector3(-90, 0, 0))
+			_mesh(_cyl(0.2, 0.2, 0.12, 10), body, Vector3(_radius, _height * 0.45, 0.1), Vector3(0, 0, 90))
+		"herder":
+			# wide hat and a staff
+			_mesh(_cyl(head_r * 1.9, head_r * 1.9, 0.05, 12), acc, Vector3(0, _height - head_r * 0.2, 0))
+			_mesh(_cyl(0.03, 0.03, _height * 1.05), body, Vector3(_radius + 0.3, _height * 0.52, -0.05))
+		"clerk":
+			# Dominion clerk: stiff cap, ledger board held to the chest
+			_mesh(_cyl(head_r * 1.0, head_r * 1.1, 0.14, 12), acc, Vector3(0, _height - head_r * 0.1, 0))
+			_mesh(_box(Vector3(0.5, 0.65, 0.06)), acc, Vector3(0, _height * 0.55, -_radius - 0.05), Vector3(10, 0, 0))
+		"scarf":
+			# Free Scale contact: green scarf and a wide pack
+			_mesh(_cyl(_radius * 1.05, _radius * 1.05, 0.16, 12), acc, Vector3(0, _height * 0.78, 0))
+			_mesh(_box(Vector3(_radius * 1.6, _height * 0.38, 0.4)), body, Vector3(0, _height * 0.5, _radius + 0.12))
+		_:
+			# human work cap + satchel
+			_mesh(_cyl(head_r * 1.0, head_r * 1.1, 0.1, 12), acc, Vector3(0, _height - head_r * 0.1, 0))
+			_mesh(_box(Vector3(_radius * 0.9, _height * 0.2, 0.18)), acc, Vector3(_radius * 0.9, _height * 0.42, 0.05))
 
 func _legs(mat: Material, n: int, r: float, len: float, y: float, thick: float = 0.05) -> void:
 	for i in n:

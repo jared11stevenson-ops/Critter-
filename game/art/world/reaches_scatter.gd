@@ -3,33 +3,19 @@ extends Node3D
 ## MultiMesh (one draw call), plus 3D toon props (crates, survey flags, broken pillars, rock chunks) in one
 ## MultiMesh per mesh. Placement from layout.json props_scatter; keeps paths, markers and triggers clear.
 
-const ATLAS_TEX := preload("res://game/art/world/reaches_atlas.png")
-const ATLAS_JSON := "res://game/art/world/reaches_atlas.json"
-const SCATTER_SHADER_PATH := "res://game/art/shaders/scatter_billboard.gdshader"
-
-## layout kind -> atlas items (weighted by repetition)
-const KIND_ITEMS := {
-	"rock_small": ["rock_pile", "rock_stone", "rock_needle", "rock_round", "rock_round", "rock_stone"],
-	"rock_spire": ["rock_horn", "rock_pillar", "rock_pillar"],
-	"flat_tree": ["tree_big", "tree_big", "tree_small", "tree_bone"],
-	"bone": ["horn_hanging"],
-	"shrub": ["shrub_red", "plant_agave", "plant_redbush", "plant_blue", "plant_bulb", "plant_orange", "plant_cone"],
-	"lichen_patch": ["plant_bulb", "plant_blue", "plant_agave"],
-}
 const MESH_KINDS := ["crate", "survey_flag", "pillar_broken", "rock_a", "rock_b", "rock_c", "spire", "lichen_rock",
 	"grass_tuft", "pebbles", "dead_tree"]
-## v0.7: rocks, spires, shrubs and lichen are real 3D meshes (PBR detail shader); only trees/bones stay painted cards.
+## v0.12: EVERY scatter kind is a real 3D mesh now (rocks, spires, trees, shrubs, lichen, bones); the painted card atlas is gone.
 const KIND_MESH := {
 	"rock_small": ["rock_a", "rock_b", "rock_c", "rock_a", "pebbles"],
 	"rock_spire": ["spire"],
 	"flat_tree": ["dead_tree", "dead_tree", "spire"],
 	"shrub": ["grass_tuft", "grass_tuft", "grass_tuft"],
 	"lichen_patch": ["lichen_rock", "grass_tuft"],
+	"bone": ["bone_ribs", "bone_horn"],      # v0.12: the painted horn card is now a real 3D bleached ribcage / horn
 }
 
-var _atlas: Dictionary = {}
 var _rng := RandomNumberGenerator.new()
-var _bb: Array = []        # [Transform3D, Color, rect Color]
 var _props: Dictionary = {}  # kind -> Array[Transform3D]
 var _clear: Array = []     # [Vector2 center, radius]
 var _t: Node
@@ -44,9 +30,6 @@ var _mms: Array = []       # [MultiMesh, full count, is_cover]
 func populate(t: Node) -> void:
 	_rng.seed = 1977
 	_t = t
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(ATLAS_JSON))
-	if parsed is Dictionary:
-		_atlas = parsed.get("items", {})
 	var layout: Dictionary = t.layout
 	_build_clear_zones(layout)
 	var floors := {}
@@ -62,7 +45,6 @@ func populate(t: Node) -> void:
 			_scatter_floor(t, floors[area], kinds, count)
 	_extra_backdrop_trees(t)
 	_ground_cover(t, floors)
-	_commit_billboards()
 	_commit_props()
 	var q := ToonKit.quality()
 	if q:
@@ -267,35 +249,15 @@ func _add(kind: String, pos: Vector3, scale_mul: float) -> void:
 		var s := _rng.randf_range(1.0, 2.2) * scale_mul
 		if mk == "grass_tuft":
 			s = _rng.randf_range(1.2, 2.0) * scale_mul
+		if mk == "bone_ribs" or mk == "bone_horn":
+			s = _rng.randf_range(0.9, 1.5) * scale_mul
 		if mk == "spire" or mk == "dead_tree":
 			s = _rng.randf_range(0.8, 1.3) * scale_mul
 			if _south_of_floor(pos.x, pos.z):
 				return
 		_add_mesh(mk, pos, s)
 		return
-	if KIND_ITEMS.has(kind):
-		var items: Array = KIND_ITEMS[kind]
-		var id: String = items[_rng.randi() % items.size()]
-		if not _atlas.has(id):
-			return
-		var it: Dictionary = _atlas[id]
-		var px: Array = it["px"]
-		var hm := float(it.get("height_m", 2.0)) * _rng.randf_range(0.8, 1.15) * scale_mul
-		if hm > 3.0 and _south_of_floor(pos.x, pos.z):
-			hm = minf(hm, 2.6) if kind == "rock_small" or kind == "shrub" else 0.0
-			if hm <= 0.0:
-				return
-		var wm := hm * float(px[0]) / float(px[1])
-		var xf := Transform3D(Basis().scaled(Vector3(wm, hm, 1.0)), pos + Vector3(0, -0.12, 0))
-		var uv: Array = it["uv"]
-		var sway := 0.0
-		if kind == "shrub" or kind == "lichen_patch":
-			sway = 1.0
-		elif kind == "flat_tree":
-			sway = 0.35
-		var col := Color(sway, _rng.randf(), 1.0 if _rng.randf() < 0.5 else 0.0, 1.0)
-		_bb.append([xf, col, Color(float(uv[0]), float(uv[1]), float(uv[2]), float(uv[3]))])
-	elif kind in MESH_KINDS:
+	if kind in MESH_KINDS:
 		if not _props.has(kind):
 			_props[kind] = []
 		var s := _rng.randf_range(0.85, 1.2)
@@ -312,40 +274,6 @@ func _south_of_floor(x: float, z: float) -> bool:
 		if _t.floor_sdf(x, z - float(k)) < -0.5:
 			return true
 	return false
-
-
-func _commit_billboards() -> void:
-	if _bb.is_empty():
-		return
-	var q := QuadMesh.new()
-	q.size = Vector2(1, 1)
-	q.center_offset = Vector3(0, 0.5, 0)
-	var mat := ShaderMaterial.new()
-	mat.shader = ToonKit.occluding_shader(SCATTER_SHADER_PATH)
-	mat.set_shader_parameter("atlas", ATLAS_TEX)
-	var buckets := _bucket(_bb)
-	for ci in buckets:
-		var list: Array = buckets[ci]
-		var mm := MultiMesh.new()
-		mm.transform_format = MultiMesh.TRANSFORM_3D
-		mm.use_colors = true
-		mm.use_custom_data = true
-		mm.mesh = q
-		mm.instance_count = list.size()
-		for i in list.size():
-			var e: Array = list[i]
-			mm.set_instance_transform(i, e[0])
-			mm.set_instance_color(i, e[1])
-			mm.set_instance_custom_data(i, e[2])
-		var mmi := MultiMeshInstance3D.new()
-		mmi.name = "PaintedProps_%d" % ci
-		mmi.multimesh = mm
-		mmi.material_override = mat
-		mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		# billboards rotate in the vertex shader: pad by the tallest card
-		mmi.custom_aabb = _aabb_of(list, 8.0)
-		add_child(mmi)
-		_mms.append([mm, list.size(), false])
 
 
 func _commit_props() -> void:
@@ -449,6 +377,27 @@ static func _prop_mesh(kind: String) -> ArrayMesh:
 				ToonKit.cylinder(st, p0, p1, 0.09, 0.04, 5, bark.lightened(0.08), false)
 				ToonKit.cylinder(st, p1, p1 + Vector3(cos(a + 0.7) * 0.5, 0.45, sin(a + 0.7) * 0.5), 0.04, 0.015, 4, bark.lightened(0.15), false)
 			ToonKit.rock(st, Vector3(0, 0.0, 0), Vector3(0.5, 0.2, 0.5), Color(0.55, 0.32, 0.24), 72, 1)
+		"bone_ribs":
+			# half-buried ribcage: a spine and five tapering ribs arching over it
+			var bone := Color(0.86, 0.80, 0.68)
+			ToonKit.cylinder(st, Vector3(-1.1, 0.12, 0), Vector3(1.1, 0.2, 0.05), 0.07, 0.06, 5, bone.darkened(0.08), true)
+			for i in 5:
+				var x := -0.85 + float(i) * 0.42
+				var prev := Vector3(x, 0.15, 0.0)
+				for j in 6:
+					var a := PI * float(j + 1) / 6.0
+					var cur := Vector3(x + float(j) * 0.015, 0.15 + sin(a) * (0.75 - absf(float(i) - 2.0) * 0.08), -cos(a) * 0.62)
+					ToonKit.cylinder(st, prev, cur, 0.055 * (1.0 - float(j) * 0.1), 0.05 * (1.0 - float(j + 1) * 0.1), 4, bone.lightened(0.02 * float(j)), false)
+					prev = cur
+		"bone_horn":
+			# curved horn standing out of the dust
+			var horn := Color(0.82, 0.76, 0.62)
+			var hp := Vector3(0, -0.1, 0)
+			for j in 6:
+				var a2 := float(j) / 6.0
+				var np := Vector3(sin(a2 * 1.6) * 0.55, -0.1 + a2 * 1.7, 0)
+				ToonKit.cylinder(st, hp, np, 0.17 * (1.0 - a2 * 0.9), 0.17 * (1.0 - (a2 + 0.166) * 0.9), 6, horn.darkened(0.04 * float(j)), j == 0)
+				hp = np
 		"pebbles":
 			var rng := RandomNumberGenerator.new()
 			rng.seed = 61

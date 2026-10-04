@@ -3,8 +3,6 @@ extends Node3D
 ## hotspot / camera / NPC markers and the cast billboards live in hub_visual.tscn so they are editable.
 ## No Camera3D here (Agent 2 owns the camera). Plaza centre = origin, camera side = +Z.
 
-const ATLAS_TEX := preload("res://game/art/world/reaches_atlas.png")
-const ATLAS_JSON := "res://game/art/world/reaches_atlas.json"
 
 const FLOOR_STONE := Color(0.66, 0.52, 0.42)
 const WALL := Color(0.62, 0.50, 0.44)
@@ -439,11 +437,7 @@ func _build_gate(geo: Node3D) -> void:
 
 
 func _build_plants(geo: Node3D) -> void:
-	# painted plants (Reaches kit) in the Habitat bay, planters and corners — one MultiMesh
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(ATLAS_JSON))
-	if not (parsed is Dictionary):
-		return
-	var items: Dictionary = parsed.get("items", {})
+	# v0.12: real 3D plants (no painted cards) in the Habitat bay, planters and corners, merged into ONE static mesh (1 draw)
 	var spots: Array = []
 	var hab := Transform3D(Basis(Vector3.UP, deg_to_rad(-30.0)), Vector3(15.0, 0.5, -9.0))
 	for i in 9:
@@ -451,36 +445,59 @@ func _build_plants(geo: Node3D) -> void:
 	for p in [Vector3(-19, 0, -14), Vector3(19, 0, -14), Vector3(-19.5, 0, 4), Vector3(19.5, 0, 6), Vector3(-9, 0, -15), Vector3(-1.5, 0, -15.2), Vector3(-10, 0, 6.5), Vector3(9.5, 0, 7.0)]:
 		spots.append([p, "plant_redbush"])
 		spots.append([p + Vector3(0.8, 0, 0.4), "plant_bulb"])
-	var q := QuadMesh.new()
-	q.size = Vector2(1, 1)
-	q.center_offset = Vector3(0, 0.5, 0)
-	var mm := MultiMesh.new()
-	mm.transform_format = MultiMesh.TRANSFORM_3D
-	mm.use_colors = true
-	mm.use_custom_data = true
-	mm.mesh = q
-	mm.instance_count = spots.size()
-	for i in spots.size():
-		var id: String = spots[i][1]
-		var it: Dictionary = items.get(id, items.values()[0])
-		var px: Array = it["px"]
-		var hm := float(it.get("height_m", 1.5)) * (0.55 if id == "tree_small" else 0.9)
-		var wm := hm * float(px[0]) / float(px[1])
-		var pos: Vector3 = spots[i][0]
-		mm.set_instance_transform(i, Transform3D(Basis().scaled(Vector3(wm, hm, 1)), pos))
-		mm.set_instance_color(i, Color(1.0, _rng.randf(), float(i % 2), 1))
-		var uv: Array = it["uv"]
-		mm.set_instance_custom_data(i, Color(float(uv[0]), float(uv[1]), float(uv[2]), float(uv[3])))
-	var mat := ShaderMaterial.new()
-	mat.shader = ToonKit.occluding_shader("res://game/art/shaders/scatter_billboard.gdshader")
-	mat.set_shader_parameter("atlas", ATLAS_TEX)
-	var mmi := MultiMeshInstance3D.new()
-	mmi.name = "Plants"
-	mmi.multimesh = mm
-	mmi.material_override = mat
-	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	mmi.custom_aabb = AABB(Vector3(-25, -2, -20), Vector3(50, 15, 35))
-	geo.add_child(mmi)
+	var cache: Dictionary = {}
+	var merged := ToonKit.begin()
+	for sp in spots:
+		var id: String = sp[1]
+		if not cache.has(id):
+			cache[id] = _plant_mesh(id)
+		var sc := _rng.randf_range(0.85, 1.25)
+		var xf := Transform3D(Basis(Vector3.UP, _rng.randf() * TAU).scaled(Vector3(sc, sc, sc)), sp[0])
+		merged.append_from(cache[id], 0, xf)
+	var mi := ToonKit.mesh_instance(ToonKit.finish(merged), ToonKit.material({"roughness": 0.85, "detail": 0.2, "outline": 0.0}), "Plants")
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	geo.add_child(mi)
+
+
+static func _plant_mesh(id: String) -> ArrayMesh:
+	var st := ToonKit.begin()
+	var rng := RandomNumberGenerator.new()
+	rng.seed = id.hash()
+	match id:
+		"plant_agave":
+			for i in 9:
+				var a := TAU * float(i) / 9.0
+				var tip := Vector3(cos(a) * 0.62, 0.55 + 0.2 * float(i % 3), sin(a) * 0.62)
+				ToonKit.cylinder(st, Vector3(0, 0.05, 0), tip, 0.09, 0.0, 4, Color(0.34, 0.52, 0.36).lerp(Color(0.5, 0.64, 0.5), float(i % 3) * 0.3), false)
+		"plant_blue":
+			for i in 7:
+				var a := TAU * float(i) / 7.0 + 0.4
+				var mid := Vector3(cos(a) * 0.3, 0.45, sin(a) * 0.3)
+				var tip := Vector3(cos(a) * 0.62, 0.7 + 0.1 * float(i % 2), sin(a) * 0.62)
+				ToonKit.cylinder(st, Vector3(0, 0.0, 0), mid, 0.06, 0.045, 4, Color(0.3, 0.5, 0.62), false)
+				ToonKit.cylinder(st, mid, tip, 0.045, 0.0, 4, Color(0.42, 0.66, 0.74), false)
+		"plant_orange":
+			for i in 4:
+				var a := TAU * float(i) / 4.0
+				ToonKit.rock(st, Vector3(cos(a) * 0.24, 0.26 + 0.06 * float(i % 2), sin(a) * 0.24), Vector3(0.26, 0.28, 0.26), Color(0.9, 0.5, 0.2).lerp(Color(0.8, 0.36, 0.16), float(i) * 0.2), 810 + i, 0)
+		"plant_cone":
+			for t in 3:
+				var r := 0.42 - float(t) * 0.12
+				ToonKit.cylinder(st, Vector3(0, 0.1 + float(t) * 0.32, 0), Vector3(0, 0.55 + float(t) * 0.32, 0), r, 0.0, 6, Color(0.4, 0.5, 0.34).lerp(Color(0.62, 0.42, 0.5), float(t) * 0.35), t == 0)
+		"plant_redbush":
+			for i in 4:
+				var a := TAU * float(i) / 4.0 + 0.3
+				ToonKit.rock(st, Vector3(cos(a) * 0.3, 0.3, sin(a) * 0.3), Vector3(0.32, 0.3, 0.32), Color(0.7, 0.22, 0.2).lerp(Color(0.84, 0.36, 0.24), rng.randf()), 830 + i, 0)
+			ToonKit.rock(st, Vector3(0, 0.45, 0), Vector3(0.34, 0.3, 0.34), Color(0.78, 0.28, 0.22), 840, 1)
+		"plant_bulb":
+			ToonKit.rock(st, Vector3(0, 0.22, 0), Vector3(0.22, 0.26, 0.22), Color(0.86, 0.8, 0.62), 850, 1)
+			ToonKit.cylinder(st, Vector3(0, 0.4, 0), Vector3(0.05, 0.75, 0), 0.03, 0.02, 4, Color(0.4, 0.55, 0.34), false)
+		_:   # tree_small
+			ToonKit.cylinder(st, Vector3(0, 0.0, 0), Vector3(0.05, 1.5, 0), 0.12, 0.07, 6, Color(0.42, 0.32, 0.27), true)
+			for i in 3:
+				var a := TAU * float(i) / 3.0
+				ToonKit.rock(st, Vector3(cos(a) * 0.35, 1.5 + 0.1 * float(i), sin(a) * 0.35), Vector3(0.5, 0.2, 0.5), Color(0.46, 0.5, 0.28).lerp(Color(0.36, 0.44, 0.24), float(i) * 0.3), 860 + i, 0)
+	return ToonKit.finish(st)
 
 
 func _build_collision(geo: Node3D) -> void:

@@ -1,0 +1,14 @@
+[
+ {"t":0.3,"call":"scene.qa_auto_dialogue","args":[true,0,0.15]},
+ {"t":0.8,"call":"scene.qa_npc","args":["rr_tavik"]},
+ {"t":2.0,"call":"scene.qa_clock","args":[0.0]},
+ {"t":6.0,"call":"scene.qa_clock","args":[0.34]},
+ {"t":10.0,"call":"scene.qa_clock","args":[0.5]},
+ {"t":14.0,"call":"scene.qa_npc_log"},
+ {"t":16.0,"call":"scene.qa_weather","args":["wind"]},
+ {"t":24.0,"call":"scene.qa_clock","args":[0.0]},
+ {"t":25.0,"call":"scene.qa_weather","args":["glitter"]},
+ {"t":32.0,"call":"scene.qa_weather","args":["devils"]},
+ {"t":38.0,"call":"scene.qa_teleport","args":["t_drill"]},
+ {"t":44.0,"call":"scene.qa_clock","args":[0.5]}
+]

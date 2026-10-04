@@ -84,6 +84,10 @@ const ZONE_KEYS := [[-30.0, "gate"], [14.0, "gate"], [40.0, "valley"], [86.0, "v
 	[400.0, "boss"]]
 
 var _cur: Dictionary = {}
+var _grade_dusk := 0.0
+var _grade_dust := 0.0
+var _dusk_mood: Dictionary = {}
+var _dust_mood: Dictionary = {}
 var _mood_t := 0.0
 var _sky_t := 0.0
 var _sky_dirty := false
@@ -299,6 +303,30 @@ func apply_preset(p: String) -> void:
 				_apply_mood(MOODS["gate"])
 
 
+## Time-of-day / weather grade layered over the zone mood (set by RrAmbient, 2 Hz): dusk 0..1 blends toward an amber dusk,
+## dust 0..1 toward a red dust-wind haze (denser fog, lower sun).
+func set_grade(dusk: float, dust: float) -> void:
+	_grade_dusk = clampf(dusk, 0.0, 1.0)
+	_grade_dust = clampf(dust, 0.0, 1.0)
+
+func _graded(m: Dictionary) -> Dictionary:
+	if _grade_dusk > 0.002:
+		if _dusk_mood.is_empty():
+			_dusk_mood = _mix(MOODS["span"], MOODS["boss"], 0.55)
+		m = _mix(m, _dusk_mood, _grade_dusk)
+	if _grade_dust > 0.002:
+		if _dust_mood.is_empty():
+			_dust_mood = MOODS["valley"].duplicate()
+			_dust_mood["sun_col"] = Color(1.0, 0.66, 0.46)
+			_dust_mood["sun_e"] = 1.25
+			_dust_mood["fog_col"] = Color(0.86, 0.52, 0.38)
+			_dust_mood["fog_d"] = 0.0125
+			_dust_mood["sat"] = 0.86
+			_dust_mood["horizon"] = Color(0.88, 0.54, 0.42)
+			_dust_mood["zenith"] = Color(0.52, 0.42, 0.48)
+		m = _mix(m, _dust_mood, _grade_dust)
+	return m
+
 ## Mood for a level X position (keyframed, smooth).
 static func mood_at_x(x: float) -> Dictionary:
 	for i in ZONE_KEYS.size() - 1:
@@ -406,7 +434,7 @@ func _process(delta: float) -> void:
 	_mood_t = 0.1
 	# focus ≈ where the camera looks at ground level (gameplay rig ~14 m away)
 	var fx := cam.global_position.x - cam.global_transform.basis.z.x * 12.0
-	var m := mood_at_x(fx)
+	var m := _graded(mood_at_x(fx))
 	if not _cur.is_empty() and absf(float(_cur.get("sun_e", 0.0)) - float(m["sun_e"])) < 0.0005 \
 			and (_cur.get("fog_col", Color()) as Color).is_equal_approx(m["fog_col"]):
 		return
