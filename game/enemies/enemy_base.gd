@@ -40,6 +40,8 @@ func _ready() -> void:
 	_actor_ready()
 	cfg = Balance.section("enemies." + species_id)
 	max_hp = float(cfg.get("hp", 50))
+	if species_id != "dust_grazer" and species_id != "resonance_pylon" and species_id != "augur_rig":
+		max_hp *= Director.enemy_hp_mult()
 	hp = max_hp
 	poise = float(cfg.get("poise", 0))
 	speed = float(cfg.get("speed", 3.0))
@@ -50,7 +52,7 @@ func _ready() -> void:
 	team = "enemy"
 	collision_layer = 4
 	collision_mask = 1 | 8
-	visual = VisualFactory.creature(species_id)
+	visual = _make_visual()
 	add_child(visual)
 	if visual.has_method("get_radius"):
 		var r: float = float(visual.get_radius())
@@ -75,6 +77,10 @@ func _ready() -> void:
 
 func _enemy_ready() -> void:
 	pass
+
+## Subclasses with their own look (Ledger Rivals) override this.
+func _make_visual() -> Node3D:
+	return VisualFactory.creature(species_id)
 
 func _exit_tree() -> void:
 	if Field.current:
@@ -204,7 +210,7 @@ func hit_party_in_radius(center: Vector3, radius: float, hit: Dictionary) -> int
 	return n
 
 func make_hit(amount: float, kind: String = "light", extra: Dictionary = {}) -> Dictionary:
-	var h := {"amount": amount, "source": self, "kind": kind, "can_crit": false, "feel": true}
+	var h := {"amount": amount * Director.enemy_damage_mult(), "source": self, "kind": kind, "can_crit": false, "feel": true}
 	for k in extra:
 		h[k] = extra[k]
 	return h

@@ -31,6 +31,9 @@ var beetles: Array = []
 var pylons: Array = []
 var grazers: Array = []
 var boss: AugurRig = null
+var rivals: RivalEncounters = null
+var replay := false                  # Return Descent: the Reaches are cleared; the rivals are out there
+var _run_ended := false
 var _barrier_boulder: StaticBody3D = null
 var _events_seen: Dictionary = {}
 var _fade: ColorRect
@@ -74,6 +77,10 @@ func _ready() -> void:
 	add_child(runner)
 	runner.event_emitted.connect(_on_dialogue_event)
 	runner.finished.connect(_on_dialogue_finished)
+	rivals = RivalEncounters.new()
+	rivals.name = "Rivals"
+	add_child(rivals)
+	rivals.setup(self, runner)
 	hud = Hud.new()
 	hud.name = "HUD"
 	hud.setup(field, party)
@@ -81,7 +88,10 @@ func _ready() -> void:
 	field.hud = hud
 	_build_fade()
 	_build_interactables()
+	replay = bool(GameState.get_flag("rr_complete", false))
 	_spawn_content()
+	if replay:
+		rivals.spawn_all()
 	_apply_world_state()
 	Events.codex_unlocked.connect(_on_codex)
 	Events.boss_phase_changed.connect(_on_boss_phase)
@@ -92,6 +102,7 @@ func _ready() -> void:
 	GameState.unlock_codex("char_aruun")
 	GameState.unlock_codex("char_cigarra")
 	Events.scene_ready.emit("red_reaches")
+	_begin_ledger_run()
 	_update_objective(true)
 
 # ================= setup =================
@@ -145,6 +156,12 @@ func _spawn_points() -> Array:
 		var t := _trigger(cp)
 		if not t.is_empty():
 			lp = _tpos(t)
+			pp = lp + Vector3(-2.0, 0, 1.2)
+	if cp == "" and bool(GameState.get_flag("rr_complete", false)):
+		# Return Descent: drop in at the Waystation, with the whole road behind and the rivals ahead
+		var tw := _trigger("t_waystation")
+		if not tw.is_empty():
+			lp = _tpos(tw)
 			pp = lp + Vector3(-2.0, 0, 1.2)
 	if cp == "t_burden" and not bool(GameState.get_flag("burden_done", false)):
 		lp = _tpos(_trigger("t_span"))
@@ -422,8 +439,12 @@ func _beetle_in_scan() -> bool:
 			return true
 	return false
 
-func on_scanned_object(_id: String) -> void:
-	pass
+func on_scanned_object(id: String) -> void:
+	# Reading the Dominion survey camp's permit turns up paperwork that does not match: evidence
+	# (unlocks "Expose them" against any rival, see rivals.json resolutions).
+	if id == "camp" and not Ledger.exists({"type": "discovered", "target": "survey_camp"}):
+		Ledger.record("discovered", "player", "survey_camp", ["evidence", "discovery"], {}, 2)
+		Events.toast.emit("Evidence logged: the camp's permit does not match the survey on file", "codex")
 
 func on_enemy_hit(e: Node, hit: Dictionary) -> void:
 	if e is DustGrazer:
@@ -488,6 +509,8 @@ func _physics_process(_delta: float) -> void:
 func _fire_trigger(id: String, ev: String) -> void:
 	Events.trigger_entered.emit(ev)
 	_checkpoint(id)
+	if rivals:
+		rivals.on_trigger(ev)
 	match ev:
 		"arrival":
 			GameState.set_flag("arrived_rr", true)
@@ -514,6 +537,28 @@ func _fire_trigger(id: String, ev: String) -> void:
 				if DialogueRunner.seen("rr_boss_intro") or not _say("rr_boss_intro"):
 					_start_boss()
 	_update_objective()
+
+# ================= Ledger run =================
+func _begin_ledger_run() -> void:
+	Director.attach()
+	Director.reset_run()
+	if Ledger.current_region != "red_reaches":
+		Ledger.begin_run("red_reaches")
+		GameState.flags["_returned_pending"] = false
+	GameState.save_game()
+
+func _end_ledger_run() -> void:
+	if _run_ended:
+		return
+	_run_ended = true
+	if rivals:
+		rivals.on_leave_level()
+	var all_conscious := true
+	for m in party.members:
+		if m.downed:
+			all_conscious = false
+	Ledger.end_run(all_conscious)
+	GameState.flags["_returned_pending"] = true
 
 func _checkpoint(id: String) -> void:
 	GameState.flags["_checkpoint"] = id
@@ -839,6 +884,7 @@ func _exit_level() -> void:
 func _exfil() -> void:
 	if Router.is_busy():
 		return
+	_end_ledger_run()
 	GameState.set_flag("rr_complete", true)
 	GameState.flags["_scene"] = "hub"
 	GameState.flags["_checkpoint"] = ""
@@ -849,6 +895,10 @@ func _exfil() -> void:
 
 # ---------------- wipe ----------------
 func on_party_wiped() -> void:
+	Ledger.record("party_wipe", "player", "", ["casualty"], {}, 3)
+	Director.on_wipe()
+	if rivals:
+		rivals.on_party_wiped()
 	party.input_enabled = false
 	Audio.sfx("downed")
 	var tw := create_tween()
@@ -886,6 +936,9 @@ func _update_objective(force: bool = false) -> void:
 
 func _compute_objective() -> String:
 	var f := func(n: String) -> bool: return bool(GameState.get_flag(n, false))
+	var ro := rivals.objective_text() if rivals else ""
+	if ro != "":
+		return ro
 	var lx: float = party.get_leader().global_position.x if party and party.get_leader() else 0.0
 	if not f.call("valley_clear"):
 		return "Descend into the Fracture Valley" if lx < 40.0 else "Drive off the Skitter Mite swarm"
@@ -909,6 +962,8 @@ func _compute_objective() -> String:
 		return "Reach the foundation beyond the span"
 	if str(GameState.get_flag("ochre_span", "")) == "":
 		return "Decide the foundation's fate (marked point)"
+	if rivals and not rivals.live.is_empty():
+		return "Meet the rivals on the road, then reach the exfil beacon"
 	return "Return to the exfil beacon"
 
 # ================= QA helpers =================
@@ -1087,3 +1142,34 @@ func qa_boss_beam() -> void:
 	if boss and is_instance_valid(boss):
 		boss._beam_state = ""
 		boss._beam_t = 0.0
+
+# ---- QA: Ledger Rivals ----
+## Spawn a rival (if needed) and put the party 9 m from them.
+func qa_rival_meet(id: String) -> void:
+	var e: RivalEnemy = rivals.live.get(id, null)
+	if e == null:
+		e = rivals.spawn(id)
+	if e == null:
+		print("[QA] rival ", id, " not available")
+		return
+	var p := e.global_position + Vector3(-9, 0, 0)
+	var l := party.get_leader()
+	l.teleport(ground(p, 0.4))
+	party.get_partner().teleport(ground(p + Vector3(-2, 0, 1.2), 0.4))
+	party.clear_trail()
+	cam.set_target(l, true)
+
+func qa_rival_hurt(id: String, frac: float) -> void:
+	var e: RivalEnemy = rivals.live.get(id, null)
+	if e and is_instance_valid(e) and e.alive:
+		e.receive_hit({"amount": e.max_hp * frac, "source": party.get_leader(), "ability": "reaching_strike", "can_crit": false, "feel": true, "kind": "heavy"})
+
+func qa_rival_resolve(id: String, outcome: String) -> void:
+	rivals.qa_resolve(id, outcome)
+
+func qa_rival_log() -> void:
+	for id in rivals.live:
+		var e: RivalEnemy = rivals.live[id]
+		print("[QA] RIVAL ", id, " state=", e.state, " hp=", snappedf(e.hp, 0.1), "/", snappedf(e.max_hp, 0.1), " tactics=", e.tactics, " kind=", e.attack_kind)
+	for r in Rivals.all():
+		print("[QA] ROSTER ", r["id"], " state=", r["state"], " enc=", r["encounters"], " adapt=", r["adaptations"], " scars=", r["scars"], " grudge=", r["grudge"])

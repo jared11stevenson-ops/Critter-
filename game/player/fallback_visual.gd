@@ -29,6 +29,11 @@ const CHAR_SPECS := {
 	"cigarra": {"h": 1.65, "r": 0.42, "body": "#3b2a44", "acc": "#b8c24a", "head": "#8f8a52"},
 	"mara": {"h": 1.7, "r": 0.35, "body": "#4f7a8c", "acc": "#e9dcc0", "head": "#d8b48c"},
 	"dexter": {"h": 1.85, "r": 0.36, "body": "#3a3d46", "acc": "#c8462b", "head": "#d8b48c"},
+	# Ledger Rivals (human opponents): a coat in the faction's colors; the accent is the hat / visor.
+	"rival_dominion": {"h": 1.85, "r": 0.4, "body": "#4b5058", "acc": "#b53a2a", "head": "#c9a07a"},
+	"rival_undermarket": {"h": 1.8, "r": 0.4, "body": "#6b4a2a", "acc": "#d9a43a", "head": "#b98c66"},
+	"rival_free_scale": {"h": 1.75, "r": 0.4, "body": "#3a6b4a", "acc": "#e0d28a", "head": "#a97c5a"},
+	"rival_helix": {"h": 1.85, "r": 0.38, "body": "#cfd5d8", "acc": "#2a8f9a", "head": "#d8b48c"},
 }
 
 func setup(id: String, as_kind: String) -> void:
@@ -169,6 +174,16 @@ func _build_character() -> void:
 		var stone := _mat(Color("#7b8794"), 0.25)
 		_mesh(_cyl(0.07, 0.07, 1.2), _mat(Color("#4a3226")), Vector3(0, 0, -0.5), Vector3(90, 0, 0), Vector3.ONE, arm)
 		_mesh(_sphere(0.36, 10), stone, Vector3(0, 0, -1.15), Vector3.ZERO, Vector3.ONE, arm)
+	elif character_id.begins_with("rival_"):
+		# peaked cap / visor band + a satchel so the silhouette reads as "person with a job", not a partner
+		_mesh(_cyl(head_r * 1.05, head_r * 1.15, 0.12, 12), acc, Vector3(0, _height - head_r * 0.1, 0))
+		_mesh(_box(Vector3(head_r * 1.6, 0.05, head_r * 0.9)), acc, Vector3(0, _height - head_r * 0.25, -head_r * 0.85))
+		_mesh(_box(Vector3(_radius * 0.9, _height * 0.2, 0.18)), acc, Vector3(_radius * 0.9, _height * 0.42, 0.05))
+		var wp := Node3D.new()
+		wp.name = "Weapon"
+		wp.position = Vector3(-_radius - 0.12, _height * 0.55, -0.1)
+		_pivot.add_child(wp)
+		_mesh(_box(Vector3(0.1, 0.1, 0.7)), _mat(Color("#2a2a30")), Vector3(0, 0, -0.35), Vector3.ZERO, Vector3.ONE, wp)
 	elif character_id == "cigarra":
 		var crown := _mat(Color("#b8c24a"), 0.6)
 		for i in 5:

@@ -21,6 +21,10 @@ const CHAR_COLORS := {
 	"pharilux": Color("#4e6b4a"), "solmara": Color("#3a8a8a"), "scarlith": Color("#b0302a"), "bramvex": Color("#6b5a3a"),
 }
 
+const RIVAL_COLORS := {
+	"dominion": Color("#8a3a30"), "undermarket": Color("#8a6a2a"), "free_scale": Color("#3a6b4a"), "helix": Color("#2a8f9a"),
+}
+
 static var _fonts: Dictionary = {}
 static var _theme: Theme = null
 static var _tex_cache: Dictionary = {}
@@ -160,7 +164,17 @@ static func portrait(id: String, expr: String = "default") -> Texture2D:
 	return t
 
 static func char_color(id: String) -> Color:
+	if id.begins_with("rival:"):
+		var r: Dictionary = Rivals.get_rival(id.substr(6))
+		return RIVAL_COLORS.get(str(r.get("faction", "")), Color("#6b5a4a"))
 	return CHAR_COLORS.get(id, Color("#6b5a4a"))
+
+## Display name for a speaker id; "rival:<id>" resolves through the Ledger Rivals roster.
+static func speaker_name(id: String) -> String:
+	if id.begins_with("rival:"):
+		var r: Dictionary = Rivals.get_rival(id.substr(6))
+		return str(r.get("name", "Stranger"))
+	return Canon.display_name(id)
 
 ## Portrait control: real portrait if present, else a coloured badge with the initial.
 static func portrait_control(id: String, expr: String, size: float) -> Control:
@@ -202,7 +216,7 @@ static func _fill_portrait(holder: Control, id: String, expr: String, size: floa
 		inner.offset_bottom = -6
 		inner.add_theme_stylebox_override("panel", box(col, Color(0, 0, 0, 0), int(size * 0.5), 0))
 		holder.add_child(inner)
-		var nm := Canon.display_name(id) if id != "" else "?"
+		var nm := speaker_name(id) if id != "" else "?"
 		var l := label(nm.substr(0, 1).to_upper(), int(size * 0.5), PARCHMENT, "title", 6, INK)
 		l.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

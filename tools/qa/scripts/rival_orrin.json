@@ -1,0 +1,13 @@
+[
+ {"t":0.4,"call":"scene.qa_skip_to","args":["drill"]},
+ {"t":1.0,"call":"scene.qa_auto_dialogue","args":[true,0,0.8]},
+ {"t":1.2,"call":"scene.qa_kill_all","args":[60]},
+ {"t":1.6,"call":"scene.qa_rival_meet","args":["foreman_orrin"]},
+ {"t":12.0,"call":"scene.qa_rival_log"},
+ {"t":13.0,"action":"attack","dur":1.0},
+ {"t":18.0,"call":"scene.qa_rival_log"},
+ {"t":19.0,"call":"scene.qa_rival_hurt","args":["foreman_orrin",0.9]},
+ {"t":20.0,"call":"scene.qa_rival_log"},
+ {"t":50.0,"call":"scene.qa_rival_log"},
+ {"t":50.5,"call":"Ledger.qa_dump"}
+]

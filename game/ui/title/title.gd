@@ -162,7 +162,11 @@ func _new_game() -> void:
 
 func _really_new() -> void:
 	GameState.new_game()
-	Router.goto(HUB, "fade")
+	GameState.settings.erase("session_zero")
+	Director.reset_run()
+	var sz := SessionZero.new()
+	add_child(sz)
+	sz.done.connect(func(): Router.goto(HUB, "fade"))
 
 func _continue() -> void:
 	Audio.sfx("ui_confirm")

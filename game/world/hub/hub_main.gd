@@ -26,6 +26,8 @@ var _objective_panel: PanelContainer
 var _toast_box: VBoxContainer
 var habitat: Node = null
 var _end_card: Node = null
+var _returning := false
+var _bonds_screen: Node = null
 var _pitch := -48.0
 var _dist := 24.0
 
@@ -56,6 +58,8 @@ func _ready() -> void:
 	GameState.unlock_codex("char_mara")
 	GameState.save_game()
 	Events.toast.connect(_toast)
+	Ledger.bond_changed.connect(_on_bond_changed)
+	Ledger.promise_changed.connect(_on_promise_changed)
 	Events.codex_unlocked.connect(func(id): _toast("Codex updated: %s" % CodexData.title(id), "codex"))
 	Audio.music("hub")
 	Events.scene_ready.emit("hub")
@@ -111,6 +115,16 @@ func _build_ui() -> void:
 	menu.offset_bottom = 104
 	menu.pressed.connect(_open_menu)
 	ui_root.add_child(menu)
+	var bonds := UiKit.button("Bonds", Vector2(150, 88), 28)
+	bonds.anchor_left = 1.0
+	bonds.anchor_right = 1.0
+	bonds.offset_left = -338
+	bonds.offset_right = -188
+	bonds.offset_top = 16
+	bonds.offset_bottom = 104
+	bonds.pressed.connect(_open_bonds)
+	bonds.name = "BondsButton"
+	ui_root.add_child(bonds)
 	var hint := UiKit.label("Drag to look around · tap a place or a person", 22, UiKit.PARCHMENT.darkened(0.15), "ui", 6, Color(0, 0, 0, 0.8))
 	hint.anchor_top = 1.0
 	hint.anchor_bottom = 1.0
@@ -259,7 +273,7 @@ func _unhandled_input(ev: InputEvent) -> void:
 
 # ---------------- hotspots ----------------
 func _on_spot(id: String) -> void:
-	if runner.active or habitat != null:
+	if runner.active or habitat != null or _returning:
 		return
 	Audio.sfx("ui_tap")
 	for s in _spots:
@@ -277,6 +291,11 @@ func _on_spot(id: String) -> void:
 				_toast("%s nods at you." % Canon.display_name(id), "info")
 
 func _talk_table() -> void:
+	if _returning:
+		return
+	if bool(GameState.get_flag("_returned_pending", false)):
+		_return_sequence()
+		return
 	if not bool(GameState.get_flag("briefed", false)):
 		runner.play("hub_intro")
 	elif bool(GameState.get_flag("rr_complete", false)) and not bool(GameState.get_flag("debriefed", false)):
@@ -296,8 +315,8 @@ func _gate() -> void:
 				_focus_target = s["node"].global_position
 		return
 	runner.play_data("hub_gate_confirm", {"lines": [
-		{"who": "comms:mara", "expr": "focused", "text": "Gate is calibrated for the Red Reaches. Descend?" if not bool(GameState.get_flag("rr_complete", false)) else "The Reaches remember what you did there. Descend again?"},
-		{"choice": [{"text": "Descend", "event": "descend"}, {"text": "Not yet"}]},
+		{"who": "comms:mara", "expr": "focused", "text": "Gate is calibrated for the Red Reaches. Descend?" if not bool(GameState.get_flag("rr_complete", false)) else "The Reaches remember what you did there, and so do the people you met. Return Descent?"},
+		{"choice": [{"text": "Descend" if not bool(GameState.get_flag("rr_complete", false)) else "Return Descent", "event": "descend"}, {"text": "Not yet"}]},
 	]})
 
 func _descend() -> void:
@@ -316,8 +335,33 @@ func _open_codex() -> void:
 	cl.add_child(c)
 	c.tree_exited.connect(cl.queue_free)
 
+func _open_bonds() -> void:
+	if runner.active or habitat != null or _returning or (_bonds_screen and is_instance_valid(_bonds_screen)):
+		return
+	Audio.sfx("ui_tap")
+	var cl := CanvasLayer.new()
+	cl.layer = 70
+	add_child(cl)
+	var b := BondScreen.new()
+	cl.add_child(b)
+	_bonds_screen = cl
+	b.tree_exited.connect(cl.queue_free)
+
+func _on_bond_changed(character_id: String, stage: String) -> void:
+	if character_id in ["aruun", "cigarra"] and stage == "bonded":
+		return
+	_toast("Bond Contract: %s is now %s" % [Canon.display_name(character_id), stage.to_upper()], "trust")
+
+func _on_promise_changed(_promise_id: String, status: String) -> void:
+	match status:
+		"open": _toast("Promise made. It is judged when you return (see Bonds).", "info")
+		"kept": _toast("Promise KEPT, letter and spirit.", "trust")
+		"loophole": _toast("Promise kept to the LETTER only.", "warning")
+		"bent": _toast("Promise kept in spirit, not in wording.", "warning")
+		"broken": _toast("Promise BROKEN.", "warning")
+
 func _open_menu() -> void:
-	if runner.active or habitat != null:
+	if runner.active or habitat != null or _returning:
 		return
 	add_child(PauseMenu.new())
 
@@ -353,10 +397,13 @@ func _on_habitat_closed() -> void:
 
 # ---------------- beats ----------------
 func _auto_beats() -> void:
-	if runner.active or habitat != null:
+	if runner.active or habitat != null or _returning:
 		return
 	await get_tree().create_timer(0.5).timeout
-	if runner.active or habitat != null:
+	if runner.active or habitat != null or _returning:
+		return
+	if bool(GameState.get_flag("_returned_pending", false)):
+		_return_sequence()
 		return
 	if not bool(GameState.get_flag("briefed", false)):
 		runner.play("hub_intro")
@@ -364,6 +411,48 @@ func _auto_beats() -> void:
 		runner.play("hub_debrief")
 	elif bool(GameState.get_flag("habitat_built", false)) and not bool(GameState.get_flag("slice_complete", false)) and not DialogueRunner.seen("hub_hook"):
 		runner.play("hub_hook")
+
+## After a descent: the Ledger card ("what changed because of you"), then the Reaction Matrix barks
+## (Ledger.take_reaction(char, "return") through the dialogue box), then the story debrief the first time.
+func _return_sequence() -> void:
+	_returning = true
+	GameState.flags["_returned_pending"] = false
+	GameState.save_game()
+	var card := LedgerCard.debrief(-1, "Continue")
+	card.subtitle = "Back at the Common. The Ledger remembers."
+	add_child(card)
+	await card.closed
+	var barks := _collect_return_barks()
+	if not barks.is_empty():
+		runner.play_data("hub_return_barks", {"lines": barks})
+		while runner.active:
+			await get_tree().process_frame
+	_returning = false
+	if bool(GameState.get_flag("rr_complete", false)) and not bool(GameState.get_flag("debriefed", false)):
+		runner.play("hub_debrief")
+	_update_objective()
+
+## Up to N return barks (N from the Story tone), best priority first, one per character.
+func _collect_return_barks() -> Array:
+	var n: int = [0, 1, 2, 3, 4][Director.story_level()]
+	if n <= 0:
+		return []
+	var cands: Array = []
+	var chars: Array = ["aruun", "cigarra", "zephyr", "bramvex", "mara", "dexter"]
+	for c in Ledger.reaction_defs:
+		if not (c in chars) and not str(c).begins_with("_"):
+			chars.append(c)
+	for c in chars:
+		var rs: Array = Ledger.reactions_for(c, "return")
+		if not rs.is_empty():
+			cands.append([int(rs[0].get("priority", 0)), c])
+	cands.sort_custom(func(a, b): return a[0] > b[0])
+	var lines: Array = []
+	for i in mini(n, cands.size()):
+		var r: Dictionary = Ledger.take_reaction(str(cands[i][1]), "return")
+		if not r.is_empty():
+			lines.append({"who": str(cands[i][1]), "expr": str(r.get("expr", "default")), "text": str(r.get("text", ""))})
+	return lines
 
 func _on_event(ev: String) -> void:
 	match ev:
@@ -496,11 +585,21 @@ func qa_open(what: String) -> void:
 		"codex": _open_codex()
 		"habitat": open_habitat()
 		"end_card": _show_end_card()
+		"bonds": _open_bonds()
 
 func qa_close_all() -> void:
 	for c in get_children():
 		if c is PauseMenu:
 			c.queue_free()
-		elif c is CanvasLayer and c.get_child_count() > 0 and c.get_child(0) is CodexScreen:
+		elif c is CanvasLayer and c.get_child_count() > 0 and (c.get_child(0) is CodexScreen or c.get_child(0) is BondScreen):
 			c.queue_free()
 	get_tree().paused = false
+
+func qa_return() -> void:
+	GameState.flags["_returned_pending"] = true
+	_return_sequence()
+
+func qa_card_close() -> void:
+	for c in get_children():
+		if c is LedgerCard:
+			c.close()

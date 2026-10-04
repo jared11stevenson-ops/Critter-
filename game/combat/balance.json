@@ -39,6 +39,7 @@
     "skitter_mite": {"hp": 34, "speed": 5.4, "damage": 7, "range": 1.4, "telegraph": 0.45, "recover": 0.8, "aggro": 14.0, "flee_below": 2, "poise": 0, "radius": 0.5},
     "plate_beetle": {"hp": 260, "speed": 2.0, "charge_speed": 11.0, "damage": 34, "range": 2.8, "telegraph": 1.0, "charge_time": 0.9, "recover": 1.6, "aggro": 16.0, "poise": 80, "radius": 1.4, "pylon_radius": 32.0},
     "dust_grazer": {"hp": 90, "speed": 1.6, "flee_speed": 6.5, "poise": 10, "radius": 0.9},
+    "rival": {"hp": 190, "speed": 4.0, "damage": 11, "range": 13.0, "pref_range": 9.0, "telegraph": 0.75, "burst": 2, "burst_gap": 0.3, "shot_speed": 14.0, "recover": 1.6, "aggro": 16.0, "poise": 40, "radius": 0.45, "lunge_range": 6.5, "lunge_speed": 12.0, "lunge_damage": 15, "trap_every": 9.0, "trap_radius": 2.2, "trap_damage": 8, "drone_count": 2, "yield_window": 12.0, "leash": 60.0},
     "dominion_drone": {"hp": 70, "speed": 4.4, "damage": 9, "range": 13.0, "pref_range": 8.0, "telegraph": 0.6, "burst": 3, "burst_gap": 0.16, "shot_speed": 15.0, "recover": 1.8, "aggro": 18.0, "poise": 0, "radius": 0.6, "heavy_mult": 1.6},
     "resonance_pylon": {"hp": 120, "radius": 0.8},
     "augur_rig": {"hp": 1600, "phase2_at": 0.66, "phase3_at": 0.33, "radius": 5.0,
