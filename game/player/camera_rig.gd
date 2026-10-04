@@ -74,6 +74,11 @@ func _framing_mult(tp: Vector3) -> float:
 	var need := (sep * 0.5 + FRAME_MARGIN) / maxf(0.01, half_w * distance)
 	return clampf(need, _frame_min_mult, FRAME_MAX_MULT)
 
+var _punch := 0.0
+
+func add_punch(amount: float) -> void:
+	_punch = clampf(_punch + amount * float(GameState.settings.get("screen_shake", 1.0)), 0.0, 1.5)
+
 func add_shake(amount: float) -> void:
 	var s := float(GameState.settings.get("screen_shake", 1.0))
 	trauma = clampf(trauma + amount * s, 0.0, 1.0)
@@ -123,6 +128,11 @@ func _process(_delta: float) -> void:
 	var offset := Vector3(0, -sin(p) * d, cos(p) * d)
 	global_position = _focus + offset
 	rotation = Vector3(p, 0, 0)
+	if _punch > 0.001:
+		_punch = maxf(0.0, _punch - rd * 5.0)
+		cam.fov = fov - _punch * 2.2
+	elif cam.fov != fov:
+		cam.fov = fov
 	# shake
 	trauma = maxf(0.0, trauma - rd * 1.8)
 	var sh := trauma * trauma

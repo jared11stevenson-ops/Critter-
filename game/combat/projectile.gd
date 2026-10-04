@@ -106,7 +106,7 @@ func _impact(target: Node) -> void:
 	var h := _hit.duplicate()
 	h["dir"] = _dir
 	target.receive_hit(h)
-	if Field.current:
+	if Field.current and (_style != "psychic" or not (target is CritterActor)):
 		Field.current.vfx("psychic_burst" if _style == "psychic" else "hit_spark", global_position)
 	_finish()
 

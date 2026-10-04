@@ -20,7 +20,7 @@ void fragment() {
 		if (e > 1.0) discard;
 		float outline = smoothstep(0.86, 0.94, abs(p.x)) + smoothstep(0.96, 0.99, abs(p.y));
 		float filled = step(1.0 - UV.y, progress);
-		a = clamp(outline * 0.9 + filled * 0.32 + 0.08, 0.0, 1.0);
+		a = clamp(outline * 0.9 + filled * 0.42 + 0.12, 0.0, 1.0);
 	} else {
 		float r = length(p);
 		if (r > 1.0) discard;
@@ -31,12 +31,12 @@ void fragment() {
 			if (rel > span) discard;
 			float edge = min(rel, span - rel) * r;
 			float outline = smoothstep(0.92, 0.98, r) + (1.0 - smoothstep(0.0, 0.06, edge));
-			a = clamp(outline * 0.9 + step(r, progress) * 0.3 + 0.08, 0.0, 1.0);
+			a = clamp(outline * 0.9 + step(r, progress) * 0.4 + 0.12, 0.0, 1.0);
 		} else {
 			float outline = smoothstep(0.86, 0.95, r);
-			float inner = step(r, progress) * 0.34;
-			float rim = smoothstep(progress - 0.06, progress, r) * step(r, progress) * 0.5;
-			a = clamp(outline * 0.95 + inner + rim + 0.07, 0.0, 1.0);
+			float inner = step(r, progress) * 0.44;
+			float rim = smoothstep(progress - 0.08, progress, r) * step(r, progress) * 0.7;
+			a = clamp(outline * 0.95 + inner + rim + 0.1, 0.0, 1.0);
 		}
 	}
 	ALBEDO = mix(col.rgb, vec3(1.0, 0.95, 0.85), flash);
@@ -117,7 +117,9 @@ func _start(dur: float, col: Color, mode: int) -> void:
 		Field.current.dangers.append(self)
 	_dur = maxf(0.05, dur)
 	_t = 0.0
-	_mat.set_shader_parameter("col", col)
+	# readability: push every telegraph to a brighter, more saturated colour (a = opacity kept)
+	var sat_col := Color.from_hsv(col.h, minf(1.0, col.s * 1.2 + 0.1), 1.0, minf(1.0, col.a + 0.1))
+	_mat.set_shader_parameter("col", sat_col)
 	_mat.set_shader_parameter("mode", mode)
 	_mat.set_shader_parameter("progress", 0.0)
 
