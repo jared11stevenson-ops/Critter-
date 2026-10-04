@@ -48,7 +48,12 @@ func setup(p: Dictionary) -> void:
 		_start()
 
 
+## Live one-shot count: Field.vfx() uses it to drop cosmetic extras when many effects overlap (draw-call budget).
+static var live := 0
+
+
 func _ready() -> void:
+	live += 1
 	_start()
 
 
@@ -274,6 +279,7 @@ var _align_tw: Tween
 
 
 func _exit_tree() -> void:
+	live = maxi(0, live - 1)
 	if _align_tw and _align_tw.is_valid():
 		_align_tw.kill()
 
@@ -324,8 +330,7 @@ func _p_hit_spark() -> void:
 func _p_heavy_impact() -> void:
 	_flash(Color(1, 0.8, 0.45, 0.9), 2.2, 0.22, TEX_STAR)
 	_ring(Color(1, 0.62, 0.22, 1.0), 0.4, 4.0, 0.45)
-	_emit({"amount": 1, "life": 0.22, "tex": TEX_SLASH, "c0": Color(1, 0.95, 0.7, 1.0), "c1": Color(1, 0.4, 0.1, 0), "size": Vector2(2.8, 2.8), "vel": Vector2(0, 0), "gravity": Vector3.ZERO, "angle": Vector2(-35, 35), "grow": true, "expl": 1.0})
-	_emit({"amount": 22, "life": 0.9, "tex": TEX_PUFF, "add": false, "c0": Color(0.78, 0.55, 0.40, 0.85), "c1": Color(0.6, 0.42, 0.34, 0), "size": Vector2(0.6, 1.1), "vel": Vector2(3, 6), "dir": Vector3(0, 0.15, 0), "spread": 90.0, "gravity": Vector3(0, 0.5, 0), "damping": 5.0, "ring": 0.5, "grow": true})
+	_emit({"amount": 14, "life": 0.9, "tex": TEX_PUFF, "add": false, "c0": Color(0.78, 0.55, 0.40, 0.85), "c1": Color(0.6, 0.42, 0.34, 0), "size": Vector2(0.6, 1.1), "vel": Vector2(3, 6), "dir": Vector3(0, 0.15, 0), "spread": 90.0, "gravity": Vector3(0, 0.5, 0), "damping": 5.0, "ring": 0.5, "grow": true})
 	_emit({"amount": 18, "life": 0.5, "tex": TEX_SPARK, "c0": Color(1, 0.95, 0.6), "c1": Color(1, 0.35, 0.05, 0), "size": Vector2(0.14, 0.3), "vel": Vector2(5, 11), "spread": 70.0, "gravity": Vector3(0, -14, 0)})
 	_free_after(1.1)
 
@@ -438,7 +443,6 @@ func _p_mace_arc() -> void:
 	tw.set_parallel(true)
 	tw.tween_property(mi, "rotation:y", base_y - sweep, dur).from(base_y + sweep).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
 	tw.tween_property(mi, "transparency", 1.0, dur + 0.08).set_ease(Tween.EASE_IN)
-	_flash(Color(1, 0.9, 0.6, 0.9), 1.4 if not heavy else 2.4, 0.18, TEX_STAR).position = Vector3(0, 0.9, 0) + (d.normalized() * r * 0.8 if d.length_squared() > 0.01 else Vector3.ZERO)
 	if heavy:
 		_ring(Color(1, 0.5, 0.12, 0.9), 0.4, r * 0.9, 0.35)
 	_free_after(0.5)

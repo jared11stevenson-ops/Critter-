@@ -338,7 +338,13 @@ func float_text(pos: Vector3, text: String, col: Color = Color(0.95, 0.95, 1.0),
 
 # ================= VFX =================
 ## Spawns Agent 1's VFX if it exists; otherwise a cheap fallback for the important ones.
+const VFX_CHEAP := ["hit_spark", "hit_slash", "windup_glint", "dust_puff", "shockwave"]
+const VFX_LIVE_CAP := 5
+
 func vfx(vfx_name: String, pos: Vector3, params: Dictionary = {}, parent: Node = null) -> Node:
+	# draw-call budget: cosmetic extras are dropped while several effects overlap
+	if CritterVFX.live >= VFX_LIVE_CAP and vfx_name in VFX_CHEAP:
+		return null
 	var path := "res://game/art/vfx/%s.tscn" % vfx_name
 	if not _vfx_exists.has(vfx_name):
 		_vfx_exists[vfx_name] = ResourceLoader.exists(path)
