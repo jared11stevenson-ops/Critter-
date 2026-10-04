@@ -17,10 +17,10 @@ const EXTRA := {
 		PBR + "cliff_rock_albedo.webp", PBR + "cliff_rock_normal.webp", PBR + "ground_dirt_albedo.webp", PBR + "ground_dirt_normal.webp",
 		PBR + "ground_flag_albedo.webp", PBR + "ground_flag_normal.webp", PBR + "macro_var.webp", PBR + "prop_detail.webp",
 		PBR + "prop_rock_normal.webp", PBR + "scrub_albedo.webp", PBR + "scrub_normal.webp",
-		"res://game/art/world/reaches_atlas.png", "res://game/art/world/terrain_noise.png",
+		"res://game/art/world/terrain_noise.png",
 	],
 	"res://game/world/hub/hub.tscn": [
-		"res://game/art/world/flagstone.png", "res://game/art/world/terrain_noise.png", "res://game/art/world/reaches_atlas.png",
+		"res://game/art/world/flagstone.png", "res://game/art/world/terrain_noise.png"
 	],
 }
 var _hold: Array = []

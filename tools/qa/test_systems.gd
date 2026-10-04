@@ -22,6 +22,7 @@ func _ready() -> void:
 	_test_flag_hooks_and_debrief()
 	_test_persistence()
 	_test_rivals()
+	await _test_npcs()
 	print("[TEST] pass=%d fail=%d" % [passed, failed])
 	get_tree().quit(1 if failed > 0 else 0)
 
@@ -191,3 +192,53 @@ func _test_rivals() -> void:
 	Rivals.reset()
 	Rivals.from_dict(json)
 	ok(Rivals.get_rival("foreman_orrin")["encounters"] == 1 and "erratic_timing" in Rivals.get_rival("foreman_orrin")["adaptations"], "rival roundtrip")
+
+## Red Reaches NPCs (NpcLife): every NPC builds a dialogue, quest givers hand off to their quest, trade actions move items,
+## placeholders bake to a single draw call, the registry + schedule data are consistent.
+func _test_npcs() -> void:
+	fresh()
+	GameState.items = {}
+	var host := Node3D.new()
+	add_child(host)
+	var dlg := DialogueRunner.new()
+	add_child(dlg)
+	var region := RegionRunner.new()
+	region.setup("red_reaches", host)
+	var life := NpcLife.new()
+	host.add_child(life)
+	life.setup(host, "res://game/world/red_reaches/rr_npcs.json", region, dlg, func() -> Vector3: return Vector3.ZERO, func(_x: float, _z: float) -> float: return 0.0, func() -> String: return "day", "red_reaches")
+	ok(life.ids().size() >= 8, "npc count >= 8 (%d)" % life.ids().size())
+	for id in life.ids():
+		var d := life.build_dialogue(str(id))
+		ok(not d.is_empty() and (d["lines"] as Array).size() >= 2, "npc %s builds a dialogue" % id)
+		var n: Dictionary = life._npcs[id]
+		var meshes := (n["body"] as Node3D).find_children("*", "MeshInstance3D", true, false)
+		ok(meshes.size() == 1, "npc %s placeholder is 1 baked mesh (%d)" % [id, meshes.size()])
+	GameState.set_flag("rr_act1_done", true)
+	var qd := life.build_dialogue("rr_oda")
+	var has_q := false
+	for ln in qd.get("lines", []):
+		if ln is Dictionary and str(ln.get("event", "")).begins_with("npc"):
+			has_q = true
+	ok(has_q, "first talk to Oda hands off (event or quest)")
+	GameState.flags["_npc_met_rr_tavik"] = true
+	var td := life.build_dialogue("rr_tavik")
+	var hq := false
+	for ln in td.get("lines", []):
+		if ln is Dictionary and str(ln.get("event", "")) == "npcq:rr_grazer_crossing":
+			hq = true
+	ok(hq, "Tavik (act 1 done) offers rr_grazer_crossing")
+	ok(life.quest_state("rr_apprentice_arch") == "locked", "act-2 quest stays locked in act 1")
+	# trade action
+	life.build_dialogue("rr_dunnock")
+	GameState.add_item("lichen_culture", 1)
+	ok(life.handle_event("npca:rr_dunnock:0"), "npc action event consumed")
+	ok(GameState.item_count("red_slate_plate") == 1 and GameState.item_count("lichen_culture") == 0, "Dunnock trade lichen -> slate plate")
+	life.handle_event("npca:rr_dunnock:0")
+	ok(not bool(GameState.get_flag("_npc_ok", true)), "failed trade flags _npc_ok=false")
+	# registry covers every npc
+	var reg: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://game/art/models/npcs/npc_registry.json"))
+	for id in life.ids():
+		ok(reg["npcs"].has(id), "registry has %s" % id)
+	host.queue_free()
+	dlg.queue_free()

@@ -19,7 +19,7 @@ const CLOTH_GREEN := Color(0.28, 0.44, 0.30)
 const CLOTH_GREY := Color(0.36, 0.38, 0.42)
 const DOM_RED := Color(0.72, 0.12, 0.10)
 const IRON := Color(0.30, 0.31, 0.35)
-const SALT := Color(0.94, 0.92, 0.86)
+const SALT := Color(0.86, 0.83, 0.76)
 const BONE := Color(0.86, 0.80, 0.68)
 const FLAME := Color(1.0, 0.62, 0.20)
 const LAMP := Color(1.0, 0.86, 0.45)
@@ -320,9 +320,9 @@ static func _permit_board(st: SurfaceTool, T: Transform3D) -> void:
 	_box(st, T, Vector3(0, 2.1, 0.0), Vector3(2.0, 0.1, 0.12), DOM_RED)
 
 static func _salt_basin(st: SurfaceTool, T: Transform3D, seed_v: int) -> void:
-	_box(st, T, Vector3(0, 0.1, 0), Vector3(3.4, 0.22, 2.2), STONE_DARK)
-	_box(st, T, Vector3(0, 0.2, 0), Vector3(3.0, 0.06, 1.8), SALT.darkened(0.04 * float(seed_v % 3)))
-	_box(st, T, Vector3(-0.6, 0.24, 0.2), Vector3(0.9, 0.04, 0.5), SALT)
+	_box(st, T, Vector3(0, 0.1, 0), Vector3(3.0, 0.22, 2.0), STONE_DARK)
+	_box(st, T, Vector3(0, 0.2, 0), Vector3(2.6, 0.06, 1.6), SALT.darkened(0.05 * float(seed_v % 3)))
+	_box(st, T, Vector3(-0.5, 0.24, 0.2), Vector3(0.8, 0.04, 0.4), SALT.lightened(0.04))
 
 static func _salt_pile(st: SurfaceTool, T: Transform3D) -> void:
 	_cyl(st, T, Vector3.ZERO, Vector3(0, 1.3, 0), 1.2, 0.0, 9, SALT)

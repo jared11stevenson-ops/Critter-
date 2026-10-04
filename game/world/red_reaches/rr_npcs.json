@@ -7,7 +7,7 @@
    "shape": "beetle", "h": 1.6, "r": 0.62, "body": "#6a5c58", "acc": "#4b5262", "head": "#8d7e72",
    "stations": [
     {"p": [107.0, 31.0], "act": "crank", "face": [1.0, 0.4]},
-    {"p": [114.5, 38.5], "act": "rest", "face": [-1.0, -0.5]},
+    {"p": [113.0, 39.0], "act": "rest", "face": [-1.0, -0.5]},
     {"p": [104.5, 28.0], "act": "idle", "face": [0.6, 1.0]}
    ],
    "schedule": {"dawn": 0, "day": 1, "dusk": 2},
@@ -66,9 +66,9 @@
    "id": "rr_tessaly", "name": "Tessaly Vane", "role": "Free Scale contact (new)", "species": "human",
    "shape": "scarf", "h": 1.72, "r": 0.36, "body": "#3a6b4a", "acc": "#e0d28a", "head": "#a97c5a",
    "stations": [
-    {"p": [124.5, -9.0], "act": "watch", "face": [-1.0, 0.2]},
-    {"p": [108.0, -8.5], "act": "idle", "face": [1.0, -0.4]},
-    {"p": [121.0, -14.0], "act": "rest", "face": [0.0, 1.0]}
+    {"p": [123.0, -7.0], "act": "watch", "face": [-1.0, 0.3]},
+    {"p": [110.5, -6.5], "act": "idle", "face": [1.0, -0.4]},
+    {"p": [119.0, -9.0], "act": "rest", "face": [0.0, 1.0]}
    ],
    "schedule": {"dawn": 1, "day": 0, "dusk": 2},
    "hotspot": {"label": "Talk to the Free Scale scout", "r": 3.4},

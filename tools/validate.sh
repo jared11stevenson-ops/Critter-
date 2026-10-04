@@ -8,6 +8,7 @@ status=0
 python3 tools/validate_data.py || status=1
 python3 tools/validate_regions.py || status=1
 python3 tools/validate_gear.py || status=1
+python3 tools/validate_world.py || status=1
 python3 tools/spellcheck_canon.py || status=1
 run() {
   local G=$1; local tag=$2
