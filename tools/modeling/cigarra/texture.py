@@ -13,7 +13,9 @@ sys.path.insert(0, os.path.join(HERE, ".."))
 from common.pnoise import noise3, worley  # noqa: E402
 from common.raster import uv_raster, dilate  # noqa: E402
 
-SIZE = 1024
+SIZE = 2048
+BODY_SCALE = 0.72           # body UV islands occupy [0,0.72]^2; the face tile lives in the top-right corner
+FACE_UV0, FACE_UV1 = 0.73, 0.99
 
 
 def _sub_mesh(src):
@@ -59,6 +61,11 @@ def unwrap_body(ob):
             uv[l] = tuv[k]
             k += 1
     assert k == len(tuv), (k, len(tuv))
+    uv_b = uv.copy()
+    for p in me.polygons:
+        if p.material_index == 0:
+            for l in p.loop_indices:
+                uv[l] = uv_b[l] * BODY_SCALE
     me.uv_layers["UVMap"].data.foreach_set("uv", uv.ravel())
     sc.collection.objects.unlink(tmp)
     bpy.data.objects.remove(tmp)
@@ -68,7 +75,7 @@ def _hx(h):
     return np.array([int(h[i:i + 2], 16) / 255.0 for i in (1, 3, 5)], np.float32)
 
 
-def paint_body(ob, names, COL, EMIT, work):
+def paint_body(ob, names, COL, EMIT, work, face_albedo=None, face_emis=None):
     me = ob.data
     n_loops = len(me.loops)
     uv = np.zeros(n_loops * 2, np.float32)
@@ -177,6 +184,15 @@ def paint_body(ob, names, COL, EMIT, work):
     himg, _ = dilate(himg, mask, 8)
     orm, _ = dilate(orm, mask, 8)
     em_i, _ = dilate(em_i, mask, 8)
+    if face_albedo is not None:                      # face tile -> top-right corner of the atlas (v up = image y down)
+        x0 = int(FACE_UV0 * SIZE)
+        w = int((FACE_UV1 - FACE_UV0) * SIZE)
+        y0 = int((1 - FACE_UV1) * SIZE)
+        for arr, tile in ((img, face_albedo), (em_i, face_emis)):
+            t = np.asarray(tile.convert("RGB").resize((w, w), Image.LANCZOS)).astype(np.float32) / 255
+            arr[y0:y0 + w, x0:x0 + w] = t
+        orm[y0:y0 + w, x0:x0 + w] = np.array([1.0, 0.6, 0.0], np.float32)
+        himg[y0:y0 + w, x0:x0 + w] = 0.0
     gy, gx = np.gradient(himg)
     nrm = np.stack([-gx * 5.0, gy * 5.0, np.ones_like(himg)], -1)
     nrm /= np.linalg.norm(nrm, axis=-1, keepdims=True)
@@ -250,3 +266,18 @@ def merge_normals(paint_path, bake_path, out_path):
     n = np.stack([a[..., 0] + bxy[..., 0], a[..., 1] + bxy[..., 1], np.maximum(a[..., 2] * b[..., 2], 0.4)], -1)
     n /= np.linalg.norm(n, axis=-1, keepdims=True)
     Image.fromarray(((n * 0.5 + 0.5) * 255).astype(np.uint8)).save(out_path)
+
+
+def merge_face_into_body(ob):
+    """Face polygons (material 2): remap planar UVs into the atlas face tile and move them to the body material."""
+    me = ob.data
+    uv = np.zeros(len(me.loops) * 2, np.float32)
+    me.uv_layers["UVMap"].data.foreach_get("uv", uv)
+    uv = uv.reshape(-1, 2)
+    for p in me.polygons:
+        if p.material_index == 2:
+            for l in p.loop_indices:
+                uv[l] = FACE_UV0 + np.clip(uv[l], 0, 1) * (FACE_UV1 - FACE_UV0)
+            p.material_index = 0
+    me.uv_layers["UVMap"].data.foreach_set("uv", uv.ravel())
+    me.materials.pop(index=2)
