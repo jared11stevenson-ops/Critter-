@@ -29,6 +29,10 @@ var _end_card: Node = null
 var _returning := false
 var _bonds_screen: Node = null
 var _gate_layer: CanvasLayer = null
+var _labels_hidden := false
+var _place_tick := 0
+var _force_place := true
+var _last_placed_focus := Vector3(1e9, 0, 0)
 var _pitch := -48.0
 var _dist := 24.0
 
@@ -198,6 +202,26 @@ func _process(delta: float) -> void:
 	cam.global_position = _focus + Vector3(0, -sin(p) * _dist, cos(p) * _dist)
 	cam.rotation = Vector3(p, 0, 0)
 	var modal := runner.active or habitat != null or _end_card != null or get_tree().paused
+	Quality.set_modal(modal)
+	if modal:
+		# Nothing to place while a dialogue/menu is up: hide the labels once and do no per-frame layout work.
+		if not _labels_hidden:
+			for s in _spots:
+				(s["button"] as Button).visible = false
+			_objective_panel.visible = false
+			_labels_hidden = true
+		return
+	_labels_hidden = false
+	# Hotspot labels only move when the camera does; re-place them when the focus moved, else every 8th frame.
+	_place_tick += 1
+	var moved := _focus.distance_squared_to(_last_placed_focus) > 0.0001
+	if moved or _place_tick % 8 == 0 or _force_place:
+		_last_placed_focus = _focus
+		_force_place = false
+		_place_labels()
+	_objective_panel.visible = true
+
+func _place_labels() -> void:
 	var vs := ui_root.get_viewport_rect().size
 	# Place hotspot labels: big places first, then people; nudge overlapping labels apart and keep
 	# them clear of the top bar (title/objective/menu) and the screen edges.
@@ -212,12 +236,15 @@ func _process(delta: float) -> void:
 	for s in order:
 		var b: Button = s["button"]
 		var wp: Vector3 = s["node"].global_position + Vector3(0, s["h"], 0)
-		if modal or cam.is_position_behind(wp):
+		if cam.is_position_behind(wp):
 			b.visible = false
 			continue
 		var sp := cam.unproject_position(wp)
-		b.reset_size()
-		var r := Rect2(sp - Vector2(b.size.x * 0.5, b.size.y), b.size)
+		if not s.has("sz") or b.size.x < 2.0:
+			b.reset_size()
+			s["sz"] = b.size
+		var bsz: Vector2 = s["sz"]
+		var r := Rect2(sp - Vector2(bsz.x * 0.5, bsz.y), bsz)
 		for _attempt in 6:
 			var hit := false
 			for pr in placed:
@@ -239,12 +266,14 @@ func _process(delta: float) -> void:
 		placed.append(r)
 		var locked: bool = s["id"] == "gate" and not bool(GameState.get_flag("briefed", false))
 		b.modulate = Color(1, 1, 1, 0.55) if locked else Color.WHITE
-	_objective_panel.visible = not modal
 	_objective_panel.reset_size()
 	_objective_panel.position = Vector2(20, 50)
 	# Toasts sit bottom-centre above the hint line, clear of the top bar and the hotspot labels' band.
 	_toast_box.reset_size()
 	_toast_box.position = Vector2(vs.x * 0.5 - 260, vs.y - 56.0 - _toast_box.size.y)
+
+func _exit_tree() -> void:
+	Quality.set_modal(false)
 
 func _unhandled_input(ev: InputEvent) -> void:
 	if runner.active or habitat != null or _end_card != null or _returning:

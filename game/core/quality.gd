@@ -183,11 +183,21 @@ func _inject(code: String) -> String:
 
 # ------------------------------------------------------------------ viewport / renderer
 
+var _modal := false
+
+## While a dialogue or full-screen menu covers the world, render the 3D scene at a lower resolution: the player is
+## reading, so the GPU time goes to keeping the text/UI smooth instead.
+func set_modal(on: bool) -> void:
+	if on == _modal:
+		return
+	_modal = on
+	get_tree().root.scaling_3d_scale = render_scale() * (0.72 if on else 1.0)
+
 func _apply_viewport() -> void:
 	var vp := get_tree().root
 	vp.msaa_3d = Viewport.MSAA_2X if level == HIGH else Viewport.MSAA_DISABLED
 	vp.scaling_3d_mode = Viewport.SCALING_3D_MODE_BILINEAR
-	vp.scaling_3d_scale = render_scale()
+	vp.scaling_3d_scale = render_scale() * (0.72 if _modal else 1.0)
 	if not vp.size_changed.is_connected(_apply_viewport):
 		vp.size_changed.connect(_apply_viewport)
 	vp.anisotropic_filtering_level = [Viewport.ANISOTROPY_DISABLED, Viewport.ANISOTROPY_2X,

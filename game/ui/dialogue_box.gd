@@ -22,6 +22,7 @@ var _blink := 0.0
 var _line: Dictionary = {}
 var _comms_tag: Label
 var _input_cool := 0.0
+var _last_n := 0
 
 func bind(r: DialogueRunner) -> void:
 	runner = r
@@ -143,26 +144,27 @@ func _on_line(line: Dictionary) -> void:
 	var style: String = line["style"]
 	var who: String = line["who"]
 	_style(style, who)
-	for c in _portrait_l.get_children():
-		c.queue_free()
-	for c in _portrait_r.get_children():
-		c.queue_free()
 	_portrait_l.visible = false
 	_portrait_r.visible = false
 	if style == "normal" or style == "comms":
 		var left := PARTY.has(who)
 		var holder := _portrait_l if left else _portrait_r
 		holder.visible = true
-		var p := UiKit.portrait_control(who, line["expr"], 170)
-		p.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		if style == "comms":
-			p.modulate = Color(0.75, 1.0, 1.0)
-		holder.add_child(p)
-		# small pop
+		var key := "%s|%s|%s" % [who, str(line["expr"]), style]
+		if holder.get_meta("pkey", "") != key:
+			for c in holder.get_children():
+				holder.remove_child(c)
+				c.queue_free()
+			var p := UiKit.portrait_control(who, line["expr"], 170)
+			p.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			if style == "comms":
+				p.modulate = Color(0.75, 1.0, 1.0)
+			holder.add_child(p)
+			holder.set_meta("pkey", key)
+		# small pop (cheap: one tween on the holder)
 		holder.pivot_offset = Vector2(85, 85)
-		holder.scale = Vector2(0.92, 0.92)
-		var tw := create_tween()
-		tw.tween_property(holder, "scale", Vector2.ONE, 0.12)
+		holder.scale = Vector2(0.94, 0.94)
+		create_tween().tween_property(holder, "scale", Vector2.ONE, 0.1)
 	var txt: String = line["text"]
 	if style == "narration" or style == "handler":
 		_text.text = "[i]%s[/i]" % txt
@@ -171,6 +173,7 @@ func _on_line(line: Dictionary) -> void:
 	_total = _text.get_total_character_count()
 	_shown = 0.0
 	_text.visible_characters = 0
+	_last_n = 0
 	_typing = true
 	_next.visible = false
 	_input_cool = 0.12
@@ -210,8 +213,11 @@ func _process(delta: float) -> void:
 	_input_cool = maxf(0.0, _input_cool - delta)
 	if _typing:
 		_shown += CPS * delta
-		_text.visible_characters = int(_shown)
-		if int(_shown) >= _total:
+		var n := int(_shown)
+		if n != _last_n and (n - _last_n >= 2 or n >= _total):
+			_last_n = n
+			_text.visible_characters = n
+		if n >= _total:
 			_typing = false
 			_text.visible_characters = -1
 	_blink += delta

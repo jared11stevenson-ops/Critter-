@@ -45,6 +45,51 @@ func _ready() -> void:
 	box = DialogueBox.new()
 	layer.add_child(box)
 	box.bind(self)
+	started.connect(func(_i): Quality.set_modal(true))
+	finished.connect(func(_i): Quality.set_modal(false))
+	_prewarm()
+
+static var _warmed := false
+
+## Fonts are dynamic (woff2): the first time a glyph is drawn it is rasterized, which shows up as a hitch on the
+## first dialogue line. Draw every common glyph once, nearly invisible, for a few frames at load time, and queue the
+## portraits for threaded loading so the first line does not block on disk.
+func _prewarm() -> void:
+	if _warmed:
+		return
+	_warmed = true
+	var chars := ""
+	for c in range(32, 127):
+		chars += char(c)
+	chars += "’‘“”—–…éèáíóúñüöä▼"
+	var warm := CanvasLayer.new()
+	warm.layer = 1
+	add_child(warm)
+	var y := 0.0
+	for spec in [["dialogue", 28], ["dialogue_bold", 28], ["title", 36], ["ui", 26], ["bold", 20], ["bold", 30]]:
+		var l := UiKit.label(chars, spec[1], Color.WHITE, spec[0])
+		l.modulate.a = 0.004
+		l.position = Vector2(0, y)
+		y += 44.0
+		warm.add_child(l)
+	var rt := RichTextLabel.new()
+	rt.bbcode_enabled = true
+	rt.text = "[i]%s[/i]" % chars
+	rt.modulate.a = 0.004
+	rt.size = Vector2(1200, 80)
+	rt.position = Vector2(0, y)
+	var df := UiKit.font("dialogue")
+	if df:
+		rt.add_theme_font_override("italics_font", df)
+		rt.add_theme_font_size_override("italics_font_size", 28)
+	warm.add_child(rt)
+	for id in Canon.data.get("characters", {}).keys():
+		var pth := "res://game/art/portraits/%s/default.png" % id
+		if ResourceLoader.exists(pth):
+			ResourceLoader.load_threaded_request(pth)
+	for _i in 4:
+		await get_tree().process_frame
+	warm.queue_free()
 
 static func exists(id: String) -> bool:
 	for d in DIRS:

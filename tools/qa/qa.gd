@@ -144,6 +144,8 @@ func _bench_tick(_delta: float) -> void:
 	var real_ms := (now - _last_frame_us) / 1000.0 if _last_frame_us > 0 else 0.0
 	_last_frame_us = now
 	var proc_ms := _last_proc_us / 1000.0
+	if real_ms > 250.0 and _t > 0.5:
+		print("[QA] HITCH t=%.2f frame_ms=%.0f scripts_ms=%.1f" % [_t, real_ms, proc_ms])
 	_proc_start_us = now
 	for b in _bench:
 		if _t < float(b[0]) or _t > float(b[1]):

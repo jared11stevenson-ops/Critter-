@@ -99,12 +99,22 @@ func new_game() -> void:
 		var sys := get_node_or_null("/root/" + n)
 		if sys:
 			sys.reset()
-	save_game()
+	save_now()
 
 func has_save() -> bool:
 	return FileAccess.file_exists(SAVE_PATH)
 
+## Debounced save: many call sites ask for a save (dialogue end, flag changes, level exits). Writing the
+## whole save + Ledger synchronously on a phone costs a visible hitch, so requests coalesce into one
+## write ~0.7 s later (and always flush when the app is paused, loses focus or closes).
+var _save_wait := -1.0
+
 func save_game() -> void:
+	if _save_wait < 0.0:
+		_save_wait = 0.7
+
+func save_now() -> void:
+	_save_wait = -1.0
 	var data := {
 		"version": SAVE_VERSION, "flags": flags, "trust": trust, "items": items,
 		"specimens": specimens, "codex": codex, "dominion_standing": dominion_standing,
@@ -112,11 +122,23 @@ func save_game() -> void:
 	}
 	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if f:
-		f.store_string(JSON.stringify(data, "\t"))
+		f.store_string(JSON.stringify(data))
 	for n in ["Ledger", "Rivals"]:
 		var sys := get_node_or_null("/root/" + n)
 		if sys:
 			sys.save()
+
+func _process(delta: float) -> void:
+	if _save_wait >= 0.0:
+		_save_wait -= delta
+		if _save_wait < 0.0:
+			save_now()
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_PAUSED or what == NOTIFICATION_APPLICATION_FOCUS_OUT \
+			or what == NOTIFICATION_WM_CLOSE_REQUEST or what == NOTIFICATION_PREDELETE:
+		if _save_wait >= 0.0:
+			save_now()
 
 func load_game() -> void:
 	if not has_save():
