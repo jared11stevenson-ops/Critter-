@@ -507,7 +507,7 @@ def build_morrow(mb):
     R = MORROW_HEAD_R
     hc = V(0, 0, -MORROW_HAFT)
     # head sphere (slightly lumpy)
-    mb.sphere(hc, R, part="morrow_head", mat=MORROW, n=20, rings=14,
+    mb.sphere(hc, R, part="morrow_head", mat=MORROW, n=18, rings=12,
               deform=lambda ph, th, d: d * (1.0 + 0.025 * math.sin(3 * th + 2 * ph) * math.sin(5 * ph)))
     # spikes: fibonacci distribution, conical tan spikes on a ring stud
     pts = []
@@ -526,12 +526,12 @@ def build_morrow(mb):
         if i % 3 == 0:
             # ring stud (cream disc with dark centre) instead of a spike
             mb.loft([base - d * 0.01, base + d * 0.018, base + d * 0.022], [0.045, 0.04, 0.02], [0.045, 0.04, 0.02],
-                    n=10, part="morrow_stud", mat=MORROW, side=d.orthogonal(), front=d.cross(d.orthogonal()),
+                    n=7, part="morrow_stud", mat=MORROW, side=d.orthogonal(), front=d.cross(d.orthogonal()),
                     cap0=None, cap1="flat")
         else:
-            mb.loft([base - d * 0.01, base + d * 0.02], [0.05, 0.042], [0.05, 0.042], n=10, part="morrow_stud",
+            mb.loft([base - d * 0.01, base + d * 0.02], [0.05, 0.042], [0.05, 0.042], n=7, part="morrow_stud",
                     mat=MORROW, side=d.orthogonal(), front=d.cross(d.orthogonal()), cap0=None, cap1="flat")
-            mb.cone(base + d * 0.015, base + d * (0.02 + ln), 0.032, part="morrow_spike", mat=MORROW, n=7, segs=3,
+            mb.cone(base + d * 0.015, base + d * (0.02 + ln), 0.032, part="morrow_spike", mat=MORROW, n=6, segs=2,
                     side=d.orthogonal(), front=d.cross(d.orthogonal()), cap0=None)
     # core eye: glowing red dome set in a dark socket rim
     cc = hc + core_dir * (R * 0.93)
