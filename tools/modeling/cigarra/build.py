@@ -17,7 +17,7 @@ ROOT = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "tools", "animation"))
 sys.path.insert(0, os.path.join(ROOT, "tools", "modeling"))
 import bpy  # noqa: E402
-from PIL import Image, ImageDraw, ImageFilter  # noqa: E402
+from PIL import Image, ImageChops, ImageDraw, ImageFilter  # noqa: E402
 import standin  # noqa: E402
 
 OUT = os.path.join(ROOT, "game", "art", "models", "cigarra")
@@ -25,11 +25,11 @@ WORK = os.path.join(HERE, "work")
 os.makedirs(OUT, exist_ok=True)
 os.makedirs(WORK, exist_ok=True)
 
-COL = {  # name -> rgb (sampled by eye from design/model_sheets/cigarra/palette.png)
-    "skin": (0.72, 0.54, 0.38), "hair": (0.86, 0.82, 0.70), "violet": (0.24, 0.18, 0.30), "violet_d": (0.12, 0.09, 0.15),
-    "moss": (0.50, 0.55, 0.16), "crop": (0.72, 0.70, 0.48), "trim": (0.11, 0.09, 0.09), "leather": (0.32, 0.19, 0.10),
-    "gold": (0.85, 0.66, 0.18), "cream": (0.82, 0.76, 0.60), "orange": (0.78, 0.36, 0.12), "black": (0.035, 0.035, 0.045),
-    "boot": (0.17, 0.11, 0.08), "eye": (0.97, 0.80, 0.12), "gourd": (0.80, 0.74, 0.55), "mark": (0.08, 0.06, 0.06),
+COL = {  # bright violet / white / gold read (v2); sheet-faithful hues, lifted for the game's lighting
+    "skin": (0.88, 0.64, 0.46), "hair": (0.96, 0.94, 0.88), "violet": (0.46, 0.32, 0.72), "violet_d": (0.34, 0.24, 0.58),
+    "moss": (0.62, 0.72, 0.22), "crop": (0.95, 0.91, 0.76), "trim": (0.20, 0.15, 0.30), "leather": (0.55, 0.34, 0.18),
+    "gold": (1.00, 0.78, 0.22), "cream": (0.95, 0.90, 0.78), "orange": (0.95, 0.48, 0.16), "black": (0.17, 0.11, 0.30),
+    "boot": (0.30, 0.20, 0.34), "eye": (1.00, 0.84, 0.16), "gourd": (0.93, 0.88, 0.70), "mark": (0.10, 0.06, 0.12),
 }
 CELLS = list(COL)
 GRID = 4  # 4x4 cells of 64 px = 256 px atlas
@@ -102,12 +102,12 @@ def build_geometry(J):
     hd, he = V("head"), V("head_end")
     # ---- torso: crop top + midriff + belt + hooded jacket shoulders
     b.tube([V("hips") + [0, 0, 0.02], [0, 0, 1.00], [0, 0, 1.10]], [0.155, 0.135, 0.13], [0.105, 0.09, 0.09], "skin",
-           ["hips", "spine1", "spine2"], n=10, cap0=False, cap1=False)
+           ["hips", "spine1", "spine2"], n=14, cap0=False, cap1=False)
     b.tube([[0, 0, 1.11], [0, 0.005, 1.20], [0, 0, 1.30], [0, -0.005, 1.35]], [0.14, 0.15, 0.17, 0.09],
-           [0.095, 0.105, 0.11, 0.07], "crop", ["spine2", "chest"], n=10, cap0=False, cap1=True)
-    b.tube([[0, 0, 1.095], [0, 0, 1.125]], [0.142, 0.142], [0.097, 0.097], "trim", ["spine2"], n=10, cap0=False, cap1=False)
+           [0.095, 0.105, 0.11, 0.07], "crop", ["spine2", "chest"], n=14, cap0=False, cap1=True)
+    b.tube([[0, 0, 1.095], [0, 0, 1.125]], [0.142, 0.142], [0.097, 0.097], "trim", ["spine2"], n=14, cap0=False, cap1=False)
     # belt + buckle + charms (hips bone)
-    b.tube([[0, 0, 0.905], [0, 0, 0.965]], [0.17, 0.17], [0.125, 0.125], "leather", ["hips"], n=10, cap0=False, cap1=False)
+    b.tube([[0, 0, 0.905], [0, 0, 0.965]], [0.17, 0.17], [0.125, 0.125], "leather", ["hips"], n=14, cap0=False, cap1=False)
     b.ellipsoid([0, -0.125, 0.935], [0.035, 0.012, 0.03], "gold", ["hips"], n=6, rings=3)
     for sx, (x, z, col, rr) in zip((1, 1, -1), ((0.10, 0.78, "gourd", 0.04), (0.17, 0.80, "orange", 0.035),
                                                  (-0.12, 0.80, "gourd", 0.03))):
@@ -115,34 +115,39 @@ def build_geometry(J):
     b.tube([[0.07, -0.12, 0.9], [0.075, -0.125, 0.62]], [0.012, 0.01], [0.006, 0.005], "orange", ["hips", "thigh.L"], n=4)
     # jacket: shoulders mantle + collar + hood behind the head
     b.tube([[0, 0.02, 1.31], [0, 0.03, 1.22], [0, 0.07, 1.06]], [0.21, 0.20, 0.17], [0.12, 0.13, 0.12], "violet",
-           ["chest", "spine2"], n=10, cap0=False, cap1=False)
-    b.tube([[0, 0.0, 1.31], [0, 0.0, 1.38]], [0.15, 0.12], [0.12, 0.10], "violet_d", ["chest", "neck1"], n=10, cap0=False, cap1=False)
-    b.tube([[0, 0.0, 1.375], [0, 0.0, 1.395]], [0.125, 0.125], [0.105, 0.105], "moss", ["neck1"], n=10, cap0=False, cap1=False)
+           ["chest", "spine2"], n=14, cap0=False, cap1=False)
+    b.tube([[0, 0.0, 1.31], [0, 0.0, 1.38]], [0.15, 0.12], [0.12, 0.10], "violet_d", ["chest", "neck1"], n=14, cap0=False, cap1=False)
+    b.tube([[0, 0.0, 1.375], [0, 0.0, 1.395]], [0.125, 0.125], [0.105, 0.105], "moss", ["neck1"], n=14, cap0=False, cap1=False)
     b.ellipsoid([0, 0.125, 1.40], [0.12, 0.07, 0.10], "violet_d", ["neck1", "head"], n=10, rings=5)   # hood
     b.ellipsoid([0, 0.17, 1.30], [0.045, 0.012, 0.06], "gold", ["chest"], n=6, rings=3)               # sigil tab
     # ---- neck + head
     b.tube([V("neck1") + [0, 0, -0.02], hd], 0.045, 0.045, "skin", ["neck1", "head"], n=8, cap0=False, cap1=False)
-    b.ellipsoid(hd + [0, -0.01, 0.075], [0.085, 0.09, 0.105], "skin", ["head"], n=10, rings=6)
-    b.ellipsoid(hd + [0, 0.012, 0.115], [0.105, 0.105, 0.085], "hair", ["head"], n=10, rings=5)         # hair mass
-    b.ellipsoid(hd + [0, -0.075, 0.13], [0.09, 0.03, 0.04], "hair", ["head"], n=8, rings=3)             # fringe
+    n0 = len(b.f)
+    b.ellipsoid(hd + [0, -0.01, 0.075], [0.085, 0.09, 0.105], "skin", ["head"], n=18, rings=12)       # face (painted texture)
+    for k in range(n0, len(b.f)):                                                                     # planar face UVs, material 2
+        b.uv[k] = [(((b.v[i][0] - hd[0]) + 0.095) / 0.19, (b.v[i][2] - (hd[2] - 0.03)) / 0.21) for i in b.f[k]]
+        b.mat[k] = 2
+    b.ellipsoid(hd + [0, 0.035, 0.125], [0.105, 0.10, 0.085], "hair", ["head"], n=14, rings=7)         # hair mass (behind forehead)
+    b.ellipsoid(hd + [0, -0.062, 0.178], [0.092, 0.03, 0.03], "hair", ["head"], n=10, rings=4)         # fringe
     rng = np.random.default_rng(4)
-    for i in range(14):                                                                                   # shaggy tufts
+    for i in range(16):                                                                                 # shaggy tufts
+        a = rng.uniform(0.35, 2 * math.pi - 0.35) + math.pi / 2 + math.pi * 0.0
         a = rng.uniform(0, 2 * math.pi)
-        p = hd + [math.cos(a) * 0.09, math.sin(a) * 0.09 + 0.01, 0.12 + rng.uniform(-0.04, 0.06)]
-        d = np.array([math.cos(a) * 0.05, math.sin(a) * 0.05 - 0.01, rng.uniform(-0.07, 0.01)])
-        b.cone(p, p + d * 1.4, 0.026, "hair", ["head"])
+        if math.sin(a) < -0.55:
+            a += math.pi * 0.6                                                                          # keep the face clear
+        p = hd + [math.cos(a) * 0.095, math.sin(a) * 0.095 + 0.02, 0.13 + rng.uniform(-0.04, 0.07)]
+        d = np.array([math.cos(a) * 0.05, math.sin(a) * 0.05 - 0.01, rng.uniform(-0.08, 0.01)])
+        b.cone(p, p + d * 1.4, 0.026, "hair", ["head"], n=6)
     for sx in (1, -1):
-        e = hd + [sx * 0.04, -0.082, 0.075]
-        b.ellipsoid(e, [0.022, 0.008, 0.012], "eye", ["head"], n=6, rings=3)
-        b.ellipsoid(e + [0, -0.006, 0.014], [0.026, 0.006, 0.006], "mark", ["head"], n=6, rings=2)
-        b.cone(hd + [sx * 0.085, 0.0, 0.085], hd + [sx * 0.17, 0.01, 0.12], 0.02, "skin", ["head"])      # pointed ears
-    b.ellipsoid(hd + [0, -0.09, 0.115], [0.012, 0.006, 0.012], "mark", ["head"], n=6, rings=3)           # third eye
+        b.cone(hd + [sx * 0.085, 0.0, 0.085], hd + [sx * 0.17, 0.01, 0.125], 0.022, "skin", ["head"], n=6)   # pointed ears
+        for yy, zz in ((-0.07, 0.17), (-0.03, 0.15)):                                                   # bangs framing the face
+            b.cone(hd + [sx * 0.07, yy, zz], hd + [sx * 0.085, yy - 0.02, zz - 0.10], 0.02, "hair", ["head"], n=6)
     # ---- crown (treehopper horn): branching stalks + glossy black spheres
     cr = ["crown"]
     base = he + [0, 0.045, 0.01]
-    for stalk, (dx, dy, dz, rr) in enumerate([(0.02, 0.02, 0.13, 0.05), (0.15, 0.04, 0.08, 0.046), (-0.15, 0.04, 0.07, 0.046),
-                                              (0.07, 0.15, 0.10, 0.04), (-0.09, 0.15, 0.06, 0.038),
-                                              (0.22, -0.01, -0.01, 0.036), (-0.22, 0.0, 0.0, 0.036)]):
+    for stalk, (dx, dy, dz, rr) in enumerate([(0.02, 0.02, 0.14, 0.07), (0.16, 0.04, 0.09, 0.066), (-0.16, 0.04, 0.08, 0.066),
+                                              (0.08, 0.16, 0.11, 0.058), (-0.10, 0.16, 0.07, 0.056),
+                                              (0.24, -0.01, -0.01, 0.052), (-0.24, 0.0, 0.0, 0.052)]):
         tip = base + [dx, dy, dz]
         mid = base + [dx * 0.4, dy * 0.4 + 0.015, dz * 0.55]
         b.tube([base, mid, tip], [0.011, 0.008, 0.006], [0.011, 0.008, 0.006], "black", cr, n=5, cap0=False, cap1=False)
@@ -154,52 +159,137 @@ def build_geometry(J):
         sh, el, wr, he_ = P("shoulder"), P("elbow"), P("wrist"), P("hand_end")
         ua, fa, hn = ["upperarm" + s, "clavicle" + s], ["forearm" + s, "upperarm" + s], ["hand" + s, "forearm" + s]
         b.tube([sh + [0, 0, 0.02], (sh + el) / 2 + [sx * 0.012, 0.01, 0], el + [0, 0, 0.0]], [0.062, 0.068, 0.07],
-               [0.058, 0.064, 0.066], "violet", ua, n=8, cap0=True, cap1=False)                       # puffy rolled sleeve
+               [0.058, 0.064, 0.066], "violet", ua, n=12, cap0=True, cap1=False)                       # puffy rolled sleeve
         b.tube([el, (el + wr) / 2 + [0, 0, 0.0], wr + [0, 0, 0.1 - 0.1]], [0.05, 0.043, 0.036], [0.05, 0.043, 0.036],
-               "cream", fa, n=8, cap0=False, cap1=False)                                               # bandaged forearm
-        b.tube([wr, he_], [0.032, 0.012], [0.02, 0.01], "skin", hn, n=6, cap0=True, cap1=True)         # hand
+               "cream", fa, n=12, cap0=False, cap1=False)                                               # bandaged forearm
+        b.tube([wr, he_], [0.032, 0.012], [0.02, 0.01], "skin", hn, n=12, cap0=True, cap1=True)         # hand
         # ---- legs: baggy harem pants, bandage shins, leaf-trim boots
         hp, kn, an, bl, te = P("hip"), P("knee"), P("ankle"), P("ball"), P("toe_end")
         th, sn, ft = ["thigh" + s, "hips"], ["shin" + s, "thigh" + s], ["foot" + s, "shin" + s]
         b.tube([hp + [0, 0, 0.03], (hp + kn) / 2 + [sx * 0.01, -0.01, 0], kn + [0, 0, 0.0]], [0.125, 0.125, 0.115],
-               [0.12, 0.125, 0.115], "violet_d", th, n=9, cap0=True, cap1=False)
+               [0.12, 0.125, 0.115], "violet_d", th, n=12, cap0=True, cap1=False)
         b.tube([kn, kn * 0.55 + an * 0.45 + [0, -0.01, 0.04], an + [0, -0.01, 0.2]], [0.115, 0.115, 0.08], [0.115, 0.115, 0.08],
-               "violet_d", sn, n=9, cap0=False, cap1=True)
-        b.tube([an + [0, -0.005, 0.2], an + [0, 0, 0.1]], [0.042, 0.04], [0.042, 0.04], "cream", sn, n=7, cap0=False, cap1=False)
+               "violet_d", sn, n=12, cap0=False, cap1=True)
+        b.tube([an + [0, -0.005, 0.2], an + [0, 0, 0.1]], [0.042, 0.04], [0.042, 0.04], "cream", sn, n=12, cap0=False, cap1=False)
         b.tube([an + [0, 0.02, 0.1], an + [0, 0.0, 0.02], bl + [0, 0, 0.03], te + [0, 0, 0.025]], [0.055, 0.06, 0.056, 0.04],
-               [0.05, 0.06, 0.05, 0.03], "boot", ft, n=7, cap0=True, cap1=True)
+               [0.05, 0.06, 0.05, 0.03], "boot", ft, n=12, cap0=True, cap1=True)
         b.cone(an + [sx * 0.05, 0.0, 0.06], an + [sx * 0.15, -0.04, 0.1], 0.03, "moss", ft)           # leaf trim
     return b
 
 
 def wing_mesh(b, J):
-    """Translucent wing-cloak panels, material 1. Returns nothing; faces appended with uv into wing texture."""
+    """Veined wing-cloak panels (material 1): leaf-shaped alpha-cut membranes, 2 per side, curved around the back."""
     for sx, s in ((1, ".L"), (-1, ".R")):
         root = np.array(J["wing_root" + s], float)
-        for panel, (length, width, dy, tilt, uoff) in enumerate([(0.74, 0.30, 0.0, 0.18, 0.0), (0.52, 0.22, 0.045, -0.05, 0.5)]):
-            NU, NV = 3, 5
+        # (length, width, y offset, outward splay, z start, uoff)
+        for panel, (length, width, dy, splay, dz, uoff) in enumerate([(0.90, 0.50, 0.0, 0.22, 0.0, 0.0), (0.62, 0.36, 0.05, 0.10, -0.05, 0.5)]):
+            NU, NV = 6, 12
             ids = []
             for iv in range(NV + 1):
                 v = iv / NV
                 row = []
                 for iu in range(NU + 1):
                     u = iu / NU
-                    x = root[0] + sx * (width * u * (0.55 + 0.45 * v) + tilt * v * 0.3 + 0.01)
-                    y = root[1] + dy + 0.03 * v + 0.05 * math.sin(u * math.pi) * v
-                    z = root[2] - length * v + 0.02 * u
-                    cand = [("wing" + s)] + (["chest"] if v < 0.2 else [])
+                    wv = width * (0.55 + 0.45 * math.sin(min(v * 1.25, 1.0) * math.pi * 0.5 + 0.0))   # fan out down the wing
+                    x = root[0] + sx * (0.02 + wv * u + splay * v * v)
+                    y = root[1] + dy + 0.02 + 0.06 * math.sin(u * math.pi) * (0.3 + v) + 0.05 * v * v
+                    z = root[2] + dz - length * v + 0.03 * u * v
+                    cand = [("wing" + s)] + (["chest"] if v < 0.18 else [])
                     row.append(b.vert((x, y, z), cand))
                 ids.append(row)
             for iv in range(NV):
                 for iu in range(NU):
                     u0, u1 = iu / NU, (iu + 1) / NU
                     v0, v1 = iv / NV, (iv + 1) / NV
-                    a, bb, c, d = ids[iv][iu], ids[iv][iu + 1], ids[iv + 1][iu + 1], ids[iv + 1][iu]
-                    # panel textures side by side: left half = panel 0, right half = panel 1; mirror u for the R wing
+                    a_, bb, c, d = ids[iv][iu], ids[iv][iu + 1], ids[iv + 1][iu + 1], ids[iv + 1][iu]
                     uu0, uu1 = (u0, u1) if sx > 0 else (1 - u0, 1 - u1)
                     T = lambda uu, vv: (uoff + uu * 0.5, 1 - vv)  # noqa: E731
-                    quad = (a, bb, c, d)
-                    b.quad(quad, [T(uu0, v0), T(uu1, v0), T(uu1, v1), T(uu0, v1)], 1)
+                    b.quad((a_, bb, c, d), [T(uu0, v0), T(uu1, v0), T(uu1, v1), T(uu0, v1)], 1)
+
+
+def paint_wing(img, px, seed):
+    """One 256x512 panel: leaf-shaped membrane with white veins, lilac->gold gradient, violet cells, gold rim."""
+    rng = np.random.default_rng(seed)
+    W, H = 256, 512
+    S = 2
+    pnl = Image.new("RGBA", (W * S, H * S), (0, 0, 0, 0))
+    d = ImageDraw.Draw(pnl)
+    pts = []
+    for i in range(41):                      # leaf outline, widest ~40% down, tip at the bottom
+        t = i / 40
+        wd = 0.5 * math.sin(math.pi * t ** 0.8) ** 0.8
+        pts.append((W * S * (0.04 + 0.92 * wd * 1.9 * 0.5 + 0.0), H * S * (0.02 + 0.96 * t)))
+    left = [(max(2.0, x0), y0) for x0, y0 in pts]
+    outline = [(W * S * 0.04, H * S * 0.02)] + left + [(W * S * 0.04, H * S * 0.98)]
+    mask = Image.new("L", (W * S, H * S), 0)
+    ImageDraw.Draw(mask).polygon(outline, fill=255)
+    # membrane gradient
+    yy = np.linspace(0, 1, H * S)[:, None, None]
+    top, mid, bot = np.array([112, 66, 222]), np.array([186, 120, 240]), np.array([255, 190, 60])
+    g = np.where(yy < 0.5, top + (mid - top) * (yy / 0.5), mid + (bot - mid) * ((yy - 0.5) / 0.5))
+    g = np.broadcast_to(g, (H * S, W * S, 3)).astype(np.uint8)
+    pnl = Image.fromarray(g).convert("RGBA")
+    d = ImageDraw.Draw(pnl)
+    # veins: main spine along the left edge-ish, branching to the leaf edge
+    for k in range(10):
+        t = 0.06 + k * 0.09
+        x0, y0 = W * S * 0.05, H * S * t
+        x1 = W * S * (0.05 + 0.85 * math.sin(math.pi * min(t + 0.14, 1) ** 0.8) ** 0.8 * 0.95)
+        y1 = H * S * min(t + 0.17, 0.98)
+        d.line([(x0, y0), ((x0 + x1) / 2, (y0 + y1) / 2 - 12), (x1, y1)], fill=(255, 250, 255, 255), width=6)
+        for j in range(1, 3):                # cross veins
+            fx = j / 3
+            d.line([(x0 + (x1 - x0) * fx, y0 + (y1 - y0) * fx), (x0 + (x1 - x0) * fx + 18, y0 + (y1 - y0) * fx + 46)],
+                   fill=(255, 245, 255, 220), width=3)
+    d.line([(W * S * 0.05, H * S * 0.02), (W * S * 0.06, H * S * 0.98)], fill=(255, 255, 255, 255), width=12)
+    for (cx, cy, rx, ry) in ((0.55, 0.3, 0.12, 0.07), (0.38, 0.5, 0.1, 0.06), (0.52, 0.7, 0.09, 0.05)):   # violet wing spots
+        d.ellipse([W * S * (cx - rx), H * S * (cy - ry), W * S * (cx + rx), H * S * (cy + ry)], fill=(96, 58, 170, 255))
+    # gold rim: erode mask and tint the border
+    inner = mask.filter(ImageFilter.MinFilter(15))
+    rim = Image.composite(Image.new("RGBA", pnl.size, (255, 205, 70, 255)), pnl, ImageChops.invert(inner))
+    pnl = rim
+    pnl.putalpha(mask)
+    pnl = pnl.resize((W, H), Image.LANCZOS)
+    a = np.array(pnl.getchannel("A"))
+    pnl.putalpha(Image.fromarray(np.where(a > 110, 255, 0).astype(np.uint8)))   # clean cutout edge for alpha-scissor
+    img.paste(pnl, (px, 0))
+
+
+def paint_face():
+    """512x512 planar face map (u = x across the head, v = height): skin, yellow eyes with liner, third-eye mark."""
+    S = 2
+    W = 512 * S
+    im = Image.new("RGB", (W, W), tuple(int(c * 255) for c in COL["skin"]))
+    d = ImageDraw.Draw(im)
+    hair = tuple(int(c * 255) for c in COL["hair"])
+    d.rectangle([0, 0, W, int(W * 0.17)], fill=hair)                                    # hairline
+    for k in range(9):
+        x = W * (0.08 + k * 0.105)
+        d.polygon([(x - 26, W * 0.15), (x + 30, W * 0.15), (x + 6, W * (0.22 + 0.05 * (k % 3)))], fill=hair)
+    d.rectangle([0, 0, int(W * 0.09), W], fill=hair)
+    d.rectangle([int(W * 0.91), 0, W, W], fill=hair)
+    liner = (28, 16, 34)
+    for sx in (-1, 1):
+        cx, cy = W * (0.5 + sx * 0.22), W * 0.52
+        ex, ey = W * 0.12, W * 0.07
+        d.polygon([(cx - ex * 1.25, cy + ey * 0.2), (cx - ex * 0.4, cy - ey * 1.5), (cx + ex * 0.6, cy - ey * 1.45), (cx + ex * 1.3, cy - ey * 0.1 * sx),
+                   (cx + ex * 0.4, cy + ey * 1.2), (cx - ex * 0.5, cy + ey * 1.1)], fill=liner)
+        d.ellipse([cx - ex, cy - ey, cx + ex, cy + ey], fill=(255, 236, 150))
+        d.ellipse([cx - ex * 0.62, cy - ey * 1.05, cx + ex * 0.62, cy + ey * 1.05], fill=(255, 196, 30))
+        d.ellipse([cx - ex * 0.3, cy - ey * 0.5, cx + ex * 0.3, cy + ey * 0.5], fill=(40, 20, 12))
+        d.ellipse([cx - ex * 0.28, cy - ey * 0.78, cx - ex * 0.02, cy - ey * 0.3], fill=(255, 255, 255))
+        d.line([(cx - ex * 1.2, cy - ey * 1.7 - 18), (cx + ex * 1.1, cy - ey * 1.9 - 28 * sx)], fill=liner, width=int(W * 0.018))   # brow
+        for k in range(3):                                                                                       # face marks
+            d.line([(cx + sx * ex * 0.4, cy + ey * 2.2 + k * 26), (cx + sx * ex * (0.9 + 0.2 * k), cy + ey * 3.0 + k * 30)], fill=(80, 40, 40), width=8)
+    r = W * 0.036
+    d.ellipse([W * 0.5 - r, W * 0.30 - r, W * 0.5 + r, W * 0.30 + r], fill=(24, 12, 30))                         # third eye
+    d.ellipse([W * 0.5 - r * 0.45, W * 0.30 - r * 0.75, W * 0.5 + r * 0.05, W * 0.30 - r * 0.25], fill=(255, 215, 90))
+    d.ellipse([W * 0.5 - r * 1.5, W * 0.30 - r * 1.5, W * 0.5 + r * 1.5, W * 0.30 + r * 1.5], outline=(255, 205, 70), width=5)
+    d.line([(W * 0.5, W * 0.57), (W * 0.49, W * 0.66)], fill=(190, 120, 90), width=8)                            # nose
+    d.ellipse([W * 0.46, W * 0.655, W * 0.54, W * 0.675], fill=(165, 95, 80))
+    d.line([(W * 0.43, W * 0.74), (W * 0.5, W * 0.755), (W * 0.57, W * 0.74)], fill=(120, 50, 60), width=9)    # mouth
+    d.rectangle([0, int(W * 0.94), W, W], fill=tuple(int(c * 255) for c in COL["skin"]))
+    return im.resize((512, 512), Image.LANCZOS)
 
 
 def make_textures():
@@ -210,25 +300,13 @@ def make_textures():
         x0, y0 = (i % GRID) * 64, (i // GRID) * 64
         a = np.clip(c[None, None, :] + rng.normal(0, 5, (64, 64, 1)), 0, 255).astype(np.uint8)
         img.paste(Image.fromarray(a), (x0, y0))
-    img.save(os.path.join(WORK, "cigarra_albedo.webp"), quality=90)
-    # wing: two 128x512 panels, lime membrane + dark violet cells, veins, black spots (sheet back view)
-    W, H = 256, 512
-    w = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    d = ImageDraw.Draw(w)
-    for px in (0, 128):
-        d.rectangle([px, 0, px + 127, H], fill=(150, 168, 45, 150))
-        for k in range(5):
-            x = px + 20 + k * 20
-            d.polygon([(x, 20 + k * 10), (x + 24, 110 + k * 40), (x + 8, 330 + k * 20), (x - 12, 120 + k * 40)],
-                      fill=(54, 38, 74, 215))
-        d.line([(px + 4, 0), (px + 120, H)], fill=(40, 52, 20, 255), width=3)
-        for k in range(8):
-            d.line([(px + 64, k * 64), (px + (10 if k % 2 else 118), 60 + k * 64)], fill=(70, 85, 25, 230), width=2)
-        for (cx, cy) in ((px + 90, 160), (px + 40, 300), (px + 80, 420)):
-            d.ellipse([cx - 14, cy - 20, cx + 14, cy + 20], fill=(18, 14, 24, 230))
-        d.rectangle([px, 0, px + 127, 6], fill=(30, 30, 40, 255))
-    w.save(os.path.join(WORK, "cigarra_wing.webp"), quality=88)
-    return os.path.join(WORK, "cigarra_albedo.webp"), os.path.join(WORK, "cigarra_wing.webp")
+    img.save(os.path.join(WORK, "cigarra_albedo.webp"), quality=92)
+    w = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
+    paint_wing(w, 0, 1)
+    paint_wing(w, 256, 2)
+    w.save(os.path.join(WORK, "cigarra_wing.webp"), quality=90)
+    paint_face().save(os.path.join(WORK, "cigarra_face.webp"), quality=92)
+    return tuple(os.path.join(WORK, f) for f in ("cigarra_albedo.webp", "cigarra_wing.webp", "cigarra_face.webp"))
 
 
 def material(name, path, alpha=False):
@@ -245,7 +323,26 @@ def material(name, path, alpha=False):
         nt.links.new(t.outputs["Alpha"], bs.inputs["Alpha"])
         m.surface_render_method = "BLENDED"
         m.use_backface_culling = False
+        nt.links.new(t.outputs["Color"], bs.inputs["Emission Color"])      # wings glow a little: read bright in shade
+        bs.inputs["Emission Strength"].default_value = 0.12
     return m
+
+
+def patch_alpha_mask(glb):
+    """Blender exports the wing material as alphaMode BLEND; the leaf cut-out wants MASK (no sort artefacts on mobile)."""
+    import struct
+    data = open(glb, "rb").read()
+    n = struct.unpack("<I", data[12:16])[0]
+    js = json.loads(data[20:20 + n])
+    for m in js.get("materials", []):
+        if m.get("alphaMode") == "BLEND":
+            m["alphaMode"] = "MASK"
+            m["alphaCutoff"] = 0.5
+    nj = json.dumps(js, separators=(",", ":")).encode()
+    nj += b" " * ((4 - len(nj) % 4) % 4)
+    rest = data[20 + n:]
+    out = data[:8] + struct.pack("<I", 12 + 8 + len(nj) + len(rest)) + struct.pack("<I", len(nj)) + b"JSON" + nj + rest
+    open(glb, "wb").write(out)
 
 
 def main():
@@ -265,9 +362,10 @@ def main():
         p.use_smooth = True
     ob = bpy.data.objects.new("Cigarra", me)
     bpy.context.scene.collection.objects.link(ob)
-    alb, wing = make_textures()
+    alb, wing, face = make_textures()
     ob.data.materials.append(material("cigarra_body", alb))
     ob.data.materials.append(material("cigarra_wings", wing, alpha=True))
+    ob.data.materials.append(material("cigarra_face", face))
     # skin: inverse-distance weights over the part's candidate bones
     bones = {bn.name: (np.array(bn.head_local), np.array(bn.tail_local)) for bn in rig.data.bones}
 
@@ -301,6 +399,7 @@ def main():
     bpy.ops.export_scene.gltf(filepath=glb, export_format="GLB", use_selection=True, export_animations=True,
                               export_animation_mode="ACTIONS", export_skins=True, export_apply=False,
                               export_yup=True, export_force_sampling=True, export_image_format="WEBP")
+    patch_alpha_mask(glb)
     json.dump({"height_m": 1.65, "tris": tris, "fps": 30, "animations": meta}, open(os.path.join(OUT, "cigarra_anim.json"), "w"), indent=1)
     open(os.path.join(OUT, "cigarra_model.tscn"), "w").write(
         '[gd_scene load_steps=3 format=3]\n\n'

@@ -223,14 +223,43 @@ def paint(ob):
     rough[cloth] = 0.85
     orm = np.zeros((TEX, TEX, 3), dtype=np.float32)
     orm[mask] = np.stack([np.ones(len(P)), rough, metal], 1)
-    # in-engine grade: the warm Red Reaches key light lifts the cream/red blotches toward pink. Deepen the
-    # midtones (gamma) and pull light warm tones slightly toward the sheet's ochre-cream so the read matches the sheet.
-    lum = img.mean(-1, keepdims=True)
-    img = np.clip(img, 0, 1) ** 1.18
-    warm = np.clip((lum - 0.45) * 3, 0, 1) * np.clip(img[..., :1] - img[..., 2:3], 0, 1)
-    img[..., 0:1] -= 0.10 * warm
-    img[..., 1:2] += 0.04 * warm
+    # in-engine grade (v2, playtester: "needs brighter color"): lift values, enrich saturation, warm the dark chitin
+    # floor so shadows read as deep wine/plum not black, and keep cream as warm bone.
     img = np.clip(img, 0, 1)
+    # cloak: break up the flat dark cloth with fold streaks + a warm lighter weave toward the hem
+    if cloth.any():
+        cl_cloak = np.array([x.startswith("cloak") for x in part])
+        fold = 0.5 + 0.5 * np.sin(P[:, 0] * 38 + 3 * n2 + 6 * n1)
+        t = np.clip(0.25 + 0.55 * fold * (0.6 + 0.4 * n3), 0, 1)[:, None]
+        cl_col = np.array(hex2("#5a4a36")) * (1 - t) + np.array(hex2("#a4875a")) * t
+        tmpc = np.zeros((TEX, TEX, 3), dtype=np.float32)
+        tmpm = np.zeros((TEX, TEX), dtype=bool)
+        tmpc[mask] = cl_col
+        tmpm[mask] = cl_cloak
+        img[tmpm] = tmpc[tmpm] * 0.75 + img[tmpm] * 0.25
+    img = img ** 0.82
+    lum = (img * np.array([0.3, 0.55, 0.15])).sum(-1, keepdims=True)
+    img = lum + (img - lum) * 1.38                     # saturation
+    dark = np.clip(1 - lum / 0.30, 0, 1)               # near-black chitin -> warm wine floor
+    wine = np.array(hex2("#4d2a2c"))
+    img = img * (1 - 0.7 * dark) + wine * (0.7 * dark)
+    img = img * 1.12
+    warm = np.clip((lum - 0.5) * 2.5, 0, 1)
+    img[..., 2:3] -= 0.05 * warm
+    img = np.clip(img, 0, 1)
+    # emissive accents: ladybug spots (yellow/ochre), eyes, Morrow core, a faint ember on red plates
+    emis = np.zeros((TEX, TEX, 3), dtype=np.float32)
+    r_, g_, b_ = img[..., 0], img[..., 1], img[..., 2]
+    spot = (r_ > 0.78) & (g_ > 0.55) & (b_ < 0.50) & ((r_ - b_) > 0.35)
+    em = np.zeros((len(P), 3), dtype=np.float32)
+    isface = np.isin(part, ["eye"])
+    core = part == "morrow_core"
+    em[isface] = hex2("#ffd24a")
+    em[core] = np.array(hex2("#c4301a")) * 0.6
+    emis[mask] = em
+    emis[spot] = img[spot] * 0.55
+    emis, _ = dilate(emis, mask, 6)
+    Image.fromarray((np.clip(emis, 0, 1) * 255).astype(np.uint8)).save(os.path.join(WORK, "aruun_emissive.png"))
     img, _ = dilate(img, mask, 6)
     himg, _ = dilate(himg, mask, 6)
     orm, _ = dilate(orm, mask, 6)
@@ -241,6 +270,7 @@ def paint(ob):
     nrm /= np.linalg.norm(nrm, axis=-1, keepdims=True)
     os.makedirs(OUT, exist_ok=True)
     paths = {}
+    paths["emissive"] = os.path.join(WORK, "aruun_emissive.png")
     for nm, arr in (("albedo", img), ("normal", nrm * 0.5 + 0.5), ("orm", orm)):
         p = os.path.join(WORK, "aruun_%s.png" % nm)
         Image.fromarray((np.clip(arr, 0, 1) * 255).astype(np.uint8)).save(p)
@@ -271,7 +301,9 @@ def make_material(paths):
     nm = nt.nodes.new("ShaderNodeNormalMap")
     nt.links.new(n.outputs["Color"], nm.inputs["Color"])
     nt.links.new(nm.outputs["Normal"], bsdf.inputs["Normal"])
-    # eyes / morrow core glow
+    e = tex(paths["emissive"], False)
+    nt.links.new(e.outputs["Color"], bsdf.inputs["Emission Color"])
+    bsdf.inputs["Emission Strength"].default_value = 1.0
     return m
 
 
@@ -570,7 +602,7 @@ def main():
     glb = os.path.join(OUT, "aruun.glb")
     bpy.ops.export_scene.gltf(filepath=glb, export_format="GLB", use_selection=True, export_animations=True,
                               export_animation_mode="ACTIONS", export_skins=True, export_apply=False,
-                              export_yup=True, export_force_sampling=True, export_image_format="AUTO")
+                              export_yup=True, export_force_sampling=True, export_image_format="WEBP")
     meta = {"height_m": 2.4, "tris": tris, "texture_px": TEX, "fps": anims.FPS, "animations": impacts}
     with open(os.path.join(OUT, "aruun_anim.json"), "w") as f:
         json.dump(meta, f, indent=1)

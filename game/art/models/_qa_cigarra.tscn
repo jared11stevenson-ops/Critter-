@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://game/art/models/_qa_cigarra.gd" id="1"]
+[ext_resource type="Script" path="res://game/world/common/world_lighting.gd" id="2"]
+[ext_resource type="PackedScene" path="res://game/art/models/cigarra/cigarra_model.tscn" id="3"]
+
+[sub_resource type="StandardMaterial3D" id="g"]
+albedo_color = Color(0.55, 0.32, 0.24, 1)
+roughness = 0.95
+
+[sub_resource type="PlaneMesh" id="p"]
+material = SubResource("g")
+size = Vector2(60, 60)
+
+[node name="QACigarra" type="Node3D"]
+script = ExtResource("1")
+
+[node name="WorldLighting" type="Node3D" parent="."]
+script = ExtResource("2")
+preset = "reaches"
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+mesh = SubResource("p")
+
+[node name="Cigarra" parent="." instance=ExtResource("3")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+current = true
+fov = 42.0
