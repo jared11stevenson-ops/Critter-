@@ -167,6 +167,10 @@ static func char_color(id: String) -> Color:
 	if id.begins_with("rival:"):
 		var r: Dictionary = Rivals.get_rival(id.substr(6))
 		return RIVAL_COLORS.get(str(r.get("faction", "")), Color("#6b5a4a"))
+	if not CHAR_COLORS.has(id):
+		var pal: Array = Canon.npc(id).get("look", {}).get("palette", [])
+		if not pal.is_empty():
+			return Color(str(pal[0]))
 	return CHAR_COLORS.get(id, Color("#6b5a4a"))
 
 ## Display name for a speaker id; "rival:<id>" resolves through the Ledger Rivals roster.

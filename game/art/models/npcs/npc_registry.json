@@ -1,0 +1,406 @@
+{
+ "bede_alcott": {
+  "scene": "res://game/art/models/npcs/bede_alcott/bede_alcott_model.tscn",
+  "height_m": 1.8,
+  "tris": 1598,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "bramvex": {
+  "scene": "res://game/art/models/npcs/bramvex/bramvex_model.tscn",
+  "height_m": 2.3,
+  "tris": 2082,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "dessa_harl": {
+  "scene": "res://game/art/models/npcs/dessa_harl/dessa_harl_model.tscn",
+  "height_m": 1.5,
+  "tris": 1692,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "dexter": {
+  "scene": "res://game/art/models/npcs/dexter/dexter_model.tscn",
+  "height_m": 1.85,
+  "tris": 1812,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "hobb_sarrane": {
+  "scene": "res://game/art/models/npcs/hobb_sarrane/hobb_sarrane_model.tscn",
+  "height_m": 1.25,
+  "tris": 1925,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "idris_voll": {
+  "scene": "res://game/art/models/npcs/idris_voll/idris_voll_model.tscn",
+  "height_m": 2.3,
+  "tris": 1764,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "ilsa_brandt": {
+  "scene": "res://game/art/models/npcs/ilsa_brandt/ilsa_brandt_model.tscn",
+  "height_m": 2.0,
+  "tris": 1560,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "imre_dahl": {
+  "scene": "res://game/art/models/npcs/imre_dahl/imre_dahl_model.tscn",
+  "height_m": 1.78,
+  "tris": 1546,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "mara": {
+  "scene": "res://game/art/models/npcs/mara/mara_model.tscn",
+  "height_m": 1.7,
+  "tris": 2016,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "mollusk": {
+  "scene": "res://game/art/models/npcs/mollusk/mollusk_model.tscn",
+  "height_m": 2.2,
+  "tris": 2762,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "nerit": {
+  "scene": "res://game/art/models/npcs/nerit/nerit_model.tscn",
+  "height_m": 1.75,
+  "tris": 2254,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "nuru_tamsin": {
+  "scene": "res://game/art/models/npcs/nuru_tamsin/nuru_tamsin_model.tscn",
+  "height_m": 1.25,
+  "tris": 1767,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "nyxaris": {
+  "scene": "res://game/art/models/npcs/nyxaris/nyxaris_model.tscn",
+  "height_m": 2.0,
+  "tris": 1558,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "oda_keth": {
+  "scene": "res://game/art/models/npcs/oda_keth/oda_keth_model.tscn",
+  "height_m": 1.5,
+  "tris": 1756,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "odalys_penhallow": {
+  "scene": "res://game/art/models/npcs/odalys_penhallow/odalys_penhallow_model.tscn",
+  "height_m": 1.7,
+  "tris": 1588,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "pel_narr": {
+  "scene": "res://game/art/models/npcs/pel_narr/pel_narr_model.tscn",
+  "height_m": 2.6,
+  "tris": 1436,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "pharilux": {
+  "scene": "res://game/art/models/npcs/pharilux/pharilux_model.tscn",
+  "height_m": 2.6,
+  "tris": 2268,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "rival_dominion": {
+  "scene": "res://game/art/models/npcs/rival_dominion/rival_dominion_model.tscn",
+  "height_m": 1.85,
+  "tris": 1618,
+  "clips": [
+   "attack_1",
+   "attack_2",
+   "attack_3",
+   "downed",
+   "gesture",
+   "hit",
+   "hit_back",
+   "hit_left",
+   "hit_right",
+   "idle",
+   "jog",
+   "react",
+   "revive",
+   "run",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "rival_free_scale": {
+  "scene": "res://game/art/models/npcs/rival_free_scale/rival_free_scale_model.tscn",
+  "height_m": 1.75,
+  "tris": 1632,
+  "clips": [
+   "attack_1",
+   "attack_2",
+   "attack_3",
+   "downed",
+   "gesture",
+   "hit",
+   "hit_back",
+   "hit_left",
+   "hit_right",
+   "idle",
+   "jog",
+   "react",
+   "revive",
+   "run",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "rival_helix": {
+  "scene": "res://game/art/models/npcs/rival_helix/rival_helix_model.tscn",
+  "height_m": 1.85,
+  "tris": 1614,
+  "clips": [
+   "attack_1",
+   "attack_2",
+   "attack_3",
+   "downed",
+   "gesture",
+   "hit",
+   "hit_back",
+   "hit_left",
+   "hit_right",
+   "idle",
+   "jog",
+   "react",
+   "revive",
+   "run",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "rival_undermarket": {
+  "scene": "res://game/art/models/npcs/rival_undermarket/rival_undermarket_model.tscn",
+  "height_m": 1.8,
+  "tris": 1592,
+  "clips": [
+   "attack_1",
+   "attack_2",
+   "attack_3",
+   "downed",
+   "gesture",
+   "hit",
+   "hit_back",
+   "hit_left",
+   "hit_right",
+   "idle",
+   "jog",
+   "react",
+   "revive",
+   "run",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "scarlith": {
+  "scene": "res://game/art/models/npcs/scarlith/scarlith_model.tscn",
+  "height_m": 0.12,
+  "tris": 2114,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "solmara": {
+  "scene": "res://game/art/models/npcs/solmara/solmara_model.tscn",
+  "height_m": 5.5,
+  "tris": 2486,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "tavik_roon": {
+  "scene": "res://game/art/models/npcs/tavik_roon/tavik_roon_model.tscn",
+  "height_m": 1.9,
+  "tris": 1667,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "vesk_dunmore": {
+  "scene": "res://game/art/models/npcs/vesk_dunmore/vesk_dunmore_model.tscn",
+  "height_m": 1.75,
+  "tris": 2019,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "zephyr": {
+  "scene": "res://game/art/models/npcs/zephyr/zephyr_model.tscn",
+  "height_m": 1.65,
+  "tris": 2286,
+  "clips": [
+   "gesture",
+   "hit",
+   "idle",
+   "react",
+   "talk_idle",
+   "walk",
+   "wave"
+  ]
+ }
+}

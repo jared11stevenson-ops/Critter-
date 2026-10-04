@@ -144,10 +144,18 @@ func play_data(id: String, d: Dictionary, pause: bool = true) -> bool:
 	return true
 
 ## Flags the Lead's dialogue gates on that are derived from other state.
+## ledger_<tag> flags: true when the Ledger holds any event carrying <tag> (Red Reaches NPC dialogue / bark gates).
+const LEDGER_TAG_FLAGS := ["braced_structure", "claim_jump", "salvage_fair", "extraction", "consent_asked", "dominion_favor", "trafficked",
+	"trafficking_exposed", "threshold_breached", "threshold_kept", "darkness_kept", "forced_exposure", "protect_weak"]
+
 static func sync_derived_flags() -> void:
 	var has_spec := not GameState.specimens.is_empty()
 	if bool(GameState.get_flag("has_specimen", false)) != has_spec:
 		GameState.set_flag("has_specimen", has_spec)
+	for tag in LEDGER_TAG_FLAGS:
+		var on: bool = Ledger.exists({"tag": tag})
+		if bool(GameState.get_flag("ledger_" + tag, false)) != on:
+			GameState.set_flag("ledger_" + tag, on)
 
 func is_running(id: String = "") -> bool:
 	return active and (id == "" or id == dialogue_id)

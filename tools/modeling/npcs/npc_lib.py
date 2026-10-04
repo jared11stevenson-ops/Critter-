@@ -361,6 +361,18 @@ class Builder:
 
 
 # ------------------------------------------------------------------------------------------- textures
+SAT_BOOST = 1.32      # the Compatibility renderer + filmic tonemap washes pastels out; saturate / darken the albedo a touch
+VAL_SCALE = 0.86
+
+
+def grade(c):
+    import colorsys
+    h, sa, v = colorsys.rgb_to_hsv(*c)
+    sa = min(1.0, sa * SAT_BOOST)
+    v = min(1.0, v * VAL_SCALE + 0.02)
+    return colorsys.hsv_to_rgb(h, sa, v)
+
+
 def write_atlas(b, outdir):
     from PIL import Image
     cell = 16
@@ -368,6 +380,8 @@ def write_atlas(b, outdir):
     emi = Image.new("RGB", (8 * cell, 8 * cell), (0, 0, 0))
     for i, k in enumerate(b.pal_order):
         c, glow = b.pal[k]
+        if not glow:
+            c = grade(c)
         px = tuple(int(round(255 * x)) for x in c)
         box = ((i % 8) * cell, (i // 8) * cell, (i % 8 + 1) * cell, (i // 8 + 1) * cell)
         alb.paste(px, box)

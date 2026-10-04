@@ -20,8 +20,7 @@ func _ready() -> void:
 	RenderingServer.global_shader_parameter_set("critter_focus_pos", Vector3.ZERO)
 	var spots := {"aruun": Vector3(-1.4, 0, -0.4), "cigarra": Vector3(1.2, 0, 0.9)}
 	for id in spots:
-		var bb: Node3D = load("res://game/art/characters/character_billboard.tscn").instantiate()
-		bb.set("character_id", id)
+		var bb: Node3D = VisualFactory.character(id)
 		add_child(bb)
 		var p: Vector3 = f + spots[id]
 		p.y = terrain.height_at(p.x, p.z)

@@ -66,6 +66,8 @@ def build(cid, do_preview=False, do_anim=True):
     meta = {}
     if do_anim:
         meta = animate(spec, rig, cid)
+    if not do_anim:          # preview-only run: never overwrite the shipped glb with an animation-less one
+        return tris
     out = os.path.join(ROOT, "game", "art", "models", "npcs", cid)
     os.makedirs(out, exist_ok=True)
     for o in bpy.data.objects:
@@ -119,6 +121,20 @@ def animate(spec, rig, cid):
     return meta
 
 
+def write_registry():
+    """game/art/models/npcs/npc_registry.json: id -> scene path / height / tris (read by RrNpcs and VisualFactory users)."""
+    base = os.path.join(ROOT, "game", "art", "models", "npcs")
+    reg = {}
+    for cid in sorted(os.listdir(base)):
+        j = os.path.join(base, cid, cid + "_anim.json")
+        if os.path.exists(j):
+            m = json.load(open(j))
+            reg[cid] = {"scene": "res://game/art/models/npcs/%s/%s_model.tscn" % (cid, cid), "height_m": m["height_m"], "tris": m["tris"],
+                        "clips": sorted(m["animations"].keys())}
+    json.dump(reg, open(os.path.join(base, "npc_registry.json"), "w"), indent=1)
+    print("registry:", len(reg), "models")
+
+
 if __name__ == "__main__":
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     ids = args or ALL
@@ -126,3 +142,4 @@ if __name__ == "__main__":
     for i in ids:
         t[i] = build(i, "--preview" in sys.argv, "--noanim" not in sys.argv)
     print("TRIS", t)
+    write_registry()

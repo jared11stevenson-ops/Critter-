@@ -32,6 +32,7 @@ var pylons: Array = []
 var grazers: Array = []
 var boss: AugurRig = null
 var rivals: RivalEncounters = null
+var npcs: RrNpcs = null
 var replay := false                  # Return Descent: the Reaches are cleared; the rivals are out there
 var _run_ended := false
 var _barrier_boulder: StaticBody3D = null
@@ -88,6 +89,10 @@ func _ready() -> void:
 	rivals.name = "Rivals"
 	add_child(rivals)
 	rivals.setup(self, runner)
+	npcs = RrNpcs.new()
+	npcs.name = "RrNpcs"
+	add_child(npcs)
+	npcs.setup(self, runner, region)
 	hud = Hud.new()
 	hud.name = "HUD"
 	hud.setup(field, party)
@@ -351,6 +356,8 @@ func _build_interactables() -> void:
 	]
 	if region:
 		_interactables.append_array(region.interactables())
+	if npcs:
+		_interactables.append_array(npcs.interactables())
 	for it in _interactables:
 		var l := Label3D.new()
 		l.text = "◆"
@@ -642,6 +649,8 @@ func _say(id: String, force: bool = false) -> bool:
 	return ok
 
 func _on_dialogue_event(ev: String) -> void:
+	if npcs and npcs.handle_dialogue_event(ev):
+		return
 	if region and region.handle_dialogue_event(ev):
 		return
 	_events_seen[ev] = true
@@ -1056,6 +1065,11 @@ func qa_teleport(marker_name: String) -> void:
 	party.clear_trail()
 	cam.set_target(l, true)
 	print("[QA] teleport ", marker_name, " -> ", p)
+
+func qa_npcs() -> void:
+	if npcs:
+		var o := party.get_leader().global_position
+		npcs.qa_lineup(o + Vector3(0, 0, 0))
 
 func qa_skip_to(beat: String) -> void:
 	var order := ["valley", "gap", "waystation", "boulder", "drill", "span", "burden", "boss", "choice", "exfil"]

@@ -53,9 +53,8 @@ static func make(rid: String) -> RivalEnemy:
 
 func _make_visual() -> Node3D:
 	var r := Rivals.get_rival(rival_id)
-	var fb := FallbackVisual.new()
-	fb.setup("rival_" + str(r.get("faction", "dominion")), "character")
-	return fb
+	# faction body: skinned 3D model (res://game/art/models/npcs/rival_<faction>), primitive fallback if missing
+	return VisualFactory.character("rival_" + str(r.get("faction", "dominion")))
 
 func has_tactic(t: String) -> bool:
 	return t in tactics
