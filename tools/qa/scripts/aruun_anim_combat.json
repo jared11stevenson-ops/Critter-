@@ -1,0 +1,12 @@
+[
+ {"t":0.8,"call":"scene.qa_skip_dialogue"},
+ {"t":1.0,"call":"scene.qa_teleport","args":["encounter_valley"]},
+ {"t":1.3,"call":"scene.qa_skip_dialogue"},
+ {"t":2.0,"action":"attack","dur":0.1},
+ {"t":2.25,"action":"attack","dur":0.1},
+ {"t":2.5,"action":"attack","dur":0.1},
+ {"t":4.0,"action":"ability_1","dur":0.1},
+ {"t":5.5,"action":"ability_2","dur":0.1},
+ {"t":9.0,"action":"attack","dur":0.1},
+ {"t":9.3,"action":"attack","dur":0.1}
+]

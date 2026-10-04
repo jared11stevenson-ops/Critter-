@@ -514,6 +514,17 @@ def hunch(ob):
         body.J[k] = body.V(*q)
 
 
+def build_animations(rig):
+    """Mocap-based clip set from tools/animation (Agent 4); falls back to the hand-keyed anims.py set."""
+    sys.path.insert(0, os.path.join(ROOT, "tools", "animation"))
+    try:
+        from apply import apply_animations
+    except ImportError as e:
+        print("tools/animation unavailable (%s); using anims.py" % e)
+        return anims.build_all(rig)
+    return apply_animations(rig, "aruun")
+
+
 def main():
     bpy.ops.wm.open_mainfile(filepath=os.path.join(WORK, "aruun_geo.blend"))
     ob = bpy.data.objects["Aruun"]
@@ -552,7 +563,7 @@ def main():
     tris = bu.tri_count(ob)
     rig = build_armature()
     skin(ob, rig)
-    impacts = anims.build_all(rig)
+    impacts = build_animations(rig)
     # export
     for o in bpy.data.objects:
         o.select_set(o in (ob, rig))

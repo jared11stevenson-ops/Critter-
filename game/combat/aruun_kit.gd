@@ -47,6 +47,10 @@ func _swing(i: int) -> void:
 	var windup := Balance.arr("aruun.combo.windup", i, 0.1)
 	var active := Balance.arr("aruun.combo.active", i, 0.08)
 	var recover := Balance.arr("aruun.combo.recover", i, 0.25)
+	# 3D model: land damage + hit-stop on the clip's impact frame (may add <= 80 ms windup; billboard returns null)
+	var hit_t: Variant = c.vis("attack_hit_time", "heavy" if i == 2 else "light", windup)
+	if hit_t is float:
+		windup = hit_t
 	var tok := c.begin_action(windup + active + recover, 0.2)
 	var a := c.aim(Balance.arr("aruun.combo.range", i, 3.0) + 2.5, true)
 	var dir: Vector3 = a[0]
