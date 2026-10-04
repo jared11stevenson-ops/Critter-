@@ -145,7 +145,7 @@ def downsample(im, size):
     return Image.fromarray(np.dstack([rgb, al * 255.0 + 0.5]).clip(0, 255).astype(np.uint8), "RGBA")
 
 
-def save_optimized(im, path, quality="88-100"):
+def save_optimized(im, path, quality="70-95"):
     """Palettize with pngquant when it stays near-lossless, then oxipng; falls back to plain optimize."""
     tmp = path + ".tmp.png"
     im.save(tmp, optimize=True)
