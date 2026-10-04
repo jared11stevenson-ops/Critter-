@@ -490,8 +490,6 @@ func _tick_npc(n: Dictionary, delta: float) -> void:
 					_face(n, (cs["face"] as Vector3).rotated(Vector3.UP, _rng.randf_range(-1.4, 1.4)))
 				else:
 					_face(n, cs["face"])
-	if not node.position.is_finite() or not body.position.is_finite() or not body.rotation.is_finite():
-		print("[NPCDBG] nonfinite ", n["id"], " state=", n["state"], " pos=", node.position, " body=", body.position, body.rotation, " target=", n["target"])
 	if bool(n["proc"]):
 		_animate(n, body)
 	else:
