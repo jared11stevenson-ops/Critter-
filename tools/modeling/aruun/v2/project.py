@@ -96,6 +96,18 @@ def grade(img, gamma=0.78, sat=1.28):
     return x * 255.0
 
 
+def make_normal(rgb, strength=2.2):
+    """Tangent-space normal from plate/skin classes of the painted albedo: plates (non-dark paint) sit proud with a soft
+    bevel, painted edge lines read as grooves (pure image processing; matches the sheet's own plate layout)."""
+    lum = rgb.mean(2)
+    plate = (lum > 78).astype(np.float32)
+    h = ndi.gaussian_filter(plate, 1.6) * 1.0 + ndi.gaussian_filter(lum / 255.0, 0.8) * 0.35
+    gy, gx = np.gradient(h)
+    n = np.stack([-gx * strength * 4, gy * strength * 4, np.ones_like(h)], 2)
+    n /= np.linalg.norm(n, axis=2, keepdims=True)
+    return ((n * 0.5 + 0.5) * 255).astype(np.uint8)
+
+
 def sheet_palette(vs, k=16):
     px = []
     for v in vs.values():
@@ -308,7 +320,7 @@ def main(size=2048):
             la = np.asarray(Image.open(os.path.join(WORK, "legacy", nm + ".webp")).convert("RGB")).astype(np.float32)
             side_img = EXTRA[nm]
             side_img[ii[:, 0], ii[:, 1]] = la[py, px]
-    out = cel_clean(out, mask, vs, k=28, passes=1, win=3)
+    out = cel_clean(out, mask, vs, k=22, passes=2, win=5)
     out = np.where(MOR[..., None], out, grade(out))
     out = paint_procedural(out, ok, tt, b, T, fk, m['sparam'])
     # eyes: yellow texels on the head glow a little
@@ -316,6 +328,7 @@ def main(size=2048):
     EXTRA["emissive"][yel & (EXTRA["emissive"].sum(2) == 0)] = out[yel & (EXTRA["emissive"].sum(2) == 0)] * 0.35
     for nm in ("emissive", "orm"):
         Image.fromarray(np.clip(EXTRA[nm], 0, 255).astype(np.uint8)).save(os.path.join(WORK, nm + ".png"))
+    Image.fromarray(make_normal(out)).save(os.path.join(WORK, "normal.png"))
     Image.fromarray(np.clip(out, 0, 255).astype(np.uint8)).save(os.path.join(WORK, "albedo_proj.png"))
     print("coverage seen %.3f of covered %.3f" % (have.sum() / ok.sum() if ok.sum() else 0, 0), "done %.1fs" % (time.time() - t0))
 

@@ -67,21 +67,25 @@ def main():
             if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1:
                 c = not c
         return c
-    xs = np.arange(pw[:, 0].min(), pw[:, 0].max() + 1e-6, 0.03); zs = np.arange(pw[:, 1].min(), pw[:, 1].max() + 1e-6, 0.03)
-    gi = {}; V = []; S = []
-    for j, z in enumerate(zs):
-        for i, x in enumerate(xs):
-            if inpoly((x, z), pw):
-                y = back_y(x, z, 0.04)
-                if y is None:
-                    continue
-                gi[(i, j)] = len(V)
-                V.append((x, y + 0.035 + 0.05 * (pw[:, 1].max() - z) / 0.4, z)); S.append((pw[:, 1].max() - z) / (pw[:, 1].max() - pw[:, 1].min()))
-    F = []
-    for (i, j), a in gi.items():
-        if (i + 1, j) in gi and (i, j + 1) in gi and (i + 1, j + 1) in gi:
-            b, c, d = gi[(i + 1, j)], gi[(i, j + 1)], gi[(i + 1, j + 1)]
-            F += [(a, b, c), (b, d, c)]
+    # boundary resampled every 3.5 cm + interior grid, Delaunay-triangulated, centroid-in-polygon filter (smooth hem)
+    from scipy.spatial import Delaunay
+    bd = []
+    for i in range(len(pw)):
+        p, q = pw[i], pw[(i + 1) % len(pw)]; n = max(1, int(np.linalg.norm(q - p) / 0.035))
+        bd += [p + (q - p) * t / n for t in range(n)]
+    bd = np.array(bd)
+    gx = np.arange(pw[:, 0].min(), pw[:, 0].max(), 0.045); gz = np.arange(pw[:, 1].min(), pw[:, 1].max(), 0.045)
+    inner = np.array([(x, z) for z in gz for x in gx if inpoly((x, z), pw) and np.min(np.linalg.norm(bd - [x, z], axis=1)) > 0.03])
+    pts = np.vstack([bd, inner]) if len(inner) else bd
+    tri = Delaunay(pts)
+    V = []; S = []
+    zt, zb_ = pw[:, 1].max(), pw[:, 1].min()
+    for x, z in pts:
+        y = back_y(x, z, 0.05)
+        if y is None:
+            y = back_y(x, z, 0.12) or 0.15
+        V.append((x, y + 0.03 + 0.05 * (zt - z) / 0.4, z)); S.append((zt - z) / (zt - zb_))
+    F = [tuple(s) for s in tri.simplices if inpoly(pts[s].mean(0), pw)]
     C.add(np.array(V), F, "mantle", np.array(S)); print("mantle tris", len(F))
     # ---- fringe strips hanging from the mantle hem along the right arm (back px picks: top u,v -> bottom u,v)
     picks = [((350, 520), (352, 900)), ((385, 530), (402, 1010)), ((420, 545), (440, 1060)), ((448, 560), (480, 1090)),
@@ -109,7 +113,7 @@ def main():
         front = np.cos(th + np.pi / 2) > 0.55 and np.sin(th) < 0
         if front:
             continue
-        for layer, kind, off, drop in ((0, "leaf_dark", 0.0, 0.52), (1, "leaf_olive", 0.04, 0.68)):
+        for layer, kind, off, drop in ((0, "leaf_dark", 0.0, 0.46), (1, "leaf_olive", 0.04, 0.58)):
             L = (drop + 0.12 * rng.rand()) * (0.8 if np.sin(th) < -0.3 else 1.0)
             z0 = 1.2
             r0 = rbody(th, z0) + 0.025 + off
@@ -118,7 +122,7 @@ def main():
             P0 = np.array([xc + r0 * np.cos(thj), yc + r0 * np.sin(thj), z0])
             P1 = np.array([xc + r1 * np.cos(thj), yc + r1 * np.sin(thj), z0 - L])
             n = np.array([np.cos(thj), np.sin(thj), 0.0])
-            V_, F_, S_ = strip(P0, P1, 0.15, 0.04, n, nseg=5, taper=0.8)
+            V_, F_, S_ = strip(P0, P1, 0.17, 0.05, n, nseg=5, taper=0.8, sway=0.012)
             C.add(V_, F_, kind, S_)
     # ---- front cream tassels hanging from the belt at the front centre
     for i, dx in enumerate(np.linspace(-0.13, 0.12, 7)):

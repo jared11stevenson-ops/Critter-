@@ -12,7 +12,7 @@ BACK = {"R": [(266, 176), (268, 150), (280, 95), (272, 62), (248, 44), (215, 37)
         "L": [(207, 168), (205, 140), (175, 95), (150, 65), (110, 28), (60, 22), (45, 34)]}
 SIDE = {"R": [(170, 188), (175, 160), (190, 125), (210, 100), (240, 70), (280, 50), (320, 32)],
         "L": [(262, 222), (265, 195), (280, 140), (300, 105), (330, 80), (360, 55), (385, 40)]}
-RAD = {"R": (0.034, 0.010), "L": (0.030, 0.009)}
+RAD = {"R": (0.046, 0.013), "L": (0.040, 0.012)}
 ANCHOR = {"R": (0.07, -0.07, 2.07), "L": (0.125, -0.115, 2.07)}
 
 
@@ -74,6 +74,15 @@ def main():
         rad[-4:] *= np.linspace(1, 0.55, 4)
         V, F, S = tube(C, rad, 8)
         verts.append(V); faces.append(F + off); tid.append(np.full(len(V), k)); sparam.append(S); off += len(V)
+        # spurs at the joints (stag-beetle branching): short cones leaving the horn sideways/outward
+        for si, (sv_, ln) in enumerate(((0.28, 0.07), (0.52, 0.09), (0.74, 0.06))):
+            i = int(sv_ * (len(C) - 1)); tg = C[min(i + 1, len(C) - 1)] - C[i - 1]; tg /= np.linalg.norm(tg)
+            side = np.cross(tg, [0, 0, 1.0]); side /= np.linalg.norm(side)
+            dirn = (side * (1 if (si + k) % 2 == 0 else -1) * 0.8 + tg * 0.35 + np.array([0, 0, 0.45])); dirn /= np.linalg.norm(dirn)
+            base = C[i]; tip = base + dirn * ln
+            Cs = np.array([base - dirn * 0.01, base + dirn * ln * 0.5, tip]); rs = np.array([rad[i] * 0.55, rad[i] * 0.33, 0.003])
+            Vs, Fs, Ss = tube(Cs, rs, 6)
+            verts.append(Vs); faces.append(Fs + off); tid.append(np.full(len(Vs), k)); sparam.append(np.full(len(Vs), sv_)); off += len(Vs)
         print(name, "tube tris", len(F), "tip", C[-1].round(3), "base", C[0].round(3))
     # temple tines: short cream cones (his left/right), from the back view picks
     for k, (name, tip_b, base_b, tip_s, base_s) in enumerate((("tR", (300, 175), (270, 170), (300, 238), (265, 235)),
