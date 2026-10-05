@@ -1,0 +1,156 @@
+[
+ {
+  "name": "Hair (shaggy, pale)",
+  "cls": "fibre / hair",
+  "sample": [
+   "side",
+   0.5,
+   0.093
+  ],
+  "rough": 0.55,
+  "metal": 0.0,
+  "note": "cel-lit, stylised clumps; olive-lime tips are painted into the hair",
+  "hex": "#b79e7c",
+  "n": 1
+ },
+ {
+  "name": "Skin (face, hands)",
+  "cls": "skin",
+  "sample": [
+   "side",
+   0.28,
+   0.19
+  ],
+  "rough": 0.5,
+  "metal": 0.0,
+  "note": "warm tan; black face markings are paint, not geometry",
+  "hex": "#cb995c",
+  "n": 2
+ },
+ {
+  "name": "Crown spheres (treehopper)",
+  "cls": "glossy black lacquer chitin",
+  "sample": [
+   "side",
+   0.46,
+   0.04
+  ],
+  "rough": 0.12,
+  "metal": 0.0,
+  "note": "very glossy, yellow-green glint is a painted highlight; stalk = matte dark wood-like chitin rough .5",
+  "hex": "#1b1a1b",
+  "n": 3
+ },
+ {
+  "name": "Hooded jacket",
+  "cls": "cloth",
+  "sample": [
+   "side",
+   0.72,
+   0.247
+  ],
+  "rough": 0.85,
+  "metal": 0.0,
+  "note": "deep violet-black, moss-olive edging",
+  "hex": "#4d4037",
+  "n": 4
+ },
+ {
+  "name": "Cropped top (olive/cream)",
+  "cls": "cloth",
+  "sample": [
+   "side",
+   0.23,
+   0.37
+  ],
+  "rough": 0.85,
+  "metal": 0.0,
+  "note": "dark trim at hem",
+  "hex": "#a08756",
+  "n": 5
+ },
+ {
+  "name": "Belt / leather",
+  "cls": "leather",
+  "sample": [
+   "side",
+   0.3,
+   0.48
+  ],
+  "rough": 0.55,
+  "metal": 0.0,
+  "note": "brown leather, buckle dark metal rough .4 metal .8",
+  "hex": "#372514",
+  "n": 6
+ },
+ {
+  "name": "Charms (gourds / egg pod)",
+  "cls": "dried gourd / bone",
+  "sample": [
+   "side",
+   0.21,
+   0.6
+  ],
+  "rough": 0.6,
+  "metal": 0.0,
+  "note": "pale skull-like gourds, orange cords",
+  "hex": "#9d902c",
+  "n": 7
+ },
+ {
+  "name": "Baggy trousers",
+  "cls": "cloth",
+  "sample": [
+   "side",
+   0.5,
+   0.75
+  ],
+  "rough": 0.9,
+  "metal": 0.0,
+  "note": "violet-black harem pants, cuffed at the shin",
+  "hex": "#513c42",
+  "n": 8
+ },
+ {
+  "name": "Shin bandage",
+  "cls": "cloth wrap",
+  "sample": [
+   "side",
+   0.49,
+   0.88
+  ],
+  "rough": 0.9,
+  "metal": 0.0,
+  "note": "cream/olive wrap",
+  "hex": "#5b4c35",
+  "n": 9
+ },
+ {
+  "name": "Boots (leaf-trimmed)",
+  "cls": "leather",
+  "sample": [
+   "side",
+   0.52,
+   0.965
+  ],
+  "rough": 0.6,
+  "metal": 0.0,
+  "note": "dark brown with olive leaf trim",
+  "hex": "#362a1e",
+  "n": 10
+ },
+ {
+  "name": "Wing cloak (translucent panels)",
+  "cls": "translucent membrane",
+  "sample": [
+   "back",
+   0.17,
+   0.68
+  ],
+  "rough": 0.35,
+  "metal": 0.0,
+  "note": "lime membrane with dark veins/spots; alpha/transmission ~0.5; dark violet outer panels are opaque cloth",
+  "hex": "#ada852",
+  "n": 11
+ }
+]

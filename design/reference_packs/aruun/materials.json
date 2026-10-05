@@ -1,0 +1,143 @@
+[
+ {
+  "name": "Red carapace discs (shoulder / hip / elbow)",
+  "cls": "glossy chitin",
+  "sample": [
+   "side",
+   0.15,
+   0.285
+  ],
+  "rough": 0.3,
+  "metal": 0.0,
+  "note": "cream spot highlight painted; dark holes are recesses",
+  "hex": "#9b322a",
+  "n": 1
+ },
+ {
+  "name": "Orange neck / limb skin",
+  "cls": "soft chitin / skin",
+  "sample": [
+   "side",
+   0.43,
+   0.2
+  ],
+  "rough": 0.5,
+  "metal": 0.0,
+  "note": "smooth orange gradient with painted gloss streaks",
+  "hex": "#c1663b",
+  "n": 2
+ },
+ {
+  "name": "Dark under-armour",
+  "cls": "matte chitin / suit",
+  "sample": [
+   "side",
+   0.56,
+   0.4
+  ],
+  "rough": 0.45,
+  "metal": 0.0,
+  "note": "navy-black with tiny cream star speckles (paint)",
+  "hex": "#352a2c",
+  "n": 3
+ },
+ {
+  "name": "Tan bone plates (thigh, arm guards)",
+  "cls": "bone / dry chitin",
+  "sample": [
+   "side",
+   0.37,
+   0.65
+  ],
+  "rough": 0.55,
+  "metal": 0.0,
+  "note": "cream-tan plates with red rim",
+  "hex": "#b9927a",
+  "n": 4
+ },
+ {
+  "name": "Horns",
+  "cls": "chitin (matte-satin)",
+  "sample": [
+   "side",
+   0.56,
+   0.06
+  ],
+  "rough": 0.4,
+  "metal": 0.0,
+  "note": "red-brown with orange base, jointed knobs",
+  "hex": "#808080",
+  "n": 5
+ },
+ {
+  "name": "Cream wraps / straps",
+  "cls": "cloth",
+  "sample": [
+   "side",
+   0.56,
+   0.375
+  ],
+  "rough": 0.85,
+  "metal": 0.0,
+  "note": "chest wrap, hanging tassels",
+  "hex": "#b0824c",
+  "n": 6
+ },
+ {
+  "name": "Brass rings / belt ornaments",
+  "cls": "metal (aged brass)",
+  "sample": [
+   "front",
+   0.38,
+   0.52
+  ],
+  "rough": 0.35,
+  "metal": 0.85,
+  "note": "belt ring + buckle ornament, small",
+  "hex": "#5e4635",
+  "n": 7
+ },
+ {
+  "name": "Hood / cloak",
+  "cls": "cloth",
+  "sample": [
+   "back",
+   0.6,
+   0.28
+  ],
+  "rough": 0.9,
+  "metal": 0.0,
+  "note": "dark olive-grey, ragged edge, over RIGHT shoulder in back view",
+  "hex": "#423533",
+  "n": 8
+ },
+ {
+  "name": "Olive skirt strips",
+  "cls": "cloth / leaf-like fibre",
+  "sample": [
+   "front",
+   0.785,
+   0.78
+  ],
+  "rough": 0.9,
+  "metal": 0.0,
+  "note": "tattered olive-green strips",
+  "hex": "#342d2c",
+  "n": 9
+ },
+ {
+  "name": "Morrow mace core (red orb)",
+  "cls": "glossy red gem / psionic",
+  "hex": "#c8462b",
+  "sample": [
+   "side",
+   0.15,
+   0.285
+  ],
+  "rough": 0.15,
+  "metal": 0.0,
+  "emi": 0.4,
+  "note": "hex = canon palette (not in these views); emissive is a SUGGESTION pending Q6",
+  "n": 10
+ }
+]

@@ -1,0 +1,153 @@
+{
+ "art_sampled_kmeans": [
+  {
+   "hex": "#302825",
+   "share": 0.234
+  },
+  {
+   "hex": "#463938",
+   "share": 0.233
+  },
+  {
+   "hex": "#13100d",
+   "share": 0.139
+  },
+  {
+   "hex": "#b7a073",
+   "share": 0.074
+  },
+  {
+   "hex": "#cdba93",
+   "share": 0.068
+  },
+  {
+   "hex": "#a8964c",
+   "share": 0.062
+  },
+  {
+   "hex": "#c0b860",
+   "share": 0.057
+  },
+  {
+   "hex": "#8a733f",
+   "share": 0.047
+  },
+  {
+   "hex": "#918f5f",
+   "share": 0.046
+  },
+  {
+   "hex": "#675232",
+   "share": 0.041
+  }
+ ],
+ "sheet_palette_json": {
+  "front": [
+   {
+    "hex": "#3f3330",
+    "share": 0.412
+   },
+   {
+    "hex": "#181512",
+    "share": 0.201
+   },
+   {
+    "hex": "#a7945e",
+    "share": 0.136
+   },
+   {
+    "hex": "#c0b374",
+    "share": 0.129
+   },
+   {
+    "hex": "#836a3f",
+    "share": 0.08
+   },
+   {
+    "hex": "#d3bb99",
+    "share": 0.043
+   }
+  ],
+  "side": [
+   {
+    "hex": "#322926",
+    "share": 0.291
+   },
+   {
+    "hex": "#4d3c37",
+    "share": 0.239
+   },
+   {
+    "hex": "#13100e",
+    "share": 0.144
+   },
+   {
+    "hex": "#ccb492",
+    "share": 0.121
+   },
+   {
+    "hex": "#b69766",
+    "share": 0.115
+   },
+   {
+    "hex": "#8c733d",
+    "share": 0.09
+   }
+  ],
+  "back": [
+   {
+    "hex": "#423734",
+    "share": 0.436
+   },
+   {
+    "hex": "#1c1916",
+    "share": 0.21
+   },
+   {
+    "hex": "#9a9553",
+    "share": 0.145
+   },
+   {
+    "hex": "#b8b15c",
+    "share": 0.12
+   },
+   {
+    "hex": "#7c6c3c",
+    "share": 0.064
+   },
+   {
+    "hex": "#d2c578",
+    "share": 0.025
+   }
+  ],
+  "game_palette": {
+   "intent": "Pop against red/ochre desert: acid yellow-green wings + gold + violet glow; stays inside the sheet's olive/violet/white-blonde family.",
+   "shader": "game/art/shaders/character_pop.gd PALETTES.cigarra",
+   "sat_lift": 1.22,
+   "val_lift": 1.12,
+   "contrast": 1.12,
+   "hues": {
+    "wing_lime": "#b0d63a",
+    "wing_cell_violet": "#46286f",
+    "gold": "#ffc22e",
+    "jacket_violet": "#453559",
+    "hair": "#faf0c8",
+    "skin": "#e0a375",
+    "moss": "#a9b81f"
+   },
+   "rim": "#ccff40",
+   "emissive_accent": "#c75aff (third eye, crown highlights), gold ring",
+   "outline": "#0f051f"
+  }
+ },
+ "game_palette_canon_json": [
+  "#1e1a22",
+  "#3b2a44",
+  "#8f8a52",
+  "#b8c24a",
+  "#d9cf9a",
+  "#efe6cf",
+  "#b5473a"
+ ],
+ "note": "game palette = game/canon/canon.json characters.Cigarra.palette (the colours UI/FX use); art_sampled = k-means over the cut views of this pack."
+}
