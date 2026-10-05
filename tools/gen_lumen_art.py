@@ -67,6 +67,13 @@ po = [
 ]
 grp("pool", po, vis_end=150)
 
+# warm pulse colonies along the whole route (the rhythm is language: gold = calm, pink = warning)
+grp("pulse_line", [
+    scat([30, 2], 16, 10, 41, ["glow_colony"], (1.1, 1.7), off_floor=True, floor_margin=2.0, min_gap=4.0),
+    scat([90, 4], 14, 8, 42, ["glow_colony"], (1.1, 1.6), off_floor=True, floor_margin=2.0, min_gap=4.0),
+    L("glow_colony", 100, -2, 1.5, 0), L("glow_colony", 138, 6, 1.5, 100), L("glow_colony", 99, 8, 1.3, 40), L("bell_moss", 133, -2, 1.5, 0),
+], vis_end=150)
+
 # the shaft crossing: hanging walkway, anchor spires, lantern posts
 wk = []
 for i in range(4):

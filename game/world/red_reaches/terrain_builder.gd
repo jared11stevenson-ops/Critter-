@@ -240,6 +240,7 @@ func qa_vista(px: float, py: float, pz: float, tx: float, ty: float, tz: float, 
 		lighting.set_grade(dusk, dust)
 	if lighting:
 		lighting.set("_mood_t", 0.0)
+	print("[QA] vista grade dusk=%.2f dust=%.2f lighting=%s cam=%s" % [dusk, dust, str(lighting != null), str(_qa_cam.global_position)])
 
 
 func register_deck(a: Vector3, b: Vector3, width: float, node: Node3D, sag: float = 0.0) -> void:

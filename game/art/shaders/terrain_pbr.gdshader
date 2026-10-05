@@ -28,8 +28,8 @@ uniform sampler2D cliff_albedo : source_color, filter_linear_mipmap_anisotropic,
 uniform sampler2D cliff_normal : hint_normal, filter_linear_mipmap_anisotropic, repeat_enable;
 uniform sampler2D macro_tex : filter_linear_mipmap, repeat_enable;
 
-uniform float dirt_scale = 0.16;      // 1 / tile size in m
-uniform float flag_scale = 0.22;
+uniform float dirt_scale = 0.24;      // 1 / tile size in m
+uniform float flag_scale = 0.34;
 uniform float scrub_scale = 0.12;
 uniform float cliff_scale = 0.09;     // horizontal
 uniform float cliff_v_scale = 0.075;  // vertical (strata thickness)

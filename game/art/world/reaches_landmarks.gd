@@ -20,6 +20,7 @@ signal finished
 var _groups: Array = []
 var _results: Array = []
 var _gid := -1
+var _joined := false
 var _next := 0
 var _t0 := 0
 
@@ -28,6 +29,7 @@ var _t0 := 0
 ## merged on the WorkerThreadPool; finished groups are attached to the tree one per frame (no load hitch).
 func populate(t: Node) -> void:
 	terrain = t
+	process_mode = Node.PROCESS_MODE_ALWAYS      # keep attaching while a dialogue / menu pauses the tree
 	_t0 = Time.get_ticks_msec()
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(art_path))
 	if not (parsed is Dictionary):
@@ -57,9 +59,11 @@ func _process(_d: float) -> void:
 	if _gid < 0:
 		set_process(false)
 		return
-	if not WorkerThreadPool.is_group_task_completed(_gid):
-		return
-	WorkerThreadPool.wait_for_group_task_completion(_gid)
+	if not _joined:
+		if not WorkerThreadPool.is_group_task_completed(_gid):
+			return
+		WorkerThreadPool.wait_for_group_task_completion(_gid)      # joins (frees) the group: the id is invalid afterwards
+		_joined = true
 	if _next < _results.size():
 		for _k in 3:       # a few groups per frame: still hitch-free (each attach is a handful of nodes)
 			if _next >= _results.size():

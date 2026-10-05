@@ -300,6 +300,7 @@ var _groups: Dictionary = {}
 var _gkeys: Array = []
 var _gresults: Array = []
 var _gid := -1
+var _joined := false
 var _gnext := 0
 
 
@@ -343,10 +344,12 @@ func _commit_props() -> void:
 			if not _groups.has(key):
 				_groups[key] = []
 			_groups[key].append({"mesh": kmesh[kind], "xf": xf})
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_gkeys = _groups.keys()
 	_gresults.clear()
 	_gresults.resize(_gkeys.size())
 	_gnext = 0
+	_joined = false
 	_gid = WorkerThreadPool.add_group_task(_merge_cell, _gkeys.size(), -1, true, "scatter_merge")
 	set_process(true)
 
@@ -360,9 +363,11 @@ func _process(_d: float) -> void:
 	if _gid < 0:
 		set_process(false)
 		return
-	if not WorkerThreadPool.is_group_task_completed(_gid):
-		return
-	WorkerThreadPool.wait_for_group_task_completion(_gid)
+	if not _joined:
+		if not WorkerThreadPool.is_group_task_completed(_gid):
+			return
+		WorkerThreadPool.wait_for_group_task_completion(_gid)      # joins (frees) the group: the id is invalid afterwards
+		_joined = true
 	for _k in 4:
 		if _gnext >= _gkeys.size():
 			break

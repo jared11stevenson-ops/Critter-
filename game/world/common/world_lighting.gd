@@ -312,6 +312,19 @@ func apply_preset(p: String) -> void:
 		_:
 			if LUMEN.has(p):
 				_apply_mood(LUMEN[p])
+				if motes and motes.draw_pass_1 is QuadMesh:
+					# plankton light: slower, larger, cyan-gold, denser
+					var qm: QuadMesh = motes.draw_pass_1
+					qm.size = Vector2(0.11, 0.11)
+					var mm := qm.material as StandardMaterial3D
+					if mm:
+						mm.albedo_color = Color(0.55, 1.0, 0.95, 0.8)
+					_motes_amount = 140
+					motes.amount = 140
+					var ppm := motes.process_material as ParticleProcessMaterial
+					if ppm:
+						ppm.gravity = Vector3(0, 0.05, 0)
+						ppm.initial_velocity_max = 0.25
 			elif MOODS.has(p):
 				_apply_mood(MOODS[p])
 			else:

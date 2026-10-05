@@ -105,8 +105,8 @@ def butte(name, R, H, seed, layers=10, N=18):
         hard = rng.random() < 0.45
         f0 = 1.0 - 0.18 * k / layers + (0.10 if hard else -0.05)
         L.append((rng.uniform(0.8, 1.4), f0, f0 - 0.03, hard))
-    L.append((1.0, 1.2, 1.12, True))      # cap overhang
-    L.append((0.35, 1.1, 0.6, True))
+    L.append((1.0, 1.1, 1.05, True))      # cap overhang (kept small: a big one reads as a floating plate from low cameras)
+    L.append((0.35, 1.04, 0.6, True))
     return layered(name, R, H, L, seed, aspect=0.8, N=N, wobble=0.14, palette=PAL_MAIN, rows=2 if N > 14 else 1)
 
 

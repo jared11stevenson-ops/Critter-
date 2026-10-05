@@ -90,6 +90,14 @@ grp("pass_vault", [
     L("marker_stone", 170, 3.5, 0.9, 160, col=[1.6, 4.4, 1.1]),
 ], vis_end=150)
 
+# ---- Waystation: shade, rope mending, the wells (Spanwright "mend before you take") ----
+grp("waystation", [
+    L("shade_awning", 123.5, -10.2, 1.0, 0, col=[7.0, 3.2, 5.0, 0, 0, 0]),
+    L("rope_rack", 110.0, -9.0, 1.0, 180, col=[3.0, 2.4, 1.2, 0, 0, 0]),
+    L("cart_wreck", 130.5, 9.5, 1.0, 160, col=[3.6, 1.4, 2.0, 0, 0, 0]),
+    L("cairn_small", 127.0, -4.5, 1.0, 0), L("cairn_small", 105.0, 3.5, 0.9, 80),
+], vis_end=120)
+
 # ---- Salt pans / grazer flats ----
 grp("salt_pans", [
     {"scatter": {"c": [110, 34], "r": 9.5, "n": 16, "seed": 7, "pieces": ["salt_crust"], "s": [1.3, 2.1], "on_floor": True, "clear": 2.6, "min_gap": 4.5}},

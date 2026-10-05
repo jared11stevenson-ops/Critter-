@@ -47,3 +47,30 @@ Fix plan: author a real kit (strata mesas, Spanwright stone bays/piers/towers, m
 flags/stacks, flora, salt, thoughtstone), place it as landmarks + skyline + dressing, rebuild the Ochre Span from the kit,
 add shafts/mist, add terrain LOD + a cheap shadow proxy, merge scatter.
 
+## 2. Iteration 1 -- first kit integration (`c1_*`, `c2_*`)
+
+Shots: valley (`c1_00`), waystation (`c1_01`), boulder pass (`c1_02`), drill basin (`c1_03`), salt pans (`c2_06`).
+
+What worked
+* Skyline mesas / buttes / hoodoos and mesa-top flat trees immediately give the map a horizon and a sense that this is a plateau
+  country; the derrick over the drill basin is the first thing you see on entering it (wayfinding by landmark works).
+* Flat trees, hoodoos, boulders and bone ribs replace the dead sticks; terrain wind ripples are visible on the dunes.
+
+Problems found (candid) and what I did
+1. **Floating cap.** `hoodoo_a` at 3x scale behind the rim showed only its mushroom cap above the cliff (`h1_01`: a brown slab hanging over the
+   Span approach). Fix: butte pieces for the far silhouettes, hoodoos only on rims and at scatter scale.
+2. **Open slot to the world edge.** Looking down the Span chasm (`h1_03`) the corridor ended in a flat haze rectangle: the backdrop canyon ran
+   straight to the mesh boundary. Fix: backdrop canyon depth fades out at |z| > 86 so it closes against a rising wall.
+3. **Candy towers.** The first gate tower alternated six course colours (`c2_04`, `c2_05`): it read as a layer cake and was 13 m of
+   undifferentiated slab right in front of the camera. Fix: calm, close course colours, per-course ashlar joint decals from the atlas (random row
+   and mirroring), crenellated parapet, 0.8 scale, pushed 9 / 15 m off the road.
+4. **Ladder piers.** String courses on the pier stack stuck out like rungs (`h1_03`). Fix: flush, thinner.
+5. **Salt Pans looked like cracked concrete** (`c2_06`): blown-out white. Fix: warm salt colour, 72 % blend, ragged edge noise.
+6. **Light shafts were hard white blades** (`c2_00`, `c2_02`). Fix: rim exponent up, fade over the first quarter of the length, intensity halved.
+7. **Lichen terraces neon yellow** (`c1_01`). Fix: desaturated olive / ochre.
+8. **Spoil heaps showed a star pattern** (cap fan with centre-bright vertex colours). Fix: flat cap colour.
+9. **Async attach looked like missing content in QA** (`c2_04`: no derrick): groups attach 3 per frame, QA runs at ~3 fps. Real devices
+   finish in < 0.5 s; QA shots now wait 9 s.
+10. **Threading bug**: `height_at` checks deck node visibility (main-thread only) so worker threads logged errors. Added
+    `ground_h()` (pure array read) for placement.
+
