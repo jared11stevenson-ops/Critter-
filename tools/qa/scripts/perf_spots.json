@@ -1,0 +1,16 @@
+[
+ {"t":0.3,"call":"scene.qa_auto_dialogue","args":[true,0,0.2]},
+ {"t":16.0,"call":"scene.qa_perf_breakdown"},
+ {"t":30.0,"call":"scene.qa_teleport","args":["t_valley"]},
+ {"t":36.0,"call":"scene.qa_perf_breakdown"},
+ {"t":46.0,"call":"scene.qa_teleport","args":["t_waystation"]},
+ {"t":52.0,"call":"scene.qa_perf_breakdown"},
+ {"t":62.0,"call":"scene.qa_teleport","args":["t_boulder"]},
+ {"t":68.0,"call":"scene.qa_perf_breakdown"},
+ {"t":78.0,"call":"scene.qa_teleport","args":["t_drill"]},
+ {"t":84.0,"call":"scene.qa_perf_breakdown"},
+ {"t":94.0,"call":"scene.qa_teleport","args":["t_span"]},
+ {"t":100.0,"call":"scene.qa_perf_breakdown"},
+ {"t":110.0,"call":"scene.qa_teleport","args":["t_boss"]},
+ {"t":116.0,"call":"scene.qa_perf_breakdown"}
+]

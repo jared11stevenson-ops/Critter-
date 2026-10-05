@@ -82,6 +82,41 @@ func _ready() -> void:
 		GameState.settings["use_3d_models"] = true
 	print("[QA] active, shots=", _shots, " quit=", _quit)
 
+## What is alive when the draw budget is blown: emitting particle systems, lights, visible 3D meshes by class of owner, 2D nodes.
+func _draw_census() -> String:
+	var root := get_tree().root
+	var gp := 0
+	var cp := 0
+	var li := 0
+	var mi := 0
+	var l3 := 0
+	var tops: Dictionary = {}
+	for n in root.find_children("*", "GeometryInstance3D", true, false):
+		var g := n as GeometryInstance3D
+		if not g.is_visible_in_tree():
+			continue
+		if g is GPUParticles3D:
+			if (g as GPUParticles3D).emitting:
+				gp += 1
+				tops[g.get_parent().name] = int(tops.get(g.get_parent().name, 0)) + 1
+		elif g is CPUParticles3D:
+			if (g as CPUParticles3D).emitting:
+				cp += 1
+				tops[g.get_parent().name] = int(tops.get(g.get_parent().name, 0)) + 1
+		elif g is Label3D:
+			l3 += 1
+		else:
+			mi += 1
+	for n in root.find_children("*", "Light3D", true, false):
+		if (n as Light3D).is_visible_in_tree():
+			li += 1
+	var cv := 0
+	for n in root.find_children("*", "CanvasItem", true, false):
+		if (n as CanvasItem).is_visible_in_tree() and not (n is Container):
+			cv += 1
+	return "[gpu_part=%d cpu_part=%d lights=%d mesh3d=%d label3d=%d canvasitems=%d emit_parents=%s]" % [gp, cp, li, mi, l3, cv, str(tops)]
+
+
 class _QALate extends Node:
 	var qa: Node
 	func _ready() -> void:
@@ -97,7 +132,7 @@ func _process(delta: float) -> void:
 	if _t > 1.0:
 		var _dc := int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME))
 		if _dc > 150 and _dc > _max_draw:
-			print("[QA] DRAWS %d at t=%.1f scene=%s" % [_dc, _t, str(get_tree().current_scene.name) if get_tree().current_scene else "-"])
+			print("[QA] DRAWS %d at t=%.1f scene=%s %s" % [_dc, _t, str(get_tree().current_scene.name) if get_tree().current_scene else "-", _draw_census()])
 		_max_draw = max(_max_draw, _dc)
 		_max_prims = max(_max_prims, int(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME)))
 		_max_objs = max(_max_objs, int(Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME)))

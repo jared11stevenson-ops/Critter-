@@ -8,7 +8,7 @@ extends Node3D
 ##        or a scatter item {scatter:{c:[x,z], r, n, seed, pieces:[..], s:[min,max], off_floor|on_floor, min_gap}}.
 
 const ART_PATH := "res://game/world/red_reaches/world_art.json"
-const SHADOW_RANGE := 64.0
+const SHADOW_RANGE := 56.0
 
 var terrain: Node
 var art_path := ART_PATH
