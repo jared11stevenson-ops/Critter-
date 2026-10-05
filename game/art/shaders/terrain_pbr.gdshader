@@ -48,6 +48,8 @@ uniform vec3 ground_tint : source_color = vec3(1.0, 1.0, 1.0);
 uniform float deep_fade_y = -14.0;
 uniform vec4 salt_zone = vec4(110.0, 34.0, 13.0, 0.0);   // x, z, radius (0 = off): white salt crust plates (Salt Pans)
 uniform vec3 salt_color : source_color = vec3(0.80, 0.70, 0.58);
+uniform vec3 glow_silt_color : source_color = vec3(0.25, 0.8, 0.85);
+uniform float glow_silt = 0.0;                           // Lumen: soft silt that lights where it pools (emissive patches on flat ground)
 uniform float ripple_amp = 0.22;                         // wind-ripple normals on loose sand
 uniform vec3 deep_color : source_color = vec3(0.36, 0.22, 0.26);
 
@@ -262,5 +264,9 @@ void fragment() {
 	ROUGHNESS = mix(0.86, 0.97, mac2.a) - sw * flat_w * 0.06;
 	SPECULAR = 0.32;
 	NORMAL = normalize((VIEW_MATRIX * vec4(wn, 0.0)).xyz);
+	if (glow_silt > 0.0) {
+		float gs = smoothstep(0.58, 0.86, mac2.g * 0.6 + mac.b * 0.5) * flat_w * (1.0 - sw * 0.5);
+		EMISSION = glow_silt_color * gs * glow_silt * (0.6 + 0.4 * sin(TIME * 0.7 + mac.r * 20.0));
+	}
 }
 #endif

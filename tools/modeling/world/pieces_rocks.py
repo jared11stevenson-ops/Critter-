@@ -19,7 +19,7 @@ def _wob(rng, wobble):
 
 
 def layered(name, R, H, layers, seed, aspect=1.0, N=20, wobble=0.16, palette=PAL_MAIN, dust=0.22, cap_dome=0.04,
-            rough=0.05, rows=2, ao_dist=None):
+            rough=0.05, rows=2, ao_dist=None, skyline_calm=False):
     """layers: list of (thickness_weight, r_lo, r_hi, hard) from bottom to top. Radii are fractions of R."""
     km = KM(name, seed)
     km.dust = dust
@@ -38,7 +38,7 @@ def layered(name, R, H, layers, seed, aspect=1.0, N=20, wobble=0.16, palette=PAL
     for k, (w, rl, rh, hard) in enumerate(layers):
         t = H * w / tw
         base = palette[k % len(palette)]
-        col = jit(base, rng, 0.07)
+        col = mix(jit(base, rng, 0.07), (0.66, 0.40, 0.29), 0.22 if skyline_calm else 0.0)
         if not hard:
             col = mul(col, 0.9)
         zs = [z + t * r / rows for r in range(rows + 1)]
@@ -60,7 +60,7 @@ def layered(name, R, H, layers, seed, aspect=1.0, N=20, wobble=0.16, palette=PAL
         if prev_hi is not None:
             for i in range(N):
                 j = (i + 1) % N
-                km.poly([prev_hi[i], prev_hi[j], rings[0][j], rings[0][i]], mix(prev_col, DUST, 0.35), out=(0, 0, z - 5))
+                km.poly([prev_hi[i], prev_hi[j], rings[0][j], rings[0][i]], mix(prev_col, DUST, 0.18 if skyline_calm else 0.35), out=(0, 0, z - 5))
         for ri in range(rows):
             for i in range(N):
                 j = (i + 1) % N
@@ -93,7 +93,7 @@ def mesa(name, R, H, seed, layers=15, aspect=1.0, taper=0.2, skirt=0.2, N=24, wo
         f1 = f0 - (0.004 if hard else 0.012)
         L.append((rng.uniform(0.5, 1.2) * (1.5 if hard else 0.8), f0, f1, hard))
     L.append((2.2, 1.0 - taper + 0.03, 1.0 - taper + 0.005, True))   # hard caprock band
-    return layered(name, R, H, L, seed, aspect=aspect, N=N, wobble=wobble, rough=0.012, rows=1)
+    return layered(name, R, H, L, seed, aspect=aspect, N=N, wobble=wobble, rough=0.012, rows=1, skyline_calm=True)
 
 
 def butte(name, R, H, seed, layers=10, N=18):
@@ -107,7 +107,7 @@ def butte(name, R, H, seed, layers=10, N=18):
         L.append((rng.uniform(0.8, 1.4), f0, f0 - 0.03, hard))
     L.append((1.0, 1.1, 1.05, True))      # cap overhang (kept small: a big one reads as a floating plate from low cameras)
     L.append((0.35, 1.04, 0.6, True))
-    return layered(name, R, H, L, seed, aspect=0.8, N=N, wobble=0.14, palette=PAL_MAIN, rows=2 if N > 14 else 1)
+    return layered(name, R, H, L, seed, aspect=0.8, N=N, wobble=0.14, palette=PAL_MAIN, rows=2 if N > 14 else 1, skyline_calm=True)
 
 
 def hoodoo(name, R, H, seed, N=16, n=7):

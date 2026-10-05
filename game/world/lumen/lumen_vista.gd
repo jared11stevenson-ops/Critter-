@@ -22,7 +22,7 @@ func _ready() -> void:
 		"ground_tint": Color(0.62, 0.80, 1.05), "dust_color": Color(0.16, 0.26, 0.36), "deep_color": Color(0.02, 0.04, 0.08),
 		"strata_0": Color(0.14, 0.20, 0.32), "strata_1": Color(0.24, 0.34, 0.48), "strata_2": Color(0.40, 0.55, 0.70),
 		"strata_3": Color(0.06, 0.08, 0.16), "strata_4": Color(0.12, 0.2, 0.3), "strata_mix": 0.8,
-		"ripple_amp": 0.08, "deep_fade_y": -10.0, "cliff_scale": 0.07})
+		"ripple_amp": 0.08, "glow_silt": 0.55, "deep_fade_y": -10.0, "cliff_scale": 0.07})
 	add_child(terrain)
 	lighting = load("res://game/world/common/world_lighting.gd").new()
 	lighting.name = "Lighting"
