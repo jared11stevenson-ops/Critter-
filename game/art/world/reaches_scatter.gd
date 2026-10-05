@@ -390,7 +390,7 @@ func _process(_d: float) -> void:
 			sp.name = "Shadow_" + key
 			sp.mesh = m
 			sp.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
-			sp.visibility_range_end = 60.0 + 28.0
+			sp.visibility_range_end = 46.0
 			add_child(sp)
 	if _gnext >= _gkeys.size():
 		_gid = -1

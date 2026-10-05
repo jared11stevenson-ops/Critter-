@@ -1352,6 +1352,78 @@ func qa_perf_breakdown(path: String = "") -> void:
 	get_tree().paused = was_paused
 	print("[QA] PERF BREAKDOWN %s " % (path if path != "" else "level"), ", ".join(out))
 
+## QA: cleaner cost matrix than qa_perf_breakdown: reports draws/prims with the sun shadow off, with the party / all actors
+## hidden, and with each Terrain child hidden (shadows ON), each measured on a frozen frame.
+func qa_perf_matrix() -> void:
+	var dc := func() -> int: return int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME))
+	var pr := func() -> int: return int(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME))
+	var was_paused := get_tree().paused
+	get_tree().paused = true
+	var cam_mode := cam.process_mode
+	cam.process_mode = Node.PROCESS_MODE_DISABLED
+	for _i in 3:
+		await get_tree().process_frame
+	var out: Array = ["base=%d/%dk" % [dc.call(), pr.call() / 1000]]
+	var sun: DirectionalLight3D = null
+	for n in find_children("*", "DirectionalLight3D", true, false):
+		if (n as DirectionalLight3D).shadow_enabled:
+			sun = n
+	if sun:
+		sun.shadow_enabled = false
+		for _i in 3:
+			await get_tree().process_frame
+		out.append("noshadow=%d/%dk" % [dc.call(), pr.call() / 1000])
+		sun.shadow_enabled = true
+	for th in [4.0, 8.0]:
+		get_viewport().mesh_lod_threshold = th
+		for _i in 3:
+			await get_tree().process_frame
+		out.append("lod%d=%d/%dk" % [int(th), dc.call(), pr.call() / 1000])
+	get_viewport().mesh_lod_threshold = 4.0
+	if sun:
+		sun.directional_shadow_mode = DirectionalLight3D.SHADOW_ORTHOGONAL
+		for _i in 3:
+			await get_tree().process_frame
+		out.append("ortho1=%d/%dk" % [dc.call(), pr.call() / 1000])
+		sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS
+	actors_root.visible = false
+	for _i in 3:
+		await get_tree().process_frame
+	out.append("noactors=%d/%dk" % [dc.call(), pr.call() / 1000])
+	actors_root.visible = true
+	var ag: Dictionary = {}
+	for a in actors_root.get_children():
+		var k: String = (a.get_script().resource_path.get_file().get_basename() if a.get_script() else a.get_class())
+		if not ag.has(k):
+			ag[k] = []
+		ag[k].append(a)
+	for k in ag.keys():
+		for a in ag[k]:
+			a.visible = false
+		for _i in 3:
+			await get_tree().process_frame
+		var tri := 0
+		for a in ag[k]:
+			for mi in a.find_children("*", "MeshInstance3D", true, false):
+				if mi.mesh:
+					tri += mi.mesh.get_faces().size() / 3
+		out.append("-%s(x%d,%d tri)=%d/%dk" % [k, ag[k].size(), tri, dc.call(), pr.call() / 1000])
+		for a in ag[k]:
+			a.visible = true
+	var terr: Node = get_node_or_null("Terrain")
+	if terr:
+		for c in terr.get_children():
+			if not ("visible" in c) or not c.visible:
+				continue
+			c.visible = false
+			for _i in 3:
+				await get_tree().process_frame
+			out.append("-%s=%d/%dk" % [c.name, dc.call(), pr.call() / 1000])
+			c.visible = true
+	cam.process_mode = cam_mode
+	get_tree().paused = was_paused
+	print("[QA] PERF MATRIX ", ", ".join(out))
+
 ## QA: start a drill-beam cycle now (telegraph → sweep), for screenshots.
 func qa_boss_beam() -> void:
 	if boss and is_instance_valid(boss):

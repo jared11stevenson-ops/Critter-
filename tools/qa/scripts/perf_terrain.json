@@ -1,0 +1,81 @@
+[
+ {
+  "t": 0.3,
+  "call": "scene.qa_auto_dialogue",
+  "args": [
+   true,
+   0,
+   0.2
+  ]
+ },
+ {
+  "t": 18.0,
+  "call": "scene.qa_perf_matrix"
+ },
+ {
+  "t": 40,
+  "call": "scene.qa_teleport",
+  "args": [
+   "t_valley"
+  ]
+ },
+ {
+  "t": 49,
+  "call": "scene.qa_perf_matrix"
+ },
+ {
+  "t": 85,
+  "call": "scene.qa_teleport",
+  "args": [
+   "t_waystation"
+  ]
+ },
+ {
+  "t": 94,
+  "call": "scene.qa_perf_matrix"
+ },
+ {
+  "t": 130,
+  "call": "scene.qa_teleport",
+  "args": [
+   "t_boulder"
+  ]
+ },
+ {
+  "t": 139,
+  "call": "scene.qa_perf_matrix"
+ },
+ {
+  "t": 175,
+  "call": "scene.qa_teleport",
+  "args": [
+   "t_drill"
+  ]
+ },
+ {
+  "t": 184,
+  "call": "scene.qa_perf_matrix"
+ },
+ {
+  "t": 220,
+  "call": "scene.qa_teleport",
+  "args": [
+   "t_span"
+  ]
+ },
+ {
+  "t": 229,
+  "call": "scene.qa_perf_matrix"
+ },
+ {
+  "t": 265,
+  "call": "scene.qa_teleport",
+  "args": [
+   "t_boss"
+  ]
+ },
+ {
+  "t": 274,
+  "call": "scene.qa_perf_matrix"
+ }
+]
