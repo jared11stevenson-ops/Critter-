@@ -1,0 +1,97 @@
+{
+ "id": "dexter",
+ "height_m": 1.85,
+ "px_per_m": 2110.27027027027,
+ "canvas_h": 4096,
+ "ground_y": 4000,
+ "top_y": 96,
+ "landmarks_m": {
+  "top": 1.85,
+  "crown": 1.85,
+  "eyes": 1.7298,
+  "chin": 1.6326,
+  "neck": 1.6002,
+  "shoulder": 1.5309,
+  "elbow": 1.184,
+  "wrist": 0.9713,
+  "waist": 1.1378,
+  "crotch": 0.8602,
+  "knee": 0.4625,
+  "ankle": 0.1387,
+  "ground": 0.0
+ },
+ "views": {
+  "front": {
+   "file": "ortho/dexter_front_4096.png",
+   "width_px": 1115,
+   "height_px": 4096,
+   "axis_x_px": 557.0,
+   "ground_y_px": 4000,
+   "pose": "hero 3/4 pose, hands in pockets, long coat (the only front)",
+   "orthographic": false,
+   "source_landmarks": {
+    "top": 0,
+    "crown": 0.0,
+    "eyes": 0.07,
+    "chin": 0.115,
+    "neck": 0.13,
+    "shoulder": 0.155,
+    "elbow": 0.33,
+    "wrist": 0.43,
+    "waist": 0.37,
+    "crotch": 0.52,
+    "knee": 0.72,
+    "ankle": 0.93,
+    "ground": 1
+   }
+  },
+  "back": {
+   "file": "ortho/dexter_back_4096.png",
+   "width_px": 1340,
+   "height_px": 4096,
+   "axis_x_px": 669.5,
+   "ground_y_px": 4000,
+   "pose": "back, coat with red lining",
+   "orthographic": true,
+   "source_landmarks": {
+    "top": 0,
+    "crown": 0.0,
+    "eyes": 0.06,
+    "chin": 0.12,
+    "neck": 0.14,
+    "shoulder": 0.19,
+    "elbow": 0.39,
+    "wrist": 0.52,
+    "waist": 0.4,
+    "crotch": 0.55,
+    "knee": 0.78,
+    "ankle": 0.92,
+    "ground": 1
+   }
+  },
+  "back_alt_jacket": {
+   "file": "ortho/dexter_back_alt_jacket_x4.png",
+   "width_px": 249,
+   "height_px": 925,
+   "pose": "back, jacket + harness outfit variant (no coat)",
+   "orthographic": false,
+   "aligned": false
+  },
+  "back_alt_coat": {
+   "file": "ortho/dexter_back_alt_coat_x4.png",
+   "width_px": 264,
+   "height_px": 913,
+   "pose": "back, plain long coat variant",
+   "orthographic": false,
+   "aligned": false
+  },
+  "labcoat": {
+   "file": "ortho/dexter_labcoat_x4.png",
+   "width_px": 568,
+   "height_px": 2183,
+   "pose": "lab-coat outfit variant, 3/4",
+   "orthographic": false,
+   "aligned": false
+  }
+ }
+}

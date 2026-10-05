@@ -1,0 +1,76 @@
+{
+ "rows": [
+  [
+   "Total height (canon)",
+   "1.850 m  (sheet: 6'1\" (185 cm))"
+  ],
+  [
+   "Body height (ground to crown/top of head)",
+   "1.850 m"
+  ],
+  [
+   "Head height (crown to chin)",
+   "0.217 m"
+  ],
+  [
+   "Heads tall (body / head)",
+   "8.5"
+  ],
+  [
+   "Neck (chin to neck base)",
+   "0.032 m"
+  ],
+  [
+   "Torso (neck base to crotch)",
+   "0.740 m"
+  ],
+  [
+   "Arm (shoulder to wrist)",
+   "0.560 m  = 30% of height"
+  ],
+  [
+   "Upper arm (shoulder to elbow)",
+   "0.347 m"
+  ],
+  [
+   "Forearm+hand (elbow to wrist)",
+   "0.213 m"
+  ],
+  [
+   "Leg (crotch to ground)",
+   "0.860 m  = 46% of height"
+  ],
+  [
+   "Thigh (crotch to knee)",
+   "0.398 m"
+  ],
+  [
+   "Shin (knee to ankle)",
+   "0.324 m"
+  ],
+  [
+   "Ankle height",
+   "0.139 m"
+  ],
+  [
+   "Leg : torso ratio",
+   "1.16"
+  ]
+ ],
+ "landmarks_m": {
+  "top": 1.85,
+  "crown": 1.85,
+  "eyes": 1.73,
+  "chin": 1.633,
+  "neck": 1.6,
+  "shoulder": 1.531,
+  "elbow": 1.184,
+  "wrist": 0.971,
+  "waist": 1.138,
+  "crotch": 0.86,
+  "knee": 0.463,
+  "ankle": 0.139,
+  "ground": 0.0
+ },
+ "source": "READ (+-2%). Coat hides crotch/knee in the back view; front crotch/knee from the trousers."
+}
