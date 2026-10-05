@@ -62,12 +62,38 @@ static func _glow_mesh(parent: Node3D, st: SurfaceTool, c: Color, energy: float,
 
 # =====================================================================================================
 class GateRing extends Node3D:
-	## Terrarium arrival gate: an upright stone-and-brass ring on a stepped dais, Thoughtstone membrane.
+	## Terrarium arrival gate (the Scale Transition Array, "the Gate"): kit coil ring on a hazard-striped cradle with a
+	## pulsing membrane. Falls back to the old stone-and-brass ring when the kit is not imported.
 	var membrane: MeshInstance3D
 
 	func _init(spec: Dictionary, _t: Node) -> void:
 		position = ReachesStructures._v3(spec.get("pos", [0, 0, 0]))
 		rotation.y = deg_to_rad(float(spec.get("rot_y", 0.0)))
+		if ReachesKit.available("scale_array"):
+			scale = Vector3.ONE * 1.1
+			add_child(ReachesKit.instance("scale_array"))
+			var disc := CylinderMesh.new()
+			disc.top_radius = 2.95
+			disc.bottom_radius = 2.95
+			disc.height = 0.02
+			disc.radial_segments = 28
+			membrane = MeshInstance3D.new()
+			membrane.name = "Membrane"
+			membrane.mesh = disc
+			membrane.rotation.x = PI / 2.0
+			membrane.position = Vector3(0, 4.3, 0)
+			var mm := StandardMaterial3D.new()
+			mm.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+			mm.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+			mm.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+			mm.albedo_color = Color(0.45, 0.78, 1.0, 0.3)
+			mm.cull_mode = BaseMaterial3D.CULL_DISABLED
+			membrane.material_override = mm
+			membrane.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			add_child(membrane)
+			for sx: float in [-1.0, 1.0]:
+				ToonKit.static_cylinder(self, Vector3(sx * 3.0, 0, 0), 0.8, 3.0)
+			return
 		var st := ToonKit.begin()
 		# dais: two stepped discs
 		ToonKit.cylinder(st, Vector3(0, -0.6, 0), Vector3(0, 0.12, 0), 4.6, 4.5, 14, STONE_DARK, true, 0.03, 4)
@@ -75,25 +101,9 @@ class GateRing extends Node3D:
 		# ring
 		ToonKit.torus(st, Transform3D(Basis(), Vector3(0, 4.0, 0)), 3.5, 0.48, 22, 6, Color(0.66, 0.46, 0.34))
 		ToonKit.torus(st, Transform3D(Basis(), Vector3(0, 4.0, 0)), 3.5, 0.2, 22, 4, Color(0.86, 0.66, 0.30))
-		# keystones + feet
-		for i in 6:
-			var a := TAU * float(i) / 6.0 + PI / 2.0
-			var p := Vector3(cos(a) * 3.5, 4.0 + sin(a) * 3.5, 0)
-			ToonKit.box(st, Transform3D(Basis(Vector3.BACK, a), p), Vector3(0.6, 1.1, 1.3), STONE)
 		for sx: float in [-1.0, 1.0]:
 			ToonKit.box(st, Transform3D(Basis(Vector3.BACK, -sx * 0.35), Vector3(sx * 2.6, 0.9, 0)), Vector3(1.3, 1.9, 1.5), STONE_DARK)
 		ReachesStructures._add_mesh(self, st, ToonKit.material({"outline": 0.04}), "Ring")
-		# membrane (soft glow disc)
-		var g := SurfaceTool.new()
-		g.begin(Mesh.PRIMITIVE_TRIANGLES)
-		var n := 24
-		for i in n:
-			var a0 := TAU * float(i) / n
-			var a1 := TAU * float(i + 1) / n
-			g.add_vertex(Vector3(0, 4.0, 0))
-			g.add_vertex(Vector3(cos(a1) * 3.1, 4.0 + sin(a1) * 3.1, 0))
-			g.add_vertex(Vector3(cos(a0) * 3.1, 4.0 + sin(a0) * 3.1, 0))
-		membrane = ReachesStructures._glow_mesh(self, g, Color(0.55, 0.8, 1.0, 0.28), 1.6, "Membrane")
 		for sx: float in [-1.0, 1.0]:
 			ToonKit.static_cylinder(self, Vector3(sx * 2.7, 0, 0), 0.8, 3.0)
 
@@ -239,7 +249,7 @@ class StoneBridge extends Node3D:
 	var visual: Node3D
 	var braces: MeshInstance3D
 	var damage: MeshInstance3D
-	var mid_seg: MeshInstance3D
+	var mid_seg: Node3D
 	var state := "intact"
 	var _shake := 0.0
 	var _rng := RandomNumberGenerator.new()
@@ -258,70 +268,47 @@ class StoneBridge extends Node3D:
 		visual = Node3D.new()
 		visual.name = "Visual"
 		add_child(visual)
-		var st := ToonKit.begin()
-		var mid_st := ToonKit.begin()
+		# kit build: 4 stone bays (arch + coursed spandrels + parapets with tally marks), pier stacks down into the chasm,
+		# gate towers at both ends. Outer bays + piers + towers are merged into ONE mesh; the middle bays are separate so
+		# the "failing" state can tilt them.
 		var hw := width * 0.5
-		var nseg := int(L / 2.6)
-		for i in nseg:
-			var x0 := L * float(i) / nseg
-			var x1 := L * float(i + 1) / nseg
-			var xm := (x0 + x1) * 0.5
-			var y := rise * xm / L
-			var c := OCHRE.lerp(STONE, 0.3 + 0.4 * _rng.randf())
-			var target := mid_st if absf(xm - L * 0.5) < 6.0 else st
-			# deck slab (slightly varied heights for a hand-laid look)
-			ToonKit.box(target, Transform3D(Basis(), Vector3(xm, y - 0.45 + _rng.randf() * 0.04, 0)), Vector3(x1 - x0 - 0.06, 0.9, width), c)
-			# parapets (with a few broken gaps)
-			for s: float in [-1.0, 1.0]:
-				if _rng.randf() < 0.12:
-					continue
-				var ph := 0.75 + _rng.randf() * 0.2
-				ToonKit.box(target, Transform3D(Basis(), Vector3(xm, y + ph * 0.5, s * (hw - 0.3))), Vector3(x1 - x0 - 0.1, ph, 0.6), STONE.lerp(OCHRE, _rng.randf() * 0.4))
-				ToonKit.box(target, Transform3D(Basis(), Vector3(xm, y + ph + 0.06, s * (hw - 0.3))), Vector3(x1 - x0 + 0.05, 0.14, 0.75), STONE_DARK.lightened(0.15))
-		# cornice band under the deck
-		for s: float in [-1.0, 1.0]:
-			ToonKit.box(st, Transform3D(Basis(), Vector3(L * 0.5, rise * 0.5 - 1.05, s * (hw + 0.05))), Vector3(L, 0.35, 0.3), STONE_DARK)
-		# piers + arches down into the chasm
-		var piers := [0.0, L * 0.27, L * 0.5, L * 0.73, L]
-		for px in piers:
-			var pxf: float = px
-			if pxf <= 0.0 or pxf >= L:
-				continue
-			ToonKit.box(st, Transform3D(Basis(), Vector3(pxf, -20.0, 0)), Vector3(2.6, 38.0, width * 0.8), STONE.darkened(0.08))
-			ToonKit.box(st, Transform3D(Basis(), Vector3(pxf, -1.6, 0)), Vector3(3.2, 0.5, width * 0.9), STONE_DARK)
-		for i in piers.size() - 1:
-			var p0: float = piers[i]
-			var p1: float = piers[i + 1]
-			var span := p1 - p0
-			var na := 9
-			for k in na:
-				var u0 := float(k) / na
-				var u1 := float(k + 1) / na
-				var x0 := p0 + span * u0
-				var x1 := p0 + span * u1
-				var y0 := -1.0 - (1.0 - pow(sin(u0 * PI), 0.6)) * span * 0.32
-				var y1 := -1.0 - (1.0 - pow(sin(u1 * PI), 0.6)) * span * 0.32
-				for s: float in [-1.0, 1.0]:
-					var z := s * (width * 0.4)
-					var zi := s * (width * 0.4 - 0.9)
-					# arch face (spandrel) between deck underside and arch curve
-					ToonKit.quad(st, Vector3(x0, -0.9, z), Vector3(x1, -0.9, z), Vector3(x1, y1, z), Vector3(x0, y0, z), STONE.darkened(0.05) if s > 0 else STONE.darkened(0.15))
-					ToonKit.quad(st, Vector3(x1, -0.9, zi), Vector3(x0, -0.9, zi), Vector3(x0, y0, zi), Vector3(x1, y1, zi), STONE.darkened(0.25))
-				# arch intrados
-				ToonKit.quad(st, Vector3(x0, y0, width * 0.4), Vector3(x1, y1, width * 0.4), Vector3(x1, y1, -width * 0.4), Vector3(x0, y0, -width * 0.4), STONE_DARK.darkened(0.2))
-				# voussoir ink accents
-				if k % 2 == 0:
-					ToonKit.box(st, Transform3D(Basis(), Vector3((x0 + x1) * 0.5, (y0 + y1) * 0.5 - 0.15, width * 0.4 + 0.08)), Vector3(x1 - x0 + 0.04, 0.32, 0.12), OCHRE)
-		# Spanwright carvings: glyph discs on the pier heads
-		for px: float in [L * 0.27, L * 0.5, L * 0.73]:
-			for s: float in [-1.0, 1.0]:
-				ToonKit.cylinder(st, Vector3(px, -2.6, s * width * 0.4), Vector3(px, -2.6, s * (width * 0.4 + 0.15)), 0.9, 0.9, 10, OCHRE.lightened(0.1))
-		var smat := ToonKit.material({"outline": 0.04, "strata": 0.5})
-		ReachesStructures._add_mesh(visual, st, smat, "Span")
-		mid_seg = ReachesStructures._add_mesh(visual, mid_st, smat, "MidSpan")
+		var bay_l := 13.0
+		var nbay := maxi(1, int(round(L / bay_l)))
+		bay_l = L / nbay
+		var outer: Array = []
+		var mids: Array = []
+		var sx := bay_l / 13.0
+		for i in nbay:
+			var cx := bay_l * (float(i) + 0.5)
+			var piece := "span_bay_broken" if (i == 1 and nbay >= 4) else "span_bay"
+			var xf := Transform3D(Basis().scaled(Vector3(sx, 1.0, width / 7.0)), Vector3(cx, rise * (cx / L), 0.0))
+			var inner: bool = nbay >= 4 and (i == 1 or i == 2)
+			(mids if inner else outer).append({"mesh": ReachesKit.mesh(piece), "xf": xf})
+		# pier stacks at the bay boundaries (visible down into the haze)
+		for i in range(1, nbay):
+			var px := bay_l * float(i)
+			for k in 6:
+				outer.append({"mesh": ReachesKit.mesh("span_pier"), "xf": Transform3D(Basis().scaled(Vector3(1.0, 1.0, width / 7.0)), Vector3(px, rise * (px / L) - 1.35 - 7.0 * k, 0.0))})
+		# gate towers: west pair flanks the approach, east pair stands wide of the foundation road
+		for ex: float in [-4.0, L + 4.0]:
+			var zoff := 9.0 if ex < 0.0 else 15.0
+			for s_: float in [-1.0, 1.0]:
+				var yy := terrain_h(t, a, ex, s_ * zoff, ang)
+				var txf := Transform3D(Basis(Vector3.UP, 0.0).scaled(Vector3.ONE * 0.8), Vector3(ex, yy, s_ * zoff))
+				outer.append({"mesh": ReachesKit.mesh("span_tower"), "xf": txf})
+				ToonKit.static_box(self, Transform3D(Basis(), Vector3(ex, yy + 5.2, s_ * zoff)), Vector3(5.9, 10.4, 5.9))
+		var smesh := ReachesLandmarks.merge(outer)
+		visual.add_child(_mi(smesh, "Span"))
+		mid_seg = Node3D.new()
+		mid_seg.name = "MidSpan"
+		visual.add_child(mid_seg)
+		for p_ in mids:
+			var mm := _mi(p_["mesh"] as Mesh, "Bay")
+			mm.transform = p_["xf"]
+			mid_seg.add_child(mm)
 		# braces (Burden Bridge braced state): timber struts + rope lashings + amber glow lines
 		var bst := ToonKit.begin()
-		for px: float in [L * 0.27, L * 0.5, L * 0.73]:
+		for px: float in [L * 0.25, L * 0.5, L * 0.75]:
 			for s: float in [-1.0, 1.0]:
 				var z := s * (width * 0.5 + 0.25)
 				ToonKit.cylinder(bst, Vector3(px - 4.5, 1.2, z), Vector3(px, -5.0, z), 0.16, 0.16, 6, WOOD)
@@ -364,6 +351,18 @@ class StoneBridge extends Node3D:
 			body.add_child(wall)
 		if t and t.has_method("register_deck"):
 			t.register_deck(a, b, width - 0.6, null, 0.0)
+
+	static func terrain_h(t: Node, a: Vector3, lx: float, lz: float, ang: float) -> float:
+		if t == null or not t.has_method("ground_h"):
+			return 0.0
+		var w := a + Vector3(lx * cos(-ang) - lz * sin(-ang), 0.0, lx * sin(-ang) + lz * cos(-ang))
+		return t.ground_h(w.x, w.z) - a.y
+
+	static func _mi(m: Mesh, nm: String) -> MeshInstance3D:
+		var mi := MeshInstance3D.new()
+		mi.mesh = m
+		mi.name = nm
+		return mi
 
 	func set_state(s: String) -> void:
 		state = s
@@ -448,22 +447,11 @@ class Ruins extends Node3D:
 
 # =====================================================================================================
 class MarkerStone extends Node3D:
-	## Old Road marker stone: carved Spanwright monolith with softly glowing glyphs (scan target).
+	## Old Road marker stone: carved Spanwright monolith with softly glowing glyph inlays (scan target). Kit piece.
 	func _init(spec: Dictionary, _t: Node) -> void:
 		position = ReachesStructures._v3(spec.get("pos", [0, 0, 0]))
-		var st := ToonKit.begin()
-		ToonKit.box(st, Transform3D(Basis(), Vector3(0, 0.15, 0)), Vector3(2.0, 0.5, 1.4), STONE_DARK)
-		ToonKit.box(st, Transform3D(Basis(Vector3.BACK, 0.04), Vector3(0, 1.6, 0)), Vector3(1.2, 2.8, 0.6), STONE.lerp(OCHRE, 0.3))
-		ToonKit.box(st, Transform3D(Basis(Vector3.BACK, 0.04), Vector3(0.05, 3.1, 0)), Vector3(1.35, 0.3, 0.7), STONE)
-		ReachesStructures._add_mesh(self, st, ToonKit.material({"outline": 0.035}), "Stone")
-		var gs := ToonKit.begin()
-		for i in 4:
-			var y := 0.9 + i * 0.5
-			ToonKit.box(gs, Transform3D(Basis(Vector3.BACK, 0.04), Vector3(0.0, y, 0.31)), Vector3(0.7 - (i % 2) * 0.3, 0.07, 0.02), THOUGHT)
-			ToonKit.box(gs, Transform3D(Basis(Vector3.BACK, 0.04), Vector3(-0.2 + (i % 2) * 0.4, y + 0.15, 0.31)), Vector3(0.07, 0.3, 0.02), THOUGHT)
-		var gm := ToonKit.mesh_instance(gs.commit(), ToonKit.glow(Color(0.65, 0.9, 1.0), 1.6), "Glyphs")
-		gm.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		add_child(gm)
+		rotation.y = deg_to_rad(float(spec.get("rot_y", 20.0)))
+		add_child(ReachesKit.instance("marker_stone"))
 		ToonKit.static_cylinder(self, Vector3.ZERO, 0.9, 3.2)
 
 
@@ -583,21 +571,11 @@ class DominionCamp extends Node3D:
 			ToonKit.box(st, xf.translated_local(Vector3(0, 1.85, 1.62)), Vector3(4.42, 0.35, 0.05), DOM_RED)
 			ToonKit.box(st, xf.translated_local(Vector3(0.9, 0.95, 1.62)), Vector3(1.1, 1.9, 0.06), GUNMETAL.darkened(0.4))
 			ToonKit.static_box(self, xf.translated_local(Vector3(0, 1.3, 0)), Vector3(4.4, 2.6, 3.2))
-		# survey derrick (lattice tower) behind the huts
+		# relay pole behind the huts (the big AUGUR derrick is a kit landmark now, see world_art.json "drill_basin")
 		var dp := Vector3(4.5, 0, -11.0)
-		var Ht := 9.0
-		for cx: float in [-1.0, 1.0]:
-			for cz: float in [-1.0, 1.0]:
-				ToonKit.cylinder(st, dp + Vector3(cx * 1.6, 0, cz * 1.6), dp + Vector3(cx * 0.5, Ht, cz * 0.5), 0.12, 0.1, 4, GUNMETAL)
-		for k in 5:
-			var y := 1.0 + k * 1.7
-			var w := lerpf(1.6, 0.5, y / Ht)
-			for s: float in [-1.0, 1.0]:
-				ToonKit.cylinder(st, dp + Vector3(-w, y, s * w), dp + Vector3(w, y, s * w), 0.06, 0.06, 4, DOM_RED if k % 2 == 0 else GUNMETAL, false)
-				ToonKit.cylinder(st, dp + Vector3(s * w, y, -w), dp + Vector3(s * w, y, w), 0.06, 0.06, 4, GUNMETAL, false)
-		ToonKit.box(st, Transform3D(Basis(), dp + Vector3(0, Ht + 0.3, 0)), Vector3(1.6, 0.6, 1.6), GUNMETAL.darkened(0.2))
-		ToonKit.cylinder(st, dp + Vector3(0, -0.5, 0), dp + Vector3(0, Ht, 0), 0.22, 0.22, 6, Color(0.55, 0.55, 0.58))
-		ToonKit.static_box(self, Transform3D(Basis(), dp + Vector3(0, 2.0, 0)), Vector3(3.4, 4.0, 3.4))
+		var Ht := 3.2
+		ToonKit.cylinder(st, dp + Vector3(0, -0.2, 0), dp + Vector3(0, Ht, 0), 0.14, 0.1, 6, Color(0.55, 0.55, 0.58))
+		ToonKit.box(st, Transform3D(Basis(), dp + Vector3(0, 0.3, 0)), Vector3(1.2, 0.6, 1.2), GUNMETAL.darkened(0.2))
 		# antenna mast + dish
 		var mp := Vector3(-6.5, 0, -10.0)
 		ToonKit.cylinder(st, mp, mp + Vector3(0, 7.0, 0), 0.12, 0.07, 5, GUNMETAL)

@@ -1,0 +1,1 @@
+[{"t": 0.5, "call": "scene.focus", "args": ["span_bay", 24, 16, -20]}, {"t": 1.9, "call": "scene.focus", "args": ["span_pier", 18, 16, -20]}, {"t": 3.3, "call": "scene.focus", "args": ["mesa_a", 16, 16, -20]}, {"t": 4.699999999999999, "call": "scene.focus", "args": ["mesa_b", 18, 16, -20]}]

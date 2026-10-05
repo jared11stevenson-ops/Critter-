@@ -28,8 +28,8 @@ uniform sampler2D cliff_albedo : source_color, filter_linear_mipmap_anisotropic,
 uniform sampler2D cliff_normal : hint_normal, filter_linear_mipmap_anisotropic, repeat_enable;
 uniform sampler2D macro_tex : filter_linear_mipmap, repeat_enable;
 
-uniform float dirt_scale = 0.16;      // 1 / tile size in m
-uniform float flag_scale = 0.22;
+uniform float dirt_scale = 0.24;      // 1 / tile size in m
+uniform float flag_scale = 0.34;
 uniform float scrub_scale = 0.12;
 uniform float cliff_scale = 0.09;     // horizontal
 uniform float cliff_v_scale = 0.075;  // vertical (strata thickness)
@@ -46,6 +46,11 @@ uniform float strata_mix = 0.55;
 uniform vec3 dust_color : source_color = vec3(0.86, 0.64, 0.48);
 uniform vec3 ground_tint : source_color = vec3(1.0, 1.0, 1.0);
 uniform float deep_fade_y = -14.0;
+uniform vec4 salt_zone = vec4(110.0, 34.0, 13.0, 0.0);   // x, z, radius (0 = off): white salt crust plates (Salt Pans)
+uniform vec3 salt_color : source_color = vec3(0.80, 0.70, 0.58);
+uniform vec3 glow_silt_color : source_color = vec3(0.25, 0.8, 0.85);
+uniform float glow_silt = 0.0;                           // Lumen: soft silt that lights where it pools (emissive patches on flat ground)
+uniform float ripple_amp = 0.22;                         // wind-ripple normals on loose sand
 uniform vec3 deep_color : source_color = vec3(0.36, 0.22, 0.26);
 
 varying vec3 w_pos;
@@ -138,6 +143,10 @@ void fragment() {
 	vec3 col = mix(c_col, g_col, flat_w);
 	float rim = smoothstep(0.55, 0.66, ny) * (1.0 - smoothstep(0.66, 0.8, ny));
 	col = mix(col, dust_color, rim * 0.25 + COLOR.b * 0.3);
+	if (salt_zone.z > 0.0) {
+		float sd2 = length(xz - salt_zone.xy);
+		col = mix(col, salt_color * (0.8 + 0.25 * da.a), smoothstep(salt_zone.z, salt_zone.z * 0.55, sd2 + (mac.r - 0.5) * 4.0) * flat_w * 0.9);
+	}
 	ALBEDO = col;
 	AO = (1.0 - COLOR.a * 0.55) * mix(0.72, 1.0, smoothstep(0.2, 0.6, mix(c_h, g_h, flat_w)));
 	AO_LIGHT_AFFECT = 0.35;
@@ -231,6 +240,19 @@ void fragment() {
 	float flat_w = smoothstep(0.66, 0.86, ny + (g_h - c_h) * 0.25 + (mac2.b - 0.5) * 0.08);
 	vec3 col = mix(c_col, g_col, flat_w);
 	vec3 wn = normalize(mix(cN, gN, flat_w));
+	// wind ripples: long dune-crest ripples on loose dust, swept along the prevailing wind (+x, a little -z)
+	float rip_w = flat_w * (1.0 - sw) * smoothstep(0.2, 0.7, dust + mac.g * 0.5) * (1.0 - 0.6 * floor_w);
+	float rph = dot(xz, vec2(0.93, 0.36)) * 3.1 + (mac2.r - 0.5) * 5.0 + sin(dot(xz, vec2(-0.36, 0.93)) * 0.7) * 1.3;
+	wn = normalize(wn + vec3(0.93, 0.0, 0.36) * (cos(rph) * ripple_amp * rip_w));
+	col = mix(col, col * (0.93 + 0.1 * sin(rph)), rip_w * 0.5);
+	// salt crust: flagstone plate pattern bleached white, edges stay ochre
+	if (salt_zone.z > 0.0) {
+		float sd = length(xz - salt_zone.xy);
+		float salt = smoothstep(salt_zone.z, salt_zone.z * 0.5, sd + (mac.r - 0.5) * 6.0) * flat_w;
+		vec3 sc = salt_color * (0.82 + 0.3 * fa.a) * mix(1.0, 0.86, smoothstep(0.55, 0.2, fa.a));
+		col = mix(col, sc, salt * 0.72);
+		wn = normalize(mix(wn, mix(wn, vec3(flag_n.x, 0.0, -flag_n.y) * 0.5 + N, 0.5), salt));
+	}
 	// ledge rims: sun-bleached grit along crests
 	float rim = smoothstep(0.55, 0.66, ny) * (1.0 - smoothstep(0.66, 0.8, ny));
 	col = mix(col, dust_color, rim * 0.25 + COLOR.b * 0.3);
@@ -242,5 +264,9 @@ void fragment() {
 	ROUGHNESS = mix(0.86, 0.97, mac2.a) - sw * flat_w * 0.06;
 	SPECULAR = 0.32;
 	NORMAL = normalize((VIEW_MATRIX * vec4(wn, 0.0)).xyz);
+	if (glow_silt > 0.0) {
+		float gs = smoothstep(0.58, 0.86, mac2.g * 0.6 + mac.b * 0.5) * flat_w * (1.0 - sw * 0.5);
+		EMISSION = glow_silt_color * gs * glow_silt * (0.6 + 0.4 * sin(TIME * 0.7 + mac.r * 20.0));
+	}
 }
 #endif

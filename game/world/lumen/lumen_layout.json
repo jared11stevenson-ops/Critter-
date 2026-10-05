@@ -1,0 +1,155 @@
+{
+ "_doc": "Lumen Depths vault-layer art slice (greybox): mineral shelves, a crystal forest, a dark pool, a hanging-walkway shaft crossing and the far ledge with the den + sealed vault. Same schema as red_reaches/layout.json.",
+ "bounds": {
+  "min_x": -24,
+  "max_x": 204,
+  "min_z": -56,
+  "max_z": 48
+ },
+ "cell_size": 1.0,
+ "mesa_height": 28.0,
+ "chasm_depth": -40.0,
+ "edge_width": 4.0,
+ "floors": [
+  {
+   "id": "spawn_ledge",
+   "type": "disc",
+   "c": [
+    0,
+    0
+   ],
+   "r": 14,
+   "h": 0,
+   "surface": "stone"
+  },
+  {
+   "id": "path_a",
+   "type": "capsule",
+   "a": [
+    10,
+    0
+   ],
+   "b": [
+    44,
+    4
+   ],
+   "r": 5,
+   "h_a": 0,
+   "h_b": -2,
+   "surface": "dirt"
+  },
+  {
+   "id": "forest",
+   "type": "disc",
+   "c": [
+    62,
+    6
+   ],
+   "r": 20,
+   "h": -2,
+   "surface": "stone"
+  },
+  {
+   "id": "path_b",
+   "type": "capsule",
+   "a": [
+    78,
+    6
+   ],
+   "b": [
+    100,
+    2
+   ],
+   "r": 4.5,
+   "h_a": -2,
+   "h_b": -2,
+   "surface": "dirt"
+  },
+  {
+   "id": "west_landing",
+   "type": "disc",
+   "c": [
+    104,
+    2
+   ],
+   "r": 7,
+   "h": -2,
+   "surface": "stone"
+  },
+  {
+   "id": "east_landing",
+   "type": "disc",
+   "c": [
+    134,
+    2
+   ],
+   "r": 7,
+   "h": -2,
+   "surface": "stone"
+  },
+  {
+   "id": "far_ledge",
+   "type": "disc",
+   "c": [
+    154,
+    4
+   ],
+   "r": 19,
+   "h": -2,
+   "surface": "stone"
+  },
+  {
+   "id": "pool_path",
+   "type": "capsule",
+   "a": [
+    66,
+    -10
+   ],
+   "b": [
+    64,
+    -28
+   ],
+   "r": 4,
+   "h_a": -2,
+   "h_b": -8,
+   "surface": "dirt"
+  },
+  {
+   "id": "pool_basin",
+   "type": "disc",
+   "c": [
+    64,
+    -36
+   ],
+   "r": 12,
+   "h": -8,
+   "surface": "dirt"
+  }
+ ],
+ "chasms": [
+  {
+   "id": "shaft",
+   "type": "capsule",
+   "a": [
+    119,
+    -70
+   ],
+   "b": [
+    119,
+    70
+   ],
+   "r": 10
+  }
+ ],
+ "structures": [],
+ "markers": {
+  "player_spawn": [
+   2,
+   0,
+   4
+  ]
+ },
+ "triggers": [],
+ "pickups": [],
+ "props_scatter": []
+}

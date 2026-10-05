@@ -17,6 +17,8 @@ signal built
 const LAYOUT_PATH := "res://game/world/red_reaches/layout.json"
 const TERRAIN_SHADER := preload("res://game/art/shaders/terrain_pbr.gdshader")
 const PBR_DIR := "res://game/art/world/pbr/"
+const LODS := 3
+const LOD_RANGES := [74.0, 170.0]   # m: LOD0 (1 m cells) -> LOD1 (2 m) -> LOD2 (4 m)
 const CHUNK := 48   # 48 m chunks: tighter frustum culling + shadow-pass culling (was 64)
 
 @export var layout_path: String = LAYOUT_PATH
@@ -25,6 +27,9 @@ const CHUNK := 48   # 48 m chunks: tighter frustum culling + shadow-pass culling
 @export var with_structures: bool = true
 @export var with_backdrop: bool = true
 @export var with_collision: bool = true
+## Extra terrain shader uniforms (per-region palette: ground_tint, strata_*, dust_color, deep_color, salt_zone ...).
+@export var shader_params: Dictionary = {}
+@export var cache_to_res: bool = true
 
 var layout: Dictionary = {}
 var lighting: Node3D
@@ -80,6 +85,9 @@ func build() -> void:
 	var t4 := Time.get_ticks_msec()
 	if with_scatter:
 		_build_scatter()
+	if with_structures:
+		_build_landmarks()
+		_build_atmosphere()
 	if OS.get_cmdline_user_args().has("qa"):
 		print("[PERF] terrain heights=%d meshes=%d collision+backdrop=%d light+structs=%d scatter=%d" % [t1 - t0, t2 - t1, t3 - t2, t4 - t3, Time.get_ticks_msec() - t4])
 	built.emit()
@@ -158,6 +166,34 @@ func set_span_state(state: String) -> void:
 		s.set_state(state)
 
 
+var _bd_hs := PackedFloat32Array()
+var _bd_x0 := 0.0
+var _bd_z0 := 0.0
+var _bd_step := 4.0
+var _bd_n := Vector2i.ZERO
+
+## Visual surface height anywhere (playable grid inside the bounds, the coarse backdrop grid outside).
+func surface_height(x: float, z: float) -> float:
+	if _bd_hs.is_empty() or Rect2(_min_x, _min_z, (_nx - 1) * _cell, (_nz - 1) * _cell).has_point(Vector2(x, z)):
+		return _sample(_hv, x, z)
+	var fx := clampf((x - _bd_x0) / _bd_step, 0.0, float(_bd_n.x - 1) - 0.001)
+	var fz := clampf((z - _bd_z0) / _bd_step, 0.0, float(_bd_n.y - 1) - 0.001)
+	var ix := int(fx)
+	var iz := int(fz)
+	var tx := fx - ix
+	var tz := fz - iz
+	var i := iz * _bd_n.x + ix
+	return lerpf(lerpf(_bd_hs[i], _bd_hs[i + 1], tx), lerpf(_bd_hs[i + _bd_n.x], _bd_hs[i + _bd_n.x + 1], tx), tz)
+
+
+## Height of the surface you SEE (visual grid: the camera-side cliffs are capped low), pure array read: safe on worker threads.
+## Props must sit on this, not on the collision grid, or they float over the capped dunes south of the floors.
+func ground_h(x: float, z: float) -> float:
+	if _hv.is_empty():
+		return 0.0
+	return _sample(_hv, x, z)
+
+
 ## Extra helpers (art/QA)
 func get_floor_weight(x: float, z: float) -> float:
 	return _sample(_fw, x, z)
@@ -181,6 +217,31 @@ func chasm_sdf(x: float, z: float) -> float:
 	for c in _chasms:
 		best = minf(best, _shape_sdf(c, x, z))
 	return best
+
+
+## QA/art review: free vista camera (disables the gameplay rig). Called from tools/qa scripts as Terrain.qa_vista.
+var _qa_cam: Camera3D
+func qa_vista(px: float, py: float, pz: float, tx: float, ty: float, tz: float, fov: float = 60.0, dusk: float = 0.0, dust: float = 0.0) -> void:
+	if _qa_cam == null:
+		_qa_cam = Camera3D.new()
+		_qa_cam.name = "QAVista"
+		_qa_cam.far = 900.0
+		add_child(_qa_cam)
+	for n in get_tree().current_scene.find_children("CameraRig", "Node3D", true, false):
+		n.process_mode = Node.PROCESS_MODE_DISABLED
+	for cl in get_tree().current_scene.find_children("*", "CanvasLayer", true, false):
+		(cl as CanvasLayer).visible = false
+	_qa_cam.fov = fov
+	_qa_cam.global_position = Vector3(px, py, pz)
+	_qa_cam.look_at(Vector3(tx, ty, tz), Vector3.UP)
+	_qa_cam.make_current()
+	for an in get_tree().current_scene.find_children("Ambient", "Node", true, false):
+		an.process_mode = Node.PROCESS_MODE_DISABLED       # the day clock would overwrite the grade below
+	if lighting and lighting.has_method("set_grade"):
+		lighting.set_grade(dusk, dust)
+	if lighting:
+		lighting.set("_mood_t", 0.0)
+	print("[QA] vista grade dusk=%.2f dust=%.2f lighting=%s cam=%s" % [dusk, dust, str(lighting != null), str(_qa_cam.global_position)])
 
 
 func register_deck(a: Vector3, b: Vector3, width: float, node: Node3D, sag: float = 0.0) -> void:
@@ -332,7 +393,7 @@ func _cache_key() -> String:
 	return "%s|%s|%d|%d" % [CACHE_VER, FileAccess.get_md5(layout_path), _nx, _nz]
 
 func _load_height_cache() -> bool:
-	for path in [CACHE_RES, CACHE_USER]:
+	for path in ([CACHE_RES, CACHE_USER] if cache_to_res else [CACHE_USER + "." + layout_path.get_file().get_basename()]):
 		if not FileAccess.file_exists(path):
 			continue
 		var f := FileAccess.open(path, FileAccess.READ)
@@ -351,8 +412,8 @@ func _load_height_cache() -> bool:
 	return false
 
 func _save_height_cache() -> void:
-	var paths := [CACHE_USER]
-	if OS.has_feature("editor") or OS.get_cmdline_user_args().has("qa"):
+	var paths := [CACHE_USER] if cache_to_res else [CACHE_USER + "." + layout_path.get_file().get_basename()]
+	if cache_to_res and (OS.has_feature("editor") or OS.get_cmdline_user_args().has("qa")):
 		paths.append(CACHE_RES)
 	for path in paths:
 		var f := FileAccess.open(path, FileAccess.WRITE)
@@ -436,6 +497,8 @@ func _make_material() -> ShaderMaterial:
 		terrain_material.set_shader_parameter(set_name + "_albedo", load(PBR_DIR + file + "_albedo.webp"))
 		terrain_material.set_shader_parameter(set_name + "_normal", load(PBR_DIR + file + "_normal.webp"))
 	terrain_material.set_shader_parameter("macro_tex", load(PBR_DIR + "macro_var.webp"))
+	for k in shader_params:
+		terrain_material.set_shader_parameter(k, shader_params[k])
 	return terrain_material
 
 
@@ -461,20 +524,48 @@ func _build_terrain_meshes() -> void:
 	var cx := int(ceil(float(_nx - 1) / CHUNK))
 	var cz := int(ceil(float(_nz - 1) / CHUNK))
 	_chunk_arrays.clear()
-	_chunk_arrays.resize(cx * cz)
+	_chunk_arrays.resize(cx * cz * LODS)
 	_chunk_cx = cx
-	WorkerThreadPool.wait_for_group_task_completion(WorkerThreadPool.add_group_task(_chunk_job, cx * cz, -1, true, "rr_chunks"))
+	WorkerThreadPool.wait_for_group_task_completion(WorkerThreadPool.add_group_task(_chunk_job, cx * cz * LODS, -1, true, "rr_chunks"))
 	for c_z in cz:
 		for c_x in cx:
-			var arrays: Array = _chunk_arrays[c_z * cx + c_x]
-			var am := ArrayMesh.new()
-			am.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
-			var mi := MeshInstance3D.new()
-			mi.name = "Chunk_%d_%d" % [c_x, c_z]
-			mi.mesh = am
-			mi.material_override = mat
-			mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-			root.add_child(mi)
+			var x0 := c_x * CHUNK
+			var z0 := c_z * CHUNK
+			var x1 := mini(x0 + CHUNK, _nx - 1)
+			var z1 := mini(z0 + CHUNK, _nz - 1)
+			var ctr := Vector3(_min_x + (x0 + x1) * 0.5 * _cell, 0.0, _min_z + (z0 + z1) * 0.5 * _cell)
+			for lod in LODS:
+				var arrays: Array = _chunk_arrays[(c_z * cx + c_x) * LODS + lod]
+				var am := ArrayMesh.new()
+				am.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+				var mi := MeshInstance3D.new()
+				mi.name = "Chunk_%d_%d_L%d" % [c_x, c_z, lod]
+				mi.mesh = am
+				mi.position = ctr
+				mi.material_override = mat
+				# distance LOD (cheap hysteresis switch, no fade): full detail near the camera, 2x and 4x coarser beyond
+				mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+				if lod == 1:
+					# the 2 m mesh doubles as the sun-shadow caster for the whole near field (a quarter of the shadow-pass triangles)
+					var sh := MeshInstance3D.new()
+					sh.name = "ShadowProxy_%d_%d" % [c_x, c_z]
+					sh.mesh = am
+					sh.position = ctr
+					sh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+					sh.visibility_range_end = 96.0
+					root.add_child(sh)
+				if lod == 0:
+					mi.visibility_range_end = LOD_RANGES[0]
+					mi.visibility_range_end_margin = 8.0
+				elif lod == 1:
+					mi.visibility_range_begin = LOD_RANGES[0]
+					mi.visibility_range_begin_margin = 8.0
+					mi.visibility_range_end = LOD_RANGES[1]
+					mi.visibility_range_end_margin = 12.0
+				else:
+					mi.visibility_range_begin = LOD_RANGES[1]
+					mi.visibility_range_begin_margin = 12.0
+				root.add_child(mi)
 	_chunk_arrays.clear()
 	_normals = PackedVector3Array()
 	_colors = PackedColorArray()
@@ -506,46 +597,87 @@ func _shade_row(iz: int) -> void:
 		_colors[i] = Color(_sw[i], _fw[i], crest, ao)
 
 
-func _chunk_job(ci: int) -> void:
+func _chunk_job(ji: int) -> void:
+	var lod := ji % LODS
+	var ci := ji / LODS
+	var stride := 1 << lod
 	var c_x := ci % _chunk_cx
 	var c_z := ci / _chunk_cx
 	var x0 := c_x * CHUNK
 	var z0 := c_z * CHUNK
 	var x1 := mini(x0 + CHUNK, _nx - 1)
 	var z1 := mini(z0 + CHUNK, _nz - 1)
-	var w := x1 - x0 + 1
+	var ox := _min_x + (x0 + x1) * 0.5 * _cell
+	var oz := _min_z + (z0 + z1) * 0.5 * _cell
+	var xs: Array[int] = []
+	var zs: Array[int] = []
+	var v := x0
+	while v < x1:
+		xs.append(v)
+		v += stride
+	xs.append(x1)
+	v = z0
+	while v < z1:
+		zs.append(v)
+		v += stride
+	zs.append(z1)
+	var w := xs.size()
+	var h := zs.size()
 	var verts := PackedVector3Array()
 	var nrm := PackedVector3Array()
 	var col := PackedColorArray()
 	var idx := PackedInt32Array()
-	for iz in range(z0, z1 + 1):
-		for ix in range(x0, x1 + 1):
+	for iz in zs:
+		for ix in xs:
 			var i := iz * _nx + ix
-			verts.append(Vector3(_min_x + ix * _cell, _hv[i], _min_z + iz * _cell))
+			verts.append(Vector3(_min_x + ix * _cell - ox, _hv[i], _min_z + iz * _cell - oz))
 			nrm.append(_normals[i])
 			col.append(_colors[i])
-	for iz in range(z1 - z0):
-		for ix in range(x1 - x0):
-			var a := iz * w + ix
+	for jz in h - 1:
+		for jx in w - 1:
+			var a := jz * w + jx
 			var b := a + 1
 			var c := a + w
 			var d := c + 1
 			# split along the shorter diagonal for nicer cliffs
-			var ha := verts[a].y
-			var hb := verts[b].y
-			var hc := verts[c].y
-			var hd := verts[d].y
-			if absf(ha - hd) < absf(hb - hc):
+			if absf(verts[a].y - verts[d].y) < absf(verts[b].y - verts[c].y):
 				idx.append_array([a, b, d, a, d, c])
 			else:
 				idx.append_array([a, b, c, b, d, c])
+	if lod > 0:
+		# skirts hide the T-junction cracks against finer neighbours
+		var drop := 2.0 + 1.5 * lod
+		var edges: Array = []
+		var top: Array[int] = []
+		var bot: Array[int] = []
+		var lef: Array[int] = []
+		var rig: Array[int] = []
+		for jx in w:
+			top.append(jx)
+			bot.append((h - 1) * w + jx)
+		for jz in h:
+			lef.append(jz * w)
+			rig.append(jz * w + w - 1)
+		edges = [top, bot, lef, rig]
+		for e in edges:
+			var base := verts.size()
+			for vi in e:
+				verts.append(verts[vi] - Vector3(0, drop, 0))
+				nrm.append(nrm[vi])
+				col.append(col[vi])
+			for k in e.size() - 1:
+				var p0: int = e[k]
+				var p1: int = e[k + 1]
+				var q0: int = base + k
+				var q1: int = base + k + 1
+				idx.append_array([p0, p1, q1, p0, q1, q0, p0, q1, p1, p0, q0, q1])   # double-sided (winding unknown per edge)
 	var arrays := []
 	arrays.resize(Mesh.ARRAY_MAX)
 	arrays[Mesh.ARRAY_VERTEX] = verts
 	arrays[Mesh.ARRAY_NORMAL] = nrm
 	arrays[Mesh.ARRAY_COLOR] = col
 	arrays[Mesh.ARRAY_INDEX] = idx
-	_chunk_arrays[ci] = arrays
+	_chunk_arrays[ji] = arrays
 
 
 func _build_collision() -> void:
@@ -568,7 +700,7 @@ func _build_collision() -> void:
 
 ## Distant mesas, buttes and canyons around the playable bounds (visual only, coarse grid).
 func _build_backdrop() -> void:
-	var step := 4.0
+	var step := 6.0
 	var mx0 := _min_x - 180.0
 	var mx1 := _min_x + (_nx - 1) * _cell + 180.0
 	var mz0 := _min_z - 160.0
@@ -613,12 +745,18 @@ func _build_backdrop() -> void:
 						var a: Array = cc["a"]
 						var d := absf(x - float(a[0]))
 						if d < float(cc["r"]) + 2.0:
-							h = lerpf(h, -40.0, smoothstep(float(cc["r"]) + 2.0, float(cc["r"]) - 1.0, d))
+							# the canyon closes against a rising wall far out (no open slot to the world edge)
+							h = lerpf(h, -40.0, smoothstep(float(cc["r"]) + 2.0, float(cc["r"]) - 1.0, d) * (1.0 - smoothstep(86.0, 124.0, absf(z - 0.0))))
 				# blend into the playable edge
 				var ex := maxf(maxf(_min_x - x, x - (_min_x + (_nx - 1) * _cell)), maxf(_min_z - z, z - max_z))
 				if ex < 10.0:
 					h = lerpf(_sample(_hv, x, z), h, smoothstep(0.0, 10.0, ex))
 			hs[iz * bx + ix] = h
+	_bd_hs = hs
+	_bd_x0 = mx0
+	_bd_z0 = mz0
+	_bd_step = step
+	_bd_n = Vector2i(bx, bz)
 	var verts := PackedVector3Array()
 	var nrm := PackedVector3Array()
 	var col := PackedColorArray()
@@ -696,3 +834,21 @@ func _build_scatter() -> void:
 	sc.name = "Scatter"
 	add_child(sc)
 	sc.populate(self)
+
+
+func _build_landmarks() -> void:
+	if not ResourceLoader.exists("res://game/art/world/reaches_landmarks.gd"):
+		return
+	var lm := ReachesLandmarks.new()
+	lm.name = "Landmarks"
+	add_child(lm)
+	lm.populate(self)
+
+
+func _build_atmosphere() -> void:
+	if not ResourceLoader.exists("res://game/art/world/reaches_atmosphere.gd"):
+		return
+	var at := ReachesAtmosphere.new()
+	at.name = "Atmosphere"
+	add_child(at)
+	at.populate(self)
