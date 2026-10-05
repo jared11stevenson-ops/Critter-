@@ -8,3 +8,4 @@ Nothing below was resolved silently; each item is a design ambiguity or an unkno
 4. The thorned weapon 'Diplomacy' appears only in the hero crouch and the gear panel: please confirm length.
 5. Lantern: emissive (it glows in art)?
 6. Hero pose is a crouch; the turnaround figures are standing. Modelling pose = standing turnaround (assumed).
+7. SIDE view: is the large pale cream triangle above the head the raised bat wing (edge-on) or leftover sheet background?

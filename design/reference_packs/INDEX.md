@@ -9,7 +9,7 @@ Only the Lead sets `approved` / `changes requested` (after the creator answers).
 | [mara](mara/review/mara_pack_overview.png) | ready for review | 2026-10-05 |  |
 | [dexter](dexter/review/dexter_pack_overview.png) | ready for review | 2026-10-05 |  |
 | [zephyr](zephyr/review/zephyr_pack_overview.png) | ready for review | 2026-10-05 |  |
-| [bramvex](bramvex/review/bramvex_pack_overview.png) | not started |  |  |
+| [bramvex](bramvex/review/bramvex_pack_overview.png) | ready for review | 2026-10-05 |  |
 | [scarlith](scarlith/review/scarlith_pack_overview.png) | not started |  |  |
 | [solmara](solmara/review/solmara_pack_overview.png) | not started |  |  |
 | [mollusk](mollusk/review/mollusk_pack_overview.png) | not started |  |  |
