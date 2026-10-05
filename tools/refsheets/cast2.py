@@ -12,7 +12,7 @@ SRC = {
         gear_tablet=P((1218, 385, 1313, 497)), gear_watch=P((1325, 385, 1397, 497))),
     expressions=["neutral", "curious", "focused", "annoyed", "tired", "soft"]),
  "dexter": dict(name="Dexter Mane", title="Director / Scientist / Strategist", height_m=1.85, height_note="sheet: 6'1\" (185 cm)", sheet="tools/source_art/dexter_sheet.jpg",
-    views={"front": V((203, 84, 424, 784), "hero 3/4 pose, hands in pockets, long coat (the only front)", False), "back": V((150, 676, 244, 927), "back, coat with red lining"),
+    views={"front": V((203, 4, 424, 784), "hero 3/4 pose, hands in pockets, long coat (the only front)", False, near=0), "back": V((150, 676, 244, 927), "back, coat with red lining"),
            "back_alt_jacket": V((84, 676, 154, 927), "back, jacket + harness outfit variant (no coat)", True, lineup=False), "back_alt_coat": V((8, 676, 84, 927), "back, plain long coat variant", True, lineup=False),
            "labcoat": V((408, 108, 550, 664), "lab-coat outfit variant, 3/4", False, lineup=False)},
     sheet_panels=dict(expr_neutral=P((511, 22, 617, 164)), expr_amused=P((618, 22, 726, 164)), expr_irritated=P((727, 22, 834, 164)), expr_serious=P((835, 22, 942, 164)),

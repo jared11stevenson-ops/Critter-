@@ -1,1 +1,41 @@
+"""Measured landmarks, materials, questions, style, review notes for the remaining characters (fractions of silhouette height, top=0, sole=1)."""
+L = lambda **k: k
 EXTRA = {}
+
+EXTRA["mara"] = dict(
+ lm={"front": L(top=0, crown=.015, eyes=.09, chin=.145, neck=.165, shoulder=.195, elbow=.385, wrist=.50, waist=.40, crotch=.56, knee=.70, ankle=.91, ground=1),
+     "side": L(top=0, crown=.015, eyes=.095, chin=.15, neck=.175, shoulder=.20, elbow=.40, wrist=.52, waist=.40, crotch=.56, knee=.70, ankle=.91, ground=1),
+     "back": L(top=0, crown=.02, eyes=.10, chin=.17, neck=.19, shoulder=.215, elbow=.40, wrist=.53, waist=.40, crotch=.55, knee=.70, ankle=.91, ground=1)},
+ lm_src="READ off the gridded art (+-1.5%). Hair bun counts toward height (bun top = 'top').",
+ callout_panel="expr_neutral",
+ callouts={"eyes": (.25, .28, .80, .50), "nose + freckles": (.30, .45, .75, .66), "mouth": (.30, .62, .75, .80)},
+ view_details={"hand_front": ("front", .55, .46, .95, .60), "hand_side": ("side", .55, .45, .98, .62), "hand_back": ("back", .80, .46, 1.0, .62), "boots_side": ("side", .05, .86, .98, 1.0), "boots_back": ("back", .0, .85, 1.0, 1.0), "backpack_side": ("side", .0, .16, .50, .50), "backpack_back": ("back", .20, .17, .85, .46)},
+ material_view="side",
+ materials=[dict(name="Hair (dark brown)", cls="hair", sample=("side", .62, .04), rough=.6, metal=0, note="messy high bun, loose strands"), dict(name="Skin (warm light brown)", cls="skin", sample=("side", .80, .115), rough=.5, metal=0, note="freckles + scar on LEFT cheek are paint"),
+   dict(name="Jumpsuit (grey-beige)", cls="cloth (ripstop)", sample=("side", .55, .50), rough=.85, metal=0, note="expedition jumpsuit; trousers bloused over boots"), dict(name="Black harness / pads / pack", cls="nylon + moulded plastic", sample=("side", .55, .75), rough=.7, metal=0, note="knee pads rough .5; straps webbing .9"),
+   dict(name="Backpack accent strips", cls="painted plastic", sample=("side", .02, .29), rough=.5, metal=0, note="orange strips (#d9803a-like) on the Expedition Pack"), dict(name="Boots", cls="leather + rubber sole", sample=("side", .55, .965), rough=.6, metal=0, note="black lace-up combat boots"),
+   dict(name="Gloves (black)", cls="leather/fabric", sample=("side", .74, .54), rough=.7, metal=0, note="fingerless look"), dict(name="Stewardship patch", cls="embroidered patch", sample=("side", .38, .27), rough=.9, metal=0, note="dark disc, white emblem, LEFT shoulder")],
+ layers=["Skin", "Grey-beige jumpsuit", "Black upper-arm bands, gloves, knee pads", "Black harness straps (chest, waist, thighs) + utility belt/pouches", "Stewardship patch (left shoulder)", "Expedition Pack (largest layer, back)", "Boots over bloused trouser cuffs"],
+ expressions=["neutral", "curious", "focused", "annoyed", "tired", "soft"],
+ style=dict(line="Clean medium-heavy black ink contour, thinner on folds; slightly warm-brown line on the face.", color="Neutral muted blocks: grey-beige suit, black gear, warm brown skin/hair, small orange accents; palette strip on the sheet: black, charcoal, grey, olive, dark green, orange, blue.", shading="Flat cel, one soft shadow tone; face has a light blush gradient and freckles.", shape="Athletic, upright, narrow; the big rectangular backpack is the signature silhouette element. Bloused trousers over boots make a pronounced ankle bulge.", locks=["Messy high bun with loose strands", "Freckles across nose/cheeks; small scar on LEFT cheek", "Grey-beige jumpsuit + black harness + round patch left shoulder", "Large black pack with orange strips", "Black knee pads, boots, fingerless-look gloves", "170 cm"]),
+ questions=["The sheet's FRONT turnaround figure is a 3/4 turn, not a flat front (its twin is the side). Please supply or approve a true orthographic front (face symmetry, harness layout on the chest).",
+   "Hair: the bun's volume differs between views (side wider than front). Which silhouette is canon?", "Tattoo (forearm, 'minimal personal meaning') appears only in a detail panel: model it? Which arm?", "Helmet / field tablet / watch props exist as sheet panels (details/): in-game props or cut-scene only?", "Scar/freckles: bake into texture only (assumed)."],
+ review=["Turnaround figures are small on the sheet (about 85 px wide) so the x4 views are smooth but soft; line weight is consistent.", "FRONT is a 3/4 turn (flagged non-ortho). Back is truly frontal; side is truly lateral.", "Photoreal concept images in the lore bible (image5/6) are a different style and were NOT used."])
+
+EXTRA["dexter"] = dict(
+ lm={"front": L(top=0, crown=.0, eyes=.07, chin=.115, neck=.13, shoulder=.155, elbow=.33, wrist=.43, waist=.37, crotch=.52, knee=.72, ankle=.93, ground=1),
+     "back": L(top=0, crown=.0, eyes=.06, chin=.12, neck=.14, shoulder=.19, elbow=.39, wrist=.52, waist=.40, crotch=.55, knee=.78, ankle=.92, ground=1)},
+ lm_src="READ (+-2%). Coat hides crotch/knee in the back view; front crotch/knee from the trousers.",
+ callout_panel="detail_eyes", callouts={"eye (grey-green)": (.05, .10, .95, .90)},
+ view_details={"boots_front": ("front", .15, .86, 1.0, 1.0), "boots_back": ("back", .05, .86, .95, 1.0), "coat_back_lining": ("back", .05, .12, .95, .60), "hand_pocket_front": ("front", .0, .30, .40, .50), "shoulder_sigil_front": ("front", .0, .08, .40, .25)},
+ material_view="front",
+ materials=[dict(name="Hair (dark, grey streak right)", cls="hair", sample=("front", .5, .0), rough=.6, metal=0, note="tousled, swept back; streak is paint"), dict(name="Skin (warm tan)", cls="skin", sample=("front", .55, .06), rough=.5, metal=0, note="stubble beard, scar above RIGHT brow"),
+   dict(name="Long field coat (black)", cls="cloth (heavy wool/canvas)", sample=("front", .1, .55), rough=.85, metal=0, note="collar up, sleeves pushed to forearm"), dict(name="Coat lining (Dominion red)", cls="cloth (satin-ish)", sample=("back", .50, .70), rough=.55, metal=0, note="whole lining panel, very visible from the back; red sigil"),
+   dict(name="Shirt / trousers (black)", cls="cloth", sample=("front", .60, .22), rough=.8, metal=0, note="black shirt, utility trousers"), dict(name="Utility belt + pouches + holster", cls="leather / nylon", sample=("front", .55, .30), rough=.6, metal=0, note="thigh holster with sidearm (metal parts rough .35 metal .8)"),
+   dict(name="Boots", cls="leather + rubber", sample=("front", .5, .96), rough=.6, metal=0, note="black lace-up, red sigil on the heel strap")],
+ layers=["Skin", "Black shirt + ID lanyard (red cord)", "Trousers + utility belt + thigh holster", "Boots", "Long black coat with red lining (outer)", "Sigil on left shoulder (red)", "Gloves (back view)"],
+ expressions=["neutral", "amused", "irritated", "serious", "genuine", "tired"],
+ style=dict(line="Heavy black ink, thicker than Mara's; hatching on the face.", color="Near-black everything with ONE colour accent: Dominion red (lining, sigils); skin warm tan; grey streak in hair.", shading="Flat cel with deep shadow tone; faces slightly more painterly (stubble shading).", shape="Tall, lean, vertical: long coat creates a narrow column; broad collar; heavy boots.", locks=["Black long coat, collar up, sleeves pushed up", "Red lining + sigil, red sigil left shoulder", "Grey streak in hair on the right side of the parting; stubble; scar above right brow", "Cigarette", "185 cm"]),
+ questions=["There is NO side view and the only front is a 3/4 hero pose with hands in pockets. A true front + side orthographic from the creator are needed before 3D. The greybox cannot be built (needs side+back silhouettes).",
+   "Three BACK variants exist (long coat with red lining = hero; jacket + harness; plain long coat). Is the jacket/harness version a separate outfit (casual/lab) to be modelled?", "Lab-coat outfit (white coat over black) is shown in the sheet: separate costume skin?", "Sidearm 'custom non-lethal/lethal' is shown as a panel only: proportions assumed from the panel (gear_sidearm).", "Tattoo (left ribs, faction symbol): model as texture only?"],
+ review=["Front head was cut off in the older hires; re-cut includes the head. The neighbouring lab-coat figure's sleeve touches the front figure on the right; removed by component filtering.", "Back view silhouettes are 4 small figures; the biggest (hero back, ~230 px) used. Landmarks inside the coat are guesses (flagged +-2%)."])

@@ -6,7 +6,7 @@ Only the Lead sets `approved` / `changes requested` (after the creator answers).
 |---|---|---|---|
 | [aruun](aruun/review/aruun_pack_overview.png) | ready for review | 2026-10-05 |  |
 | [cigarra](cigarra/review/cigarra_pack_overview.png) | ready for review | 2026-10-05 |  |
-| [mara](mara/review/mara_pack_overview.png) | not started |  |  |
+| [mara](mara/review/mara_pack_overview.png) | ready for review | 2026-10-05 |  |
 | [dexter](dexter/review/dexter_pack_overview.png) | not started |  |  |
 | [zephyr](zephyr/review/zephyr_pack_overview.png) | not started |  |  |
 | [bramvex](bramvex/review/bramvex_pack_overview.png) | not started |  |  |

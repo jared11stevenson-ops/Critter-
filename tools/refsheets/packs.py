@@ -13,7 +13,7 @@ GREEN, YELLOW, RED = (60, 170, 70), (235, 190, 40), (210, 50, 50)
 def canon_json(cid):
     d = json.load(open(os.path.join(ROOT, "game/canon/canon.json")))["characters"]
     for k, v in d.items():
-        if v.get("name", "").lower().split()[-1 if cid in ("mara", "dexter") else 0] == cid or k == cid:
+        if cid in v.get("name", "").lower() or k == cid:
             return v
     return {}
 
