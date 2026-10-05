@@ -1,0 +1,126 @@
+{
+ "art_sampled_kmeans": [
+  {
+   "hex": "#131010",
+   "share": 0.181
+  },
+  {
+   "hex": "#352926",
+   "share": 0.158
+  },
+  {
+   "hex": "#554137",
+   "share": 0.108
+  },
+  {
+   "hex": "#94754d",
+   "share": 0.098
+  },
+  {
+   "hex": "#bc976f",
+   "share": 0.091
+  },
+  {
+   "hex": "#c17455",
+   "share": 0.089
+  },
+  {
+   "hex": "#7e4535",
+   "share": 0.08
+  },
+  {
+   "hex": "#df9a74",
+   "share": 0.071
+  },
+  {
+   "hex": "#e3c397",
+   "share": 0.068
+  },
+  {
+   "hex": "#a84d3c",
+   "share": 0.056
+  }
+ ],
+ "sheet_palette_json": {
+  "front": [
+   {
+    "hex": "#322927",
+    "share": 0.201
+   },
+   {
+    "hex": "#0b0a0c",
+    "share": 0.189
+   },
+   {
+    "hex": "#e1b484",
+    "share": 0.161
+   },
+   {
+    "hex": "#5f3e34",
+    "share": 0.153
+   },
+   {
+    "hex": "#be7e57",
+    "share": 0.153
+   },
+   {
+    "hex": "#97553e",
+    "share": 0.142
+   }
+  ],
+  "side": [
+   {
+    "hex": "#161212",
+    "share": 0.26
+   },
+   {
+    "hex": "#513930",
+    "share": 0.198
+   },
+   {
+    "hex": "#c89375",
+    "share": 0.159
+   },
+   {
+    "hex": "#8e5a41",
+    "share": 0.153
+   },
+   {
+    "hex": "#b97051",
+    "share": 0.121
+   },
+   {
+    "hex": "#e6c397",
+    "share": 0.109
+   }
+  ],
+  "back": [
+   {
+    "hex": "#c48c65",
+    "share": 0.229
+   },
+   {
+    "hex": "#996848",
+    "share": 0.214
+   },
+   {
+    "hex": "#362c28",
+    "share": 0.173
+   },
+   {
+    "hex": "#0f0e0f",
+    "share": 0.156
+   },
+   {
+    "hex": "#634337",
+    "share": 0.142
+   },
+   {
+    "hex": "#e2b888",
+    "share": 0.085
+   }
+  ]
+ },
+ "game_palette_canon_json": [],
+ "note": "game palette = game/canon/canon.json characters.Zephyr.palette (the colours UI/FX use); art_sampled = k-means over the cut views of this pack."
+}

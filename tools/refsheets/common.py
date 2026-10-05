@@ -95,3 +95,13 @@ def save_png(img, path, colors=None):
 
 def label(draw, xy, text, sz=28, fill=INK):
     draw.text(xy, text, font=font(sz), fill=fill)
+
+
+def save_art(im, path):
+    """Flat-colour sheet art: 256-colour RGBA PNG (octree). ~5x smaller than 32-bit with no visible change on cel art (keeps packs < 25 MB)."""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    im = im.convert("RGBA")
+    if im.getchannel("A").getextrema()[0] == 255:
+        im.convert("RGB").quantize(256, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE).save(path, optimize=True)
+    else:
+        im.quantize(256, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE).save(path, optimize=True)

@@ -158,7 +158,7 @@ def stage_head(cid):
     crops = {}
     for v in aligned:
         cr, off, y0, y1 = head_crop(aligned, canon, v); crops[v] = (cr, off)
-        cr.save(os.path.join(out, f"{cid}_head_{v}.png"), optimize=True)
+        save_art(cr, os.path.join(out, f"{cid}_head_{v}.png"))
     # turnaround on shared rows (same scale as ortho)
     gap = 80; hh = max(cr.height for cr, _ in crops.values()); W = sum(cr.width + gap for cr, _ in crops.values()) + 200
     for guides in (False, True):
@@ -177,7 +177,7 @@ def stage_head(cid):
         if not p.startswith("panel_"): continue
         n = p[6:-4]; im = Image.open(os.path.join(cdir, p))
         if n.startswith("expr_"): exps.append((n[5:], im))
-        elif n in c.get("head_panels", ["head_details", "eye_detail", "face_closeup"]): im.save(os.path.join(out, f"{cid}_{n}.png"), optimize=True)
+        elif n in c.get("head_panels", ["head_details", "eye_detail", "face_closeup"]): save_art(im, os.path.join(out, f"{cid}_{n}.png"))
     # expression sheet: uniform tiles
     order = c["expressions"]; tiles = [(e, dict(exps).get(e)) for e in order if dict(exps).get(e) is not None]
     if not tiles:  # fall back to game portraits
@@ -224,7 +224,7 @@ def stage_details(cid):
         cr = im.crop((int(fx0 * W), int(fy0 * H), int(fx1 * W), int(fy1 * H)))
         if max(cr.size) > 1400: cr = cr.resize((int(cr.width * 1400 / max(cr.size)), int(cr.height * 1400 / max(cr.size))), Image.LANCZOS)
         items.append((name.replace("_", " "), cr))
-    for n, im in items: im.save(os.path.join(out, f"{cid}_panel_{n.replace(' ', '_')}.png"), optimize=True)
+    for n, im in items: save_art(im, os.path.join(out, f"{cid}_panel_{n.replace(' ', '_')}.png"))
     if not items: return
     T = 640; cols = 4; rows = (len(items) + cols - 1) // cols
     cv = Image.new("RGB", (cols * (T + 30) + 30, rows * (T + 70) + 90), PAPER); d = ImageDraw.Draw(cv)

@@ -1,0 +1,116 @@
+[
+ {
+  "name": "Bark-brown body (stick insect)",
+  "cls": "chitin / bark",
+  "sample": [
+   "front",
+   0.38,
+   0.85
+  ],
+  "rough": 0.7,
+  "metal": 0,
+  "note": "thorn spurs on every limb segment",
+  "hex": "#251f1b",
+  "n": 1
+ },
+ {
+  "name": "Peaked cap (olive/dark, red band)",
+  "cls": "cloth",
+  "sample": [
+   "front",
+   0.58,
+   0.09
+  ],
+  "rough": 0.85,
+  "metal": 0,
+  "note": "worn low",
+  "hex": "#2e261a",
+  "n": 2
+ },
+ {
+  "name": "Olive field jacket",
+  "cls": "cloth",
+  "sample": [
+   "front",
+   0.45,
+   0.38
+  ],
+  "rough": 0.9,
+  "metal": 0,
+  "note": "crossed chest straps",
+  "hex": "#090809",
+  "n": 3
+ },
+ {
+  "name": "Banner cloak (crimson, gold chevrons)",
+  "cls": "cloth",
+  "sample": [
+   "back",
+   0.72,
+   0.55
+  ],
+  "rough": 0.9,
+  "metal": 0,
+  "note": "tattered; restrained red insignia",
+  "hex": "#5f2c26",
+  "n": 4
+ },
+ {
+  "name": "Wing membranes (tan/olive)",
+  "cls": "membrane",
+  "sample": [
+   "back",
+   0.12,
+   0.45
+  ],
+  "rough": 0.6,
+  "metal": 0,
+  "note": "ragged bat-like, with thorn veins; alpha ~.8",
+  "hex": "#b8926c",
+  "n": 5
+ },
+ {
+  "name": "Leather pouches / belt",
+  "cls": "leather",
+  "sample": [
+   "front",
+   0.5,
+   0.43
+  ],
+  "rough": 0.6,
+  "metal": 0,
+  "note": "many brown pouches",
+  "hex": "#1f1c19",
+  "n": 6
+ },
+ {
+  "name": "Lantern",
+  "cls": "brass + glass",
+  "sample": [
+   "front",
+   0.06,
+   0.13
+  ],
+  "rough": 0.35,
+  "metal": 0.7,
+  "emi": 1.0,
+  "note": "glows orange-red in the art: emissive suggestion 1.0 (Q)",
+  "hex": "#d25d2e",
+  "n": 7
+ },
+ {
+  "name": "Red eye",
+  "cls": "glass",
+  "sample": [
+   "front",
+   0.62,
+   0.12
+  ],
+  "rough": 0.1,
+  "metal": 0,
+  "emi": 0.4,
+  "note": "red; head studies panel",
+  "hex": "#0c0906",
+  "n": 8
+ }
+]

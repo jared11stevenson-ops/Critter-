@@ -67,17 +67,20 @@ def run(cid):
     aligned = {}
     for v, s in c["views"].items():
         if not s.get("lineup", True):                         # hero / variant / top-bottom art: kept at its own x4 resolution, not aligned
-            h = trim(load_cut(cid, v)); h.save(os.path.join(out, f"{cid}_{v}_x4.png"), optimize=True)
+            h = trim(load_cut(cid, v)); save_art(h, os.path.join(out, f"{cid}_{v}_x4.png"))
             meta["views"][v] = dict(file=f"ortho/{cid}_{v}_x4.png", width_px=h.width, height_px=h.height, pose=s.get("pose", ""), orthographic=False, aligned=False)
             continue
         im = trim(load_cut(cid, v)); fr = c["lm"][v]
+        if s.get("flip"):
+            from PIL import ImageOps
+            im = ImageOps.mirror(im)
         al = warp_rows(im, fr, canon)
         bb = al.getchannel("A").point(lambda x: 255 if x > 20 else 0).getbbox(); m = 64
         ax = body_axis(al, canon)
         x0 = max(bb[0] - m, 0); x1 = min(bb[2] + m, al.width)
         cv = Image.new("RGBA", (x1 - x0, CANVAS_H), (0, 0, 0, 0)); cv.paste(al, (-x0, TOP))
         aligned[v] = (cv, ax - x0)
-        p = os.path.join(out, f"{cid}_{v}_4096.png"); cv.save(p, optimize=True)
+        p = os.path.join(out, f"{cid}_{v}_4096.png"); save_art(cv, p)
         meta["views"][v] = dict(file=f"ortho/{cid}_{v}_4096.png", width_px=cv.width, height_px=CANVAS_H, axis_x_px=round(ax - x0, 1), ground_y_px=GROUND,
                                 pose=s.get("pose", ""), orthographic=bool(s.get("ortho", True)), source_landmarks=fr)
         print(cid, v, cv.size, os.path.getsize(p) // 1024, "KB", flush=True)

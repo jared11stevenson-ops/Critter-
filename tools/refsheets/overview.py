@@ -52,6 +52,7 @@ def build(cid, status="ready for review"):
     # ortho + right column
     blocks.append(section_title("1  ORTHO VIEWS - same scale, aligned on measured landmark lines (clean + overlay in ortho/)"))
     lu = Image.open(os.path.join(pk, "ortho", f"{cid}_ortho_lineup_landmarks.jpg")).convert("RGB"); lu = fit_h(lu, 1150)
+    if lu.width > 1560: lu = fit_w(lu, 1560)
     col_w = W - lu.width - 60
     row = Image.new("RGB", (W, max(lu.height, 1000) + 20), PAPER); row.paste(lu, (20, 10)); d = ImageDraw.Draw(row); x = lu.width + 40; y = 20
     rows = json.load(open(os.path.join(pk, "proportions.json")))["rows"]

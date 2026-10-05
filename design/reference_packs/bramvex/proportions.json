@@ -1,0 +1,76 @@
+{
+ "rows": [
+  [
+   "Total height (canon)",
+   "2.300 m  (canon.json 2.3 m; NOT printed on sheet (scale-comparison panel only))"
+  ],
+  [
+   "Body height (ground to crown/top of head)",
+   "2.058 m"
+  ],
+  [
+   "Head height (crown to chin)",
+   "0.288 m"
+  ],
+  [
+   "Heads tall (body / head)",
+   "7.2"
+  ],
+  [
+   "Neck (chin to neck base)",
+   "0.054 m"
+  ],
+  [
+   "Torso (neck base to crotch)",
+   "0.813 m"
+  ],
+  [
+   "Arm (shoulder to wrist)",
+   "0.747 m  = 32% of height"
+  ],
+  [
+   "Upper arm (shoulder to elbow)",
+   "0.425 m"
+  ],
+  [
+   "Forearm+hand (elbow to wrist)",
+   "0.322 m"
+  ],
+  [
+   "Leg (crotch to ground)",
+   "0.905 m  = 39% of height"
+  ],
+  [
+   "Thigh (crotch to knee)",
+   "0.414 m"
+  ],
+  [
+   "Shin (knee to ankle)",
+   "0.330 m"
+  ],
+  [
+   "Ankle height",
+   "0.161 m"
+  ],
+  [
+   "Leg : torso ratio",
+   "1.11"
+  ]
+ ],
+ "landmarks_m": {
+  "top": 2.3,
+  "crown": 2.058,
+  "eyes": 1.901,
+  "chin": 1.771,
+  "neck": 1.717,
+  "shoulder": 1.652,
+  "elbow": 1.227,
+  "wrist": 0.905,
+  "waist": 1.242,
+  "crotch": 0.905,
+  "knee": 0.491,
+  "ankle": 0.161,
+  "ground": 0.0
+ },
+ "source": "READ (+-3%). Thin stick-insect body under a banner cloak and wings; the cut tops differ (front/back top = lantern or antenna tip, side top = antenna sweep): 'crown' = hat top."
+}
