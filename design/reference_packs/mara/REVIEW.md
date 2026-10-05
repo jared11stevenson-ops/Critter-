@@ -12,7 +12,7 @@ Pack built 2026-10-05. Critique written after opening every output image next to
 |---|---|---|---|---|
 | front | 988x4096 | 1 | 0 | front turnaround, standing, arms down, backpack at viewer-left (3/4-ish) (NOT ortho) |
 | side | 950x4096 | 1 | 0 | side, faces screen-right |
-| back | 1233x4096 | 1 | 0 | back |
+| back | 1233x4096 | 1 | 15 | back |
 | hero | 940x3081 | 1 | 0 | hero 3/4 pose with tablet (not aligned) (NOT ortho) |
 
 Landmark rows are shared by construction (see metadata.json: landmarks_m). Components >200 px other than 1 are detached art such as horns tips, dangling charms or wing tips.

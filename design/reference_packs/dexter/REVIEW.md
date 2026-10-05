@@ -10,7 +10,7 @@ Pack built 2026-10-05. Critique written after opening every output image next to
 | view | size px | alpha components >200px | specks <=200px | pose |
 |---|---|---|---|---|
 | front | 1115x4096 | 1 | 0 | hero 3/4 pose, hands in pockets, long coat (the only front) (NOT ortho) |
-| back | 1340x4096 | 1 | 0 | back, coat with red lining |
+| back | 1340x4096 | 1 | 26 | back, coat with red lining |
 | back_alt_jacket | 249x925 | 1 | 0 | back, jacket + harness outfit variant (no coat) (NOT ortho) |
 | back_alt_coat | 264x913 | 1 | 0 | back, plain long coat variant (NOT ortho) |
 | labcoat | 568x2183 | 1 | 0 | lab-coat outfit variant, 3/4 (NOT ortho) |

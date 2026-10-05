@@ -48,7 +48,7 @@ def write_review(cid):
     t += [f"- {x}" for x in c.get("review", ["(not yet reviewed)"])]
     t += ["", "## Automatic checks (tools/refsheets/docs.py)", "| view | size px | alpha components >200px | specks <=200px | pose |", "|---|---|---|---|---|"]
     for v, m in meta["views"].items():
-        im = Image.open(os.path.join(PACKS, cid, m["file"])); a = np.asarray(im.getchannel("A")) > 40
+        im = Image.open(os.path.join(PACKS, cid, m["file"])).convert("RGBA"); a = np.asarray(im.getchannel("A")) > 40
         lab, n = ndimage.label(a); sz = np.bincount(lab.ravel())[1:] if n else np.array([])
         t.append(f"| {v} | {im.width}x{im.height} | {int((sz > 200).sum())} | {int((sz <= 200).sum())} | {m['pose']}{'' if m['orthographic'] else ' (NOT ortho)'} |")
     t += ["", "Landmark rows are shared by construction (see metadata.json: landmarks_m). Components >200 px other than 1 are detached art such as horns tips, dangling charms or wing tips."]
