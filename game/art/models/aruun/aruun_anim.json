@@ -1,6 +1,6 @@
 {
  "height_m": 2.4,
- "tris": 14935,
+ "tris": 16746,
  "texture_px": 2048,
  "fps": 30,
  "animations": {
@@ -13,19 +13,19 @@
    "duration": 1.2667,
    "loop": true,
    "impact": null,
-   "speed": 1.065
+   "speed": 1.101
   },
   "jog": {
    "duration": 0.7667,
    "loop": true,
    "impact": null,
-   "speed": 2.907
+   "speed": 3.006
   },
   "run": {
    "duration": 0.7333,
    "loop": true,
    "impact": null,
-   "speed": 3.302
+   "speed": 3.414
   },
   "dash": {
    "duration": 0.4333,
