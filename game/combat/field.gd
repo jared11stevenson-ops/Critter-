@@ -338,8 +338,8 @@ func float_text(pos: Vector3, text: String, col: Color = Color(0.95, 0.95, 1.0),
 
 # ================= VFX =================
 ## Spawns Agent 1's VFX if it exists; otherwise a cheap fallback for the important ones.
-const VFX_CHEAP := ["hit_spark", "hit_slash", "windup_glint", "dust_puff", "shockwave"]
-const VFX_LIVE_CAP := 5
+const VFX_CHEAP := ["pickup_glint", "heal_motes", "hit_spark", "hit_slash", "windup_glint", "dust_puff", "shockwave"]
+const VFX_LIVE_CAP := 3
 
 func vfx(vfx_name: String, pos: Vector3, params: Dictionary = {}, parent: Node = null) -> Node:
 	# draw-call budget: cosmetic extras are dropped while several effects overlap

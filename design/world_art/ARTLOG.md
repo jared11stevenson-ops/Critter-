@@ -109,3 +109,30 @@ Critique of `h4_00`..`h4_07`:
 
 Fixes applied after this round: mesa/butte palette + ledge dust (all mesa / butte GLBs rebuilt), glow-silt terrain emissive (Lumen), terrain paving scale.
 
+
+
+## 5. Performance gate (Priority 1) -- full_flow before / after
+
+Tooling: `qa_perf_matrix` (level script; cost with sun shadow off, with actors hidden / per actor class, per Terrain child, with mesh-LOD
+threshold and single-split shadow experiments) and the DRAWS census in `tools/qa/qa.gd` (what is alive when the budget is blown).
+Scripts: `perf_terrain.json` (per-vista matrix), `rr_boulder_matrix.json`, `rr_boulder_hit.json`.
+
+Findings (boulder pass, matrix): sun shadow pass = ~42 of 114 draws and ~55k of 160k prims; the two party characters are 28k tris
+(each drawn main + outline + two shadow splits = ~110-130k prims, 40-60 % of the frame) and Godot mesh LODs were never biting
+(project default threshold 1 px); the peak draw frame was the boulder-break burst (13 CPU particle emitters + dialogue UI) on top of ~115 baseline.
+
+Fixes: `rendering/mesh_lod/lod_change/threshold_pixels=4` (character + kit auto-LODs, prims -35..40 %); shadow-only twins of landmark / scatter cells
+are now ONE material-less surface (3-4 draws -> 1 each in the shadow pass); shadow-twin ranges 46 / 38 / 50 m (landmarks / scatter / terrain proxy)
+to match the 36 m shadow distance; VFX live cap 5 -> 3 with pickup_glint / heal_motes added to the droppable cosmetics.
+
+| full_flow | peak draw calls | peak primitives | SCRIPT ERRORs |
+|---|---|---|---|
+| before (merged master) | 184 | 306,971 | 0 |
+| LOD + shadow ranges | 171 | 186,569 | 0 |
+| + new close camera (master) | 163 | 197,531 | 0 |
+| + single-surface shadow twins, VFX cap | 152 | 197,531 | 0 |
+| + tighter shadow ranges (final) | **144** | **187,421** | 0 |
+
+Honest gaps: figures are HIGH quality (QA default); Medium (phone default) uses a single ortho split and is cheaper. The characters are still the
+largest single prim cost (28k tris x4 passes) -- a lower-poly character LOD is the next lever (character artist's files, not touched).
+Priority 2 / 3 art work was not reached in this session.

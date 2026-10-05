@@ -552,7 +552,7 @@ func _build_terrain_meshes() -> void:
 					sh.mesh = am
 					sh.position = ctr
 					sh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
-					sh.visibility_range_end = 64.0
+					sh.visibility_range_end = 50.0
 					root.add_child(sh)
 				if lod == 0:
 					mi.visibility_range_end = LOD_RANGES[0]

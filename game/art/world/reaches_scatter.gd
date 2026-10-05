@@ -388,9 +388,9 @@ func _process(_d: float) -> void:
 		if big:
 			var sp := MeshInstance3D.new()          # shadow-only twin, camera range 60 m (keeps far cells out of the sun pass)
 			sp.name = "Shadow_" + key
-			sp.mesh = m
+			sp.mesh = m.get_meta("shadow_mesh", m)
 			sp.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
-			sp.visibility_range_end = 46.0
+			sp.visibility_range_end = 38.0
 			add_child(sp)
 	if _gnext >= _gkeys.size():
 		_gid = -1
