@@ -24,8 +24,12 @@ while true; do
       echo "$ts snapshot $br -> ${c:0:8}" >> $LOG
     fi
   done
-  if git -C $REPO push -q origin 'refs/heads/*:refs/heads/*' 'refs/snapshots/*:refs/snapshots/*' >/dev/null 2>&1; then
+  # The git proxy only accepts refs/heads/*, so snapshots are pushed as branches named snapshot/<branch>.
+  specs=$(git -C $REPO for-each-ref --format='%(refname):refs/heads/snapshot/%(refname:strip=2)' refs/snapshots | tr '\n' ' ')
+  if git -C $REPO push -q origin 'refs/heads/*:refs/heads/*' $specs >/dev/null 2>&1; then
     echo "$ts pushed to GitHub" >> $LOG
+  else
+    echo "$ts PUSH FAILED" >> $LOG
   fi
   sleep $INTERVAL
 done
