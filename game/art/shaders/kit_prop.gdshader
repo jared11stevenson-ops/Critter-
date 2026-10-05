@@ -69,8 +69,8 @@ void vertex() {
 	if (wind_sway > 0.0) {
 		float h = max(VERTEX.y, 0.0);
 		float ph = TIME * 1.6 + w_pos.x * 0.35 + w_pos.z * 0.27;
-		VERTEX.x += sin(ph) * wind_sway * h * h * 0.12;
-		VERTEX.z += cos(ph * 0.83) * wind_sway * h * h * 0.08;
+		VERTEX.x += sin(ph) * wind_sway * h * h * 0.012;
+		VERTEX.z += cos(ph * 0.83) * wind_sway * h * h * 0.008;
 	}
 }
 

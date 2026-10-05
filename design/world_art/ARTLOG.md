@@ -74,3 +74,21 @@ Problems found (candid) and what I did
 10. **Threading bug**: `height_at` checks deck node visibility (main-thread only) so worker threads logged errors. Added
     `ground_h()` (pure array read) for placement.
 
+## 3. Iteration 2 -- hero vistas after the kit landed (`h2_*`, `h3_*`)
+
+Hero cameras: `tools/qa/scripts/art_heroes.json` (arrival behind the Gate, Span approach, Span aerial, Augur pit, Overlook, Waystation).
+
+Critique of `h3_00`..`h3_03`:
+1. **The Ochre Span now reads** (`h2_03`): four stone arch bays on tall piers going down into mist, parapets with tally blocks, gate
+   towers, shafts of light. This is the first frame in the game with the scale the lore asks for. Remaining: the piers still show too many
+   string courses, the deck is a little pale and clean for "older than anyone's records".
+2. **A tower floated in mid-air above the Span approach** (`h3_02`) -- the single worst bug of the pass. Props on the camera (+Z) side of a
+   floor sat on the *collision* grid (mesa height 12 m) while the visible terrain there is deliberately capped to ~1 m (the "camera cut"). Fix:
+   `RedReachesTerrain.ground_h()` returns the *visual* height and everything the kit places (landmarks, tower footing, path ribbons) uses it.
+3. **Landmarks silently not attached in the first async version** (`h2_04`: no derrick): `is_group_task_completed` was polled after the group had
+   been joined (id invalid -> false forever) and the tree is paused during the intro dialogue. Fixed: join once, `PROCESS_MODE_ALWAYS`.
+4. **Wind sway tore the flat-tree canopies** (`h3_00`: a pad swooping across the frame): amplitude formula was 10x too strong. Fixed.
+5. **Time-of-day**: the dusk / dust grades requested by `qa_vista` were being overwritten by the day-clock node; the QA camera now freezes it.
+6. Gate: the new Scale Transition Array ring + membrane is the right scale, but from behind it is a big pale disc; added the control pylon and
+   hazard cradle to read as *machinery* (Terrarium) not as ancient ruin.
+

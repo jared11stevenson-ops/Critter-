@@ -45,6 +45,7 @@ func populate(t: Node) -> void:
 					names[pn] = true
 			else:
 				names[it["p"]] = true
+	_build_paths()
 	ReachesKit.prefetch(names.keys())
 	for n in names:
 		var km := ReachesKit.mesh(n)
@@ -330,3 +331,98 @@ static func merge(parts: Array) -> ArrayMesh:
 		am.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 		am.surface_set_material(am.get_surface_count() - 1, mat)
 	return am
+
+
+# ---------------------------------------------------------------------------------------------- worn paths
+
+## Worn path ribbons (history in the dirt): the cairn trail road and the spoke paths as thin 3D strips over the terrain,
+## with a darker rut pair on the cart road north of the Waystation. One mesh, one draw call.
+func _build_paths() -> void:
+	var lay: Dictionary = terrain.layout
+	var lines: Array = []       # [{pts: Array[Vector2], w: float, ruts: bool}]
+	var extra: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://game/world/red_reaches/world_extra.json"))
+	if extra is Dictionary and (extra as Dictionary).has("cairn_trail"):
+		var pts: Array = []
+		for p in extra["cairn_trail"]["path"]:
+			pts.append(Vector2(float(p[0]), float(p[1])))
+		lines.append({"pts": _smooth(pts), "w": 2.8, "ruts": false})
+	for f in lay.get("floors", []):
+		if str(f.get("id", "")).begins_with("path_") and f.get("type", "") == "capsule":
+			var a: Array = f["a"]
+			var b: Array = f["b"]
+			lines.append({"pts": _smooth([Vector2(float(a[0]), float(a[1])), Vector2(float(b[0]), float(b[1]))]), "w": 2.2, "ruts": str(f["id"]) == "path_drover"})
+	var verts := PackedVector3Array()
+	var nrm := PackedVector3Array()
+	var cols := PackedColorArray()
+	var idx := PackedInt32Array()
+	var across := [-1.0, -0.62, 0.0, 0.62, 1.0]
+	var alpha := [0.0, 0.34, 0.46, 0.34, 0.0]
+	for ln in lines:
+		var pts: Array = ln["pts"]
+		var hw: float = float(ln["w"]) * 0.5
+		var base := verts.size()
+		var cross := 7 if ln["ruts"] else 5
+		var hc: Array = []
+		for i in pts.size():
+			hc.append(terrain.ground_h((pts[i] as Vector2).x, (pts[i] as Vector2).y))
+		for i in pts.size():
+			var p: Vector2 = pts[i]
+			var tgt: Vector2 = (pts[mini(i + 1, pts.size() - 1)] - pts[maxi(i - 1, 0)]).normalized()
+			var n := Vector2(-tgt.y, tgt.x)
+			var wob := 0.88 + 0.12 * sin(float(i) * 0.9 + p.x * 0.17)
+			for k in cross:
+				var u := -1.0 + 2.0 * float(k) / float(cross - 1)
+				var q := p + n * u * hw * wob
+				verts.append(Vector3(q.x, terrain.ground_h(q.x, q.y), q.y))
+				nrm.append(Vector3.UP)
+				var a := 0.46 * (1.0 - absf(u) * absf(u) * absf(u))
+				var c := Color(0.86, 0.64, 0.48, a)
+				if ln["ruts"] and (k == 2 or k == 4):
+					c = Color(0.36, 0.22, 0.17, 0.5)
+				cols.append(c)
+		for i in pts.size() - 1:
+			if absf(float(hc[i + 1]) - float(hc[i])) > 1.0:
+				continue          # the ribbon stops at a chasm / cliff instead of draping down it
+			for k in cross - 1:
+				var a0 := base + i * cross + k
+				var a1 := a0 + 1
+				var b0 := a0 + cross
+				var b1 := b0 + 1
+				idx.append_array([a0, a1, b1, a0, b1, b0])
+	if verts.is_empty():
+		return
+	var arrays := []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = verts
+	arrays[Mesh.ARRAY_NORMAL] = nrm
+	arrays[Mesh.ARRAY_COLOR] = cols
+	arrays[Mesh.ARRAY_INDEX] = idx
+	var am := ArrayMesh.new()
+	am.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	var m := ShaderMaterial.new()
+	m.shader = load("res://game/art/shaders/worn_path.gdshader")
+	am.surface_set_material(0, m)
+	var mi := MeshInstance3D.new()
+	mi.name = "WornPaths"
+	mi.mesh = am
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	mi.visibility_range_end = 150.0
+	add_child(mi)
+
+
+## Catmull-Rom resample at ~1.6 m steps.
+static func _smooth(pts: Array) -> Array:
+	var out: Array = []
+	if pts.size() < 2:
+		return pts
+	for i in pts.size() - 1:
+		var p0: Vector2 = pts[maxi(i - 1, 0)]
+		var p1: Vector2 = pts[i]
+		var p2: Vector2 = pts[i + 1]
+		var p3: Vector2 = pts[mini(i + 2, pts.size() - 1)]
+		var n := maxi(2, int(p1.distance_to(p2) / 1.6))
+		for k in n:
+			var t := float(k) / float(n)
+			out.append(0.5 * ((2.0 * p1) + (p2 - p0) * t + (2.0 * p0 - 5.0 * p1 + 4.0 * p2 - p3) * t * t + (3.0 * p1 - p0 - 3.0 * p2 + p3) * t * t * t))
+	out.append(pts[pts.size() - 1])
+	return out

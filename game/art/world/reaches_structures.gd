@@ -353,10 +353,10 @@ class StoneBridge extends Node3D:
 			t.register_deck(a, b, width - 0.6, null, 0.0)
 
 	static func terrain_h(t: Node, a: Vector3, lx: float, lz: float, ang: float) -> float:
-		if t == null or not t.has_method("height_at"):
+		if t == null or not t.has_method("ground_h"):
 			return 0.0
 		var w := a + Vector3(lx * cos(-ang) - lz * sin(-ang), 0.0, lx * sin(-ang) + lz * cos(-ang))
-		return t.height_at(w.x, w.z) - a.y
+		return t.ground_h(w.x, w.z) - a.y
 
 	static func _mi(m: Mesh, nm: String) -> MeshInstance3D:
 		var mi := MeshInstance3D.new()

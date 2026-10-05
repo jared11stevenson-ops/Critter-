@@ -186,11 +186,12 @@ func surface_height(x: float, z: float) -> float:
 	return lerpf(lerpf(_bd_hs[i], _bd_hs[i + 1], tx), lerpf(_bd_hs[i + _bd_n.x], _bd_hs[i + _bd_n.x + 1], tx), tz)
 
 
-## Raw collision-grid ground height (no decks, pure array read: safe on worker threads).
+## Height of the surface you SEE (visual grid: the camera-side cliffs are capped low), pure array read: safe on worker threads.
+## Props must sit on this, not on the collision grid, or they float over the capped dunes south of the floors.
 func ground_h(x: float, z: float) -> float:
-	if _h.is_empty():
+	if _hv.is_empty():
 		return 0.0
-	return _sample(_h, x, z)
+	return _sample(_hv, x, z)
 
 
 ## Extra helpers (art/QA)
