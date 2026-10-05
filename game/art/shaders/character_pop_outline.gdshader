@@ -8,7 +8,7 @@ uniform float flash = 0.0;
 void vertex() {
 	vec4 wp = MODEL_MATRIX * vec4(VERTEX, 1.0);
 	float d = length(INV_VIEW_MATRIX[3].xyz - wp.xyz);
-	float w = width * clamp(d / 10.0, 0.55, 2.2);
+	float w = width * clamp(d / 10.0, 0.55, 2.2) * COLOR.r;
 	vec3 scale = vec3(length(MODEL_MATRIX[0].xyz), length(MODEL_MATRIX[1].xyz), length(MODEL_MATRIX[2].xyz));
 	VERTEX += normalize(NORMAL) * w / max(scale, vec3(0.001));
 }

@@ -9,7 +9,7 @@ import horns as H
 import importlib
 WORK = os.path.join(HERE, "..", "work", "v3")
 ANCHOR = {"R": (0.040, -0.024, 2.11), "L": (0.130, -0.024, 2.11)}
-RAD = {"R": (0.040, 0.014), "L": (0.036, 0.013)}
+RAD = {"R": (0.036, 0.014), "L": (0.034, 0.013)}
 
 
 def main():
@@ -22,15 +22,15 @@ def main():
         b = np.array(H.BACK[name], float); s = np.array(H.SIDE[name], float)
         xb = -(b[:, 0] - bv.u0) / bv.ppm; zb = (bv.v0 - b[:, 1]) / bv.ppm
         ys = -(s[:, 0] - sv.u0) / sv.ppm; zs = (sv.v0 - s[:, 1]) / sv.ppm
-        cb = H.arclen_resample(H.catmull(np.stack([xb, zb], 1)), 56)
-        cs = H.arclen_resample(H.catmull(np.stack([ys, zs], 1)), 56)
+        cb = H.arclen_resample(H.catmull(np.stack([xb, zb], 1)), 40)
+        cs = H.arclen_resample(H.catmull(np.stack([ys, zs], 1)), 40)
         C = np.stack([cb[:, 0], cs[:, 0], 0.5 * (cb[:, 1] + cs[:, 1])], 1)
         t = np.linspace(0, 1, len(C))
         C = C + (np.array(ANCHOR[name]) - C[0]) * ((1 - t) ** 1.5)[:, None]
         r0, r1 = RAD[name]
         knob = 1 + 0.22 * (np.cos(2 * np.pi * t * 3.0) ** 2) ** 2.5
         rad = (r0 + (r1 - r0) * t ** 0.9) * knob
-        rad[:3] *= np.array([1.25, 1.12, 1.05])      # flared root sits in the cup
+        rad[:3] *= np.array([1.10, 1.05, 1.02])      # flared root sits in the cup
         rad[-3:] *= np.array([1.0, 0.9, 0.8])          # blunt notched tip
         V, F, S = H.tube(C, rad, 8)
         add(V, F, k, S)

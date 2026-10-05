@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, os.path.join(HERE, "..", "..")); sys.path.insert(0, HERE)
 from common import texbake as TB
-import paint_head as PH, paint_body as PB
+import paint_head as PH, paint_body as PB, paint_body2 as PB2
 from paint_head import smooth, mix
 W3 = os.path.join(HERE, "..", "work", "v3")
 
@@ -21,6 +21,9 @@ def main():
     nm_t, kd_t = names[B.tri], kinds[B.tri]
     H = np.load(os.path.join(W3, "head_raw.npz")); O, sc = H["origin"], float(H["scale"])
     n = B.n
+    kv = np.full(len(V), "", object)
+    for t_, kk in enumerate(kinds): kv[T[t_]] = kk
+    PB2.set_anchors(V, kv)
     col = np.tile(np.array([60, 50, 55.]), (n, 1)); emis = np.zeros((n, 3)); rough = np.full(n, 0.6); hgt = np.zeros(n)
     def put(sel, c, r, h, e=None):
         col[sel] = c; rough[sel] = r; hgt[sel] = h
@@ -30,8 +33,7 @@ def main():
         if not s.any(): continue
         P, Nn = B.P[s], B.N[s]
         c, r, h, cls = PB.paint_plated(P, Nn, k, seed={"trunk": 0, "armL": 1, "armR": 2, "legL": 3, "legR": 4}[k])
-        if k in ("trunk", "armL", "armR"):
-            c, h, r = PB.pauldron(P, Nn, c, h, r)
+        c, h, r = PB2.overlays(P, Nn, k, c, h, r)
         c, h = PB.neck_belt(P, Nn, c, h, k)
         put(s, c, r, h)
     s = kd_t == "horn"
@@ -45,6 +47,8 @@ def main():
     s = kd_t == "jaw"; c, e, r, h = PH.paint_jaw(B.P[s], B.N[s], O, sc); put(s, c, r, h, e)
     for k, up in (("tooth_up", True), ("tooth_lo", False)):
         s = kd_t == k; c, e, r, h = PH.paint_tooth(B.P[s], up); put(s, c, r, h, e)
+    s = kd_t == "fringe_head"; c, e, r, h = PH.paint_fringe(B.sp[s]); put(s, c, r, h, e)
+    s = kd_t == "tine"; c, e, r, h = PH.paint_tine(B.P[s]); put(s, c, r, h, e)
     s = kd_t == "tongue"; c, e, r, h = PH.paint_tongue(B.P[s], B.N[s], O, sc); put(s, c, r, h, e)
     s = kd_t == "eye"; c, e, r, h = PH.paint_eye(B.P[s], B.N[s], O, sc); put(s, c, r, h, e)
     alb = B.finish(col)

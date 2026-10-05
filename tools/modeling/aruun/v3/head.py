@@ -8,13 +8,13 @@ Head-local frame (metres): x lateral (+x = his left), f forward (world -Y), z up
 """
 import os, sys
 import numpy as np
-HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, os.path.join(HERE, "..", ".."))
+HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, os.path.join(HERE, "..", "..")); sys.path.insert(0, os.path.join(HERE, "..", "v2"))
 from common import sdf2 as S
 WORK = os.path.join(HERE, "..", "work", "v3"); os.makedirs(WORK, exist_ok=True)
 
 # world placement of the head-local origin
 ORIGIN = np.array([0.085, -0.050, 2.045])
-SCALE = 0.92          # head is exaggerated a touch for phone readability
+SCALE = 1.06          # head is exaggerated a touch for phone readability
 
 
 def W(p):
@@ -43,13 +43,13 @@ def skull_field():
     parts.append(cap((0, 0.02, 0.05), (0, 0.24, -0.010), 0.014, 0.011))
     for s in (-1, 1):
         # brow ridge: heavy bar over the eye socket sweeping up and back
-        parts.append(cap((s * 0.030, 0.100, 0.034), (s * 0.072, 0.040, 0.044), 0.017, 0.013))
+        parts.append(cap((s * 0.030, 0.100, 0.030), (s * 0.072, 0.040, 0.050), 0.017, 0.013))
         parts.append(cap((s * 0.072, 0.040, 0.044), (s * 0.074, -0.020, 0.030), 0.013, 0.010))
         # cheek plate (zygomatic) + lip plate along the upper jaw
         parts.append(E((s * 0.060, 0.020, -0.034), (0.016, 0.052, 0.036), S.euler(0.0, 0.0, s * 0.18)))
         parts.append(E((s * 0.040, 0.150, -0.044), (0.014, 0.075, 0.016), S.euler(0.0, 0.0, s * 0.12)))
         # horn cups / crown plates
-        parts.append(cap((s * 0.044, -0.020, 0.035), (s * 0.050, -0.030, 0.092), 0.034, 0.026))
+        parts.append(cap((s * 0.044, -0.020, 0.035), (s * 0.050, -0.030, 0.085), 0.030, 0.023))
         # temple knob (bone tine root)
         parts.append(E((s * 0.076, -0.030, 0.005), (0.012, 0.016, 0.012)))
     # sagittal crest plates
@@ -71,9 +71,12 @@ def skull_field():
             body = S.subtract(body, E((s * 0.012, 0.268, -0.030), (0.0075, 0.012, 0.0075)), 0.004)
     # the neck stub (collar) so the head seats on the neck; joined last, wide and soft
     nx, nf, nz = (0.085 - ORIGIN[0]) / SCALE, -(-0.085 - ORIGIN[1]) / SCALE, (1.872 - ORIGIN[2]) / SCALE
-    stub = S.smooth_union([S.capsule(W((0, 0.0, -0.045)), W((nx, nf, nz + 0.02)), 0.055, 0.05),
-                           E((nx, nf, nz + 0.005), (0.078 / SCALE, 0.060 / SCALE, 0.03))], k=0.02)
-    body = S.smooth_union([body, stub], k=0.03)
+    def lerp(a, b, t): return a + (b - a) * t
+    es = []
+    for z, rx, ry, t in ((-0.060, 0.056, 0.053, 0.0), (-0.100, 0.060, 0.054, 0.45), (nz + 0.035, 0.0655 / SCALE, 0.0500 / SCALE, 1.0), (nz - 0.01, 0.0655 / SCALE, 0.0500 / SCALE, 1.0)):
+        es.append(E((lerp(0.0, nx, t), lerp(0.0, nf, t), z), (rx, ry, 0.032)))
+    stub = S.smooth_union(es, k=0.03)
+    body = S.smooth_union([body, stub], k=0.025)
     return body
 
 
@@ -149,11 +152,30 @@ def main():
     print("jaw raw", len(Fj))
     up, lo = teeth()
     Vu, Fu = merge(up); Vl, Fl = merge(lo)
+    # temple tines (bone) + fringe strands (pale yellow / olive / cream cards sweeping back over the nape)
+    import cards as C
+    tines = []
+    for sg in (-1, 1):
+        for (f0, z0, dx, df, dz, ln) in ((-0.020, 0.012, 0.050, -0.030, 0.055, 0.075), (-0.045, 0.030, 0.035, -0.055, 0.065, 0.06)):
+            base = W((sg * 0.074, f0, z0)); tip = W((sg * (0.074 + dx), f0 + df, z0 + dz))
+            tines.append(cone_mesh(base, tip, 0.0125 if ln > 0.07 else 0.010, 5))
+    Vtn, Ftn = merge(tines)
+    fr_V = []; fr_F = []; fr_S = []; off_ = 0
+    for sg in (-1, 1):
+        for k in range(5):
+            u = k / 4.0
+            b = np.array([sg * (0.070 - 0.028 * u), 0.020 - 0.100 * u, 0.050 - 0.058 * u])
+            e = b + np.array([sg * (0.020 + 0.030 * u), -(0.060 + 0.070 * (1 - abs(u - 0.4))), -(0.060 + 0.040 * u)])
+            P0 = W(b); P1 = W(e)
+            V_, F_, S_ = C.strip(P0, P1, 0.058 - 0.010 * u, 0.020, np.array([sg * 1.0, 0.0, 0.35]), nseg=4, taper=0.8)
+            fr_V.append(V_); fr_F.append(np.array(F_) + off_); off_ += len(V_)
+            fr_S.append(S_ + 2.0 * ((k + (sg > 0)) % 3))
+    Vfr, Ffr = np.vstack(fr_V), np.vstack(fr_F); Sfr = np.concatenate(fr_S)
     # eyes
     eyes = []
     for s in (-1, 1):
         c = W((s * 0.058, 0.064, 0.005))
-        ey = S.mesh(S.ellipsoid(c, (0.016, 0.024, 0.020), S.euler(0.0, 0.0, s * 0.5)), c - 0.03, c + 0.03, 0.0015)
+        ey = S.mesh(S.ellipsoid(c, (0.019, 0.028, 0.024), S.euler(0.0, 0.0, s * 0.5)), c - 0.03, c + 0.03, 0.0015)
         eyes.append(ey)
     Ve, Fe = merge(eyes)
     tg = S.mesh(S.ellipsoid(W((0, 0.11, zp(0.11) - 0.008)), (0.018, 0.085, 0.008)), W((0, 0.11, zp(0.11))) - [0.05, 0.1, 0.04], W((0, 0.11, zp(0.11))) + [0.05, 0.1, 0.04], 0.002)
@@ -164,7 +186,7 @@ def main():
         # input coords are already 'world-oriented' relative to head-local origin (x, -f, z): place and scale
         return (loc * SCALE + ORIGIN * np.array([1, 1, 1]) * 1.0).astype(np.float32)
     np.savez(os.path.join(WORK, "head_raw.npz"),
-             Vs=place(Vs), Fs=Fs, Vj=place(Vj), Fj=Fj, Vu=place(Vu), Fu=Fu, Vl=place(Vl), Fl=Fl, Ve=place(Ve), Fe=Fe, Vt=place(Vt), Ft=Ft,
+             Vs=place(Vs), Fs=Fs, Vj=place(Vj), Fj=Fj, Vu=place(Vu), Fu=Fu, Vl=place(Vl), Fl=Fl, Ve=place(Ve), Fe=Fe, Vt=place(Vt), Ft=Ft, Vtn=place(Vtn), Ftn=Ftn, Vfr=place(Vfr), Ffr=Ffr, Sfr=Sfr,
              origin=ORIGIN, scale=SCALE)
 
 

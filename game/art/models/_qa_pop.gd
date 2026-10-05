@@ -5,6 +5,7 @@ func _ready() -> void:
 	var preset := "reaches"
 	var ground := Color(0.55, 0.32, 0.24)
 	var cam_kind := "close"
+	var yaw := 0.0
 	for a in OS.get_cmdline_user_args():
 		if a.begins_with("qa_preset="):
 			preset = a.substr(10)
@@ -39,7 +40,19 @@ func _ready() -> void:
 	var target := Vector3(0, 1.1, 0)
 	var dist := 6.0
 	var pitch := -10.0
+	var who := 0
+	for a in OS.get_cmdline_user_args():
+		if a.begins_with("qa_who="):
+			who = int(a.substr(7))
+		if a.begins_with("qa_yaw="):
+			yaw = float(a.substr(7))
+	if cam_kind == "head":
+		target = Vector3(-1.1 + 0.0, 2.05, -0.1) if who == 0 else Vector3(1.0, 1.45, 0.0)
+		dist = 1.6 if who == 0 else 1.0; pitch = -6.0; cam.fov = 35
+	elif cam_kind == "body":
+		target = Vector3(-1.1, 1.2, 0.0) if who == 0 else Vector3(1.0, 0.85, 0.0)
+		dist = 4.6 if who == 0 else 3.2; pitch = -8.0; cam.fov = 35
 	if cam_kind == "game":
 		target = Vector3(0, 0.85, 0); dist = 14.0; pitch = -40.0; cam.fov = 42
-	var b := Basis.from_euler(Vector3(deg_to_rad(pitch), 0, 0))
+	var b := Basis.from_euler(Vector3(deg_to_rad(pitch), deg_to_rad(yaw), 0))
 	cam.global_transform = Transform3D(b, target + b * Vector3(0, 0, dist))

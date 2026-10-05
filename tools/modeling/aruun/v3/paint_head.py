@@ -53,7 +53,7 @@ def paint_skull(P, Nr, O, sc, out):
         col = mix(col, TAN * 0.55, ln * 0.9); hgt -= 0.5 * ln
     # nose bridge ridge: bone strip
     ridge = (1 - smooth(0.007, 0.011, ax)) * smooth(0.075, 0.095, lf) * smooth(0.268, 0.25, lf) * smooth(-0.005, 0.01, lz)
-    col = mix(col, BONE, ridge * 0.9); hgt += 0.5 * ridge
+    col = mix(col, mix(CREAM, BONE, 0.4), ridge * 0.6); hgt += 0.5 * ridge
     # --- crown: red plates over the brow/skull, segmented by cream-edged arcs
     top = smooth(0.022, 0.034, lz + 0.0 * lf) * smooth(0.11, 0.085, lf) * smooth(-0.075, -0.045, lf)
     col = mix(col, RED, top * 0.96)
@@ -134,9 +134,10 @@ def paint_jaw(P, Nr, O, sc):
     col = mix(col, PLUM, smooth(-0.1, -0.04, lz) * 0.5 + 0.12 * vnoise(P, 50, 3))
     # cream chin plate and hook (bone), segmented by lines
     chin = smooth(0.150, 0.185, lf)
-    col = mix(col, mix(TAN, CREAM, smooth(0.18, 0.26, lf)), chin * 0.95)
+    col = mix(col, mix(RED, REDDK, smooth(0.20, 0.27, lf)), chin * 0.95)
     for f0 in (0.19, 0.225):
-        col = mix(col, DARK * 0.8, line(lf - f0, 0.0016) * chin)
+        col = mix(col, CREAM, line(lf - f0, 0.0016) * chin * 0.8)
+    col = mix(col, TAN, smooth(0.0, 0.5, ax * 40 - 0.0) * 0 + smooth(0.255, 0.275, lf) * 0.5 * chin)
     # lower lip plates: tan stripe along the top edge of the jaw outside
     lip = lz - (zp(lf) - 0.0015)
     col = mix(col, TAN * 0.9, smooth(-0.018, -0.008, lip) * smooth(0.004, -0.004, lip) * smooth(0.0, 0.05, lf) * (1 - chin))
@@ -187,3 +188,14 @@ def paint_eye(P, Nr, O, sc):
         e = np.where((er < 0.30)[:, None], 0, c * 0.7)
         col[sel] = c[sel]; emis[sel] = e[sel]
     return col, emis, rough, np.zeros(n)
+
+
+def paint_fringe(sp):
+    n = len(sp); k = np.floor(sp / 2.0 + 1e-4).astype(int) % 3; t = sp - 2.0 * np.floor(sp / 2.0 + 1e-4)
+    cols = np.array([[228, 200, 112.], [216, 198, 156.], [120, 106, 62.]])
+    c = cols[k]; c = c * (0.62 + 0.55 * smooth(0.0, 0.8, t))[:, None]
+    return c, np.zeros((n, 3)), np.full(n, 0.7), np.zeros(n)
+
+
+def paint_tine(P):
+    n = len(P); return np.tile(BONE * 0.95, (n, 1)), np.zeros((n, 3)), np.full(n, 0.5), np.zeros(n)

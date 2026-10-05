@@ -9,7 +9,7 @@ d = np.load(os.path.join(W3, "raw_mesh.npz"), allow_pickle=True)
 V, T, fk, sp = d["V"].astype(np.float32), d["T"].astype(np.int64), d["facekinds"], d["sparam"]
 kind = np.array([str(k).split("|")[1] for k in fk])
 GROUPS = {"body": (("trunk", "armL", "armR", "legL", "legR"), 1152, (0, 0)),
-          "head": (("skull", "jaw", "eye", "tooth_up", "tooth_lo", "tongue"), 896, (1152, 0)),
+          "head": (("skull", "jaw", "eye", "tooth_up", "tooth_lo", "tongue", "tine", "fringe_head"), 896, (1152, 0)),
           "horn": (("horn",), 768, (1152, 896)),
           "gear": (("morrow", "card"), 896, (0, 1152))}
 S = 2048.0

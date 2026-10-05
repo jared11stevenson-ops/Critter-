@@ -8,7 +8,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); V2 = os.path.join(HERE, "..",
 sys.path.insert(0, os.path.join(HERE, "..", "..")); sys.path.insert(0, V2)
 from common import bpy_util as bu
 W2 = os.path.join(HERE, "..", "work", "v2"); W3 = os.path.join(HERE, "..", "work", "v3")
-TARGET = {"trunk": 3700, "armL": 950, "armR": 950, "legL": 1250, "legR": 1250}
+TARGET = {"trunk": 3300, "armL": 800, "armR": 800, "legL": 1100, "legR": 1100}
 CUT_Z = 1.874
 bpy.ops.wm.read_factory_settings(use_empty=True)
 hi = np.load(os.path.join(W2, "shells_hi.npz")); mf = np.load(os.path.join(W2, "mesh_fit.npz"), allow_pickle=True)
@@ -41,7 +41,9 @@ for pi in [i for i, p in enumerate(parts) if p.startswith("morrow")]:
     t = T[pot == pi]
     if len(t) == 0: continue
     used = np.unique(t); remap = -np.ones(len(V), int); remap[used] = np.arange(len(used))
-    add("legacy_" + parts[pi], V[used], remap[t], "morrow")
+    ob = add("legacy_" + parts[pi], V[used], remap[t], "morrow")
+    if len(t) > 120:
+        decimate(ob, int(len(t) * 0.62))
 # cards
 cd = np.load(os.path.join(W2, "cards.npz"))
 INV = {1: "mantle", 2: "fringe", 3: "leaf_olive", 4: "leaf_dark", 5: "tassel", 6: "cord"}
@@ -66,7 +68,7 @@ for nm, kind, tgt in (("s", "skull", 2500), ("j", "jaw", 650), ("e", "eye", 90),
             decimate(o, tgt)
     else:
         decimate(ob, tgt, 4 if nm in "sj" else 0)
-add("head_tooth_up", H["Vu"], H["Fu"], "tooth_up"); add("head_tooth_lo", H["Vl"], H["Fl"], "tooth_lo")
+add("head_tine", H["Vtn"], H["Ftn"], "tine"); add("head_fringe", H["Vfr"], H["Ffr"], "fringe_head", H["Sfr"]); add("head_tooth_up", H["Vu"], H["Fu"], "tooth_up"); add("head_tooth_lo", H["Vl"], H["Fl"], "tooth_lo")
 Vs, Fs, KS, SPs = [], [], [], []; off = 0
 for ob in objs:
     me = ob.data

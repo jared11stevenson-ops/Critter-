@@ -31,6 +31,11 @@ MORROW_HAFT = 0.78
 _cache = {}
 
 
+def jaw(tr, keys):
+    """Open/close the mouth (jaw bone rx, degrees; + = open). keys: [(t, deg), ...]"""
+    lib.layer(tr, {"jaw": [(t, (d, 0, 0)) for t, d in keys]})
+
+
 def meta(tr, loop=False, impact=None, **kw):
     d = {"duration": round((tr.F - 1) / FPS, 4), "loop": loop, "impact": None if impact is None else round(impact, 3)}
     d.update(kw)
@@ -285,6 +290,7 @@ def attack_1(sk):
     carry(tr, w=curve1(tr, [(0, 1.0), (0.14, 0.0), (0.55, 0.0), (0.8, 1.0)]))
     plant(tr)
     ground_clamp(tr)
+    jaw(tr, [(0, 0), (0.12, 14), (0.27, 30), (0.5, 12), (0.8, 0)])
     return tr, meta(tr, impact=find_impact(tr, "sweep", 0.27), cancel=0.4)
 
 
@@ -300,6 +306,7 @@ def attack_2(sk):
     carry(tr, w=curve1(tr, [(0, 1.0), (0.08, 0.0), (0.5, 0.0), (0.75, 1.0)]))
     plant(tr)
     ground_clamp(tr)
+    jaw(tr, [(0, 0), (0.14, 12), (0.30, 30), (0.55, 10), (0.7, 0)])
     return tr, meta(tr, impact=find_impact(tr, "slam", 0.30), cancel=0.4)
 
 
@@ -319,6 +326,7 @@ def attack_3(sk):
     carry(tr, w=curve1(tr, [(0, 1.0), (0.1, 0.0), (0.72, 0.0), (1.0, 1.0)]))
     plant(tr)
     ground_clamp(tr)
+    jaw(tr, [(0, 0), (0.2, 16), (0.47, 36), (0.8, 22), (1.0, 0)])
     return tr, meta(tr, impact=find_impact(tr, "slam", 0.47), cancel=0.62)
 
 
@@ -356,6 +364,7 @@ def reaching_strike(sk):
     from_idle(tr, sk, 0.08)
     settle(tr, sk, 0.7)
     plant(tr)
+    jaw(tr, [(0, 0), (0.14, 10), (0.34, 32), (0.7, 14), (0.9, 0)])
     return tr, meta(tr, impact=find_impact(tr, "thrust", 0.36), cancel=0.6)
 
 
@@ -378,6 +387,7 @@ def gravity_pull(sk):
             curve1(tr, [(0, 0.0), (0.12, 1.0), (0.8, 1.0), (1.05, 0.0)]))
     lib.layer(tr, {"hand.L": [(0, (0, 0, 0)), (0.28, (40, 0, 0)), (0.45, (35, 0, 0)), (0.58, (-30, 0, 0)), (1.05, (0, 0, 0))]})
     plant(tr)
+    jaw(tr, [(0, 0), (0.3, 18), (0.55, 26), (1.05, 0)])
     return tr, meta(tr, impact=0.55, cancel=0.75)
 
 
@@ -423,6 +433,7 @@ def dash(sk):
     rt.pendulum(tr, "weapon", stiffness=40, damping=5, max_deg=30)
     from_idle(tr, sk, 0.06)
     settle(tr, sk, 0.32)
+    jaw(tr, [(0, 0), (0.08, 24), (0.3, 18), (0.45, 0)])
     return tr, meta(tr, impact=0.08, cancel=0.3)
 
 
@@ -437,6 +448,7 @@ def _hit(sk, recoil, dur=0.45, peak=0.07, hips=(0, 0.06, -0.03), scale=1.0):
         return [(0, (0, 0, 0)), (peak, tuple(v)), (peak + 0.12, tuple(v * 0.55)), (dur, (0, 0, 0))]
     lib.layer(tr, {b: keys(v) for b, v in recoil.items()})
     lib.shift(tr, lib.curve(tr.F, [(0, (0, 0, 0)), (peak, tuple(np.array(hips) * scale)), (dur, (0, 0, 0))]))
+    jaw(tr, [(0, 0), (peak, 26 * scale), (peak + 0.15, 14 * scale), (dur, 0)])
     rt.pendulum(tr, "weapon", stiffness=70, damping=11, max_deg=20)
     settle(tr, sk, dur * 0.6)
     plant(tr)
@@ -491,6 +503,7 @@ def downed(sk):
     from_idle(tr, sk, 0.1)
     lib.ground_body(tr)
     carry(tr, w=curve1(tr, [(0, 1.0), (0.5, 0.0)]))
+    jaw(tr, [(0, 0), (0.15, 22), (0.6, 12), (1.1, 6)])
     plant(tr)
     ground_clamp(tr)
     return tr, meta(tr, impact=0.85)

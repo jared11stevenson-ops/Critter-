@@ -29,38 +29,31 @@ def zones(P, N, kind):
 
 
 def paint_plated(P, N, kind, seed=0):
+    """Plate patchwork: elongated Worley cells (plates) coloured by anatomical zone, thick ink outlines, shaded domes,
+    big ochre spots on red plates. Large, calm, deliberate shapes (no speckle)."""
     n = len(P); pr, pb = zones(P, N, kind)
-    L = 0.058 if kind in ("trunk", "legL", "legR") else 0.048
-    f1, f2, cid, cen = worley(P, L, seed=seed + 7)
-    u = hash1(cid, 3 + seed); edge = f2 - f1
+    L = 0.115 if kind == "trunk" else 0.095
+    Pz = P * np.array([1.0, 1.0, 0.62])                       # plates elongated along the limb/trunk axis
+    f1, f2, cid, cen = worley(Pz, L * 0.8, seed=seed + 7, jitter=0.9)
+    u = hash1(cid, 3 + seed); edge = (f2 - f1) / 0.62 * 0.62
     cls = np.where(u < pr, 0, np.where(u < pr + pb, 1, 2))     # 0 red 1 bone 2 dark
-    base = np.where((cls == 0)[:, None], mix(WINE, RED, hash1(cid, 5)[:, None] * np.ones((1, 3))), 0)
-    base = np.where((cls == 0)[:, None], mix(WINE, RED, hash1(cid, 5)), 0) if False else base
-    col = np.zeros((n, 3))
-    rtone = hash1(cid, 11)
-    col = np.where((cls == 0)[:, None], WINE[None] * (1 - rtone[:, None]) + REDHI[None] * 0.0 + RED[None] * rtone[:, None] * 1.0, col)
-    col = np.where((cls == 1)[:, None], TAN[None] * (1 - hash1(cid, 13)[:, None]) + CREAM[None] * hash1(cid, 13)[:, None], col)
-    col = np.where((cls == 2)[:, None], CHITIN[None] * (1 - hash1(cid, 17)[:, None]) + PLUM[None] * hash1(cid, 17)[:, None] * 0.8, col)
-    # painterly gradient inside each plate: dome light at the centre, darker toward the rim and downward
-    rr = np.clip(f1 / (0.55 * L), 0, 1)
-    shade = 1.12 - 0.34 * rr ** 1.6 + 0.10 * (N[:, 2])
+    t1 = hash1(cid, 11)[:, None]; t2 = hash1(cid, 13)[:, None]; t3 = hash1(cid, 17)[:, None]
+    col = np.where((cls == 0)[:, None], WINE[None] * (1 - t1) + RED[None] * t1, 0.0)
+    col = np.where((cls == 1)[:, None], TAN[None] * (1 - t2) + CREAM[None] * t2, col)
+    col = np.where((cls == 2)[:, None], CHITIN[None] * (1 - t3) + PLUM[None] * t3 * 0.9, col)
+    rr = np.clip(f1 / (0.7 * L * 0.8), 0, 1)
+    shade = 1.14 - 0.38 * rr ** 1.5 + 0.10 * N[:, 2]
     col = col * shade[:, None]
-    # outline: dark line on cell borders; thin cream rim highlight just inside on red plates
-    ln = 1 - smooth(0.0016, 0.0042, edge)
-    rim = (1 - smooth(0.0042, 0.0085, edge)) * smooth(0.0016, 0.0042, edge)
-    wear = smooth(0.58, 0.72, vnoise(P, 70, 9))
-    col = mix(col, np.where((cls == 0)[:, None], CREAM[None], col * 1.15), rim * ((cls == 0) * wear * 0.9 + (cls != 0) * 0.35))
-    col = mix(col, DARK * 0.8, ln * 0.92)
-    # spots: cream/ochre discs with a dark ring in red plates
-    sp = (cls == 0) & (hash1(cid, 19) < 0.6)
-    d = np.linalg.norm(P - cen, axis=1); R0 = 0.011 + 0.009 * hash1(cid, 23)
-    col = mix(col, DARK * 0.9, sp * line(d - R0 * 1.15, 0.0022) * 0.9)
-    col = mix(col, mix(OCHRE, CREAM, hash1(cid, 29)), sp * smooth(R0, R0 * 0.8, d))
-    # tiny cream star-dots on dark chitin
-    g1, g2, gid, gc = worley(P, 0.034, seed=seed + 31)
-    dots = (cls == 2) & (hash1(gid, 37) < 0.22) & (g1 < 0.0032)
-    col = mix(col, CREAM, dots * 0.9)
-    hgt = 0.9 * smooth(0.0, 0.01, edge) - 0.6 * ln + 0.8 * smooth(R0, R0 * 0.7, d) * sp * 0.5
+    ln = 1 - smooth(0.0022, 0.0050, edge)
+    rim = (1 - smooth(0.0050, 0.0105, edge)) * smooth(0.0022, 0.0050, edge)
+    col = mix(col, np.where((cls == 0)[:, None], CREAM[None] * 0.9, col * 1.22), rim * np.where(cls == 2, 0.25, 0.6))
+    col = mix(col, DARK * 0.7, ln * 0.95)
+    d = np.linalg.norm(P - cen, axis=1); R0 = 0.020 + 0.012 * hash1(cid, 23)
+    sp = (cls == 0) & (hash1(cid, 19) < 0.55)
+    col = mix(col, DARK * 0.8, sp * line(d - R0 * 1.15, 0.0028) * 0.95)
+    col = mix(col, mix(OCHRE, CREAM, hash1(cid, 29)[:, None] * 0.5), sp * smooth(R0, R0 * 0.85, d))
+    col = mix(col, DARK * 0.6, sp * smooth(R0 * 0.35, R0 * 0.2, d) * 0.8)
+    hgt = 0.9 * smooth(0.0, 0.012, edge) - 0.8 * ln + 0.6 * sp * smooth(R0, R0 * 0.8, d)
     rough = np.where(cls == 1, 0.62, np.where(cls == 0, 0.38, 0.32))
     return col, rough, hgt, cls
 
@@ -113,7 +106,7 @@ def paint_horn(sp, P, N):
     n = len(P); t = sp
     col = mix(RED, REDHI, 0.25 * vnoise(P, 45, 21)); col = mix(col, WINE, smooth(0.0, 0.25, 0.25 - t))
     knob = (np.cos(2 * np.pi * t * 3.0) ** 2) ** 2.5
-    col = mix(col, CREAM, smooth(0.55, 0.9, knob) * 0.95)
+    col = mix(col, CREAM, smooth(0.80, 0.97, knob) * 0.95)
     col = mix(col, DARK * 0.8, line(np.abs(np.sin(2 * np.pi * t * 3.0)) - 0.12, 0.012) * 0.0)
     # lighter spine highlight along the top, dark underside
     col = col * (0.82 + 0.28 * smooth(-0.6, 0.8, N[:, 2]))[:, None]

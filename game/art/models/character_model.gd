@@ -62,6 +62,11 @@ const HOLD_LEAD := 0.12
 const HOLD_DRIFT := 0.04
 
 var _model: Node3D
+## Face expressions (blend shapes on the head mesh, if the model has them): "neutral" | "angry" | "calm".
+## Automatic by default (angry while an action plays, calm when downed); set_expression() overrides until clear_expression().
+var _expr_meshes: Array = []        # [[MeshInstance3D, {shape name: index}]]
+var _expr_cur := {}
+var _expr_override := ""
 var _player: AnimationPlayer
 var _tree: AnimationTree
 var _meshes: Array[MeshInstance3D] = []
@@ -110,6 +115,7 @@ func _ready() -> void:
 	add_child(_model)
 	_player = _find_player(_model)
 	_collect_meshes(_model)
+	_collect_blend_shapes()
 	_overlay = ShaderMaterial.new()
 	var sh := Shader.new()
 	sh.code = OVERLAY_CODE
@@ -154,6 +160,41 @@ func _collect_meshes(n: Node) -> void:
 		_meshes.append(n)
 	for c in n.get_children():
 		_collect_meshes(c)
+
+
+func _collect_blend_shapes() -> void:
+	for m in _meshes:
+		if m.mesh == null or m.mesh.get_blend_shape_count() == 0:
+			continue
+		var idx := {}
+		for i in m.mesh.get_blend_shape_count():
+			idx[String(m.mesh.get_blend_shape_name(i))] = i
+		_expr_meshes.append([m, idx])
+
+
+## Face expression override: "neutral", "angry", "calm". Pass "" (or call clear_expression) to return to automatic.
+func set_expression(expr: String) -> void:
+	_expr_override = expr
+
+
+func clear_expression() -> void:
+	_expr_override = ""
+
+
+func _update_expression(delta: float) -> void:
+	if _expr_meshes.is_empty():
+		return
+	var want := _expr_override
+	if want == "":
+		want = "calm" if _downed else ("angry" if _act_name != "" else "neutral")
+	for em in _expr_meshes:
+		var mi: MeshInstance3D = em[0]
+		for shape in em[1]:
+			var t := 1.0 if shape == want else 0.0
+			var cur: float = _expr_cur.get(shape, 0.0)
+			cur = move_toward(cur, t, delta * 6.0)
+			_expr_cur[shape] = cur
+			mi.set_blend_shape_value(em[1][shape], cur)
 
 
 func _add_shadow() -> void:
@@ -590,6 +631,7 @@ func _process(delta: float) -> void:
 		for pm in _pop:
 			pm.set_shader_parameter("flash", _flash * 0.6)
 			pm.set_shader_parameter("highlight", _hl)
+	_update_expression(delta)
 	if _tree == null:
 		return
 	if _hit_pending > 0:

@@ -26,6 +26,8 @@ uniform vec4 accent_color : source_color = vec4(0.3, 1.0, 0.9, 1.0);
 uniform float accent_strength = 1.4;
 uniform float accent_mix = 0.4;       // how much of the baked emissive hue is replaced by accent_color
 uniform float alpha_cut = 0.0;          // >0: leaf-cut membrane
+// per-vertex control (glb COLOR_0, authored by tools/modeling): r = outline width scale, g = rim scale, b = shade-floor boost (faces).
+varying vec4 vcol;
 // gameplay feedback (driven by CharacterModel)
 uniform vec4 highlight_color : source_color = vec4(0.4, 0.9, 1.0, 1.0);
 uniform float highlight = 0.0;
@@ -56,7 +58,7 @@ void pop_fragment(vec2 uv, vec3 nrm, vec3 view, out vec3 albedo, out float rough
 	}
 	float ndv = clamp(dot(nrm, view), 0.0, 1.0);
 	float f = pow(1.0 - ndv, rim_power);
-	emis = albedo * shadow_floor + rim_color.rgb * f * rim_strength;
+	emis = albedo * shadow_floor * (1.0 + vcol.b * 2.2) + rim_color.rgb * f * rim_strength * vcol.g;
 	if (use_emis > 0.5) {
 		vec3 e = texture(emis_tex, uv).rgb;
 		float m = max(e.r, max(e.g, e.b));
