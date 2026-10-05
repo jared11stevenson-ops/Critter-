@@ -1,0 +1,88 @@
+[
+ {
+  "name": "Sun core disc + spikes",
+  "cls": "emissive gold",
+  "sample": [
+   "front",
+   0.45,
+   0.3
+  ],
+  "rough": 0.3,
+  "metal": 0.6,
+  "emi": 3.0,
+  "note": "glows strongly in art; suggest emissive 3.0 gold (#f0a030-ish), spikes thin emissive",
+  "hex": "#ffefbf",
+  "n": 1
+ },
+ {
+  "name": "Moon core (black/white crescent)",
+  "cls": "dark glass / matte",
+  "sample": [
+   "front",
+   0.32,
+   0.27
+  ],
+  "rough": 0.2,
+  "metal": 0,
+  "emi": 0.3,
+  "note": "gravity core; crescent rim white",
+  "hex": "#232b39",
+  "n": 2
+ },
+ {
+  "name": "Ivory/bone plates",
+  "cls": "bone / chitin",
+  "sample": [
+   "side",
+   0.45,
+   0.75
+  ],
+  "rough": 0.45,
+  "metal": 0,
+  "note": "pale ivory plates",
+  "hex": "#808080",
+  "n": 3
+ },
+ {
+  "name": "Gold edging",
+  "cls": "gold metal",
+  "sample": [
+   "front",
+   0.27,
+   0.7
+  ],
+  "rough": 0.3,
+  "metal": 0.9,
+  "note": "leg plate edging",
+  "hex": "#808080",
+  "n": 4
+ },
+ {
+  "name": "Navy-blue segments",
+  "cls": "chitin / enamel",
+  "sample": [
+   "front",
+   0.55,
+   0.6
+  ],
+  "rough": 0.35,
+  "metal": 0.1,
+  "note": "deep navy leg segments",
+  "hex": "#2c2f34",
+  "n": 5
+ },
+ {
+  "name": "Tide silk / webbing",
+  "cls": "translucent silk",
+  "sample": [
+   "front",
+   0.85,
+   0.55
+  ],
+  "rough": 0.2,
+  "metal": 0,
+  "note": "pale blue webbing between legs, alpha ~.4 (anatomy panel)",
+  "hex": "#33414d",
+  "n": 6
+ }
+]

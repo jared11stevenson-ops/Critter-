@@ -1,0 +1,115 @@
+[
+ {
+  "name": "Velvet fur (crimson)",
+  "cls": "fur / velvet",
+  "sample": [
+   "side",
+   0.38,
+   0.55
+  ],
+  "rough": 0.9,
+  "metal": 0,
+  "note": "dense short pile; use fur cards or velvet shader with sheen",
+  "hex": "#351510",
+  "n": 1
+ },
+ {
+  "name": "Legs (darker red tips)",
+  "cls": "chitin",
+  "sample": [
+   "side",
+   0.45,
+   0.95
+  ],
+  "rough": 0.5,
+  "metal": 0,
+  "note": "8 short legs",
+  "hex": "#260c0f",
+  "n": 2
+ },
+ {
+  "name": "Tricorn hat (black, gold trim)",
+  "cls": "cloth / felt",
+  "sample": [
+   "side",
+   0.2,
+   0.2
+  ],
+  "rough": 0.85,
+  "metal": 0,
+  "note": "gold compass/sun emblem",
+  "hex": "#808080",
+  "n": 3
+ },
+ {
+  "name": "Coat panels + gold embroidery",
+  "cls": "cloth",
+  "sample": [
+   "side",
+   0.6,
+   0.75
+  ],
+  "rough": 0.8,
+  "metal": 0,
+  "note": "dark long panels, gold thread",
+  "hex": "#0a0503",
+  "n": 4
+ },
+ {
+  "name": "Cheese carapace",
+  "cls": "aged cheese (waxy)",
+  "sample": [
+   "back",
+   0.45,
+   0.35
+  ],
+  "rough": 0.65,
+  "metal": 0,
+  "note": "pale yellow with holes; slightly translucent edges (sss 0.2)",
+  "hex": "#2d2217",
+  "n": 5
+ },
+ {
+  "name": "Gold chains, coins, medallions",
+  "cls": "gold metal",
+  "sample": [
+   "side",
+   0.83,
+   0.45
+  ],
+  "rough": 0.3,
+  "metal": 1.0,
+  "note": "small hanging items",
+  "hex": "#b5823e",
+  "n": 6
+ },
+ {
+  "name": "Lantern (spores)",
+  "cls": "brass + glass",
+  "sample": [
+   "side",
+   0.05,
+   0.3
+  ],
+  "rough": 0.3,
+  "metal": 0.7,
+  "emi": 1.0,
+  "note": "glows orange; emissive suggestion",
+  "hex": "#361a0c",
+  "n": 7
+ },
+ {
+  "name": "Eyes",
+  "cls": "glass",
+  "sample": [
+   "side",
+   0.27,
+   0.3
+  ],
+  "rough": 0.05,
+  "metal": 0,
+  "note": "glossy black with gold glints",
+  "hex": "#2e271b",
+  "n": 8
+ }
+]

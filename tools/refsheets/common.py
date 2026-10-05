@@ -105,3 +105,14 @@ def save_art(im, path):
         im.convert("RGB").quantize(256, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE).save(path, optimize=True)
     else:
         im.quantize(256, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE).save(path, optimize=True)
+
+
+def key_bg(rgb, lo=22, hi=60):
+    """Colour-key background removal for flat parchment panels where rembg keeps the paper: bg = median of the border."""
+    a = np.asarray(rgb.convert("RGB")).astype(np.float32)
+    b = np.concatenate([a[:6].reshape(-1, 3), a[-6:].reshape(-1, 3), a[:, :6].reshape(-1, 3), a[:, -6:].reshape(-1, 3)])
+    bgc = np.median(b, 0); d = np.sqrt(((a - bgc) ** 2).sum(-1))
+    al = np.clip((d - lo) / (hi - lo), 0, 1)
+    al = ndimage.binary_closing(al > .5, iterations=2) * np.maximum(al, .0) + 0
+    out = np.dstack([a, np.clip(al, 0, 1) * 255]).astype(np.uint8)
+    return Image.fromarray(out, "RGBA")

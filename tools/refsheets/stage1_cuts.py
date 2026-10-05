@@ -19,7 +19,7 @@ def main(cid, only=None):
             im = Image.open(os.path.join(ROOT, s["hires"])).convert("RGBA")
         else:
             x4 = esrgan_rgb(sheet.crop(s["box"]))
-            im = largest(cut_bg(x4), keep_near=int(s.get("near", 6)))
+            im = largest(key_bg(x4) if s.get("key") else cut_bg(x4), keep_near=int(s.get("near", 6)))
             im = trim(im)
             if "erase" in s:      # re-apply an audited erase mask (e.g. Aruun's Morrow) by registering the old cut onto the new one
                 from skimage.registration import phase_cross_correlation

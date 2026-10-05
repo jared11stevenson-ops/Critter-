@@ -1,0 +1,126 @@
+{
+ "art_sampled_kmeans": [
+  {
+   "hex": "#341c17",
+   "share": 0.223
+  },
+  {
+   "hex": "#170c0a",
+   "share": 0.169
+  },
+  {
+   "hex": "#58231c",
+   "share": 0.161
+  },
+  {
+   "hex": "#a46b3f",
+   "share": 0.099
+  },
+  {
+   "hex": "#862221",
+   "share": 0.089
+  },
+  {
+   "hex": "#7d4f30",
+   "share": 0.089
+  },
+  {
+   "hex": "#bd8856",
+   "share": 0.081
+  },
+  {
+   "hex": "#e3ac6c",
+   "share": 0.05
+  },
+  {
+   "hex": "#efd9bb",
+   "share": 0.021
+  },
+  {
+   "hex": "#edc68e",
+   "share": 0.018
+  }
+ ],
+ "sheet_palette_json": {
+  "front": [
+   {
+    "hex": "#301b18",
+    "share": 0.241
+   },
+   {
+    "hex": "#0e0707",
+    "share": 0.194
+   },
+   {
+    "hex": "#572520",
+    "share": 0.171
+   },
+   {
+    "hex": "#b77743",
+    "share": 0.153
+   },
+   {
+    "hex": "#8c3b2b",
+    "share": 0.141
+   },
+   {
+    "hex": "#edba7a",
+    "share": 0.101
+   }
+  ],
+  "side": [
+   {
+    "hex": "#22110d",
+    "share": 0.253
+   },
+   {
+    "hex": "#521e1a",
+    "share": 0.24
+   },
+   {
+    "hex": "#843427",
+    "share": 0.177
+   },
+   {
+    "hex": "#aa7850",
+    "share": 0.164
+   },
+   {
+    "hex": "#dbaa6f",
+    "share": 0.105
+   },
+   {
+    "hex": "#f5e1c1",
+    "share": 0.061
+   }
+  ],
+  "back": [
+   {
+    "hex": "#361c16",
+    "share": 0.202
+   },
+   {
+    "hex": "#160b09",
+    "share": 0.202
+   },
+   {
+    "hex": "#b67f50",
+    "share": 0.191
+   },
+   {
+    "hex": "#68271f",
+    "share": 0.172
+   },
+   {
+    "hex": "#8e5a38",
+    "share": 0.161
+   },
+   {
+    "hex": "#eabd82",
+    "share": 0.072
+   }
+  ]
+ },
+ "game_palette_canon_json": [],
+ "note": "game palette = game/canon/canon.json characters.Scarlith.palette (the colours UI/FX use); art_sampled = k-means over the cut views of this pack."
+}

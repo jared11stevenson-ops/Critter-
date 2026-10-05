@@ -1,0 +1,10 @@
+{
+ "method": "visual hull of aligned side+back silhouettes, voxel 8px, smoothed+decimated",
+ "renders": {
+  "front": "/home/user/critter/.claude/worktrees/agent3/design/reference_packs/scarlith/greybox/scarlith_clay_front.png",
+  "side": "/home/user/critter/.claude/worktrees/agent3/design/reference_packs/scarlith/greybox/scarlith_clay_side.png",
+  "back": "/home/user/critter/.claude/worktrees/agent3/design/reference_packs/scarlith/greybox/scarlith_clay_back.png",
+  "q34_front": "/home/user/critter/.claude/worktrees/agent3/design/reference_packs/scarlith/greybox/scarlith_clay_q34_front.png",
+  "q34_back": "/home/user/critter/.claude/worktrees/agent3/design/reference_packs/scarlith/greybox/scarlith_clay_q34_back.png"
+ }
+}
