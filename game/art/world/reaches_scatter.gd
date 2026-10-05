@@ -9,11 +9,17 @@ const MESH_KINDS := ["crate", "survey_flag", "pillar_broken", "rock_a", "rock_b"
 const KIND_MESH := {
 	"rock_small": ["rock_a", "rock_b", "rock_c", "rock_a", "pebbles"],
 	"rock_spire": ["spire"],
-	"flat_tree": ["dead_tree", "dead_tree", "spire"],
-	"shrub": ["grass_tuft", "grass_tuft", "grass_tuft"],
+	"flat_tree": ["flat_tree_a", "flat_tree_b", "dead_tree"],
+	"shrub": ["reach_shrub", "reach_shrub_b", "grass_tuft"],
 	"lichen_patch": ["lichen_rock", "grass_tuft"],
 	"bone": ["bone_ribs", "bone_horn"],      # v0.12: the painted horn card is now a real 3D bleached ribcage / horn
 }
+
+## Legacy kind -> Blender kit piece (res://game/art/world/kit). Kinds not listed stay procedural (grass tuft, pebbles).
+const KIT_MAP := {"crate": "dom_stack", "survey_flag": "survey_flag", "pillar_broken": "pillar_broken", "rock_a": "boulder_a",
+	"rock_b": "boulder_b", "rock_c": "boulder_c", "spire": "hoodoo_lo", "lichen_rock": "lichen_mat", "dead_tree": "dead_tree",
+	"bone_ribs": "bone_ribs", "bone_horn": "bone_ribs", "flat_tree_a": "flat_tree_a", "flat_tree_b": "flat_tree_b",
+	"reach_shrub": "reach_shrub", "reach_shrub_b": "reach_shrub_b"}
 
 var _rng := RandomNumberGenerator.new()
 var _props: Dictionary = {}  # kind -> Array[Transform3D]
@@ -251,8 +257,8 @@ func _add(kind: String, pos: Vector3, scale_mul: float) -> void:
 			s = _rng.randf_range(1.2, 2.0) * scale_mul
 		if mk == "bone_ribs" or mk == "bone_horn":
 			s = _rng.randf_range(0.9, 1.5) * scale_mul
-		if mk == "spire" or mk == "dead_tree":
-			s = _rng.randf_range(0.8, 1.3) * scale_mul
+		if mk == "spire" or mk == "dead_tree" or mk.begins_with("flat_tree"):
+			s = _rng.randf_range(0.8, 1.3) * scale_mul * (0.7 if mk == "spire" else 1.0)
 			if _south_of_floor(pos.x, pos.z):
 				return
 		_add_mesh(mk, pos, s)
@@ -279,9 +285,14 @@ func _south_of_floor(x: float, z: float) -> bool:
 func _commit_props() -> void:
 	var grass_mat := _grass_material()
 	for kind in _props:
-		var mesh := _prop_mesh(kind)
+		var kit_mesh: Mesh = null
+		if KIT_MAP.has(kind) and ReachesKit.available(KIT_MAP[kind]):
+			kit_mesh = ReachesKit.mesh(KIT_MAP[kind])
+		var mesh: Mesh = kit_mesh if kit_mesh else _prop_mesh(kind)
 		var mat: Material
-		if kind == "grass_tuft":
+		if kit_mesh:
+			mat = null
+		elif kind == "grass_tuft":
 			mat = grass_mat
 		elif kind in ["crate", "survey_flag"]:
 			mat = ToonKit.material({"roughness": 0.7, "detail": 0.35})
@@ -300,9 +311,10 @@ func _commit_props() -> void:
 			var mmi := MultiMeshInstance3D.new()
 			mmi.name = "Props_%s_%d" % [kind, ci]
 			mmi.multimesh = mm
-			mmi.material_override = mat
+			if mat:
+				mmi.material_override = mat
 			mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-			if kind in ["spire", "rock_a", "rock_b", "pillar_broken"]:
+			if kind in ["spire", "rock_a", "rock_b", "pillar_broken", "flat_tree_a", "flat_tree_b", "dead_tree"]:
 				mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 			add_child(mmi)
 			_mms.append([mm, list.size(), cover])

@@ -624,6 +624,26 @@ def span_stump(name="span_stump", seed=26):
     return km
 
 
+def pillar_broken(name="pillar_broken", seed=27):
+    """Spanwright survey column: base block, three drums, broken top, toppled drum beside it."""
+    km = KM(name, seed)
+    km.dust = 0.2
+    km.ao_dist = 0.9
+    km.ground = 0.4
+    rng = random.Random(seed)
+    km.box((0, 0, 0.2), (1.7, 1.7, 0.4), mul(STONE_D, 1.0), jitter=0.02)
+    z = 0.4
+    for i in range(3):
+        h = rng.uniform(0.55, 0.8)
+        r = 0.55 - i * 0.03
+        km.cyl((0, 0, z), (0, 0, z + h), r, r - 0.01, 9, _stone(rng, SURVEY, 0.08), jitter=0.015, rot0=rng.random())
+        km.cyl((0, 0, z + h - 0.03), (0, 0, z + h + 0.04), r + 0.05, r + 0.05, 9, mul(STONE_D, 1.05))
+        z += h + 0.04
+    km.cyl((0, 0, z), (0.1, 0.0, z + 0.45), 0.5, 0.35, 7, mul(SURVEY, 1.05), jitter=0.12)
+    km.cyl((0.8, -1.0, 0.5), (1.9, -1.4, 0.5), 0.5, 0.5, 9, _stone(rng, SURVEY, 0.08), jitter=0.015)
+    return km
+
+
 def registry():
     return {
         "span_bay": lambda: span_bay("span_bay"),
@@ -653,4 +673,5 @@ def registry():
         "glyph_wall": lambda: glyph_wall("glyph_wall"),
         "lamp_post": lambda: lamp_post("lamp_post"),
         "span_stump": lambda: span_stump("span_stump"),
+        "pillar_broken": lambda: pillar_broken("pillar_broken"),
     }

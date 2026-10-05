@@ -80,6 +80,8 @@ func build() -> void:
 	var t4 := Time.get_ticks_msec()
 	if with_scatter:
 		_build_scatter()
+	if with_structures:
+		_build_landmarks()
 	if OS.get_cmdline_user_args().has("qa"):
 		print("[PERF] terrain heights=%d meshes=%d collision+backdrop=%d light+structs=%d scatter=%d" % [t1 - t0, t2 - t1, t3 - t2, t4 - t3, Time.get_ticks_msec() - t4])
 	built.emit()
@@ -158,6 +160,26 @@ func set_span_state(state: String) -> void:
 		s.set_state(state)
 
 
+var _bd_hs := PackedFloat32Array()
+var _bd_x0 := 0.0
+var _bd_z0 := 0.0
+var _bd_step := 4.0
+var _bd_n := Vector2i.ZERO
+
+## Visual surface height anywhere (playable grid inside the bounds, the coarse backdrop grid outside).
+func surface_height(x: float, z: float) -> float:
+	if _bd_hs.is_empty() or Rect2(_min_x, _min_z, (_nx - 1) * _cell, (_nz - 1) * _cell).has_point(Vector2(x, z)):
+		return _sample(_hv, x, z)
+	var fx := clampf((x - _bd_x0) / _bd_step, 0.0, float(_bd_n.x - 1) - 0.001)
+	var fz := clampf((z - _bd_z0) / _bd_step, 0.0, float(_bd_n.y - 1) - 0.001)
+	var ix := int(fx)
+	var iz := int(fz)
+	var tx := fx - ix
+	var tz := fz - iz
+	var i := iz * _bd_n.x + ix
+	return lerpf(lerpf(_bd_hs[i], _bd_hs[i + 1], tx), lerpf(_bd_hs[i + _bd_n.x], _bd_hs[i + _bd_n.x + 1], tx), tz)
+
+
 ## Extra helpers (art/QA)
 func get_floor_weight(x: float, z: float) -> float:
 	return _sample(_fw, x, z)
@@ -193,6 +215,8 @@ func qa_vista(px: float, py: float, pz: float, tx: float, ty: float, tz: float, 
 		add_child(_qa_cam)
 	for n in get_tree().current_scene.find_children("CameraRig", "Node3D", true, false):
 		n.process_mode = Node.PROCESS_MODE_DISABLED
+	for cl in get_tree().current_scene.find_children("*", "CanvasLayer", true, false):
+		(cl as CanvasLayer).visible = false
 	_qa_cam.fov = fov
 	_qa_cam.global_position = Vector3(px, py, pz)
 	_qa_cam.look_at(Vector3(tx, ty, tz), Vector3.UP)
@@ -639,6 +663,11 @@ func _build_backdrop() -> void:
 				if ex < 10.0:
 					h = lerpf(_sample(_hv, x, z), h, smoothstep(0.0, 10.0, ex))
 			hs[iz * bx + ix] = h
+	_bd_hs = hs
+	_bd_x0 = mx0
+	_bd_z0 = mz0
+	_bd_step = step
+	_bd_n = Vector2i(bx, bz)
 	var verts := PackedVector3Array()
 	var nrm := PackedVector3Array()
 	var col := PackedColorArray()
@@ -716,3 +745,12 @@ func _build_scatter() -> void:
 	sc.name = "Scatter"
 	add_child(sc)
 	sc.populate(self)
+
+
+func _build_landmarks() -> void:
+	if not ResourceLoader.exists("res://game/art/world/reaches_landmarks.gd"):
+		return
+	var lm := ReachesLandmarks.new()
+	lm.name = "Landmarks"
+	add_child(lm)
+	lm.populate(self)

@@ -96,7 +96,7 @@ def mesa(name, R, H, seed, layers=15, aspect=1.0, taper=0.2, skirt=0.2, N=24, wo
     return layered(name, R, H, L, seed, aspect=aspect, N=N, wobble=wobble, rough=0.012, rows=1)
 
 
-def butte(name, R, H, seed, layers=10):
+def butte(name, R, H, seed, layers=10, N=18):
     """Tall narrow chimney butte w/ hard cap."""
     rng = random.Random(seed + 3)
     L = [(1.2, 1.5, 1.0, False)]
@@ -107,19 +107,18 @@ def butte(name, R, H, seed, layers=10):
         L.append((rng.uniform(0.8, 1.4), f0, f0 - 0.03, hard))
     L.append((1.0, 1.2, 1.12, True))      # cap overhang
     L.append((0.35, 1.1, 0.6, True))
-    return layered(name, R, H, L, seed, aspect=0.8, N=18, wobble=0.14, palette=PAL_MAIN)
+    return layered(name, R, H, L, seed, aspect=0.8, N=N, wobble=0.14, palette=PAL_MAIN, rows=2 if N > 14 else 1)
 
 
-def hoodoo(name, R, H, seed):
+def hoodoo(name, R, H, seed, N=16, n=7):
     rng = random.Random(seed)
     L = [(0.9, 1.45, 1.0, False)]
-    n = 7
     for k in range(n):
         neck = 0.62 + 0.18 * math.sin(k * 1.9 + seed)
         L.append((rng.uniform(0.6, 1.1), neck + 0.08, neck, k % 2 == 0))
     L.append((0.7, 1.25, 1.15, True))     # caprock
     L.append((0.3, 1.1, 0.5, True))
-    return layered(name, R, H, L, seed, N=16, wobble=0.12, palette=PAL_DEEP + [CREAM, VERMIL])
+    return layered(name, R, H, L, seed, N=N, wobble=0.12, palette=PAL_DEEP + [CREAM, VERMIL], rows=2 if N > 11 else 1)
 
 
 def arch_rock(name, seed=4, span=16.0, rise=9.0, thick=3.2, depth=5.0):

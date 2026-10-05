@@ -1302,6 +1302,7 @@ func qa_log_flags() -> void:
 ## level's top-level nodes + actors grouped by script) in turn and prints what it was costing.
 func qa_perf_breakdown(path: String = "") -> void:
 	var dc := func() -> int: return int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME))
+	var pr := func() -> int: return int(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME))
 	var was_paused := get_tree().paused
 	get_tree().paused = true
 	var cam_mode := cam.process_mode
@@ -1309,7 +1310,8 @@ func qa_perf_breakdown(path: String = "") -> void:
 	for _i in 4:
 		await get_tree().process_frame
 	var base: int = dc.call()
-	var out: Array = ["total=%d" % base]
+	var base_pr: int = pr.call()
+	var out: Array = ["total=%d prims=%d" % [base, base_pr]]
 	var groups: Dictionary = {}
 	var root: Node = get_node(path) if path != "" else self
 	for c in root.get_children():
@@ -1339,12 +1341,13 @@ func qa_perf_breakdown(path: String = "") -> void:
 		for _i in 3:
 			await get_tree().process_frame
 		var v: int = dc.call()
+		var vp: int = pr.call()
 		for n in hid:
 			n.visible = true
 		for _i in 3:
 			await get_tree().process_frame
-		if base - v != 0:
-			out.append("%s(x%d)=%d" % [k, nodes.size(), base - v])
+		if base - v != 0 or base_pr - vp > 500:
+			out.append("%s(x%d)=%d/%dk" % [k, nodes.size(), base - v, (base_pr - vp) / 1000])
 	cam.process_mode = cam_mode
 	get_tree().paused = was_paused
 	print("[QA] PERF BREAKDOWN %s " % (path if path != "" else "level"), ", ".join(out))
