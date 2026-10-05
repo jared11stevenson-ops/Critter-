@@ -11,11 +11,11 @@ Only the Lead sets `approved` / `changes requested` (after the creator answers).
 | [zephyr](zephyr/review/zephyr_pack_overview.png) | ready for review | 2026-10-05 |  |
 | [bramvex](bramvex/review/bramvex_pack_overview.png) | ready for review | 2026-10-05 |  |
 | [scarlith](scarlith/review/scarlith_pack_overview.png) | ready for review | 2026-10-05 |  |
-| [solmara](solmara/review/solmara_pack_overview.png) | not started |  |  |
-| [mollusk](mollusk/review/mollusk_pack_overview.png) | not started |  |  |
-| [nerit](nerit/review/nerit_pack_overview.png) | not started |  |  |
-| [nyxaris](nyxaris/review/nyxaris_pack_overview.png) | not started |  |  |
-| [pharilux](pharilux/review/pharilux_pack_overview.png) | not started |  |  |
+| [solmara](solmara/review/solmara_pack_overview.png) | ready for review | 2026-10-05 |  |
+| [mollusk](mollusk/review/mollusk_pack_overview.png) | ready for review | 2026-10-05 |  |
+| [nerit](nerit/review/nerit_pack_overview.png) | ready for review | 2026-10-05 |  |
+| [nyxaris](nyxaris/review/nyxaris_pack_overview.png) | ready for review | 2026-10-05 |  |
+| [pharilux](pharilux/review/pharilux_pack_overview.png) | ready for review | 2026-10-05 |  |
 
 ## Source art inventory (what exists per character)
 

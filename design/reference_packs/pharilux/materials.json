@@ -1,0 +1,102 @@
+[
+ {
+  "name": "Lantern glass (glowing)",
+  "cls": "emissive glass",
+  "sample": [
+   "side",
+   0.7,
+   0.16
+  ],
+  "rough": 0.1,
+  "metal": 0,
+  "emi": 4.0,
+  "note": "warm amber; strongest light on the character; suggest point light",
+  "hex": "#fde5a5",
+  "n": 1
+ },
+ {
+  "name": "Lantern frame + brass fittings",
+  "cls": "aged copper/brass",
+  "sample": [
+   "side",
+   0.68,
+   0.08
+  ],
+  "rough": 0.4,
+  "metal": 0.8,
+  "note": "rust-brown, orange trim",
+  "hex": "#2b2721",
+  "n": 2
+ },
+ {
+  "name": "Dark cloak / body",
+  "cls": "cloth + chitin",
+  "sample": [
+   "side",
+   0.55,
+   0.75
+  ],
+  "rough": 0.8,
+  "metal": 0,
+  "note": "charcoal blue-grey with orange stitched/chain lines",
+  "hex": "#44484c",
+  "n": 3
+ },
+ {
+  "name": "Wings (pale grey-cream, tattered)",
+  "cls": "translucent membrane",
+  "sample": [
+   "side",
+   0.5,
+   0.65
+  ],
+  "rough": 0.4,
+  "metal": 0,
+  "note": "large, torn; alpha .6",
+  "hex": "#0f0d0a",
+  "n": 4
+ },
+ {
+  "name": "Head (olive-grey chitin)",
+  "cls": "chitin",
+  "sample": [
+   "side",
+   0.12,
+   0.33
+  ],
+  "rough": 0.4,
+  "metal": 0,
+  "emi": 0.5,
+  "note": "eyes amber glow painted",
+  "hex": "#4d2514",
+  "n": 5
+ },
+ {
+  "name": "Gold sigils / chains / pendant",
+  "cls": "gold metal",
+  "sample": [
+   "side",
+   0.62,
+   0.45
+  ],
+  "rough": 0.3,
+  "metal": 0.9,
+  "note": "circular sigil on the lantern housing; hanging pendant lantern",
+  "hex": "#2b2b2c",
+  "n": 6
+ },
+ {
+  "name": "Talon feet",
+  "cls": "chitin",
+  "sample": [
+   "side",
+   0.2,
+   0.975
+  ],
+  "rough": 0.5,
+  "metal": 0,
+  "note": "dark with orange claw tips",
+  "hex": "#252728",
+  "n": 7
+ }
+]

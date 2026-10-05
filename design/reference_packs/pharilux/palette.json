@@ -1,0 +1,47 @@
+{
+ "art_sampled_kmeans": [
+  {
+   "hex": "#332c28",
+   "share": 0.174
+  },
+  {
+   "hex": "#1f1b19",
+   "share": 0.159
+  },
+  {
+   "hex": "#e5cfae",
+   "share": 0.123
+  },
+  {
+   "hex": "#0c0b0a",
+   "share": 0.117
+  },
+  {
+   "hex": "#b4a287",
+   "share": 0.117
+  },
+  {
+   "hex": "#4b4842",
+   "share": 0.1
+  },
+  {
+   "hex": "#663b24",
+   "share": 0.07
+  },
+  {
+   "hex": "#7e725f",
+   "share": 0.062
+  },
+  {
+   "hex": "#a35c26",
+   "share": 0.043
+  },
+  {
+   "hex": "#d69143",
+   "share": 0.036
+  }
+ ],
+ "sheet_palette_json": {},
+ "game_palette_canon_json": [],
+ "note": "game palette = game/canon/canon.json characters.Pharilux.palette (the colours UI/FX use); art_sampled = k-means over the cut views of this pack."
+}

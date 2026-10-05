@@ -1,0 +1,76 @@
+{
+ "rows": [
+  [
+   "Total height (canon)",
+   "2.600 m  (sheet: 260 cm (8'6\"))"
+  ],
+  [
+   "Body height (ground to crown/top of head)",
+   "2.132 m"
+  ],
+  [
+   "Head height (crown to chin)",
+   "0.373 m"
+  ],
+  [
+   "Heads tall (body / head)",
+   "5.7"
+  ],
+  [
+   "Neck (chin to neck base)",
+   "0.061 m"
+  ],
+  [
+   "Torso (neck base to crotch)",
+   "0.971 m"
+  ],
+  [
+   "Arm (shoulder to wrist)",
+   "0.667 m  = 26% of height"
+  ],
+  [
+   "Upper arm (shoulder to elbow)",
+   "0.390 m"
+  ],
+  [
+   "Forearm+hand (elbow to wrist)",
+   "0.277 m"
+  ],
+  [
+   "Leg (crotch to ground)",
+   "0.728 m  = 28% of height"
+  ],
+  [
+   "Thigh (crotch to knee)",
+   "0.295 m"
+  ],
+  [
+   "Shin (knee to ankle)",
+   "0.260 m"
+  ],
+  [
+   "Ankle height",
+   "0.173 m"
+  ],
+  [
+   "Leg : torso ratio",
+   "0.75"
+  ]
+ ],
+ "landmarks_m": {
+  "top": 2.6,
+  "crown": 2.132,
+  "eyes": 1.933,
+  "chin": 1.759,
+  "neck": 1.699,
+  "shoulder": 1.621,
+  "elbow": 1.231,
+  "wrist": 0.953,
+  "waist": 1.101,
+  "crotch": 0.728,
+  "knee": 0.433,
+  "ankle": 0.173,
+  "ground": 0.0
+ },
+ "source": "APPROXIMATE (+-4%): hunched moth-lighthouse figure; side view is bent forward (head low at 0.34) so head rows differ strongly per view and the warp there is large. Top = lantern finial / antenna tip."
+}

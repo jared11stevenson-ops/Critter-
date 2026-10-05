@@ -10,8 +10,8 @@ Pack built 2026-10-05. Critique written after opening every output image next to
 | view | size px | alpha components >200px | specks <=200px | pose |
 |---|---|---|---|---|
 | front | 1603x4096 | 1 | 0 | front |
+| side | 1353x4096 | 1 | 0 | side, faces screen-left on sheet; MIRRORED here to face screen-right |
 | back | 2352x4096 | 1 | 0 | back (shell) |
-| side | 1353x4096 | 1 | 0 | side, faces screen-left (mirror for game) |
 | hero | 2232x2012 | 1 | 0 | hero with time mace (not aligned) (NOT ortho) |
 
 Landmark rows are shared by construction (see metadata.json: landmarks_m). Components >200 px other than 1 are detached art such as horns tips, dangling charms or wing tips.
