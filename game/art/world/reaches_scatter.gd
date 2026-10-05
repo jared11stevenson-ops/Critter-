@@ -383,8 +383,15 @@ func _process(_d: float) -> void:
 		var vr: float = float(get_meta("vr", 1.0))
 		mi.visibility_range_end = ((128.0 if big else 52.0) * vr) + 28.0
 		mi.visibility_range_end_margin = 8.0
-		mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if big else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		add_child(mi)
+		if big:
+			var sp := MeshInstance3D.new()          # shadow-only twin, camera range 60 m (keeps far cells out of the sun pass)
+			sp.name = "Shadow_" + key
+			sp.mesh = m
+			sp.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+			sp.visibility_range_end = 60.0 + 28.0
+			add_child(sp)
 	if _gnext >= _gkeys.size():
 		_gid = -1
 		_groups.clear()
@@ -410,7 +417,7 @@ static func _grass_mesh() -> ArrayMesh:
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 41
-	for i in 14:
+	for i in 10:
 		var a := rng.randf() * TAU
 		var r := rng.randf() * 0.12
 		var base := Vector3(cos(a) * r, 0.0, sin(a) * r)
@@ -484,7 +491,7 @@ static func _prop_mesh(kind: String) -> ArrayMesh:
 		"pebbles":
 			var rng := RandomNumberGenerator.new()
 			rng.seed = 61
-			for i in 6:
+			for i in 3:
 				var c := Vector3(rng.randf_range(-0.4, 0.4), 0.02, rng.randf_range(-0.4, 0.4))
 				var r := rng.randf_range(0.05, 0.13)
 				ToonKit.rock(st, c, Vector3(r, r * 0.6, r * 0.9), Color(0.78, 0.5, 0.36).lerp(Color(0.6, 0.38, 0.3), rng.randf()), 62 + i, 0)

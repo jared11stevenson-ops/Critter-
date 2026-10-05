@@ -92,3 +92,20 @@ Critique of `h3_00`..`h3_03`:
 6. Gate: the new Scale Transition Array ring + membrane is the right scale, but from behind it is a big pale disc; added the control pylon and
    hazard cradle to read as *machinery* (Terrarium) not as ancient ruin.
 
+## 4. Iteration 3 -- grades, towers, derrick (`h4_*`, day / dusk / dust on the same cameras)
+
+Critique of `h4_00`..`h4_07`:
+* **Arrival** (`h4_00` day, `h4_01` dusk): the Gate now dwarfs the party and the pad; the skyline of buttes with flat trees on the rim sells the plateau.
+  The dusk grade works on every kit material (they go through the same toon/PBR lighting), shafts warm up. Weak: the foreground boulder blocks the lower
+  third; the pad paving was 4 m plates (fixed: texture scale 0.34/0.24 -> ~1 m plates, the party now reads as small in a big place).
+* **Ochre Span aerial dusk** (`h4_03`) is the hero frame of the pass: four arch bays, piers vanishing into two mist layers, shafts, towers. Approach view (`h4_02`):
+  the near tower is correct now (grounded on the visible dune). Weak: parapet tally blocks are too regular; the deck wants a few missing / mended
+  stones (the `span_bay_broken` variant exists, only one is used).
+* **Augur pit** (`h4_04` day, `h4_05` dust storm): the derrick is a real landmark (36 m, red aviation bands, machine house, pipe rack, guy lines), the
+  second derrick over the boss foundation is visible on the right horizon (wayfinding by landmark). The dust grade hides the far derrick, as it
+  should. Weak: the near mesa at the left reads as a stack of thin plates; fixed in the generator (calmer course colours, less dust on ledges).
+* **Overlook / Waystation sunset** (`h4_06`, `h4_07`): the Span from the Overlook works; Waystation ruins with awning, rope rack, lichen terraces
+  and the grazer flat read as a place.
+
+Fixes applied after this round: mesa/butte palette + ledge dust (all mesa / butte GLBs rebuilt), glow-silt terrain emissive (Lumen), terrain paving scale.
+

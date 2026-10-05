@@ -55,11 +55,20 @@ mid = [
     L("butte_b", 210, 74, 1.6, 40, dy=-3),
     L("butte_a", 300, 70, 1.4, 300, dy=-3),
 ]
-grp("mid_landmarks", mid, shadow=False, vis_end=260)
+for it in mid:
+    if it["p"] in ("butte_a", "butte_b", "mesa_a", "mesa_b", "mesa_c"):
+        it["p"] += "_lo"
+    if it["p"].startswith("hoodoo"):
+        it["p"] = "butte_b_lo"; it["s"] = it["s"] * 0.6
+mchunks = {}
+for it in mid:
+    mchunks.setdefault(int(it["x"] // 110), []).append(it)
+for k in sorted(mchunks):
+    grp("mid_%d" % k, mchunks[k], shadow=False, vis_end=280)
 
 # ---- the Window (rock arch) over the Fracture Valley: collision legs are on the rim ----
 # ---- Valley dressing ----
-grp("valley", [
+grp("valley", shadow=False, items=[
     L("boulder_a", 46, -9.5, 1.5, 20), L("boulder_b", 52, 9, 1.4, 120), L("boulder_c", 78, 9.5, 1.8, 40),
     L("scree", 40, -9, 1.6, 0), L("scree", 70, 9, 1.4, 90), L("scree", 58, -10, 1.3, 40),
     L("flat_tree_a", 36, -12, 1.0, 0), L("flat_tree_b", 66, -11, 1.1, 90), L("flat_tree_b", 22, 9, 1.0, 40),

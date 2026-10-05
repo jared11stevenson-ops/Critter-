@@ -8,6 +8,7 @@ extends Node3D
 ##        or a scatter item {scatter:{c:[x,z], r, n, seed, pieces:[..], s:[min,max], off_floor|on_floor, min_gap}}.
 
 const ART_PATH := "res://game/world/red_reaches/world_art.json"
+const SHADOW_RANGE := 64.0
 
 var terrain: Node
 var art_path := ART_PATH
@@ -201,7 +202,15 @@ func _attach(r: Dictionary) -> void:
 	var mi := MeshInstance3D.new()
 	mi.name = "Mesh"
 	mi.mesh = mesh
-	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if g.get("shadow", true) else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	if g.get("shadow", true):
+		# shadows come from a shadow-only twin that only exists within 64 m of the camera: far groups never enter the sun pass
+		var sp := MeshInstance3D.new()
+		sp.name = "ShadowProxy"
+		sp.mesh = mesh
+		sp.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+		sp.visibility_range_end = SHADOW_RANGE
+		gnode.add_child(sp)
 	var ve := float(g.get("vis_end", 0.0))
 	if ve > 0.0:
 		mi.visibility_range_end = ve
