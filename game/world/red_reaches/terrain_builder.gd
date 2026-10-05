@@ -183,6 +183,26 @@ func chasm_sdf(x: float, z: float) -> float:
 	return best
 
 
+## QA/art review: free vista camera (disables the gameplay rig). Called from tools/qa scripts as Terrain.qa_vista.
+var _qa_cam: Camera3D
+func qa_vista(px: float, py: float, pz: float, tx: float, ty: float, tz: float, fov: float = 60.0, dusk: float = 0.0, dust: float = 0.0) -> void:
+	if _qa_cam == null:
+		_qa_cam = Camera3D.new()
+		_qa_cam.name = "QAVista"
+		_qa_cam.far = 900.0
+		add_child(_qa_cam)
+	for n in get_tree().current_scene.find_children("CameraRig", "Node3D", true, false):
+		n.process_mode = Node.PROCESS_MODE_DISABLED
+	_qa_cam.fov = fov
+	_qa_cam.global_position = Vector3(px, py, pz)
+	_qa_cam.look_at(Vector3(tx, ty, tz), Vector3.UP)
+	_qa_cam.make_current()
+	if lighting and lighting.has_method("set_grade"):
+		lighting.set_grade(dusk, dust)
+	if lighting:
+		lighting.set("_mood_t", 0.0)
+
+
 func register_deck(a: Vector3, b: Vector3, width: float, node: Node3D, sag: float = 0.0) -> void:
 	_decks.append({"a": a, "b": b, "width": width, "node": node, "sag": sag})
 

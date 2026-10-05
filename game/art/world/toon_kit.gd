@@ -66,7 +66,12 @@ static func material(opts: Dictionary = {}) -> ShaderMaterial:
 	if _mat_cache.has(key) and not opts.get("unique", false):
 		return _mat_cache[key]
 	var m := ShaderMaterial.new()
-	m.shader = occluding_shader(PROP_SHADER_PATH)
+	m.shader = occluding_shader(str(opts.get("shader", PROP_SHADER_PATH)))
+	if opts.has("kit_tex"):
+		m.set_shader_parameter("kit_tex", opts["kit_tex"])
+		m.set_shader_parameter("kit_glow", float(opts.get("kit_glow", 1.0)))
+	if opts.has("wind"):
+		m.set_shader_parameter("wind_sway", float(opts["wind"]))
 	m.set_shader_parameter("noise_tex", NOISE_TEX)
 	m.set_shader_parameter("detail_tex", DETAIL_TEX)
 	m.set_shader_parameter("detail_normal", DETAIL_NRM)
