@@ -1,0 +1,47 @@
+{
+ "art_sampled_kmeans": [
+  {
+   "hex": "#322420",
+   "share": 0.172
+  },
+  {
+   "hex": "#120f0e",
+   "share": 0.148
+  },
+  {
+   "hex": "#4b3a33",
+   "share": 0.144
+  },
+  {
+   "hex": "#d6a05e",
+   "share": 0.13
+  },
+  {
+   "hex": "#765935",
+   "share": 0.088
+  },
+  {
+   "hex": "#6c3521",
+   "share": 0.08
+  },
+  {
+   "hex": "#9d4b28",
+   "share": 0.078
+  },
+  {
+   "hex": "#a77c46",
+   "share": 0.074
+  },
+  {
+   "hex": "#d27334",
+   "share": 0.061
+  },
+  {
+   "hex": "#eece8f",
+   "share": 0.024
+  }
+ ],
+ "sheet_palette_json": {},
+ "game_palette_canon_json": [],
+ "note": "game palette = game/canon/canon.json characters.Mollusk.palette (the colours UI/FX use); art_sampled = k-means over the cut views of this pack."
+}

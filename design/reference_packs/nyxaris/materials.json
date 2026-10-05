@@ -1,0 +1,87 @@
+[
+ {
+  "name": "Black chitin body",
+  "cls": "chitin (glossy)",
+  "sample": [
+   "front",
+   0.38,
+   0.62
+  ],
+  "rough": 0.3,
+  "metal": 0,
+  "note": "black with painted pink/orange spot highlights",
+  "hex": "#1f1e2d",
+  "n": 1
+ },
+ {
+  "name": "Petal crest + mantle (pink/blue/white)",
+  "cls": "translucent petal / frost",
+  "sample": [
+   "side",
+   0.55,
+   0.25
+  ],
+  "rough": 0.3,
+  "metal": 0,
+  "note": "thin, translucent petals; alpha .7; slight subsurface",
+  "hex": "#d9c0ad",
+  "n": 2
+ },
+ {
+  "name": "White-grey fur / ruff",
+  "cls": "fur",
+  "sample": [
+   "front",
+   0.22,
+   0.55
+  ],
+  "rough": 0.8,
+  "metal": 0,
+  "note": "fluffy ruff around the face and legs",
+  "hex": "#c4a5ae",
+  "n": 3
+ },
+ {
+  "name": "Antennae (crimson) + drop buds",
+  "cls": "chitin / glossy",
+  "sample": [
+   "front",
+   0.56,
+   0.1
+  ],
+  "rough": 0.35,
+  "metal": 0,
+  "emi": 0.3,
+  "note": "fuchsia-like hanging buds",
+  "hex": "#ef5692",
+  "n": 4
+ },
+ {
+  "name": "Legs (black, blue tips)",
+  "cls": "chitin",
+  "sample": [
+   "front",
+   0.58,
+   0.93
+  ],
+  "rough": 0.35,
+  "metal": 0,
+  "note": "blue-black pointed tips",
+  "hex": "#ebcfb6",
+  "n": 5
+ },
+ {
+  "name": "Pink drips",
+  "cls": "frost sap / ice",
+  "sample": [
+   "side",
+   0.93,
+   0.75
+  ],
+  "rough": 0.2,
+  "metal": 0,
+  "note": "hanging pink drips",
+  "hex": "#808080",
+  "n": 6
+ }
+]

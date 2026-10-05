@@ -1,0 +1,76 @@
+{
+ "rows": [
+  [
+   "Total height (canon)",
+   "2.000 m  (sheet: 200 cm (6'7\"))"
+  ],
+  [
+   "Body height (ground to crown/top of head)",
+   "1.513 m"
+  ],
+  [
+   "Head height (crown to chin)",
+   "0.500 m"
+  ],
+  [
+   "Heads tall (body / head)",
+   "3.0"
+  ],
+  [
+   "Neck (chin to neck base)",
+   "0.040 m"
+  ],
+  [
+   "Torso (neck base to crotch)",
+   "0.533 m"
+  ],
+  [
+   "Arm (shoulder to wrist)",
+   "0.440 m  = 22% of height"
+  ],
+  [
+   "Upper arm (shoulder to elbow)",
+   "0.220 m"
+  ],
+  [
+   "Forearm+hand (elbow to wrist)",
+   "0.220 m"
+  ],
+  [
+   "Leg (crotch to ground)",
+   "0.440 m  = 22% of height"
+  ],
+  [
+   "Thigh (crotch to knee)",
+   "0.173 m"
+  ],
+  [
+   "Shin (knee to ankle)",
+   "0.167 m"
+  ],
+  [
+   "Ankle height",
+   "0.100 m"
+  ],
+  [
+   "Leg : torso ratio",
+   "0.83"
+  ]
+ ],
+ "landmarks_m": {
+  "top": 2.0,
+  "crown": 1.513,
+  "eyes": 1.153,
+  "chin": 1.013,
+  "neck": 0.973,
+  "shoulder": 0.907,
+  "elbow": 0.687,
+  "wrist": 0.467,
+  "waist": 0.653,
+  "crotch": 0.44,
+  "knee": 0.267,
+  "ankle": 0.1,
+  "ground": 0.0
+ },
+ "source": "APPROXIMATE (+-4%): a hunched, multi-legged frost-flower creature; the anatomy is not human so neck/shoulder/crotch rows are placeholders. Top = antenna-lure tip; 'crown' = the base of the petal crest. Do not read limb ratios."
+}

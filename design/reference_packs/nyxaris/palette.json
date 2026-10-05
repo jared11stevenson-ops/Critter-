@@ -1,0 +1,47 @@
+{
+ "art_sampled_kmeans": [
+  {
+   "hex": "#f0d4c2",
+   "share": 0.214
+  },
+  {
+   "hex": "#1f1925",
+   "share": 0.204
+  },
+  {
+   "hex": "#383345",
+   "share": 0.133
+  },
+  {
+   "hex": "#c8b3b4",
+   "share": 0.106
+  },
+  {
+   "hex": "#a48f94",
+   "share": 0.093
+  },
+  {
+   "hex": "#ed94a7",
+   "share": 0.061
+  },
+  {
+   "hex": "#e65c84",
+   "share": 0.058
+  },
+  {
+   "hex": "#6e667d",
+   "share": 0.055
+  },
+  {
+   "hex": "#682c43",
+   "share": 0.042
+  },
+  {
+   "hex": "#b43758",
+   "share": 0.035
+  }
+ ],
+ "sheet_palette_json": {},
+ "game_palette_canon_json": [],
+ "note": "game palette = game/canon/canon.json characters.Nyxaris.palette (the colours UI/FX use); art_sampled = k-means over the cut views of this pack."
+}
