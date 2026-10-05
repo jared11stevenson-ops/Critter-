@@ -1,0 +1,6 @@
+[
+ {"t":0.3,"call":"scene.qa_skip_to","args":["boulder"]},
+ {"t":1.0,"call":"scene.qa_teleport","args":["boulder_interact"]},
+ {"t":16.0,"action":"interact","dur":0.1},
+ {"t":30.0,"call":"scene.qa_perf_breakdown"}
+]
