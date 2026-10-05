@@ -24,6 +24,7 @@ Rivals="*res://game/core/rivals.gd"
 Audio="*res://game/core/audio.gd"
 Router="*res://game/core/router.gd"
 Quality="*res://game/core/quality.gd"
+Perf="*res://game/core/perf.gd"
 QA="*res://tools/qa/qa.gd"
 
 [display]

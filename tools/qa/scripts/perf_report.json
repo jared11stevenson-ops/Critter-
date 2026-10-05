@@ -1,0 +1,5 @@
+[
+ {"t":0.3,"call":"GameState.set_flag","args":["briefed",true]},
+ {"t":6.0,"call":"Perf.open_report"},
+ {"t":8.0,"call":"Perf.set_overlay","args":[true]}
+]

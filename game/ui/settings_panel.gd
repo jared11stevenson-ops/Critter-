@@ -41,6 +41,7 @@ func _ready() -> void:
 	_toggle(right, "Left-handed layout", "left_handed")
 	_toggle(right, "Reduce flashing", "reduce_flashing")
 	_toggle(right, "3D character models ", "use_3d_models")
+	_perf_row(right)
 	var back := UiKit.button("Back", Vector2(300, 88))
 	back.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	back.pressed.connect(_close)
@@ -103,6 +104,20 @@ func _quality_row(vb: Node) -> void:
 		Quality.apply_settings()
 		b.text = _quality_text()
 		Audio.sfx("ui_tap"))
+	hb.add_child(b)
+
+func _perf_row(vb: Node) -> void:
+	var hb := _row(vb, "Performance report")
+	var b := UiKit.button("Open", Vector2(130, 76), 26)
+	b.name = "PerfReport"
+	b.pressed.connect(func():
+		Audio.sfx("ui_tap")
+		var layer := CanvasLayer.new()
+		layer.layer = 130
+		layer.process_mode = Node.PROCESS_MODE_ALWAYS
+		layer.add_child(PerfReport.new())
+		get_tree().root.add_child(layer)
+		layer.get_child(0).tree_exited.connect(layer.queue_free))
 	hb.add_child(b)
 
 func _fps_row(vb: Node) -> void:
