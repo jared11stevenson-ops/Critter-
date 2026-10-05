@@ -28,8 +28,19 @@ var _pitch_want := -40.0
 var _dist_occl := 1.0
 var _dist_occl_want := 1.0
 
+## Camera presets (Settings > Camera): distance and pitch of the follow camera. "close" is the default so the
+## heroes' faces and animation read on a phone; "wide" is the original overhead view.
+const CAM_MODES := {"wide": [14.0, -40.0], "close": [10.0, -33.0], "hero": [7.2, -26.0]}
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	var mode := str(GameState.settings.get("cam_mode", "close"))
+	if CAM_MODES.has(mode):
+		distance = CAM_MODES[mode][0]
+		pitch_deg = CAM_MODES[mode][1]
+		_pitch_cur = pitch_deg
+		_pitch_want = pitch_deg
+	add_to_group("camera_rig")
 	cam = Camera3D.new()
 	cam.fov = fov
 	cam.near = 0.3
@@ -37,6 +48,12 @@ func _ready() -> void:
 	cam.current = true
 	add_child(cam)
 	_last_us = Time.get_ticks_usec()
+
+func apply_mode(mode: String) -> void:
+	if CAM_MODES.has(mode):
+		distance = CAM_MODES[mode][0]
+		pitch_deg = CAM_MODES[mode][1]
+		_pitch_want = pitch_deg
 
 ## Agent 1's dithered occlusion fade reads these two globals (declared in project.godot [shader_globals]).
 const GP_FOCUS := &"critter_focus_pos"

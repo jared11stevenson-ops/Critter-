@@ -41,6 +41,7 @@ func _ready() -> void:
 	_toggle(right, "Left-handed layout", "left_handed")
 	_toggle(right, "Reduce flashing", "reduce_flashing")
 	_toggle(right, "3D character models ", "use_3d_models")
+	_cam_row(right)
 	_perf_row(right)
 	var back := UiKit.button("Back", Vector2(300, 88))
 	back.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -104,6 +105,23 @@ func _quality_row(vb: Node) -> void:
 		Quality.apply_settings()
 		b.text = _quality_text()
 		Audio.sfx("ui_tap"))
+	hb.add_child(b)
+
+func _cam_row(vb: Node) -> void:
+	var modes := ["close", "hero", "wide"]
+	var hb := _row(vb, "Camera")
+	var b := UiKit.button(str(GameState.settings.get("cam_mode", "close")).to_upper(), Vector2(190, 76), 26)
+	b.name = "CameraMode"
+	b.pressed.connect(func():
+		var cur := str(GameState.settings.get("cam_mode", "close"))
+		var nxt: String = modes[(modes.find(cur) + 1) % modes.size()]
+		GameState.settings["cam_mode"] = nxt
+		b.text = nxt.to_upper()
+		Audio.sfx("ui_tap")
+		# apply live if a camera rig is in the scene
+		for rig in get_tree().get_nodes_in_group("camera_rig"):
+			if rig.has_method("apply_mode"):
+				rig.apply_mode(nxt))
 	hb.add_child(b)
 
 func _perf_row(vb: Node) -> void:
