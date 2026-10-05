@@ -23,36 +23,52 @@ TEXDIR = os.path.join(WORK, "tex")
 os.makedirs(TEXDIR, exist_ok=True)
 
 
-def displaced_joints():
-    old = np.load(os.path.join(WORK, "old.npz"), allow_pickle=True)
-    fit = np.load(os.path.join(WORK, "fit.npz"))
-    V0, V1 = fit["V0"], fit["V"]
-    parts = list(old["parts"]); pot = old["part_of_tri"]; T = old["T"]
-    skip = [i for i, p in enumerate(parts) if p.startswith(("morrow", "cloak", "leaf", "strip", "band", "talisman", "beads", "cloth", "horn", "tine"))]
-    use = np.unique(T[~np.isin(pot, skip)])
-    kd = cKDTree(V0[use]); D = (V1 - V0)[use]
-
-    def disp(p):
-        idx = kd.query_ball_point(p, 0.14)
-        if not idx:
-            return np.zeros(3)
-        d = np.linalg.norm(V0[use][idx] - p, axis=1); w = 1 / (d + 0.03) ** 2
-        return (D[idx] * w[:, None]).sum(0) / w.sum()
-    return disp
+def shell_joints():
+    """Joint table placed INSIDE the new shells: slice centroids at the legacy joint heights (rig hierarchy unchanged)."""
+    hi = np.load(os.path.join(WORK, "shells_hi.npz"))
+    def cen(g, z, dz=0.02):
+        V = hi["V_" + g]; m = np.abs(V[:, 2] - z) < dz
+        if m.sum() < 5:
+            m = np.abs(V[:, 2] - z) < 0.06
+        return V[m, :2].mean(0)
+    old = legacy_body.J
+    J = {}
+    # spine / neck / head on the trunk centreline (head & neck from the head-zone slices)
+    for n in ("hips", "spine1", "spine2", "chest", "neck1", "neck2", "neck3", "head", "jaw"):
+        z = old[n].z
+        if n == "hips":
+            c = 0.5 * (cen("legL", 1.02, 0.05) + cen("legR", 1.02, 0.05))
+        else:
+            c = cen("trunk", z, 0.025)
+        J[n] = np.array([c[0], c[1], z])
+    # neck/head lean: use the neck shell centres directly (trunk slices include the head at z>1.9)
+    J["head_end"] = J["head"] + np.array([0, -0.22, -0.03]); J["jaw_end"] = J["jaw"] + np.array([0, -0.2, -0.06])
+    J["root"] = np.zeros(3)
+    cx = J["chest"][0]
+    for s, g, sg in ((".L", "armL", 1), (".R", "armR", -1)):
+        z = old["shoulder.L"].z
+        c = cen(g, 1.50, 0.04); J["shoulder" + s] = np.array([c[0], c[1], z])
+        J["clavicle" + s] = np.array([cx + sg * 0.06, J["chest"][1] + 0.0, old["clavicle.L"].z])
+        c = cen(g, old["elbow.L"].z, 0.03); J["elbow" + s] = np.array([c[0], c[1], old["elbow.L"].z])
+        c = cen(g, old["wrist.L"].z, 0.03); J["wrist" + s] = np.array([c[0], c[1], old["wrist.L"].z])
+        c = cen(g, old["hand_end.L"].z, 0.03); J["hand_end" + s] = np.array([c[0], c[1], old["hand_end.L"].z])
+    for s, g in ((".L", "legL"), (".R", "legR")):
+        c = cen(g, 1.02, 0.05); J["hip" + s] = np.array([c[0], c[1], old["hip.L"].z])
+        c = cen(g, old["knee.L"].z, 0.03); J["knee" + s] = np.array([c[0], c[1], old["knee.L"].z])
+        c = cen(g, old["ankle.L"].z, 0.03); J["ankle" + s] = np.array([c[0], c[1], old["ankle.L"].z])
+        V = hi["V_" + g]; low = V[V[:, 2] < 0.12]
+        ty = low[:, 1].min() + 0.02; tx = low[:, 0].mean()
+        J["toe_end" + s] = np.array([tx, ty, 0.03]); J["toe" + s] = np.array([tx, ty + 0.13, 0.05])
+    return J
 
 
 def patch_joints():
-    disp = displaced_joints()
-    orig = legacy_body.jm
-
+    J = shell_joints()
     def jm(name):
-        p = orig(name)
-        q = np.array([p.x, p.y, p.z])
-        if name not in ("root",):
-            q = q + disp(q)
-        return Vector(q.tolist())
+        return Vector(np.asarray(J[name], float).tolist())
     legacy_body.jm = jm
     fin.body.jm = jm
+    return J
 
 
 def build_weights(rig, gm):

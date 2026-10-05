@@ -89,6 +89,13 @@ def front_register(V, T, fk):
         return pu, pv
     return dict(view=v, f=f, zbuf=zb, PPM=PPM, u0w=u0w, v0w=v0w)
 
+def grade(img, gamma=0.78, sat=1.28):
+    x = np.clip(img / 255.0, 0, 1) ** gamma
+    g = x.mean(2, keepdims=True)
+    x = np.clip(g + (x - g) * sat, 0, 1)
+    return x * 255.0
+
+
 def sheet_palette(vs, k=16):
     px = []
     for v in vs.values():
@@ -177,6 +184,7 @@ def paint_procedural(out, ok, tt, b, T, fk, sp):
 def main(size=2048):
     t0 = time.time()
     global EXTRA
+    MOR = np.zeros((size, size), bool)
     EXTRA = {"emissive": np.zeros((size, size, 3), np.float32), "orm": np.tile(np.array([255, 175, 0], np.float32), (size, size, 1))}
     m = np.load(os.path.join(WORK, "game_mesh.npz"), allow_pickle=True)
     V, T, UVc = m["V"].astype(np.float64), m["T"], m["UVc"]
@@ -241,7 +249,7 @@ def main(size=2048):
         # sample
         from scipy.ndimage import map_coordinates
         col = np.stack([map_coordinates(v.rgb[:, :, c].astype(np.float32), [vf - 0.5, uu - 0.5], order=1, mode="nearest") for c in range(3)], 1)
-        acc += col * w[:, None]; wsum += w; cmax = np.maximum(cmax, w)
+        acc += col * w[:, None]; wsum += w; cmax = np.maximum(cmax, np.where(vis & valid, cq, 0.0))
         print(vk, "vis %.2f valid %.2f cos %.2f" % (vis.mean(), valid.mean(), (cos>0.25).mean()), "valid frac %.2f" % ((w > 0).mean()), "%.1fs" % (time.time() - t0))
 
     # ---- front (registered by silhouette flow)
@@ -258,13 +266,14 @@ def main(size=2048):
     er = ndi.binary_erosion(v.mask, iterations=4)
     pui = np.clip(np.round(pu - 0.5).astype(int), 0, v.W - 1); pvi = np.clip(np.round(pv - 0.5).astype(int), 0, v.H - 1)
     valid = er[pvi, pui]
-    w = np.where(vis & valid & (cos > 0.25), cos ** POW * 1.5, 0.0)
+    tcf = N @ np.array([0, -1.0, 0]); cq = np.minimum(cos, tcf)
+    w = np.where(vis & valid, np.clip((cq - 0.45) / 0.3, 0, 1), 0.0) ** 2 * 0.8
     col = np.stack([map_coordinates(v.rgb[:, :, c].astype(np.float32), [pv - 0.5, pu - 0.5], order=1, mode="nearest") for c in range(3)], 1)
-    acc += col * w[:, None]; wsum += w; cmax = np.maximum(cmax, w)
+    acc += col * w[:, None]; wsum += w; cmax = np.maximum(cmax, np.where(vis & valid, cq, 0.0))
     print("front used frac %.3f" % (w > 0).mean())
     col = acc / np.maximum(wsum, 1e-6)[:, None]
     NAVY = np.array([40, 31, 34], np.float32)
-    conf = np.clip(cmax / 0.6, 0, 1)[:, None]
+    conf = np.clip((cmax - 0.28) / 0.25, 0, 1)[:, None]
     col = col * conf + NAVY * (1 - conf)
     cmax = np.maximum(cmax, 0.5)
     img = np.zeros((size, size, 3), np.float32); W = np.zeros((size, size), np.float32)
@@ -293,12 +302,14 @@ def main(size=2048):
         mc = oalb[py, px]
         ii = np.argwhere(ok)[is_mor]
         out[ii[:, 0], ii[:, 1]] = mc
+        MOR[ii[:, 0], ii[:, 1]] = True
         mask[ii[:, 0], ii[:, 1]] = True
         for nm in ("emissive", "orm"):
             la = np.asarray(Image.open(os.path.join(WORK, "legacy", nm + ".webp")).convert("RGB")).astype(np.float32)
             side_img = EXTRA[nm]
             side_img[ii[:, 0], ii[:, 1]] = la[py, px]
     out = cel_clean(out, mask, vs, k=28, passes=1, win=3)
+    out = np.where(MOR[..., None], out, grade(out))
     out = paint_procedural(out, ok, tt, b, T, fk, m['sparam'])
     # eyes: yellow texels on the head glow a little
     yel = (out[..., 0] > 170) & (out[..., 1] > 140) & (out[..., 2] < 130) & (out[..., 0] - out[..., 2] > 70)

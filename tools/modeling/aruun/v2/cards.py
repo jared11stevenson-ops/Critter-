@@ -97,15 +97,12 @@ def main():
     xc, yc = hip[:, 0].mean(), hip[:, 1].mean()
     rng = np.random.RandomState(3)
     Bb = np.vstack([hi['V_' + g] for g in ('trunk', 'legL', 'legR')])
+    xc, yc = np.median(hip[:, 0]), np.median(hip[:, 1])
+    RX, RY = 0.235, 0.20
     def rbody(th, z):
-        d = np.array([np.cos(th), np.sin(th)])
-        m = np.abs(Bb[:, 2] - z) < 0.04
-        q = Bb[m, :2] - [xc, yc]
-        if len(q) == 0:
-            return 0.2
-        ang = np.arctan2(q[:, 1], q[:, 0]); dth = np.abs((ang - th + np.pi) % (2 * np.pi) - np.pi)
-        sel = dth < 0.22
-        return np.linalg.norm(q[sel], axis=1).max() if sel.any() else 0.2
+        # ellipse radius at angle th, widening slightly down the thighs
+        r = RX * RY / np.hypot(RY * np.cos(th), RX * np.sin(th))
+        return r * (1.0 + 0.25 * np.clip((1.2 - z) / 0.7, 0, 1))
     nl = 18
     for i in range(nl):
         th = 2 * np.pi * (i + 0.5) / nl                     # angle in xy; front = -y => th = -pi/2
