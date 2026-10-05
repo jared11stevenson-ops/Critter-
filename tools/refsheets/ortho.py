@@ -37,7 +37,7 @@ def warp_rows(img, src_fr, dst_fr, scale_ref=None):
     s = H / img.height
     big = img.resize((max(1, round(img.width * s)), H), Image.LANCZOS)
     a = np.asarray(big).astype(np.float32); a[..., :3] *= a[..., 3:] / 255.0      # premultiply
-    keys = [k for k in LM_ORDER if k in src_fr and k in dst_fr]
+    keys = sorted([k for k in LM_ORDER if k in src_fr and k in dst_fr], key=lambda k: (dst_fr[k], src_fr[k]))   # rows may be in any anatomical order (e.g. waist above wrist)
     sx = np.array([src_fr[k] for k in keys]) * H; dx = np.array([dst_fr[k] for k in keys]) * H
     # enforce monotonic
     for i in range(1, len(sx)):

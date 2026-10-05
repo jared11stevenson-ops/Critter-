@@ -63,7 +63,7 @@ def build(cid, status="ready for review"):
     y += 14; d.text((x, y), "Views in this pack", font=font(26), fill=INK); y += 38
     for v, m in meta["views"].items():
         d.text((x, y), f"{v}: {m['pose']}" + ("" if m["orthographic"] else "  [NOT ortho]"), font=font(18, False), fill=INK); y += 26
-    y += 16
+    y += 8; y = P.wrap(d, (x, y), "Landmarks: " + c["lm_src"], 17, 70, fill=(150, 40, 40)); y += 8
     pal = Image.open(os.path.join(pk, "swatches", f"{cid}_palette.png")).convert("RGB").crop((0, 0, 1400, 260)); pal = fit_w(pal, min(col_w, 1000)); row.paste(pal, (x, y)); y += pal.height + 10
     blocks.append(row)
     # head

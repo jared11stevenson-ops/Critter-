@@ -12,7 +12,7 @@ Pack built 2026-10-05. Critique written after opening every output image next to
 |---|---|---|---|---|
 | front | 1945x4096 | 1 | 0 | front turnaround, standing, lantern staff at viewer-left |
 | side | 1876x4096 | 2 | 0 | side, faces screen-left on sheet; MIRRORED here to face screen-right |
-| back | 2310x4096 | 2 | 2 | back, banner cloak + lantern |
+| back | 2310x4096 | 2 | 3 | back, banner cloak + lantern |
 | hero | 19x15 | 0 | 1 | hero crouch with thorned polearm 'Diplomacy' (not aligned) (NOT ortho) |
 
 Landmark rows are shared by construction (see metadata.json: landmarks_m). Components >200 px other than 1 are detached art such as horns tips, dangling charms or wing tips.
