@@ -53,6 +53,7 @@ func _ready() -> void:
 	_build_pool_water(geo)
 	_build_gate(geo)
 	_build_plants(geo)
+	_build_kit_dressing(geo)
 	_build_collision(geo)
 	if with_lighting:
 		lighting = load("res://game/world/common/world_lighting.gd").new()
@@ -84,6 +85,8 @@ func _face_npcs() -> void:
 
 ## Ambient life: every few seconds someone glances somewhere else, then back.
 func _process(delta: float) -> void:
+	if _membrane:
+		(_membrane.material_override as StandardMaterial3D).albedo_color.a = 0.24 + 0.08 * sin(Time.get_ticks_msec() * 0.002)
 	_idle_t -= delta
 	if _idle_t > 0.0:
 		return
@@ -442,10 +445,78 @@ func _build_living_lights(geo: Node3D) -> void:
 	geo.add_child(bulbs)
 
 
+var _membrane: MeshInstance3D
+
 func _build_gate(geo: Node3D) -> void:
-	var g: Node3D = ReachesStructures.build({"kind": "gate_ring", "pos": [-14.0, 0.0, -8.0], "rot_y": 35.0}, null)
-	g.name = "GateRing"
-	geo.add_child(g)
+	# Terrarium One's Gate: a Scale Transition Array (kit piece: coil ring on a hazard-striped cradle, capacitor drums,
+	# control pylon) with a soft pulsing membrane. The old stone ring is kept as the fallback when the kit is missing.
+	if not ReachesKit.available("scale_array"):
+		var g: Node3D = ReachesStructures.build({"kind": "gate_ring", "pos": [-14.0, 0.0, -8.0], "rot_y": 35.0}, null)
+		g.name = "GateRing"
+		geo.add_child(g)
+		return
+	var root := Node3D.new()
+	root.name = "GateArray"
+	root.position = Vector3(-14.0, 0.0, -8.0)
+	root.rotation.y = deg_to_rad(35.0)
+	geo.add_child(root)
+	root.add_child(ReachesKit.instance("scale_array"))
+	var disc := CylinderMesh.new()
+	disc.top_radius = 2.95
+	disc.bottom_radius = 2.95
+	disc.height = 0.02
+	disc.radial_segments = 28
+	_membrane = MeshInstance3D.new()
+	_membrane.name = "Membrane"
+	_membrane.mesh = disc
+	_membrane.rotation.x = PI / 2.0
+	_membrane.position = Vector3(0, 4.3, 0)
+	var mm := StandardMaterial3D.new()
+	mm.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mm.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	mm.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	mm.albedo_color = Color(0.45, 0.78, 1.0, 0.3)
+	mm.cull_mode = BaseMaterial3D.CULL_DISABLED
+	_membrane.material_override = mm
+	_membrane.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	root.add_child(_membrane)
+	for sx: float in [-1.0, 1.0]:
+		ToonKit.static_cylinder(root, Vector3(sx * 3.0, 0, 0), 0.8, 3.0)
+
+
+## Kit dressing: ducts with spore growth along the back wall, pipe runs on the side walls, planters, tanks, crates and
+## string lamps over the plaza -- all merged into 2 meshes (kit + glow surfaces) via ReachesLandmarks.merge.
+func _build_kit_dressing(geo: Node3D) -> void:
+	if not ReachesKit.available("hub_duct"):
+		return
+	var parts: Array = []
+	var add := func(piece: String, pos: Vector3, yaw: float = 0.0, sc: float = 1.0) -> void:
+		var m := ReachesKit.mesh(piece)
+		if m:
+			parts.append({"mesh": m, "xf": Transform3D(Basis(Vector3.UP, deg_to_rad(yaw)).scaled(Vector3(sc, sc, sc)), pos)})
+	for x in [-15.0, -9.0, -3.0, 3.0, 9.0, 15.0]:
+		add.call("hub_duct", Vector3(x, 7.2, -16.0))
+	for s: float in [-1.0, 1.0]:
+		for z in [-12.0, -7.0, -2.0]:
+			add.call("hub_pipes", Vector3(s * 20.9, 3.0 + (z + 12.0) * 0.06, z), 90.0)
+	for x in [-14.0, -7.0, 0.0, 7.0, 14.0]:
+		add.call("hub_lamp_string", Vector3(x, 6.9, -6.0), 0.0)
+		add.call("hub_lamp_string", Vector3(x + 2.0, 6.3, 3.0), 0.0)
+	for p in [Vector3(-18.5, 0, -12.5), Vector3(18.5, 0, -12.5), Vector3(-19.0, 0, 7.5), Vector3(19.0, 0, 9.0), Vector3(-1.0, 0, -15.2)]:
+		add.call("hub_planter", p, 90.0 if absf(p.x) > 10.0 else 0.0)
+	add.call("hub_tank", Vector3(17.2, 0, 7.4), -20.0)
+	add.call("hub_tank", Vector3(-17.0, 0, -1.4), 25.0)
+	add.call("hub_crates", Vector3(-8.2, 0, -14.6), 10.0)
+	add.call("hub_crates", Vector3(19.0, 0, 3.0), 80.0)
+	add.call("hub_crates", Vector3(-19.4, 0, 11.0), 95.0)
+	var mesh := ReachesLandmarks.merge(parts)
+	if mesh == null:
+		return
+	var mi := MeshInstance3D.new()
+	mi.name = "KitDressing"
+	mi.mesh = mesh
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	geo.add_child(mi)
 
 
 func _build_plants(geo: Node3D) -> void:

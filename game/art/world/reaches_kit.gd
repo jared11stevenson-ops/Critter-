@@ -16,11 +16,26 @@ static func available(piece: String) -> bool:
 	return ResourceLoader.exists(DIR + piece + ".glb")
 
 
+## Starts background loads of the given pieces (ResourceLoader threads); mesh() then picks them up without a stall.
+static func prefetch(pieces: Array) -> void:
+	for p in pieces:
+		var path := DIR + str(p) + ".glb"
+		if _meshes.has(p) or not ResourceLoader.exists(path):
+			continue
+		if ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			ResourceLoader.load_threaded_request(path)
+
+
 static func mesh(piece: String) -> Mesh:
 	if _meshes.has(piece):
 		return _meshes[piece]
 	var m: Mesh = null
-	var ps: PackedScene = load(DIR + piece + ".glb") as PackedScene
+	var path := DIR + piece + ".glb"
+	var ps: PackedScene
+	if ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+		ps = load(path) as PackedScene
+	else:
+		ps = ResourceLoader.load_threaded_get(path) as PackedScene
 	if ps:
 		var root := ps.instantiate()
 		var mi := _first_mesh(root)
@@ -56,14 +71,14 @@ static func kit_material(opts: Dictionary = {}) -> ShaderMaterial:
 	return m
 
 
-static func glow_material(energy: float = 1.8) -> StandardMaterial3D:
-	var key := "glow%.2f" % energy
+static func glow_material(energy: float = 1.8, pulse: float = 0.22) -> ShaderMaterial:
+	var key := "glow%.2f/%.2f" % [energy, pulse]
 	if _mats.has(key):
 		return _mats[key]
-	var m := StandardMaterial3D.new()
-	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	m.vertex_color_use_as_albedo = true
-	m.albedo_color = Color(energy, energy, energy, 1.0)
+	var m := ShaderMaterial.new()
+	m.shader = load("res://game/art/shaders/glow_pulse.gdshader")
+	m.set_shader_parameter("energy", energy)
+	m.set_shader_parameter("pulse", pulse)
 	_mats[key] = m
 	return m
 
@@ -78,7 +93,8 @@ static func _assign_materials(m: Mesh, piece: String) -> void:
 		var cur := m.surface_get_material(i)
 		var nm := cur.resource_name if cur else ""
 		if nm == "glow":
-			m.surface_set_material(i, glow_material(2.2 if piece.begins_with("thought") else 1.8))
+			var lumen := piece.begins_with("lumen") or piece in ["glow_colony", "lantern_kelp", "glass_bloom", "bell_moss", "hanging_walkway", "sleeping_den"]
+			m.surface_set_material(i, glow_material(2.2 if (lumen or piece.begins_with("thought")) else 1.8, 0.45 if lumen else 0.2))
 		else:
 			m.surface_set_material(i, kit_material(opts))
 

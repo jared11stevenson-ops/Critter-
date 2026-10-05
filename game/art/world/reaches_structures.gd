@@ -62,12 +62,38 @@ static func _glow_mesh(parent: Node3D, st: SurfaceTool, c: Color, energy: float,
 
 # =====================================================================================================
 class GateRing extends Node3D:
-	## Terrarium arrival gate: an upright stone-and-brass ring on a stepped dais, Thoughtstone membrane.
+	## Terrarium arrival gate (the Scale Transition Array, "the Gate"): kit coil ring on a hazard-striped cradle with a
+	## pulsing membrane. Falls back to the old stone-and-brass ring when the kit is not imported.
 	var membrane: MeshInstance3D
 
 	func _init(spec: Dictionary, _t: Node) -> void:
 		position = ReachesStructures._v3(spec.get("pos", [0, 0, 0]))
 		rotation.y = deg_to_rad(float(spec.get("rot_y", 0.0)))
+		if ReachesKit.available("scale_array"):
+			scale = Vector3.ONE * 1.1
+			add_child(ReachesKit.instance("scale_array"))
+			var disc := CylinderMesh.new()
+			disc.top_radius = 2.95
+			disc.bottom_radius = 2.95
+			disc.height = 0.02
+			disc.radial_segments = 28
+			membrane = MeshInstance3D.new()
+			membrane.name = "Membrane"
+			membrane.mesh = disc
+			membrane.rotation.x = PI / 2.0
+			membrane.position = Vector3(0, 4.3, 0)
+			var mm := StandardMaterial3D.new()
+			mm.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+			mm.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+			mm.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+			mm.albedo_color = Color(0.45, 0.78, 1.0, 0.3)
+			mm.cull_mode = BaseMaterial3D.CULL_DISABLED
+			membrane.material_override = mm
+			membrane.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			add_child(membrane)
+			for sx: float in [-1.0, 1.0]:
+				ToonKit.static_cylinder(self, Vector3(sx * 3.0, 0, 0), 0.8, 3.0)
+			return
 		var st := ToonKit.begin()
 		# dais: two stepped discs
 		ToonKit.cylinder(st, Vector3(0, -0.6, 0), Vector3(0, 0.12, 0), 4.6, 4.5, 14, STONE_DARK, true, 0.03, 4)
@@ -75,25 +101,9 @@ class GateRing extends Node3D:
 		# ring
 		ToonKit.torus(st, Transform3D(Basis(), Vector3(0, 4.0, 0)), 3.5, 0.48, 22, 6, Color(0.66, 0.46, 0.34))
 		ToonKit.torus(st, Transform3D(Basis(), Vector3(0, 4.0, 0)), 3.5, 0.2, 22, 4, Color(0.86, 0.66, 0.30))
-		# keystones + feet
-		for i in 6:
-			var a := TAU * float(i) / 6.0 + PI / 2.0
-			var p := Vector3(cos(a) * 3.5, 4.0 + sin(a) * 3.5, 0)
-			ToonKit.box(st, Transform3D(Basis(Vector3.BACK, a), p), Vector3(0.6, 1.1, 1.3), STONE)
 		for sx: float in [-1.0, 1.0]:
 			ToonKit.box(st, Transform3D(Basis(Vector3.BACK, -sx * 0.35), Vector3(sx * 2.6, 0.9, 0)), Vector3(1.3, 1.9, 1.5), STONE_DARK)
 		ReachesStructures._add_mesh(self, st, ToonKit.material({"outline": 0.04}), "Ring")
-		# membrane (soft glow disc)
-		var g := SurfaceTool.new()
-		g.begin(Mesh.PRIMITIVE_TRIANGLES)
-		var n := 24
-		for i in n:
-			var a0 := TAU * float(i) / n
-			var a1 := TAU * float(i + 1) / n
-			g.add_vertex(Vector3(0, 4.0, 0))
-			g.add_vertex(Vector3(cos(a1) * 3.1, 4.0 + sin(a1) * 3.1, 0))
-			g.add_vertex(Vector3(cos(a0) * 3.1, 4.0 + sin(a0) * 3.1, 0))
-		membrane = ReachesStructures._glow_mesh(self, g, Color(0.55, 0.8, 1.0, 0.28), 1.6, "Membrane")
 		for sx: float in [-1.0, 1.0]:
 			ToonKit.static_cylinder(self, Vector3(sx * 2.7, 0, 0), 0.8, 3.0)
 

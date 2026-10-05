@@ -1,0 +1,9 @@
+[
+ {"t":0.5,"call":"scene.qa_auto_dialogue","args":[true,0,0.1]},
+ {"t":2.0,"call":"scene.qa_teleport","args":["t_valley"]},
+ {"t":6.0,"call":"scene.qa_perf_breakdown","args":["Terrain"]},
+ {"t":14.0,"call":"scene.qa_teleport","args":["t_drill"]},
+ {"t":18.0,"call":"scene.qa_perf_breakdown","args":["Terrain"]},
+ {"t":26.0,"call":"scene.qa_teleport","args":["t_span"]},
+ {"t":30.0,"call":"scene.qa_perf_breakdown","args":["Terrain"]}
+]

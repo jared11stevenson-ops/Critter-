@@ -29,7 +29,12 @@ var _t: Node
 ## culling skips off-screen instances (was one level-wide MultiMesh per kind = every instance drawn + shadowed
 ## every frame). Instances are shuffled per chunk so `visible_instance_count` thins them evenly for the graphics
 ## quality scatter density (Quality.scatter_density()).
-const CHUNK_X := 48.0
+const CHUNK_X := 32.0
+const CHUNK_Z := 32.0
+## Visibility range (m, before the quality multiplier) per kind: cover is dropped early (fog hides it), silhouettes stay.
+const RANGE := {"grass_tuft": 38.0, "pebbles": 34.0, "lichen_mat": 48.0, "rock_c": 48.0, "rock_a": 64.0, "rock_b": 80.0,
+	"reach_shrub": 64.0, "reach_shrub_b": 64.0, "bone_ribs": 52.0, "dead_tree": 100.0, "flat_tree_a": 112.0, "flat_tree_b": 112.0,
+	"spire": 120.0, "pillar_broken": 100.0, "survey_flag": 80.0, "crate": 80.0, "lichen_rock": 48.0}
 var _mms: Array = []       # [MultiMesh, full count, is_cover]
 
 
@@ -52,6 +57,17 @@ func populate(t: Node) -> void:
 	_extra_backdrop_trees(t)
 	_ground_cover(t, floors)
 	_commit_props()
+	if OS.get_cmdline_user_args().has("qa"):
+		var tot := 0
+		var parts: Array = []
+		for kind in _props:
+			var m: Mesh = ReachesKit.mesh(KIT_MAP[kind]) if KIT_MAP.has(kind) and ReachesKit.available(KIT_MAP[kind]) else null
+			var tr := 0
+			if m:
+				for si in m.get_surface_count():
+					tr += m.surface_get_array_index_len(si) / 3
+			parts.append("%s=%d(x%d tri)" % [kind, _props[kind].size(), tr])
+		print("[PERF] scatter ", ", ".join(parts))
 	var q := ToonKit.quality()
 	if q:
 		q.connect("changed", _apply_density)
@@ -75,7 +91,7 @@ func _bucket(list: Array) -> Dictionary:
 	var out := {}
 	for e in list:
 		var xf: Transform3D = e if e is Transform3D else e[0]
-		var ci := int(floor(xf.origin.x / CHUNK_X))
+		var ci := int(floor(xf.origin.x / CHUNK_X)) + 1000 * int(floor((xf.origin.z + 200.0) / CHUNK_Z))
 		if not out.has(ci):
 			out[ci] = []
 		out[ci].append(e)
@@ -311,6 +327,10 @@ func _commit_props() -> void:
 			var mmi := MultiMeshInstance3D.new()
 			mmi.name = "Props_%s_%d" % [kind, ci]
 			mmi.multimesh = mm
+			var rg: float = float(RANGE.get(kind, 100.0))
+			var qq := ToonKit.quality()
+			mmi.visibility_range_end = (rg * (qq.call("vis_range_mult") if qq else 1.0)) + 17.0
+			mmi.visibility_range_end_margin = 6.0
 			if mat:
 				mmi.material_override = mat
 			mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF

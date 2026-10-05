@@ -13,6 +13,8 @@ extends Node3D
 const RIM_LAYER := 1 << 10
 
 @export var preset: String = "reaches"
+## "reaches" (ringed planet, clouds) or "lumen" (vault ceiling of living constellations).
+@export var sky_kind: String = "reaches"
 ## Blend moods along the Red Reaches path (set by RedReachesTerrain).
 @export var zone_blend: bool = false
 ## Global multipliers for the mood table (sun, ambient).
@@ -78,6 +80,17 @@ const MOODS := {
 		"horizon": Color(0.98, 0.56, 0.40), "zenith": Color(0.24, 0.24, 0.46),
 	},
 }
+## Lumen Depths moods (sky_kind "lumen"): a dim cool key standing in for far vault light, glittering fill, constellation overhead.
+const LUMEN := {
+	"lumen_vault": {
+		"sun_col": Color(0.60, 0.82, 1.0), "sun_e": 2.6, "sun_rot": Vector2(-50, -40),
+		"amb_col": Color(0.36, 0.52, 0.80), "amb_e": 1.9, "sky_e": 0.7,
+		"fog_col": Color(0.06, 0.15, 0.24), "fog_d": 0.0065, "fog_h": -4.0, "fog_hd": 0.02, "fog_sun": 0.05,
+		"exposure": 1.28, "sat": 1.12, "contrast": 1.12, "glow": 1.1,
+		"rim_col": Color(0.4, 0.9, 1.0), "rim_e": 1.1,
+		"horizon": Color(0.07, 0.2, 0.28), "zenith": Color(0.02, 0.04, 0.11),
+	},
+}
 ## Mood keyframes along the level X axis (Red Reaches layout).
 const ZONE_KEYS := [[-30.0, "gate"], [14.0, "gate"], [40.0, "valley"], [86.0, "valley"], [108.0, "waystation"],
 	[140.0, "waystation"], [172.0, "drill"], [224.0, "drill"], [244.0, "span"], [290.0, "span"], [306.0, "boss"],
@@ -129,7 +142,7 @@ func _build() -> void:
 	env.background_mode = Environment.BG_SKY
 	var sky := Sky.new()
 	sky_mat = ShaderMaterial.new()
-	var sky_sh: Shader = preload("res://game/art/shaders/sky_reaches.gdshader")
+	var sky_sh: Shader = load("res://game/art/shaders/sky_lumen.gdshader" if sky_kind == "lumen" else "res://game/art/shaders/sky_reaches.gdshader")
 	var q := ToonKit.quality()
 	sky_mat.shader = q.call("shader", sky_sh.resource_path, sky_sh.code) if q else sky_sh
 	sky.sky_material = sky_mat
@@ -297,7 +310,9 @@ func apply_preset(p: String) -> void:
 		"reaches":
 			_apply_mood(MOODS["gate"])
 		_:
-			if MOODS.has(p):
+			if LUMEN.has(p):
+				_apply_mood(LUMEN[p])
+			elif MOODS.has(p):
 				_apply_mood(MOODS[p])
 			else:
 				_apply_mood(MOODS["gate"])

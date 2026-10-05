@@ -78,7 +78,7 @@ def layered(name, R, H, layers, seed, aspect=1.0, N=20, wobble=0.16, palette=PAL
     capc = mix(prev_col, DUST, 0.45)
     for i in range(N):
         j = (i + 1) % N
-        km.poly([ctr, prev_hi[i], prev_hi[j]], [mul(capc, 1.05), capc, capc], out=(0, 0, z - 3))
+        km.poly([ctr, prev_hi[i], prev_hi[j]], [capc, capc, capc], out=(0, 0, z - 3))
     # fix winding of cap (up facing)
     return km
 

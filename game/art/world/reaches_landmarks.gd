@@ -10,20 +10,67 @@ extends Node3D
 const ART_PATH := "res://game/world/red_reaches/world_art.json"
 
 var terrain: Node
+var art_path := ART_PATH
 var stats := {"tris": 0, "items": 0, "groups": 0}
 var _rng := RandomNumberGenerator.new()
 
 
+signal finished
+
+var _groups: Array = []
+var _results: Array = []
+var _gid := -1
+var _next := 0
+var _t0 := 0
+
+
+## Threaded build: kit meshes are warmed on the main thread (the cache is not thread-safe), then every group is expanded +
+## merged on the WorkerThreadPool; finished groups are attached to the tree one per frame (no load hitch).
 func populate(t: Node) -> void:
 	terrain = t
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(ART_PATH))
+	_t0 = Time.get_ticks_msec()
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(art_path))
 	if not (parsed is Dictionary):
-		push_warning("ReachesLandmarks: cannot parse " + ART_PATH)
+		push_warning("ReachesLandmarks: cannot parse " + art_path)
+		finished.emit()
 		return
-	for g in (parsed as Dictionary).get("groups", []):
-		_build_group(g)
+	_groups = (parsed as Dictionary).get("groups", [])
+	var names := {}
+	for g in _groups:
+		for it in g.get("items", []):
+			if it.has("scatter"):
+				for pn in it["scatter"]["pieces"]:
+					names[pn] = true
+			else:
+				names[it["p"]] = true
+	ReachesKit.prefetch(names.keys())
+	for n in names:
+		var km := ReachesKit.mesh(n)
+		if km:
+			surfaces_of(km)
+	_results.resize(_groups.size())
+	_gid = WorkerThreadPool.add_group_task(_prep_group, _groups.size(), -1, true, "landmarks")
+	set_process(true)
+
+
+func _process(_d: float) -> void:
+	if _gid < 0:
+		set_process(false)
+		return
+	if not WorkerThreadPool.is_group_task_completed(_gid):
+		return
+	WorkerThreadPool.wait_for_group_task_completion(_gid)
+	if _next < _results.size():
+		var r: Variant = _results[_next]
+		_next += 1
+		if r is Dictionary:
+			_attach(r)
+		return
+	_gid = -1
+	set_process(false)
 	if OS.get_cmdline_user_args().has("qa"):
-		print("[PERF] landmarks groups=%d items=%d tris=%d" % [stats["groups"], stats["items"], stats["tris"]])
+		print("[PERF] landmarks groups=%d items=%d tris=%d total_ms=%d (threaded)" % [stats["groups"], stats["items"], stats["tris"], Time.get_ticks_msec() - _t0])
+	finished.emit()
 
 
 func _ground(x: float, z: float, bd: bool = false) -> float:
@@ -44,7 +91,8 @@ func _expand(g: Dictionary) -> Array:
 
 func _scatter(sc: Dictionary) -> Array:
 	var out: Array = []
-	_rng.seed = int(sc.get("seed", 1))
+	var rng := RandomNumberGenerator.new()
+	rng.seed = int(sc.get("seed", 1))
 	var c: Array = sc["c"]
 	var R := float(sc["r"])
 	var pieces: Array = sc["pieces"]
@@ -54,8 +102,8 @@ func _scatter(sc: Dictionary) -> Array:
 	var gap := float(sc.get("min_gap", 2.0))
 	while out.size() < int(sc["n"]) and tries < int(sc["n"]) * 25:
 		tries += 1
-		var a := _rng.randf() * TAU
-		var d := sqrt(_rng.randf()) * R
+		var a := rng.randf() * TAU
+		var d := sqrt(rng.randf()) * R
 		var x := float(c[0]) + cos(a) * d * float(sc.get("ax", 1.0))
 		var z := float(c[1]) + sin(a) * d
 		var sdf: float = terrain.floor_sdf(x, z)
@@ -65,6 +113,13 @@ func _scatter(sc: Dictionary) -> Array:
 			continue
 		if _near_marker(x, z, float(sc.get("clear", 3.0))):
 			continue
+		var blocked := false
+		for av in sc.get("avoid", []):
+			if Vector2(x - float(av[0]), z - float(av[1])).length() < float(av[2]):
+				blocked = true
+				break
+		if blocked:
+			continue
 		var ok := true
 		for q in placed:
 			if Vector2(x - q.x, z - q.y).length() < gap:
@@ -73,8 +128,8 @@ func _scatter(sc: Dictionary) -> Array:
 		if not ok:
 			continue
 		placed.append(Vector2(x, z))
-		out.append({"p": pieces[_rng.randi() % pieces.size()], "x": x, "z": z, "r": _rng.randf() * 360.0,
-			"s": _rng.randf_range(float(sr[0]), float(sr[1]))})
+		out.append({"p": pieces[rng.randi() % pieces.size()], "x": x, "z": z, "r": rng.randf() * 360.0,
+			"s": rng.randf_range(float(sr[0]), float(sr[1]))})
 	return out
 
 
@@ -91,14 +146,13 @@ func _near_marker(x: float, z: float, r: float) -> bool:
 	return false
 
 
-func _build_group(g: Dictionary) -> void:
+func _prep_group(gi: int) -> void:
+	var g: Dictionary = _groups[gi]
 	var items := _expand(g)
 	if items.is_empty():
 		return
 	var parts: Array = []
-	var gnode := Node3D.new()
-	gnode.name = "LM_" + str(g.get("id", "group"))
-	add_child(gnode)
+	var cols: Array = []
 	for it in items:
 		var piece: String = it["p"]
 		var m := ReachesKit.mesh(piece)
@@ -113,18 +167,27 @@ func _build_group(g: Dictionary) -> void:
 		if it.has("tilt"):
 			var tl: Array = it["tilt"]
 			b = b * Basis.from_euler(Vector3(deg_to_rad(float(tl[0])), 0.0, deg_to_rad(float(tl[1]))))
-		var sx: float = s * float(it.get("sx", 1.0))
-		var sy: float = s * float(it.get("sy", 1.0))
-		b = b.scaled(Vector3(sx, sy, s * float(it.get("sz", 1.0))))
+		b = b.scaled(Vector3(s * float(it.get("sx", 1.0)), s * float(it.get("sy", 1.0)), s * float(it.get("sz", 1.0))))
 		var xf := Transform3D(b, Vector3(x, y, z))
 		parts.append({"mesh": m, "xf": xf})
-		stats["items"] += 1
 		if it.has("col"):
-			_collider(gnode, xf, it["col"])
+			cols.append({"xf": xf, "col": it["col"]})
 	var mesh := merge(parts)
 	if mesh == null:
 		return
+	_results[gi] = {"g": g, "mesh": mesh, "cols": cols, "items": parts.size()}
+
+
+func _attach(r: Dictionary) -> void:
+	var g: Dictionary = r["g"]
+	var gnode := Node3D.new()
+	gnode.name = "LM_" + str(g.get("id", "group"))
+	add_child(gnode)
+	for c in r["cols"]:
+		_collider(gnode, c["xf"], c["col"])
+	var mesh: ArrayMesh = r["mesh"]
 	stats["groups"] += 1
+	stats["items"] += int(r["items"])
 	for si in mesh.get_surface_count():
 		stats["tris"] += mesh.surface_get_array_index_len(si) / 3
 	var mi := MeshInstance3D.new()
@@ -135,7 +198,6 @@ func _build_group(g: Dictionary) -> void:
 	if ve > 0.0:
 		mi.visibility_range_end = ve
 		mi.visibility_range_end_margin = ve * 0.1
-		mi.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
 	var vb := float(g.get("vis_begin", 0.0))
 	if vb > 0.0:
 		mi.visibility_range_begin = vb
@@ -167,6 +229,18 @@ func _collider(parent: Node3D, xf: Transform3D, col: Variant) -> void:
 	parent.add_child(sb)
 
 
+static var _surf_cache: Dictionary = {}     # Mesh -> [{arr, mat}] (filled on the main thread; read-only on workers)
+
+static func surfaces_of(m: Mesh) -> Array:
+	if _surf_cache.has(m):
+		return _surf_cache[m]
+	var out: Array = []
+	for s in m.get_surface_count():
+		out.append({"arr": m.surface_get_arrays(s), "mat": m.surface_get_material(s)})
+	_surf_cache[m] = out
+	return out
+
+
 ## Merge transformed kit meshes into one ArrayMesh (one surface per distinct material). Static helper (also used by tools).
 static func merge(parts: Array) -> ArrayMesh:
 	var acc: Dictionary = {}     # Material -> {v,n,c,uv,idx}
@@ -174,9 +248,9 @@ static func merge(parts: Array) -> ArrayMesh:
 		var m: Mesh = p["mesh"]
 		var xf: Transform3D = p["xf"]
 		var nb := xf.basis.inverse().transposed()
-		for s in m.get_surface_count():
-			var arr := m.surface_get_arrays(s)
-			var mat: Material = m.surface_get_material(s)
+		for sf in surfaces_of(m):
+			var arr: Array = sf["arr"]
+			var mat: Material = sf["mat"]
 			if not acc.has(mat):
 				acc[mat] = {"v": PackedVector3Array(), "n": PackedVector3Array(), "c": PackedColorArray(), "uv": PackedVector2Array(), "idx": PackedInt32Array()}
 			var a: Dictionary = acc[mat]

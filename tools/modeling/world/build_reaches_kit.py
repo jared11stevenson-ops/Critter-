@@ -19,6 +19,10 @@ try:
     import pieces_hub as H
 except ImportError:
     H = None
+try:
+    import pieces_lumen as LU
+except ImportError:
+    LU = None
 
 OUT = os.path.abspath(os.path.join(HERE, "..", "..", "..", "game", "art", "world", "kit"))
 
@@ -44,7 +48,7 @@ def registry():
     reg["scree"] = lambda: R.scree("scree")
     reg["spoil_heap"] = lambda: R.spoil_heap("spoil_heap")
     reg["salt_crust"] = lambda: R.salt_crust("salt_crust")
-    for mod in (S, F, H):
+    for mod in (S, F, H, LU):
         if mod:
             reg.update(mod.registry())
     return reg
