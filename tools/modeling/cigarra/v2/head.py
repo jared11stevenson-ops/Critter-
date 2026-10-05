@@ -31,26 +31,26 @@ def cap(a, b, ra, rb=None):
 def skull_field():
     P = []
     P.append(E((0, 0.004, 0.030), (0.077, 0.088, 0.088)))                   # cranium
-    P.append(E((0, -0.030, -0.030), (0.059, 0.064, 0.082)))                  # lower face
-    P.append(E((0, -0.048, -0.086), (0.032, 0.036, 0.032)))                  # chin (tapered)
+    P.append(E((0, -0.030, -0.026), (0.059, 0.064, 0.072)))                  # lower face
+    P.append(E((0, -0.046, -0.078), (0.031, 0.034, 0.028)))                  # chin (tapered)
     for s in (-1, 1):
-        P.append(E((s * 0.050, -0.018, -0.045), (0.018, 0.034, 0.034)))      # cheeks / jaw angle
+        P.append(E((s * 0.050, -0.018, -0.040), (0.018, 0.034, 0.030)))      # cheeks / jaw angle
         P.append(cap((s * 0.030, -0.066, 0.034), (s * 0.066, -0.040, 0.044), 0.009, 0.008))   # brow ridge (heavy-lidded look)
-    P.append(E((0, -0.088, -0.020), (0.016, 0.020, 0.024)))                  # nose bridge+tip
-    P.append(E((0, -0.100, -0.036), (0.014, 0.013, 0.012)))                  # nose tip
+    P.append(E((0, -0.088, -0.016), (0.014, 0.018, 0.021)))                  # nose bridge+tip
+    P.append(E((0, -0.099, -0.031), (0.012, 0.012, 0.011)))                  # nose tip
     for s in (-1, 1):
-        P.append(E((s * 0.010, -0.092, -0.040), (0.009, 0.010, 0.008)))      # nostril wings
-    P.append(E((0, -0.080, -0.066), (0.018, 0.012, 0.0045)))                 # upper lip
-    P.append(E((0, -0.081, -0.074), (0.020, 0.013, 0.0055)))                 # lower lip
+        P.append(E((s * 0.009, -0.092, -0.034), (0.008, 0.009, 0.007)))      # nostril wings
+    P.append(E((0, -0.080, -0.060), (0.018, 0.012, 0.0045)))                 # upper lip
+    P.append(E((0, -0.081, -0.068), (0.020, 0.013, 0.0055)))                 # lower lip
     P.append(E((0, -0.077, 0.052), (0.014, 0.008, 0.010)))                   # third-eye dome
     body = S.smooth_union(P, k=0.016)
     # eye sockets: soft carve, then eyeballs sit in them
     for s in (-1, 1):
         body = S.subtract(body, E((s * 0.036, -0.068, 0.008), (0.028, 0.015, 0.020), S.euler(0, 0, s * 0.25)), 0.008)
     # mouth line (thin groove) and nostrils
-    body = S.subtract(body, E((0, -0.088, -0.0705), (0.020, 0.004, 0.0016)), 0.0015)
+    body = S.subtract(body, E((0, -0.088, -0.0645), (0.020, 0.004, 0.0016)), 0.0015)
     for s in (-1, 1):
-        body = S.subtract(body, E((s * 0.0075, -0.105, -0.040), (0.0045, 0.006, 0.0045)), 0.002)
+        body = S.subtract(body, E((s * 0.0075, -0.104, -0.034), (0.0045, 0.006, 0.0045)), 0.002)
     # ears: pointed blades swept out and up through the hair
     ears = []
     for s in (-1, 1):

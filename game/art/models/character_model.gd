@@ -62,7 +62,7 @@ const HOLD_LEAD := 0.12
 const HOLD_DRIFT := 0.04
 
 var _model: Node3D
-## Face expressions (blend shapes on the head mesh, if the model has them): "neutral" | "angry" | "calm".
+## Face expressions (blend shapes on the head mesh, if the model has them): "neutral" | "angry" | "calm" | "open".
 ## Automatic by default (angry while an action plays, calm when downed); set_expression() overrides until clear_expression().
 var _expr_meshes: Array = []        # [[MeshInstance3D, {shape name: index}]]
 var _expr_cur := {}
@@ -186,11 +186,19 @@ func _update_expression(delta: float) -> void:
 		return
 	var want := _expr_override
 	if want == "":
-		want = "calm" if _downed else ("angry" if _act_name != "" else "neutral")
+		if _downed:
+			want = "calm"
+		elif _act_name.begins_with("hit"):
+			want = "open"        # pain / shout (falls back to angry when the face has no mouth-open shape)
+		else:
+			want = "angry" if _act_name != "" else "neutral"
 	for em in _expr_meshes:
 		var mi: MeshInstance3D = em[0]
+		var w: String = want
+		if w == "open" and not em[1].has("open"):
+			w = "angry"
 		for shape in em[1]:
-			var t := 1.0 if shape == want else 0.0
+			var t := 1.0 if shape == w else 0.0
 			var cur: float = _expr_cur.get(shape, 0.0)
 			cur = move_toward(cur, t, delta * 6.0)
 			_expr_cur[shape] = cur

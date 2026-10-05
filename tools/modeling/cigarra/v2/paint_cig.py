@@ -6,8 +6,8 @@ from common.texbake import smooth, mix, hash1, vnoise, worley
 
 SKIN = np.array([208, 154, 114.]); SKIN_D = np.array([168, 112, 80.]); SKIN_L = np.array([232, 182, 138.]); LIP = np.array([188, 102, 98.])
 INK = np.array([22, 16, 26.]); VIOLET = np.array([70, 54, 98.]); VIOLET_D = np.array([46, 36, 68.]); MOSS = np.array([160, 172, 48.]); OLIVE = np.array([112, 120, 52.])
-CREAM = np.array([230, 218, 172.]); HAIR = np.array([236, 230, 206.]); LEATHER = np.array([136, 84, 48.]); BOOT = np.array([76, 56, 46.])
-GOLD = np.array([240, 188, 58.]); ORANGE = np.array([236, 112, 42.]); LIME = np.array([184, 214, 62.]); EYE_Y = np.array([246, 204, 52.])
+CREAM = np.array([230, 218, 172.]); HAIR = np.array([236, 230, 206.]); LEATHER = np.array([136, 84, 48.]); BOOT = np.array([50, 36, 32.])
+GOLD = np.array([240, 188, 58.]); ORANGE = np.array([236, 112, 42.]); LIME = np.array([184, 214, 62.]); EYE_Y = np.array([252, 196, 24.])
 
 
 def line(d, w, soft=0.0007):
@@ -31,7 +31,7 @@ def paint_skull(P, N, O, sc):
     col = mix(col, SKIN_L, smooth(0.02, -0.06, ly) * smooth(-0.03, 0.03, lz) * 0.25)
     col = mix(col, SKIN_D, smooth(-0.07, -0.13, lz) * 0.5)
     col = mix(col, np.array([226, 120, 104.]), smooth(0.03, 0.0, np.hypot(ax - 0.044, lz + 0.032)) * front * 0.25)      # cheek blush
-    col = mix(col, np.array([226, 120, 104.]), smooth(0.016, 0.006, np.hypot(lx, (lz + 0.018) * 0.9)) * smooth(-0.07, -0.095, ly) * 0.22)   # nose tip
+    col = mix(col, np.array([226, 120, 104.]), smooth(0.016, 0.006, np.hypot(lx, (lz + 0.012) * 0.9)) * smooth(-0.07, -0.095, ly) * 0.22)   # nose tip
     # scalp / hair-cap colour behind the hairline (never bald under the clumps)
     scalp = np.clip(smooth(0.040, 0.050, lz) + smooth(0.005, 0.03, ly) * smooth(-0.07, -0.02, lz) * (1 - smooth(0.055, 0.075, ax) * smooth(-0.04, -0.01, lz) * 0.0), 0, 1)
     scalp = scalp * (1 - front * smooth(0.040, 0.030, lz) * 0)
@@ -59,7 +59,7 @@ def paint_skull(P, N, O, sc):
         crease = np.abs(v - 0.0185 * (1 - 0.0 * u)) - 0.0
         col = mix(col, SKIN_D * 0.8, line(v - 0.021 + 0.03 * (u / 0.0235) ** 2 * 0.0, 0.0012) * smooth(1.8, 1.0, (u / 0.032) ** 2) * front * m * 0.6)
         brow = seg_d2(dx, dz, (-0.012, 0.024), (0.044, 0.036))
-        col = mix(col, INK * 1.6, smooth(0.0042, 0.0020, brow) * front * m * 0.9)
+        col = mix(col, INK * 1.6, smooth(0.0030, 0.0014, brow) * front * m * 0.85)
         # cheek smears (the sheet's dark brown face marks): three slashes and dots under the eye
         for (a0, a1) in (((-0.004, -0.018), (-0.012, -0.040)), ((0.008, -0.020), (0.004, -0.045)), ((0.022, -0.012), (0.034, -0.028))):
             dd = seg_d2(dx, dz, a0, a1); col = mix(col, np.array([90, 56, 44.]), smooth(0.0030, 0.0012, dd) * front * m * 0.9)
@@ -72,15 +72,15 @@ def paint_skull(P, N, O, sc):
     col = mix(col, SKIN_L, line(seg_d2(lx, lz, (-0.03, 0.036), (-0.012, 0.062)) - 0.0, 0.0016) * front * 0.6)
     # nose: nostril dark, tip highlight
     for sg in (-1, 1):
-        dn = np.hypot((lx - sg * 0.0075) / 0.0042, (lz + 0.040) / 0.0032)
+        dn = np.hypot((lx - sg * 0.0075) / 0.0042, (lz + 0.034) / 0.0032)
         col = mix(col, INK * 1.4, smooth(1.2, 0.8, dn) * front)
-    col = mix(col, SKIN_L, smooth(0.008, 0.002, np.hypot(lx, lz + 0.034)) * front * 0.35)
+    col = mix(col, SKIN_L, smooth(0.008, 0.002, np.hypot(lx, lz + 0.028)) * front * 0.35)
     # lips: pink upper/lower, dark mouth line, tiny gloss; chin line (black)
-    lipz = (lz + 0.067) / 0.0095; lipx = lx / 0.021
+    lipz = (lz + 0.061) / 0.0095; lipx = lx / 0.021
     lipm = smooth(1.0, 0.8, np.hypot(lipx, lipz * 1.0)) * front
-    col = mix(col, LIP, lipm); col = mix(col, LIP * 1.15, smooth(0.5, 0.2, np.hypot(lipx, (lz + 0.0765) / 0.004)) * front * 0.5)
-    col = mix(col, INK * 1.5, line(lz + 0.0705 + 0.003 * (lx / 0.02) ** 2 * 0 - 0.0012 * (lx / 0.02) ** 2, 0.0011) * smooth(0.024, 0.018, ax) * front * 0.95)
-    col = mix(col, INK, line(lx, 0.0015) * smooth(-0.082, -0.092, lz) * smooth(-0.118, -0.100, lz) * front * 0.9)      # black chin line
+    col = mix(col, LIP, lipm); col = mix(col, LIP * 1.15, smooth(0.5, 0.2, np.hypot(lipx, (lz + 0.0705) / 0.004)) * front * 0.5)
+    col = mix(col, INK * 1.5, line(lz + 0.0645 - 0.0012 * (lx / 0.02) ** 2, 0.0011) * smooth(0.024, 0.018, ax) * front * 0.95)
+    col = mix(col, INK, line(lx, 0.0015) * smooth(-0.075, -0.085, lz) * smooth(-0.112, -0.095, lz) * front * 0.9)      # black chin line
     # ears: inner pink
     ear = smooth(0.045, 0.03, np.hypot(ax - 0.092, lz - 0.01)) * smooth(0.05, 0.075, ax)
     col = mix(col, np.array([226, 140, 118.]), ear * 0.5)
@@ -102,13 +102,13 @@ def paint_eye(P, N, O, sc):
         a = u @ gaze; ang = np.arccos(np.clip(a, -1, 1)); px = u @ tx; py = u @ ty
         rr = ang / 1.15
         c = np.tile(EYE_Y, (n, 1))
-        c = mix(c, np.array([252, 232, 120.]), smooth(0.55, 0.0, rr) * 0.4)
+        c = mix(c, np.array([255, 224, 70.]), smooth(0.55, 0.0, rr) * 0.4)
         c = mix(c, np.array([214, 128, 28.]), smooth(0.42, 0.62, rr) * 0.8)                # amber limbal ring
         c = mix(c, INK, smooth(0.20, 0.17, rr))                                                # round pupil
         c = mix(c, np.array([60, 30, 10.]), smooth(0.82, 0.95, rr) * 0.8)
         gl = np.exp(-(((px + 0.30) / 0.13) ** 2 + ((py - 0.30) / 0.13) ** 2)) * smooth(0.0, 0.3, a)
         c = mix(c, np.array([255, 255, 245.]), np.clip(gl * 2.2, 0, 1))
-        e = np.where((rr < 0.18)[:, None], 0.0, c * 0.55)
+        e = np.where((rr < 0.18)[:, None], 0.0, c * 0.28)
         col[sel] = c[sel]; emis[sel] = e[sel]
     return col, emis, np.full(n, 0.08), np.zeros(n)
 
@@ -253,6 +253,11 @@ def paint_cloth(name, sp, P, N):
         col = mix(col, GOLD, glyph * pm)
         em = np.tile(GOLD, (n, 1)) * (np.maximum(glyph, line(sd + 0.007, 0.0016) * 0.8) * pm * 0.5)[:, None]
         return col, np.full(n, 0.8), em
+    if name.startswith("jacket_"):
+        col = mix(VIOLET, VIOLET_D, 0.3 + 0.4 * vnoise(P, 16, 12)) * (0.9 + 0.15 * smooth(-1, 1, N[:, 1]))[:, None]
+        col = mix(col, MOSS, smooth(0.86, 0.96, sp) * 0.9 * smooth(0.35, 0.7, vnoise(P, 36, 13) + 0.2))
+        col = mix(col, INK * 1.5, line(sp - 0.0, 0.01) * 0.0)
+        return col, np.full(n, 0.8), np.zeros((n, 3))
     if name in ("hood_roll", "hood_bag", "collar"):
         col = mix(VIOLET, VIOLET_D, 0.3 + 0.4 * vnoise(P, 20, 4))
         col = mix(col, MOSS, smooth(0.6, 0.8, vnoise(P, 28, 5)) * 0.7 * (1 if name != "hood_bag" else smooth(0.5, 1.0, sp)))
@@ -297,7 +302,7 @@ def paint_wings(S=1024):
         f1, f2, cid, cen = worley(P, 0.095, seed=21 + tile, jitter=0.85)
         edge = (f2 - f1).reshape(H, tw)
         cidr = cid.reshape(H, tw); d_c = f1.reshape(H, tw)
-        base = mix(OLIVE * 0.95, LIME * 1.05, smooth(0.0, 0.5, b)[..., None] if False else (smooth(0.0, 0.45, b))[..., None])
+        base = mix(OLIVE * 0.9, np.array([168, 196, 62.]), smooth(0.0, 0.5, b)[..., None] if False else (smooth(0.0, 0.45, b))[..., None])
         base = mix(base, np.array([212, 228, 90.]), smooth(0.35, 0.0, np.abs(a - 0.5) * 2 - 0.35)[..., None] * 0.25)
         # dark violet cells in the central region, bigger toward the middle
         pick = hash1(cidr.astype(np.int64), 3 + tile) < (0.75 - 0.9 * np.abs(a - 0.5)) * smooth(0.04, 0.2, b) * smooth(0.97, 0.8, b)

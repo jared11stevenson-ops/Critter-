@@ -103,6 +103,7 @@ def weights(gm, bones):
         elif nm == "crown_trunk": W[i, bi["crown"]] = 0.5; W[i, bi["head"]] = 0.5
         elif nm in ("hood_roll", "collar"): W[i, bi["neck1"]] = 0.55; W[i, bi["chest"]] = 0.45
         elif nm == "hood_bag": u = float(np.clip((1.40 - p[2]) / 0.2, 0, 1)); W[i, bi["chest"]] = 0.5 + 0.5 * u; W[i, bi["neck1"]] = 0.5 - 0.5 * u
+        elif nm.startswith("jacket_"): u = float(np.clip(sp, 0, 1)); W[i, bi["chest"]] = 1 - 0.55 * u; W[i, bi["spine1"]] = 0.55 * u
         elif nm == "cape": u = float(np.clip((1.40 - p[2]) / 0.5, 0, 1)); W[i, bi["chest"]] = 1 - 0.4 * u; W[i, bi["spine1"]] = 0.4 * u
         elif nm.startswith("wing_"):
             wb = "wing" if nm.startswith("wing_0") else "wing2"; sd = nm.split("_")[-1]
@@ -165,6 +166,13 @@ def main():
     vk = np.full(len(V), "", object)
     for t, k in enumerate(kinds): vk[T[t]] = k
     colr = np.ones((len(V), 4), np.float32); head = np.isin(vk, ["skull", "eye"]); colr[head] = (0.30, 0.45, 0.8, 1.0)
+    vn_ = np.full(len(V), "", object)
+    for t, k in enumerate(gm["facekinds"]): vn_[T[t]] = str(k).split("|")[0]
+    for i, nm in enumerate(vn_):
+        if nm.startswith("hair_"): colr[i] = (0.10, 0.35, 0.3, 1)
+        elif nm.startswith(("cord_", "leaf", "crownb_", "crown_trunk")): colr[i] = (0.22, 0.5, 0.2, 1)
+        elif nm.startswith(("charm_", "belt", "buckle", "hood_roll", "collar")): colr[i] = (0.45, 0.6, 0.2, 1)
+        elif nm.startswith("crowns_"): colr[i] = (0.6, 0.7, 0.2, 1)
     ca = me.color_attributes.new("Col", "FLOAT_COLOR", "POINT"); ca.data.foreach_set("color", colr.ravel())
     me.materials.append(material("cigarra_body", os.path.join(W2, "albedo.png"), os.path.join(W2, "orm.png"), os.path.join(W2, "normal.png"), os.path.join(W2, "emissive.png")))
     me.materials.append(material("cigarra_wings", os.path.join(W2, "wing_rgba.png"), None, None, os.path.join(W2, "wing_emissive.png"), alpha=True, double=True))

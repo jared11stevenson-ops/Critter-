@@ -41,14 +41,14 @@ def tube(C, radii, sides=6, cap_end=True, cap_start=False, ry=None):
     for i in range(n - 1):
         for j in range(sides):
             a = i * sides + j; b = i * sides + (j + 1) % sides; c = (i + 1) * sides + j; d = (i + 1) * sides + (j + 1) % sides
-            F += [(a, c, b), (b, c, d)]
+            F += [(a, b, c), (b, d, c)]
     S = list(S)
     if cap_end:
         k = len(V); V = np.vstack([V, C[-1]]); S.append(1.0)
-        for j in range(sides): F.append((k, (n - 1) * sides + j, (n - 1) * sides + (j + 1) % sides))
+        for j in range(sides): F.append((k, (n - 1) * sides + (j + 1) % sides, (n - 1) * sides + j))
     if cap_start:
         k = len(V); V = np.vstack([V, C[0]]); S.append(0.0)
-        for j in range(sides): F.append((k, (j + 1) % sides, j))
+        for j in range(sides): F.append((k, j, (j + 1) % sides))
     return V, np.array(F), np.array(S)
 
 
@@ -119,6 +119,28 @@ def cape(P):
     P.add("cape", V, F, SP)
 
 
+def jacket_panels(P):
+    """open violet jacket front panels hanging from the shoulders to the hips (moss hem), one per side"""
+    for sd in (1, -1):
+        nu, nv = 8, 2; V = []; SP = []
+        for i in range(nu + 1):
+            u = i / nu; z = 1.335 - 0.40 * u
+            cx = sd * (0.080 + 0.085 * u ** 1.3); cy = -0.092 - 0.016 * u
+            w = 0.052 + 0.030 * u
+            for j in range(nv + 1):
+                v = j / nv * 2 - 1
+                V.append((cx + sd * v * w * 0.5, cy - 0.014 * (1 - v * v) * 0.0 + (0.03 * abs(v) * (0.4 + u)), z - 0.01 * v * v)); SP.append(u)
+        F = []
+        for i in range(nu):
+            for j in range(nv):
+                a = i * (nv + 1) + j; b = a + 1; c = a + nv + 1; d = c + 1
+                F += [(a, b, c), (b, d, c)]
+        V = np.array(V); F = np.array(F)
+        n = np.cross(V[F[:, 1]] - V[F[:, 0]], V[F[:, 2]] - V[F[:, 0]]).mean(0)
+        if n[1] > 0: F = F[:, ::-1]
+        P.add(f"jacket_{'L' if sd > 0 else 'R'}", V, F, SP)
+
+
 def hood_collar(P):
     # hood roll bunched behind the neck: a tube loop from ear to ear passing behind the nape + a drooping bag
     path = np.array([(0.075 * math.sin(a), 0.020 + 0.075 * math.cos(a) * 0.9, 1.385 - 0.03 * math.cos(a * 0.5) * 0) for a in np.linspace(-2.3, 2.3, 16)])
@@ -153,7 +175,7 @@ def hair(P):
         tip = root + out * 0.035 + sweep * L
         mid = (root + tip) / 2 + out * 0.030 + np.array([0, 0, 0.012])
         C = bez([root, mid, tip], 5)
-        rad = np.array([0.026, 0.024, 0.017, 0.009, 0.0015])
+        rad = np.array([0.032, 0.030, 0.021, 0.011, 0.002])
         V, F, S = tube(C, rad, 4, cap_end=False)
         var = 2 if rng.random() < 0.20 else (1 if rng.random() < 0.35 else 0)
         P.add(f"hair_{k}", V, F, S + 2.0 * var); k += 1
@@ -224,7 +246,7 @@ def boot_leaves(P):
 
 def main():
     P = Pieces()
-    wing_panels(P); cape(P); hood_collar(P); hair(P); crown(P); belt_charms(P); boot_leaves(P)
+    wing_panels(P); cape(P); jacket_panels(P); hood_collar(P); hair(P); crown(P); belt_charms(P); boot_leaves(P)
     P.save()
 
 
