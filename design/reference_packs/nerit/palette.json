@@ -1,0 +1,47 @@
+{
+ "art_sampled_kmeans": [
+  {
+   "hex": "#352e2f",
+   "share": 0.297
+  },
+  {
+   "hex": "#191616",
+   "share": 0.158
+  },
+  {
+   "hex": "#4e4543",
+   "share": 0.134
+  },
+  {
+   "hex": "#776a5a",
+   "share": 0.08
+  },
+  {
+   "hex": "#b7ab91",
+   "share": 0.077
+  },
+  {
+   "hex": "#95d2d8",
+   "share": 0.073
+  },
+  {
+   "hex": "#9d8c72",
+   "share": 0.07
+  },
+  {
+   "hex": "#e3dfbb",
+   "share": 0.043
+  },
+  {
+   "hex": "#727f8a",
+   "share": 0.037
+  },
+  {
+   "hex": "#ce9fdc",
+   "share": 0.032
+  }
+ ],
+ "sheet_palette_json": {},
+ "game_palette_canon_json": [],
+ "note": "game palette = game/canon/canon.json characters.Nerit.palette (the colours UI/FX use); art_sampled = k-means over the cut views of this pack."
+}

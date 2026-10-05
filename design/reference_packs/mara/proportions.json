@@ -1,0 +1,76 @@
+{
+ "rows": [
+  [
+   "Total height (canon)",
+   "1.700 m  (sheet: 5'7\" (170 cm))"
+  ],
+  [
+   "Body height (ground to crown/top of head)",
+   "1.672 m"
+  ],
+  [
+   "Head height (crown to chin)",
+   "0.235 m"
+  ],
+  [
+   "Heads tall (body / head)",
+   "7.1"
+  ],
+  [
+   "Neck (chin to neck base)",
+   "0.037 m"
+  ],
+  [
+   "Torso (neck base to crotch)",
+   "0.646 m"
+  ],
+  [
+   "Arm (shoulder to wrist)",
+   "0.533 m  = 31% of height"
+  ],
+  [
+   "Upper arm (shoulder to elbow)",
+   "0.326 m"
+  ],
+  [
+   "Forearm+hand (elbow to wrist)",
+   "0.207 m"
+  ],
+  [
+   "Leg (crotch to ground)",
+   "0.754 m  = 44% of height"
+  ],
+  [
+   "Thigh (crotch to knee)",
+   "0.244 m"
+  ],
+  [
+   "Shin (knee to ankle)",
+   "0.357 m"
+  ],
+  [
+   "Ankle height",
+   "0.153 m"
+  ],
+  [
+   "Leg : torso ratio",
+   "1.17"
+  ]
+ ],
+ "landmarks_m": {
+  "top": 1.7,
+  "crown": 1.672,
+  "eyes": 1.538,
+  "chin": 1.436,
+  "neck": 1.4,
+  "shoulder": 1.354,
+  "elbow": 1.028,
+  "wrist": 0.822,
+  "waist": 1.02,
+  "crotch": 0.754,
+  "knee": 0.51,
+  "ankle": 0.153,
+  "ground": 0.0
+ },
+ "source": "READ off the gridded art (+-1.5%). Hair bun counts toward height (bun top = 'top')."
+}

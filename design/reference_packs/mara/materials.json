@@ -1,0 +1,114 @@
+[
+ {
+  "name": "Hair (dark brown)",
+  "cls": "hair",
+  "sample": [
+   "side",
+   0.62,
+   0.04
+  ],
+  "rough": 0.6,
+  "metal": 0,
+  "note": "messy high bun, loose strands",
+  "hex": "#3b2b27",
+  "n": 1
+ },
+ {
+  "name": "Skin (warm light brown)",
+  "cls": "skin",
+  "sample": [
+   "side",
+   0.8,
+   0.115
+  ],
+  "rough": 0.5,
+  "metal": 0,
+  "note": "freckles + scar on LEFT cheek are paint",
+  "hex": "#c78462",
+  "n": 2
+ },
+ {
+  "name": "Jumpsuit (grey-beige)",
+  "cls": "cloth (ripstop)",
+  "sample": [
+   "side",
+   0.55,
+   0.5
+  ],
+  "rough": 0.85,
+  "metal": 0,
+  "note": "expedition jumpsuit; trousers bloused over boots",
+  "hex": "#a08870",
+  "n": 3
+ },
+ {
+  "name": "Black harness / pads / pack",
+  "cls": "nylon + moulded plastic",
+  "sample": [
+   "side",
+   0.55,
+   0.75
+  ],
+  "rough": 0.7,
+  "metal": 0,
+  "note": "knee pads rough .5; straps webbing .9",
+  "hex": "#2c2625",
+  "n": 4
+ },
+ {
+  "name": "Backpack accent strips",
+  "cls": "painted plastic",
+  "sample": [
+   "side",
+   0.02,
+   0.29
+  ],
+  "rough": 0.5,
+  "metal": 0,
+  "note": "orange strips (#d9803a-like) on the Expedition Pack",
+  "hex": "#2b2425",
+  "n": 5
+ },
+ {
+  "name": "Boots",
+  "cls": "leather + rubber sole",
+  "sample": [
+   "side",
+   0.55,
+   0.965
+  ],
+  "rough": 0.6,
+  "metal": 0,
+  "note": "black lace-up combat boots",
+  "hex": "#302a29",
+  "n": 6
+ },
+ {
+  "name": "Gloves (black)",
+  "cls": "leather/fabric",
+  "sample": [
+   "side",
+   0.74,
+   0.54
+  ],
+  "rough": 0.7,
+  "metal": 0,
+  "note": "fingerless look",
+  "hex": "#382e2b",
+  "n": 7
+ },
+ {
+  "name": "Stewardship patch",
+  "cls": "embroidered patch",
+  "sample": [
+   "side",
+   0.38,
+   0.27
+  ],
+  "rough": 0.9,
+  "metal": 0,
+  "note": "dark disc, white emblem, LEFT shoulder",
+  "hex": "#a4907d",
+  "n": 8
+ }
+]

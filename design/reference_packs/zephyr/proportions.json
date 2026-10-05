@@ -1,0 +1,76 @@
+{
+ "rows": [
+  [
+   "Total height (canon)",
+   "1.650 m  (sheet: 165 cm (5'5\"))"
+  ],
+  [
+   "Body height (ground to crown/top of head)",
+   "1.463 m"
+  ],
+  [
+   "Head height (crown to chin)",
+   "0.281 m"
+  ],
+  [
+   "Heads tall (body / head)",
+   "5.2"
+  ],
+  [
+   "Neck (chin to neck base)",
+   "0.033 m"
+  ],
+  [
+   "Torso (neck base to crotch)",
+   "0.583 m"
+  ],
+  [
+   "Arm (shoulder to wrist)",
+   "0.462 m  = 28% of height"
+  ],
+  [
+   "Upper arm (shoulder to elbow)",
+   "0.292 m"
+  ],
+  [
+   "Forearm+hand (elbow to wrist)",
+   "0.170 m"
+  ],
+  [
+   "Leg (crotch to ground)",
+   "0.566 m  = 34% of height"
+  ],
+  [
+   "Thigh (crotch to knee)",
+   "0.237 m"
+  ],
+  [
+   "Shin (knee to ankle)",
+   "0.192 m"
+  ],
+  [
+   "Ankle height",
+   "0.138 m"
+  ],
+  [
+   "Leg : torso ratio",
+   "0.97"
+  ]
+ ],
+ "landmarks_m": {
+  "top": 1.65,
+  "crown": 1.463,
+  "eyes": 1.301,
+  "chin": 1.182,
+  "neck": 1.15,
+  "shoulder": 1.1,
+  "elbow": 0.808,
+  "wrist": 0.638,
+  "waist": 0.814,
+  "crotch": 0.566,
+  "knee": 0.33,
+  "ankle": 0.138,
+  "ground": 0.0
+ },
+ "source": "READ (+-2%). Zephyr is digitigrade/bird-like and cloaked: 'knee' = the visible leg joint, 'crotch' = hem of the belt/cloak panels. Top = tip of the crest feather."
+}

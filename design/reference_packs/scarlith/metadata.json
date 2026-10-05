@@ -1,0 +1,105 @@
+{
+ "id": "scarlith",
+ "height_m": 0.12,
+ "px_per_m": 32533.333333333336,
+ "canvas_h": 4096,
+ "ground_y": 4000,
+ "top_y": 96,
+ "landmarks_m": {
+  "top": 0.12,
+  "crown": 0.106,
+  "eyes": 0.0856,
+  "chin": 0.0716,
+  "neck": 0.0692,
+  "shoulder": 0.0664,
+  "elbow": 0.048,
+  "wrist": 0.0336,
+  "waist": 0.0456,
+  "crotch": 0.024,
+  "knee": 0.0156,
+  "ankle": 0.006,
+  "ground": 0.0
+ },
+ "views": {
+  "front": {
+   "file": "ortho/scarlith_front_4096.png",
+   "width_px": 3293,
+   "height_px": 4096,
+   "axis_x_px": 1741.5,
+   "ground_y_px": 4000,
+   "pose": "front turnaround (tiny)",
+   "orthographic": true,
+   "source_landmarks": {
+    "top": 0,
+    "shoulder": 0.42,
+    "elbow": 0.6,
+    "wrist": 0.72,
+    "waist": 0.62,
+    "crotch": 0.8,
+    "knee": 0.87,
+    "ankle": 0.95,
+    "ground": 1,
+    "crown": 0.1,
+    "eyes": 0.26,
+    "chin": 0.37,
+    "neck": 0.39
+   }
+  },
+  "side": {
+   "file": "ortho/scarlith_side_4096.png",
+   "width_px": 2999,
+   "height_px": 4096,
+   "axis_x_px": 1542.0,
+   "ground_y_px": 4000,
+   "pose": "side, faces screen-right",
+   "orthographic": true,
+   "source_landmarks": {
+    "top": 0,
+    "shoulder": 0.47,
+    "elbow": 0.6,
+    "wrist": 0.72,
+    "waist": 0.62,
+    "crotch": 0.8,
+    "knee": 0.87,
+    "ankle": 0.95,
+    "ground": 1,
+    "crown": 0.13,
+    "eyes": 0.3,
+    "chin": 0.42,
+    "neck": 0.44
+   }
+  },
+  "back": {
+   "file": "ortho/scarlith_back_4096.png",
+   "width_px": 4641,
+   "height_px": 4096,
+   "axis_x_px": 2189.5,
+   "ground_y_px": 4000,
+   "pose": "back (cheese carapace)",
+   "orthographic": true,
+   "source_landmarks": {
+    "top": 0,
+    "shoulder": 0.45,
+    "elbow": 0.6,
+    "wrist": 0.72,
+    "waist": 0.62,
+    "crotch": 0.8,
+    "knee": 0.87,
+    "ankle": 0.95,
+    "ground": 1,
+    "crown": 0.12,
+    "eyes": 0.3,
+    "chin": 0.42,
+    "neck": 0.44
+   }
+  },
+  "hero": {
+   "file": "ortho/scarlith_hero_x4.png",
+   "width_px": 2328,
+   "height_px": 1890,
+   "pose": "hero with halberd (not aligned)",
+   "orthographic": false,
+   "aligned": false
+  }
+ }
+}

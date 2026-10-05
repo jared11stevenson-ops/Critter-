@@ -1,0 +1,102 @@
+[
+ {
+  "name": "Head carapace (grey-olive)",
+  "cls": "chitin",
+  "sample": [
+   "back",
+   0.5,
+   0.12
+  ],
+  "rough": 0.4,
+  "metal": 0,
+  "note": "smooth mask-like head, pale glowing eye",
+  "hex": "#848073",
+  "n": 1
+ },
+ {
+  "name": "Hooded cloak (dark plum)",
+  "cls": "cloth",
+  "sample": [
+   "back",
+   0.5,
+   0.3
+  ],
+  "rough": 0.9,
+  "metal": 0,
+  "note": "large hood",
+  "hex": "#493b41",
+  "n": 2
+ },
+ {
+  "name": "Lantern abdomen",
+  "cls": "translucent glowing membrane",
+  "sample": [
+   "back",
+   0.5,
+   0.55
+  ],
+  "rough": 0.15,
+  "metal": 0,
+  "emi": 2.0,
+  "note": "cyan/pink/yellow bioluminescent chambers (the sheet colours differ per view: cyan back, peach front); emissive 2.0, alpha/transmission .6; see Q",
+  "hex": "#be8ed5",
+  "n": 3
+ },
+ {
+  "name": "Drop lures on antennae",
+  "cls": "glowing glass",
+  "sample": [
+   "side",
+   0.2,
+   0.12
+  ],
+  "rough": 0.1,
+  "metal": 0,
+  "emi": 1.5,
+  "note": "teardrop lanterns, pink/green/cyan",
+  "hex": "#cdc39c",
+  "n": 4
+ },
+ {
+  "name": "Skin / limbs (grey-tan)",
+  "cls": "chitin",
+  "sample": [
+   "side",
+   0.55,
+   0.45
+  ],
+  "rough": 0.5,
+  "metal": 0,
+  "note": "thin limbs",
+  "hex": "#52504e",
+  "n": 5
+ },
+ {
+  "name": "Belts, leather straps, pouches",
+  "cls": "leather",
+  "sample": [
+   "side",
+   0.62,
+   0.52
+  ],
+  "rough": 0.6,
+  "metal": 0,
+  "note": "brown",
+  "hex": "#363232",
+  "n": 6
+ },
+ {
+  "name": "Boots",
+  "cls": "leather",
+  "sample": [
+   "side",
+   0.5,
+   0.95
+  ],
+  "rough": 0.6,
+  "metal": 0,
+  "note": "dark, buckled",
+  "hex": "#2b2826",
+  "n": 7
+ }
+]

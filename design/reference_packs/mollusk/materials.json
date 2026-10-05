@@ -1,0 +1,100 @@
+[
+ {
+  "name": "Slug skin (tan-orange)",
+  "cls": "skin / mucous",
+  "sample": [
+   "side",
+   0.27,
+   0.15
+  ],
+  "rough": 0.35,
+  "metal": 0,
+  "note": "moist look; slight wet specular",
+  "hex": "#0d0f0e",
+  "n": 1
+ },
+ {
+  "name": "Eyestalks",
+  "cls": "skin + glossy eyes",
+  "sample": [
+   "side",
+   0.27,
+   0.04
+  ],
+  "rough": 0.3,
+  "metal": 0,
+  "note": "eyes glossy white/black rough .05",
+  "hex": "#1e1011",
+  "n": 2
+ },
+ {
+  "name": "Shell (brown spiral, banded)",
+  "cls": "shell / keratin",
+  "sample": [
+   "back",
+   0.65,
+   0.4
+  ],
+  "rough": 0.4,
+  "metal": 0,
+  "note": "dark brown with cream bands, amber spiral centre",
+  "hex": "#7a4434",
+  "n": 3
+ },
+ {
+  "name": "Plants + hibiscus on the shell",
+  "cls": "foliage / petal",
+  "sample": [
+   "back",
+   0.55,
+   0.12
+  ],
+  "rough": 0.7,
+  "metal": 0,
+  "note": "fern leaves, 2 red hibiscus",
+  "hex": "#4b4b25",
+  "n": 4
+ },
+ {
+  "name": "Tattered garments (orange/red/dark purple)",
+  "cls": "cloth + moss",
+  "sample": [
+   "side",
+   0.55,
+   0.7
+  ],
+  "rough": 0.9,
+  "metal": 0,
+  "note": "layered strips; moss patches",
+  "hex": "#3d3739",
+  "n": 5
+ },
+ {
+  "name": "Boots / feet",
+  "cls": "leather + moss",
+  "sample": [
+   "side",
+   0.5,
+   0.97
+  ],
+  "rough": 0.6,
+  "metal": 0,
+  "note": "tan/brown wraps",
+  "hex": "#cd9759",
+  "n": 6
+ },
+ {
+  "name": "Sword / time-relic blade",
+  "cls": "pale gold metal/bone",
+  "sample": [
+   "side",
+   0.83,
+   0.85
+  ],
+  "rough": 0.4,
+  "metal": 0.5,
+  "note": "long pale blade along the back of the leg",
+  "hex": "#dfb666",
+  "n": 7
+ }
+]

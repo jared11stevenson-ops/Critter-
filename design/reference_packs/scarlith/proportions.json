@@ -1,0 +1,76 @@
+{
+ "rows": [
+  [
+   "Total height (canon)",
+   "0.120 m  (sheet: 12 cm (4.7\"); canon 0.12 m)"
+  ],
+  [
+   "Body height (ground to crown/top of head)",
+   "0.106 m"
+  ],
+  [
+   "Head height (crown to chin)",
+   "0.034 m"
+  ],
+  [
+   "Heads tall (body / head)",
+   "3.1"
+  ],
+  [
+   "Neck (chin to neck base)",
+   "0.002 m"
+  ],
+  [
+   "Torso (neck base to crotch)",
+   "0.045 m"
+  ],
+  [
+   "Arm (shoulder to wrist)",
+   "0.033 m  = 27% of height"
+  ],
+  [
+   "Upper arm (shoulder to elbow)",
+   "0.018 m"
+  ],
+  [
+   "Forearm+hand (elbow to wrist)",
+   "0.014 m"
+  ],
+  [
+   "Leg (crotch to ground)",
+   "0.024 m  = 20% of height"
+  ],
+  [
+   "Thigh (crotch to knee)",
+   "0.008 m"
+  ],
+  [
+   "Shin (knee to ankle)",
+   "0.010 m"
+  ],
+  [
+   "Ankle height",
+   "0.006 m"
+  ],
+  [
+   "Leg : torso ratio",
+   "0.53"
+  ]
+ ],
+ "landmarks_m": {
+  "top": 0.12,
+  "crown": 0.106,
+  "eyes": 0.086,
+  "chin": 0.072,
+  "neck": 0.069,
+  "shoulder": 0.066,
+  "elbow": 0.048,
+  "wrist": 0.034,
+  "waist": 0.046,
+  "crotch": 0.024,
+  "knee": 0.016,
+  "ankle": 0.006,
+  "ground": 0.0
+ },
+ "source": "APPROXIMATE (+-4%): Scarlith is a round mite with 8 legs, not a biped. 'crown' = hat top, 'shoulder' = fore-leg root, 'crotch'/'knee'/'ankle' = leg segments of the rear legs. Top = lantern hook on the staff. Use for rough scale only."
+}

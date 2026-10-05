@@ -1,0 +1,76 @@
+{
+ "rows": [
+  [
+   "Total height (canon)",
+   "1.750 m  (sheet: 175 cm (5'9\"))"
+  ],
+  [
+   "Body height (ground to crown/top of head)",
+   "1.558 m"
+  ],
+  [
+   "Head height (crown to chin)",
+   "0.303 m"
+  ],
+  [
+   "Heads tall (body / head)",
+   "5.1"
+  ],
+  [
+   "Neck (chin to neck base)",
+   "0.035 m"
+  ],
+  [
+   "Torso (neck base to crotch)",
+   "0.729 m"
+  ],
+  [
+   "Arm (shoulder to wrist)",
+   "0.519 m  = 30% of height"
+  ],
+  [
+   "Upper arm (shoulder to elbow)",
+   "0.274 m"
+  ],
+  [
+   "Forearm+hand (elbow to wrist)",
+   "0.245 m"
+  ],
+  [
+   "Leg (crotch to ground)",
+   "0.490 m  = 28% of height"
+  ],
+  [
+   "Thigh (crotch to knee)",
+   "0.181 m"
+  ],
+  [
+   "Shin (knee to ankle)",
+   "0.187 m"
+  ],
+  [
+   "Ankle height",
+   "0.122 m"
+  ],
+  [
+   "Leg : torso ratio",
+   "0.67"
+  ]
+ ],
+ "landmarks_m": {
+  "top": 1.75,
+  "crown": 1.558,
+  "eyes": 1.359,
+  "chin": 1.254,
+  "neck": 1.219,
+  "shoulder": 1.149,
+  "elbow": 0.875,
+  "wrist": 0.63,
+  "waist": 0.741,
+  "crotch": 0.49,
+  "knee": 0.309,
+  "ankle": 0.122,
+  "ground": 0.0
+ },
+ "source": "READ (+-3%). Slim hooded firefly-folk with a huge translucent lantern abdomen on the back; top = tip of the antenna lures. Hood/cloak hides shoulders and waist. Front view is a 3/4 turn, so its rows are less reliable."
+}

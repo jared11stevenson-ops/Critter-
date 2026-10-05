@@ -1,0 +1,76 @@
+{
+ "rows": [
+  [
+   "Total height (canon)",
+   "2.200 m  (sheet: 220 cm (7'2\"))"
+  ],
+  [
+   "Body height (ground to crown/top of head)",
+   "2.127 m"
+  ],
+  [
+   "Head height (crown to chin)",
+   "0.513 m"
+  ],
+  [
+   "Heads tall (body / head)",
+   "4.1"
+  ],
+  [
+   "Neck (chin to neck base)",
+   "0.048 m"
+  ],
+  [
+   "Torso (neck base to crotch)",
+   "1.016 m"
+  ],
+  [
+   "Arm (shoulder to wrist)",
+   "0.620 m  = 28% of height"
+  ],
+  [
+   "Upper arm (shoulder to elbow)",
+   "0.334 m"
+  ],
+  [
+   "Forearm+hand (elbow to wrist)",
+   "0.286 m"
+  ],
+  [
+   "Leg (crotch to ground)",
+   "0.550 m  = 25% of height"
+  ],
+  [
+   "Thigh (crotch to knee)",
+   "0.220 m"
+  ],
+  [
+   "Shin (knee to ankle)",
+   "0.198 m"
+  ],
+  [
+   "Ankle height",
+   "0.132 m"
+  ],
+  [
+   "Leg : torso ratio",
+   "0.54"
+  ]
+ ],
+ "landmarks_m": {
+  "top": 2.2,
+  "crown": 2.127,
+  "eyes": 2.072,
+  "chin": 1.613,
+  "neck": 1.566,
+  "shoulder": 1.5,
+  "elbow": 1.166,
+  "wrist": 0.88,
+  "waist": 0.99,
+  "crotch": 0.55,
+  "knee": 0.33,
+  "ankle": 0.132,
+  "ground": 0.0
+ },
+ "source": "APPROXIMATE (+-3%): a slug-folk figure under layered tattered garments; 'crown' = eyestalk tips, 'eyes' = stalk eyes, 'chin' = where the slug head blends into the body. Arms/legs are hidden under the garments; rows below the shoulder are estimates."
+}

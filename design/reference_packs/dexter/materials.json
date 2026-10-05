@@ -1,0 +1,100 @@
+[
+ {
+  "name": "Hair (dark, grey streak right)",
+  "cls": "hair",
+  "sample": [
+   "front",
+   0.5,
+   0.0
+  ],
+  "rough": 0.6,
+  "metal": 0,
+  "note": "tousled, swept back; streak is paint",
+  "hex": "#808080",
+  "n": 1
+ },
+ {
+  "name": "Skin (warm tan)",
+  "cls": "skin",
+  "sample": [
+   "front",
+   0.55,
+   0.06
+  ],
+  "rough": 0.5,
+  "metal": 0,
+  "note": "stubble beard, scar above RIGHT brow",
+  "hex": "#6b4538",
+  "n": 2
+ },
+ {
+  "name": "Long field coat (black)",
+  "cls": "cloth (heavy wool/canvas)",
+  "sample": [
+   "front",
+   0.1,
+   0.55
+  ],
+  "rough": 0.85,
+  "metal": 0,
+  "note": "collar up, sleeves pushed to forearm",
+  "hex": "#1e1c1d",
+  "n": 3
+ },
+ {
+  "name": "Coat lining (Dominion red)",
+  "cls": "cloth (satin-ish)",
+  "sample": [
+   "back",
+   0.5,
+   0.7
+  ],
+  "rough": 0.55,
+  "metal": 0,
+  "note": "whole lining panel, very visible from the back; red sigil",
+  "hex": "#6a2726",
+  "n": 4
+ },
+ {
+  "name": "Shirt / trousers (black)",
+  "cls": "cloth",
+  "sample": [
+   "front",
+   0.6,
+   0.22
+  ],
+  "rough": 0.8,
+  "metal": 0,
+  "note": "black shirt, utility trousers",
+  "hex": "#2c2121",
+  "n": 5
+ },
+ {
+  "name": "Utility belt + pouches + holster",
+  "cls": "leather / nylon",
+  "sample": [
+   "front",
+   0.55,
+   0.3
+  ],
+  "rough": 0.6,
+  "metal": 0,
+  "note": "thigh holster with sidearm (metal parts rough .35 metal .8)",
+  "hex": "#2f2b28",
+  "n": 6
+ },
+ {
+  "name": "Boots",
+  "cls": "leather + rubber",
+  "sample": [
+   "front",
+   0.5,
+   0.96
+  ],
+  "rough": 0.6,
+  "metal": 0,
+  "note": "black lace-up, red sigil on the heel strap",
+  "hex": "#2f2927",
+  "n": 7
+ }
+]

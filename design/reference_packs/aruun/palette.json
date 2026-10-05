@@ -1,0 +1,386 @@
+{
+ "art_sampled_kmeans": [
+  {
+   "hex": "#352c2b",
+   "share": 0.222
+  },
+  {
+   "hex": "#241c1b",
+   "share": 0.162
+  },
+  {
+   "hex": "#0c0908",
+   "share": 0.118
+  },
+  {
+   "hex": "#ad805d",
+   "share": 0.105
+  },
+  {
+   "hex": "#903829",
+   "share": 0.096
+  },
+  {
+   "hex": "#9c6542",
+   "share": 0.086
+  },
+  {
+   "hex": "#c0956f",
+   "share": 0.078
+  },
+  {
+   "hex": "#684d3a",
+   "share": 0.062
+  },
+  {
+   "hex": "#60281e",
+   "share": 0.053
+  },
+  {
+   "hex": "#e8c39b",
+   "share": 0.018
+  }
+ ],
+ "sheet_palette_json": {
+  "carapace_red": {
+   "median": "#953d32",
+   "clusters": [
+    [
+     "#933c31",
+     278
+    ],
+    [
+     "#c69b70",
+     101
+    ],
+    [
+     "#6d2a1b",
+     50
+    ]
+   ]
+  },
+  "carapace_spot_yellow": {
+   "median": "#d8a15c",
+   "clusters": [
+    [
+     "#e3a865",
+     19
+    ],
+    [
+     "#8f3f1a",
+     6
+    ],
+    [
+     "#bf7847",
+     5
+    ]
+   ]
+  },
+  "carapace_orange": {
+   "median": "#974a33",
+   "clusters": [
+    [
+     "#a4553a",
+     200
+    ],
+    [
+     "#4d2a1c",
+     115
+    ],
+    [
+     "#cda594",
+     16
+    ]
+   ]
+  },
+  "chitin_navy": {
+   "median": "#34282a",
+   "clusters": [
+    [
+     "#281e1e",
+     427
+    ],
+    [
+     "#584d3b",
+     126
+    ],
+    [
+     "#a18a6e",
+     78
+    ]
+   ]
+  },
+  "plate_tan": {
+   "median": "#ba9270",
+   "clusters": [
+    [
+     "#c69e7c",
+     108
+    ],
+    [
+     "#a77d5c",
+     62
+    ],
+    [
+     "#734721",
+     23
+    ]
+   ]
+  },
+  "cloth_cream": {
+   "median": "#b28d64",
+   "clusters": [
+    [
+     "#bd996f",
+     47
+    ],
+    [
+     "#8f6b45",
+     27
+    ],
+    [
+     "#573112",
+     4
+    ]
+   ]
+  },
+  "skirt_olive": {
+   "median": "#806c45",
+   "clusters": [
+    [
+     "#7a6341",
+     356
+    ],
+    [
+     "#a79063",
+     266
+    ],
+    [
+     "#2c2218",
+     148
+    ]
+   ]
+  },
+  "cloak_dark": {
+   "median": "#4d4037",
+   "clusters": [
+    [
+     "#4e4235",
+     330
+    ],
+    [
+     "#8e7e65",
+     82
+    ],
+    [
+     "#1f1815",
+     72
+    ]
+   ]
+  },
+  "sash_red": {
+   "median": "#72322b",
+   "clusters": [
+    [
+     "#8f4336",
+     60
+    ],
+    [
+     "#652c22",
+     39
+    ],
+    [
+     "#391916",
+     36
+    ]
+   ]
+  },
+  "horn_red": {
+   "median": "#903d2d",
+   "clusters": [
+    [
+     "#913f2e",
+     100
+    ],
+    [
+     "#6a3022",
+     32
+    ],
+    [
+     "#bd654b",
+     21
+    ]
+   ]
+  },
+  "head_crown_red": {
+   "median": "#894230",
+   "clusters": [
+    [
+     "#924b39",
+     72
+    ],
+    [
+     "#49291b",
+     30
+    ],
+    [
+     "#daa289",
+     10
+    ]
+   ]
+  },
+  "face_tan": {
+   "median": "#a58469",
+   "clusters": [
+    [
+     "#9f7e65",
+     59
+    ],
+    [
+     "#bb9880",
+     42
+    ],
+    [
+     "#4b3328",
+     29
+    ]
+   ]
+  },
+  "jaw_navy": {
+   "median": "#352f32",
+   "clusters": [
+    [
+     "#342f31",
+     55
+    ],
+    [
+     "#3c3639",
+     30
+    ],
+    [
+     "#2d282a",
+     25
+    ]
+   ]
+  },
+  "eye_yellow": {
+   "median": "#c4bb58",
+   "clusters": [
+    [
+     "#d7ca79",
+     11
+    ],
+    [
+     "#76652f",
+     6
+    ],
+    [
+     "#210c00",
+     3
+    ]
+   ]
+  },
+  "fringe_cream": {
+   "median": "#bb9753",
+   "clusters": [
+    [
+     "#c29f5d",
+     75
+    ],
+    [
+     "#a88541",
+     40
+    ],
+    [
+     "#563613",
+     6
+    ]
+   ]
+  },
+  "morrow_head": {
+   "median": "#5a3d32",
+   "clusters": [
+    [
+     "#624437",
+     124
+    ],
+    [
+     "#37221c",
+     107
+    ],
+    [
+     "#937261",
+     58
+    ]
+   ]
+  },
+  "morrow_core": {
+   "median": "#bc4340",
+   "clusters": [
+    [
+     "#d34f49",
+     105
+    ],
+    [
+     "#b7413f",
+     104
+    ],
+    [
+     "#902c2b",
+     79
+    ]
+   ]
+  },
+  "morrow_stud": {
+   "median": "#aa7e63",
+   "clusters": [
+    [
+     "#bd9073",
+     41
+    ],
+    [
+     "#a0755b",
+     36
+    ],
+    [
+     "#603d28",
+     22
+    ]
+   ]
+  },
+  "_sheet_palette_dots": [
+   "#8c3b32",
+   "#9f3e30",
+   "#b56e43",
+   "#6f6a4c",
+   "#5a4432"
+  ],
+  "game_palette": {
+   "intent": "Pop against warm Red Reaches (ochre/red/sand) and green/blue worlds: deep saturated end of his reds, near-white bone, cool ice-teal complement.",
+   "shader": "game/art/shaders/character_pop.gd PALETTES.aruun",
+   "sat_lift": 1.32,
+   "val_lift": 1.06,
+   "contrast": 1.08,
+   "hues": {
+    "carapace_red": "#8a1d1c",
+    "carapace_hot": "#c9402a",
+    "ochre": "#d8a15c",
+    "bone": "#d3bf98",
+    "chitin": "#2a2224",
+    "plum": "#3b3350"
+   },
+   "rim": "#6bf2ff",
+   "emissive_accent": "#2fe8d6 (horn tines, medallion, buckle)",
+   "outline": "#08050f",
+   "core_glow": "#c4301a (Morrow, kept from sheet)"
+  }
+ },
+ "game_palette_canon_json": [
+  "#9c2f22",
+  "#c8462b",
+  "#d9803a",
+  "#6b6a3a",
+  "#4a3226"
+ ],
+ "note": "game palette = game/canon/canon.json characters.Aruun.palette (the colours UI/FX use); art_sampled = k-means over the cut views of this pack."
+}

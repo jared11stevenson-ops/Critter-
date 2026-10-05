@@ -1,0 +1,76 @@
+{
+ "rows": [
+  [
+   "Total height (canon)",
+   "1.650 m  (sheet: 165 cm (5'5\"); board states 'incl. crown')"
+  ],
+  [
+   "Body height (ground to crown/top of head)",
+   "1.490 m"
+  ],
+  [
+   "Head height (crown to chin)",
+   "0.256 m"
+  ],
+  [
+   "Heads tall (body / head)",
+   "5.8"
+  ],
+  [
+   "Neck (chin to neck base)",
+   "0.030 m"
+  ],
+  [
+   "Torso (neck base to crotch)",
+   "0.632 m"
+  ],
+  [
+   "Arm (shoulder to wrist)",
+   "0.454 m  = 27% of height"
+  ],
+  [
+   "Upper arm (shoulder to elbow)",
+   "0.333 m"
+  ],
+  [
+   "Forearm+hand (elbow to wrist)",
+   "0.121 m"
+  ],
+  [
+   "Leg (crotch to ground)",
+   "0.572 m  = 35% of height"
+  ],
+  [
+   "Thigh (crotch to knee)",
+   "0.253 m"
+  ],
+  [
+   "Shin (knee to ankle)",
+   "0.171 m"
+  ],
+  [
+   "Ankle height",
+   "0.148 m"
+  ],
+  [
+   "Leg : torso ratio",
+   "0.90"
+  ]
+ ],
+ "landmarks_m": {
+  "top": 1.65,
+  "crown": 1.49,
+  "eyes": 1.32,
+  "chin": 1.235,
+  "neck": 1.204,
+  "shoulder": 1.141,
+  "elbow": 0.808,
+  "wrist": 0.688,
+  "waist": 0.924,
+  "crotch": 0.572,
+  "knee": 0.319,
+  "ankle": 0.148,
+  "ground": 0.0
+ },
+ "source": "READ off the gridded x4 art (+-1.5%); crown spheres count toward 165 cm per the existing board"
+}

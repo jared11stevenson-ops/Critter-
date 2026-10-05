@@ -1,0 +1,76 @@
+{
+ "rows": [
+  [
+   "Total height (canon)",
+   "5.500 m  (sheet: 5.5 m (18 ft))"
+  ],
+  [
+   "Body height (ground to crown/top of head)",
+   "4.822 m"
+  ],
+  [
+   "Head height (crown to chin)",
+   "1.797 m"
+  ],
+  [
+   "Heads tall (body / head)",
+   "2.7"
+  ],
+  [
+   "Neck (chin to neck base)",
+   "0.110 m"
+  ],
+  [
+   "Torso (neck base to crotch)",
+   "1.265 m"
+  ],
+  [
+   "Arm (shoulder to wrist)",
+   "0.715 m  = 13% of height"
+  ],
+  [
+   "Upper arm (shoulder to elbow)",
+   "0.385 m"
+  ],
+  [
+   "Forearm+hand (elbow to wrist)",
+   "0.330 m"
+  ],
+  [
+   "Leg (crotch to ground)",
+   "1.650 m  = 30% of height"
+  ],
+  [
+   "Thigh (crotch to knee)",
+   "0.440 m"
+  ],
+  [
+   "Shin (knee to ankle)",
+   "0.770 m"
+  ],
+  [
+   "Ankle height",
+   "0.440 m"
+  ],
+  [
+   "Leg : torso ratio",
+   "1.30"
+  ]
+ ],
+ "landmarks_m": {
+  "top": 5.5,
+  "crown": 4.822,
+  "eyes": 4.052,
+  "chin": 3.025,
+  "neck": 2.915,
+  "shoulder": 2.805,
+  "elbow": 2.42,
+  "wrist": 2.09,
+  "waist": 1.87,
+  "crotch": 1.65,
+  "knee": 1.21,
+  "ankle": 0.44,
+  "ground": 0.0
+ },
+ "source": "NOT ANATOMICAL: a sea spider has no neck/torso/hips. Only top (tip of the sun spikes), core centre ('eyes' = sun/moon core), body underside ('chin') and ground are measured; the other rows are evenly spaced placeholders for leg joints so the views stay aligned. Do not read limb ratios from the chart."
+}

@@ -1,0 +1,76 @@
+{
+ "rows": [
+  [
+   "Total height (canon)",
+   "2.400 m  (horn tip to sole (sheet: 240 cm / 7'10\"))"
+  ],
+  [
+   "Body height (ground to crown/top of head)",
+   "2.127 m"
+  ],
+  [
+   "Head height (crown to chin)",
+   "0.157 m"
+  ],
+  [
+   "Heads tall (body / head)",
+   "13.5"
+  ],
+  [
+   "Neck (chin to neck base)",
+   "0.198 m"
+  ],
+  [
+   "Torso (neck base to crotch)",
+   "0.878 m"
+  ],
+  [
+   "Arm (shoulder to wrist)",
+   "0.631 m  = 26% of height"
+  ],
+  [
+   "Upper arm (shoulder to elbow)",
+   "0.320 m"
+  ],
+  [
+   "Forearm+hand (elbow to wrist)",
+   "0.311 m"
+  ],
+  [
+   "Leg (crotch to ground)",
+   "0.894 m  = 37% of height"
+  ],
+  [
+   "Thigh (crotch to knee)",
+   "0.298 m"
+  ],
+  [
+   "Shin (knee to ankle)",
+   "0.345 m"
+  ],
+  [
+   "Ankle height",
+   "0.251 m"
+  ],
+  [
+   "Leg : torso ratio",
+   "1.02"
+  ]
+ ],
+ "landmarks_m": {
+  "top": 2.4,
+  "crown": 2.127,
+  "eyes": 2.075,
+  "chin": 1.97,
+  "neck": 1.772,
+  "shoulder": 1.631,
+  "elbow": 1.311,
+  "wrist": 1.0,
+  "waist": 1.239,
+  "crotch": 0.894,
+  "knee": 0.596,
+  "ankle": 0.251,
+  "ground": 0.0
+ },
+ "source": "landmarks.json (side+back+front rows); eyes and wrist READ"
+}

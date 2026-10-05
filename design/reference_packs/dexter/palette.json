@@ -1,0 +1,100 @@
+{
+ "art_sampled_kmeans": [
+  {
+   "hex": "#2c2726",
+   "share": 0.402
+  },
+  {
+   "hex": "#211e1d",
+   "share": 0.269
+  },
+  {
+   "hex": "#111010",
+   "share": 0.126
+  },
+  {
+   "hex": "#a59181",
+   "share": 0.071
+  },
+  {
+   "hex": "#692926",
+   "share": 0.036
+  },
+  {
+   "hex": "#92634d",
+   "share": 0.027
+  },
+  {
+   "hex": "#422f2c",
+   "share": 0.022
+  },
+  {
+   "hex": "#cfbda8",
+   "share": 0.017
+  },
+  {
+   "hex": "#6d5144",
+   "share": 0.017
+  },
+  {
+   "hex": "#867266",
+   "share": 0.014
+  }
+ ],
+ "sheet_palette_json": {
+  "front": [
+   {
+    "hex": "#231f1f",
+    "share": 0.378
+   },
+   {
+    "hex": "#2e2927",
+    "share": 0.374
+   },
+   {
+    "hex": "#0d0c0c",
+    "share": 0.138
+   },
+   {
+    "hex": "#946751",
+    "share": 0.06
+   },
+   {
+    "hex": "#5b322d",
+    "share": 0.046
+   },
+   {
+    "hex": "#d3bda7",
+    "share": 0.005
+   }
+  ],
+  "back": [
+   {
+    "hex": "#211e1e",
+    "share": 0.311
+   },
+   {
+    "hex": "#2c2322",
+    "share": 0.286
+   },
+   {
+    "hex": "#6e302a",
+    "share": 0.183
+   },
+   {
+    "hex": "#171515",
+    "share": 0.13
+   },
+   {
+    "hex": "#0a090a",
+    "share": 0.069
+   },
+   {
+    "hex": "#d6c2ae",
+    "share": 0.019
+   }
+  ]
+ },
+ "game_palette_canon_json": [],
+ "note": "game palette = game/canon/canon.json characters.Dexter Mane.palette (the colours UI/FX use); art_sampled = k-means over the cut views of this pack."
+}
