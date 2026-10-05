@@ -8,7 +8,7 @@ extends Node3D
 ##        or a scatter item {scatter:{c:[x,z], r, n, seed, pieces:[..], s:[min,max], off_floor|on_floor, min_gap}}.
 
 const ART_PATH := "res://game/world/red_reaches/world_art.json"
-const SHADOW_RANGE := 56.0
+const SHADOW_RANGE := 46.0
 
 var terrain: Node
 var art_path := ART_PATH
@@ -207,7 +207,7 @@ func _attach(r: Dictionary) -> void:
 		# shadows come from a shadow-only twin that only exists within 64 m of the camera: far groups never enter the sun pass
 		var sp := MeshInstance3D.new()
 		sp.name = "ShadowProxy"
-		sp.mesh = mesh
+		sp.mesh = mesh.get_meta("shadow_mesh", mesh)
 		sp.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
 		sp.visibility_range_end = SHADOW_RANGE
 		gnode.add_child(sp)
@@ -339,6 +339,30 @@ static func merge(parts: Array) -> ArrayMesh:
 		arrays[Mesh.ARRAY_INDEX] = a["idx"]
 		am.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 		am.surface_set_material(am.get_surface_count() - 1, mat)
+	# one-surface, material-less twin for the sun shadow pass: a shadow caster does not need per-material draws
+	# (3-4 surfaces per cell became 1 draw each in the shadow pass)
+	var sv := PackedVector3Array()
+	var sn := PackedVector3Array()
+	var si := PackedInt32Array()
+	for mat in acc:
+		var a2: Dictionary = acc[mat]
+		var base := sv.size()
+		sv.append_array(a2["v"])
+		sn.append_array(a2["n"])
+		var idx2: PackedInt32Array = a2["idx"]
+		var off := PackedInt32Array()
+		off.resize(idx2.size())
+		for k in idx2.size():
+			off[k] = idx2[k] + base
+		si.append_array(off)
+	var sarr := []
+	sarr.resize(Mesh.ARRAY_MAX)
+	sarr[Mesh.ARRAY_VERTEX] = sv
+	sarr[Mesh.ARRAY_NORMAL] = sn
+	sarr[Mesh.ARRAY_INDEX] = si
+	var sm := ArrayMesh.new()
+	sm.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, sarr)
+	am.set_meta("shadow_mesh", sm)
 	return am
 
 
