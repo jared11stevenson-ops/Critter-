@@ -14,7 +14,7 @@ WORK = os.path.join(HERE, "..", "work", "v3"); os.makedirs(WORK, exist_ok=True)
 
 # world placement of the head-local origin
 ORIGIN = np.array([0.085, -0.050, 2.045])
-SCALE = 1.06          # head is exaggerated a touch for phone readability
+SCALE = 1.18          # head is exaggerated a touch for phone readability
 
 
 def W(p):

@@ -35,10 +35,10 @@ def main():
         c, r, h, cls = PB.paint_plated(P, Nn, k, seed={"trunk": 0, "armL": 1, "armR": 2, "legL": 3, "legR": 4}[k])
         c, h, r = PB2.overlays(P, Nn, k, c, h, r)
         c, h = PB.neck_belt(P, Nn, c, h, k)
-        put(s, c, r, h)
+        put(s, c, r, h, PB2.accent_emis(P, k, B.sp[s]))
     s = kd_t == "horn"
     if s.any():
-        c, r, h = PB.paint_horn(B.sp[s], B.P[s], B.N[s]); put(s, c, r, h)
+        c, r, h = PB.paint_horn(B.sp[s], B.P[s], B.N[s]); put(s, c, r, h, PB2.accent_emis(B.P[s], 'horn', B.sp[s]))
     for nm in np.unique(nm_t[kd_t == "card"]):
         s = nm_t == nm; c, r = PB.paint_card(nm, B.sp[s], B.P[s], B.N[s]); put(s, c, r, np.zeros(s.sum()))
     for nm in np.unique(nm_t[kd_t == "morrow"]):

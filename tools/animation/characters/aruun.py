@@ -238,7 +238,7 @@ def idle(sk):
     tr = base(sk, "137_41", 4.3, 7.2333, loop=True)
     lib.layer(tr, CARRY)
     carry(tr)
-    lib.layer(tr, {"spine1": (4, 0, 0)})
+    lib.layer(tr, {"spine1": (4, 0, 0), "neck1": (0, 0, 12), "head": (30, 0, 22)})      # head turns back toward the camera/viewer (face readable)
     lib.shift(tr, (0, 0, -0.03))
     # slow breathing on top of the mocap weight shifts (2 breaths per loop)
     t = lib.timeline(tr.F)

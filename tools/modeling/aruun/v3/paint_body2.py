@@ -187,7 +187,6 @@ def pauldron2(P, N, col, hgt, rough):
         col = mix(col, INK, line(d - R - 0.004, 0.0035) * 0.95)
         col = mix(col, INK, line(d - 0.056, 0.0035) * m * 0.95)
         col = mix(col, mix(OCHRE, CREAM, 0.3), smooth(0.053, 0.046, d) * m)
-        col = mix(col, INK * 1.5, smooth(0.018, 0.010, d) * m * 0.85)
         hgt += 1.2 * m
         rough = np.where(m > 0.5, 0.28, rough)
     return col, hgt, rough
@@ -218,3 +217,16 @@ def overlays(P, N, kind, col, hgt, rough):
         pass
     col, hgt, rough = pauldron2(P, N, col, hgt, rough) if kind in ("trunk", "armL", "armR") else (col, hgt, rough)
     return col, hgt, rough
+
+
+def accent_emis(P, kind, sp):
+    """ice-teal emissive accents (the pop layer): horn joint bands, pauldron rim ring"""
+    n = len(P); em = np.zeros((n, 3)); TEAL = np.array([70., 230., 255.])
+    if kind == "horn":
+        knob = (np.cos(2 * np.pi * sp * 3.0) ** 2) ** 2.5
+        em = TEAL[None] * (smooth(0.80, 0.97, knob) * 0.32)[:, None]
+    if kind in ("trunk", "armL", "armR"):
+        for k, a in ANCHORS.items():
+            d = np.linalg.norm(P - a, axis=1)
+            em = np.maximum(em, TEAL[None] * (line(d - 0.123, 0.005) * 0.35)[:, None])
+    return em

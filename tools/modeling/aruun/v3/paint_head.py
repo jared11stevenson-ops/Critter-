@@ -185,7 +185,7 @@ def paint_eye(P, Nr, O, sc):
         c = mix(c, np.array([30, 20, 20.]), line(ang - 1.12, 0.07) * 0.8)                  # rim
         gl = np.exp(-(((px + 0.42) / 0.12) ** 2 + ((py - 0.42) / 0.12) ** 2)) * smooth(0.0, 0.4, a)
         c = mix(c, np.array([255, 255, 240.]), np.clip(gl * 2.0, 0, 1))
-        e = np.where((er < 0.30)[:, None], 0, c * 0.7)
+        e = np.where((er < 0.30)[:, None], 0, c * 0.8)
         col[sel] = c[sel]; emis[sel] = e[sel]
     return col, emis, rough, np.zeros(n)
 
