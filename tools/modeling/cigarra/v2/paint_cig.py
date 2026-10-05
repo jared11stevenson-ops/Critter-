@@ -5,7 +5,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, os.path.jo
 from common.texbake import smooth, mix, hash1, vnoise, worley
 
 SKIN = np.array([208, 154, 114.]); SKIN_D = np.array([168, 112, 80.]); SKIN_L = np.array([232, 182, 138.]); LIP = np.array([188, 102, 98.])
-INK = np.array([22, 16, 26.]); VIOLET = np.array([70, 54, 98.]); VIOLET_D = np.array([46, 36, 68.]); MOSS = np.array([160, 172, 48.]); OLIVE = np.array([112, 120, 52.])
+INK = np.array([22, 16, 26.]); VIOLET = np.array([64, 48, 88.]); VIOLET_D = np.array([44, 34, 64.]); MOSS = np.array([160, 172, 48.]); OLIVE = np.array([112, 120, 52.])
 CREAM = np.array([230, 218, 172.]); HAIR = np.array([236, 230, 206.]); LEATHER = np.array([136, 84, 48.]); BOOT = np.array([50, 36, 32.])
 GOLD = np.array([240, 188, 58.]); ORANGE = np.array([236, 112, 42.]); LIME = np.array([184, 214, 62.]); EYE_Y = np.array([252, 196, 24.])
 
@@ -302,10 +302,10 @@ def paint_wings(S=1024):
         f1, f2, cid, cen = worley(P, 0.095, seed=21 + tile, jitter=0.85)
         edge = (f2 - f1).reshape(H, tw)
         cidr = cid.reshape(H, tw); d_c = f1.reshape(H, tw)
-        base = mix(OLIVE * 0.9, np.array([168, 196, 62.]), smooth(0.0, 0.5, b)[..., None] if False else (smooth(0.0, 0.45, b))[..., None])
+        base = mix(OLIVE * 0.8, np.array([150, 180, 56.]), smooth(0.0, 0.5, b)[..., None] if False else (smooth(0.0, 0.45, b))[..., None])
         base = mix(base, np.array([212, 228, 90.]), smooth(0.35, 0.0, np.abs(a - 0.5) * 2 - 0.35)[..., None] * 0.25)
         # dark violet cells in the central region, bigger toward the middle
-        pick = hash1(cidr.astype(np.int64), 3 + tile) < (0.75 - 0.9 * np.abs(a - 0.5)) * smooth(0.04, 0.2, b) * smooth(0.97, 0.8, b)
+        pick = hash1(cidr.astype(np.int64), 3 + tile) < (1.02 - 0.9 * np.abs(a - 0.5)) * smooth(0.04, 0.2, b) * smooth(0.97, 0.8, b)
         cell = pick * smooth(0.012, 0.004, edge - 0.012 * 0 - 0.0)
         cellm = pick * smooth(0.0035, 0.0075, edge)
         base = mix(base, VIOLET_D * 0.95, cellm[..., None] * 0.9)

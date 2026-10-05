@@ -49,3 +49,15 @@ it is a silhouette problem (horns+snout) not a texture one. See "what remains".
 Blotchy projection replaced by object-space plates: elongated Worley cells = plates, coloured by anatomical zone (red/bone/chitin probabilities), ink outlines, cream rim lights,
 big ochre spots in red plates; hand-placed ladybug pauldrons (ochre spot, cream rim, teal emissive ring), cream sternum plate with rib lines, spine plates, belt, orange neck with cream dashes.
 Horns restored to sheet scale (tips 2.36 m, hooked), 10 -> 8 sided, jointed knobs with cream bands + teal emissive bands, side tines, forked tips.
+
+## Hand-off state (qa/v3_compare_cycles.png = sheet | model, side/back/front-3/4; qa/v3_game_camera_crop_both_heroes.png)
+Gates: 14,675 tris (<=15k), 2048 WebP maps, 1 body material (+1 outline pass), tools/validate.sh 0 failures / 84 system tests pass, full_flow.json 0 SCRIPT ERRORs (peak draw calls
+in that run 186 for the whole scene incl. world - heroes contribute ~6; world side is the Lead's). Face iterations: 4 (iter1-iter4 above), all opened and critiqued.
+Jaw opens in attacks/hits/rage (checked numerically: jaw-vs-head angle 29 -> 61 deg in beetle_rage). Expressions: shape keys angry/calm on the skull, driven by CharacterModel.set_expression().
+CRITIQUE vs the sheet (board):
+- Silhouette: horns now hooked lyre antlers at sheet height (2.36 vs 2.40 m), snout + hook read in profile. Head is still a little small for the 2.4 m body (x1.18 already).
+- Paint is now clean plates, but coverage is too red/cream: the sheet is dominated by near-black plum chitin with red/cream accents (about 60/25/15). Mine is closer to 40/30/30.
+- Hands, feet and the mantle card are crude (flat cloak card, no fingers); Morrow is the legacy mesh.
+- Face: lacks the sheet's expressive eye socket drama, the white fang is small, the pale-yellow fringe is a few paper-flat strands instead of a flowing mane.
+HONEST MATCH: face ~60 % (structure + palette right, line quality / fringe / expression range not), body ~65 %.
+WHAT REMAINS: darker chitin balance, real fringe strands with alpha, hands with fingers, mantle thickness/hood, per-expression texture swaps, a gameplay-distance silhouette pass (bigger snout contrast), contact-sheet review of every clip at close camera.

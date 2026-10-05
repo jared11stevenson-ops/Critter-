@@ -15,7 +15,7 @@ H = 650
 
 
 def main(out, action=None, frame=0, views=("front", "side", "back"), compare=True):
-    bpy.ops.wm.open_mainfile(filepath=os.path.join(HERE, "work", "cigarra_final.blend"))
+    bpy.ops.wm.open_mainfile(filepath=os.environ.get("CIG_BLEND", os.path.join(HERE, "work", "cigarra_final.blend")))
     rig = bpy.data.objects["Cigarra_Rig"]
     if action:
         rig.animation_data.action = bpy.data.actions[action]

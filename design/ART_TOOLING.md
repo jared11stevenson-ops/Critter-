@@ -32,3 +32,24 @@ Blender 5.0.1 as `bpy` module, torch 2.14 CPU, numpy/scipy/skimage/Pillow, rembg
 - Multi-view generation to fill the unseen front/inner surfaces (Zero123++ or SV3D): ~10-20 min per character per 6 views on this CPU; seconds on a GPU. Optional.
 - A tuned image-to-3D (Hunyuan3D-2.1 class) for a true sculpt-grade base: not licence-compatible as is; InstantMesh would be the Apache route (GPU: ~1 min, CPU: untested, expected > 20 min).
 Nothing in the current plan is blocked on a GPU.
+
+---
+## v3 learnings (Agent 4, face-first rebuild of both heroes) - what actually worked
+1. **SDF-sculpted dedicated heads beat any projected/fitted head.** `tools/modeling/common/sdf2.py` (torch CPU) + marching cubes at 2-2.5 mm, smooth-union of
+   ellipsoids/capsules, subtract for sockets/nostrils/mouth line, flat-cut planes for palate/tongue bed. ~45 s per head. Then Blender DECIMATE (collapse) to 2.5-3k tris
+   (+ corrective smooth). Jaw / mandible is a separate SDF so it can be skinned to the existing `jaw` bone.
+2. **Object-space painting (`common/texbake.py`)**: rasterise the final UV layout once -> per-texel world position + normal; every colour is a plain numpy function
+   of (P, N, piece, param). Seams cannot show, regions are defined in 3D (sheet positions), line work is |signed distance| bands. xatlas only has to pack, never to be pretty.
+   Bake 1.6 M texels in 3 s; a full 2048 paint is ~40 s.
+3. **Texel budget by group, not by chart**: separate xatlas runs per group, composed into fixed rectangles (head 768 + 128 strip for eyes, body 1152, gear/horns 768-896).
+   Eyes get a hand-made planar-disc UV (a 90-tri sphere split into 12 tiny charts lost its pupil in-engine).
+4. **Per-vertex shader control in the glb (COLOR_0)**: r = inverted-hull outline width, g = rim strength, b = shade-floor boost. Thin geometry (hair, fringe, cords) and faces
+   must not get the full outline: a 1.1 cm hull on a 2 cm hair tube is a black blob. Meshes without COLOR_0 are unaffected (Godot default white).
+5. **Look at the ENGINE render, not only Cycles.** Three faults only showed in-engine: outline/rim swamping the face, mocap idle pitching the head at the sky, and inside-out
+   hair tubes (cull_back + wrong winding = black). A numeric winding check (`face normal . (centroid - axis) > 0`) is a 5-line test; do it for every procedural tube.
+6. Headless Blender 5 `export_scene.gltf` with shape keys + 20 sampled clips is slow (3-4 min); iterate on `prev_tex.py` (numpy z-buffer textured preview, 2 s) and export last.
+7. The box is shared: load average 10-16 on 4 cores. Never `sleep`-poll; use blocking `timeout N bash -c 'until grep -q DONE log; do sleep 3; done'`.
+8. Expressions: glTF morph targets (shape keys angry/calm/open on the head) + `CharacterModel.set_expression()` / automatic (angry while an action plays, open on hit*, calm when downed).
+   Aruun additionally opens his real `jaw` bone in attack/hit/dash/rage clips (tools/animation/characters/aruun.py `jaw()`).
+
+Pipelines: Aruun `tools/modeling/aruun/v3/run_all.sh`; Cigarra `tools/modeling/cigarra/v2/{head,body,cards}.py` -> `build_mesh2.py` -> `unwrap2.py` -> `paint2.py` -> `finish2.py`.
