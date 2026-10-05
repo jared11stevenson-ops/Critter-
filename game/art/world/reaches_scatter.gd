@@ -68,10 +68,6 @@ func populate(t: Node) -> void:
 					tr += m.surface_get_array_index_len(si) / 3
 			parts.append("%s=%d(x%d tri)" % [kind, _props[kind].size(), tr])
 		print("[PERF] scatter ", ", ".join(parts))
-	var q := ToonKit.quality()
-	if q:
-		q.connect("changed", _apply_density)
-	_apply_density()
 
 
 ## Scatter density for the graphics quality level. Big silhouettes (trees, spires, pillars) are kept; small cover
@@ -298,46 +294,96 @@ func _south_of_floor(x: float, z: float) -> bool:
 	return false
 
 
+const COVER_KINDS := ["grass_tuft", "pebbles", "rock_c", "lichen_rock", "rock_a", "bone_ribs", "bone_horn", "reach_shrub", "reach_shrub_b"]
+const GROUP_M := 40.0           # merge cell (m): one mesh per cell and class ("cover" drops at 52 m, "big" silhouettes at 128 m)
+var _groups: Dictionary = {}
+var _gkeys: Array = []
+var _gresults: Array = []
+var _gid := -1
+var _gnext := 0
+
+
+## v0.14 (environment art pass): scatter is MERGED per 40 m cell into one mesh per material and class (cover / big) instead of
+## one MultiMesh per kind per chunk -- 3-4x fewer draw calls -- built on the WorkerThreadPool and attached a few cells per
+## frame. Visibility ranges drop cover early (fog hides it) and keep silhouettes; quality density thins instances at build.
 func _commit_props() -> void:
 	var grass_mat := _grass_material()
+	var q := ToonKit.quality()
+	var dens: float = q.call("scatter_density") if q else 1.0
+	var vr: float = q.call("vis_range_mult") if q else 1.0
+	set_meta("vr", vr)
+	var kmesh: Dictionary = {}
 	for kind in _props:
 		var kit_mesh: Mesh = null
 		if KIT_MAP.has(kind) and ReachesKit.available(KIT_MAP[kind]):
 			kit_mesh = ReachesKit.mesh(KIT_MAP[kind])
 		var mesh: Mesh = kit_mesh if kit_mesh else _prop_mesh(kind)
-		var mat: Material
-		if kit_mesh:
-			mat = null
-		elif kind == "grass_tuft":
-			mat = grass_mat
-		elif kind in ["crate", "survey_flag"]:
-			mat = ToonKit.material({"roughness": 0.7, "detail": 0.35})
-		else:
-			mat = ToonKit.material({"strata": 0.35, "roughness": 0.9})
-		var cover: bool = kind in ["grass_tuft", "pebbles", "rock_c", "lichen_rock", "rock_a"]
-		var buckets := _bucket(_props[kind])
-		for ci in buckets:
-			var list: Array = buckets[ci]
-			var mm := MultiMesh.new()
-			mm.transform_format = MultiMesh.TRANSFORM_3D
-			mm.mesh = mesh
-			mm.instance_count = list.size()
-			for i in list.size():
-				mm.set_instance_transform(i, list[i])
-			var mmi := MultiMeshInstance3D.new()
-			mmi.name = "Props_%s_%d" % [kind, ci]
-			mmi.multimesh = mm
-			var rg: float = float(RANGE.get(kind, 100.0))
-			var qq := ToonKit.quality()
-			mmi.visibility_range_end = (rg * (qq.call("vis_range_mult") if qq else 1.0)) + 17.0
-			mmi.visibility_range_end_margin = 6.0
-			if mat:
-				mmi.material_override = mat
-			mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-			if kind in ["spire", "rock_a", "rock_b", "pillar_broken", "flat_tree_a", "flat_tree_b", "dead_tree"]:
-				mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-			add_child(mmi)
-			_mms.append([mm, list.size(), cover])
+		if kit_mesh == null:
+			var mat: Material
+			if kind == "grass_tuft":
+				mat = grass_mat
+			elif kind in ["crate", "survey_flag"]:
+				mat = ToonKit.material({"roughness": 0.7, "detail": 0.35})
+			else:
+				mat = ToonKit.material({"strata": 0.35, "roughness": 0.9})
+			for si in mesh.get_surface_count():
+				mesh.surface_set_material(si, mat)
+		ReachesLandmarks.surfaces_of(mesh)           # warm the CPU-side surface cache on the main thread
+		kmesh[kind] = mesh
+	_groups.clear()
+	for kind in _props:
+		var cover: bool = kind in COVER_KINDS
+		var k: float = dens if cover else clampf(dens * 1.6, 0.0, 1.0)
+		var list: Array = _props[kind]
+		for i in list.size():
+			if k < 0.999 and fmod(float(i) * 0.6180339, 1.0) > k:
+				continue
+			var xf: Transform3D = list[i]
+			var key := "%d_%d_%d" % [int(floor(xf.origin.x / GROUP_M)), int(floor((xf.origin.z + 200.0) / GROUP_M)), 0 if cover else 1]
+			if not _groups.has(key):
+				_groups[key] = []
+			_groups[key].append({"mesh": kmesh[kind], "xf": xf})
+	_gkeys = _groups.keys()
+	_gresults.clear()
+	_gresults.resize(_gkeys.size())
+	_gnext = 0
+	_gid = WorkerThreadPool.add_group_task(_merge_cell, _gkeys.size(), -1, true, "scatter_merge")
+	set_process(true)
+
+
+func _merge_cell(i: int) -> void:
+	var m := ReachesLandmarks.merge(_groups[_gkeys[i]])
+	_gresults[i] = m
+
+
+func _process(_d: float) -> void:
+	if _gid < 0:
+		set_process(false)
+		return
+	if not WorkerThreadPool.is_group_task_completed(_gid):
+		return
+	WorkerThreadPool.wait_for_group_task_completion(_gid)
+	for _k in 4:
+		if _gnext >= _gkeys.size():
+			break
+		var key: String = _gkeys[_gnext]
+		_gnext += 1
+		var m: ArrayMesh = _gresults[_gnext - 1]
+		if m == null:
+			continue
+		var big := key.ends_with("_1")
+		var mi := MeshInstance3D.new()
+		mi.name = "Scatter_" + key
+		mi.mesh = m
+		var vr: float = float(get_meta("vr", 1.0))
+		mi.visibility_range_end = ((128.0 if big else 52.0) * vr) + 28.0
+		mi.visibility_range_end_margin = 8.0
+		mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if big else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		add_child(mi)
+	if _gnext >= _gkeys.size():
+		_gid = -1
+		_groups.clear()
+		set_process(false)
 
 
 static func _grass_material() -> StandardMaterial3D:

@@ -131,50 +131,54 @@ def span_pier(name="span_pier", H=7.0, W=7.0, seed=5):
                 j = (k + 1) % 8
                 km.poly([ctr, r1[k], r1[j]], mul(c, 1.1), out=(0, 0, z1 - 50))
         # string course every section
-        km.box((0, 0, z1 - 0.12), (3.1, pw + 0.2, 0.24), mul(STONE_D, 1.05))
+        km.box((0, 0, z1 - 0.1), (3.6, pw + 0.04, 0.16), mul(STONE_D, 1.12))
     km.box((0, -pw * 0.5 - 0.02, -H * 0.5), (2.2, 0.08, H * 0.7), mul(STONE, 1.0), decal="rust", decal_face="-y")
     return km
 
 
 def span_tower(name="span_tower", seed=6, S=6.0, H=13.0):
-    """Spanwright gate tower (battered square tower, crenellations, cresset). Origin at base centre."""
+    """Spanwright gate tower: battered coursed-ashlar shaft (per-course joint decals, calm colour), corbel, crenellated
+    parapet, cresset. Origin at base centre."""
     km = KM(name, seed)
     km.dust = 0.2
     km.ao_dist = 2.0
     km.ground = 1.2
     rng = random.Random(seed)
-    # plinth steps
     km.box((0, 0, 0.3), (S + 2.2, S + 2.2, 0.6), mul(STONE_D, 0.95))
     km.box((0, 0, 0.8), (S + 1.2, S + 1.2, 0.5), mul(STONE_D, 1.05))
     z = 1.05
-    courses = 11
+    courses = 12
+    base = mix(SURVEY, STONE, 0.45)
     for k in range(courses):
         ch = (H - 2.4) / courses
         t0 = k / courses
         t1 = (k + 1) / courses
-        w0 = S * (1.0 - 0.18 * t0)
-        w1 = S * (1.0 - 0.18 * t1)
-        c = _stone(rng, SURVEY if k % 3 else STONE, 0.07)
-        dec = None
-        # one face each: glyph band at 3, tally at 7
-        km.box((0, 0, z + ch / 2), (w0 * 0.5 + w1 * 0.5, w0 * 0.5 + w1 * 0.5, ch - 0.02), c, taper=0.0,
-               decal="glyph" if k == 8 else ("tally" if k == 4 else None), decal_face="-y", jitter=0.0)
+        w0 = S * (1.0 - 0.16 * t0)
+        w1 = S * (1.0 - 0.16 * t1)
+        c = mul(jit(base, rng, 0.05), 0.92 + 0.12 * (k % 3) / 2)
+        c = mix(c, DUST, 0.12 * t1)
+        row = rng.randrange(6)
+        flip = rng.random() < 0.5
+        u0, u1 = (1, 0) if flip else (0, 1)
+        dec = "ashlar"
+        if k == 9:
+            dec = "glyph"
+        elif k == 5:
+            dec = "tally"
+        uvr = (u0, row / 6.0, u1, (row + 1) / 6.0) if dec == "ashlar" else None
+        km.box((0, 0, z + ch / 2), ((w0 + w1) * 0.5, (w0 + w1) * 0.5, ch - 0.02), c, decal=dec, decal_face="all" if dec == "ashlar" else "-y", decal_uv=uvr)
         z += ch
-    # corbel + parapet
-    km.box((0, 0, z + 0.2), (S * 0.82 + 1.0, S * 0.82 + 1.0, 0.4), mul(STONE_D, 1.0))
+    km.box((0, 0, z + 0.2), (S * 0.84 + 1.0, S * 0.84 + 1.0, 0.4), mul(STONE_D, 1.0))
     z += 0.4
     for i in range(6):
         for s in (-1, 1):
-            off = -S * 0.41 + i * (S * 0.82 / 5)
-            km.box((off, s * S * 0.45, z + 0.45), (0.8, 0.7, 0.9), _stone(rng, SURVEY))
+            off = -S * 0.42 + i * (S * 0.84 / 5)
+            km.box((off, s * S * 0.46, z + 0.45), (0.8, 0.7, 0.9), _stone(rng, SURVEY))
             if 0 < i < 5:
-                km.box((s * S * 0.45, off, z + 0.45), (0.7, 0.8, 0.9), _stone(rng, SURVEY))
-    # cresset bowl (mat 1 = fire glow)
+                km.box((s * S * 0.46, off, z + 0.45), (0.7, 0.8, 0.9), _stone(rng, SURVEY))
     km.cyl((0, 0, z), (0, 0, z + 0.8), 0.25, 0.25, 5, mul(GUN, 0.8))
     km.blob((0, 0, z + 1.1), (0.55, 0.55, 0.35), (1.0, 0.62, 0.2), sub=1, noise=0.1, seed=1, mat=1)
-    # door arch slot on the road-facing side (+Y local): dark niche
     km.box((0, -S * 0.5 + 0.02, 2.0), (1.6, 0.12, 2.6), mul(DEEP, 1.0))
-    # banner pole + faded cloth
     km.cyl((S * 0.3, S * 0.3, z), (S * 0.3, S * 0.3, z + 3.2), 0.06, 0.05, 4, WOOD)
     km.box((S * 0.3 + 0.55, S * 0.3, z + 2.5), (1.0, 0.04, 1.2), mix(VERMIL, DUST, 0.3), tilt=(0, 0.1))
     return km

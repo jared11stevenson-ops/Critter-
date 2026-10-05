@@ -47,7 +47,7 @@ uniform vec3 dust_color : source_color = vec3(0.86, 0.64, 0.48);
 uniform vec3 ground_tint : source_color = vec3(1.0, 1.0, 1.0);
 uniform float deep_fade_y = -14.0;
 uniform vec4 salt_zone = vec4(110.0, 34.0, 13.0, 0.0);   // x, z, radius (0 = off): white salt crust plates (Salt Pans)
-uniform vec3 salt_color : source_color = vec3(0.93, 0.89, 0.80);
+uniform vec3 salt_color : source_color = vec3(0.80, 0.70, 0.58);
 uniform float ripple_amp = 0.22;                         // wind-ripple normals on loose sand
 uniform vec3 deep_color : source_color = vec3(0.36, 0.22, 0.26);
 
@@ -246,9 +246,9 @@ void fragment() {
 	// salt crust: flagstone plate pattern bleached white, edges stay ochre
 	if (salt_zone.z > 0.0) {
 		float sd = length(xz - salt_zone.xy);
-		float salt = smoothstep(salt_zone.z, salt_zone.z * 0.55, sd + (mac.r - 0.5) * 4.0) * flat_w;
+		float salt = smoothstep(salt_zone.z, salt_zone.z * 0.5, sd + (mac.r - 0.5) * 6.0) * flat_w;
 		vec3 sc = salt_color * (0.82 + 0.3 * fa.a) * mix(1.0, 0.86, smoothstep(0.55, 0.2, fa.a));
-		col = mix(col, sc, salt * 0.92);
+		col = mix(col, sc, salt * 0.72);
 		wn = normalize(mix(wn, mix(wn, vec3(flag_n.x, 0.0, -flag_n.y) * 0.5 + N, 0.5), salt));
 	}
 	// ledge rims: sun-bleached grit along crests

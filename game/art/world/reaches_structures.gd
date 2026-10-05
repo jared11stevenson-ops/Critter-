@@ -291,12 +291,12 @@ class StoneBridge extends Node3D:
 				outer.append({"mesh": ReachesKit.mesh("span_pier"), "xf": Transform3D(Basis().scaled(Vector3(1.0, 1.0, width / 7.0)), Vector3(px, rise * (px / L) - 1.35 - 7.0 * k, 0.0))})
 		# gate towers: west pair flanks the approach, east pair stands wide of the foundation road
 		for ex: float in [-4.0, L + 4.0]:
-			var zoff := 8.0 if ex < 0.0 else 14.0
+			var zoff := 9.0 if ex < 0.0 else 15.0
 			for s_: float in [-1.0, 1.0]:
 				var yy := terrain_h(t, a, ex, s_ * zoff, ang)
-				var txf := Transform3D(Basis(Vector3.UP, 0.0), Vector3(ex, yy, s_ * zoff))
+				var txf := Transform3D(Basis(Vector3.UP, 0.0).scaled(Vector3.ONE * 0.8), Vector3(ex, yy, s_ * zoff))
 				outer.append({"mesh": ReachesKit.mesh("span_tower"), "xf": txf})
-				var tb := ToonKit.static_box(self, txf.translated_local(Vector3(0, 6.5, 0)), Vector3(7.4, 13.0, 7.4))
+				ToonKit.static_box(self, Transform3D(Basis(), Vector3(ex, yy + 5.2, s_ * zoff)), Vector3(5.9, 10.4, 5.9))
 		var smesh := ReachesLandmarks.merge(outer)
 		visual.add_child(_mi(smesh, "Span"))
 		mid_seg = Node3D.new()
@@ -571,21 +571,11 @@ class DominionCamp extends Node3D:
 			ToonKit.box(st, xf.translated_local(Vector3(0, 1.85, 1.62)), Vector3(4.42, 0.35, 0.05), DOM_RED)
 			ToonKit.box(st, xf.translated_local(Vector3(0.9, 0.95, 1.62)), Vector3(1.1, 1.9, 0.06), GUNMETAL.darkened(0.4))
 			ToonKit.static_box(self, xf.translated_local(Vector3(0, 1.3, 0)), Vector3(4.4, 2.6, 3.2))
-		# survey derrick (lattice tower) behind the huts
+		# relay pole behind the huts (the big AUGUR derrick is a kit landmark now, see world_art.json "drill_basin")
 		var dp := Vector3(4.5, 0, -11.0)
-		var Ht := 9.0
-		for cx: float in [-1.0, 1.0]:
-			for cz: float in [-1.0, 1.0]:
-				ToonKit.cylinder(st, dp + Vector3(cx * 1.6, 0, cz * 1.6), dp + Vector3(cx * 0.5, Ht, cz * 0.5), 0.12, 0.1, 4, GUNMETAL)
-		for k in 5:
-			var y := 1.0 + k * 1.7
-			var w := lerpf(1.6, 0.5, y / Ht)
-			for s: float in [-1.0, 1.0]:
-				ToonKit.cylinder(st, dp + Vector3(-w, y, s * w), dp + Vector3(w, y, s * w), 0.06, 0.06, 4, DOM_RED if k % 2 == 0 else GUNMETAL, false)
-				ToonKit.cylinder(st, dp + Vector3(s * w, y, -w), dp + Vector3(s * w, y, w), 0.06, 0.06, 4, GUNMETAL, false)
-		ToonKit.box(st, Transform3D(Basis(), dp + Vector3(0, Ht + 0.3, 0)), Vector3(1.6, 0.6, 1.6), GUNMETAL.darkened(0.2))
-		ToonKit.cylinder(st, dp + Vector3(0, -0.5, 0), dp + Vector3(0, Ht, 0), 0.22, 0.22, 6, Color(0.55, 0.55, 0.58))
-		ToonKit.static_box(self, Transform3D(Basis(), dp + Vector3(0, 2.0, 0)), Vector3(3.4, 4.0, 3.4))
+		var Ht := 3.2
+		ToonKit.cylinder(st, dp + Vector3(0, -0.2, 0), dp + Vector3(0, Ht, 0), 0.14, 0.1, 6, Color(0.55, 0.55, 0.58))
+		ToonKit.box(st, Transform3D(Basis(), dp + Vector3(0, 0.3, 0)), Vector3(1.2, 0.6, 1.2), GUNMETAL.darkened(0.2))
 		# antenna mast + dish
 		var mp := Vector3(-6.5, 0, -10.0)
 		ToonKit.cylinder(st, mp, mp + Vector3(0, 7.0, 0), 0.12, 0.07, 5, GUNMETAL)

@@ -98,7 +98,7 @@ class KM:
 
     # ---- primitives ----
     def box(self, center, size, col, rot=0.0, taper=0.0, tilt=(0, 0), decal=None, decal_face="-y", mat=0,
-            cols=None, jitter=0.0):
+            cols=None, jitter=0.0, decal_uv=None):
         """Box centred at `center`, size (x,y,z), yaw `rot` (rad about Z), taper = top shrink (0..1),
         tilt=(about x, about y) small lean. decal: atlas cell name painted on `decal_face`."""
         cx, cy, cz = center
@@ -128,8 +128,9 @@ class KM:
             if cols and nm in cols:
                 c = cols[nm]
             uv = None
-            if decal and nm == decal_face:
-                uv = [cell_uv(decal, 0, 0), cell_uv(decal, 1, 0), cell_uv(decal, 1, 1), cell_uv(decal, 0, 1)]
+            if decal and (nm == decal_face or decal_face == "all"):
+                u0, v0, u1, v1 = decal_uv if decal_uv else (0, 0, 1, 1)
+                uv = [cell_uv(decal, u0, v0), cell_uv(decal, u1, v0), cell_uv(decal, u1, v1), cell_uv(decal, u0, v1)]
             self.poly([out[i] for i in idx], c, uv, mat, out=(cx, cy, cz))
 
     def cyl(self, p0, p1, r0, r1, seg, col, caps=True, jitter=0.0, cols=None, rot0=0.0, mat=0):

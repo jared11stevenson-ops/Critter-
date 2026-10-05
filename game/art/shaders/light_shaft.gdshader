@@ -9,9 +9,9 @@ uniform float drift = 0.25;
 uniform float seed = 0.0;
 
 void fragment() {
-	float rim = pow(clamp(abs(dot(normalize(NORMAL), normalize(VIEW))), 0.0, 1.0), 1.6);
+	float rim = pow(clamp(abs(dot(normalize(NORMAL), normalize(VIEW))), 0.0, 1.0), 2.4);
 	float along = clamp(UV.y, 0.0, 1.0);             // 0 = sun end (top), 1 = ground end
-	float fade = smoothstep(0.0, 0.12, along) * (1.0 - smoothstep(0.72, 1.0, along));
+	float fade = smoothstep(0.0, 0.25, along) * (1.0 - smoothstep(0.45, 1.0, along));
 	float band = 0.62 + 0.38 * sin(UV.x * 31.4159 * 1.7 + TIME * drift + seed) * sin(UV.x * 9.4 - TIME * drift * 0.6 + along * 3.0);
 	ALBEDO = shaft_color.rgb * intensity * rim * fade * band;
 	ALPHA = 1.0;

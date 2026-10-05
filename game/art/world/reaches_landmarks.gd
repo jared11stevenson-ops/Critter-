@@ -61,10 +61,13 @@ func _process(_d: float) -> void:
 		return
 	WorkerThreadPool.wait_for_group_task_completion(_gid)
 	if _next < _results.size():
-		var r: Variant = _results[_next]
-		_next += 1
-		if r is Dictionary:
-			_attach(r)
+		for _k in 3:       # a few groups per frame: still hitch-free (each attach is a handful of nodes)
+			if _next >= _results.size():
+				break
+			var r: Variant = _results[_next]
+			_next += 1
+			if r is Dictionary:
+				_attach(r)
 		return
 	_gid = -1
 	set_process(false)
@@ -76,7 +79,7 @@ func _process(_d: float) -> void:
 func _ground(x: float, z: float, bd: bool = false) -> float:
 	if bd and terrain.has_method("surface_height"):
 		return terrain.surface_height(x, z)
-	return terrain.height_at(x, z) if terrain else 0.0
+	return terrain.ground_h(x, z) if terrain else 0.0
 
 
 func _expand(g: Dictionary) -> Array:
@@ -262,7 +265,13 @@ static func merge(parts: Array) -> ArrayMesh:
 			var uvs := PackedVector2Array()
 			if arr[Mesh.ARRAY_TEX_UV] != null:
 				uvs = arr[Mesh.ARRAY_TEX_UV]
-			var idx: PackedInt32Array = arr[Mesh.ARRAY_INDEX]
+			var idx := PackedInt32Array()
+			if arr[Mesh.ARRAY_INDEX] != null:
+				idx = arr[Mesh.ARRAY_INDEX]
+			else:
+				idx.resize(vs.size())
+				for ii in vs.size():
+					idx[ii] = ii
 			var av: PackedVector3Array = a["v"]
 			var an: PackedVector3Array = a["n"]
 			var ac: PackedColorArray = a["c"]

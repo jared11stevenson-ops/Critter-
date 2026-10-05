@@ -44,13 +44,13 @@ mid = [
     L("butte_b", 150, -66, 1.5, 70, dy=-3),                      # twin sentinels over the Boulder Pass
     L("butte_b", 166, -74, 1.2, 10, dy=-3),
     L("mesa_b", 196, -58, 2.1, 0, dy=-3),                        # the drill-basin wall
-    L("hoodoo_a", 232, -62, 3.2, 0, dy=-2),                      # the Needle over the Span approach
+    L("butte_b", 236, -60, 1.7, 0, dy=-3),                      # the Needle over the Span approach (butte: no floating caprock)
     L("mesa_a", 280, -66, 2.6, 30, dy=-3),
     L("mesa_c", 330, -64, 2.2, 150, dy=-3),
     L("butte_a", 14, -78, 1.5, 200, dy=-3),
     L("mesa_a", -44, -40, 1.8, 90, dy=-3),
-    L("hoodoo_b", 38, -46, 2.2, 0, dy=-2),
-    L("hoodoo_a", 86, -50, 2.0, 0, dy=-2),
+    L("butte_a", 38, -52, 1.0, 0, dy=-3),
+    L("butte_b", 88, -56, 1.3, 40, dy=-3),
     L("mesa_c", 128, 70, 1.8, 0, dy=-3),
     L("butte_b", 210, 74, 1.6, 40, dy=-3),
     L("butte_a", 300, 70, 1.4, 300, dy=-3),
@@ -135,6 +135,19 @@ grp("span_approach", [
     L("cairn", 236, 8.8, 1.0, 40, col={"cyl": [0.8, 1.6]}),
 ], vis_end=140)
 
+# ---- The foundation beyond the Span: Spanwright footings under a second AUGUR derrick (the rig the boss is bolted to) ----
+fd = [
+    L("augur_derrick", 348, -22, 1.25, 8, col=[13.0, 7.5, 13.0, 0, 0, 0]),
+    L("bore_collar", 348, -22, 1.25, 0),
+    L("floodlight", 322, -16, 1.0, 200, col={"cyl": [0.25, 7]}), L("floodlight", 338, 15, 1.0, 20, col={"cyl": [0.25, 7]}),
+    L("spoil_heap", 332, -26, 1.6, 40), L("spoil_heap", 350, 10, 1.4, 110), L("spoil_heap", 306, 17, 1.3, 190),
+    L("marker_stone", 303, 6.5, 0.9, 170, col=[1.6, 4.4, 1.1]),
+]
+for i in range(7):
+    a = -2.4 + i * 0.7
+    fd.append(L("pillar_broken", 318 + math.cos(a) * 22.5, math.sin(a) * 22.5, 1.1, rng.uniform(0, 360), col=[1.4, 3.4, 1.4]))
+grp("foundation", fd, vis_end=190)
+
 # ---- Gate pad ----
 grp("gate_pad", [
     L("flat_tree_a", -16, -13, 1.1, 30), L("flat_tree_b", 12, -14, 1.0, 210),
@@ -146,12 +159,12 @@ atmos = {"shafts": [], "mist": []}
 def shaft(x, z, y=None, r=3.0, ln=34.0, i=0.5, seed=0, c=(1.0, 0.76, 0.48), vis=150):
     atmos["shafts"].append({"x": x, "z": z, "y": y if y is not None else 0.0, "r": r, "len": ln, "i": i, "seed": seed, "c": list(c), "vis": vis})
 # arrival over the Gate pad, the valley mouth, the waystation shade, the vault, the Span approach and over the chasm
-shaft(-2, -2, y=0.0, r=3.4, ln=40, i=0.5, seed=0.0)
-shaft(30, -4, y=-3.0, r=2.6, ln=34, i=0.45, seed=1.3)
-shaft(96, 6, y=-3.0, r=3.0, ln=36, i=0.4, seed=2.1)
-shaft(160, -24, y=-4.0, r=2.2, ln=30, i=0.5, seed=3.4, c=(0.8, 0.95, 1.0))
-shaft(238, 2, y=-3.0, r=3.0, ln=40, i=0.5, seed=4.2)
-shaft(272, -6, y=-6.0, r=4.0, ln=48, i=0.55, seed=5.7)
+shaft(-2, -2, y=0.0, r=3.4, ln=40, i=0.26, seed=0.0)
+shaft(30, -4, y=-3.0, r=2.6, ln=34, i=0.22, seed=1.3)
+shaft(96, 6, y=-3.0, r=3.0, ln=36, i=0.2, seed=2.1)
+shaft(160, -24, y=-4.0, r=2.2, ln=30, i=0.28, seed=3.4, c=(0.8, 0.95, 1.0))
+shaft(238, 2, y=-3.0, r=3.0, ln=40, i=0.26, seed=4.2)
+shaft(272, -6, y=-6.0, r=4.0, ln=48, i=0.3, seed=5.7)
 atmos["mist"] = [
     {"x": 270, "z": 0, "y": -9.0, "w": 52, "d": 108, "a": 0.55, "c": [0.92, 0.6, 0.46], "vis": 260},
     {"x": 270, "z": 0, "y": -20.0, "w": 52, "d": 108, "a": 0.7, "c": [0.7, 0.42, 0.40], "vis": 260},

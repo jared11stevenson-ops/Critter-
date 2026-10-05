@@ -186,6 +186,13 @@ func surface_height(x: float, z: float) -> float:
 	return lerpf(lerpf(_bd_hs[i], _bd_hs[i + 1], tx), lerpf(_bd_hs[i + _bd_n.x], _bd_hs[i + _bd_n.x + 1], tx), tz)
 
 
+## Raw collision-grid ground height (no decks, pure array read: safe on worker threads).
+func ground_h(x: float, z: float) -> float:
+	if _h.is_empty():
+		return 0.0
+	return _sample(_h, x, z)
+
+
 ## Extra helpers (art/QA)
 func get_floor_weight(x: float, z: float) -> float:
 	return _sample(_fw, x, z)
@@ -227,6 +234,8 @@ func qa_vista(px: float, py: float, pz: float, tx: float, ty: float, tz: float, 
 	_qa_cam.global_position = Vector3(px, py, pz)
 	_qa_cam.look_at(Vector3(tx, ty, tz), Vector3.UP)
 	_qa_cam.make_current()
+	for an in get_tree().current_scene.find_children("Ambient", "Node", true, false):
+		an.process_mode = Node.PROCESS_MODE_DISABLED       # the day clock would overwrite the grade below
 	if lighting and lighting.has_method("set_grade"):
 		lighting.set_grade(dusk, dust)
 	if lighting:
@@ -734,7 +743,8 @@ func _build_backdrop() -> void:
 						var a: Array = cc["a"]
 						var d := absf(x - float(a[0]))
 						if d < float(cc["r"]) + 2.0:
-							h = lerpf(h, -40.0, smoothstep(float(cc["r"]) + 2.0, float(cc["r"]) - 1.0, d))
+							# the canyon closes against a rising wall far out (no open slot to the world edge)
+							h = lerpf(h, -40.0, smoothstep(float(cc["r"]) + 2.0, float(cc["r"]) - 1.0, d) * (1.0 - smoothstep(86.0, 124.0, absf(z - 0.0))))
 				# blend into the playable edge
 				var ex := maxf(maxf(_min_x - x, x - (_min_x + (_nx - 1) * _cell)), maxf(_min_z - z, z - max_z))
 				if ex < 10.0:
