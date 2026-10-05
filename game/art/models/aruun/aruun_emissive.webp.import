@@ -2,19 +2,19 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://du0u2l38d7rfe"
-path="res://.godot/imported/aruun_aruun_orm.webp-a6d089a34b6a9d432f2dc1eb5eed3267.ctex"
+uid="uid://ci8f0ov53ddru"
+path="res://.godot/imported/aruun_emissive.webp-e80e8711adde5e41d3f32799911207f0.ctex"
 metadata={
 "vram_texture": false
 }
 generator_parameters={
-"md5": "60518e62bea8f6df88ead6be1a894203"
+"md5": "b28d0476f68396ece75d7fe8aeb9090a"
 }
 
 [deps]
 
-source_file="res://game/art/models/aruun/aruun_aruun_orm.webp"
-dest_files=["res://.godot/imported/aruun_aruun_orm.webp-a6d089a34b6a9d432f2dc1eb5eed3267.ctex"]
+source_file="res://game/art/models/aruun/aruun_emissive.webp"
+dest_files=["res://.godot/imported/aruun_emissive.webp-e80e8711adde5e41d3f32799911207f0.ctex"]
 
 [params]
 

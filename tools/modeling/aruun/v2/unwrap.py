@@ -16,4 +16,4 @@ vmap, idx, uv = at[0]
 print("atlas", at.width, at.height, "charts", at.chart_count, "verts", len(vmap), "tris", len(idx) // 3 if idx.ndim == 1 else len(idx))
 idx = idx.reshape(-1, 3)
 np.savez(os.path.join(WORK, "game_mesh.npz"), V=V[vmap], T=idx.astype(np.int32), UV=uv.astype(np.float32), vmap=vmap.astype(np.int32),
-         facekinds=fk, UVc=uv[idx].astype(np.float32), Vn=np.zeros((len(vmap), 3), np.float32))
+         facekinds=fk, sparam=d['sparam'][vmap], UVc=uv[idx].astype(np.float32), Vn=np.zeros((len(vmap), 3), np.float32))
