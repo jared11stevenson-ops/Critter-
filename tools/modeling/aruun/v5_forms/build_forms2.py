@@ -3,6 +3,7 @@ FORMS2_STAGE: 0 = rollback (proxy + pauldron/blades only) | 1 = + HORNS swept al
 2 = + HEAD visual hull (head_hull.py) | 3 = + head features.   Output dir env FORMS_OUT.  Clay grey, separate named objects."""
 import os, sys, json, numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
+os.environ['FID_REF'] = 'v2'          # head hull + horn curves are extracted from the v2 completed masks
 import bpy
 import build_forms as BF
 from build_forms import P, tube, ell, FW, UP, LF, nm, drop, HL
