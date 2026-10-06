@@ -7,7 +7,8 @@ import sys, os, json, argparse
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fid_common import *
 
-def m_x(v, px): return (px - view_info(v)['axis_x_px']) / PPM   # +x = screen right
+PAD_X = 0   # horizontal padding of the canvas being analysed (compare.py analyses padded canvases)
+def m_x(v, px): return (px - PAD_X - view_info(v)['axis_x_px']) / PPM   # +x = screen right
 def m_h(row): return h_of(row)
 
 def edge_at(mask, h, side):
@@ -118,6 +119,18 @@ def special_points(v, mask):
     ext('knee_front', LM['knee'] - .1, LM['knee'] + .1, 'maxx'); ext('knee_back', LM['knee'] - .1, LM['knee'] + .1, 'minx')
     return pts
 
+def arm_points(v, mask):
+    """Back view only: hand bottom = lowest silhouette row outside the leg line (columns left of the shin's own left edge minus 0.04 m), rows 0.60..1.35 m."""
+    if v != 'back': return {}
+    sh = band_stats(mask, LM['ankle'], LM['knee'])
+    lim = int(sh['xmin'] - 0.04 * PPM)
+    r0, r1 = band_rows(0.60, 1.35); sub = mask[r0:r1 + 1, :max(lim, 1)]
+    ys, xs = np.where(sub)
+    if len(ys) == 0: return {}
+    i = np.argmax(ys)
+    return dict(hand_bottom=dict(x_px=float(xs[i]), y_px=float(ys[i] + r0), x_m=m_x(v, xs[i]), h_m=m_h(ys[i] + r0), window_right_px=lim),
+                arm_outer_left=dict(x_px=float(xs.min()), x_m=m_x(v, xs.min())))
+
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--out', default=os.path.join(ROOT, 'design/model_sheets/aruun/fidelity/ref_extract'))
     a = ap.parse_args(); os.makedirs(a.out, exist_ok=True)
@@ -127,7 +140,7 @@ def main():
         cv2.imwrite(os.path.join(a.out, f'mask_{v}.png'), mask.astype(np.uint8) * 255)
         d = analyse(v, mask); d['special_points'] = special_points(v, mask)
         d['quantitative'] = v in QUANT_VIEWS
-        allv[v] = d
+        d['arm_points'] = arm_points(v, mask); allv[v] = d
     # side-view head details
     s = cv2.imread(os.path.join(a.out, 'mask_side.png'), 0) > 0
     eye_x = 0.57 * s.shape[1]            # parts.json eye marker (fraction of width) - approximate

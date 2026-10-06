@@ -1,0 +1,26 @@
+{
+ "model": "game/art/models/aruun/aruun.glb",
+ "forward": "+z",
+ "px_per_m": 1626.6666666666667,
+ "ground_row": 4000,
+ "pad_px": 1200,
+ "views": {
+  "front": {
+   "height_m": 2.381760478951037,
+   "top_m": 2.383368968963623,
+   "bottom_m": 0.0016084900125861168
+  },
+  "side": {
+   "height_m": 2.381760478951037,
+   "top_m": 2.383368968963623,
+   "bottom_m": 0.0016084900125861168
+  },
+  "back": {
+   "height_m": 2.381760478951037,
+   "top_m": 2.383368968963623,
+   "bottom_m": 0.0016084900125861168
+  }
+ },
+ "mace_faces_dropped": 1437,
+ "note": "rest/A-pose render; mace islands dropped unless --keep-mace; front reference is 3/4 so front compare is qualitative"
+}
