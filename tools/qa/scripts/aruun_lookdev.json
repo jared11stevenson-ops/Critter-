@@ -1,0 +1,13 @@
+{
+ "_doc": "Run: tools/shot.sh res://game/art/models/_qa_aruun_look.tscn /tmp/x 2,4.5,7,9.5,12,14.5,17,19.5 23 - qa_seq=hub:hero,reaches:hero,dusk:hero,boss:hero,ice:hero,green:hero,reaches:close,reaches:wide",
+ "seq": [
+  "hub:hero",
+  "reaches:hero",
+  "dusk:hero",
+  "boss:hero",
+  "ice:hero",
+  "green:hero",
+  "reaches:close",
+  "reaches:wide"
+ ]
+}
