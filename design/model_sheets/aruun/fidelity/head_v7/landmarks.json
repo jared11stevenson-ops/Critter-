@@ -1,0 +1,46 @@
+{
+ "_doc": "Pixel landmarks read by eye from the grid crops (crop_side_grid.png, crop_front_grid2.png). All px are FRAME px of the v2 4096 tiles (1626.667 px/m). PROFILE (side_completed, axis x=436): F=(x-436)/1626.667 - 0.055 (0.055 = frame->P1d-scene offset measured by matching the neck), U=(4000-y)/1626.667. FRONT (face_calm tile): s=(x-712)/1626.667, U=(4000-(y-25))/1626.667 (-25 px row shift matches the front eye row to the side eye row). s<0 = his RIGHT (visible in side ref, image-left in front). Side-view plates are given for s<0 and mirrored; front plates are given for x<712 and mirrored about x=712 (eyes about 704).",
+ "FOFF": 0.055, "FRONT_AXIS": 712, "FRONT_SHIFT": -25,
+ "points_profile": {
+  "snout_tip_hook": [845, 740], "hook_underside": [830, 762], "nose_pad_front_top": [790, 700], "nose_pad_bottom": [775, 724], "nose_pad_back": [715, 695],
+  "shield_knob_front": [822, 595], "shield_knob_top": [805, 575], "shield_knob_bottom": [805, 645],
+  "brow_start": [575, 598], "brow_peak": [602, 582], "brow_end": [700, 520],
+  "eye_inner_corner": [628, 600], "eye_outer_corner": [668, 612], "eye_top": [646, 587], "eye_bottom": [656, 622],
+  "eye_socket_TL": [612, 580], "eye_socket_BR": [684, 632],
+  "cheek_plate_TL": [547, 640], "cheek_plate_front": [720, 700], "cheek_plate_bottom": [560, 705],
+  "jaw_hinge": [574, 697], "nape_back": [425, 600], "tine_tip": [352, 665], "tine_base": [430, 650],
+  "crown_top": [640, 516], "cranium_back_top": [460, 550], "throat_bottom": [520, 755],
+  "horn_cup_A_c": [470, 520], "horn_cup_B_c": [700, 515]
+ },
+ "points_front": {
+  "shield_top_L": [662, 540], "shield_left": [640, 600], "shield_V_tip": [678, 692], "shield_center_notch": [712, 672],
+  "eye_L_inner": [604, 628], "eye_L_outer": [583, 650], "eye_L_top": [594, 620], "eye_L_bottom": [594, 662],
+  "socket_L_outer": [555, 630], "nose_pad_top_notch": [712, 748], "nose_pad_left": [650, 765], "nose_pad_bottom_center": [712, 800],
+  "nostril_L": [716, 788], "nostril_R": [740, 788], "chin": [712, 800], "tine_L_tip": [480, 575], "skull_left_edge": [533, 650]
+ },
+ "cage": {
+  "_doc": "ring stations: [x_px, top_y_px, bottom_y_px, half_width_m] along the side silhouette (cage ~8 px inside the plated silhouette); widths from front/back masks (skull 0.21 m)",
+  "rings": [[425,592,722,0.060],[445,560,730,0.088],[490,540,732,0.100],[545,531,730,0.102],[600,527,728,0.098],[650,526,722,0.090],[700,532,708,0.078],[745,546,704,0.064],[782,566,702,0.050],[806,580,655,0.042],[822,592,640,0.030]]
+ },
+ "mandible": {
+  "_doc": "separate jaw loft; pivot F 0.03 U 2.03 L 0.09; rings [x,top_y,bot_y,hw]",
+  "rings": [[470,690,750,0.060],[530,700,758,0.082],[600,712,758,0.080],[660,716,745,0.066],[715,722,752,0.050],[765,728,771,0.038],[805,734,772,0.028],[830,738,764,0.018],[846,742,752,0.010]]
+ },
+ "plates": [
+  {"name":"plate_crown_shield","view":"front","pts":[[640,570],[662,540],[712,534],[712,672],[678,692],[645,650],[640,600]],"mirror":"front_half","lift":0.004,"thick":0.010,"color":[0.78,0.30,0.12]},
+  {"name":"nose_pad","view":"front","pts":[[712,748],[685,738],[650,765],[660,795],[712,800]],"mirror":"front_half","lift":0.004,"thick":0.008,"color":[0.78,0.60,0.44]},
+  {"name":"plate_cheek_front","view":"front","pts":[[600,660],[640,655],[665,690],[668,730],[640,750],[605,745],[590,700]],"mirror":"front_pair","lift":0.004,"thick":0.008,"color":[0.72,0.52,0.38]},
+  {"name":"plate_crown_step1","view":"side","pts":[[650,527],[715,516],[742,546],[702,572],[655,560]],"mirror":"side","lift":0.007,"thick":0.008,"color":[0.58,0.20,0.12]},
+  {"name":"plate_crown_step2","view":"side","pts":[[715,516],[765,531],[792,572],[740,577],[742,546]],"mirror":"side","lift":0.007,"thick":0.008,"color":[0.52,0.22,0.12]},
+  {"name":"plate_crown_step3","view":"side","pts":[[765,531],[806,562],[822,596],[812,642],[782,652],[792,572]],"mirror":"side","lift":0.007,"thick":0.008,"color":[0.45,0.16,0.10]},
+  {"name":"plate_brow_ridge","view":"side","pts":[[480,548],[540,526],[620,516],[700,521],[735,546],[700,553],[640,547],[580,550],[530,562]],"mirror":"side","lift":0.006,"thick":0.008,"color":[0.40,0.36,0.17]},
+  {"name":"plate_brow_strip","view":"side","pts":[[570,600],[590,583],[615,590],[640,620],[690,650],[740,680],[778,700],[770,716],[735,702],[680,674],[625,647],[580,630]],"mirror":"side","lift":0.006,"thick":0.008,"color":[0.70,0.48,0.32]},
+  {"name":"plate_cheek_red","view":"side","pts":[[548,640],[600,646],[650,666],[705,690],[722,700],[702,714],[640,702],[590,692],[562,704],[540,688]],"mirror":"side","lift":0.006,"thick":0.009,"color":[0.58,0.19,0.13]},
+  {"name":"plate_cheek_rear","view":"side","pts":[[470,620],[545,610],[560,660],[545,700],[480,720],[455,670]],"mirror":"side","lift":0.004,"thick":0.008,"color":[0.12,0.12,0.15]},
+  {"name":"plate_lip_tan","view":"side","pts":[[715,692],[760,686],[790,702],[798,714],[780,724],[740,727],[715,712]],"mirror":"side","lift":0.006,"thick":0.008,"color":[0.75,0.55,0.40]}
+ ],
+ "eyes": {"center_px": [648, 604], "size_m": [0.030, 0.021], "tilt_deg": -14, "azimuth_deg": 48},
+ "tines": [{"base_px":[430,650],"tip_px":[352,665],"s_base":0.092,"s_tip":0.145,"radius":0.011},{"base_px":[425,725],"tip_px":[360,728],"s_base":0.070,"s_tip":0.110,"radius":0.007}],
+ "horn_cups": [{"name":"horn_cup_A","F":-0.026,"U":2.128,"s":-0.1045,"r":0.026},{"name":"horn_cup_B","F":0.1065,"U":2.12,"s":0.0435,"r":0.026}],
+ "nostril_front_px": [[716,788],[740,788]]
+}
