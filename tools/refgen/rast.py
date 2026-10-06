@@ -55,3 +55,13 @@ def surf_points(V, F, fid, bu, bv):
     N = np.cross(b - a, c - a); N /= np.maximum(np.linalg.norm(N, axis=-1, keepdims=True), 1e-12)
     P[~m] = np.nan; N[~m] = np.nan
     return P, N
+
+def load_parts(path=PROXY):
+    """per-part meshes (scene nodes with transforms applied): returns V, F, part_id_per_face, names"""
+    sc = trimesh.load(path)
+    Vs, Fs, pid, names = [], [], [], []; off = 0
+    for node in sc.graph.nodes_geometry:
+        T, gname = sc.graph[node]; g = sc.geometry[gname]
+        v = np.asarray(g.vertices, float); v = (np.c_[v, np.ones(len(v))] @ T.T)[:, :3]
+        Vs.append(v); Fs.append(np.asarray(g.faces) + off); pid.append(np.full(len(g.faces), len(names))); names.append(gname); off += len(v)
+    return np.vstack(Vs), np.vstack(Fs).astype(np.int64), np.concatenate(pid), names

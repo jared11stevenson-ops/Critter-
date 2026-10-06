@@ -1,0 +1,222 @@
+{
+ "view": "front",
+ "camera": "orthographic, camera in front looking -Z (yaw 0); image-right = his LEFT (red pauldron side); arms hanging (reference pose); head facing forward",
+ "axis_x_px": 900,
+ "x_offset_px": 0,
+ "sources": [
+  "proxy: design/model_sheets/aruun/fidelity/proxy/proxy.glb (geometry only: part ids, visibility, row extents)",
+  "silhouette below the neck: design/reference_packs/aruun/ortho/aruun_back_4096.png mirrored (an ortho front silhouette is the mirror of the back one)",
+  "body paint: design/reference_packs/aruun/ortho/aruun_front_4096.png (3/4 front cut, perspective pose) through hand-registered per-part row warps (v2_front.py GROUPS)",
+  "head/neck: design/reference_gen/aruun/head/aruun_head_front_straighton.png (x4 upscale of the CALM tile, original pixels), registered by eye/chin landmark rows",
+  "horns: back cut mirrored (aruun_back_4096.png), bases nudged to the tile horn-stub tops"
+ ],
+ "regions_by_source": {
+  "neck": {
+   "parts": [
+    "neck"
+   ],
+   "rows": [
+    773,
+    1058
+   ],
+   "mean_x_scale": 1.231796517468373,
+   "mean_y_scale": 0.9309531868655174,
+   "px": 50835,
+   "green": 73.46513229074456,
+   "yellow": 24.910002950722927,
+   "red": 1.6248647585325071
+  },
+  "neckbase": {
+   "parts": [
+    "neckbase"
+   ],
+   "rows": [
+    999,
+    1195
+   ],
+   "mean_x_scale": 0.6826344128717264,
+   "mean_y_scale": 0.47288776796973475,
+   "px": 74186,
+   "green": 0.0,
+   "yellow": 90.63030760520853,
+   "red": 9.369692394791471
+  },
+  "trunk": {
+   "parts": [
+    "trunk"
+   ],
+   "rows": [
+    1135,
+    2650
+   ],
+   "mean_x_scale": 0.9719328575213338,
+   "mean_y_scale": 0.8981249455627394,
+   "px": 1091613,
+   "green": 37.707868997529346,
+   "yellow": 60.699075588143415,
+   "red": 1.5930554143272386
+  },
+  "mantle": {
+   "parts": [
+    "mantleR"
+   ],
+   "rows": [
+    1072,
+    1887
+   ],
+   "mean_x_scale": 1.9990486622879553,
+   "mean_y_scale": 0.5526301397960359,
+   "px": 86532,
+   "green": 0.0,
+   "yellow": 92.35774048906762,
+   "red": 7.642259510932371
+  },
+  "pauldron": {
+   "parts": [
+    "pauldronL"
+   ],
+   "rows": [
+    1179,
+    1653
+   ],
+   "mean_x_scale": 2.710672512072548,
+   "mean_y_scale": 0.8107809297817671,
+   "px": 43296,
+   "green": 0.0,
+   "yellow": 98.79665558019217,
+   "red": 1.2033444198078345
+  },
+  "armL": {
+   "parts": [
+    "armL",
+    "fistL"
+   ],
+   "rows": [
+    1642,
+    2745
+   ],
+   "mean_x_scale": 1.5340125162636673,
+   "mean_y_scale": 0.7742991577912812,
+   "px": 180734,
+   "green": 30.289818185842176,
+   "yellow": 69.43463875087144,
+   "red": 0.2755430632863767
+  },
+  "armR": {
+   "parts": [
+    "armR",
+    "fistR"
+   ],
+   "rows": [
+    1743,
+    2486
+   ],
+   "mean_x_scale": 1.9134242327104634,
+   "mean_y_scale": 0.71545490891723,
+   "px": 125460,
+   "green": 0.0,
+   "yellow": 90.47824007651842,
+   "red": 9.521759923481588
+  },
+  "legL": {
+   "parts": [
+    "legL",
+    "footL",
+    "soleL"
+   ],
+   "rows": [
+    2464,
+    3996
+   ],
+   "mean_x_scale": 1.227971272641905,
+   "mean_y_scale": 0.9366045623705708,
+   "px": 423563,
+   "green": 15.617039259803144,
+   "yellow": 75.0138704277758,
+   "red": 9.369090312421056
+  },
+  "legR": {
+   "parts": [
+    "legR",
+    "footR",
+    "soleR"
+   ],
+   "rows": [
+    2451,
+    3999
+   ],
+   "mean_x_scale": 1.0729164233396535,
+   "mean_y_scale": 0.8495026106502478,
+   "px": 518510,
+   "green": 34.02750188038803,
+   "yellow": 65.36556672002469,
+   "red": 0.6069313995872789
+  },
+  "strips": {
+   "parts": [
+    "stripmassR"
+   ],
+   "rows": [
+    2557,
+    3410
+   ],
+   "mean_x_scale": 2.2544155185823387,
+   "mean_y_scale": 0.8091941745280962,
+   "px": 102317,
+   "green": 22.51922945356099,
+   "yellow": 76.27569221146047,
+   "red": 1.205078334978547
+  }
+ },
+ "head": {
+  "tile": {
+   "scale": 0.4066666666666667,
+   "row0": 15,
+   "col0": 719,
+   "tile": "aruun_head_front_straighton.png"
+  },
+  "horns": {
+   "back_head_mid_col": 513.5,
+   "head_span_row": 632,
+   "horn_runs_at_base_row_px_from_mid": [
+    -184.5,
+    -77.5,
+    150.5
+   ],
+   "nudge_m": {
+    "B": 0.03610655737704918,
+    "A": -0.00122950819672131
+   }
+  },
+  "stub_targets_world_x": [
+   -0.013749999999999998,
+   0.16375
+  ]
+ },
+ "palette_quantisation": {
+  "palette": "design/model_sheets/aruun/palette.json (medians+clusters+dots)",
+  "dE_tol": 14,
+  "fraction_snapped": 0.9963304436042311
+ },
+ "outline": "4 px ink ring (#14101a) on the silhouette only; interior lines are the sheet's own",
+ "unknown_policy": "RED = pixels where the sheet has no paint at the mapped place (gap between sheet parts) and the nearest opaque sheet pixel (>10 px away) was copied; no new features drawn",
+ "notes": [
+  "green criterion: sheet pixel mapped with local x and y scale both within 0.8..1.25 (mild warp of original paint) - not a claim that the 3/4 pose equals a true front",
+  "every body group is warped from a 3/4 perspective pose: treat as LAYOUT reference, not as measured front art",
+  "pauldron: proxy+back silhouette give only a narrow outer slice; the sheet shows a large round red disc facing the viewer: the disc size in a true front is UNKNOWN",
+  "open creator question: pauldrons on both shoulders? his right shoulder carries the mantle here (front+back agree)"
+ ],
+ "percent_of_painted_pixels": {
+  "green": 34.35,
+  "yellow": 62.67,
+  "red": 2.98
+ },
+ "legend": "GREEN=original sheet pixels, YELLOW=inferred/completed/warped from other views, RED=unknown (nearest-neighbour fill)",
+ "canvas": {
+  "width_px": 1891,
+  "height_px": 4096,
+  "px_per_m": 1626.6666666666667,
+  "ground_row": 4000,
+  "note": "same scale/ground row as reference_packs/aruun/ortho; x_offset_px = columns added at the left of the original cut (axis_x_px shifts by the same amount)"
+ }
+}
