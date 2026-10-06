@@ -210,8 +210,8 @@ Black-on-flat: `head_silhouette_black.png` (ROI 900x800, source px), mask `head_
 5. **Snout**: not a long curved muzzle; a short drooped wedge (0.40 L tip-to-eye) whose front is a hooked heel pointing down-left; straight ventral edge at 26 deg; flat-then-vertical dorsal step. The mouth is a flat seam; the lower jaw is the cream plate that runs the full length under the red plate and ends in the hook.
 6. **Rhythm**: sharp graphic angles (vertical edge x=878, elbow corner, spur) alternate with long sweeps (fringe streaks, ventral jaw edge, arm arc). Fringe elements all stream rearward (screen-right) at -5 deg to -51 deg; blades/horns point up and left; hook points down-left: the head is a radial burst of thin spikes around a small plate-faced skull.
 7. **Overlap**: plates are stacked cut-out shapes with thick dark gaps (the dark outline is 8-14 px at plate edges, e.g. between red 71 and cheek mass 20): treat them as layered shells.
-8. **Neck**: a long vertical column (width 0.348 L at y850) with straight edges; the head sits on it at the TOP-FRONT (throat apex at x=1009 is 0.31 L in front of the neck front edge? no: the neck front edge is x~1040, so the throat apex is just in front of it) - the head overhangs forward of the neck by ~0.32 L (snout tip is 230 px / 0.36 L in front of the neck front edge).
-9. **Eye**: tiny round iris with a large dark swept socket; socket tilts up toward the back at ~12 deg and is overhung by the cream brow band whose underside is the 'upper eyelid' (rising from (990,628) to (1073,632) ... eyelid line is nearly level with a 12 deg tilt).
+8. **Neck**: a long vertical column (width 0.348 L at y850) with straight near-parallel edges; the head sits on its TOP-FRONT and overhangs forward: the snout tip is 0.36 L in front of the neck front edge (x~1040), the throat apex is 0.04 L in front of it, and the fringe/cream strands overlap the neck's top-back.
+9. **Eye**: tiny round iris with a large dark swept socket; socket tilts up toward the back at ~12 deg and is overhung by the cream brow band; the upper eyelid is the black arc from (990,628) to (1073,632), roughly parallel to the iris major axis.
 
 ## 8. AMBIGUITIES (ranked by importance for the modeler)
 
@@ -229,7 +229,7 @@ Black-on-flat: `head_silhouette_black.png` (ROI 900x800, source px), mask `head_
 
 ## 9. R-HERO (full body) - coordinates and landmarks
 
-Coordinate system: section 1. Silhouette: single connected component, bbox x0-1890, y96-3999 (width includes the left hand/mace stub at x=8). Row spans for every 100 px are in `hero_landmarks.json -> row_runs_src`. Key proportions (all /H=3904): head length L = 0.162 H; horn A top at v=1.0; snout tip at v=0.825; throat apex v=0.832-0.0.. (y746: v=0.834); neck from throat (y746) to cape junction (y~1150) = 0.103 H, neck width 0.058 H; shoulders: cape extreme x=504 to pauldron extreme x=1712 = 1208 px = 0.309 H; right pauldron 620 px tall (0.159 H); belt at y~1880 (v=0.543); right fist bottom y 2510 (v=0.382); knees y~2730-2910 (v=0.30-0.32); skirt hem y~3314-3470; left foot bottom y~3873 (v=0.033), right foot y=4000 (v=0).
+Coordinate system: section 1. Silhouette: single connected component, bbox x0-1890, y96-3999 (width includes the left hand/mace stub at x=8). Row spans for every 100 px are in `hero_landmarks.json -> row_runs_src`. Key proportions (all /H=3904): head length L = 0.162 H; horn A top at v=1.0; snout tip at v=0.825; throat apex (y746) v=0.834; neck from throat (y746) to cape junction (y~1150) = 0.103 H, neck width 0.058 H; shoulders: cape extreme x=504 to pauldron extreme x=1712 = 1208 px = 0.309 H; right pauldron 620 px tall (0.159 H); belt at y~1880 (v=0.543); right fist bottom y 2510 (v=0.382); knees y~2730-2910 (v=0.30-0.32); skirt hem y~3314-3470; left foot bottom y~3873 (v=0.033), right foot y=4000 (v=0).
 
 | # | landmark | src px | (u, v) | kind |
 |---|---|---|---|---|
@@ -307,5 +307,5 @@ The legs: the left leg (screen-left) is planted with its foot at x 365-880 and t
 6. Horn A arm bends +24 deg then the distal segment drops -20 deg; arc radii 0.375 L (top) / 0.145 L (underside); spur 95 px / 0.15 L long at -32 deg.
 7. Horn B: width 0.066 L, outer arc radius 0.256 L, left extreme at u=-0.292 (v=0.453), top knob (-0.071, 0.823); 0.26 L shorter than A.
 8. Crown line at v=0.373 (flat from u=0.34 to 0.51); blade D base (0.51,0.373) apex (0.679, 0.554) (0.25 L at 46 deg); stub E tip (0.80, 0.474); spike C top (0.338, 0.461).
-9. Blade F: tip (-0.060, 0.120) from the snout tip... length 0.149 L, pointing left and 9 deg down, below horn B and above the hook (gap N8 = 0.014 L^2).
+9. Blade F: tip (-0.060, 0.120), length 0.149 L, pointing left and 9 deg down, below horn B and above the hook (gap N8 = 0.014 L^2).
 10. Fringe/occiput: crown to rear tip u=1.0; long streak 0.289 L at -5 deg; cream strands at -51 deg; rear skull itself is hidden (ambiguity #2); negative spaces N1 (0.104 L^2) and N2 (0.276 L^2) must stay open: horns do not touch.
