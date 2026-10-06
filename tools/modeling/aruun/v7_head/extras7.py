@@ -45,14 +45,17 @@ def make(cage, LM, B):
     # ---- fringe cards ----
     olive = (0.40, 0.38, 0.18); cream = (0.80, 0.70, 0.45)
     strands = [  # (name, pts(F,U,s), widths, color)
-        ('fringe_nape_a', [(-0.015, 2.100, 0.0), (-0.050, 2.085, 0.0), (-0.085, 2.055, 0.0), (-0.100, 2.025, 0.0)], [0.030, 0.026, 0.014, 0.003], olive),
-        ('fringe_wing_R', [(-0.005, 2.062, -0.060), (-0.040, 2.056, -0.105), (-0.070, 2.048, -0.150), (-0.090, 2.040, -0.180)], [0.030, 0.034, 0.022, 0.004], cream),
-        ('fringe_wing_L', [(-0.005, 2.062, 0.060), (-0.040, 2.056, 0.105), (-0.070, 2.048, 0.150), (-0.090, 2.040, 0.180)], [0.030, 0.034, 0.022, 0.004], cream),
-        ('fringe_hang_R', [(-0.020, 2.040, -0.085), (-0.035, 2.015, -0.105), (-0.045, 1.995, -0.115)], [0.026, 0.022, 0.004], olive),
-        ('fringe_hang_L', [(-0.020, 2.040, 0.085), (-0.035, 2.015, 0.105), (-0.045, 1.995, 0.115)], [0.026, 0.022, 0.004], olive),
+        ('fringe_nape_a', [(-0.050, 2.090, 0.020), (-0.075, 2.070, 0.030), (-0.100, 2.045, 0.040)], [0.020, 0.016, 0.003], olive),
+        ('fringe_wing_R', [(-0.005, 2.062, -0.060), (-0.045, 2.056, -0.092), (-0.080, 2.050, -0.110), (-0.108, 2.043, -0.120)], [0.026, 0.030, 0.020, 0.004], cream),
+        ('fringe_wing_L', [(-0.005, 2.062, 0.060), (-0.045, 2.056, 0.092), (-0.080, 2.050, 0.110), (-0.108, 2.043, 0.120)], [0.026, 0.030, 0.020, 0.004], cream),
     ]
-    for nm, pts, wd, col in strands:
-        bm = strip(pts, wd, B)
+    strands += [
+        ('fringe_flap_L', [(-0.030, 2.000, 0.070), (-0.045, 1.965, 0.105)], [0.040, 0.030], olive, (-1, 0, 0)),
+        ('nape_mark', [(-0.062, 2.105, 0.0), (-0.062, 2.070, 0.0), (-0.062, 2.030, 0.0)], [0.020, 0.046, 0.008], (0.62, 0.45, 0.22), (-1, 0, 0)),
+    ]
+    for st in strands:
+        nm, pts, wd, col = st[:4]
+        bm = strip(pts, wd, B, st[4] if len(st) > 4 else None)
         o = B.new_obj(nm, bm, col); B.solid(o, 0.003, 0.0006); out.append(o)
     return out
 
@@ -73,12 +76,12 @@ def tube(pts, radii, n, B, inset=0.0):
     bm.faces.new(rings[0][::-1]); bm.faces.new(rings[-1])
     return bm
 
-def strip(pts, widths, B):
+def strip(pts, widths, B, nrm=None):
     bm = bmesh.new(); P = [Vector(p) for p in pts]; rows = []
     for i, p in enumerate(P):
         t = (P[min(i + 1, len(P) - 1)] - P[max(i - 1, 0)]).normalized()
         sg = 1 if p[2] >= 0 else -1
-        side = t.cross(Vector((0, 0.5, sg * 0.85)).normalized())  # card faces up/outward
+        side = t.cross(Vector(nrm).normalized() if nrm else Vector((0, 0.5, sg * 0.85)).normalized())  # card faces up/outward
         if abs(side.length) < 1e-3: side = Vector((1, 0, 0))
         side.normalize()
         rows.append((bm.verts.new(p - side * widths[i] / 2), bm.verts.new(p + side * widths[i] / 2)))
