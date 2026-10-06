@@ -16,12 +16,12 @@ def build():
     BF.shoulders(parts, keep)                                  # pass-1 pauldron + underplate + shoulder blades (kept)
     if STAGE >= 1: horns(parts)
     if STAGE >= 2:
-        if os.environ.get('P1C', '1') == '1':
+        if os.environ.get('P1C', '0') == '1':
             import head_loft; head_loft.build_loft(parts)                       # P1c: subdivision skull + mandible lofted from measured sections
         else:
             import head_hull; head_hull.build_hull(parts, split_jaw=(STAGE >= 3))
     if STAGE >= 3:
-        if os.environ.get('P1C', '1') == '1':
+        if os.environ.get('P1C', '0') == '1':
             import head_plates; head_plates.build(parts)
         else:
             import head_features; head_features.build(parts)
@@ -30,6 +30,8 @@ def build():
 def horns(parts):
     for n in ('hornA', 'hornB', 'hornB_tooth'): drop(parts, n)
     C = json.load(open(CURVES))
+    if os.environ.get('HORNS_D', '1') == '1':
+        import horns_blade; horns_blade.build(parts, C); return
     for n, hint, order in (('A', LF, (1, 0)), ('B', FW, (0, 1))):
         pts = np.array(C[n]['points_FUL']); rad = np.array(C[n]['radii_FL'])
         r = rad[:, list(order)] * float(os.environ.get('HORN_R_SCALE', '1.15'))
