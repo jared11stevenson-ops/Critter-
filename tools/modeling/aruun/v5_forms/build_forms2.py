@@ -16,9 +16,15 @@ def build():
     BF.shoulders(parts, keep)                                  # pass-1 pauldron + underplate + shoulder blades (kept)
     if STAGE >= 1: horns(parts)
     if STAGE >= 2:
-        import head_hull; head_hull.build_hull(parts, split_jaw=(STAGE >= 3))
+        if os.environ.get('P1C', '1') == '1':
+            import head_loft; head_loft.build_loft(parts)                       # P1c: subdivision skull + mandible lofted from measured sections
+        else:
+            import head_hull; head_hull.build_hull(parts, split_jaw=(STAGE >= 3))
     if STAGE >= 3:
-        import head_features; head_features.build(parts)
+        if os.environ.get('P1C', '1') == '1':
+            import head_plates; head_plates.build(parts)
+        else:
+            import head_features; head_features.build(parts)
     return parts
 
 def horns(parts):
