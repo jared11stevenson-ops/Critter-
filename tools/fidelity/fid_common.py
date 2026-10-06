@@ -13,8 +13,17 @@ VIEWS = ['front', 'side', 'back']
 QUANT_VIEWS = ['side', 'back']    # front is a 3/4 pose: qualitative only
 HALO_PX = 3                       # +-px edge uncertainty from the jagged black halo of the upscaled side/back cuts
 
+# Reference selection. Default = ORIGINAL cleaned ortho cuts (regression reference). FID_REF=v2 -> the creator-approved v2 COMPLETED side/back
+# (design/reference_gen/aruun/v2/, same 4096 frame/scale/ground row, +100 px left pad). Front is always the old 3/4 (qualitative). Set the env var for BOTH
+# render_model_views.py and compare.py (the render axis follows the reference axis).
+REF_SET = os.environ.get('FID_REF', 'orig')
+V2 = {'side': dict(file='../../reference_gen/aruun/v2/aruun_v2_side_completed_4096.png', width_px=1147, axis_x_px=536.0),
+      'back': dict(file='../../reference_gen/aruun/v2/aruun_v2_back_completed_4096.png', width_px=1659, axis_x_px=759.0)}
+
 def view_info(v):
-    return META['views'][v]
+    info = META['views'][v]
+    if REF_SET == 'v2' and v in V2: info = dict(info, **V2[v])
+    return info
 
 def row_of(h_m):  # height in metres -> pixel row (float)
     return GROUND - h_m * PPM
