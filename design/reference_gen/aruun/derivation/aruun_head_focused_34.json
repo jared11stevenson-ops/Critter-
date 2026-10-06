@@ -1,0 +1,22 @@
+{
+ "file": "head/aruun_head_focused_34.png",
+ "view": "3/4 FOCUSED",
+ "sources": [
+  "design/reference_packs/aruun/head/aruun_expressions.jpg FOCUSED tile"
+ ],
+ "method": "Real-ESRGAN anime-6B x4 of original sheet pixels, placed by landmark row; no diffusion",
+ "px_per_m": 4000,
+ "rows_px": {
+  "top": 200,
+  "crown": 1292,
+  "eyes": 1499,
+  "chin": 1920,
+  "neck": 2712
+ },
+ "scale": 1.57,
+ "eyes_row_src_y": 700,
+ "axis_x_src": 1128,
+ "seed": null,
+ "notes": "scaled by eyes->snout-tip, approximate",
+ "legend": "derivation: green = original paint, yellow = generated"
+}

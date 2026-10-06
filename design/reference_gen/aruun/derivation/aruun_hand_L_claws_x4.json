@@ -1,0 +1,11 @@
+{
+ "file": "details/aruun_hand_L_claws_x4.png",
+ "view": "left hand, three long pointed claws",
+ "sources": [
+  "design/reference_packs/aruun/details/aruun_panel_hand_L_claws.png"
+ ],
+ "method": "Real-ESRGAN anime-6B x4 of original panel on cream; no diffusion",
+ "seed": null,
+ "generated_fraction": 0.0,
+ "legend": "whole image = original paint upscaled (green); nothing generated"
+}

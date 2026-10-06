@@ -1,0 +1,19 @@
+{
+ "file": "head/aruun_head_front_straighton.png",
+ "sources": [
+  "design/reference_packs/aruun/head/aruun_expressions.jpg (CALM tile, itself x4 of tools/source_art/aruun_nerit_sheet.jpg)"
+ ],
+ "method": "Real-ESRGAN x4plus_anime_6B upscale of CALM tile, scaled so eye row and chin row land on landmarks_m; no diffusion",
+ "px_per_m": 4000,
+ "rows_px": {
+  "top": 200,
+  "crown": 1292,
+  "eyes": 1499,
+  "chin": 1920,
+  "neck": 2712
+ },
+ "scale_applied": 1.175977653631285,
+ "seed": null,
+ "generated_fraction": 0.0,
+ "legend": "green = original sheet paint (upscaled), yellow = generated (none)"
+}

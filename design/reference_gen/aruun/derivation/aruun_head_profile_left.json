@@ -1,0 +1,22 @@
+{
+ "file": "head/aruun_head_profile_left.png",
+ "view": "profile (sheet FRONT head, faces screen-left)",
+ "sources": [
+  "design/reference_packs/aruun/head/aruun_head_turnaround.jpg FRONT"
+ ],
+ "method": "Real-ESRGAN anime-6B x4 of original sheet pixels, placed by landmark row; no diffusion",
+ "px_per_m": 4000,
+ "rows_px": {
+  "top": 200,
+  "crown": 1292,
+  "eyes": 1499,
+  "chin": 1920,
+  "neck": 2712
+ },
+ "scale": 0.615,
+ "eyes_row_src_y": 2220,
+ "axis_x_src": 1745,
+ "seed": null,
+ "notes": "crop ends at jpg y=900 so neck is cut",
+ "legend": "derivation: green = original paint, yellow = generated"
+}

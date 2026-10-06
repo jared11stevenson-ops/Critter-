@@ -1,0 +1,11 @@
+{
+ "file": "details/aruun_hand_side_x4.png",
+ "view": "hand side",
+ "sources": [
+  "design/reference_packs/aruun/details/aruun_panel_hand_side.png"
+ ],
+ "method": "Real-ESRGAN anime-6B x4 of original panel on cream; no diffusion",
+ "seed": null,
+ "generated_fraction": 0.0,
+ "legend": "whole image = original paint upscaled (green); nothing generated"
+}
