@@ -192,8 +192,27 @@ def pauldron2(P, N, col, hgt, rough):
     return col, hgt, rough
 
 
+def wraps(P, col, hgt, bands):
+    """cream bandage wraps (diagonal spiral with dark stitch lines) on limb bands [(z0, z1), ...]"""
+    x, y, z = P[:, 0], P[:, 1], P[:, 2]
+    for z0, z1 in bands:
+        m = smooth(z0 - 0.002, z0 + 0.002, z) * smooth(z1 + 0.002, z1 - 0.002, z)
+        if m.max() <= 0: continue
+        sel = m > 0.5
+        cx, cy = x[sel].mean(), y[sel].mean()
+        ang = np.arctan2(y - cy, x - cx)
+        sp_ = np.sin(ang * 2.0 + z * 85.0)
+        c = mix(CREAM * 0.97, TAN, 0.3 + 0.3 * vnoise(P, 45, 12))
+        col = mix(col, c, m[:, None] * 0.97)
+        col = mix(col, INK, line(sp_, 0.10) * m * 0.55)
+        col = mix(col, INK, (line(z - z0, 0.0025) + line(z - z1, 0.0025)) * m * 0.8); hgt = hgt + 0.6 * m
+    return col, hgt
+
+
 def overlays(P, N, kind, col, hgt, rough):
     x, y, z = P[:, 0], P[:, 1], P[:, 2]
+    if kind in ("armL", "armR"): col, hgt = wraps(P, col, hgt, [(0.955, 1.0)])
+    if kind in ("legL", "legR"): col, hgt = wraps(P, col, hgt, [(0.255, 0.31), (0.50, 0.53)])
     front = smooth(-0.1, -0.45, N[:, 1])
     if kind == "trunk":
         # cream bandage strap crossing from his left shoulder to the right hip (front), stitched

@@ -67,7 +67,7 @@ def skirt(A):
     """olive leaf-panel skirt: two staggered rows of long pointed leaves around the waist (front centre left open for the cream loincloth strips)"""
     xc, yc = 0.0, 0.0
     RX, RY = 0.235, 0.20
-    for row, (n_l, z0, dr, Lr) in enumerate(((14, 1.205, 0.030, (0.34, 0.50)), (14, 1.20, 0.0, (0.28, 0.44)))):
+    for row, (n_l, z0, dr, Lr) in enumerate(((14, 1.205, 0.030, (0.44, 0.64)), (14, 1.20, 0.0, (0.36, 0.56)))):
         for i in range(n_l):
             th = 2 * np.pi * (i + 0.5 * row + 0.25) / n_l
             if np.sin(th) < -0.55 and abs(np.cos(th)) < 0.5: continue            # front centre
