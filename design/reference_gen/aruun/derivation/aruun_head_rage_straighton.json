@@ -1,0 +1,22 @@
+{
+ "file": "head/aruun_head_rage_straighton.png",
+ "view": "front straight-on RAGE, jaw hinged wide, fangs, pink tongue",
+ "sources": [
+  "design/reference_packs/aruun/head/aruun_expressions.jpg RAGE tile"
+ ],
+ "method": "Real-ESRGAN anime-6B x4 of original sheet pixels, placed by landmark row; no diffusion",
+ "px_per_m": 4000,
+ "rows_px": {
+  "top": 200,
+  "crown": 1292,
+  "eyes": 1499,
+  "chin": 1920,
+  "neck": 2712
+ },
+ "scale": 1.34,
+ "eyes_row_src_y": 640,
+ "axis_x_src": 1088,
+ "seed": null,
+ "notes": "chin row not meaningful (jaw open); eyes row + eye spacing matched to CALM face",
+ "legend": "derivation: green = original paint, yellow = generated"
+}
