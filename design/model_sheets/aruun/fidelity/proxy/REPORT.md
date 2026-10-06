@@ -4,9 +4,9 @@ model: `design/model_sheets/aruun/fidelity/proxy/proxy.glb`  forward +z  render 
 
 | view | IoU (aligned) | IoU (dx=0) | align dx (m) | model/ref area | mean abs rel width err | mean signed width err (m) |
 |---|---|---|---|---|---|---|
-| side | 0.877 | 0.873 | -0.004 | 1.04 | 0.079 | +0.006 |
-| back | 0.885 | 0.885 | +0.001 | 1.01 | 0.071 | +0.007 |
-| front (3/4 ref, qualitative) | 0.578 | 0.425 | +0.150 | 0.84 | 0.306 | -0.088 |
+| side | 0.879 | 0.874 | -0.004 | 1.02 | 0.071 | +0.003 |
+| back | 0.885 | 0.884 | +0.001 | 1.00 | 0.073 | +0.005 |
+| front (3/4 ref, qualitative) | 0.578 | 0.426 | +0.149 | 0.83 | 0.310 | -0.090 |
 
 ## side region errors (m; err = model - ref; edge uncertainty about +-0.0037 m)
 
@@ -22,27 +22,27 @@ model: `design/model_sheets/aruun/fidelity/proxy/proxy.glb`  forward +z  render 
 | snout.outer_width | 0.236 | 0.245 | +0.008 | +4 |  |
 | snout.solid_width | 0.218 | 0.236 | +0.018 | +8 |  |
 | snout.extent | 0.307 | 0.303 | -0.004 | -1 |  |
-| neck.outer_width | 0.150 | 0.166 | +0.016 | +11 |  |
-| neck.run_width (central run, fringe/skirt-free) | 0.147 | 0.165 | +0.018 | +12 | y |
-| neck.solid_width | 0.149 | 0.166 | +0.017 | +11 |  |
-| neck.extent | 0.314 | 0.314 | +0.001 | +0 |  |
+| neck.outer_width | 0.150 | 0.151 | +0.001 | +1 |  |
+| neck.run_width (central run, fringe/skirt-free) | 0.147 | 0.150 | +0.002 | +2 | y |
+| neck.solid_width | 0.149 | 0.151 | +0.001 | +1 |  |
+| neck.extent | 0.314 | 0.288 | -0.026 | -8 |  |
 | neck_top.outer_width | 0.108 | 0.111 | +0.002 | +2 |  |
 | neck_top.run_width (central run, fringe/skirt-free) | 0.108 | 0.111 | +0.002 | +2 | y |
 | neck_top.solid_width | 0.108 | 0.111 | +0.002 | +2 |  |
 | neck_top.extent | 0.110 | 0.117 | +0.007 | +7 |  |
-| neck_mid.outer_width | 0.115 | 0.123 | +0.008 | +7 |  |
-| neck_mid.run_width (central run, fringe/skirt-free) | 0.115 | 0.123 | +0.008 | +7 | y |
-| neck_mid.solid_width | 0.115 | 0.123 | +0.008 | +7 |  |
-| neck_mid.extent | 0.124 | 0.168 | +0.044 | +36 |  |
-| neck_base.outer_width | 0.252 | 0.282 | +0.031 | +12 |  |
-| neck_base.run_width (central run, fringe/skirt-free) | 0.245 | 0.280 | +0.034 | +14 | y |
-| neck_base.solid_width | 0.250 | 0.281 | +0.031 | +12 |  |
-| neck_base.extent | 0.314 | 0.314 | +0.001 | +0 |  |
-| shoulders.outer_width | 0.402 | 0.427 | +0.025 | +6 | y |
-| shoulders.solid_width | 0.402 | 0.427 | +0.025 | +6 |  |
-| shoulders.extent | 0.436 | 0.443 | +0.007 | +2 |  |
-| torso.outer_width | 0.423 | 0.420 | -0.003 | -1 |  |
-| torso.solid_width | 0.413 | 0.420 | +0.008 | +2 |  |
+| neck_mid.outer_width | 0.115 | 0.119 | +0.004 | +4 |  |
+| neck_mid.run_width (central run, fringe/skirt-free) | 0.115 | 0.119 | +0.004 | +4 | y |
+| neck_mid.solid_width | 0.115 | 0.119 | +0.004 | +4 |  |
+| neck_mid.extent | 0.124 | 0.136 | +0.012 | +10 |  |
+| neck_base.outer_width | 0.252 | 0.246 | -0.005 | -2 |  |
+| neck_base.run_width (central run, fringe/skirt-free) | 0.245 | 0.242 | -0.003 | -1 | y |
+| neck_base.solid_width | 0.250 | 0.244 | -0.005 | -2 |  |
+| neck_base.extent | 0.314 | 0.288 | -0.026 | -8 |  |
+| shoulders.outer_width | 0.402 | 0.417 | +0.015 | +4 | y |
+| shoulders.solid_width | 0.402 | 0.417 | +0.015 | +4 |  |
+| shoulders.extent | 0.436 | 0.443 | +0.006 | +1 |  |
+| torso.outer_width | 0.423 | 0.415 | -0.008 | -2 |  |
+| torso.solid_width | 0.413 | 0.415 | +0.003 | +1 |  |
 | torso.extent | 0.537 | 0.476 | -0.060 | -11 |  |
 | waist.outer_width | 0.460 | 0.447 | -0.013 | -3 | y |
 | waist.solid_width | 0.460 | 0.447 | -0.013 | -3 |  |
@@ -65,7 +65,7 @@ model: `design/model_sheets/aruun/fidelity/proxy/proxy.glb`  forward +z  render 
 | foot.outer_width | 0.235 | 0.250 | +0.015 | +6 | y |
 | foot.solid_width | 0.229 | 0.250 | +0.021 | +9 |  |
 | foot.extent | 0.416 | 0.410 | -0.006 | -1 |  |
-| snout.length_from_eye (tip - ref eye col; model eye col assumed = ref eye col after alignment) | 0.130 | 0.128 | -0.002 | -2 | y |
+| snout.length_from_eye (tip - ref eye col; model eye col assumed = ref eye col after alignment) | 0.130 | 0.127 | -0.003 | -2 | y |
 | head.length (nape..snout tip) | 0.307 | 0.303 | -0.004 | -1 | y |
 | foot.length (heel..toe) | 0.416 | 0.410 | -0.006 | -1 | y |
 | torso.chest_to_back_depth | 0.513 | 0.460 | -0.053 | -10 | y |
@@ -91,27 +91,27 @@ model: `design/model_sheets/aruun/fidelity/proxy/proxy.glb`  forward +z  render 
 | snout.outer_width | 0.195 | 0.201 | +0.006 | +3 |  |
 | snout.solid_width | 0.194 | 0.201 | +0.007 | +4 |  |
 | snout.extent | 0.258 | 0.221 | -0.037 | -14 |  |
-| neck.outer_width | 0.198 | 0.203 | +0.005 | +3 |  |
-| neck.run_width (central run, fringe/skirt-free) | 0.178 | 0.202 | +0.024 | +14 | y |
-| neck.solid_width | 0.191 | 0.203 | +0.012 | +6 |  |
-| neck.extent | 0.458 | 0.406 | -0.052 | -11 |  |
+| neck.outer_width | 0.198 | 0.184 | -0.014 | -7 |  |
+| neck.run_width (central run, fringe/skirt-free) | 0.178 | 0.183 | +0.005 | +3 | y |
+| neck.solid_width | 0.191 | 0.184 | -0.007 | -4 |  |
+| neck.extent | 0.458 | 0.397 | -0.061 | -13 |  |
 | neck_top.outer_width | 0.142 | 0.136 | -0.006 | -4 |  |
 | neck_top.run_width (central run, fringe/skirt-free) | 0.133 | 0.137 | +0.003 | +2 | y |
 | neck_top.solid_width | 0.138 | 0.136 | -0.001 | -1 |  |
 | neck_top.extent | 0.224 | 0.179 | -0.045 | -20 |  |
-| neck_mid.outer_width | 0.122 | 0.144 | +0.022 | +18 |  |
-| neck_mid.run_width (central run, fringe/skirt-free) | 0.122 | 0.142 | +0.020 | +16 | y |
-| neck_mid.solid_width | 0.122 | 0.144 | +0.022 | +18 |  |
-| neck_mid.extent | 0.133 | 0.240 | +0.106 | +80 |  |
-| neck_base.outer_width | 0.345 | 0.342 | -0.003 | -1 |  |
-| neck_base.run_width (central run, fringe/skirt-free) | 0.326 | 0.340 | +0.015 | +4 | y |
-| neck_base.solid_width | 0.344 | 0.342 | -0.002 | -1 |  |
-| neck_base.extent | 0.409 | 0.381 | -0.028 | -7 |  |
-| shoulders.outer_width | 0.625 | 0.617 | -0.007 | -1 | y |
-| shoulders.solid_width | 0.625 | 0.617 | -0.007 | -1 |  |
+| neck_mid.outer_width | 0.122 | 0.123 | +0.000 | +0 |  |
+| neck_mid.run_width (central run, fringe/skirt-free) | 0.122 | 0.123 | +0.000 | +0 | y |
+| neck_mid.solid_width | 0.122 | 0.123 | +0.000 | +0 |  |
+| neck_mid.extent | 0.133 | 0.136 | +0.002 | +2 |  |
+| neck_base.outer_width | 0.345 | 0.309 | -0.036 | -10 |  |
+| neck_base.run_width (central run, fringe/skirt-free) | 0.326 | 0.307 | -0.019 | -6 | y |
+| neck_base.solid_width | 0.344 | 0.308 | -0.036 | -10 |  |
+| neck_base.extent | 0.409 | 0.365 | -0.044 | -11 |  |
+| shoulders.outer_width | 0.625 | 0.617 | -0.008 | -1 | y |
+| shoulders.solid_width | 0.625 | 0.617 | -0.008 | -1 |  |
 | shoulders.extent | 0.639 | 0.632 | -0.007 | -1 |  |
-| torso.outer_width | 0.675 | 0.673 | -0.002 | -0 | y |
-| torso.solid_width | 0.666 | 0.670 | +0.004 | +1 |  |
+| torso.outer_width | 0.675 | 0.672 | -0.004 | -1 | y |
+| torso.solid_width | 0.666 | 0.669 | +0.003 | +0 |  |
 | torso.extent | 0.812 | 0.792 | -0.020 | -2 |  |
 | waist.outer_width | 0.743 | 0.746 | +0.003 | +0 | y |
 | waist.solid_width | 0.742 | 0.746 | +0.004 | +0 |  |
@@ -157,27 +157,27 @@ model: `design/model_sheets/aruun/fidelity/proxy/proxy.glb`  forward +z  render 
 | snout.outer_width | 0.319 | 0.201 | -0.119 | -37 |  |
 | snout.solid_width | 0.300 | 0.201 | -0.099 | -33 |  |
 | snout.extent | 0.444 | 0.221 | -0.224 | -50 |  |
-| neck.outer_width | 0.220 | 0.203 | -0.017 | -8 |  |
-| neck.run_width (central run, fringe/skirt-free) | 0.155 | 0.202 | +0.047 | +30 | y |
-| neck.solid_width | 0.193 | 0.203 | +0.010 | +5 |  |
-| neck.extent | 0.509 | 0.407 | -0.102 | -20 |  |
+| neck.outer_width | 0.220 | 0.184 | -0.037 | -17 |  |
+| neck.run_width (central run, fringe/skirt-free) | 0.155 | 0.183 | +0.028 | +18 | y |
+| neck.solid_width | 0.193 | 0.183 | -0.009 | -5 |  |
+| neck.extent | 0.509 | 0.397 | -0.112 | -22 |  |
 | neck_top.outer_width | 0.178 | 0.136 | -0.042 | -24 |  |
 | neck_top.run_width (central run, fringe/skirt-free) | 0.134 | 0.137 | +0.002 | +2 | y |
 | neck_top.solid_width | 0.145 | 0.136 | -0.009 | -6 |  |
 | neck_top.extent | 0.270 | 0.179 | -0.092 | -34 |  |
-| neck_mid.outer_width | 0.133 | 0.144 | +0.011 | +8 |  |
-| neck_mid.run_width (central run, fringe/skirt-free) | 0.133 | 0.142 | +0.009 | +7 | y |
-| neck_mid.solid_width | 0.133 | 0.144 | +0.011 | +8 |  |
-| neck_mid.extent | 0.139 | 0.239 | +0.100 | +72 |  |
-| neck_base.outer_width | 0.366 | 0.342 | -0.024 | -7 |  |
-| neck_base.run_width (central run, fringe/skirt-free) | 0.214 | 0.340 | +0.127 | +59 | y |
-| neck_base.solid_width | 0.335 | 0.342 | +0.006 | +2 |  |
-| neck_base.extent | 0.389 | 0.381 | -0.008 | -2 |  |
-| shoulders.outer_width | 0.585 | 0.617 | +0.033 | +6 | y |
-| shoulders.solid_width | 0.585 | 0.617 | +0.033 | +6 |  |
+| neck_mid.outer_width | 0.133 | 0.123 | -0.011 | -8 |  |
+| neck_mid.run_width (central run, fringe/skirt-free) | 0.133 | 0.123 | -0.011 | -8 | y |
+| neck_mid.solid_width | 0.133 | 0.123 | -0.011 | -8 |  |
+| neck_mid.extent | 0.139 | 0.135 | -0.004 | -3 |  |
+| neck_base.outer_width | 0.366 | 0.309 | -0.057 | -16 |  |
+| neck_base.run_width (central run, fringe/skirt-free) | 0.214 | 0.307 | +0.093 | +43 | y |
+| neck_base.solid_width | 0.335 | 0.308 | -0.027 | -8 |  |
+| neck_base.extent | 0.389 | 0.366 | -0.023 | -6 |  |
+| shoulders.outer_width | 0.585 | 0.617 | +0.032 | +6 | y |
+| shoulders.solid_width | 0.585 | 0.617 | +0.032 | +6 |  |
 | shoulders.extent | 0.668 | 0.632 | -0.036 | -5 |  |
-| torso.outer_width | 0.783 | 0.673 | -0.110 | -14 | y |
-| torso.solid_width | 0.733 | 0.670 | -0.063 | -9 |  |
+| torso.outer_width | 0.783 | 0.672 | -0.111 | -14 | y |
+| torso.solid_width | 0.733 | 0.669 | -0.064 | -9 |  |
 | torso.extent | 1.103 | 0.792 | -0.310 | -28 |  |
 | waist.outer_width | 0.897 | 0.746 | -0.151 | -17 | y |
 | waist.solid_width | 0.827 | 0.746 | -0.081 | -10 |  |
@@ -205,10 +205,10 @@ model: `design/model_sheets/aruun/fidelity/proxy/proxy.glb`  forward +z  render 
 ## Largest deviations (rankable regions, side+back, by |err| in m)
 
 1. side torso.chest_to_back_depth: ref 0.513 m, model 0.460 m, err -0.053 m (-10%)
-2. side neck_base.run_width (central run, fringe/skirt-free): ref 0.245 m, model 0.280 m, err +0.034 m (+14%)
-3. back horn_A(image-right).tip_height: ref 2.362 m, model 2.391 m, err +0.030 m (+1%)
-4. side shoulders.outer_width: ref 0.402 m, model 0.427 m, err +0.025 m (+6%)
-5. back neck.run_width (central run, fringe/skirt-free): ref 0.178 m, model 0.202 m, err +0.024 m (+14%)
-6. side horns.total_depth_spread (side): ref 0.334 m, model 0.357 m, err +0.022 m (+7%)
-7. back neck_mid.run_width (central run, fringe/skirt-free): ref 0.122 m, model 0.142 m, err +0.020 m (+16%)
-8. side horn_B(front/long).span: ref 0.183 m, model 0.202 m, err +0.020 m (+11%)
+2. back horn_A(image-right).tip_height: ref 2.362 m, model 2.391 m, err +0.030 m (+1%)
+3. side horns.total_depth_spread (side): ref 0.334 m, model 0.357 m, err +0.022 m (+7%)
+4. side horn_B(front/long).span: ref 0.183 m, model 0.202 m, err +0.020 m (+11%)
+5. back neck_base.run_width (central run, fringe/skirt-free): ref 0.326 m, model 0.307 m, err -0.019 m (-6%)
+6. back foot.outer_width: ref 0.708 m, model 0.727 m, err +0.019 m (+3%)
+7. back pelvis.outer_width: ref 0.784 m, model 0.768 m, err -0.016 m (-2%)
+8. side foot.outer_width: ref 0.235 m, model 0.250 m, err +0.015 m (+6%)
