@@ -4,9 +4,9 @@ model: `design/model_sheets/aruun/fidelity/proxy/proxy.glb`  forward +z  render 
 
 | view | IoU (aligned) | IoU (dx=0) | align dx (m) | model/ref area | mean abs rel width err | mean signed width err (m) |
 |---|---|---|---|---|---|---|
-| side | 0.877 | 0.874 | -0.004 | 1.04 | 0.079 | +0.006 |
-| back | 0.885 | 0.885 | +0.001 | 1.01 | 0.072 | +0.008 |
-| front (3/4 ref, qualitative) | 0.578 | 0.425 | +0.152 | 0.84 | 0.305 | -0.087 |
+| side | 0.877 | 0.873 | -0.004 | 1.04 | 0.079 | +0.006 |
+| back | 0.885 | 0.885 | +0.001 | 1.01 | 0.071 | +0.007 |
+| front (3/4 ref, qualitative) | 0.578 | 0.425 | +0.150 | 0.84 | 0.306 | -0.088 |
 
 ## side region errors (m; err = model - ref; edge uncertainty about +-0.0037 m)
 
@@ -41,27 +41,27 @@ model: `design/model_sheets/aruun/fidelity/proxy/proxy.glb`  forward +z  render 
 | shoulders.outer_width | 0.402 | 0.427 | +0.025 | +6 | y |
 | shoulders.solid_width | 0.402 | 0.427 | +0.025 | +6 |  |
 | shoulders.extent | 0.436 | 0.443 | +0.007 | +2 |  |
-| torso.outer_width | 0.423 | 0.421 | -0.003 | -1 |  |
-| torso.solid_width | 0.413 | 0.421 | +0.008 | +2 |  |
+| torso.outer_width | 0.423 | 0.420 | -0.003 | -1 |  |
+| torso.solid_width | 0.413 | 0.420 | +0.008 | +2 |  |
 | torso.extent | 0.537 | 0.476 | -0.060 | -11 |  |
 | waist.outer_width | 0.460 | 0.447 | -0.013 | -3 | y |
 | waist.solid_width | 0.460 | 0.447 | -0.013 | -3 |  |
 | waist.extent | 0.468 | 0.454 | -0.014 | -3 |  |
-| pelvis.outer_width | 0.419 | 0.409 | -0.010 | -2 |  |
+| pelvis.outer_width | 0.419 | 0.409 | -0.011 | -3 |  |
 | pelvis.solid_width | 0.405 | 0.409 | +0.004 | +1 |  |
 | pelvis.extent | 0.446 | 0.440 | -0.006 | -1 |  |
 | arm.outer_width | 0.399 | 0.393 | -0.006 | -2 |  |
-| arm.solid_width | 0.387 | 0.392 | +0.006 | +1 |  |
+| arm.solid_width | 0.387 | 0.392 | +0.005 | +1 |  |
 | arm.extent | 0.537 | 0.476 | -0.060 | -11 |  |
-| hand.outer_width | 0.302 | 0.301 | -0.001 | -0 |  |
-| hand.solid_width | 0.294 | 0.300 | +0.006 | +2 |  |
+| hand.outer_width | 0.302 | 0.300 | -0.002 | -1 |  |
+| hand.solid_width | 0.294 | 0.299 | +0.005 | +2 |  |
 | hand.extent | 0.463 | 0.459 | -0.004 | -1 |  |
-| thigh.outer_width | 0.192 | 0.198 | +0.007 | +3 |  |
-| thigh.solid_width | 0.187 | 0.197 | +0.010 | +5 |  |
-| thigh.extent | 0.360 | 0.369 | +0.009 | +3 |  |
+| thigh.outer_width | 0.192 | 0.198 | +0.006 | +3 |  |
+| thigh.solid_width | 0.187 | 0.196 | +0.009 | +5 |  |
+| thigh.extent | 0.360 | 0.371 | +0.012 | +3 |  |
 | shin.outer_width | 0.117 | 0.123 | +0.005 | +5 | y |
 | shin.solid_width | 0.117 | 0.123 | +0.005 | +5 |  |
-| shin.extent | 0.198 | 0.206 | +0.008 | +4 |  |
+| shin.extent | 0.198 | 0.207 | +0.009 | +4 |  |
 | foot.outer_width | 0.235 | 0.250 | +0.015 | +6 | y |
 | foot.solid_width | 0.229 | 0.250 | +0.021 | +9 |  |
 | foot.extent | 0.416 | 0.410 | -0.006 | -1 |  |
@@ -110,27 +110,27 @@ model: `design/model_sheets/aruun/fidelity/proxy/proxy.glb`  forward +z  render 
 | shoulders.outer_width | 0.625 | 0.617 | -0.007 | -1 | y |
 | shoulders.solid_width | 0.625 | 0.617 | -0.007 | -1 |  |
 | shoulders.extent | 0.639 | 0.632 | -0.007 | -1 |  |
-| torso.outer_width | 0.675 | 0.672 | -0.003 | -0 | y |
-| torso.solid_width | 0.666 | 0.669 | +0.003 | +0 |  |
-| torso.extent | 0.812 | 0.787 | -0.025 | -3 |  |
+| torso.outer_width | 0.675 | 0.673 | -0.002 | -0 | y |
+| torso.solid_width | 0.666 | 0.670 | +0.004 | +1 |  |
+| torso.extent | 0.812 | 0.792 | -0.020 | -2 |  |
 | waist.outer_width | 0.743 | 0.746 | +0.003 | +0 | y |
 | waist.solid_width | 0.742 | 0.746 | +0.004 | +0 |  |
 | waist.extent | 0.751 | 0.750 | -0.001 | -0 |  |
-| pelvis.outer_width | 0.784 | 0.764 | -0.020 | -2 | y |
-| pelvis.solid_width | 0.745 | 0.750 | +0.005 | +1 |  |
-| pelvis.extent | 0.812 | 0.787 | -0.025 | -3 |  |
-| arm.outer_width | 0.712 | 0.718 | +0.006 | +1 |  |
+| pelvis.outer_width | 0.784 | 0.768 | -0.016 | -2 | y |
+| pelvis.solid_width | 0.745 | 0.754 | +0.009 | +1 |  |
+| pelvis.extent | 0.812 | 0.792 | -0.020 | -2 |  |
+| arm.outer_width | 0.712 | 0.719 | +0.007 | +1 |  |
 | arm.solid_width | 0.691 | 0.701 | +0.009 | +1 |  |
-| arm.extent | 0.861 | 0.850 | -0.011 | -1 |  |
-| hand.outer_width | 0.770 | 0.779 | +0.009 | +1 |  |
-| hand.solid_width | 0.696 | 0.713 | +0.017 | +3 |  |
+| arm.extent | 0.861 | 0.849 | -0.012 | -1 |  |
+| hand.outer_width | 0.770 | 0.781 | +0.011 | +1 |  |
+| hand.solid_width | 0.696 | 0.713 | +0.017 | +2 |  |
 | hand.extent | 0.882 | 0.866 | -0.015 | -2 |  |
 | thigh.outer_width | 0.755 | 0.767 | +0.012 | +2 | y |
-| thigh.solid_width | 0.627 | 0.634 | +0.006 | +1 |  |
+| thigh.solid_width | 0.627 | 0.631 | +0.004 | +1 |  |
 | thigh.extent | 0.889 | 0.866 | -0.023 | -3 |  |
-| shin.outer_width | 0.606 | 0.616 | +0.010 | +2 | y |
-| shin.solid_width | 0.350 | 0.336 | -0.013 | -4 |  |
-| shin.extent | 0.668 | 0.663 | -0.005 | -1 |  |
+| shin.outer_width | 0.606 | 0.612 | +0.007 | +1 | y |
+| shin.solid_width | 0.350 | 0.337 | -0.013 | -4 |  |
+| shin.extent | 0.668 | 0.663 | -0.004 | -1 |  |
 | foot.outer_width | 0.708 | 0.727 | +0.019 | +3 | y |
 | foot.solid_width | 0.357 | 0.371 | +0.014 | +4 |  |
 | foot.extent | 0.829 | 0.797 | -0.033 | -4 |  |
@@ -176,27 +176,27 @@ model: `design/model_sheets/aruun/fidelity/proxy/proxy.glb`  forward +z  render 
 | shoulders.outer_width | 0.585 | 0.617 | +0.033 | +6 | y |
 | shoulders.solid_width | 0.585 | 0.617 | +0.033 | +6 |  |
 | shoulders.extent | 0.668 | 0.632 | -0.036 | -5 |  |
-| torso.outer_width | 0.783 | 0.672 | -0.110 | -14 | y |
-| torso.solid_width | 0.733 | 0.669 | -0.064 | -9 |  |
-| torso.extent | 1.103 | 0.787 | -0.315 | -29 |  |
+| torso.outer_width | 0.783 | 0.673 | -0.110 | -14 | y |
+| torso.solid_width | 0.733 | 0.670 | -0.063 | -9 |  |
+| torso.extent | 1.103 | 0.792 | -0.310 | -28 |  |
 | waist.outer_width | 0.897 | 0.746 | -0.151 | -17 | y |
 | waist.solid_width | 0.827 | 0.746 | -0.081 | -10 |  |
 | waist.extent | 0.928 | 0.750 | -0.178 | -19 |  |
-| pelvis.outer_width | 0.966 | 0.764 | -0.202 | -21 | y |
-| pelvis.solid_width | 0.921 | 0.749 | -0.172 | -19 |  |
-| pelvis.extent | 1.053 | 0.787 | -0.266 | -25 |  |
-| arm.outer_width | 0.839 | 0.718 | -0.121 | -14 |  |
+| pelvis.outer_width | 0.966 | 0.768 | -0.198 | -21 | y |
+| pelvis.solid_width | 0.921 | 0.754 | -0.168 | -18 |  |
+| pelvis.extent | 1.053 | 0.792 | -0.261 | -25 |  |
+| arm.outer_width | 0.839 | 0.719 | -0.120 | -14 |  |
 | arm.solid_width | 0.790 | 0.701 | -0.089 | -11 |  |
-| arm.extent | 1.103 | 0.850 | -0.253 | -23 |  |
-| hand.outer_width | 0.908 | 0.779 | -0.129 | -14 |  |
-| hand.solid_width | 0.879 | 0.713 | -0.165 | -19 |  |
+| arm.extent | 1.103 | 0.849 | -0.254 | -23 |  |
+| hand.outer_width | 0.908 | 0.781 | -0.127 | -14 |  |
+| hand.solid_width | 0.879 | 0.713 | -0.166 | -19 |  |
 | hand.extent | 1.111 | 0.866 | -0.245 | -22 |  |
 | thigh.outer_width | 0.867 | 0.767 | -0.100 | -12 | y |
-| thigh.solid_width | 0.862 | 0.634 | -0.228 | -26 |  |
+| thigh.solid_width | 0.862 | 0.631 | -0.231 | -27 |  |
 | thigh.extent | 0.914 | 0.866 | -0.047 | -5 |  |
-| shin.outer_width | 0.839 | 0.616 | -0.223 | -27 | y |
+| shin.outer_width | 0.839 | 0.612 | -0.227 | -27 | y |
 | shin.solid_width | 0.564 | 0.336 | -0.228 | -40 |  |
-| shin.extent | 0.939 | 0.662 | -0.277 | -30 |  |
+| shin.extent | 0.939 | 0.663 | -0.277 | -29 |  |
 | foot.outer_width | 0.681 | 0.727 | +0.045 | +7 | y |
 | foot.solid_width | 0.387 | 0.371 | -0.016 | -4 |  |
 | foot.extent | 0.936 | 0.796 | -0.140 | -15 |  |
