@@ -1,0 +1,707 @@
+{
+ "version": 1,
+ "frame": "model frame: +Y up, character faces +Z, his LEFT = +X, metres; world->cam Xc=R(X-C), OpenCV axes (x right, y down, z fwd). Entries are rest-pose cameras: root yaw already folded in.",
+ "cameras": {
+  "HERO": {
+   "C": [
+    0.0,
+    0.9000009999999995,
+    7.999999000000297
+   ],
+   "R": [
+    [
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     -0.9999999999995001,
+     9.999999981413767e-07
+    ],
+    [
+     0.0,
+     -9.999999981413767e-07,
+     -0.9999999999995001
+    ]
+   ],
+   "f_px": 13644.156071839594,
+   "cx": 1072.2324329026385,
+   "cy": 2441.6151683862904,
+   "W": 1891,
+   "H": 4096,
+   "ortho_px_per_m": null,
+   "name": "HERO",
+   "model_T": {
+    "R": [
+     [
+      0.7865877673235452,
+      0.0,
+      -0.6174784889346028
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.6174784889346028,
+      0.0,
+      0.7865877673235452
+     ]
+    ],
+    "pivot": [
+     0,
+     0,
+     0
+    ],
+    "t": [
+     0,
+     0,
+     0
+    ],
+    "note": "rest model rotated by root yaw about vertical axis through the origin (between the feet) BEFORE the camera; folded into C,R when loaded"
+   },
+   "target_model": [
+    0,
+    1.2,
+    0
+   ],
+   "landmarks_ref_px": {
+    "footL_toe_tip": [
+     1675.0,
+     3985.0
+    ],
+    "footL_side_in": [
+     1490.0,
+     3800.0
+    ],
+    "footL_side_out": [
+     1835.0,
+     3800.0
+    ],
+    "footR_toe_tip": [
+     372.0,
+     3835.0
+    ],
+    "footR_heel": [
+     862.0,
+     3790.0
+    ],
+    "ankleL": [
+     1580.0,
+     3520.0
+    ],
+    "ankleR": [
+     705.0,
+     3540.0
+    ],
+    "kneeL": [
+     1330.0,
+     2810.0
+    ],
+    "kneeR": [
+     770.0,
+     2990.0
+    ],
+    "belt_buckle": [
+     710.0,
+     1955.0
+    ],
+    "belt_medallion": [
+     712.0,
+     2190.0
+    ],
+    "pauldronL": [
+     1520.0,
+     1250.0
+    ],
+    "elbowL": [
+     1548.0,
+     1917.0
+    ]
+   },
+   "blender_camera": {
+    "location": [
+     4.939827293998517,
+     -6.292701352000828,
+     0.9000009999999995
+    ],
+    "rotation_euler_rad": [
+     1.5707953267948984,
+     -0.0,
+     0.6655330219044285
+    ],
+    "rotation_euler_deg": [
+     89.99994270422059,
+     -0.0,
+     38.13223328171153
+    ],
+    "type": "PERSP",
+    "sensor_width_mm": 36.0,
+    "lens_mm": 259.75125255749623,
+    "shift_x": 0.06701873765343125,
+    "shift_y": -0.20815186059560573,
+    "res_x": 1891,
+    "res_y": 4096
+   }
+  },
+  "HEAD": {
+   "C": [
+    0.0,
+    0.9000009999999995,
+    7.999999000000297
+   ],
+   "R": [
+    [
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     -0.9999999999995001,
+     9.999999981413767e-07
+    ],
+    [
+     0.0,
+     -9.999999981413767e-07,
+     -0.9999999999995001
+    ]
+   ],
+   "f_px": 13644.156071839594,
+   "cx": 466.2324329026385,
+   "cy": 2365.6151683862904,
+   "W": 859,
+   "H": 856,
+   "ortho_px_per_m": null,
+   "name": "HEAD",
+   "model_T": {
+    "R": [
+     [
+      0.7865877673235452,
+      0.0,
+      -0.6174784889346028
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.6174784889346028,
+      0.0,
+      0.7865877673235452
+     ]
+    ],
+    "pivot": [
+     0,
+     0,
+     0
+    ],
+    "t": [
+     0,
+     0,
+     0
+    ],
+    "note": "rest model rotated by root yaw about vertical axis through the origin (between the feet) BEFORE the camera; folded into C,R when loaded"
+   },
+   "target_model": [
+    0.063,
+    1.977,
+    0.036
+   ],
+   "landmarks_ref_px": {
+    "eye": [
+     411,
+     560
+    ],
+    "snout_hook": [
+     209,
+     706
+    ],
+    "cupB": [
+     314,
+     504
+    ],
+    "cupA": [
+     279,
+     564
+    ],
+    "fringe_rear": [
+     834,
+     564
+    ]
+   },
+   "crop_of_hero_px": {
+    "x0": 606,
+    "y0": 76,
+    "w": 859,
+    "h": 856
+   },
+   "blender_camera": {
+    "location": [
+     4.939827293998517,
+     -6.292701352000828,
+     0.9000009999999995
+    ],
+    "rotation_euler_rad": [
+     1.5707953267948984,
+     -0.0,
+     0.6655330219044285
+    ],
+    "rotation_euler_deg": [
+     89.99994270422059,
+     -0.0,
+     38.13223328171153
+    ],
+    "type": "PERSP",
+    "sensor_width_mm": 36.0,
+    "lens_mm": 571.8156211713916,
+    "shift_x": 0.04276185436861291,
+    "shift_y": -2.2556637583076724,
+    "res_x": 859,
+    "res_y": 856
+   }
+  },
+  "SIDE": {
+   "C": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "R": [
+    [
+     0.0,
+     0.0,
+     1.0
+    ],
+    [
+     0.0,
+     -1.0,
+     0.0
+    ],
+    [
+     1.0,
+     0.0,
+     0.0
+    ]
+   ],
+   "f_px": 1.0,
+   "cx": 436.0,
+   "cy": 4000.0,
+   "W": 947,
+   "H": 4096,
+   "ortho_px_per_m": 1626.6666666666667,
+   "name": "side",
+   "target_model": [
+    0,
+    1.2,
+    0
+   ],
+   "blender_camera": {
+    "location": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "rotation_euler_rad": [
+     1.5707963267948966,
+     -0.0,
+     -1.5707963267948966
+    ],
+    "rotation_euler_deg": [
+     90.0,
+     -0.0,
+     -90.0
+    ],
+    "type": "ORTHO",
+    "ortho_scale_m": 0.582172131147541,
+    "res_x": 947,
+    "res_y": 4096
+   },
+   "note": "identical to tools/fidelity/render_model_views.py (PPM 1626.667, ground row 4000); reference window without the 1200 px pad"
+  },
+  "BACK": {
+   "C": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "R": [
+    [
+     -1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     -1.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "f_px": 1.0,
+   "cx": 659.0,
+   "cy": 4000.0,
+   "W": 1459,
+   "H": 4096,
+   "ortho_px_per_m": 1626.6666666666667,
+   "name": "back",
+   "target_model": [
+    0,
+    1.2,
+    0
+   ],
+   "blender_camera": {
+    "location": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "rotation_euler_rad": [
+     1.5707963267948966,
+     -0.0,
+     3.141592653589793
+    ],
+    "rotation_euler_deg": [
+     90.0,
+     -0.0,
+     180.0
+    ],
+    "type": "ORTHO",
+    "ortho_scale_m": 0.8969262295081967,
+    "res_x": 1459,
+    "res_y": 4096
+   },
+   "note": "identical to tools/fidelity/render_model_views.py (PPM 1626.667, ground row 4000); reference window without the 1200 px pad"
+  },
+  "FRONT_ORTHO": {
+   "C": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "R": [
+    [
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     -1.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     -1.0
+    ]
+   ],
+   "f_px": 1.0,
+   "cx": 896.5,
+   "cy": 4000.0,
+   "W": 1891,
+   "H": 4096,
+   "ortho_px_per_m": 1626.6666666666667,
+   "name": "front",
+   "target_model": [
+    0,
+    1.2,
+    0
+   ],
+   "blender_camera": {
+    "location": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "rotation_euler_rad": [
+     1.5707963267948966,
+     -0.0,
+     0.0
+    ],
+    "rotation_euler_deg": [
+     90.0,
+     -0.0,
+     0.0
+    ],
+    "type": "ORTHO",
+    "ortho_scale_m": 1.1624999999999999,
+    "res_x": 1891,
+    "res_y": 4096
+   },
+   "note": "identical to tools/fidelity/render_model_views.py (PPM 1626.667, ground row 4000); reference window without the 1200 px pad"
+  },
+  "SIDE_V2": {
+   "C": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "R": [
+    [
+     0.0,
+     0.0,
+     1.0
+    ],
+    [
+     0.0,
+     -1.0,
+     0.0
+    ],
+    [
+     1.0,
+     0.0,
+     0.0
+    ]
+   ],
+   "f_px": 1.0,
+   "cx": 536.0,
+   "cy": 4000.0,
+   "W": 1147,
+   "H": 4096,
+   "ortho_px_per_m": 1626.6666666666667,
+   "name": "side_v2",
+   "target_model": [
+    0,
+    1.2,
+    0
+   ],
+   "blender_camera": {
+    "location": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "rotation_euler_rad": [
+     1.5707963267948966,
+     -0.0,
+     -1.5707963267948966
+    ],
+    "rotation_euler_deg": [
+     90.0,
+     -0.0,
+     -90.0
+    ],
+    "type": "ORTHO",
+    "ortho_scale_m": 0.7051229508196721,
+    "res_x": 1147,
+    "res_y": 4096
+   },
+   "note": "creator-approved v2 completed side/back tiles (fid_common.V2)"
+  },
+  "BACK_V2": {
+   "C": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "R": [
+    [
+     -1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     -1.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "f_px": 1.0,
+   "cx": 759.0,
+   "cy": 4000.0,
+   "W": 1659,
+   "H": 4096,
+   "ortho_px_per_m": 1626.6666666666667,
+   "name": "back_v2",
+   "target_model": [
+    0,
+    1.2,
+    0
+   ],
+   "blender_camera": {
+    "location": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "rotation_euler_rad": [
+     1.5707963267948966,
+     -0.0,
+     3.141592653589793
+    ],
+    "rotation_euler_deg": [
+     90.0,
+     -0.0,
+     180.0
+    ],
+    "type": "ORTHO",
+    "ortho_scale_m": 1.0198770491803277,
+    "res_x": 1659,
+    "res_y": 4096
+   },
+   "note": "creator-approved v2 completed side/back tiles (fid_common.V2)"
+  }
+ },
+ "hero_solution": {
+  "distance_m": 7.999999000000297,
+  "cam_height_m": 0.9000009999999995,
+  "pitch_deg": -5.729577940524608e-05,
+  "roll_deg": 0.0,
+  "f_px": 13644.156071839594,
+  "px_per_m_at_target": 1705.519722169851,
+  "principal_point_px": [
+   1072.2324329026385,
+   2441.6151683862904
+  ],
+  "root_yaw_deg": -38.13223328171153,
+  "torso_twist_deg": 3.772457495742332,
+  "foot_yaw_L_deg": 58.629800418483214,
+  "foot_yaw_R_deg": -8.418034575208011,
+  "landmark_rms_px": 153.824915209392,
+  "landmark_rms_pct_fig_height": 3.940187377289754,
+  "residuals_px": {
+   "footL_toe_tip": [
+    -70.498047129518,
+    14.889737713608156
+   ],
+   "footL_side_in": [
+    -283.3444155437737,
+    30.39238624732161
+   ],
+   "footL_side_out": [
+    -263.666529805957,
+    16.46455373187291
+   ],
+   "footR_toe_tip": [
+    35.86063022863391,
+    87.16786333042182
+   ],
+   "footR_heel": [
+    61.48178820098042,
+    -7.780830831736239
+   ],
+   "ankleL": [
+    -133.52577506529587,
+    38.95668509182087
+   ],
+   "ankleR": [
+    0.25836953805264784,
+    -27.689058129377372
+   ],
+   "kneeL": [
+    -7.354713378226052,
+    121.17834127809829
+   ],
+   "kneeR": [
+    -43.30932580243756,
+    -75.36981454755914
+   ],
+   "belt_buckle": [
+    119.4335675222643,
+    -54.083382218288534
+   ],
+   "belt_medallion": [
+    135.51206956233398,
+    -79.24433492190383
+   ],
+   "pauldronL": [
+    -17.957474673678917,
+    15.962641206720036
+   ],
+   "elbowL": [
+    162.4662187204765,
+    -165.7673442932221
+   ]
+  }
+ },
+ "head_pose": {
+  "method": "5 face landmarks (eye_L, mandible hook, horn cups x2, fringe rear), scaled-ortho 3-DOF rotation + scale + shift, multi-start from pure left profile",
+  "rms_px": 30.672758572529418,
+  "apparent_px_per_m": 1946.1703046913556,
+  "euler_yxz_deg_rel_torso": {
+   "yaw": -6.84870612555866,
+   "pitch": -2.602576840001487,
+   "roll": 17.1763674501353
+  },
+  "pure_profile_euler_rel_torso": {
+   "yaw": -51.86776671828848,
+   "pitch": 0.0,
+   "roll": -0.0
+  },
+  "R_rel_torso": [
+   [
+    0.9469839206402029,
+    -0.2950093972942096,
+    -0.127243504969869
+   ],
+   [
+    0.298380096564561,
+    0.9544147822938638,
+    0.00785756406780827
+   ],
+   [
+    0.11912502685428106,
+    -0.04540791612773739,
+    0.991840384905708
+   ]
+  ],
+  "pivot_model": [
+   0.063,
+   1.977,
+   0.036
+  ],
+  "pivot_px_target_hero": [
+   990.2139989588807,
+   877.0114044521426
+  ],
+  "off_pure_left_profile_euler_yxz_deg": [
+   45.961240037999524,
+   -12.584502683001366,
+   12.065763866438267
+  ],
+  "scale_sensitivity_note": "yaw/pitch/roll rel. torso vs assumed head px/m (rms px): 1626:(-15.3,-2.2,14.5)37.0 | 1700:(-14.2,-2.6,15.1)34.5 | 1800:(-12.7,-3.1,15.9)32.1 | 1946(free):(-10.5,-3.7,17.0)30.7; head is ~42-46 deg OFF pure profile in every case",
+  "warning": "horns excluded from the fit: the modelled horns (A up+forward, B sideways) do not resemble the art horns (both sweep back/up in the head plane), so silhouette IoU of the horn region is meaningless until the horns are rebuilt"
+ },
+ "documentation": {
+  "summary": "HERO and HEAD are ONE camera: design/reference_packs/aruun/head/aruun_head_front.png is an exact 1:1 pixel crop of aruun_front_4096.png at (x0=606,y0=76,859x856) (normalised cross-correlation 1.0000 at scale 1.0). detail_head.png tile 2 is the same crop upscaled for the sheet. So there is no independent head camera; the head pose is a POSE of the hero image.",
+  "hero_chosen": "level pinhole camera (pitch 0, roll 0) at distance 8.0 m, height 0.9 m, f=13644 px on a 1891x4096 frame with lens shift (principal point 1072,2442), i.e. 1705 px/m at the character, hFOV 7.9 deg / vFOV 17.0 deg (a telephoto-ish, mildly perspective view). Character (hips) yaw -38.1 deg: he faces screen-LEFT, camera is on his front-LEFT, his left pauldron is nearest the lens.",
+  "hero_ambiguity": {
+   "perspective_strength": "NOT determined by the body landmarks. Fit rms over camera distance d in {2.5..30 m} and camera height h in {0.3..1.5 m} stays 105-123 px (the cost surface is flat to ~15 %): perspective is a free choice inside that range; d=8 m was chosen as the mid value (limit d>=3.5 m keeps feet/head size ratio sane). Bounded prior f/d in [1400,2100] px/m.",
+   "elevation": "pitch -11..+6 deg across the whole d,h grid; level (0) chosen, framing carried by lens shift (pitch and shift are degenerate for a cropped cut-out). The brief's 'low camera' is NOT supported by the numbers: the near foot sole sits ~150 px lower than the far foot, which needs h*dz/d ~ 0.1..0.2 m, i.e. camera height 0.3-1.5 m is allowed but a strongly upward-looking camera (pitch>+10) fits worse. Treat the low-angle read as unproven.",
+   "yaw": "-20 deg (torso twist -51 deg, belt on torso) .. -38 deg (twist ~+4 deg, belt on hips); hips-yaw -38 / twist 0 chosen (lower, simpler, pauldron error 18 px). Chest in the art reads MORE turned than hips (contrapposto).",
+   "roll": "0 (no evidence of roll; ground contact lines of the far foot are horizontal)"
+  },
+  "residuals": "landmark rms 153.8 px = 3.94 % of figure height (3904 px) over 13 pairs; rigid subset (toe tips, heel, ankles, pauldron, belt buckle, medallion) 100 px = 2.6 %; dominated by pose differences (stance width, torso twist), not by camera. Worst: ankleL 134 px, buckle 119, medallion 136, elbowL 166 (arm pose), footL width 270 (art boots wider than model).",
+  "rest_pose_render_note": "entries are rest-pose cameras: rendering the rest model with HERO gives IoU ~0.56 with the art silhouette; the gap is POSE (arms, neck, torso, stance), plus model neck/horn shapes - not camera. Use --head-pose to apply the solved head orientation.",
+  "pose_targets": {
+   "hips_yaw_deg": -38.1,
+   "note_sign": "rotation about +Y; negative = body turned to face screen-left / his right",
+   "torso_twist_deg": "~0 (range -51..+4): chest reads more turned than hips",
+   "foot_L_yaw_abs_deg": "~+20 (toes toward camera, slightly screen-right); fitted rel. hips +59, poor fit",
+   "foot_R_yaw_abs_deg": "-45..-80 (toe points screen-left, foot seen side-on); fitted rel. hips -8, poor fit (toe tip 87 px off)",
+   "weight_shift": "near/left leg (screen-right) planted, knee flexed forward (ref knee row 0.74 m vs model 0.62 m); far/right leg (screen-left) back and out, shin vertical",
+   "right_arm": "abducted ~60 deg from the torso and swung forward, elbow flexed ~70 deg, forearm pointing down-screen-left, hand open/claws at row 2480 x 130 (ref px) - reaches ~0.9 m left of the body axis",
+   "left_arm": "hangs, elbow flexed ~45 deg forward, fist at hip height (row ~2440, 0.96 m); elbow disc at row 1917 (1.28 m)",
+   "neck": "leans: base near x=1050,y=1450 up to head at x~1000,y=700 in the art; art shoulders sit ~100 px (~0.06 m) lower than the rest model, i.e. slight forward slouch/bend of upper spine ~10 deg",
+   "head": "yaw rel. torso -7..-15 deg (towards his right), pitch ~-3, roll ~+15..17 deg (nose-down tilt in the image plane); equivalent to 42-46 deg OFF pure left profile - not a pure profile (second horn visible separately). Art head is ~14 % larger than the model head at the same depth (apparent 1946 vs 1700 px/m) -> head model is under-scaled or the art exaggerates it",
+   "horns": "model horn A/B directions do not match: art horns sweep up then back (big horn tip at hero px 1390,185; small horn tip 780,270) while the model horns go up+forward / sideways"
+  },
+  "fidelity_tool_bug": "tools/fidelity/render_model_views.py drop_mace() deletes legR.001 (1760 faces, min x -0.471 < right_limit -0.46) from this model, so side/back/front sil/clay renders from that tool have no right leg (back IoU 0.92 vs 0.996 with the leg removed in both). render_locked.py never drops anything.",
+  "ortho_verification": "SIDE/BACK ortho cameras re-derived from the tool: render of this model matches the tool's silhouette at IoU 0.989 (side) / 0.996 (back, tool with legR dropped) - remaining diff is the head_v7 swap; vs the reference silhouettes the current model scores IoU 0.888 (side) / 0.892 (back). Conventions: side = camera at his right looking +X, image-right = forward (+Z); back = behind, image-right = his right (-X); both 1626.667 px/m, ground row 4000, axis columns 436 (side) / 659 (back) in the 947 / 1459 px wide reference windows (v2 tiles: 536 / 759 in 1147 / 1659 px).",
+  "how_to": "python3 tools/recon/camera/render_locked.py [MODEL.glb|.blend] --out DIR [--cams HERO HEAD SIDE BACK] [--diag HERO ...] [--head-pose]; per camera: clay_, sil_ (black on white), overlay_ (RGBA), vsref_ (outlines on ref), composite_ , *_info.json (IoU). Diagnostic (+-30 yaw/pitch) cameras write half-res diag_*.png only.",
+  "no_blender_note": "Blender is not installed in this environment; the renders are produced by a numpy/OpenCV painter rasteriser (flat shading). Each camera also carries blender_camera (location, rotation_euler XYZ, lens_mm @36 mm sensor width, shift_x/y or ortho scale) for use inside Blender; the HERO values already include the root-yaw (camera orbit around the un-rotated model). NOT yet verified inside Blender."
+ }
+}
