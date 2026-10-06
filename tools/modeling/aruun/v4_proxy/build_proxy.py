@@ -60,10 +60,10 @@ def build():
     parts = []
     # ---------- HEAD (centre L ~ +0.09: head sits toward his left in the back view). Narrow in F at the chin row (side shows only neck there), wide in L (back).
     HL = 0.09
-    parts.append(tube('cranium', [(0.0, 1.955, HL), (0.0, 1.98, HL), (-0.015, 2.04, HL), (0.03, 2.10, HL), (0.035, 2.118, HL), (0.03, 2.13, HL)],
-                      [(0.035, 0.07), (0.045, 0.095), (0.095, 0.10), (0.075, 0.115), (0.06, 0.135), (0.02, 0.06)]))
+    parts.append(tube('cranium', [(0.0, 1.955, HL), (0.0, 1.98, HL), (-0.015, 2.04, HL), (0.05, 2.075, HL), (0.06, 2.10, HL), (0.05, 2.118, HL), (0.04, 2.13, HL)],
+                      [(0.035, 0.07), (0.045, 0.095), (0.095, 0.10), (0.07, 0.108), (0.05, 0.115), (0.05, 0.135), (0.02, 0.06)]))
     parts.append(tube('snout', [(0.0, 2.065, HL), (0.07, 2.05, HL), (0.13, 2.03, HL), (0.19, 2.0, HL)],
-                      [(0.055, 0.075), (0.048, 0.06), (0.036, 0.045), (0.012, 0.02)], hint=UP))
+                      [(0.075, 0.075), (0.052, 0.06), (0.030, 0.045), (0.012, 0.02)], hint=UP))
     # ---------- NECK (thin, leaning forward) with trapezius/hood flare at the base
     parts.append(ell('neckbase', (-0.035, 1.745, -0.02), (0.135, 0.10, 0.175)))
     parts.append(tube('neck', [(-0.03, 1.74, 0.03), (-0.02, 1.82, 0.05), (0.01, 1.90, 0.07), (0.0, 1.99, HL)],
