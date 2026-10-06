@@ -36,6 +36,14 @@ def main():
         c, h, r = PB2.overlays(P, Nn, k, c, h, r)
         c, h = PB.neck_belt(P, Nn, c, h, k)
         put(s, c, r, h, PB2.accent_emis(P, k, B.sp[s]))
+    for nm in np.unique(nm_t[kd_t == "leaf"]):
+        s = nm_t == nm; c, r = PB.paint_card("card_leaf_olive", B.sp[s], B.P[s], B.N[s]); put(s, c, r, np.zeros(s.sum()))
+    s = kd_t == "mane"
+    if s.any(): c, r = PB.paint_mane(B.sp[s]); put(s, c, r, np.zeros(s.sum()))
+    s = kd_t == "claw"
+    if s.any(): c, r = PB.paint_claw(B.sp[s], B.P[s]); put(s, c, r, np.zeros(s.sum()))
+    for nm in np.unique(nm_t[kd_t == "trinket"]):
+        s = nm_t == nm; c, r, e = PB.paint_trinket(nm, B.sp[s], B.P[s], B.N[s]); put(s, c, r, np.zeros(s.sum()), e)
     s = kd_t == "horn"
     if s.any():
         c, r, h = PB.paint_horn(B.sp[s], B.P[s], B.N[s]); put(s, c, r, h, PB2.accent_emis(B.P[s], 'horn', B.sp[s]))
@@ -47,7 +55,6 @@ def main():
     s = kd_t == "jaw"; c, e, r, h = PH.paint_jaw(B.P[s], B.N[s], O, sc); put(s, c, r, h, e)
     for k, up in (("tooth_up", True), ("tooth_lo", False)):
         s = kd_t == k; c, e, r, h = PH.paint_tooth(B.P[s], up); put(s, c, r, h, e)
-    s = kd_t == "fringe_head"; c, e, r, h = PH.paint_fringe(B.sp[s]); put(s, c, r, h, e)
     s = kd_t == "tine"; c, e, r, h = PH.paint_tine(B.P[s]); put(s, c, r, h, e)
     s = kd_t == "tongue"; c, e, r, h = PH.paint_tongue(B.P[s], B.N[s], O, sc); put(s, c, r, h, e)
     s = kd_t == "eye"; c, e, r, h = PH.paint_eye(B.P[s], B.N[s], O, sc); put(s, c, r, h, e)

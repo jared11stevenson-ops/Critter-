@@ -14,7 +14,8 @@ from common import bpy_util as bu
 import meshio
 W3 = os.path.join(HERE, "..", "work", "v3")
 OUT = fin.OUT
-HEAD_J = np.array([0.085, -0.085, 1.915]); JAW_J = np.array([0.085, -0.022, 1.999])
+_H = np.load(os.path.join(W3, "head_raw.npz")); _O, _SC = _H["origin"], float(_H["scale"])
+HEAD_J = np.array([0.085, -0.085, 1.915]); JAW_J = _O + _SC * np.array([0.0, 0.03, -0.05])
 _orig_sj = F2.shell_joints
 
 
@@ -50,8 +51,24 @@ def weights3(gm):
     for k in ("jaw", "tooth_lo", "tongue"):
         m = np.where(vk == k)[0]
         Wn[m] = 0; Wn[m, bi["jaw"]] = 1.0
-    # horns -> head
-    m = vk == "horn"; Wn[m] = 0; Wn[m, bi["head"]] = 1
+    # horns / mane -> head
+    for kk in ("horn", "mane"):
+        m = vk == kk; Wn[m] = 0; Wn[m, bi["head"]] = 1
+    nm_v = np.full(len(Vn), "", object)
+    for t, k in enumerate(gm["facekinds"]): nm_v[T_[t]] = str(k).split("|")[0]
+    for i in np.where(vk == "leaf")[0]:
+        z = Vn[i, 2]; a_ = float(np.clip((1.05 - z) / 0.3, 0, 1)) * 0.97; Wn[i] = 0; x_ = Vn[i, 0]
+        Wn[i, bi["hips"]] = 1 - a_
+        th_ = "thigh.L" if x_ > 0.02 else "thigh.R" if x_ < -0.02 else None
+        if th_ is None: Wn[i, bi["thigh.L"]] = a_ / 2; Wn[i, bi["thigh.R"]] = a_ / 2
+        else: Wn[i, bi[th_]] = max(a_, 1e-3)
+    for i in np.where(np.isin(vk, ["claw", "trinket"]))[0]:
+        nm = nm_v[i]; Wn[i] = 0
+        if nm.startswith(("claw_hand_L", "claw_thumb_L")): Wn[i, bi["hand.L"]] = 1
+        elif nm.startswith("claw_hand_R"): Wn[i, bi["hand.R"]] = 1
+        elif nm.startswith(("claw_toe_L", "claw_heel_L")): Wn[i, bi["foot.L"]] = 1
+        elif nm.startswith(("claw_toe_R", "claw_heel_R")): Wn[i, bi["foot.R"]] = 1
+        else: Wn[i, bi["hips"]] = 0.6; Wn[i, bi["spine1"]] = 0.4
     for vi in range(len(Wn)):
         row = Wn[vi]
         if (row > 0).sum() > 4:
@@ -127,7 +144,7 @@ def main():
     for t, k in enumerate(kinds_t): vk[gm["T"][t]] = k
     headk = np.isin(vk, ["skull", "jaw", "eye", "tooth_up", "tooth_lo", "tongue", "tine", "fringe_head"])
     colr = np.ones((len(vk), 4), np.float32)
-    colr[headk] = (0.22, 0.30, 1.0, 1.0); colr[vk == "horn"] = (0.45, 0.6, 0.4, 1.0)
+    colr[headk] = (0.22, 0.30, 1.0, 1.0); colr[vk == "horn"] = (0.45, 0.6, 0.4, 1.0); colr[vk == "mane"] = (0.15, 0.4, 0.3, 1.0); colr[vk == "claw"] = (0.4, 0.8, 0.0, 1.0); colr[vk == "trinket"] = (0.4, 0.8, 0.0, 1.0)
     ca = ob.data.color_attributes.new("Col", "FLOAT_COLOR", "POINT"); ca.data.foreach_set("color", colr.ravel())
     mat = fin.make_material(paths)
     ob.data.materials.append(mat)

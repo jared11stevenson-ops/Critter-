@@ -8,7 +8,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); V2 = os.path.join(HERE, "..",
 sys.path.insert(0, os.path.join(HERE, "..", "..")); sys.path.insert(0, V2)
 from common import bpy_util as bu
 W2 = os.path.join(HERE, "..", "work", "v2"); W3 = os.path.join(HERE, "..", "work", "v3")
-TARGET = {"trunk": 3300, "armL": 800, "armR": 800, "legL": 1100, "legR": 1100}
+TARGET = {"trunk": 2900, "armL": 700, "armR": 700, "legL": 1100, "legR": 1100}
 CUT_Z = 1.874
 bpy.ops.wm.read_factory_settings(use_empty=True)
 hi = np.load(os.path.join(W2, "shells_hi.npz")); mf = np.load(os.path.join(W2, "mesh_fit.npz"), allow_pickle=True)
@@ -43,13 +43,20 @@ for pi in [i for i, p in enumerate(parts) if p.startswith("morrow")]:
     used = np.unique(t); remap = -np.ones(len(V), int); remap[used] = np.arange(len(used))
     ob = add("legacy_" + parts[pi], V[used], remap[t], "morrow")
     if len(t) > 120:
-        decimate(ob, int(len(t) * 0.62))
+        decimate(ob, int(len(t) * 0.45))
 # cards
 cd = np.load(os.path.join(W2, "cards.npz"))
 INV = {1: "mantle", 2: "fringe", 3: "leaf_olive", 4: "leaf_dark", 5: "tassel", 6: "cord"}
 for code in sorted(set(cd["kind"].tolist())):
+    if INV[code] in ("leaf_olive", "leaf_dark"): continue
     ft = cd["F"][cd["kind"] == code]; used = np.unique(ft); remap = -np.ones(len(cd["V"]), int); remap[used] = np.arange(len(used))
-    add("card_" + INV[code], cd["V"][used], remap[ft], "card", cd["s"][used])
+    ob = add("card_" + INV[code], cd["V"][used], remap[ft], "card", cd["s"][used])
+    if INV[code] == "mantle":
+        bu.set_active(ob); bpy.ops.object.mode_set(mode="EDIT"); bpy.ops.mesh.select_all(action="SELECT"); bpy.ops.mesh.subdivide(number_cuts=1); bpy.ops.object.mode_set(mode="OBJECT")
+        co = np.array([v.co[:] for v in ob.data.vertices]); import math
+        for i_, v in enumerate(ob.data.vertices):
+            x, y, z = co[i_]; v.co = (x, y + 0.016 * math.sin(26 * x + 7 * z) + 0.010 * math.sin(41 * x - 9 * z), z)
+        ob["sparam"] = np.interp(co[:, 2], [co[:, 2].min(), co[:, 2].max()], [1.0, 0.0]).tolist()
 # horns
 hd = np.load(os.path.join(W3, "horns3.npz"))
 for t in (0, 1):
@@ -58,7 +65,7 @@ for t in (0, 1):
     add("horn_" + "RL"[t], hd["V"][idx], remap[ft], "horn", hd["s"][idx])
 # head
 H = np.load(os.path.join(W3, "head_raw.npz"))
-for nm, kind, tgt in (("s", "skull", 2500), ("j", "jaw", 650), ("e", "eye", 90), ("t", "tongue", 160)):
+for nm, kind, tgt in (("s", "skull", 2300), ("j", "jaw", 650), ("e", "eye", 90), ("t", "tongue", 160)):
     ob = add("head_" + {"s": "skull", "j": "jaw", "e": "eye", "t": "tongue"}[nm], H["V" + nm], H["F" + nm], kind)
     bu.set_active(ob); bpy.ops.object.mode_set(mode="EDIT"); bpy.ops.mesh.select_all(action="SELECT"); bpy.ops.mesh.remove_doubles(threshold=1e-6); bpy.ops.object.mode_set(mode="OBJECT")
     if nm == "e":   # two eyes -> decimate each: split by loose parts
@@ -68,7 +75,11 @@ for nm, kind, tgt in (("s", "skull", 2500), ("j", "jaw", 650), ("e", "eye", 90),
             decimate(o, tgt)
     else:
         decimate(ob, tgt, 4 if nm in "sj" else 0)
-add("head_tine", H["Vtn"], H["Ftn"], "tine"); add("head_fringe", H["Vfr"], H["Ffr"], "fringe_head", H["Sfr"]); add("head_tooth_up", H["Vu"], H["Fu"], "tooth_up"); add("head_tooth_lo", H["Vl"], H["Fl"], "tooth_lo")
+add("head_tine", H["Vtn"], H["Ftn"], "tine"); add("head_tooth_up", H["Vu"], H["Fu"], "tooth_up"); add("head_tooth_lo", H["Vl"], H["Fl"], "tooth_lo")
+ex = np.load(os.path.join(W3, "extras.npz"))
+for i, nm in enumerate(ex["names"]):
+    ft = ex["F"][ex["tri_piece"] == i]; used = np.unique(ft); remap = -np.ones(len(ex["V"]), int); remap[used] = np.arange(len(used))
+    add(str(nm), ex["V"][used], remap[ft], str(ex["kinds"][i]), ex["sp"][used])
 Vs, Fs, KS, SPs = [], [], [], []; off = 0
 for ob in objs:
     me = ob.data

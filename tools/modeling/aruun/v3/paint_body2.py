@@ -196,8 +196,20 @@ def overlays(P, N, kind, col, hgt, rough):
     x, y, z = P[:, 0], P[:, 1], P[:, 2]
     front = smooth(-0.1, -0.45, N[:, 1])
     if kind == "trunk":
+        # cream bandage strap crossing from his left shoulder to the right hip (front), stitched
+        a = np.array([0.20, 1.66]); b_ = np.array([-0.16, 1.20]); ab = b_ - a
+        t = np.clip(((x - a[0]) * ab[0] + (z - a[1]) * ab[1]) / (ab @ ab), 0, 1); d = np.hypot(x - (a[0] + t * ab[0]), z - (a[1] + t * ab[1]))
+        m = smooth(0.034, 0.030, d) * front * smooth(0.0, 0.05, t) * smooth(1.0, 0.95, t)
+        col = mix(col, mix(CREAM, TAN, 0.25 + 0.3 * vnoise(P, 40, 5)), m[:, None] * 0.95)
+        col = mix(col, INK, line(d - 0.032, 0.0025) * front * 0.85); col = mix(col, TAN * 0.6, line(((t * 30) % 1.0) - 0.5, 0.06) * m * 0.5)
+        hgt = hgt + 0.7 * m
+        # red sash at the belt with a darker knot band
+        sa = smooth(1.115, 1.13, z) * smooth(1.215, 1.20, z)
+        col = mix(col, mix(WINE, RED, 0.35 + 0.3 * vnoise(P, 30, 6)), sa[:, None] * 0.95)
+        col = mix(col, INK, (line(z - 1.118, 0.002) + line(z - 1.212, 0.002)) * 0.85); hgt = hgt + 0.5 * sa
+    if kind == "trunk":
         # sternum plate, ink outlined, ribs
-        sd = np.maximum(np.abs(x) - 0.075 - 0.02 * smooth(1.45, 1.3, z), np.maximum(z - 1.66, 1.30 - z))
+        sd = np.maximum(np.abs(x) - 0.045 - 0.02 * smooth(1.45, 1.3, z), np.maximum(z - 1.60, 1.30 - z))
         sd = np.where(front > 0.3, sd, 1.0)
         m = smooth(0.0007, -0.0007, sd)
         col = mix(col, mix(TAN, CREAM, 0.55) * (0.8 + 0.3 * smooth(0, -0.06, sd)[:, None]), m[:, None] * 1.0)

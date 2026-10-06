@@ -6,41 +6,44 @@ HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, os.path.jo
 from common.texbake import smooth, mix, hash1, vnoise, worley
 from paint_head import DARK, PLUM, RED, REDHI, REDDK, CREAM, TAN, BONE, OLIVE, NAVY, NECK, line
 
-OCHRE = np.array([222, 168, 92.]); CHITIN = np.array([40, 31, 42.]); WINE = np.array([140, 40, 38.]); BROWN = np.array([86, 66, 54.])
+OCHRE = np.array([222, 168, 92.]); CHITIN = np.array([40, 31, 42.]); WINE = np.array([140, 40, 38.]); BROWN = np.array([86, 66, 54.]); NAVYC = np.array([54, 46, 72.]); ORANGEC = np.array([204, 98, 46.])
 SH = {"L": np.array([0.235, -0.06, 1.625]), "R": np.array([-0.225, -0.06, 1.665])}
 
 
 def zones(P, N, kind):
-    """(red, bone) probabilities per texel + cell size choice"""
+    """(red, bone, orange) probabilities per texel. Sheet balance: ~65% near-black navy chitin, red only on pauldrons/vambraces/back blades,
+    tan plates on abdomen/knees/hamstrings/sabatons, orange mottling on the shins."""
     x, y, z = P[:, 0], P[:, 1], P[:, 2]; ax = np.abs(x)
     front = smooth(-0.15, -0.5, N[:, 1]); back = smooth(0.15, 0.5, N[:, 1])
-    pr = np.full(len(P), 0.12); pb = np.full(len(P), 0.10)
+    pr = np.full(len(P), 0.05); pb = np.full(len(P), 0.06); po = np.zeros(len(P))
     if kind == "trunk":
-        pr = 0.10 + 0.35 * back * smooth(1.28, 1.45, z) + 0.12 * front * smooth(1.55, 1.7, z)
-        pb = 0.12 + 0.5 * front * smooth(1.25, 1.4, z) * smooth(1.72, 1.6, z) + 0.28 * back * smooth(1.15, 1.35, z)
+        pr = 0.03 + 0.17 * back * smooth(1.3, 1.5, z)
+        pb = 0.05 + 0.34 * front * smooth(1.22, 1.36, z) * smooth(1.72, 1.6, z) + 0.16 * back * smooth(1.2, 1.4, z)
     elif kind in ("armL", "armR"):
-        up = smooth(1.25, 1.4, z); fore = smooth(1.28, 1.15, z) * smooth(0.88, 1.0, z)
-        pr = 0.15 + 0.45 * up + 0.65 * fore; pb = 0.08 + 0.12 * fore + 0.1 * up
-        hand = smooth(0.95, 0.88, z); pr = pr * (1 - hand) + 0.05 * hand; pb = pb * (1 - hand) + 0.35 * hand
+        up = smooth(1.3, 1.45, z); fore = smooth(1.28, 1.15, z) * smooth(0.88, 1.0, z); hand = smooth(0.95, 0.88, z)
+        pr = 0.05 + 0.18 * up + 0.62 * fore; pb = 0.06 + 0.10 * fore
+        pr = pr * (1 - hand) + 0.02 * hand; pb = pb * (1 - hand) + 0.30 * hand
     elif kind in ("legL", "legR"):
-        thigh = smooth(0.58, 0.72, z); knee = smooth(0.42, 0.52, z) * smooth(0.72, 0.62, z); foot = smooth(0.28, 0.18, z)
-        pb = 0.12 + 0.52 * thigh * (1 - knee) + 0.25 * foot; pr = 0.12 + 0.8 * knee + 0.15 * thigh + 0.2 * (1 - foot) * (1 - thigh) * (1 - knee)
-    return pr, pb
+        thigh = smooth(0.62, 0.74, z); knee = smooth(0.42, 0.50, z) * smooth(0.70, 0.60, z); shin = smooth(0.50, 0.40, z) * smooth(0.22, 0.30, z); foot = smooth(0.28, 0.18, z)
+        pb = 0.05 + 0.12 * thigh + 0.55 * knee + 0.40 * foot + 0.12 * back * (1 - knee) * (1 - foot)
+        pr = 0.04 + 0.10 * knee; po = 0.42 * shin + 0.05 * thigh
+    return pr, pb, po
 
 
 def paint_plated(P, N, kind, seed=0):
     """Plate patchwork: elongated Worley cells (plates) coloured by anatomical zone, thick ink outlines, shaded domes,
     big ochre spots on red plates. Large, calm, deliberate shapes (no speckle)."""
-    n = len(P); pr, pb = zones(P, N, kind)
+    n = len(P); pr, pb, po = zones(P, N, kind)
     L = 0.115 if kind == "trunk" else 0.095
     Pz = P * np.array([1.0, 1.0, 0.62])                       # plates elongated along the limb/trunk axis
     f1, f2, cid, cen = worley(Pz, L * 0.8, seed=seed + 7, jitter=0.9)
     u = hash1(cid, 3 + seed); edge = (f2 - f1) / 0.62 * 0.62
-    cls = np.where(u < pr, 0, np.where(u < pr + pb, 1, 2))     # 0 red 1 bone 2 dark
+    cls = np.where(u < pr, 0, np.where(u < pr + pb, 1, np.where(u < pr + pb + po, 3, 2)))     # 0 red 1 bone 2 dark 3 orange
     t1 = hash1(cid, 11)[:, None]; t2 = hash1(cid, 13)[:, None]; t3 = hash1(cid, 17)[:, None]
     col = np.where((cls == 0)[:, None], WINE[None] * (1 - t1) + RED[None] * t1, 0.0)
     col = np.where((cls == 1)[:, None], TAN[None] * (1 - t2) + CREAM[None] * t2, col)
-    col = np.where((cls == 2)[:, None], CHITIN[None] * (1 - t3) + PLUM[None] * t3 * 0.9, col)
+    col = np.where((cls == 2)[:, None], CHITIN[None] * (1 - t3) + NAVYC[None] * t3, col)
+    col = np.where((cls == 3)[:, None], WINE[None] * (1 - t2) + ORANGEC[None] * t2, col)
     rr = np.clip(f1 / (0.7 * L * 0.8), 0, 1)
     shade = 1.14 - 0.38 * rr ** 1.5 + 0.10 * N[:, 2]
     col = col * shade[:, None]
@@ -117,19 +120,50 @@ def paint_horn(sp, P, N):
 
 def paint_card(name, sp, P, N):
     n = len(P); t = sp
+    GREY = np.array([78, 72, 60.]); OLV = np.array([126, 116, 62.]); NAV = np.array([46, 40, 52.])
     if name == "card_mantle":
-        col = mix(BROWN * 0.75, np.array([62, 52, 50.]), vnoise(P, 22, 31)); col = mix(col, CREAM * 0.8, smooth(0.93, 0.99, t))
-        col = mix(col, DARK * 0.8, line(t - 0.9, 0.012) * 0.8)
+        col = mix(GREY, np.array([62, 54, 56.]), vnoise(P, 22, 31)); col = mix(col, OLV * 0.8, smooth(0.62, 0.8, vnoise(P, 28, 32)) * 0.5)
+        col = mix(col, CREAM * 0.85, smooth(0.93, 0.985, t)); col = mix(col, DARK * 0.8, line(t - 0.915, 0.010) * 0.85)
         return col, np.full(n, 0.8)
-    if name == "card_fringe":
-        col = mix(CREAM, TAN, t * 0.6); col = mix(col, OLIVE, smooth(0.7, 1.0, t) * 0.5); return col, np.full(n, 0.8)
-    if name == "card_leaf_olive":
-        col = mix(OLIVE * 1.1, OLIVE * 0.7, t) ; col = mix(col, np.array([150, 130, 80.]), smooth(0.2, 0.0, t) * 0.4); return col, np.full(n, 0.75)
+    if name == "card_fringe":      # ragged cloak tails: dark olive-grey, pale drips at the tips
+        col = mix(GREY * 1.05, OLV * 0.75, smooth(0.2, 0.7, t) * 0.5); col = mix(col, CREAM * 0.85, smooth(0.68, 0.95, t) * 0.9)
+        col = mix(col, DARK * 0.8, line(t - 0.66, 0.012) * 0.6); return col, np.full(n, 0.8)
+    if name == "card_leaf_olive":  # olive leaf panels, dark ragged tips, pale mid-vein glow
+        col = mix(OLV * 1.05, OLV * 0.8, vnoise(P, 30, 33)); col = mix(col, np.array([170, 156, 92.]), smooth(0.35, 0.0, t) * 0.5)
+        col = mix(col, NAV, smooth(0.62, 0.86, t + 0.12 * (vnoise(P, 60, 34) - 0.5)) * 0.95); return col, np.full(n, 0.75)
     if name == "card_leaf_dark":
-        return mix(np.array([76, 66, 44.]), np.array([46, 40, 36.]), t), np.full(n, 0.75)
+        col = mix(NAV * 1.1, OLV * 0.7, smooth(0.3, 0.0, t) * 0.7); col = mix(col, DARK, smooth(0.6, 0.9, t) * 0.5); return col, np.full(n, 0.75)
     if name == "card_tassel":
-        col = mix(CREAM, TAN, t * 0.5); col = mix(col, OCHRE, smooth(0.78, 0.95, t)); return col, np.full(n, 0.8)
+        col = mix(CREAM * 0.95, TAN, t * 0.4 + 0.2 * vnoise(P, 50, 35)); col = mix(col, WINE, smooth(0.82, 0.96, t) * 0.8)
+        col = mix(col, DARK * 0.7, (hash1(np.floor(P[:, 0] * 90).astype(np.int64), 6) > 0.93) * 0.6); return col, np.full(n, 0.8)
     return np.tile(TAN, (n, 1)), np.full(n, 0.8)
+
+
+def paint_mane(sp):
+    n = len(sp); var = np.floor(sp / 2.0 + 1e-4); t = sp - 2.0 * var
+    base = np.tile(np.array([226, 206, 158.]), (n, 1))
+    base = np.where((var == 1)[:, None], np.array([228, 204, 112.]), base)
+    base = np.where((var == 2)[:, None], np.array([122, 114, 62.]), base)
+    base = base * (0.55 + 0.5 * smooth(0.0, 0.7, t))[:, None]
+    base = mix(base, np.array([240, 228, 190.]), smooth(0.8, 1.0, t) * 0.4 * (var != 2))
+    return base, np.full(n, 0.6)
+
+
+def paint_claw(sp, P):
+    n = len(P); t = sp
+    col = mix(np.array([54, 44, 46.]), np.array([196, 168, 124.]), smooth(0.05, 0.5, t)); col = mix(col, np.array([232, 214, 172.]), smooth(0.7, 1.0, t))
+    return col, np.full(n, 0.45)
+
+
+def paint_trinket(name, sp, P, N):
+    n = len(P)
+    if name == "buckle_ring": return mix(CREAM * 0.97, TAN, 0.3 * vnoise(P, 50, 8)), np.full(n, 0.55), np.zeros((n, 3))
+    if name == "medallion":
+        c = P.mean(0); d = np.linalg.norm((P - c) * np.array([1, 3, 1]), axis=1)
+        col = mix(np.array([200, 176, 128.]), OCHRE, smooth(0.01, 0.03, d)); col = mix(col, DARK * 0.7, smooth(0.012, 0.006, d) * 0.9)
+        return col, np.full(n, 0.35), np.zeros((n, 3))
+    if name.startswith("bead"): return np.tile(np.array([176, 40, 38.]), (n, 1)), np.full(n, 0.4), np.zeros((n, 3))
+    return np.tile(TAN * 1.05, (n, 1)), np.full(n, 0.5), np.zeros((n, 3))
 
 
 def paint_morrow(name, P, N):

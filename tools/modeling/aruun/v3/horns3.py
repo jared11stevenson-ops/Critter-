@@ -8,7 +8,8 @@ HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, os.path.jo
 import horns as H
 import importlib
 WORK = os.path.join(HERE, "..", "work", "v3")
-ANCHOR = {"R": (0.040, -0.024, 2.11), "L": (0.130, -0.024, 2.11)}
+_H = np.load(os.path.join(WORK, "head_raw.npz")); _O, _SC = _H["origin"], float(_H["scale"])
+ANCHOR = {"R": tuple(_O + _SC * np.array([-0.05, 0.03, 0.065])), "L": tuple(_O + _SC * np.array([0.05, 0.03, 0.065]))}
 RAD = {"R": (0.036, 0.014), "L": (0.034, 0.013)}
 
 
@@ -22,8 +23,8 @@ def main():
         b = np.array(H.BACK[name], float); s = np.array(H.SIDE[name], float)
         xb = -(b[:, 0] - bv.u0) / bv.ppm; zb = (bv.v0 - b[:, 1]) / bv.ppm
         ys = -(s[:, 0] - sv.u0) / sv.ppm; zs = (sv.v0 - s[:, 1]) / sv.ppm
-        cb = H.arclen_resample(H.catmull(np.stack([xb, zb], 1)), 40)
-        cs = H.arclen_resample(H.catmull(np.stack([ys, zs], 1)), 40)
+        cb = H.arclen_resample(H.catmull(np.stack([xb, zb], 1)), 34)
+        cs = H.arclen_resample(H.catmull(np.stack([ys, zs], 1)), 34)
         C = np.stack([cb[:, 0], cs[:, 0], 0.5 * (cb[:, 1] + cs[:, 1])], 1)
         t = np.linspace(0, 1, len(C))
         C = C + (np.array(ANCHOR[name]) - C[0]) * ((1 - t) ** 1.5)[:, None]
@@ -34,7 +35,7 @@ def main():
         rad[-3:] *= np.array([1.0, 0.9, 0.8])          # blunt notched tip
         V, F, S = H.tube(C, rad, 8)
         add(V, F, k, S)
-        for si, (sv_, ln) in enumerate(((0.22, 0.085), (0.45, 0.10), (0.68, 0.075), (0.88, 0.05))):
+        for si, (sv_, ln) in enumerate(((0.22, 0.085), (0.45, 0.10), (0.68, 0.075))):
             i = int(sv_ * (len(C) - 1)); tg = C[min(i + 1, len(C) - 1)] - C[i - 1]; tg /= np.linalg.norm(tg)
             side = np.cross(tg, [0, 0, 1.0]); side /= np.linalg.norm(side)
             dirn = side * (1 if (si + k) % 2 == 0 else -1) * 0.75 + tg * 0.45 + np.array([0, 0, 0.35]); dirn /= np.linalg.norm(dirn)

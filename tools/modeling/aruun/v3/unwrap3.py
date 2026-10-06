@@ -10,8 +10,8 @@ V, T, fk, sp = d["V"].astype(np.float32), d["T"].astype(np.int64), d["facekinds"
 kind = np.array([str(k).split("|")[1] for k in fk])
 GROUPS = {"body": (("trunk", "armL", "armR", "legL", "legR"), 1152, (0, 0)),
           "head": (("skull", "jaw", "tooth_up", "tooth_lo", "tongue", "tine", "fringe_head"), 768, (1152, 0)),
-          "horn": (("horn",), 768, (1152, 896)),
-          "gear": (("morrow", "card"), 896, (0, 1152))}
+          "horn": (("horn", "mane", "claw", "trinket"), 768, (1152, 896)),
+          "gear": (("morrow", "card", "leaf"), 896, (0, 1152))}
 S = 2048.0
 outV, outT, outUV, outK, outSP, outG = [], [], [], [], [], []; off = 0
 for g, (kinds, res, (ox, oy)) in GROUPS.items():

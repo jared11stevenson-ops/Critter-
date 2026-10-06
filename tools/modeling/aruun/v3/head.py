@@ -14,7 +14,7 @@ WORK = os.path.join(HERE, "..", "work", "v3"); os.makedirs(WORK, exist_ok=True)
 
 # world placement of the head-local origin
 ORIGIN = np.array([0.085, -0.050, 2.045])
-SCALE = 1.18          # head is exaggerated a touch for phone readability
+SCALE = 1.30          # head is exaggerated a touch for phone readability
 
 
 def W(p):
@@ -156,7 +156,7 @@ def main():
     import cards as C
     tines = []
     for sg in (-1, 1):
-        for (f0, z0, dx, df, dz, ln) in ((-0.020, 0.012, 0.050, -0.030, 0.055, 0.075), (-0.045, 0.030, 0.035, -0.055, 0.065, 0.06)):
+        for (f0, z0, dx, df, dz, ln) in ((-0.020, 0.012, 0.030, -0.025, 0.035, 0.050), (-0.045, 0.030, 0.022, -0.035, 0.040, 0.040)):
             base = W((sg * 0.074, f0, z0)); tip = W((sg * (0.074 + dx), f0 + df, z0 + dz))
             tines.append(cone_mesh(base, tip, 0.0125 if ln > 0.07 else 0.010, 5))
     Vtn, Ftn = merge(tines)
