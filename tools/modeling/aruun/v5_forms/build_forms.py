@@ -81,11 +81,9 @@ def horns(parts, keep):
     knob('hornB_knob1', (0.095, 2.19, 0.100), (0.027, 0.014, 0.023))
     knob('hornB_knob2', (0.185, 2.32, 0.190), (0.022, 0.013, 0.019))
     # cream tines at the knobs (short bone spurs) and the long TEMPLE TINES at the sides of the head (back view: left long, right short)
-    add.append(nm(tube('hornA_tine', [(0.000, 2.20, 0.020), (-0.02, 2.215, 0.060)], [(0.012, 0.012), (0.004, 0.004)], hint=LF), 'hornA_tine'))
-    add.append(nm(tube('hornB_tine', [(0.095, 2.19, 0.105), (0.115, 2.20, 0.150)], [(0.011, 0.011), (0.004, 0.004)], hint=LF), 'hornB_tine'))
-    add.append(nm(tube('temple_tine_L', [(0.000, 2.100, HL + 0.07), (-0.015, 2.108, HL + 0.15), (-0.035, 2.112, HL + 0.235)],
+    add.append(nm(tube('temple_tine_L', [(0.000, 2.095, HL + 0.07), (-0.015, 2.100, HL + 0.115), (-0.035, 2.103, HL + 0.155)],
                        [(0.014, 0.010), (0.011, 0.008), (0.004, 0.004)], hint=UP), 'temple_tine_L'))
-    add.append(nm(tube('temple_tine_R', [(0.000, 2.100, HL - 0.07), (0.010, 2.108, HL - 0.12), (0.020, 2.112, HL - 0.168)],
+    add.append(nm(tube('temple_tine_R', [(0.000, 2.095, HL - 0.07), (0.010, 2.100, HL - 0.12), (0.020, 2.103, HL - 0.168)],
                        [(0.012, 0.009), (0.010, 0.007), (0.004, 0.004)], hint=UP), 'temple_tine_R'))
     parts.extend(add)
 
@@ -107,6 +105,7 @@ def main():
     mat = bpy.data.materials.new('clay'); mat.diffuse_color = (0.55, 0.55, 0.55, 1)
     for o in bpy.data.objects:
         o.data.materials.clear(); o.data.materials.append(mat)
+    bpy.context.preferences.filepaths.save_version = 0       # no .blend1 backups
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT, 'forms.blend'))
     bpy.ops.object.select_all(action='SELECT')
     bpy.ops.export_scene.gltf(filepath=os.path.join(OUT, 'forms.glb'), export_format='GLB', use_selection=True)
