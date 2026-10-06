@@ -1,0 +1,56 @@
+{
+ "side": {
+  "horn_zone_2.0-2.4": {
+   "iou": 0.853,
+   "ref_only_px": 11351,
+   "model_only_px": 15180
+  },
+  "horns_only_2.14-2.4": {
+   "iou": 0.775,
+   "ref_only_px": 10272,
+   "model_only_px": 10585
+  },
+  "head_1.75-2.0": {
+   "iou": 0.858,
+   "ref_only_px": 6276,
+   "model_only_px": 10598
+  },
+  "head+horns_1.75-2.4": {
+   "iou": 0.855,
+   "ref_only_px": 17619,
+   "model_only_px": 25735
+  },
+  "whole": {
+   "iou": 0.898,
+   "ref_only_px": 53375,
+   "model_only_px": 123787
+  }
+ },
+ "back": {
+  "horn_zone_2.0-2.4": {
+   "iou": 0.833,
+   "ref_only_px": 11586,
+   "model_only_px": 18314
+  },
+  "horns_only_2.14-2.4": {
+   "iou": 0.769,
+   "ref_only_px": 10272,
+   "model_only_px": 11353
+  },
+  "head_1.75-2.0": {
+   "iou": 0.881,
+   "ref_only_px": 9558,
+   "model_only_px": 8061
+  },
+  "head+horns_1.75-2.4": {
+   "iou": 0.854,
+   "ref_only_px": 21142,
+   "model_only_px": 26372
+  },
+  "whole": {
+   "iou": 0.894,
+   "ref_only_px": 143793,
+   "model_only_px": 179270
+  }
+ }
+}

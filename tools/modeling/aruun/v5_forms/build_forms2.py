@@ -24,6 +24,7 @@ def build():
     if os.environ.get('LEGS_E', '1') == '1': legs_e(parts)
     import cloth_f
     if os.environ.get('MANTLE_F', '1') == '1': cloth_f.mantle(parts)
+    if os.environ.get('CHEST_F', '1') == '1': cloth_f.chest_belt(parts)
     import limbs_e
     if os.environ.get('HANDS_E', '1') == '1': limbs_e.hands(parts)
     if os.environ.get('FEET_E', '1') == '1': limbs_e.feet(parts)
