@@ -3,6 +3,7 @@ from mathutils import Vector
 import head6 as H
 from head6 import HL, B
 NAMES = []
+import re
 def reg(ob, name): ob.name = name; ob.data.name = name; NAMES.append(name); return ob
 C0 = Vector(B(0.03, 2.06, HL))
 def surf_dir(bvh, d):
@@ -46,3 +47,24 @@ def build(STEP):
             q = bvh.ray_cast(Vector(B(0.22, 2.087, HL + s * 0.013)), Vector((0, 1, 0)))
             if q[0] is not None:
                 nos = H.ell('nostril_' + ('L' if s > 0 else 'R'), q[0] + q[1] * -0.001, (0.0055, 0.004, 0.005)); orient(nos, q[1]); reg(nos, nos.name)
+    if STEP >= 4:
+        for s, n in ((1, 'L'), (-1, 'R')):
+            reg(H.plate('cheek_' + n, [(0.020, 2.060), (0.055, 2.067), (0.100, 2.053), (0.106, 2.040), (0.072, 2.018), (0.030, 2.000), (0.012, 2.022)], bvh, 'L', s, 0.004, 0.010), 'cheek_' + n)
+            reg(H.plate('cheek2_' + n, [(0.112, 2.066), (0.150, 2.080), (0.166, 2.082), (0.152, 2.062), (0.116, 2.050)], bvh, 'L', s, 0.003, 0.008), 'cheek2_' + n)
+        cr = []
+        for i, (f0, f1, w0, w1, off) in enumerate(((0.050, 0.098, 0.034, 0.048, 0.003), (0.002, 0.056, 0.050, 0.064, 0.007), (-0.048, 0.008, 0.060, 0.072, 0.011))):
+            pg = [(f1, -w0), (f1, w0), (f0, w1), (f0, -w1)]
+            cr.append(H.plate('crown_plate%d' % (i + 1), pg, bvh, 'U', 1, off, 0.007, cuts=3))
+        for c in cr: c.select_set(False)
+        reg(cr[0], 'crown_plates'); 
+        for c in cr[1:]: reg(c, 'crown_plates_%s' % c.name[-1])
+        reg(H.tube('temple_tine_L', [B(0.002, 2.088, HL + 0.080), B(-0.020, 2.094, HL + 0.110), B(-0.052, 2.094, HL + 0.150), B(-0.075, 2.082, HL + 0.158)],
+                   [(0.022, 0.015), (0.017, 0.013), (0.012, 0.010), (0.003, 0.003)]), 'temple_tine_L')
+        reg(H.tube('temple_tine_R', [B(0.002, 2.095, HL - 0.080), B(0.010, 2.110, HL - 0.112), B(0.020, 2.124, HL - 0.148), B(0.030, 2.136, HL - 0.180)],
+                   [(0.018, 0.013), (0.014, 0.011), (0.010, 0.008), (0.003, 0.003)]), 'temple_tine_R')
+        reg(H.tube('nape_fringe_L', [B(-0.040, 2.000, HL + 0.070), B(-0.044, 1.992, HL + 0.105), B(-0.046, 1.980, HL + 0.140), B(-0.046, 1.966, HL + 0.122)],
+                   [(0.020, 0.012), (0.018, 0.011), (0.014, 0.009), (0.004, 0.004)]), 'nape_fringe_L')
+        reg(H.tube('nape_fringe_C', [B(-0.060, 2.020, HL), B(-0.085, 2.025, HL), B(-0.105, 2.026, HL), B(-0.124, 2.020, HL)],
+                   [(0.030, 0.016), (0.022, 0.012), (0.014, 0.008), (0.004, 0.004)], up=(1, 0, 0)), 'nape_fringe_C')
+        reg(H.tube('horn_cup_A', [B(-0.034, 2.098, HL - 0.080), B(-0.044, 2.112, HL - 0.122)], [(0.034, 0.030), (0.024, 0.022)], nring=14), 'horn_cup_A')
+        reg(H.tube('horn_cup_B', [B(0.096, 2.100, HL + 0.034), B(0.108, 2.126, HL + 0.046)], [(0.030, 0.026), (0.022, 0.020)], nring=14), 'horn_cup_B')
