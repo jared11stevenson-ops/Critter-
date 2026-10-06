@@ -28,6 +28,19 @@ uniform float accent_mix = 0.4;       // how much of the baked emissive hue is r
 uniform float alpha_cut = 0.0;          // >0: leaf-cut membrane
 // per-vertex control (glb COLOR_0, authored by tools/modeling): r = outline width scale, g = rim scale, b = shade-floor boost (faces).
 varying vec4 vcol;
+// painted-lookdev extras (character_pop_toon.gdshader; zone_grade 0 keeps the legacy look for other characters)
+uniform float zone_grade = 0.0;
+uniform float ao_strength = 0.55;       // orm.r baked occlusion
+uniform float edge_dark = 0.32;         // painted edge darkening (down-facing silhouettes)
+uniform vec4 shade_red : source_color = vec4(0.40, 0.11, 0.20, 1.0);    // shadow tint per material zone
+uniform vec4 shade_black : source_color = vec4(0.62, 0.44, 0.40, 1.0);
+uniform vec4 shade_bone : source_color = vec4(0.66, 0.50, 0.52, 1.0);
+uniform vec4 shade_cloth : source_color = vec4(0.50, 0.46, 0.40, 1.0);
+uniform float gloss_red = 0.26;         // roughness of the lacquered carapace discs
+uniform float rough_black = 0.58;
+uniform float rough_bone = 0.78;
+uniform float rough_cloth = 0.9;
+
 // gameplay feedback (driven by CharacterModel)
 uniform vec4 highlight_color : source_color = vec4(0.4, 0.9, 1.0, 1.0);
 uniform float highlight = 0.0;
@@ -41,16 +54,43 @@ vec3 pop_grade(vec3 c, float s, float v) {
 	return clamp(c * v, 0.0, 1.0);
 }
 
+// zone masks from the sheet albedo: red lacquer / near-black chitin / bone / cloth+leather
+vec4 pop_zones(vec3 c) {
+	float l = dot(c, vec3(0.299, 0.587, 0.114));
+	float rd = smoothstep(0.30, 0.62, (c.r - c.g) / (c.r + 0.03)) * smoothstep(0.10, 0.26, c.r);
+	float bk = (1.0 - smoothstep(0.11, 0.26, l)) * (1.0 - rd);
+	float bn = smoothstep(0.42, 0.66, l) * (1.0 - rd);
+	float cl = clamp(1.0 - rd - bk - bn, 0.0, 1.0);
+	return vec4(rd, bk, bn, cl);
+}
+
 void pop_fragment(vec2 uv, vec3 nrm, vec3 view, out vec3 albedo, out float rough, out float metal, out vec3 emis, out vec3 nmap, out float alpha) {
 	vec4 a = texture(albedo_tex, uv) * albedo_tint;
 	alpha = a.a;
 	albedo = pop_grade(a.rgb, sat_lift, val_lift);
 	rough = rough_base;
 	metal = metal_base;
+	float occl = 1.0;
 	if (use_orm > 0.5) {
 		vec3 o = texture(orm_tex, uv).rgb;
 		rough = clamp(o.g * (rough_base / 0.7), 0.05, 1.0);
 		metal = o.b;
+		occl = o.r;
+	}
+	vec4 zn = vec4(0.0);
+	if (zone_grade > 0.5) {
+		zn = pop_zones(a.rgb);
+		// chitin: the sheet's near-black is warm brown-black, not navy; keep it dark but legible
+		float l0 = dot(albedo, vec3(0.299, 0.587, 0.114));
+		vec3 warm_black = vec3(l0 * 1.30 + 0.040, l0 * 0.74 + 0.016, l0 * 0.44 + 0.010);   // pre-compensates the cool sky ambient
+		albedo = mix(albedo, warm_black, zn.y);
+		// lacquer: deeper oxblood, a touch more chroma
+		albedo = mix(albedo, albedo * vec3(0.98, 0.62, 0.70), zn.x);
+		// bone: warm cream
+		albedo = mix(albedo, albedo * vec3(1.04, 0.97, 0.88), zn.z);
+		rough = zn.x * gloss_red + zn.y * rough_black + zn.z * rough_bone + zn.w * rough_cloth;
+		metal = 0.0;
+		albedo *= mix(1.0, clamp(occl * 1.15, 0.0, 1.0), ao_strength);
 	}
 	nmap = vec3(0.5, 0.5, 1.0);
 	if (use_normal > 0.5) {
@@ -58,7 +98,14 @@ void pop_fragment(vec2 uv, vec3 nrm, vec3 view, out vec3 albedo, out float rough
 	}
 	float ndv = clamp(dot(nrm, view), 0.0, 1.0);
 	float f = pow(1.0 - ndv, rim_power);
-	emis = albedo * shadow_floor * (1.0 + vcol.b * 2.2) + rim_color.rgb * f * rim_strength * vcol.g;
+	float rim_up = 1.0;
+	if (zone_grade > 0.5) {
+		// teal rim only on the upper / outer edges (what a back light would catch); the underside gets painted edge darkening
+		rim_up = smoothstep(-0.35, 0.35, nrm.y);
+		float dk = pow(1.0 - ndv, 2.0) * edge_dark * (1.0 - rim_up);
+		albedo *= 1.0 - dk;
+	}
+	emis = albedo * shadow_floor * (1.0 + vcol.b * 2.2) + rim_color.rgb * f * rim_strength * vcol.g * rim_up;
 	if (use_emis > 0.5) {
 		vec3 e = texture(emis_tex, uv).rgb;
 		float m = max(e.r, max(e.g, e.b));
