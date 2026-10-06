@@ -1,0 +1,11 @@
+{
+ "file": "details/aruun_mace_states_x4.png",
+ "view": "mace Morrow states (retracted / extended / floating)",
+ "sources": [
+  "design/reference_packs/aruun/details/aruun_panel_mace_states.png"
+ ],
+ "method": "Real-ESRGAN anime-6B x4 of original panel on cream; no diffusion",
+ "seed": null,
+ "generated_fraction": 0.0,
+ "legend": "whole image = original paint upscaled (green); nothing generated"
+}

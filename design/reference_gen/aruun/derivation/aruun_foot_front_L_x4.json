@@ -1,0 +1,11 @@
+{
+ "file": "details/aruun_foot_front_L_x4.png",
+ "view": "foot front (L) with claws",
+ "sources": [
+  "design/reference_packs/aruun/details/aruun_panel_foot_front_L.png"
+ ],
+ "method": "Real-ESRGAN anime-6B x4 of original panel on cream; no diffusion",
+ "seed": null,
+ "generated_fraction": 0.0,
+ "legend": "whole image = original paint upscaled (green); nothing generated"
+}
