@@ -6,3 +6,7 @@
 ## Gate 1 decision (2026-10-06)
 Creator approved treating the proxy as a CONDITIONAL PASS (measured: IoU side 0.876 / back 0.884; all measured proportions within ~1-3 cm; inspectors 19-20/25, 17/20, 8-9/15 with +-4 noise) and approved moving to Gate 2 (primary forms) CONDITIONAL on the new design-locked reference views looking good.
 LOCKED_BASELINE_02 (design/model_sheets/aruun/fidelity/proxy/LOCKED_BASELINE_02/) is the Gate 1 baseline. Gate 2 rule: every added form is measured against the reference; any form that lowers side/back IoU by >0.005 or worsens a measured region is rolled back.
+
+## Creator approval (2026-10-06): the v2 reference views (design/reference_gen/aruun/v2/) approved as modeling references with these limits:
+side/back (completed) and the two faces are AUTHORITATIVE; the true front and the 3/4 views are layout/color-blocking aids only (88% / 80%+ inferred): never take measurements from them.
+Gate 2 (primary forms) started.
