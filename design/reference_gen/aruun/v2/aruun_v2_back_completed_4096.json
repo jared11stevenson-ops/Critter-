@@ -1,0 +1,45 @@
+{
+ "view": "back",
+ "camera": "orthographic, camera behind him looking +Z (yaw 180); image-right = his RIGHT (mantle side)",
+ "x_offset_px": 100,
+ "axis_x_px": 759.0,
+ "sources": [
+  "design/reference_packs/aruun/ortho/aruun_back_4096.png"
+ ],
+ "completions": [
+  {
+   "edge": "L",
+   "rows": [
+    2394,
+    2427
+   ],
+   "extend_px": 12,
+   "taper": 0.85,
+   "what": "his-left arm forearm/guard clipped at the left cut edge"
+  },
+  {
+   "edge": "R",
+   "rows": [
+    2953,
+    2976
+   ],
+   "extend_px": 40,
+   "taper": 0.5,
+   "what": "right-edge strips / cream tassel tip clipped"
+  }
+ ],
+ "regions": "green = original; yellow = edge extensions only",
+ "percent_of_painted_pixels": {
+  "green": 99.96,
+  "yellow": 0.04,
+  "red": 0.0
+ },
+ "legend": "GREEN=original sheet pixels, YELLOW=inferred/completed/warped from other views, RED=unknown (nearest-neighbour fill)",
+ "canvas": {
+  "width_px": 1659,
+  "height_px": 4096,
+  "px_per_m": 1626.6666666666667,
+  "ground_row": 4000,
+  "note": "same scale/ground row as reference_packs/aruun/ortho; x_offset_px = columns added at the left of the original cut (axis_x_px shifts by the same amount)"
+ }
+}
