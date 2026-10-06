@@ -38,3 +38,11 @@ def build(STEP):
                 if r[0] is None: continue
                 P.append(r[0] + r[1] * 0.002)
             reg(H.tube('brow_' + n, P, [(0.006, 0.008), (0.009, 0.011), (0.010, 0.012), (0.009, 0.011), (0.007, 0.008), (0.004, 0.005)], up=(0, 0, 1)), 'brow_' + n)
+    if STEP >= 3:
+        mj = reg(H.mandible_loft(), 'mandible')
+        p, nr = surf_dir(bvh, (0, -0.96, 0.22))
+        pad = H.ell('nose_pad', p + nr * -0.004, (0.016, 0.019, 0.013)); orient(pad, nr); reg(pad, 'nose_pad')
+        for s in (1, -1):
+            q = bvh.ray_cast(Vector(B(0.22, 2.087, HL + s * 0.013)), Vector((0, 1, 0)))
+            if q[0] is not None:
+                nos = H.ell('nostril_' + ('L' if s > 0 else 'R'), q[0] + q[1] * -0.001, (0.0055, 0.004, 0.005)); orient(nos, q[1]); reg(nos, nos.name)

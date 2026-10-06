@@ -22,7 +22,7 @@ tc = cam.constraints.new('TRACK_TO'); tc.target = tgt; tc.track_axis = 'TRACK_NE
 sun_d = bpy.data.lights.new('sun', 'SUN'); sun_d.energy = 3.0; sun = bpy.data.objects.new('sun', sun_d); sc.collection.objects.link(sun)
 dirs = {'front': (0, -1, 0.0), 'side': (-1, 0, 0.0), 'q34': (0.62, -0.78, 0.15), 'back': (0, 1, 0.0)}
 import colorsys
-KEEP = ('skull','mandible','eye_','brow_','cheek_','crown_','temple_','nose_','horn_cup','neck')
+KEEP = ('nostril','skull','mandible','eye_','brow_','cheek_','crown_','temple_','nose_','horn_cup','neck')
 if ONLY:
     for o in list(bpy.data.objects):
         if o.type == 'MESH' and not o.name.startswith(KEEP): o.hide_render = True
