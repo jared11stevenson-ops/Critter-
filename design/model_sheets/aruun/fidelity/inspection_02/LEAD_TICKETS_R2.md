@@ -1,0 +1,10 @@
+# Lead correction tickets, round 2 (fix ONLY these three; everything else bit-identical)
+Round-2 inspector scores (proxy stage): Silhouette 20/25, Proportions 17/20, Head-Neck-Horns 9/15 (round 1: 19 / 15.5 / 7). G1 still FAIL (needs 22.5 / 18 / 13.5).
+REGRESSION NOTE (Lead): round 1 over-thinned the horns. compare.py now reports horns.solid_width ~22% UNDER the reference (0.092/0.093 vs 0.119), and the inspector independently found horn A shaft ~30-45% too thin
+(model ~72 px, reference ~106-151 px in the side view). Round-1 thinning to 0.65 of old radius was too much (the forensics 65-70 px figure was a mask-threshold artifact of the halo). Use compare.py's horns.solid_width (target 0.119 in both views, +-5%) as the objective metric.
+
+TICKET 1 (sev 6) HORN A + overall horn thickness: restore horn A (and B and the B tooth in proportion) to the reference thickness so horns.solid_width matches ~0.119 in side and back (+-5%); horn A side tip ends ~4 cm too low and ~50 px short in x: raise/extend the tip hook.
+TICKET 2 (sev 6) HORN B PATH and LOOP: back view: the loop arches ~3.7 cm too high; the reference curls down and inward. Side view: B mid-shaft sits 2-3 cm too far back. Re-path B accordingly (keep the back span 0.283-0.290 m).
+TICKET 3 (sev 5) CROTCH / LEG GAP (back view): the gap ceiling is flat at 0.865 m; the reference apex is at ~0.95 m and slopes diagonally; the viewer-right inner thigh is a wedge up to ~8 cm wide at 0.45 m that the model lacks (part of it may be fringe: aim for about half). Also the right thigh/strip region at 0.74-0.76 m is still 5-8 cm too wide (reduce only if back IoU does not drop below 0.88).
+DEFERRED to round 3 (sev 4): viewer-right trapezius/neck base 3.7 cm too high (+ red wedge at 1.85 m), snout/skull 2-3 cm heavy, forearm/hand 5 cm forward of belly in the side view (reference hand at x=2075 is not clipped), heel/shin/foot arch, arm-torso slit.
+RULES: save LOCKED_BASELINE_01 (copy proxy.blend/glb + metrics.json) BEFORE editing; one commit per ticket with before/after numbers; roll back any ticket that lowers the SIDE or BACK IoU by more than 0.005; write HANDOFF_R2.md; do not grade yourself.
