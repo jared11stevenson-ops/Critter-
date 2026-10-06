@@ -6,19 +6,14 @@ PARENT = {}
 def make(cage, LM, B):
     FX, UY, SX, UFY, FA = B.FX, B.UY, B.SX, B.UFY, B.FA
     out = []
-    # ---- eyes / sockets (side-projected so they sit on the cheek, facing out like the side ref) ----
-    sock = [(612,590),(630,577),(660,578),(684,600),(686,622),(665,634),(635,630),(615,612)]
-    eye = [(628,600),(640,587),(656,588),(669,611),(660,623),(644,622)]
-    pup = [(649,597),(656,598),(659,606),(655,613),(648,612),(645,604)]
-    for nm, poly, lift, th, col in (('socket', sock, 0.003, 0.007, (0.04,0.04,0.05)), ('eye', eye, 0.0075, 0.004, (0.95,0.74,0.18)), ('pupil', pup, 0.0105, 0.003, (0.05,0.03,0.02))):
-        P = [(FX(x), UY(y)) for x, y in poly]
-        out.append(B.plate(nm + '_R', P, cage, 'side', lift, th, col))
-        out.append(B.plate(nm + '_L', P, cage, 'side', lift, th, col, mirror_s=True))
+    # ---- eye sockets (angular raised bowls) + almond eyes + pupils, axis 60 deg off forward ----
+    for sg, side in ((-1, 'R'), (1, 'L')):
+        for nm, parts, col in bowl_parts(cage, LM, B, sg): out.append(B.new_obj(nm + '_' + side, parts, col)); B.recalc(out[-1])
     # ---- nostrils (front-projected small dark slots) ----
     for i, (x, y) in enumerate(LM['nostril_front_px']):
         sg = -1 if i == 0 else 1; u = UFY(y); cx = sg * 0.014
         P = [(cx + dx, u + dy) for dx, dy in ((-0.004, 0.010), (0.004, 0.010), (0.004, -0.010), (-0.004, -0.010))]
-        out.append(B.plate('nostril_%s' % ('R' if i == 0 else 'L'), P, cage, 'front', 0.006, 0.004, (0.03, 0.03, 0.04)))
+        out.append(B.surf_plate('nostril_%s' % ('R' if i == 0 else 'L'), P, 5.0, 0.007, 0.004, (0.03, 0.03, 0.04), False, 0.03))
     # ---- mandible ----
     mr = LM['mandible']['rings']
     bm = B.loft(mr); mc = B.Cage(bm)
@@ -43,18 +38,18 @@ def make(cage, LM, B):
     # ---- horn cups ----
     for hc in LM['horn_cups']:
         c = Vector((hc['F'], hc['U'], hc['s']))
-        a = Vector((0.0, 1.0, 0.25 if hc['s'] > 0 else -0.25)).normalized()
+        a = Vector((0.0, 1.0, 0.1 if hc['s'] > 0 else -0.1)).normalized()
         pts = [tuple(c - a * 0.016), tuple(c + a * 0.012)]
         bm = tube(pts, [hc['r'] * 1.15, hc['r'] * 0.85], 8, B, inset=0.0)
         o = B.new_obj(hc['name'], bm, (0.50, 0.16, 0.10)); B.recalc(o); out.append(o)
     # ---- fringe cards ----
     olive = (0.40, 0.38, 0.18); cream = (0.80, 0.70, 0.45)
     strands = [  # (name, pts(F,U,s), widths, color)
-        ('fringe_nape_a', [(-0.015, 2.105, 0.0), (-0.060, 2.085, 0.0), (-0.115, 2.035, 0.0), (-0.150, 1.985, 0.0)], [0.026, 0.020, 0.012, 0.003], olive),
-        ('fringe_nape_b', [(-0.010, 2.110, 0.040), (-0.055, 2.095, 0.065), (-0.100, 2.050, 0.085), (-0.125, 2.000, 0.090)], [0.022, 0.017, 0.010, 0.003], cream),
-        ('fringe_nape_c', [(-0.010, 2.110, -0.040), (-0.055, 2.095, -0.065), (-0.100, 2.050, -0.085), (-0.125, 2.000, -0.090)], [0.022, 0.017, 0.010, 0.003], cream),
-        ('fringe_cheek_R', [(-0.030, 2.098, -0.100), (-0.036, 2.060, -0.106), (-0.042, 2.020, -0.104), (-0.046, 1.990, -0.098)], [0.020, 0.018, 0.012, 0.003], olive),
-        ('fringe_cheek_L', [(-0.030, 2.098, 0.100), (-0.036, 2.060, 0.106), (-0.042, 2.020, 0.104), (-0.046, 1.990, 0.098)], [0.020, 0.018, 0.012, 0.003], olive),
+        ('fringe_nape_a', [(-0.015, 2.100, 0.0), (-0.050, 2.085, 0.0), (-0.085, 2.055, 0.0), (-0.100, 2.025, 0.0)], [0.030, 0.026, 0.014, 0.003], olive),
+        ('fringe_wing_R', [(-0.005, 2.062, -0.060), (-0.040, 2.056, -0.105), (-0.070, 2.048, -0.150), (-0.090, 2.040, -0.180)], [0.030, 0.034, 0.022, 0.004], cream),
+        ('fringe_wing_L', [(-0.005, 2.062, 0.060), (-0.040, 2.056, 0.105), (-0.070, 2.048, 0.150), (-0.090, 2.040, 0.180)], [0.030, 0.034, 0.022, 0.004], cream),
+        ('fringe_hang_R', [(-0.020, 2.040, -0.085), (-0.035, 2.015, -0.105), (-0.045, 1.995, -0.115)], [0.026, 0.022, 0.004], olive),
+        ('fringe_hang_L', [(-0.020, 2.040, 0.085), (-0.035, 2.015, 0.105), (-0.045, 1.995, 0.115)], [0.026, 0.022, 0.004], olive),
     ]
     for nm, pts, wd, col in strands:
         bm = strip(pts, wd, B)
@@ -89,3 +84,51 @@ def strip(pts, widths, B):
         rows.append((bm.verts.new(p - side * widths[i] / 2), bm.verts.new(p + side * widths[i] / 2)))
     for a, b in zip(rows[:-1], rows[1:]): bm.faces.new((a[0], a[1], b[1], b[0]))
     return bm
+
+import math
+def _basis(a):
+    up = Vector((0, 1, 0)); w = a.cross(up).normalized(); u = w.cross(a).normalized(); return w, u
+def ring_loft(rings, caps=True):
+    bm = bmesh.new(); rs = [[bm.verts.new(p) for p in r] for r in rings]; n = len(rs[0])
+    for a, b in zip(rs[:-1], rs[1:]):
+        for i in range(n): bm.faces.new((a[i], a[(i + 1) % n], b[(i + 1) % n], b[i]))
+    if caps: bm.faces.new(rs[0][::-1]); bm.faces.new(rs[-1])
+    return bm
+def bowl_parts(cage, LM, B, sg):
+    ex = LM['eyes']; cx, cy = ex['center_px']
+    Fw, Uw = B.FX(cx), B.UY(cy)
+    p, n = cage.hit((Fw, Uw, -1.0), (0, 0, 1))      # surface point on the right side
+    C = Vector(p)
+    az = math.radians(ex['azimuth_deg'])
+    a = Vector((math.cos(az), 0.0, -math.sin(az))).normalized()   # outward axis (right side)
+    w, u = _basis(a)
+    def ring(r_w, r_u, d, nn=10, rot=0.0):
+        pts = []
+        for i in range(nn):
+            ang = 2 * math.pi * i / nn + rot
+            pts.append(tuple(C + a * d + w * (r_w * math.cos(ang)) + u * (r_u * math.sin(ang))))
+        return pts
+    # socket: outer skirt (r .034, d -.004), rim (r .031, d .012), floor (r .022, d .004)
+    soc = ring_loft([ring(0.036, 0.030, -0.006), ring(0.033, 0.027, 0.012), ring(0.023, 0.018, 0.004)])
+    # almond eye: 8 pts in (w,u), tilt
+    tilt = math.radians(ex['tilt_deg']); L, H = ex['size_m']
+    base = [(-0.5, 0.0), (-0.25, 0.42), (0.15, 0.5), (0.5, 0.05), (0.3, -0.42), (-0.15, -0.5)]
+    def almond(d, k=1.0):
+        pts = []
+        for x, y in base:
+            x, y = x * L * k, y * H * 2 * k
+            xr = x * math.cos(tilt) - y * math.sin(tilt); yr = x * math.sin(tilt) + y * math.cos(tilt)
+            pts.append(tuple(C + a * d + w * xr + u * yr))
+        return pts
+    eye = ring_loft([almond(0.0050), almond(0.0085, 0.96)])
+    pw = 0.0055
+    def pup(d):
+        return [tuple(C + a * d + w * (0.002 + pw * math.cos(2 * math.pi * i / 8)) + u * (pw * math.sin(2 * math.pi * i / 8))) for i in range(8)]
+    pupil = ring_loft([pup(0.0075), pup(0.0100)])
+    res = []
+    for nm, bm, col in (('socket', soc, (0.04, 0.04, 0.05)), ('eye', eye, (0.95, 0.74, 0.18)), ('pupil', pupil, (0.06, 0.04, 0.02))):
+        if sg > 0:
+            for v in bm.verts: v.co.z = -v.co.z
+            bmesh.ops.reverse_faces(bm, faces=list(bm.faces))
+        res.append((nm, bm, col))
+    return res
