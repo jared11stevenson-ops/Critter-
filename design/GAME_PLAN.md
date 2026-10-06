@@ -52,3 +52,6 @@ Paused by the creator: lore, music, quests, dialogue.
 - **Mobile performance unknown:** mitigation is the telemetry overlay and the polygon cut.
 - **Lost work:** mitigation is GitHub, plus frequent commits meanwhile.
 - **Scope creep:** the 25-system master plan stays in Phase D; nothing new enters before Phase A exit.
+
+## Standing order (creator, 2026-10-06)
+Sequence: (1) ARUUN until he passes every fidelity gate (design/FIDELITY_PROTOCOL.md, final >= 92/100 and Silhouette/Proportions/Head-Neck-Horns each >= 90%), (2) then CIGARRA through the same protocol, (3) only then return to the game (integration, zips, world, gameplay). Everything else stays paused until then.
