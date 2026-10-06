@@ -15,6 +15,7 @@ def fgmask(a):
     return ~bg
 def place(name,src,axis_x,eyes_y,scale,desc,sources,notes='',eyes_row='eyes',gen_mask=None,flip=False):
     im=Image.open(src).convert('RGB')
+    b=12; im=im.crop((b,b,im.width-b,im.height-b)); axis_x-=b; eyes_y-=b  # drop tile border line
     if flip: im=im.transpose(Image.FLIP_LEFT_RIGHT); axis_x=im.width-axis_x
     fg=fgmask(np.array(im))
     mk=Image.fromarray((fg*255).astype('uint8'))

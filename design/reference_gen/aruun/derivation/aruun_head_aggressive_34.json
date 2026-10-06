@@ -14,8 +14,8 @@
   "neck": 2712
  },
  "scale": 1.3,
- "eyes_row_src_y": 592,
- "axis_x_src": 1050,
+ "eyes_row_src_y": 580,
+ "axis_x_src": 1038,
  "seed": null,
  "notes": "scale approximate",
  "legend": "derivation: green = original paint, yellow = generated"
