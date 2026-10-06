@@ -1,0 +1,548 @@
+{
+ "face_calm": {
+  "source": "design/reference_gen/aruun/v2/aruun_v2_face_calm_4096.png",
+  "axis_x": 700,
+  "note": "COARSE landmarks (+-15 px) read from overlay; face views are v2 generated/completed views (see FIDELITY_NOTES.md; calm face 82.8% original pixels). Face image is symmetric about axis_x only approximately.",
+  "landmarks": [
+   {
+    "name": "crown spike tip",
+    "src": [
+     700,
+     405
+    ]
+   },
+   {
+    "name": "crown dome top",
+    "src": [
+     700,
+     425
+    ]
+   },
+   {
+    "name": "left eye centre (small cream-yellow iris)",
+    "src": [
+     595,
+     642
+    ]
+   },
+   {
+    "name": "right eye centre",
+    "src": [
+     817,
+     642
+    ]
+   },
+   {
+    "name": "forehead orange plate centre",
+    "src": [
+     700,
+     600
+    ]
+   },
+   {
+    "name": "nose black triangle",
+    "src": [
+     710,
+     705
+    ]
+   },
+   {
+    "name": "muzzle pad front",
+    "src": [
+     710,
+     770
+    ]
+   },
+   {
+    "name": "mouth notch / nostrils pair",
+    "src": [
+     725,
+     785
+    ]
+   },
+   {
+    "name": "left horn column top outer knob",
+    "src": [
+     540,
+     205
+    ]
+   },
+   {
+    "name": "right horn column top (yellow tip)",
+    "src": [
+     835,
+     280
+    ]
+   },
+   {
+    "name": "right horn tine claw tip",
+    "src": [
+     1150,
+     175
+    ]
+   },
+   {
+    "name": "left cheek tuft extreme",
+    "src": [
+     462,
+     600
+    ]
+   },
+   {
+    "name": "right temple tine extreme",
+    "src": [
+     918,
+     570
+    ]
+   },
+   {
+    "name": "black throat mass top",
+    "src": [
+     710,
+     810
+    ]
+   },
+   {
+    "name": "neck left edge y=1100",
+    "src": [
+     530,
+     1100
+    ]
+   },
+   {
+    "name": "neck right edge y=1100",
+    "src": [
+     900,
+     1100
+    ]
+   }
+  ],
+  "row_runs_src": {
+   "100": [
+    [
+     1016,
+     1034
+    ]
+   ],
+   "150": [
+    [
+     700,
+     712
+    ],
+    [
+     880,
+     1128
+    ]
+   ],
+   "200": [
+    [
+     533,
+     568
+    ],
+    [
+     573,
+     699
+    ],
+    [
+     703,
+     907
+    ]
+   ],
+   "250": [
+    [
+     530,
+     618
+    ],
+    [
+     802,
+     902
+    ]
+   ],
+   "300": [
+    [
+     519,
+     588
+    ],
+    [
+     786,
+     799
+    ],
+    [
+     805,
+     871
+    ],
+    [
+     913,
+     941
+    ]
+   ],
+   "350": [
+    [
+     506,
+     585
+    ],
+    [
+     794,
+     877
+    ]
+   ],
+   "400": [
+    [
+     498,
+     600
+    ],
+    [
+     700,
+     701
+    ],
+    [
+     771,
+     876
+    ]
+   ],
+   "450": [
+    [
+     492,
+     627
+    ],
+    [
+     646,
+     757
+    ],
+    [
+     759,
+     874
+    ]
+   ],
+   "500": [
+    [
+     494,
+     856
+    ]
+   ],
+   "550": [
+    [
+     523,
+     865
+    ]
+   ],
+   "600": [
+    [
+     459,
+     918
+    ]
+   ],
+   "650": [
+    [
+     471,
+     487
+    ],
+    [
+     503,
+     904
+    ]
+   ],
+   "700": [
+    [
+     494,
+     918
+    ]
+   ],
+   "750": [
+    [
+     499,
+     918
+    ]
+   ],
+   "800": [
+    [
+     532,
+     918
+    ]
+   ],
+   "850": [
+    [
+     555,
+     918
+    ]
+   ],
+   "900": [
+    [
+     555,
+     882
+    ]
+   ],
+   "950": [
+    [
+     560,
+     873
+    ]
+   ],
+   "1000": [
+    [
+     548,
+     824
+    ],
+    [
+     865,
+     895
+    ]
+   ],
+   "1050": [
+    [
+     543,
+     819
+    ],
+    [
+     864,
+     914
+    ]
+   ],
+   "1100": [
+    [
+     530,
+     818
+    ],
+    [
+     846,
+     918
+    ]
+   ]
+  }
+ },
+ "face_rage": {
+  "source": "design/reference_gen/aruun/v2/aruun_v2_face_rage_4096.png",
+  "axis_x": 700,
+  "note": "COARSE landmarks (+-15 px) read from overlay; face views are v2 generated/completed views (see FIDELITY_NOTES.md; calm face 82.8% original pixels). Face image is symmetric about axis_x only approximately.",
+  "landmarks": [
+   {
+    "name": "crown spike tip",
+    "src": [
+     700,
+     350
+    ]
+   },
+   {
+    "name": "left eye centre",
+    "src": [
+     585,
+     625
+    ]
+   },
+   {
+    "name": "right eye centre",
+    "src": [
+     817,
+     627
+    ]
+   },
+   {
+    "name": "nose triangle",
+    "src": [
+     700,
+     710
+    ]
+   },
+   {
+    "name": "upper lip/nose tip",
+    "src": [
+     695,
+     750
+    ]
+   },
+   {
+    "name": "mouth interior top",
+    "src": [
+     700,
+     790
+    ]
+   },
+   {
+    "name": "tongue lower end",
+    "src": [
+     700,
+     935
+    ]
+   },
+   {
+    "name": "lower teeth row",
+    "src": [
+     700,
+     1050
+    ]
+   },
+   {
+    "name": "left horn top",
+    "src": [
+     550,
+     295
+    ]
+   },
+   {
+    "name": "right horn top",
+    "src": [
+     830,
+     300
+    ]
+   },
+   {
+    "name": "left cheek extreme",
+    "src": [
+     492,
+     700
+    ]
+   },
+   {
+    "name": "right cheek extreme",
+    "src": [
+     905,
+     690
+    ]
+   }
+  ],
+  "row_runs_src": {
+   "300": [
+    [
+     547,
+     610
+    ],
+    [
+     799,
+     830
+    ]
+   ],
+   "350": [
+    [
+     530,
+     605
+    ],
+    [
+     798,
+     879
+    ]
+   ],
+   "400": [
+    [
+     535,
+     634
+    ],
+    [
+     686,
+     724
+    ],
+    [
+     778,
+     872
+    ]
+   ],
+   "450": [
+    [
+     535,
+     868
+    ]
+   ],
+   "500": [
+    [
+     549,
+     853
+    ]
+   ],
+   "550": [
+    [
+     519,
+     860
+    ]
+   ],
+   "600": [
+    [
+     504,
+     880
+    ]
+   ],
+   "650": [
+    [
+     488,
+     897
+    ]
+   ],
+   "700": [
+    [
+     502,
+     910
+    ]
+   ],
+   "750": [
+    [
+     530,
+     888
+    ]
+   ],
+   "800": [
+    [
+     549,
+     628
+    ],
+    [
+     633,
+     882
+    ]
+   ],
+   "850": [
+    [
+     535,
+     887
+    ]
+   ],
+   "900": [
+    [
+     565,
+     848
+    ],
+    [
+     868,
+     896
+    ]
+   ],
+   "950": [
+    [
+     490,
+     784
+    ],
+    [
+     791,
+     910
+    ]
+   ],
+   "1000": [
+    [
+     433,
+     780
+    ],
+    [
+     789,
+     953
+    ]
+   ],
+   "1050": [
+    [
+     418,
+     763
+    ],
+    [
+     768,
+     773
+    ],
+    [
+     778,
+     953
+    ]
+   ],
+   "1100": [
+    [
+     415,
+     952
+    ]
+   ]
+  }
+ }
+}
