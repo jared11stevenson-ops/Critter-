@@ -43,6 +43,8 @@ def outline(mask, col, img, th=3):
 
 def render_set(V, F, cam, name, out, refpath=None, landmarks=None, tag=''):
     mask, clay = raster(cam, V, F)
+    if tag:   # diagnostic: half-resolution clay only (never used to judge the match)
+        clay_d = np.where(mask[..., None] > 0, clay, 70).astype(np.uint8); cv2.imwrite(os.path.join(out, f'diag_{name}{tag}.png'), cv2.resize(clay_d, None, fx=.5, fy=.5, interpolation=cv2.INTER_AREA)); return mask
     bg = np.full_like(clay, 70); clay_o = np.where(mask[..., None] > 0, clay, bg)
     cv2.imwrite(os.path.join(out, f'clay_{name}{tag}.png'), clay_o)
     sil = np.full((cam.H, cam.W, 3), 255, np.uint8); sil[mask > 0] = 0
@@ -63,20 +65,35 @@ def render_set(V, F, cam, name, out, refpath=None, landmarks=None, tag=''):
         i = iou(mask, rm); info['iou'] = float(i)
         cv2.putText(v, f'IoU {i:.3f}  green=ref red=model', (20, 60), 0, 1.6, (255, 255, 255), 3)
         cv2.imwrite(os.path.join(out, f'vsref_{name}.png'), v)
+        comp = rbgr.astype(float) * 0.55; mk = mask > 0
+        comp[mk] = comp[mk] * 0.3 + clay[mk].astype(float) * 0.7 * np.array([0.8, 0.9, 1.0])
+        comp = comp.astype(np.uint8); outline(mask, (0, 0, 255), comp, 3)
+        cv2.imwrite(os.path.join(out, f'composite_{name}.png'), comp)
     json.dump(info, open(os.path.join(out, f'{name}{tag}_info.json'), 'w'), indent=1)
     return mask
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('model', nargs='?'); ap.add_argument('--out', required=True)
     ap.add_argument('--cams', nargs='+', default=['HERO', 'HEAD', 'SIDE', 'BACK']); ap.add_argument('--diag', nargs='*', default=[])
-    ap.add_argument('--no-ref', action='store_true'); ap.add_argument('--lock', default=LOCK)
+    ap.add_argument('--no-ref', action='store_true'); ap.add_argument('--head-pose', action='store_true', help='rotate head+horn parts by the solved head orientation (LOCKED head_pose) so the pose target can be checked'); ap.add_argument('--lock', default=LOCK)
     a = ap.parse_args(); os.makedirs(a.out, exist_ok=True)
     L = json.load(open(a.lock)); parts = load_parts(a.model)
-    V, F = merge(parts)
+    parts0 = dict(parts)
+    if a.head_pose:
+        hp = L['head_pose']; Rh = np.array(hp['R_rel_torso']); piv = np.array(hp['pivot_model']); hero_cam = cam_from_lock(L['cameras']['HERO'])
+        px = np.array(hp['pivot_px_target_hero'])
+        for k in list(parts):
+            if k.startswith('H7_') or k.startswith('horn'):
+                v, f = parts[k]; parts[k] = (piv + (v - piv) @ Rh.T, f)
+        # translate so that the posed pivot lands on the fitted image position (neck lean is pose, not camera)
+        uv, z = hero_cam.project(piv[None]); dx, dy = px - uv[0]; sh = hero_cam.R.T @ np.array([dx * z[0] / hero_cam.f, dy * z[0] / hero_cam.f, 0])
+        for k in list(parts):
+            if k.startswith('H7_') or k.startswith('horn'): parts[k] = (parts[k][0] + sh, parts[k][1])
+    V, F = merge(parts); V0, F0 = merge(parts0)
     HEADN = [k for k in parts if k.startswith('H7_') or k.startswith('horn')] if a.model is None else None
     for name in a.cams:
         d = L['cameras'][name]; cam = cam_from_lock(d)
-        Vn, Fn = V, F
+        Vn, Fn = (V, F) if name in ('HERO', 'HEAD') else (V0, F0)   # head pose only applies to the hero drawing
         if name == 'HEAD' and HEADN:      # head tile: head + horns (+ neck) only
             Vn, Fn = merge(parts, HEADN + ['neck'])
         lm = {k: v for k, v in d.get('landmarks_ref_px', {}).items()}
