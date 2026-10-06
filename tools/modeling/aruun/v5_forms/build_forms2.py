@@ -13,6 +13,7 @@ CURVES = os.environ.get('HORN_CURVES', os.path.join(P.ROOT, 'design/model_sheets
 
 def build():
     parts = P.build(); keep = {o.name: o for o in parts}
+    if os.environ.get('NECK_D', '1') == '1': neck_d(parts)
     BF.shoulders(parts, keep)                                  # pass-1 pauldron + underplate + shoulder blades (kept)
     if STAGE >= 1: horns(parts)
     if STAGE >= 2:
@@ -26,6 +27,12 @@ def build():
         else:
             import head_features; head_features.build(parts)
     return parts
+
+def neck_d(parts):
+    """P1d ticket 2: neck re-pathed 0.02-0.025 m forward at 1.84-1.90 m (side error was -0.02..-0.03 at the throat), top radii matched to the head hull's neck blend (F 0.058 / L 0.07) so the collar ring at the skull junction disappears."""
+    drop(parts, 'neck')
+    parts.append(nm(tube('neck', [(-0.05, 1.70, 0.0), (-0.035, 1.78, 0.03), (0.000, 1.84, 0.055), (0.022, 1.90, 0.068), (0.018, 1.945, 0.075), (0.008, 1.975, 0.080)],
+                         [(0.15, 0.22), (0.085, 0.105), (0.062, 0.062), (0.056, 0.056), (0.056, 0.060), (0.058, 0.066)]), 'neck'))
 
 def horns(parts):
     for n in ('hornA', 'hornB', 'hornB_tooth'): drop(parts, n)
