@@ -20,11 +20,12 @@ def pipe(cn="lllyasviel/control_v11p_sd15_lineart", ip="ip-adapter-plus_sd15.saf
     _P[k] = p
     return p
 
-def run(init, ctrl, ip_img, prompt, strength=0.5, cn_scale=0.8, ip_scale=0.7, steps=8, seed=1, size=512, neg=NEG):
+def run(init, ctrl, ip_img, prompt, strength=0.5, cn_scale=0.8, ip_scale=0.7, steps=8, seed=1, size=512, neg=NEG, hw=None):
     p = pipe(); p.set_ip_adapter_scale(ip_scale)
     g = torch.Generator().manual_seed(seed)
     t = time.time()
-    out = p(prompt=BASE + prompt, negative_prompt=neg, image=init.resize((size, size)), control_image=ctrl.resize((size, size)),
+    hw = hw or (size, size)
+    out = p(prompt=BASE + prompt, negative_prompt=neg, image=init.resize(hw[::-1]), control_image=ctrl.resize(hw[::-1]), height=hw[0], width=hw[1],
             ip_adapter_image=ip_img, strength=strength, controlnet_conditioning_scale=cn_scale, num_inference_steps=steps,
             guidance_scale=1.5, generator=g).images[0]
     return out, time.time() - t

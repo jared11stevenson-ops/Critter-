@@ -1,0 +1,1 @@
+[["C_cn_ip_s30", {"strength": 0.3, "cn_scale": 1.0, "ip_scale": 0.6}, 127.5], ["C_cn_ip_s50", {"strength": 0.5, "cn_scale": 1.0, "ip_scale": 0.6}, 167.6], ["C_cn_ip_s70", {"strength": 0.7, "cn_scale": 1.0, "ip_scale": 0.6}, 39.7], ["A_i2i_s30", {"strength": 0.3, "cn_scale": 0.0, "ip_scale": 0.0}, 36.9]]
