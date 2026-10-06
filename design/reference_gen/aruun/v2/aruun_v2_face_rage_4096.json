@@ -1,0 +1,43 @@
+{
+ "view": "straight-on face (rage)",
+ "camera": "orthographic front; head facing forward as the tile shows (tile itself is a slightly down-looking bust, snout foreshortened)",
+ "axis_x_px": 700,
+ "x_offset_px": 0,
+ "sources": [
+  "design/reference_gen/aruun/head/aruun_head_rage_straighton.png (x4 upscale of the sheet RAGE expression tile, 4000 px/m, landmark rows eyes=1499 chin=1920 crown=1292)"
+ ],
+ "horns": null,
+ "tile": {
+  "scale": 0.4066666666666667,
+  "row0": 15,
+  "col0": 389,
+  "tile": "aruun_head_rage_straighton.png"
+ },
+ "features": {
+  "eyes on the SIDES of the head (yellow, dark ring, cream/white glint)": "original tile pixels (both expression tiles)",
+  "red/orange crown plate between the horn bases": "original tile pixels",
+  "brow ridges / cream temple tines": "original tile pixels",
+  "nape/side fringe strands (olive-cream)": "original tile pixels; the tile clips the right-hand strands with a hard vertical edge at tile col ~1300 (cut by the sheet crop, NOT design)",
+  "horn bases in red crown plates": "original tile stubs (cut flat by the tile top, rows < ~690-700 at 4000 px/m)",
+  "snout / nostrils at the tip": "original RAGE tile: dark nose triangle + upper lip; mouth open",
+  "white fang at mouth corner": "original RAGE tile: cream fangs inside the open jaw (expression state, not the calm design)",
+  "long lyre horns above the stubs": "NOT ADDED (tile only)"
+ },
+ "notes": [
+  "the face is a head-only canvas: body rows are empty by design",
+  "last 6 rows of the tile are RED = the tile crop edge"
+ ],
+ "percent_of_painted_pixels": {
+  "green": 98.76,
+  "yellow": 0.0,
+  "red": 1.24
+ },
+ "legend": "GREEN=original sheet pixels, YELLOW=inferred/completed/warped from other views, RED=unknown (nearest-neighbour fill)",
+ "canvas": {
+  "width_px": 1400,
+  "height_px": 4096,
+  "px_per_m": 1626.6666666666667,
+  "ground_row": 4000,
+  "note": "same scale/ground row as reference_packs/aruun/ortho; x_offset_px = columns added at the left of the original cut (axis_x_px shifts by the same amount)"
+ }
+}

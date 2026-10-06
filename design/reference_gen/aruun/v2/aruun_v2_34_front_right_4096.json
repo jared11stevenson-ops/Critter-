@@ -1,0 +1,32 @@
+{
+ "view": "3/4 front-right",
+ "camera": "orthographic yaw -35 deg about +Y (0=front, +90 sees his LEFT side, -90 sees his RIGHT side, 180=back); axis_x_px=1100 = world x 0",
+ "axis_x_px": 1100,
+ "x_offset_px": 0,
+ "sources": [
+  "proxy.glb geometry",
+  "aruun_v2_front_ortho_4096.png",
+  "aruun_v2_side_completed_4096.png",
+  "aruun_v2_back_completed_4096.png"
+ ],
+ "source_contribution_percent": {
+  "front": 69.224672615311,
+  "side": 26.563167217940297,
+  "back": 0.5501255318762821,
+  "none(red)": 3.662034634872418
+ },
+ "silhouette": "proxy silhouette (geometry-only, ~1-3 cm vs the side/back cuts); horn tips, fringe, strips and tines are proxy-simplified",
+ "percent_of_painted_pixels": {
+  "green": 11.95,
+  "yellow": 81.62,
+  "red": 6.43
+ },
+ "legend": "GREEN=original sheet pixels, YELLOW=inferred/completed/warped from other views, RED=unknown (nearest-neighbour fill)",
+ "canvas": {
+  "width_px": 2200,
+  "height_px": 4096,
+  "px_per_m": 1626.6666666666667,
+  "ground_row": 4000,
+  "note": "same scale/ground row as reference_packs/aruun/ortho; x_offset_px = columns added at the left of the original cut (axis_x_px shifts by the same amount)"
+ }
+}

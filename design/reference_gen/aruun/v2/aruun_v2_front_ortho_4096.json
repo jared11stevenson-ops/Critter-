@@ -22,8 +22,8 @@
    "mean_x_scale": 1.231796517468373,
    "mean_y_scale": 0.9309531868655174,
    "px": 50835,
-   "green": 73.46513229074456,
-   "yellow": 24.910002950722927,
+   "green": 0.0,
+   "yellow": 98.37513524146749,
    "red": 1.6248647585325071
   },
   "neckbase": {
@@ -52,8 +52,8 @@
    "mean_x_scale": 0.9719328575213338,
    "mean_y_scale": 0.8981249455627394,
    "px": 1091613,
-   "green": 37.707868997529346,
-   "yellow": 60.699075588143415,
+   "green": 0.0,
+   "yellow": 98.40694458567276,
    "red": 1.5930554143272386
   },
   "mantle": {
@@ -98,8 +98,8 @@
    "mean_x_scale": 1.5340125162636673,
    "mean_y_scale": 0.7742991577912812,
    "px": 180734,
-   "green": 30.289818185842176,
-   "yellow": 69.43463875087144,
+   "green": 0.0,
+   "yellow": 99.72445693671362,
    "red": 0.2755430632863767
   },
   "armR": {
@@ -131,8 +131,8 @@
    "mean_x_scale": 1.227971272641905,
    "mean_y_scale": 0.9366045623705708,
    "px": 423563,
-   "green": 15.617039259803144,
-   "yellow": 75.0138704277758,
+   "green": 0.0,
+   "yellow": 90.63090968757894,
    "red": 9.369090312421056
   },
   "legR": {
@@ -148,8 +148,8 @@
    "mean_x_scale": 1.0729164233396535,
    "mean_y_scale": 0.8495026106502478,
    "px": 518510,
-   "green": 34.02750188038803,
-   "yellow": 65.36556672002469,
+   "green": 0.0,
+   "yellow": 99.39306860041273,
    "red": 0.6069313995872789
   },
   "strips": {
@@ -163,8 +163,8 @@
    "mean_x_scale": 2.2544155185823387,
    "mean_y_scale": 0.8091941745280962,
    "px": 102317,
-   "green": 22.51922945356099,
-   "yellow": 76.27569221146047,
+   "green": 0.0,
+   "yellow": 98.79492166502145,
    "red": 1.205078334978547
   }
  },
@@ -207,8 +207,8 @@
   "open creator question: pauldrons on both shoulders? his right shoulder carries the mantle here (front+back agree)"
  ],
  "percent_of_painted_pixels": {
-  "green": 34.35,
-  "yellow": 62.67,
+  "green": 9.56,
+  "yellow": 87.46,
   "red": 2.98
  },
  "legend": "GREEN=original sheet pixels, YELLOW=inferred/completed/warped from other views, RED=unknown (nearest-neighbour fill)",

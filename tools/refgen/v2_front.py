@@ -91,7 +91,6 @@ def build(sheet, use_back_silhouette=True):
         c = np.full(len(yy), 2, np.uint8)
         c[(~op) & (d > 10)] = 3                     # RED: no sheet paint at that place (gap in the sheet) -> nearest neighbour
         good = op & (sx_[yy] > 0.8) & (sx_[yy] < 1.25) & (np.abs(dy[yy]) > 0.8) & (np.abs(dy[yy]) < 1.25)
-        c[good] = 1
         cls[yy, xx] = c
         stats[g] = dict(parts=parts, rows=[int(rows.min()), int(rows.max())], mean_x_scale=float(np.mean(sx_[yy])), mean_y_scale=float(np.mean(np.abs(dy[yy]))), px=int(m.sum()),
                         green=float((c == 1).mean() * 100), yellow=float((c == 2).mean() * 100), red=float((c == 3).mean() * 100))

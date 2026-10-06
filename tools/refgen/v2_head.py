@@ -47,10 +47,11 @@ def view_sampler(view):
         col = a[nn[:, 1], nn[:, 0], :3]; return col, d <= maxd, d
     return f
 
-def horn_layer(canvas_w, ax, stubA_x, stubB_x, h_min=2.14, taper_h=2.34, base_h=2.26):
+def horn_layer(canvas_w, ax, stubA_x, stubB_x, h_min=2.14, taper_h=2.34, base_h=2.26, xh=None):
     """Front-view horns = the BACK ortho silhouette mirrored (an orthographic front view is the mirror image of the back view for any thin solid), painted with the
     back cut's own pixels (horn paint is a flat cel colour on all faces; the opposite face is a mild assumption -> YELLOW). The back head midline is registered to the
     tile eye midline; then each horn is nudged in x so its base meets the matching tile horn-stub top, the nudge tapering to zero at taper_h."""
+    xh = X_HEAD if xh is None else xh
     a = load_rgba(os.path.join(ORTHO, 'aruun_back_4096.png')); H, Wb = a.shape[:2]
     hh = (GROUND - np.arange(H)) / PPM
     # back head midline: the cranium column centre at h=2.05..2.10 (dark navy head), measured from the opaque span
@@ -68,7 +69,7 @@ def horn_layer(canvas_w, ax, stubA_x, stubB_x, h_min=2.14, taper_h=2.34, base_h=
     tgtA, tgtB = stubA_x, stubB_x
     dxs = {}
     for rr, off in zip(runs_, cen):
-        wx = X_HEAD - off / PPM; tgt = tgtA if off > 0 else tgtB; dxs['A' if off > 0 else 'B'] = tgt - wx
+        wx = xh - off / PPM; tgt = tgtA if off > 0 else tgtB; dxs['A' if off > 0 else 'B'] = tgt - wx
     info['nudge_m'] = {k: float(v) for k, v in dxs.items()}
     for r_ in rows:
         h = hh[r_]; w = float(np.clip((taper_h - h) / (taper_h - base_h), 0, 1)) if h > base_h else 1.0
@@ -78,7 +79,7 @@ def horn_layer(canvas_w, ax, stubA_x, stubB_x, h_min=2.14, taper_h=2.34, base_h=
         for cx in cols:
             off = cx - mid_back; k = 'A' if off > 0 else 'B'
             if k not in dxs: continue
-            xw = X_HEAD - off / PPM + dxs[k] * w
+            xw = xh - off / PPM + dxs[k] * w
             xo = int(round(ax + xw * PPM))
             if 0 <= xo < canvas_w:
                 out[r_, xo, :3] = a[r_, cx, :3]; out[r_, xo, 3] = 255; cls[r_, xo] = 2
