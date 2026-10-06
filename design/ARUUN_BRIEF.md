@@ -79,7 +79,7 @@ Heights: tips reach 2.40 m, cranium top 2.127 m => 0.27 m of horn above the skul
 PROPOSAL: tips intact as drawn (answers Q3: yes, the length shown IS the intended length). Horns are ASYMMETRIC (A thick/short, B thin/long); do not symmetrise.
 
 **C4 / Q4 - Morrow size and states.** Evidence: the front 3/4 draws Morrow from a low camera; the panel shows the head ~1.6x the width of the haft knuckles, haft ~3x the head height when upright. Head diameter is unmeasured.
-PROPOSAL: head diameter 0.45 m (about 3x the head-crown-to-chin 0.157 m... i.e. fist-sized x3), haft 1.5 m extended; build all 4 states as one mesh with telescoping + a detached floating pose handled in animation (no extra mesh). Needs the creator's number.
+PROPOSAL (my estimate, no sheet dimension): head diameter 0.45 m (his crown-to-chin is 0.157 m, so about 3 head-heights is too big; the sheet shows the head about 2x his fist-to-elbow length), haft 1.5 m extended; build all 4 states as one mesh with telescoping + a detached floating pose handled in animation (no extra mesh). Needs the creator's number.
 
 **C5 / Q5 - Hands and feet symmetry.** Evidence: front: viewer-left hand (his RIGHT) = three long pointed claw fingers (part 21), viewer-right (his LEFT) = gloved fist gripping the mace (22); back view shows his right hand as a wrapped fist too, with the thumb side cream. Feet: front viewer-left foot has big forward claws, viewer-right foot is seen toe-on with 3 claws; side foot has a blunt long toe + heel spur.
 PROPOSAL: both hands same anatomy (3 long claw fingers + thumb) - the left one is wrapped/gripping; both feet identical (3 forward claws + heel spur), mirrored. The 'blunt' side toe is the claw seen edge-on.
@@ -92,13 +92,13 @@ Interpretation: it is NOT a full skirt but a ragged strip panel hanging from the
 PROPOSAL: strips hang from the belt across the front and the character's left side; none on the right thigh; none at the centre back.
 
 **C8 - Pauldron/elbow count.** Evidence: FRONT shows a red disc on the viewer-right shoulder and a second red disc on the viewer-right elbow (11, 19) - one arm. SIDE shows pauldron + elbow disc on the near (right) arm. BACK shows red pauldron (right) and a red elbow/forearm (22 region) on the right; the left shoulder is the mantle.
-PROPOSAL: the left shoulder has a small tan plate under the mantle, no red disc; red discs on the right shoulder + right elbow only... EXCEPT the front's red discs are on his LEFT (viewer-right). This is the same handedness conflict as C1: follow C1 (all red armour on the RIGHT arm).
+PROPOSAL: follow C1: red pauldron + red elbow disc on his RIGHT arm; his LEFT shoulder sits under the mantle with a small tan plate. (The front draws the red discs on his LEFT: same handedness conflict as C1.)
 
-**C9 - Neck length/pose.** Evidence: neck 0.20 m chin-to-base in the front/back landmarks but the side view shows it leaning ~12 degrees forward and 0.45 m visible along its arc (spec: neck 0.45 m).
+**C9 - Neck length/pose.** Evidence: landmarks.json gives 0.20 m chin-to-neck-base (vertical) while the earlier artlog/spec says 0.45 m neck; the side view shows a forward-leaning arc, so both can hold (vertical 0.20 m, arc about 0.45 m is NOT verified by me).
 PROPOSAL: neck arc length 0.45 m, leaning forward, gloss streaks along the front. Head is carried FORWARD of the trunk in the side view (head centre ~0.10 m ahead of the shoulders) - keep.
 
-**C10 - Torso hunch / stance.** Evidence: side view: spine curves forward (shoulders ahead of the hips by ~0.12 m), knees bent, heel raised ~0.02 m; back view: weight on his left leg (leg planted wider). FRONT is a contrapposto 3/4.
-PROPOSAL: rest pose = side-view hunch, weight on the left leg, no heel-lift.
+**C10 - Torso hunch / stance.** Evidence: side view: spine curves forward (shoulders ahead of the hips by ~0.12 m), knees bent, back view: the two legs are planted at different widths (READ, not measured). FRONT is a contrapposto 3/4.
+PROPOSAL: rest pose = side-view hunch, feet flat.
 
 **C11 - Outline artefact (not design).** The side and back ortho cuts carry a thick jagged black halo (2-5 px at 4096) from the upscaler/rembg. It is NOT a design feature; the original outline is ~0.2 % of height. Do not model outline thickness from the ortho PNGs.
 
