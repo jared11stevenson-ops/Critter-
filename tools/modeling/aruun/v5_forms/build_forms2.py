@@ -21,6 +21,7 @@ def build():
                              [(0.006, 0.006), (0.007, 0.007), (0.0075, 0.0075), (0.0075, 0.0075), (0.010, 0.010), (0.011, 0.011), (0.004, 0.004)]), 'fringe_tail'))
         # chest plate: flush with the trunk front (side silhouette unchanged), gives the front chest line / sternum plate in the 3D forms
         parts.append(nm(ell('chest_plate', (0.168, 1.50, 0.0), (0.034, 0.075, 0.14)), 'chest_plate'))                                  # pass-1 pauldron + underplate + shoulder blades (kept)
+    if os.environ.get('LEGS_E', '1') == '1': legs_e(parts)
     if STAGE >= 1: horns(parts)
     if STAGE >= 2:
         if os.environ.get('P1C', '0') == '1':
@@ -33,6 +34,20 @@ def build():
         else:
             import head_features; head_features.build(parts)
     return parts
+
+def legs_e(parts):
+    """P1e ticket 1: knee/calf/shin shaping (calf bow at 0.50-0.60 m, shin taper at 0.30-0.40 m, flush knee plate) from the width-error CSVs; blades attached to the trapezius."""
+    for n in ('legL', 'legR', 'shoulder_blade_L', 'shoulder_blade_R'): drop(parts, n)
+    parts.append(nm(tube('legL', [(0.0, 0.92, 0.17), (-0.03, 0.74, 0.18), (-0.115, 0.60, 0.15), (-0.150, 0.50, 0.12), (-0.158, 0.42, 0.115), (-0.162, 0.34, 0.13), (-0.162, 0.28, 0.145), (-0.162, 0.22, 0.17), (-0.162, 0.15, 0.175)],
+                     [(0.09, 0.10), (0.075, 0.105), (0.088, 0.115), (0.078, 0.112), (0.055, 0.085), (0.044, 0.058), (0.046, 0.062), (0.075, 0.075), (0.075, 0.085)]), 'legL'))
+    parts.append(nm(tube('legR', [(0.0, 0.92, -0.26), (-0.03, 0.74, -0.29), (-0.068, 0.67, -0.30), (-0.115, 0.60, -0.30), (-0.150, 0.50, -0.30), (-0.158, 0.42, -0.325), (-0.162, 0.34, -0.332), (-0.162, 0.28, -0.335), (-0.162, 0.22, -0.335), (-0.162, 0.15, -0.34)],
+                     [(0.09, 0.13), (0.075, 0.16), (0.075, 0.17), (0.088, 0.115), (0.078, 0.11), (0.055, 0.075), (0.044, 0.052), (0.046, 0.055), (0.075, 0.065), (0.075, 0.075)]), 'legR'))
+    for sgn, L, n in ((1, 0.15, 'L'), (-1, -0.30, 'R')):
+        parts.append(nm(ell('knee_plate_' + n, (-0.045, 0.615, L), (0.020, 0.045, 0.060)), 'knee_plate_' + n))
+    # shoulder blades attached: plates sunk into the back, joined to the neck base by trapezius ridges
+    for sgn, n in ((1, 'L'), (-1, 'R')):
+        parts.append(nm(ell('shoulder_blade_' + n, (-0.188, 1.50, 0.115 * sgn), (0.022, 0.115, 0.070)), 'shoulder_blade_' + n))
+        parts.append(nm(tube('trapezius_' + n, [(-0.185, 1.58, 0.115 * sgn), (-0.150, 1.68, 0.075 * sgn), (-0.100, 1.76, 0.035 * sgn)], [(0.030, 0.035), (0.032, 0.030), (0.030, 0.025)]), 'trapezius_' + n))
 
 def neck_d(parts):
     """P1d ticket 2: neck re-pathed 0.02-0.025 m forward at 1.84-1.90 m (side error was -0.02..-0.03 at the throat), top radii matched to the head hull's neck blend (F 0.058 / L 0.07) so the collar ring at the skull junction disappears."""
