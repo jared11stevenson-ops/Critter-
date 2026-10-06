@@ -1,0 +1,9 @@
+exported
+[v2] head_1.75-2.0          side 0.846 (ref-only   9240, model-only   8762)   back 0.835 (ref-only  16045, model-only   8407)
+[v2] whole                  side 0.899 (ref-only  67462, model-only 107475)   back 0.895 (ref-only 149886, model-only 168480)
+[orig] head_1.75-2.0          side 0.846 (ref-only   9240, model-only   8762)   back 0.835 (ref-only  16045, model-only   8407)
+[orig] whole                  side 0.899 (ref-only  66359, model-only 107664)   back 0.896 (ref-only 148744, model-only 168480)
+side 1.96-2.14 0.864
+side 2.0-2.14 0.87
+back 1.96-2.14 0.836
+back 2.0-2.14 0.858
