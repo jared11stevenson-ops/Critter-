@@ -133,14 +133,17 @@ def tube(name, pts, rads, nring=10, up=(0, 0, 1)):
     return ob
 
 def ell(name, c, r, seg=24):
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=seg, ring_count=seg // 2, location=c); ob = bpy.context.active_object; ob.name = name
-    ob.scale = r; bpy.ops.object.transform_apply(scale=True); [setattr(p, 'use_smooth', True) for p in ob.data.polygons]; return ob
+    bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=seg, v_segments=seg // 2, radius=1.0)
+    for v in bm.verts: v.co = Vector((v.co.x * r[0], v.co.y * r[1], v.co.z * r[2]))
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    ob = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(ob); ob.location = Vector(c)
+    for p in me.polygons: p.use_smooth = True
+    return ob
 
 def displace(ob, fn):
-    """fn(F,U,Ls,nrm_blender)->offset along the vertex normal (m); Ls = signed lateral offset from head line"""
-    me = ob.data; me.update()
-    for v in me.vertices:
-        F, U, Ls = -v.co.y, v.co.z, v.co.x - HL
-        d = fn(F, U, Ls)
-        if d: v.co += v.normal * d
-    me.update()
+    """fn(P (n,3) blender coords) -> offset along the vertex normal (n,) (m); vectorised"""
+    me = ob.data; n = len(me.vertices)
+    co = np.zeros(n * 3); me.vertices.foreach_get('co', co); co = co.reshape(-1, 3)
+    nr = np.zeros(n * 3); me.vertices.foreach_get('normal', nr); nr = nr.reshape(-1, 3)
+    co = co + nr * fn(co)[:, None]
+    me.vertices.foreach_set('co', co.ravel()); me.update()

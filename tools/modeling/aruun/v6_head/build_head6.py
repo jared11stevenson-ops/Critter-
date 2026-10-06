@@ -6,7 +6,7 @@ import head6 as H
 ROOT = os.path.abspath(os.path.join(HERE, '../../../..'))
 P1B = os.path.join(ROOT, 'design/model_sheets/aruun/fidelity/forms/LOCKED_P1b/forms.blend')
 STEP = int(os.environ.get('STEP', '4'))
-DROP = ('cheek_plate', 'crown_plate', 'eye_socket', 'eyeball', 'horn_cup', 'mandible', 'nose_pad', 'nostril', 'skull_hull', 'temple_tine')
+DROP = ('brow', 'cheek_plate', 'crown_plate', 'eye_socket', 'eyeball', 'horn_cup', 'mandible', 'nose_pad', 'nostril', 'skull_hull', 'temple_tine')
 def main(out):
     bpy.ops.wm.open_mainfile(filepath=P1B)
     for o in list(bpy.data.objects):
