@@ -1,6 +1,7 @@
 """R-HEAD region atlas: posterised palette regions (connected components) in the head ROI. Writes regions.json + atlas png."""
 import json,sys,numpy as np,cv2
-from PIL import Image,ImageDraw
+from PIL import Image,ImageDraw,ImageFont
+FONT=ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',15)
 SRC='design/reference_packs/aruun/ortho/aruun_front_4096.png'
 OUT='design/model_sheets/aruun/recon/analyst/'
 X0,Y0,X1,Y1=600,80,1500,880
@@ -23,6 +24,6 @@ S=3
 big=Image.fromarray(np.where(fg[...,None],rgb,np.array([230,222,200])).astype(np.uint8)).resize((a.shape[1]*S//1,a.shape[0]*S//1),Image.NEAREST)
 d=ImageDraw.Draw(big)
 for r in regs:
-    if r['area_px']<700: continue
-    cx,cy=r['centroid_src']; d.text(((cx-X0)*S-6,(cy-Y0)*S-5),str(r['id']),fill=(255,255,255) if sum(r['mean_rgb'])<300 else (0,0,0))
+    if r['area_px']<500: continue
+    cx,cy=r['centroid_src']; d.text(((cx-X0)*S-8,(cy-Y0)*S-8),str(r['id']),font=FONT,fill=(255,255,0),stroke_width=2,stroke_fill=(0,0,0))
 big.save(OUT+'atlas_regions_x3.png'); print(n)
