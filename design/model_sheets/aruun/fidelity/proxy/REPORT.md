@@ -1,23 +1,23 @@
 # Fidelity comparison (model - reference)
 
-model: `design/model_sheets/aruun/fidelity/proxy/proxy.glb`  forward +z  render height 2.403 m (top 2.403); mace islands dropped: 0 faces
+model: `design/model_sheets/aruun/fidelity/proxy/proxy.glb`  forward +z  render height 2.398 m (top 2.397); mace islands dropped: 0 faces
 
 | view | IoU (aligned) | IoU (dx=0) | align dx (m) | model/ref area | mean abs rel width err | mean signed width err (m) |
 |---|---|---|---|---|---|---|
-| side | 0.874 | 0.873 | -0.002 | 1.05 | 0.081 | +0.005 |
-| back | 0.881 | 0.881 | -0.001 | 1.02 | 0.077 | +0.008 |
-| front (3/4 ref, qualitative) | 0.583 | 0.427 | +0.156 | 0.85 | 0.305 | -0.088 |
+| side | 0.871 | 0.870 | -0.002 | 1.03 | 0.086 | +0.002 |
+| back | 0.880 | 0.880 | -0.001 | 1.01 | 0.074 | +0.006 |
+| front (3/4 ref, qualitative) | 0.586 | 0.426 | +0.155 | 0.84 | 0.299 | -0.089 |
 
 ## side region errors (m; err = model - ref; edge uncertainty about +-0.0037 m)
 
 | region | ref m | model m | err m | err % | rank? |
 |---|---|---|---|---|---|
-| horns.outer_width | 0.193 | 0.192 | -0.001 | -1 |  |
-| horns.solid_width | 0.119 | 0.133 | +0.014 | +12 |  |
-| horns.extent | 0.381 | 0.385 | +0.004 | +1 |  |
-| head.outer_width | 0.226 | 0.245 | +0.018 | +8 |  |
+| horns.outer_width | 0.193 | 0.169 | -0.024 | -12 |  |
+| horns.solid_width | 0.119 | 0.092 | -0.027 | -23 |  |
+| horns.extent | 0.381 | 0.370 | -0.011 | -3 |  |
+| head.outer_width | 0.226 | 0.244 | +0.018 | +8 |  |
 | head.run_width (central run, fringe/skirt-free) | 0.200 | 0.241 | +0.041 | +21 |  |
-| head.solid_width | 0.213 | 0.244 | +0.031 | +15 |  |
+| head.solid_width | 0.213 | 0.244 | +0.031 | +14 |  |
 | head.extent | 0.307 | 0.303 | -0.004 | -1 |  |
 | snout.outer_width | 0.236 | 0.251 | +0.015 | +6 |  |
 | snout.solid_width | 0.218 | 0.251 | +0.033 | +15 |  |
@@ -70,21 +70,21 @@ model: `design/model_sheets/aruun/fidelity/proxy/proxy.glb`  forward +z  render 
 | foot.length (heel..toe) | 0.416 | 0.410 | -0.006 | -1 | y |
 | torso.chest_to_back_depth | 0.513 | 0.460 | -0.053 | -10 | y |
 | head.snout_tip_height | 2.008 | 2.011 | +0.004 | +0 |  |
-| total_height (highest point) | 2.400 | 2.402 | +0.002 | +0 | y |
-| horn_A(rear/thick).tip_height | 2.400 | 2.367 | -0.033 | -1 | y |
-| horn_A(rear/thick).span | 0.217 | 0.198 | -0.019 | -9 | y |
-| horn_B(front/long).tip_height | 2.391 | 2.400 | +0.009 | +0 | y |
-| horn_B(front/long).span | 0.183 | 0.237 | +0.054 | +30 | y |
-| horns.total_depth_spread (side) | 0.334 | 0.361 | +0.027 | +8 | y |
+| total_height (highest point) | 2.400 | 2.398 | -0.002 | -0 | y |
+| horn_A(rear/thick).tip_height | 2.400 | 2.362 | -0.038 | -2 | y |
+| horn_A(rear/thick).span | 0.217 | 0.189 | -0.028 | -13 | y |
+| horn_B(front/long).tip_height | 2.391 | 2.398 | +0.007 | +0 | y |
+| horn_B(front/long).span | 0.183 | 0.223 | +0.041 | +22 | y |
+| horns.total_depth_spread (side) | 0.334 | 0.347 | +0.013 | +4 | y |
 
 ## back region errors (m; err = model - ref; edge uncertainty about +-0.0037 m)
 
 | region | ref m | model m | err m | err % | rank? |
 |---|---|---|---|---|---|
-| horns.outer_width | 0.191 | 0.221 | +0.031 | +16 |  |
-| horns.solid_width | 0.119 | 0.131 | +0.012 | +10 |  |
-| horns.extent | 0.439 | 0.367 | -0.072 | -16 |  |
-| head.outer_width | 0.210 | 0.216 | +0.006 | +3 |  |
+| horns.outer_width | 0.191 | 0.207 | +0.016 | +8 |  |
+| horns.solid_width | 0.119 | 0.092 | -0.027 | -23 |  |
+| horns.extent | 0.439 | 0.390 | -0.049 | -11 |  |
+| head.outer_width | 0.210 | 0.215 | +0.005 | +3 |  |
 | head.run_width (central run, fringe/skirt-free) | 0.204 | 0.215 | +0.011 | +6 |  |
 | head.solid_width | 0.207 | 0.215 | +0.008 | +4 |  |
 | head.extent | 0.331 | 0.320 | -0.010 | -3 |  |
@@ -134,12 +134,12 @@ model: `design/model_sheets/aruun/fidelity/proxy/proxy.glb`  forward +z  render 
 | foot.outer_width | 0.708 | 0.737 | +0.029 | +4 | y |
 | foot.solid_width | 0.357 | 0.393 | +0.036 | +10 |  |
 | foot.extent | 0.829 | 0.797 | -0.033 | -4 |  |
-| total_height (highest point) | 2.400 | 2.402 | +0.002 | +0 | y |
-| horn_B(image-left).tip_height | 2.400 | 2.400 | +0.000 | +0 | y |
-| horn_B(image-left).span | 0.290 | 0.250 | -0.041 | -14 | y |
-| horn_A(image-right).tip_height | 2.362 | 2.393 | +0.031 | +1 | y |
-| horn_A(image-right).span | 0.103 | 0.113 | +0.010 | +10 | y |
-| horns.total_spread (back, outer tip to outer tip) | 0.393 | 0.363 | -0.031 | -8 | y |
+| total_height (highest point) | 2.400 | 2.398 | -0.002 | -0 | y |
+| horn_B(image-left).tip_height | 2.400 | 2.398 | -0.002 | -0 | y |
+| horn_B(image-left).span | 0.290 | 0.283 | -0.007 | -3 | y |
+| horn_A(image-right).tip_height | 2.362 | 2.388 | +0.026 | +1 | y |
+| horn_A(image-right).span | 0.103 | 0.104 | +0.001 | +1 | y |
+| horns.total_spread (back, outer tip to outer tip) | 0.393 | 0.387 | -0.007 | -2 | y |
 | hand.bottom_height (arm length proxy) | 0.772 | 0.750 | -0.022 | -3 |  |
 | arm.arm_length_shoulder_to_hand (vertical) | 0.859 | 0.881 | +0.022 | +3 |  |
 
@@ -147,12 +147,12 @@ model: `design/model_sheets/aruun/fidelity/proxy/proxy.glb`  forward +z  render 
 
 | region | ref m | model m | err m | err % | rank? |
 |---|---|---|---|---|---|
-| horns.outer_width | 0.202 | 0.221 | +0.019 | +9 |  |
-| horns.solid_width | 0.113 | 0.131 | +0.018 | +16 |  |
-| horns.extent | 0.473 | 0.366 | -0.107 | -23 |  |
-| head.outer_width | 0.323 | 0.216 | -0.108 | -33 |  |
-| head.run_width (central run, fringe/skirt-free) | 0.259 | 0.213 | -0.045 | -18 |  |
-| head.solid_width | 0.291 | 0.216 | -0.076 | -26 |  |
+| horns.outer_width | 0.202 | 0.207 | +0.004 | +2 |  |
+| horns.solid_width | 0.113 | 0.092 | -0.021 | -18 |  |
+| horns.extent | 0.473 | 0.390 | -0.083 | -18 |  |
+| head.outer_width | 0.323 | 0.215 | -0.108 | -33 |  |
+| head.run_width (central run, fringe/skirt-free) | 0.259 | 0.214 | -0.045 | -17 |  |
+| head.solid_width | 0.291 | 0.215 | -0.076 | -26 |  |
 | head.extent | 0.484 | 0.320 | -0.164 | -34 |  |
 | snout.outer_width | 0.319 | 0.200 | -0.119 | -37 |  |
 | snout.solid_width | 0.300 | 0.200 | -0.100 | -33 |  |
@@ -200,15 +200,15 @@ model: `design/model_sheets/aruun/fidelity/proxy/proxy.glb`  forward +z  render 
 | foot.outer_width | 0.681 | 0.737 | +0.055 | +8 | y |
 | foot.solid_width | 0.387 | 0.393 | +0.006 | +2 |  |
 | foot.extent | 0.936 | 0.796 | -0.140 | -15 |  |
-| total_height (highest point) | 2.400 | 2.402 | +0.002 | +0 | y |
+| total_height (highest point) | 2.400 | 2.398 | -0.002 | -0 | y |
 
 ## Largest deviations (rankable regions, side+back, by |err| in m)
 
-1. side horn_B(front/long).span: ref 0.183 m, model 0.237 m, err +0.054 m (+30%)
-2. side torso.chest_to_back_depth: ref 0.513 m, model 0.460 m, err -0.053 m (-10%)
-3. back horn_B(image-left).span: ref 0.290 m, model 0.250 m, err -0.041 m (-14%)
+1. side torso.chest_to_back_depth: ref 0.513 m, model 0.460 m, err -0.053 m (-10%)
+2. side horn_B(front/long).span: ref 0.183 m, model 0.223 m, err +0.041 m (+22%)
+3. side horn_A(rear/thick).tip_height: ref 2.400 m, model 2.362 m, err -0.038 m (-2%)
 4. side neck_base.run_width (central run, fringe/skirt-free): ref 0.245 m, model 0.280 m, err +0.034 m (+14%)
-5. side horn_A(rear/thick).tip_height: ref 2.400 m, model 2.367 m, err -0.033 m (-1%)
-6. back horn_A(image-right).tip_height: ref 2.362 m, model 2.393 m, err +0.031 m (+1%)
-7. back horns.total_spread (back, outer tip to outer tip): ref 0.393 m, model 0.363 m, err -0.031 m (-8%)
-8. back foot.outer_width: ref 0.708 m, model 0.737 m, err +0.029 m (+4%)
+5. back foot.outer_width: ref 0.708 m, model 0.737 m, err +0.029 m (+4%)
+6. side horn_A(rear/thick).span: ref 0.217 m, model 0.189 m, err -0.028 m (-13%)
+7. back horn_A(image-right).tip_height: ref 2.362 m, model 2.388 m, err +0.026 m (+1%)
+8. side shoulders.outer_width: ref 0.402 m, model 0.427 m, err +0.025 m (+6%)
