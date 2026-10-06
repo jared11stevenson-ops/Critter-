@@ -1,0 +1,26 @@
+{
+ "model": "design/model_sheets/aruun/fidelity/forms/p1f_mantle/forms.glb",
+ "forward": "+z",
+ "px_per_m": 1626.6666666666667,
+ "ground_row": 4000,
+ "pad_px": 1200,
+ "views": {
+  "front": {
+   "height_m": 2.394279084415757,
+   "top_m": 2.394144296646118,
+   "bottom_m": -0.00013478776963893324
+  },
+  "side": {
+   "height_m": 2.394279084415757,
+   "top_m": 2.394144296646118,
+   "bottom_m": -0.00013478776963893324
+  },
+  "back": {
+   "height_m": 2.394279084415757,
+   "top_m": 2.394144296646118,
+   "bottom_m": -0.00013478776963893324
+  }
+ },
+ "mace_faces_dropped": 0,
+ "note": "rest/A-pose render; mace islands dropped unless --keep-mace; front reference is 3/4 so front compare is qualitative"
+}
