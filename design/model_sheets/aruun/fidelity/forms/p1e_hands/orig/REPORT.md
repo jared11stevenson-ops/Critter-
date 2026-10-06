@@ -1,0 +1,214 @@
+# Fidelity comparison (model - reference)
+
+model: `design/model_sheets/aruun/fidelity/forms/p1e_hands/forms.glb`  forward +z  render height 2.394 m (top 2.394); mace islands dropped: 0 faces
+
+| view | IoU (aligned) | IoU (dx=0) | align dx (m) | model/ref area | mean abs rel width err | mean signed width err (m) |
+|---|---|---|---|---|---|---|
+| side | 0.907 | 0.903 | -0.003 | 1.04 | 0.068 | +0.007 |
+| back | 0.894 | 0.894 | +0.001 | 1.01 | 0.059 | +0.008 |
+| front (3/4 ref, qualitative) | 0.582 | 0.428 | +0.152 | 0.84 | 0.300 | -0.087 |
+
+## side region errors (m; err = model - ref; edge uncertainty about +-0.0037 m)
+
+| region | ref m | model m | err m | err % | rank? |
+|---|---|---|---|---|---|
+| horns.outer_width | 0.193 | 0.196 | +0.003 | +2 |  |
+| horns.solid_width | 0.119 | 0.120 | +0.000 | +0 |  |
+| horns.extent | 0.381 | 0.405 | +0.024 | +6 |  |
+| head.outer_width | 0.226 | 0.229 | +0.002 | +1 |  |
+| head.run_width (central run, fringe/skirt-free) | 0.200 | 0.210 | +0.009 | +5 |  |
+| head.solid_width | 0.213 | 0.220 | +0.007 | +3 |  |
+| head.extent | 0.307 | 0.298 | -0.009 | -3 |  |
+| snout.outer_width | 0.236 | 0.236 | -0.000 | -0 |  |
+| snout.solid_width | 0.218 | 0.225 | +0.006 | +3 |  |
+| snout.extent | 0.307 | 0.298 | -0.009 | -3 |  |
+| neck.outer_width | 0.150 | 0.158 | +0.008 | +5 |  |
+| neck.run_width (central run, fringe/skirt-free) | 0.147 | 0.157 | +0.009 | +6 | y |
+| neck.solid_width | 0.149 | 0.157 | +0.008 | +6 |  |
+| neck.extent | 0.314 | 0.288 | -0.026 | -8 |  |
+| neck_top.outer_width | 0.108 | 0.116 | +0.008 | +7 |  |
+| neck_top.run_width (central run, fringe/skirt-free) | 0.108 | 0.116 | +0.008 | +7 | y |
+| neck_top.solid_width | 0.108 | 0.116 | +0.008 | +7 |  |
+| neck_top.extent | 0.110 | 0.125 | +0.015 | +14 |  |
+| neck_mid.outer_width | 0.115 | 0.129 | +0.014 | +13 |  |
+| neck_mid.run_width (central run, fringe/skirt-free) | 0.115 | 0.129 | +0.014 | +13 | y |
+| neck_mid.solid_width | 0.115 | 0.129 | +0.014 | +13 |  |
+| neck_mid.extent | 0.124 | 0.160 | +0.036 | +29 |  |
+| neck_base.outer_width | 0.252 | 0.247 | -0.005 | -2 |  |
+| neck_base.run_width (central run, fringe/skirt-free) | 0.245 | 0.243 | -0.002 | -1 | y |
+| neck_base.solid_width | 0.250 | 0.245 | -0.005 | -2 |  |
+| neck_base.extent | 0.314 | 0.288 | -0.026 | -8 |  |
+| shoulders.outer_width | 0.402 | 0.418 | +0.016 | +4 | y |
+| shoulders.solid_width | 0.402 | 0.418 | +0.016 | +4 |  |
+| shoulders.extent | 0.436 | 0.443 | +0.006 | +1 |  |
+| torso.outer_width | 0.423 | 0.424 | +0.001 | +0 |  |
+| torso.solid_width | 0.413 | 0.420 | +0.007 | +2 |  |
+| torso.extent | 0.537 | 0.523 | -0.014 | -3 |  |
+| waist.outer_width | 0.460 | 0.447 | -0.013 | -3 | y |
+| waist.solid_width | 0.460 | 0.447 | -0.013 | -3 |  |
+| waist.extent | 0.468 | 0.454 | -0.014 | -3 |  |
+| pelvis.outer_width | 0.419 | 0.408 | -0.012 | -3 |  |
+| pelvis.solid_width | 0.405 | 0.408 | +0.003 | +1 |  |
+| pelvis.extent | 0.446 | 0.440 | -0.006 | -1 |  |
+| arm.outer_width | 0.399 | 0.403 | +0.004 | +1 |  |
+| arm.solid_width | 0.387 | 0.397 | +0.010 | +3 |  |
+| arm.extent | 0.537 | 0.523 | -0.014 | -3 |  |
+| hand.outer_width | 0.302 | 0.305 | +0.003 | +1 |  |
+| hand.solid_width | 0.294 | 0.301 | +0.007 | +2 |  |
+| hand.extent | 0.463 | 0.459 | -0.004 | -1 |  |
+| thigh.outer_width | 0.192 | 0.206 | +0.014 | +7 |  |
+| thigh.solid_width | 0.187 | 0.201 | +0.014 | +8 |  |
+| thigh.extent | 0.360 | 0.378 | +0.018 | +5 |  |
+| shin.outer_width | 0.117 | 0.129 | +0.011 | +10 | y |
+| shin.solid_width | 0.117 | 0.129 | +0.011 | +10 |  |
+| shin.extent | 0.198 | 0.208 | +0.010 | +5 |  |
+| foot.outer_width | 0.235 | 0.250 | +0.015 | +6 | y |
+| foot.solid_width | 0.229 | 0.250 | +0.021 | +9 |  |
+| foot.extent | 0.416 | 0.410 | -0.006 | -1 |  |
+| snout.length_from_eye (tip - ref eye col; model eye col assumed = ref eye col after alignment) | 0.130 | 0.124 | -0.007 | -5 | y |
+| head.length (nape..snout tip) | 0.307 | 0.298 | -0.009 | -3 | y |
+| foot.length (heel..toe) | 0.416 | 0.410 | -0.006 | -1 | y |
+| torso.chest_to_back_depth | 0.513 | 0.508 | -0.006 | -1 | y |
+| head.snout_tip_height | 2.008 | 2.005 | -0.002 | -0 |  |
+| total_height (highest point) | 2.400 | 2.394 | -0.006 | -0 | y |
+| horn_A(rear/thick).tip_height | 2.400 | 2.386 | -0.014 | -1 | y |
+| horn_A(rear/thick).span | 0.217 | 0.237 | +0.020 | +9 | y |
+| horn_B(front/long).tip_height | 2.391 | 2.394 | +0.003 | +0 | y |
+| horn_B(front/long).span | 0.183 | 0.203 | +0.021 | +11 | y |
+| horns.total_depth_spread (side) | 0.334 | 0.355 | +0.020 | +6 | y |
+
+## back region errors (m; err = model - ref; edge uncertainty about +-0.0037 m)
+
+| region | ref m | model m | err m | err % | rank? |
+|---|---|---|---|---|---|
+| horns.outer_width | 0.191 | 0.224 | +0.033 | +17 |  |
+| horns.solid_width | 0.119 | 0.121 | +0.002 | +1 |  |
+| horns.extent | 0.439 | 0.456 | +0.017 | +4 |  |
+| head.outer_width | 0.210 | 0.217 | +0.008 | +4 |  |
+| head.run_width (central run, fringe/skirt-free) | 0.204 | 0.218 | +0.014 | +7 |  |
+| head.solid_width | 0.207 | 0.217 | +0.010 | +5 |  |
+| head.extent | 0.331 | 0.326 | -0.004 | -1 |  |
+| snout.outer_width | 0.195 | 0.197 | +0.003 | +1 |  |
+| snout.solid_width | 0.194 | 0.197 | +0.004 | +2 |  |
+| snout.extent | 0.258 | 0.213 | -0.045 | -17 |  |
+| neck.outer_width | 0.198 | 0.183 | -0.015 | -8 |  |
+| neck.run_width (central run, fringe/skirt-free) | 0.178 | 0.182 | +0.004 | +2 | y |
+| neck.solid_width | 0.191 | 0.182 | -0.008 | -4 |  |
+| neck.extent | 0.458 | 0.412 | -0.046 | -10 |  |
+| neck_top.outer_width | 0.142 | 0.136 | -0.006 | -4 |  |
+| neck_top.run_width (central run, fringe/skirt-free) | 0.133 | 0.137 | +0.003 | +2 | y |
+| neck_top.solid_width | 0.138 | 0.136 | -0.001 | -1 |  |
+| neck_top.extent | 0.224 | 0.194 | -0.030 | -13 |  |
+| neck_mid.outer_width | 0.122 | 0.121 | -0.002 | -1 |  |
+| neck_mid.run_width (central run, fringe/skirt-free) | 0.122 | 0.121 | -0.002 | -1 | y |
+| neck_mid.solid_width | 0.122 | 0.121 | -0.002 | -1 |  |
+| neck_mid.extent | 0.133 | 0.150 | +0.017 | +12 |  |
+| neck_base.outer_width | 0.345 | 0.310 | -0.035 | -10 |  |
+| neck_base.run_width (central run, fringe/skirt-free) | 0.326 | 0.308 | -0.018 | -6 | y |
+| neck_base.solid_width | 0.344 | 0.309 | -0.035 | -10 |  |
+| neck_base.extent | 0.409 | 0.365 | -0.044 | -11 |  |
+| shoulders.outer_width | 0.625 | 0.629 | +0.004 | +1 | y |
+| shoulders.solid_width | 0.625 | 0.629 | +0.004 | +1 |  |
+| shoulders.extent | 0.639 | 0.642 | +0.004 | +1 |  |
+| torso.outer_width | 0.675 | 0.678 | +0.003 | +0 | y |
+| torso.solid_width | 0.666 | 0.675 | +0.009 | +1 |  |
+| torso.extent | 0.812 | 0.810 | -0.002 | -0 |  |
+| waist.outer_width | 0.743 | 0.746 | +0.003 | +0 | y |
+| waist.solid_width | 0.742 | 0.746 | +0.004 | +0 |  |
+| waist.extent | 0.751 | 0.750 | -0.001 | -0 |  |
+| pelvis.outer_width | 0.784 | 0.776 | -0.008 | -1 | y |
+| pelvis.solid_width | 0.745 | 0.763 | +0.018 | +2 |  |
+| pelvis.extent | 0.812 | 0.810 | -0.002 | -0 |  |
+| arm.outer_width | 0.712 | 0.718 | +0.006 | +1 |  |
+| arm.solid_width | 0.691 | 0.697 | +0.006 | +1 |  |
+| arm.extent | 0.861 | 0.859 | -0.001 | -0 |  |
+| hand.outer_width | 0.770 | 0.771 | +0.001 | +0 |  |
+| hand.solid_width | 0.696 | 0.698 | +0.002 | +0 |  |
+| hand.extent | 0.882 | 0.876 | -0.006 | -1 |  |
+| thigh.outer_width | 0.755 | 0.757 | +0.002 | +0 | y |
+| thigh.solid_width | 0.627 | 0.619 | -0.008 | -1 |  |
+| thigh.extent | 0.889 | 0.874 | -0.015 | -2 |  |
+| shin.outer_width | 0.606 | 0.617 | +0.011 | +2 | y |
+| shin.solid_width | 0.350 | 0.350 | +0.001 | +0 |  |
+| shin.extent | 0.668 | 0.682 | +0.014 | +2 |  |
+| foot.outer_width | 0.708 | 0.727 | +0.019 | +3 | y |
+| foot.solid_width | 0.357 | 0.371 | +0.014 | +4 |  |
+| foot.extent | 0.829 | 0.797 | -0.033 | -4 |  |
+| total_height (highest point) | 2.400 | 2.394 | -0.006 | -0 | y |
+| horn_B(image-left).tip_height | 2.400 | 2.394 | -0.006 | -0 | y |
+| horn_B(image-left).span | 0.290 | 0.304 | +0.014 | +5 | y |
+| horn_A(image-right).tip_height | 2.362 | 2.386 | +0.024 | +1 | y |
+| horn_A(image-right).span | 0.103 | 0.109 | +0.006 | +5 | y |
+| horns.total_spread (back, outer tip to outer tip) | 0.393 | 0.413 | +0.020 | +5 | y |
+| hand.bottom_height (arm length proxy) | 0.772 | 0.772 | +0.000 | +0 |  |
+| arm.arm_length_shoulder_to_hand (vertical) | 0.859 | 0.859 | +0.000 | +0 |  |
+
+## front region errors (m; err = model - ref; edge uncertainty about +-0.0037 m)
+
+| region | ref m | model m | err m | err % | rank? |
+|---|---|---|---|---|---|
+| horns.outer_width | 0.202 | 0.224 | +0.022 | +11 |  |
+| horns.solid_width | 0.113 | 0.121 | +0.008 | +7 |  |
+| horns.extent | 0.473 | 0.456 | -0.018 | -4 |  |
+| head.outer_width | 0.323 | 0.217 | -0.106 | -33 |  |
+| head.run_width (central run, fringe/skirt-free) | 0.259 | 0.218 | -0.041 | -16 |  |
+| head.solid_width | 0.291 | 0.217 | -0.074 | -25 |  |
+| head.extent | 0.484 | 0.327 | -0.157 | -32 |  |
+| snout.outer_width | 0.319 | 0.197 | -0.122 | -38 |  |
+| snout.solid_width | 0.300 | 0.197 | -0.103 | -34 |  |
+| snout.extent | 0.444 | 0.213 | -0.231 | -52 |  |
+| neck.outer_width | 0.220 | 0.183 | -0.038 | -17 |  |
+| neck.run_width (central run, fringe/skirt-free) | 0.155 | 0.182 | +0.027 | +17 | y |
+| neck.solid_width | 0.193 | 0.182 | -0.011 | -5 |  |
+| neck.extent | 0.509 | 0.412 | -0.097 | -19 |  |
+| neck_top.outer_width | 0.178 | 0.136 | -0.042 | -23 |  |
+| neck_top.run_width (central run, fringe/skirt-free) | 0.134 | 0.137 | +0.002 | +2 | y |
+| neck_top.solid_width | 0.145 | 0.136 | -0.009 | -6 |  |
+| neck_top.extent | 0.270 | 0.194 | -0.077 | -28 |  |
+| neck_mid.outer_width | 0.133 | 0.121 | -0.013 | -9 |  |
+| neck_mid.run_width (central run, fringe/skirt-free) | 0.133 | 0.121 | -0.013 | -9 | y |
+| neck_mid.solid_width | 0.133 | 0.121 | -0.013 | -9 |  |
+| neck_mid.extent | 0.139 | 0.151 | +0.012 | +8 |  |
+| neck_base.outer_width | 0.366 | 0.310 | -0.056 | -15 |  |
+| neck_base.run_width (central run, fringe/skirt-free) | 0.214 | 0.307 | +0.094 | +44 | y |
+| neck_base.solid_width | 0.335 | 0.309 | -0.026 | -8 |  |
+| neck_base.extent | 0.389 | 0.366 | -0.023 | -6 |  |
+| shoulders.outer_width | 0.585 | 0.629 | +0.044 | +8 | y |
+| shoulders.solid_width | 0.585 | 0.629 | +0.044 | +8 |  |
+| shoulders.extent | 0.668 | 0.642 | -0.026 | -4 |  |
+| torso.outer_width | 0.783 | 0.678 | -0.105 | -13 | y |
+| torso.solid_width | 0.733 | 0.675 | -0.058 | -8 |  |
+| torso.extent | 1.103 | 0.810 | -0.293 | -27 |  |
+| waist.outer_width | 0.897 | 0.746 | -0.151 | -17 | y |
+| waist.solid_width | 0.827 | 0.746 | -0.081 | -10 |  |
+| waist.extent | 0.928 | 0.750 | -0.178 | -19 |  |
+| pelvis.outer_width | 0.966 | 0.776 | -0.191 | -20 | y |
+| pelvis.solid_width | 0.921 | 0.763 | -0.158 | -17 |  |
+| pelvis.extent | 1.053 | 0.810 | -0.243 | -23 |  |
+| arm.outer_width | 0.839 | 0.718 | -0.121 | -14 |  |
+| arm.solid_width | 0.790 | 0.697 | -0.092 | -12 |  |
+| arm.extent | 1.103 | 0.859 | -0.243 | -22 |  |
+| hand.outer_width | 0.908 | 0.771 | -0.137 | -15 |  |
+| hand.solid_width | 0.879 | 0.698 | -0.181 | -21 |  |
+| hand.extent | 1.111 | 0.876 | -0.235 | -21 |  |
+| thigh.outer_width | 0.867 | 0.757 | -0.110 | -13 | y |
+| thigh.solid_width | 0.862 | 0.619 | -0.243 | -28 |  |
+| thigh.extent | 0.914 | 0.873 | -0.041 | -4 |  |
+| shin.outer_width | 0.839 | 0.617 | -0.222 | -26 | y |
+| shin.solid_width | 0.564 | 0.350 | -0.214 | -38 |  |
+| shin.extent | 0.939 | 0.682 | -0.258 | -27 |  |
+| foot.outer_width | 0.681 | 0.727 | +0.045 | +7 | y |
+| foot.solid_width | 0.387 | 0.371 | -0.016 | -4 |  |
+| foot.extent | 0.936 | 0.796 | -0.140 | -15 |  |
+| total_height (highest point) | 2.400 | 2.394 | -0.006 | -0 | y |
+
+## Largest deviations (rankable regions, side+back, by |err| in m)
+
+1. back horn_A(image-right).tip_height: ref 2.362 m, model 2.386 m, err +0.024 m (+1%)
+2. side horn_B(front/long).span: ref 0.183 m, model 0.203 m, err +0.021 m (+11%)
+3. side horns.total_depth_spread (side): ref 0.334 m, model 0.355 m, err +0.020 m (+6%)
+4. side horn_A(rear/thick).span: ref 0.217 m, model 0.237 m, err +0.020 m (+9%)
+5. back horns.total_spread (back, outer tip to outer tip): ref 0.393 m, model 0.413 m, err +0.020 m (+5%)
+6. back foot.outer_width: ref 0.708 m, model 0.727 m, err +0.019 m (+3%)
+7. back neck_base.run_width (central run, fringe/skirt-free): ref 0.326 m, model 0.308 m, err -0.018 m (-6%)
+8. side shoulders.outer_width: ref 0.402 m, model 0.418 m, err +0.016 m (+4%)

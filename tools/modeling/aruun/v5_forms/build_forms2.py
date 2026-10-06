@@ -22,6 +22,9 @@ def build():
         # chest plate: flush with the trunk front (side silhouette unchanged), gives the front chest line / sternum plate in the 3D forms
         parts.append(nm(ell('chest_plate', (0.168, 1.50, 0.0), (0.034, 0.075, 0.14)), 'chest_plate'))                                  # pass-1 pauldron + underplate + shoulder blades (kept)
     if os.environ.get('LEGS_E', '1') == '1': legs_e(parts)
+    import limbs_e
+    if os.environ.get('HANDS_E', '1') == '1': limbs_e.hands(parts)
+    if os.environ.get('FEET_E', '1') == '1': limbs_e.feet(parts)
     if STAGE >= 1: horns(parts)
     if STAGE >= 2:
         if os.environ.get('P1C', '0') == '1':
