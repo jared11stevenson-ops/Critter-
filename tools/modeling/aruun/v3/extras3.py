@@ -45,7 +45,7 @@ def mane(A):
 def cone(A, name, kind, base, tip, r, sides=5, sp=0.0):
     base = np.asarray(base, float); tip = np.asarray(tip, float)
     C = np.array([base, tip]); V, F, S = CC.tube(C, np.array([r, 0.0015]), 4, cap_end=False, cap_start=True)
-    A.add(name, kind, V, F, np.full(len(V), sp))
+    A.add(name, kind, V, F, S if sp == 0.0 else np.full(len(V), sp))
 
 
 def claws(A):
@@ -67,16 +67,16 @@ def skirt(A):
     """olive leaf-panel skirt: two staggered rows of long pointed leaves around the waist (front centre left open for the cream loincloth strips)"""
     xc, yc = 0.0, 0.0
     RX, RY = 0.235, 0.20
-    for row, (n_l, z0, dr, Lr) in enumerate(((14, 1.205, 0.045, (0.34, 0.50)), (14, 1.20, 0.0, (0.28, 0.44)))):
+    for row, (n_l, z0, dr, Lr) in enumerate(((14, 1.205, 0.030, (0.34, 0.50)), (14, 1.20, 0.0, (0.28, 0.44)))):
         for i in range(n_l):
             th = 2 * np.pi * (i + 0.5 * row + 0.25) / n_l
             if np.sin(th) < -0.55 and abs(np.cos(th)) < 0.5: continue            # front centre
             L = rng.uniform(*Lr); wtop = 0.13
             nrm = np.array([np.cos(th), np.sin(th), 0.0]); tan = np.array([-np.sin(th), np.cos(th), 0.0])
-            rr = lambda zz: (RX * RY / np.hypot(RY * np.cos(th), RX * np.sin(th))) * (1.0 + 0.30 * np.clip((1.2 - zz) / 0.7, 0, 1)) + dr + 0.02
+            rr = lambda zz: (RX * RY / np.hypot(RY * np.cos(th), RX * np.sin(th))) * (1.0 + 0.10 * np.clip((1.2 - zz) / 0.7, 0, 1)) + dr + 0.012
             V = []
             for j, (u, w) in enumerate(((0.0, 1.0), (0.30, 1.12), (0.65, 0.78), (1.0, 0.0))):
-                zz = z0 - L * u; r = rr(zz) + 0.04 * u
+                zz = z0 - L * u; r = rr(zz) + 0.02 * u
                 c = np.array([xc, yc, zz]) + nrm * r
                 if w > 0: V += [c - tan * wtop * w / 2, c + tan * wtop * w / 2]
                 else: V += [c - nrm * 0.0 + np.array([0, 0, -0.0])]

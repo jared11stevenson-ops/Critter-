@@ -61,3 +61,16 @@ CRITIQUE vs the sheet (board):
 - Face: lacks the sheet's expressive eye socket drama, the white fang is small, the pale-yellow fringe is a few paper-flat strands instead of a flowing mane.
 HONEST MATCH: face ~60 % (structure + palette right, line quality / fringe / expression range not), body ~65 %.
 WHAT REMAINS: darker chitin balance, real fringe strands with alpha, hands with fingers, mantle thickness/hood, per-expression texture swaps, a gameplay-distance silhouette pass (bigger snout contrast), contact-sheet review of every clip at close camera.
+
+---
+# Creator directive pass (all hands on Aruun) - 2026-10-06
+Order: (1) chitin balance, (2) hands/feet, (3) mane, (4) head size, (5) mantle/cloak, (6) skirt/studs/bandages/tassels. Boards: `qa/iter/*`.
+## Iteration 1 (qa/iter/i1_board.png, i1_head.png)
+Zones re-weighted to the sheet: ~65 % near-black navy chitin, red only on pauldrons / forearm vambraces / shoulder blades / sparse spots, tan on abdomen + knees + hamstrings + sabatons,
+orange mottling on the shins, cream bandage strap L-shoulder -> R-hip, red belt sash. Head scale 1.18 -> 1.30 (horn roots/jaw hinge/eye UVs derive from head_raw). Mane: 24 broad flat locks (cream / pale yellow / olive) replace the 10 fringe strips.
+CRITIQUE: navy balance now close to the sheet; mane reads from front/back but side view shows edge-on ribbons; skirt reads as a flat olive sheet; mantle is a flat slab; hands are mittens with black claws.
+## Iteration 2 (qa/iter/i2_board.png, i2_engine_body.png, i2_lhand.png, i2_lfoot.png)
+Added: 3 long claws + thumb claw on the left hand, knuckle claws on the right fist, 3 toe claws + heel spur per foot, bone ring buckle, medallion, 4 red bead strings, 8 skirt studs,
+new skirt = two staggered rows of 28 pointed leaves with dark tips (old continuous strips removed), mantle subdivided with fold displacement, cloak tails painted dark olive with pale drips.
+CRITIQUE (hand/foot close-ups vs detail_hands_feet.png): the sabatons (tan plates banded with dark navy + claws) now match well. Hand claws were black (param bug: claws are tan -> cream in the sheet) and the skirt flare swallowed the left hand.
+FIX in iteration 3: claw colour from the cone parameter; skirt radius flare 0.30 -> 0.10.
