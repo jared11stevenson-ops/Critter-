@@ -1,0 +1,45 @@
+{
+ "view": "side",
+ "camera": "orthographic, camera at his right looking +X (yaw -90), he faces screen-right",
+ "x_offset_px": 100,
+ "axis_x_px": 536.0,
+ "sources": [
+  "design/reference_packs/aruun/ortho/aruun_side_4096.png (original cut of tools/source_art/aruun_nerit_sheet.jpg SIDE figure)"
+ ],
+ "completions": [
+  {
+   "edge": "L",
+   "rows": [
+    2274,
+    2493
+   ],
+   "extend_px": 14,
+   "taper": 0.9,
+   "what": "rear (his back-side) forearm / hand cuff clipped at the left cut edge"
+  },
+  {
+   "edge": "R",
+   "rows": [
+    216,
+    225
+   ],
+   "extend_px": 28,
+   "taper": 0.35,
+   "what": "horn B tip (dark hooked knob) clipped at the right cut edge"
+  }
+ ],
+ "regions": "all green pixels = original side figure; yellow = only the extensions listed in completions (continued trend, ink outline added). Pauldron on his RIGHT is as drawn; creator question open: red pauldron on both shoulders?",
+ "percent_of_painted_pixels": {
+  "green": 99.92,
+  "yellow": 0.08,
+  "red": 0.0
+ },
+ "legend": "GREEN=original sheet pixels, YELLOW=inferred/completed/warped from other views, RED=unknown (nearest-neighbour fill)",
+ "canvas": {
+  "width_px": 1147,
+  "height_px": 4096,
+  "px_per_m": 1626.6666666666667,
+  "ground_row": 4000,
+  "note": "same scale/ground row as reference_packs/aruun/ortho; x_offset_px = columns added at the left of the original cut (axis_x_px shifts by the same amount)"
+ }
+}

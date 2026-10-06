@@ -1,0 +1,56 @@
+{
+ "view": "straight-on face (calm)",
+ "camera": "orthographic front; head facing forward as the tile shows (tile itself is a slightly down-looking bust, snout foreshortened)",
+ "axis_x_px": 700,
+ "x_offset_px": 0,
+ "sources": [
+  "design/reference_gen/aruun/head/aruun_head_front_straighton.png (x4 upscale of the sheet CALM expression tile, 4000 px/m, landmark rows eyes=1499 chin=1920 crown=1292)",
+  "design/reference_packs/aruun/ortho/aruun_back_4096.png (horns)"
+ ],
+ "horns": {
+  "back_head_mid_col": 513.5,
+  "head_span_row": 632,
+  "horn_runs_at_base_row_px_from_mid": [
+   -184.5,
+   -77.5,
+   150.5
+  ],
+  "nudge_m": {
+   "B": 0.03610655737704919,
+   "A": -0.00122950819672131
+  }
+ },
+ "tile": {
+  "scale": 0.4066666666666667,
+  "row0": 15,
+  "col0": 389,
+  "tile": "aruun_head_front_straighton.png"
+ },
+ "features": {
+  "eyes on the SIDES of the head (yellow, dark ring, cream/white glint)": "original tile pixels (both expression tiles)",
+  "red/orange crown plate between the horn bases": "original tile pixels",
+  "brow ridges / cream temple tines": "original tile pixels",
+  "nape/side fringe strands (olive-cream)": "original tile pixels; the tile clips the right-hand strands with a hard vertical edge at tile col ~1300 (cut by the sheet crop, NOT design)",
+  "horn bases in red crown plates": "original tile stubs (cut flat by the tile top, rows < ~690-700 at 4000 px/m)",
+  "snout / nostrils at the tip": "PARTLY: the calm tile foreshortens the snout toward the camera (tan plates + dark slit); nostrils are not separately readable",
+  "white fang at mouth corner": "NOT VISIBLE in the calm tile (mouth closed, hidden by the foreshortened snout); see the RAGE face for fangs",
+  "long lyre horns above the stubs": "INFERRED (YELLOW): back cut mirrored, bases nudged to the stub tops; the front-facing surface of the horns is not drawn anywhere"
+ },
+ "notes": [
+  "the face is a head-only canvas: body rows are empty by design",
+  "last 6 rows of the tile are RED = the tile crop edge"
+ ],
+ "percent_of_painted_pixels": {
+  "green": 82.81,
+  "yellow": 16.5,
+  "red": 0.7
+ },
+ "legend": "GREEN=original sheet pixels, YELLOW=inferred/completed/warped from other views, RED=unknown (nearest-neighbour fill)",
+ "canvas": {
+  "width_px": 1400,
+  "height_px": 4096,
+  "px_per_m": 1626.6666666666667,
+  "ground_row": 4000,
+  "note": "same scale/ground row as reference_packs/aruun/ortho; x_offset_px = columns added at the left of the original cut (axis_x_px shifts by the same amount)"
+ }
+}
