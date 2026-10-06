@@ -6,7 +6,7 @@ PPM = 1626.667; S = 450
 def comp(p):
     im = Image.open(p).convert('RGBA'); bg = Image.new('RGBA', im.size, (204, 204, 199, 255)); bg.alpha_composite(im); return bg.convert('RGB')
 def crop(im, cx, cy, half): return im.crop((int(cx - half), int(cy - half), int(cx + half), int(cy + half))).resize((S, S), Image.LANCZOS)
-half = 0.31 * PPM
+half = float(os.environ.get('SCALE', '0.62')) / 2 * PPM
 side = crop(comp(R + 'v2/aruun_v2_side_completed_4096.png'), 536 + 0.05 * PPM, 4000 - 2.12 * PPM, half)
 back = crop(comp(R + 'v2/aruun_v2_back_completed_4096.png'), 759 - 0.09 * PPM, 4000 - 2.12 * PPM, half)
 calm = Image.open(R + 'v2/aruun_v2_face_calm_4096.png'); calm = comp(R + 'v2/aruun_v2_face_calm_4096.png').crop((250, 250, 1000, 1000)).resize((S, S), Image.LANCZOS)

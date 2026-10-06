@@ -89,7 +89,11 @@ def plate(name, poly, bvh, axis, side, off, thick, cuts=3, L_of=None):
     bmesh.ops.triangulate(bm, faces=bm.faces[:])
     for v in bm.verts:
         a, b = v.co.x, v.co.y
-        h = hit(bvh, a, b, HL + b, 'U') if axis == 'U' else hit(bvh, a, b, None, 'L', side)
+        if axis == 'R':          # (F, theta deg) : ray from the head axis radially outward (theta 0 = lateral, + = up); conformal and well conditioned on the sides
+            th = np.radians(b); Uc = 0.5 * (prof(a, SK_T) + prof(a, SK_B)); r = bvh.ray_cast(Vector(B(a, Uc, HL)), Vector((side * np.cos(th), 0, np.sin(th))))
+            h = (r[0], r[1]) if r[0] is not None else None
+        else:
+            h = hit(bvh, a, b, HL + b, 'U') if axis == 'U' else hit(bvh, a, b, None, 'L', side)
         if h is None: v.co = Vector((0, 0, -9)); continue
         p, n = h; v.co = p + n * off
     bm.verts.ensure_lookup_table()
@@ -147,3 +151,20 @@ def displace(ob, fn):
     nr = np.zeros(n * 3); me.vertices.foreach_get('normal', nr); nr = nr.reshape(-1, 3)
     co = co + nr * fn(co)[:, None]
     me.vertices.foreach_set('co', co.ravel()); me.update()
+
+def depth_relief(amp):
+    """soft prior: high-passed monocular depth (Depth Anything V2 small, registered v2 side crop) -> displacement along the skull normal, weighted by the lateral normal component"""
+    from scipy import ndimage as ndi
+    Z = np.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../../../design/model_sheets/aruun/fidelity/head_v6/depth/v2side_crop_depth.npz'))
+    d = Z['depth'].astype(float); hp = ndi.gaussian_filter(d, 9) - ndi.gaussian_filter(d, 45); m = Z['mask']
+    hp = hp / (hp[m].std() + 1e-9); hp = np.clip(hp, -2.5, 2.5)
+    x0, y0, ax, ppm = float(Z['x0']), float(Z['y0']), float(Z['ax']), float(Z['ppm'])
+    def fn_factory(ob):
+        me = ob.data; n = len(me.vertices); nr = np.zeros(n * 3); me.vertices.foreach_get('normal', nr); nr = nr.reshape(-1, 3)
+        def fn(P):
+            F, U = -P[:, 1], P[:, 2]; col = ax + F * ppm - x0; row = 4000 - U * ppm - y0
+            ok = (col >= 0) & (col < hp.shape[1] - 1) & (row >= 0) & (row < hp.shape[0] - 1)
+            v = ndi.map_coordinates(hp, [np.clip(row, 0, hp.shape[0] - 1), np.clip(col, 0, hp.shape[1] - 1)], order=1)
+            return amp * v * ok * np.abs(nr[:, 0]) ** 1.5
+        return fn
+    return fn_factory
