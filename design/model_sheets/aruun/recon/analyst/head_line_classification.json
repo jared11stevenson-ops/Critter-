@@ -1,0 +1,218 @@
+{
+ "legend": {
+  "A": "form change",
+  "B": "overlapping geometry",
+  "C": "colour boundary",
+  "D": "stylised linework / highlight"
+ },
+ "region_class": {
+  "87": {
+   "cls": "A",
+   "role": "horn A base knob"
+  },
+  "67": {
+   "cls": "A",
+   "role": "horn A base"
+  },
+  "55": {
+   "cls": "A",
+   "role": "horn A base underside band"
+  },
+  "69": {
+   "cls": "A",
+   "role": "horn B arm"
+  },
+  "83": {
+   "cls": "A",
+   "role": "olive blade F"
+  },
+  "9": {
+   "cls": "A",
+   "role": "mandible hook (red)"
+  },
+  "88": {
+   "cls": "A",
+   "role": "neck column"
+  },
+  "74": {
+   "cls": "A",
+   "role": "neck column rim"
+  },
+  "35": {
+   "cls": "A",
+   "role": "dark fringe crest strand"
+  },
+  "25": {
+   "cls": "A",
+   "role": "dark fringe strand"
+  },
+  "38": {
+   "cls": "A",
+   "role": "dark/brown fringe strand"
+  },
+  "57": {
+   "cls": "A",
+   "role": "fringe streak"
+  },
+  "44": {
+   "cls": "A",
+   "role": "bluegray fringe lock"
+  },
+  "40": {
+   "cls": "A",
+   "role": "bluegray fringe lock lower"
+  },
+  "14": {
+   "cls": "A",
+   "role": "cranium top"
+  },
+  "34": {
+   "cls": "A",
+   "role": "cranium top"
+  },
+  "96": {
+   "cls": "B",
+   "role": "cream brow plate (left)"
+  },
+  "101": {
+   "cls": "B",
+   "role": "cream brow plate"
+  },
+  "104": {
+   "cls": "B",
+   "role": "cream brow plate (rear, runs to blade D)"
+  },
+  "97": {
+   "cls": "B",
+   "role": "cream cheek/eye-ridge plate"
+  },
+  "102": {
+   "cls": "B",
+   "role": "cream plate"
+  },
+  "103": {
+   "cls": "B",
+   "role": "cream lower-jaw plate"
+  },
+  "70": {
+   "cls": "B",
+   "role": "red muzzle plate"
+  },
+  "71": {
+   "cls": "B",
+   "role": "red cheek/muzzle plate"
+  },
+  "47": {
+   "cls": "B",
+   "role": "red rear cheek pocket"
+  },
+  "82": {
+   "cls": "B",
+   "role": "cream fringe strand"
+  },
+  "98": {
+   "cls": "B",
+   "role": "brown fringe strand"
+  },
+  "105": {
+   "cls": "B",
+   "role": "cream fringe strand"
+  },
+  "106": {
+   "cls": "B",
+   "role": "cream fringe strand"
+  },
+  "113": {
+   "cls": "B",
+   "role": "cream fringe strand"
+  },
+  "99": {
+   "cls": "B",
+   "role": "cream fringe strand"
+  },
+  "112": {
+   "cls": "B",
+   "role": "cream fringe strand"
+  },
+  "72": {
+   "cls": "B",
+   "role": "red neck fold"
+  },
+  "43": {
+   "cls": "B",
+   "role": "olive collar patch"
+  },
+  "51": {
+   "cls": "B",
+   "role": "olive collar patch"
+  },
+  "15": {
+   "cls": "B",
+   "role": "dark patch behind horn root"
+  },
+  "31": {
+   "cls": "B",
+   "role": "bluegray cheek patch (behind plates)"
+  },
+  "39": {
+   "cls": "B",
+   "role": "bluegray cheek patch (behind plates)"
+  },
+  "20": {
+   "cls": "C",
+   "role": "black cheek/neck mass"
+  },
+  "32": {
+   "cls": "C",
+   "role": "black neck mass"
+  },
+  "21": {
+   "cls": "C",
+   "role": "neck shadow"
+  },
+  "28": {
+   "cls": "C",
+   "role": "neck shadow"
+  },
+  "76": {
+   "cls": "C",
+   "role": "red neck stripe"
+  },
+  "3": {
+   "cls": "C",
+   "role": "eye socket black"
+  },
+  "17": {
+   "cls": "C",
+   "role": "eye socket dark"
+  },
+  "26": {
+   "cls": "C",
+   "role": "eye socket brown ring"
+  },
+  "36": {
+   "cls": "C",
+   "role": "dark brow band"
+  },
+  "30": {
+   "cls": "C",
+   "role": "dark band"
+  },
+  "6": {
+   "cls": "C",
+   "role": "black gap under fringe"
+  },
+  "7": {
+   "cls": "C",
+   "role": "black gap under fringe"
+  },
+  "8": {
+   "cls": "C",
+   "role": "dark seam/shadow"
+  },
+  "114": {
+   "cls": "D",
+   "role": "neck highlight stripe"
+  }
+ }
+}
