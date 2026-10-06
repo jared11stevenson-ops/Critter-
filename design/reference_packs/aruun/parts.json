@@ -1,0 +1,760 @@
+[
+ {
+  "id": 1,
+  "name": "Horn A (thick, hooked, jointed; char-left in back view)",
+  "group": "horn",
+  "material": "chitin satin",
+  "layer": 9,
+  "pos": {
+   "front": [
+    0.52,
+    0.1
+   ],
+   "side": [
+    0.62,
+    0.06
+   ],
+   "back": [
+    0.45,
+    0.1
+   ]
+  },
+  "hex": {
+   "front": null,
+   "side": "#4b1b15",
+   "back": "#8d332d"
+  }
+ },
+ {
+  "id": 2,
+  "name": "Horn B (thinner, longer arch; cream shaft in back view)",
+  "group": "horn",
+  "material": "chitin satin",
+  "layer": 9,
+  "pos": {
+   "front": [
+    0.38,
+    0.1
+   ],
+   "side": [
+    0.93,
+    0.045
+   ],
+   "back": [
+    0.3,
+    0.08
+   ]
+  },
+  "hex": {
+   "front": "#a54533",
+   "side": "#b1875d",
+   "back": "#d5a557"
+  }
+ },
+ {
+  "id": 3,
+  "name": "Horn knob rings / side tines (cream-tan)",
+  "group": "horn",
+  "material": "chitin satin",
+  "layer": 9,
+  "pos": {
+   "front": [
+    0.585,
+    0.06
+   ],
+   "side": [
+    0.62,
+    0.06
+   ],
+   "back": [
+    0.45,
+    0.06
+   ]
+  },
+  "hex": {
+   "front": null,
+   "side": "#4b1b15",
+   "back": "#8d332d"
+  }
+ },
+ {
+  "id": 4,
+  "name": "Red crown plates / horn cups",
+  "group": "head",
+  "material": "chitin gloss",
+  "layer": 8,
+  "pos": {
+   "front": [
+    0.55,
+    0.135
+   ],
+   "side": [
+    0.45,
+    0.125
+   ],
+   "back": [
+    0.37,
+    0.13
+   ]
+  },
+  "hex": {
+   "front": "#33211b",
+   "side": "#933327",
+   "back": "#2d2727"
+  }
+ },
+ {
+  "id": 5,
+  "name": "Cream temple tines + brow ridge",
+  "group": "head",
+  "material": "bone",
+  "layer": 8,
+  "pos": {
+   "front": [
+    0.66,
+    0.12
+   ],
+   "side": [
+    0.56,
+    0.16
+   ],
+   "back": [
+    0.5,
+    0.135
+   ]
+  },
+  "hex": {
+   "front": "#937551",
+   "side": "#933327",
+   "back": "#6f4b33"
+  }
+ },
+ {
+  "id": 6,
+  "name": "Eye (yellow, dark pupil ring, white glint)",
+  "group": "head",
+  "material": "glass",
+  "layer": 8,
+  "pos": {
+   "front": [
+    0.545,
+    0.155
+   ],
+   "side": [
+    0.57,
+    0.15
+   ]
+  },
+  "hex": {
+   "front": "#c98739",
+   "side": "#ab7b57"
+  }
+ },
+ {
+  "id": 7,
+  "name": "Snout / nose pad / mandible hook (cream-tan face plate)",
+  "group": "head",
+  "material": "bone + chitin",
+  "layer": 8,
+  "pos": {
+   "front": [
+    0.5,
+    0.175
+   ],
+   "side": [
+    0.65,
+    0.165
+   ]
+  },
+  "hex": {
+   "front": "#b18769",
+   "side": "#c98757"
+  }
+ },
+ {
+  "id": 8,
+  "name": "Fang (white) at mouth corner",
+  "group": "head",
+  "material": "bone",
+  "layer": 8,
+  "pos": {
+   "side": [
+    0.67,
+    0.175
+   ]
+  },
+  "hex": {
+   "side": "#c97b57"
+  }
+ },
+ {
+  "id": 9,
+  "name": "Pale-yellow nape fringe + dark navy lower head",
+  "group": "head",
+  "material": "fibre / hair",
+  "layer": 8,
+  "pos": {
+   "front": [
+    0.76,
+    0.16
+   ],
+   "side": [
+    0.42,
+    0.14
+   ],
+   "back": [
+    0.35,
+    0.16
+   ]
+  },
+  "hex": {
+   "front": "#6f5739",
+   "side": "#2d2727",
+   "back": "#2d2727"
+  }
+ },
+ {
+  "id": 10,
+  "name": "Neck (long, orange-red, cream gloss streaks)",
+  "group": "body",
+  "material": "soft chitin / skin",
+  "layer": 3,
+  "pos": {
+   "front": [
+    0.63,
+    0.23
+   ],
+   "side": [
+    0.38,
+    0.225
+   ],
+   "back": [
+    0.34,
+    0.22
+   ]
+  },
+  "hex": {
+   "front": "#ab5733",
+   "side": "#93452d",
+   "back": "#a5452d"
+  }
+ },
+ {
+  "id": 11,
+  "name": "Pauldron red ladybug disc (yellow spot, black holes), tan underplate",
+  "group": "armour",
+  "material": "chitin gloss",
+  "layer": 7,
+  "pos": {
+   "front": [
+    0.81,
+    0.3
+   ],
+   "side": [
+    0.19,
+    0.295
+   ],
+   "back": [
+    0.12,
+    0.31
+   ]
+  },
+  "hex": {
+   "front": "#edb775",
+   "side": "#a5392d",
+   "back": "#511b15"
+  }
+ },
+ {
+  "id": 12,
+  "name": "Hooded mantle / cloak (dark brown-aubergine, cream fringe edge)",
+  "group": "cloth",
+  "material": "cloth",
+  "layer": 10,
+  "pos": {
+   "front": [
+    0.33,
+    0.37
+   ],
+   "back": [
+    0.64,
+    0.31
+   ]
+  },
+  "hex": {
+   "front": "#2d2727",
+   "back": "#4b3933"
+  }
+ },
+ {
+  "id": 13,
+  "name": "Chest wrap + cream straps + knot",
+  "group": "cloth",
+  "material": "cloth",
+  "layer": 6,
+  "pos": {
+   "front": [
+    0.58,
+    0.39
+   ],
+   "side": [
+    0.5,
+    0.33
+   ],
+   "back": [
+    0.3,
+    0.35
+   ]
+  },
+  "hex": {
+   "front": "#cfa575",
+   "side": "#2d2727",
+   "back": "#b18769"
+  }
+ },
+ {
+  "id": 14,
+  "name": "Tan back/chest plates (carapace)",
+  "group": "armour",
+  "material": "bone / dry chitin",
+  "layer": 5,
+  "pos": {
+   "front": [
+    0.52,
+    0.43
+   ],
+   "side": [
+    0.45,
+    0.38
+   ],
+   "back": [
+    0.3,
+    0.36
+   ]
+  },
+  "hex": {
+   "front": "#b18769",
+   "side": "#b1875d",
+   "back": "#b18769"
+  }
+ },
+ {
+  "id": 15,
+  "name": "Red waist sash + belt",
+  "group": "cloth",
+  "material": "cloth",
+  "layer": 7,
+  "pos": {
+   "front": [
+    0.45,
+    0.455
+   ],
+   "side": [
+    0.5,
+    0.5
+   ],
+   "back": [
+    0.5,
+    0.47
+   ]
+  },
+  "hex": {
+   "front": "#2d2727",
+   "side": "#933327",
+   "back": "#8d332d"
+  }
+ },
+ {
+  "id": 16,
+  "name": "Brass ring + boss belt ornament",
+  "group": "metal",
+  "material": "aged brass",
+  "layer": 8,
+  "pos": {
+   "front": [
+    0.4,
+    0.495
+   ]
+  },
+  "hex": {
+   "front": "#2d2727"
+  }
+ },
+ {
+  "id": 17,
+  "name": "Cream tassels / hanging strips (belt)",
+  "group": "cloth",
+  "material": "cloth",
+  "layer": 8,
+  "pos": {
+   "front": [
+    0.52,
+    0.52
+   ],
+   "side": [
+    0.57,
+    0.33
+   ],
+   "back": [
+    0.68,
+    0.5
+   ]
+  },
+  "hex": {
+   "front": "#271b15",
+   "side": "#2d2727",
+   "back": "#dbc3ab"
+  }
+ },
+ {
+  "id": 18,
+  "name": "Leaf pendant (olive) hanging at hip",
+  "group": "cloth",
+  "material": "leaf / fibre",
+  "layer": 8,
+  "pos": {
+   "front": [
+    0.73,
+    0.5
+   ]
+  },
+  "hex": {
+   "front": "#937551"
+  }
+ },
+ {
+  "id": 19,
+  "name": "Elbow disc pad (red, yellow spot)",
+  "group": "armour",
+  "material": "chitin gloss",
+  "layer": 7,
+  "pos": {
+   "front": [
+    0.82,
+    0.475
+   ],
+   "side": [
+    0.15,
+    0.47
+   ],
+   "back": [
+    0.07,
+    0.47
+   ]
+  },
+  "hex": {
+   "front": "#e1ab5d",
+   "side": "#c38769",
+   "back": "#8d332d"
+  }
+ },
+ {
+  "id": 20,
+  "name": "Forearm guard (red + tan)",
+  "group": "armour",
+  "material": "chitin / bone",
+  "layer": 6,
+  "pos": {
+   "front": [
+    0.83,
+    0.55
+   ],
+   "side": [
+    0.06,
+    0.55
+   ],
+   "back": [
+    0.05,
+    0.55
+   ]
+  },
+  "hex": {
+   "front": "#93392d",
+   "side": "#933327",
+   "back": "#6f2727"
+  }
+ },
+ {
+  "id": 21,
+  "name": "Hand L (viewer-left in front): three long pointed claws",
+  "group": "hand",
+  "material": "chitin",
+  "layer": 4,
+  "pos": {
+   "front": [
+    0.05,
+    0.6
+   ]
+  },
+  "hex": {
+   "front": "#271b15"
+  }
+ },
+ {
+  "id": 22,
+  "name": "Hand R: gloved fist gripping Morrow haft",
+  "group": "hand",
+  "material": "chitin + wrap",
+  "layer": 4,
+  "pos": {
+   "front": [
+    0.82,
+    0.6
+   ],
+   "back": [
+    0.07,
+    0.62
+   ]
+  },
+  "hex": {
+   "front": "#b18769",
+   "back": "#2d2727"
+  }
+ },
+ {
+  "id": 23,
+  "name": "Dark under-armour (aubergine suit with cream star specks)",
+  "group": "body",
+  "material": "matte chitin / suit",
+  "layer": 2,
+  "pos": {
+   "front": [
+    0.55,
+    0.58
+   ],
+   "side": [
+    0.3,
+    0.45
+   ],
+   "back": [
+    0.45,
+    0.55
+   ]
+  },
+  "hex": {
+   "front": "#2d2727",
+   "side": "#e7c9ab",
+   "back": "#393333"
+  }
+ },
+ {
+  "id": 24,
+  "name": "Thigh plate (tan) with red patch",
+  "group": "armour",
+  "material": "bone",
+  "layer": 5,
+  "pos": {
+   "front": [
+    0.75,
+    0.66
+   ],
+   "side": [
+    0.5,
+    0.62
+   ],
+   "back": [
+    0.2,
+    0.65
+   ]
+  },
+  "hex": {
+   "front": "#8d5739",
+   "side": "#bd9375",
+   "back": "#b18769"
+  }
+ },
+ {
+  "id": 25,
+  "name": "Olive leaf skirt strips (front, hanging from waist)",
+  "group": "cloth",
+  "material": "leaf / fibre",
+  "layer": 8,
+  "pos": {
+   "front": [
+    0.55,
+    0.75
+   ]
+  },
+  "hex": {
+   "front": "#b7936f"
+  }
+ },
+ {
+  "id": 26,
+  "name": "Dark ragged skirt/cloak strips (outer, both sides)",
+  "group": "cloth",
+  "material": "cloth",
+  "layer": 9,
+  "pos": {
+   "front": [
+    0.93,
+    0.72
+   ],
+   "back": [
+    0.8,
+    0.66
+   ]
+  },
+  "hex": {
+   "front": "#6f5739",
+   "back": "#ab7557"
+  }
+ },
+ {
+  "id": 27,
+  "name": "Tan/olive skirt strips (back view, right side)",
+  "group": "cloth",
+  "material": "leaf / fibre",
+  "layer": 8,
+  "pos": {
+   "back": [
+    0.75,
+    0.72
+   ]
+  },
+  "hex": {
+   "back": "#2d2727"
+  }
+ },
+ {
+  "id": 28,
+  "name": "Knee guard (dark)",
+  "group": "armour",
+  "material": "matte chitin",
+  "layer": 6,
+  "pos": {
+   "front": [
+    0.4,
+    0.73
+   ],
+   "side": [
+    0.36,
+    0.73
+   ],
+   "back": [
+    0.3,
+    0.75
+   ]
+  },
+  "hex": {
+   "front": "#ab7b51",
+   "side": "#b78769",
+   "back": "#8d4533"
+  }
+ },
+ {
+  "id": 29,
+  "name": "Shin plate (orange-red) / red calf plate",
+  "group": "armour",
+  "material": "chitin gloss",
+  "layer": 6,
+  "pos": {
+   "front": [
+    0.38,
+    0.81
+   ],
+   "side": [
+    0.15,
+    0.78
+   ],
+   "back": [
+    0.27,
+    0.86
+   ]
+  },
+  "hex": {
+   "front": "#2d2727",
+   "side": "#b16339",
+   "back": "#8d4533"
+  }
+ },
+ {
+  "id": 30,
+  "name": "Ankle wrap / bone plates",
+  "group": "armour",
+  "material": "bone",
+  "layer": 6,
+  "pos": {
+   "front": [
+    0.42,
+    0.87
+   ],
+   "side": [
+    0.15,
+    0.91
+   ],
+   "back": [
+    0.28,
+    0.9
+   ]
+  },
+  "hex": {
+   "front": "#6f5745",
+   "side": "#933327",
+   "back": "#b18769"
+  }
+ },
+ {
+  "id": 31,
+  "name": "Foot with large claws / blunt toe",
+  "group": "foot",
+  "material": "chitin",
+  "layer": 4,
+  "pos": {
+   "front": [
+    0.3,
+    0.93
+   ],
+   "side": [
+    0.38,
+    0.955
+   ],
+   "back": [
+    0.27,
+    0.96
+   ]
+  },
+  "hex": {
+   "front": "#2d2727",
+   "side": "#2d1b15",
+   "back": "#2d2727"
+  }
+ },
+ {
+  "id": 32,
+  "name": "Second foot",
+  "group": "foot",
+  "material": "chitin",
+  "layer": 4,
+  "pos": {
+   "front": [
+    0.88,
+    0.93
+   ],
+   "back": [
+    0.8,
+    0.95
+   ]
+  },
+  "hex": {
+   "front": "#2d2727",
+   "back": "#2d2727"
+  }
+ },
+ {
+  "id": 33,
+  "name": "Red hanging fringe tail (shoulder tassel, side view)",
+  "group": "cloth",
+  "material": "cloth",
+  "layer": 9,
+  "pos": {
+   "side": [
+    0.88,
+    0.395
+   ]
+  },
+  "hex": {
+   "side": "#752d21"
+  }
+ }
+]
