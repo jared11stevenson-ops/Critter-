@@ -202,6 +202,8 @@ func toggle_panel() -> void:
 	if _panel != null and _panel.visible:
 		_close_panel()
 		return
+	if get_tree().paused:
+		return                        # pause menu / dialogue / another overlay owns the screen
 	var party: Variant = ex.level.get("party")
 	if party == null or not bool(party.input_enabled) or bool(ex.level.get("burden_active")):
 		return

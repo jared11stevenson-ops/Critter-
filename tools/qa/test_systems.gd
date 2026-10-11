@@ -447,14 +447,11 @@ func _test_explore_level() -> void:
 	for m in z["live"].duplicate():
 		m.removed.emit(m)
 	ok(int(z["clears"]) == 2 and float(z["next_ok"]) >= ex.clock + 239.0, "second clear -> longer cooldown (x1.6)")
+	ok(bool(z["retired"]), "zone retires after max_clears (no endless grind)")
 	z["next_ok"] = 0.0
 	lvl.field.in_combat = false
 	ex._roam_tick()
-	while not ex._spawn_queue.is_empty():
-		ex._spawn_one()
-	for m in z["live"].duplicate():
-		m.removed.emit(m)
-	ok(bool(z["retired"]), "zone retires after max_clears (no endless grind)")
+	ok(ex._spawn_queue.is_empty(), "a retired zone never spawns again this descent")
 	# the live cap
 	var cap := int(ex.data["roaming"]["global_cap"])
 	ok(ex.live_roamers() <= cap, "live roamers never exceed the cap")
@@ -467,6 +464,10 @@ func _test_explore_level() -> void:
 	ex._roam_tick()
 	ok(ex._spawn_queue.is_empty(), "no roamers during the Burden crossing")
 	lvl.burden_active = false
+	lvl.field.in_combat = false
+	ex._roam_tick()
+	ok(not ex._spawn_queue.is_empty(), "spoke guardians return once the Burden is over and the spoke is visited")
+	ex._spawn_queue.clear()
 	for _i in 12:
 		await get_tree().process_frame
 	lvl.queue_free()

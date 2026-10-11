@@ -46,7 +46,7 @@
       "dawn": {"dominion_drone": 0.7}
     },
     "zones": [
-      {"id": "valley_flats", "c": [56, 0], "r": 7, "needs": "valley_clear", "initial_delay_s": 120, "respawn_s": 150, "max_clears": 3,
+      {"id": "valley_flats", "c": [56, 0], "r": 7, "needs": "valley_clear", "initial_delay_s": 120, "respawn_s": 150, "max_clears": 2,
        "groups": [{"species": "skitter_mite", "n": 3, "w": 3}, {"species": "skitter_mite", "n": 2, "w": 2}]},
       {"id": "echo_run", "c": [62, -30], "r": 5, "needs": "_spoke_echo_hollow", "initial_delay_s": 200, "respawn_s": 240, "max_clears": 2,
        "groups": [{"species": "skitter_mite", "n": 3, "w": 1}]},
