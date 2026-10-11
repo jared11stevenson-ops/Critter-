@@ -70,3 +70,10 @@ Species discovered; successful captures; tournament achievements; champions prod
 ## 15. Short loop
 PREPARE → RISK AN EXISTING CRITTER → ENTER THE QUANTUM WORLD → EXPLORE AND ENCOUNTER WILD CRITTERS → CAPTURE AND EXTRACT → ESTABLISH ITS HABITAT → ASSIGN FOUNDING MONARCH IF FIRST OF SPECIES → TOURNAMENTS → CHAMPION → CHAMPION TOURNAMENT → RETIRE OR DEFEND → RETIRED CRITTERS FORM FAMILIES → POPULATIONS GROW AND BUILD AUTONOMOUSLY → ALLOCATE MONEY AND RESOURCES → EXPAND THE HABITAT SHELF → REPEAT.
 **On CRITTER, fighting means survival. On Earth, fighting means the opportunity for freedom. Every battle risks a life. Every retirement preserves one. Every surviving generation creates something that lasts beyond the arena.**
+
+---
+## ADDENDUM 1 — Creator rulings (2026-10-11) — LAW
+1. **Roster size:** unlimited fighters; the Habitat Shelf holds **up to 60 Critters**. The catch: some will die forever, so keeping 60 alive is hard. (There is no separate "7 active fighters" limit; the earlier "seven" idea is void.)
+2. **Tutorial:** **Aruun** is the tutorial character (the player's first Critter).
+3. **No main characters.** There are no protagonist critters and no plot-protected individuals. Named characters from the lore (Aruun, Cigarra, etc.) are individuals of their **species**; the species are what matter. Any Critter can die.
+4. **Breeding and species:** retired Critters can breed with the **same species** to continue a lineage, or with **another species** to create a **new species** (hybrid). New species get their own identity, jar and founding monarch (the first of that new species).

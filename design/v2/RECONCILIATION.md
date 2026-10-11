@@ -22,8 +22,16 @@ CREATOR_GDD.md is authoritative. Changes to what we had:
 6. **M6 Content:** species, regions, abilities, art stages (Realism Ladder), story chapters.
 Rules: one milestone at a time; each ends with a build you play on your phone.
 
-## Open questions for the creator (defaults in brackets; work proceeds on defaults)
-1. Is there a limit on how many Critters you can own/field at once? [up to 7 active fighters, unlimited resting in jars]
-2. Can a fight ever be lost without dying (yield, escape, knockout)? [Yield exists but costs the match and a scar; deaths happen on a finishing blow]
-3. Is the Aruun/Cigarra pair the starter pair, and how does the very first Critter get acquired? [tutorial gives Aruun]
-4. Do the First Ten each get a species jar of their own species (e.g., giraffe beetles), with Aruun as that species' founding monarch? [yes: named lore characters are founding monarchs of their species when first captured]
+## Creator rulings (ADDENDUM 1 in CREATOR_GDD.md, law) — answers to the earlier open questions
+1. Unlimited fighters; the Shelf holds up to 60 Critters; deaths make 60 hard to maintain.
+2. Aruun is the tutorial character.
+3. No main characters; species matter; any Critter can die.
+4. Same-species breeding continues a lineage; cross-species breeding creates a new species.
+
+## Consequences (design work this creates; settled only by the creator where marked)
+- **Roster model:** replace the 7-slot Rack with a Shelf of up to 60 Critters; one jar per species (cross-species hybrids create new jars); death frees a slot.
+- **Species as data:** a species is a definition (anatomy, abilities, habitat needs, architecture style, traits). A hybrid species is *generated* from two parent species. Needed: a **hybridization ruleset** (what a hybrid inherits: body traits, ability pool, habitat needs; how the name, look and combat identity are produced; limits). OPEN for the creator: which species can interbreed? Are there incompatible pairs? How many generations until a hybrid counts as its own species?
+- **Hybrid combat identity:** every Critter is its own fighting style (law 4/ section 4), so a hybrid's abilities must be a coherent blend (e.g., inherit one ability from each parent plus one emergent). OPEN: do hybrids need new art? (Proposal: parametric rigs that blend parts and palettes of both parents.)
+- **Founders:** the first Critter of any species, including a hybrid species, is its founding monarch; the named lore characters are founders only if they are the first of their species captured.
+- **Genetics:** inherited traits for same-species lineages (appearance, physical stats, tendencies; not combat experience).
+- **Tutorial:** Aruun is the player's first Critter (separate introductory process), still mortal.
