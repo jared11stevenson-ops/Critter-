@@ -16,6 +16,7 @@ var _panel: PanelContainer
 var _list: VBoxContainer
 var _msg: Label
 var _redraw_t := 0.0
+var _hud: Node = null
 var _was_paused := false
 ## The charted ground is baked once into one texture (2 px per metre) and drawn as a single rect: the minimap costs a
 ## handful of canvas draws no matter how much of the Reaches is charted.
@@ -89,10 +90,16 @@ func _on_map_input(ev: InputEvent) -> void:
 func _update_title() -> void:
 	var lp: Vector3 = ex.level.get("party").get_leader().global_position
 	var g := ex.guide_target()
+	if _hud == null or not is_instance_valid(_hud):
+		_hud = get_tree().get_first_node_in_group("hud")
 	if g.x == INF:
 		_title = "%d/%d places" % [ex.found_count(), ex.pois.size()]
+		if _hud:
+			_hud.set_guide(Vector2.ZERO, 0.0)
 		return
 	var d := Vector2(g.x - lp.x, g.z - lp.z)
+	if _hud:
+		_hud.set_guide(d, d.length())    # camera looks down -Z: screen right = +X, screen down = +Z
 	_title = "Next: %d m %s  ·  %d/%d" % [int(d.length()), ExploreRules.compass_word(d.x, d.y), ex.found_count(), ex.pois.size()]
 
 # ------------------------------------------------------------------ chart texture

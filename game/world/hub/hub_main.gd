@@ -174,41 +174,113 @@ func _build_ui() -> void:
 	_toast_box = VBoxContainer.new()
 	_toast_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ui_root.add_child(_toast_box)
-	var menu := UiKit.button("Menu", Vector2(150, 88), 28)
-	menu.anchor_left = 1.0
-	menu.anchor_right = 1.0
-	menu.offset_left = -174
-	menu.offset_right = -24
-	menu.offset_top = 16
-	menu.offset_bottom = 104
-	menu.pressed.connect(_open_menu)
-	ui_root.add_child(menu)
-	var bonds := UiKit.button("Bonds", Vector2(150, 88), 28)
-	bonds.anchor_left = 1.0
-	bonds.anchor_right = 1.0
-	bonds.offset_left = -338
-	bonds.offset_right = -188
-	bonds.offset_top = 16
-	bonds.offset_bottom = 104
-	bonds.pressed.connect(_open_bonds)
-	bonds.name = "BondsButton"
-	ui_root.add_child(bonds)
-	var gear := UiKit.button("Gear", Vector2(150, 88), 28)
-	gear.anchor_left = 1.0
-	gear.anchor_right = 1.0
-	gear.offset_left = -502
-	gear.offset_right = -352
-	gear.offset_top = 16
-	gear.offset_bottom = 104
-	gear.name = "GearButton"
-	gear.pressed.connect(_open_gear)
-	ui_root.add_child(gear)
-	var hint := UiKit.label("Drag to look around · tap a place or a person", 22, UiKit.PARCHMENT.darkened(0.15), "ui", 6, Color(0, 0, 0, 0.8))
-	hint.anchor_top = 1.0
-	hint.anchor_bottom = 1.0
-	hint.offset_top = -44
-	hint.position.x = 24
-	ui_root.add_child(hint)
+	# Top-right: Menu always; Gear / Bonds only once there is something to equip or promise (after the first descent).
+	var x := 24.0
+	for d in [["Menu", "MenuButton", "_open_menu"], ["Bonds", "BondsButton", "_open_bonds"], ["Gear", "GearButton", "_open_gear"]]:
+		var bt := UiKit.button(d[0], Vector2(124, 72), 26)
+		bt.anchor_left = 1.0
+		bt.anchor_right = 1.0
+		bt.offset_left = -(x + 124.0)
+		bt.offset_right = -x
+		bt.offset_top = 16
+		bt.offset_bottom = 88
+		bt.name = d[1]
+		bt.pressed.connect(Callable(self, d[2]))
+		ui_root.add_child(bt)
+		x += 136.0
+	# The one obvious action: a big button bottom-centre that does what the objective says.
+	_primary = UiKit.button("Descend", Vector2(440, 96), 38)
+	_primary.name = "PrimaryAction"
+	_primary.anchor_left = 0.5
+	_primary.anchor_right = 0.5
+	_primary.anchor_top = 1.0
+	_primary.anchor_bottom = 1.0
+	_primary.offset_left = -220
+	_primary.offset_right = 220
+	_primary.offset_top = -128
+	_primary.offset_bottom = -32
+	_primary.add_theme_stylebox_override("normal", UiKit.box(UiKit.ACCENT.darkened(0.15), UiKit.PARCHMENT, 30, 4, 22))
+	_primary.add_theme_stylebox_override("hover", UiKit.box(UiKit.ACCENT, UiKit.PARCHMENT, 30, 4, 22))
+	_primary.add_theme_stylebox_override("pressed", UiKit.box(UiKit.ACCENT.darkened(0.4), UiKit.PARCHMENT, 30, 4, 22))
+	_primary.pressed.connect(func(): _on_spot(HubFlow.primary_spot(GameState.flags)))
+	ui_root.add_child(_primary)
+	# Everything else lives behind one "Places" button instead of a ring of floating chips.
+	_places_btn = UiKit.button("Places", Vector2(150, 72), 26)
+	_places_btn.name = "PlacesButton"
+	_places_btn.anchor_left = 1.0
+	_places_btn.anchor_right = 1.0
+	_places_btn.anchor_top = 1.0
+	_places_btn.anchor_bottom = 1.0
+	_places_btn.offset_left = -174
+	_places_btn.offset_right = -24
+	_places_btn.offset_top = -96
+	_places_btn.offset_bottom = -24
+	_places_btn.pressed.connect(_toggle_places)
+	ui_root.add_child(_places_btn)
+	_places_panel = PanelContainer.new()
+	_places_panel.add_theme_stylebox_override("panel", UiKit.box(Color(UiKit.PARCHMENT, 0.97), UiKit.PARCHMENT_DARK.darkened(0.35), 16, 3, 12))
+	_places_panel.visible = false
+	_places_panel.anchor_left = 1.0
+	_places_panel.anchor_right = 1.0
+	_places_panel.anchor_top = 1.0
+	_places_panel.anchor_bottom = 1.0
+	_places_panel.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	_places_panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	_places_panel.offset_right = -24
+	_places_panel.offset_bottom = -104
+	ui_root.add_child(_places_panel)
+	_places_list = VBoxContainer.new()
+	_places_list.add_theme_constant_override("separation", 6)
+	_places_panel.add_child(_places_list)
+	_hint = UiKit.label("Drag to look around", 22, UiKit.PARCHMENT.darkened(0.15), "ui", 6, Color(0, 0, 0, 0.8))
+	_hint.anchor_top = 1.0
+	_hint.anchor_bottom = 1.0
+	_hint.offset_top = -44
+	_hint.position.x = 24
+	ui_root.add_child(_hint)
+
+var _primary: Button
+var _places_btn: Button
+var _places_panel: PanelContainer
+var _places_list: VBoxContainer
+var _hint: Label
+var _ui_state := ""
+
+func _toggle_places() -> void:
+	Audio.sfx("ui_tap")
+	if _places_panel.visible:
+		_places_panel.visible = false
+		return
+	for c in _places_list.get_children():
+		c.queue_free()
+	for id in HubFlow.places_list(GameState.flags):
+		var nm := str(id)
+		for sp in _spots:
+			if sp["id"] == id:
+				nm = str(sp["name"])
+		var b := UiKit.button(nm, Vector2(300, 64), 26)
+		b.pressed.connect(func():
+			_places_panel.visible = false
+			_on_spot(id))
+		_places_list.add_child(b)
+	_places_panel.visible = true
+
+## Show only what is relevant now: Gear/Bonds after the first descent, the primary button label, the Places list.
+func _refresh_ui_state() -> void:
+	var fl := GameState.flags
+	var key := "%s|%s|%s" % [HubFlow.primary_label(fl), HubFlow.show_gear_bonds(fl), HubFlow.places_list(fl)]
+	if key == _ui_state:
+		return
+	_ui_state = key
+	var gb := HubFlow.show_gear_bonds(fl)
+	ui_root.get_node("GearButton").visible = gb
+	ui_root.get_node("BondsButton").visible = gb
+	var pl := HubFlow.primary_label(fl)
+	_primary.visible = pl != ""
+	_primary.text = pl
+	_places_btn.visible = not HubFlow.places_list(fl).is_empty()
+	_places_panel.visible = false
+	_force_place = true
 
 func _build_spots() -> void:
 	var defs := [
@@ -230,8 +302,8 @@ func _build_spots() -> void:
 		var b := Button.new()
 		b.text = d[1]
 		b.focus_mode = Control.FOCUS_ALL
-		b.custom_minimum_size = Vector2(0, 88) if d[3] == "spot" else Vector2(0, 72)
-		b.add_theme_font_size_override("font_size", 28 if d[3] == "spot" else 24)
+		b.custom_minimum_size = Vector2(0, 64) if d[3] == "spot" else Vector2(0, 72)
+		b.add_theme_font_size_override("font_size", 24 if d[3] == "spot" else 24)
 		if d[3] == "spot":
 			b.add_theme_stylebox_override("normal", UiKit.box(Color(UiKit.CARD, 0.92), UiKit.ACCENT, 24, 3, 22))
 			b.add_theme_stylebox_override("hover", UiKit.box(UiKit.CARD.lightened(0.1), UiKit.ACCENT_2, 24, 3, 22))
@@ -311,6 +383,10 @@ func _process(delta: float) -> void:
 			for s in _spots:
 				(s["button"] as Button).visible = false
 			_objective_panel.visible = false
+			_primary.visible = false
+			_places_btn.visible = false
+			_places_panel.visible = false
+			_ui_state = ""
 			if life:
 				life.hide_all()
 			_labels_hidden = true
@@ -325,17 +401,11 @@ func _process(delta: float) -> void:
 		_force_place = false
 		_place_labels()
 	_objective_panel.visible = true
+	if _ui_state == "":
+		_refresh_ui_state()
 
 func _objective_id() -> String:
-	if not bool(GameState.get_flag("briefed", false)):
-		return "table"
-	if not bool(GameState.get_flag("rr_complete", false)):
-		return "gate"
-	if not bool(GameState.get_flag("debriefed", false)):
-		return "table"
-	if not bool(GameState.get_flag("habitat_built", false)):
-		return "habitat"
-	return ""
+	return HubFlow.objective_id(GameState.flags)
 
 func _place_labels() -> void:
 	var vs := ui_root.get_viewport_rect().size
@@ -364,6 +434,9 @@ func _place_labels() -> void:
 			near_id = str(s["id"])
 	for s in order:
 		var b: Button = s["button"]
+		if s["kind"] == "spot" and not HubFlow.spot_visible(str(s["id"]), GameState.flags):
+			b.visible = false
+			continue
 		var wp: Vector3 = s["node"].global_position + Vector3(0, s["h"], 0)
 		if cam.is_position_behind(wp):
 			b.visible = false
@@ -393,37 +466,11 @@ func _place_labels() -> void:
 			if not hit:
 				break
 		r.position.x = clampf(r.position.x, 8.0, vs.x - r.size.x - 8.0)
-		r.position.y = clampf(r.position.y, TOP_SAFE, vs.y - r.size.y - 52.0)
+		r.position.y = clampf(r.position.y, TOP_SAFE, vs.y - r.size.y - 140.0)
 		var onscreen := sp.x > -40.0 and sp.x < vs.x + 40.0 and sp.y > 0.0 and sp.y < vs.y + 60.0
 		var is_obj: bool = s["id"] == obj
 		if not onscreen and s["kind"] == "spot":
-			# Signpost: a chip on the screen edge pointing toward the place; tapping it pans the camera there.
-			var dir := (sp - vs * 0.5)
-			if cam.is_position_behind(wp):
-				dir = -dir
-			var arrow := "◀ " if dir.x < -absf(dir.y) * 0.6 else ("▶ " if dir.x > absf(dir.y) * 0.6 else ("▲ " if dir.y < 0 else "▼ "))
-			var label_txt: String = arrow + ("★ " if is_obj else "") + str(s["name"])
-			if b.text != label_txt:
-				b.text = label_txt
-				b.reset_size()
-				s["sz"] = b.size
-			s["off"] = true
-			bsz = s["sz"]
-			var edge := Vector2(clampf(vs.x * 0.5 + dir.x * 4.0, 8.0 + bsz.x * 0.5, vs.x - 8.0 - bsz.x * 0.5), clampf(vs.y * 0.5 + dir.y * 4.0, TOP_SAFE + 8.0, vs.y - 60.0 - bsz.y))
-			var er := Rect2(edge - Vector2(bsz.x * 0.5, 0), bsz)
-			for _a in 4:
-				var hit2 := false
-				for pr in placed:
-					if er.grow(3.0).intersects(pr):
-						er.position.y += pr.size.y + 6.0 if er.position.y < vs.y * 0.5 else -(pr.size.y + 6.0)
-						hit2 = true
-						break
-				if not hit2:
-					break
-			b.visible = true
-			b.position = er.position
-			placed.append(er)
-			b.modulate = Color(1, 1, 1, 0.9 if is_obj else 0.6)
+			b.visible = false           # off-screen places are reached through the primary button / Places list
 			continue
 		var want: String = ("★ " if is_obj else "") + str(s["name"])
 		if s.get("off", false) or b.text != want:
@@ -440,12 +487,12 @@ func _place_labels() -> void:
 		var locked: bool = s["id"] == "gate" and not bool(GameState.get_flag("briefed", false))
 		var cd := sp.distance_to(vs * 0.5)
 		var fade := clampf(0.35 + (cd - 140.0) / 360.0, 0.35, 1.0)    # places fade as they get close to the focus
-		b.modulate = Color(1, 1, 1, minf(fade, 0.55 if locked else 1.0))
+		b.modulate = Color(1, 1, 1, 1.0 if is_obj else minf(fade, 0.8 if not locked else 0.55))
 	_objective_panel.reset_size()
 	_objective_panel.position = Vector2(20, 50)
 	# Toasts sit bottom-centre above the hint line, clear of the top bar and the hotspot labels' band.
 	_toast_box.reset_size()
-	_toast_box.position = Vector2(vs.x * 0.5 - 260, vs.y - 56.0 - _toast_box.size.y)
+	_toast_box.position = Vector2(vs.x * 0.5 - 260, vs.y - 140.0 - _toast_box.size.y)
 
 
 func _unhandled_input(ev: InputEvent) -> void:
@@ -479,6 +526,8 @@ func _unhandled_input(ev: InputEvent) -> void:
 			var delta := d.position - _drag_last
 			_drag_last = d.position
 			_drag_moved += delta.length()
+			if _drag_moved > 60.0 and _hint.visible:
+				_hint.visible = false
 			var k := _dist / 520.0
 			_focus_target -= Vector3(delta.x, 0, delta.y) * k
 	elif ev is InputEventMouseButton and ev.pressed and (ev.button_index == MOUSE_BUTTON_WHEEL_UP or ev.button_index == MOUSE_BUTTON_WHEEL_DOWN):
@@ -607,11 +656,17 @@ func _on_gate_descend(region: String) -> void:
 
 func _descend() -> void:
 	GameState.flags["_scene"] = "red_reaches"
+	GameState.flags["descents"] = int(GameState.flags.get("descents", 0)) + 1
+	GameState.flags["_run_before"] = _snapshot()
 	if bool(GameState.get_flag("rr_complete", false)):
 		GameState.flags["_checkpoint"] = ""
 	GameState.save_game()
 	Audio.sfx("gate_whoosh")
 	Router.goto(RR, "gate")
+
+## What the player owns right now; diffed on return for the "what changed" recap.
+func _snapshot() -> Dictionary:
+	return {"items": GameState.items.duplicate(), "specimens": GameState.specimens.size(), "codex": GameState.codex.size(), "standing": GameState.dominion_standing}
 
 func _open_codex() -> void:
 	var cl := CanvasLayer.new()
@@ -717,6 +772,13 @@ func _return_sequence() -> void:
 	GameState.save_game()
 	var card := LedgerCard.debrief(-1, "Continue")
 	card.subtitle = "Back at the Common. The Ledger remembers."
+	var before: Variant = GameState.flags.get("_run_before", null)
+	if before is Dictionary:
+		var rl := HubFlow.recap_lines(before, _snapshot(), UiKit.item_name)
+		if not rl.is_empty():
+			card.sections.push_front({"heading": "What you brought back", "lines": rl, "color": UiKit.ACCENT_2})
+	GameState.flags.erase("_run_before")
+	card.footer = HubFlow.next_line(GameState.flags)
 	add_child(card)
 	if _qa_auto:
 		get_tree().create_timer(1.2, true, false, true).timeout.connect(card.close)
@@ -793,20 +855,8 @@ func _show_end_card() -> void:
 	GameState.save_game()
 
 func _update_objective() -> void:
-	var t := ""
-	if not bool(GameState.get_flag("briefed", false)):
-		t = "Meet Mara at the Common Table"
-	elif not bool(GameState.get_flag("rr_complete", false)):
-		t = "Descend through the Gate to the Red Reaches"
-	elif not bool(GameState.get_flag("debriefed", false)):
-		t = "Debrief at the Common Table"
-	elif not bool(GameState.get_flag("habitat_built", false)):
-		t = "Build a Habitat in the Habitat Wing"
-	elif not bool(GameState.get_flag("slice_complete", false)):
-		t = "Talk at the Common Table"
-	else:
-		t = "Free roam — the Terrarium remembers"
-	_objective_label.text = t
+	_objective_label.text = HubFlow.objective_text(GameState.flags)
+	_refresh_ui_state()
 
 func _toast(text: String, kind: String = "info") -> void:
 	var edge := UiKit.PARCHMENT

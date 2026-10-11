@@ -56,6 +56,19 @@ var _interact_kind := ""
 var _layout_dirty := true
 var _last_leader: Node = null
 var _pause_menu: Node = null
+var _tq := HudFlow.ToastQueue.new()
+var _rev_combat := false
+var _rev_scan := false
+var _rev_t := 0.0
+var _ctrl_on := true
+var _burden_on := false
+var _ability_uses := 0
+var _scan_started := false
+var _tip_pulse := 0.0
+var _guide: Control = null
+var _guide_dir := Vector2.ZERO
+var _guide_dist := -1.0
+var _moved_tip_t := 1.5
 
 func setup(f: Field, p: PartyController) -> void:
 	field = f
@@ -122,11 +135,14 @@ func _ready() -> void:
 	Events.objective_changed.connect(set_objective)
 	Events.toast.connect(toast)
 	Events.actor_damaged.connect(_on_damaged)
+	Events.ability_used.connect(func(_c, _a): _ability_uses += 1)
+	Events.scan_started.connect(func(): _scan_started = true)
 	get_viewport().size_changed.connect(func(): _layout_dirty = true)
 	if party:
 		party.leader_changed.connect(func(_m): _rebuild_portraits())
 	_rebuild_portraits()
 	set_objective(str(GameState.get_flag("_objective", "")))
+	_update_reveal(true)
 
 var _batch: HudButtonBatch
 
@@ -183,6 +199,13 @@ func _build_top() -> void:
 	hb.add_child(tag)
 	_objective_label = UiKit.label("", 26, UiKit.INK, "ui")
 	hb.add_child(_objective_label)
+	_guide = Control.new()
+	_guide.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_guide.custom_minimum_size = Vector2(220, 52)
+	_guide.size = Vector2(220, 52)
+	_guide.visible = false
+	_guide.draw.connect(_draw_guide)
+	root.add_child(_guide)
 	_toast_box = VBoxContainer.new()
 	_toast_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_toast_box.add_theme_constant_override("separation", 8)
@@ -276,6 +299,7 @@ func _rebuild_portraits() -> void:
 		_portraits.append({"holder": holder, "member": m, "hp": hpb, "knack": kb, "down": down, "size": sz, "swap": swap_btn})
 	_layout_dirty = true
 	_refresh_ability_icons()
+	_apply_vis()
 
 func _on_icon_baked(_id: String) -> void:
 	btn_dash.icon = UiKit.ability_icon("dash")
@@ -321,8 +345,8 @@ func _layout() -> void:
 		var a := deg_to_rad(180.0 + 45.0 * i)
 		_place(btn_ab[i], C + Vector2(cos(a), sin(a)) * R, lh, W)
 	_place(btn_dash, C + Vector2(-335, 36), lh, W)
-	_place(btn_interact, C + Vector2(-60, -330), lh, W)
-	_place(btn_contain, C + Vector2(-60, -440), lh, W)
+	_place(btn_interact, C + Vector2(-370, -120), lh, W)    # left of the ability arc, clear of the minimap
+	_place(btn_contain, C + Vector2(-370, -230), lh, W)
 	_place(btn_scan, Vector2(W - 170, 62), lh, W)
 	_place(btn_pause, Vector2(W - 62, 56), lh, W)
 	_place(btn_hold, Vector2(W - 250, H * 0.55), lh, W)
@@ -341,7 +365,8 @@ func _layout() -> void:
 	_objective_panel.reset_size()
 	var ow := _objective_panel.get_combined_minimum_size().x
 	_objective_panel.position = Vector2((W - ow) * 0.5, 14)
-	_toast_box.position = Vector2(W * 0.5 - 260, 156 if _boss_panel.visible else 84)
+	_guide.position = Vector2(W * 0.5 - 110, 78)
+	_toast_box.position = Vector2(W * 0.5 - 260, 156 if _boss_panel.visible else 136)
 	_toast_box.size = Vector2(520, 10)
 	_boss_panel.position = Vector2(W * 0.5 - 320, 80)
 	_revive_label.position = Vector2(W * 0.5 - 250, H * 0.36)
@@ -374,8 +399,14 @@ func _process(delta: float) -> void:
 		_layout_dirty = true
 	if _layout_dirty:
 		_layout()
+	_update_toasts()
+	if _moved_tip_t > 0.0:
+		_moved_tip_t -= delta
+		if _moved_tip_t <= 0.0 and not bool(GameState.flags.get("_hud_combat", false)) and not talking:
+			tip("move")
 	if party == null or party.members.size() < 2:
 		return
+	_update_reveal(false, delta)
 	var l := party.get_leader()
 	if l != _last_leader:
 		_last_leader = l
@@ -411,6 +442,7 @@ func _process(delta: float) -> void:
 	var ct := party.contain_target
 	btn_contain.visible = ct != null and is_instance_valid(ct)
 	if btn_contain.visible:
+		tip("contain")
 		btn_contain.caption = "CONTAIN %s" % str(ct.display_name).to_upper()
 	var cp := party.contain_progress()
 	_contain_bar.visible = cp > 0.0
@@ -454,19 +486,33 @@ func set_objective(text: String) -> void:
 	_objective_label.text = text
 	_objective_panel.visible = text != ""
 	_layout_dirty = true
-	_objective_panel.modulate = Color(1.4, 1.2, 1.0)
-	var tw := create_tween()
-	tw.tween_property(_objective_panel, "modulate", Color.WHITE, 0.6)
+	if not bool(GameState.settings.get("reduce_flashing", false)):
+		_objective_panel.modulate = Color(1.4, 1.2, 1.0)
+		var tw := create_tween()
+		tw.tween_property(_objective_panel, "modulate", Color.WHITE, 0.6)
 
 func set_interact(text: String) -> void:
 	btn_interact.visible = text != ""
 	btn_interact.caption = text.to_upper()
 	btn_interact.redraw()
 
+## Toasts go through one queue: a single short line on screen, warnings first, a backlog of at most three.
 func toast(text: String, kind: String = "info") -> void:
 	if _toast_box == null:
 		return
-	var col := UiKit.CARD
+	_tq.push(text, kind, Time.get_ticks_msec() * 0.001)
+
+func _update_toasts() -> void:
+	if _tq.tick(Time.get_ticks_msec() * 0.001):
+		_render_toast()
+
+func _render_toast() -> void:
+	for c in _toast_box.get_children():
+		c.queue_free()
+	var cur: Dictionary = _tq.current
+	if cur.is_empty():
+		return
+	var kind: String = cur["kind"]
 	var edge := UiKit.PARCHMENT
 	match kind:
 		"codex":
@@ -477,25 +523,117 @@ func toast(text: String, kind: String = "info") -> void:
 			edge = UiKit.ACCENT
 		"trust":
 			edge = UiKit.ACCENT_2
+		"tip":
+			edge = UiKit.SCAN
 	var pc := PanelContainer.new()
 	pc.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	pc.add_theme_stylebox_override("panel", UiKit.box(Color(col, 0.86), edge, 12, 2, 10))
-	var l := UiKit.label(text, 22, UiKit.PARCHMENT, "ui")
+	pc.add_theme_stylebox_override("panel", UiKit.box(Color(UiKit.CARD, 0.9), edge, 12, 3 if kind == "tip" else 2, 10))
+	var l := UiKit.label(str(cur["text"]), 24 if kind == "tip" else 22, UiKit.PARCHMENT, "bold" if kind == "tip" else "ui")
 	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	l.custom_minimum_size = Vector2(500, 0)
+	l.custom_minimum_size = Vector2(480, 0)
 	pc.add_child(l)
 	_toast_box.add_child(pc)
-	while _toast_box.get_child_count() > 2:
-		_toast_box.get_child(0).free()
-	pc.modulate.a = 0.0
-	var tw := pc.create_tween()
-	tw.tween_property(pc, "modulate:a", 1.0, 0.18)
-	tw.tween_interval(2.8)
-	tw.tween_property(pc, "modulate:a", 0.0, 0.4)
-	tw.tween_callback(pc.queue_free)
+	if not bool(GameState.settings.get("reduce_flashing", false)):
+		pc.modulate.a = 0.0
+		pc.create_tween().tween_property(pc, "modulate:a", 1.0, 0.15)
 	if kind == "codex":
 		Audio.sfx("codex")
+
+# ---------------- first-time tips ----------------
+## Show a tip once ever, and pulse the control it is about until it is used (or ~6 s).
+func tip(id: String) -> void:
+	var t := HudFlow.take_tip(GameState.flags, id)
+	if t == "":
+		return
+	_tq.push(t, "tip", Time.get_ticks_msec() * 0.001)
+	var tgt := _tip_target(id)
+	if tgt:
+		tgt.hint = 6.0
+		tgt.redraw()
+
+func _tip_target(id: String) -> TouchButton:
+	match str(HudFlow.TIPS[id]["target"]):
+		"attack": return btn_attack
+		"ability": return btn_ab[0]
+		"dash": return btn_dash
+		"scan": return btn_scan
+		"contain": return btn_contain
+		"swap":
+			for p in _portraits:
+				if p["swap"]:
+					return p["swap"]
+	return null
+
+# ---------------- progressive disclosure ----------------
+## Abilities / dash / partner appear when an enemy is near (or an ability was used); Scan when the valley asks for it.
+func _update_reveal(force: bool, delta: float = 0.0) -> void:
+	_rev_t -= delta
+	if not force and _rev_t > 0.0:
+		return
+	_rev_t = 0.25
+	var d := INF
+	if field and party and party.get_leader():
+		var e: Node = field.nearest_enemy(party.get_leader().global_position, HudFlow.REVEAL_DIST_M + 1.0, true)
+		if e:
+			d = e.global_position.distance_to(party.get_leader().global_position)
+	var r := HudFlow.reveal(GameState.flags, d, _ability_uses > 0, _scan_started)
+	var changed := false
+	if r["combat"] and not _rev_combat:
+		_rev_combat = true
+		changed = true
+		if not bool(GameState.flags.get("_hud_combat", false)):
+			GameState.flags["_hud_combat"] = true
+			tip("attack")
+			tip("abilities")
+	if r["scan"] and not _rev_scan:
+		_rev_scan = true
+		changed = true
+		if not bool(GameState.flags.get("_hud_scan", false)):
+			GameState.flags["_hud_scan"] = true
+			if not _scan_started:
+				tip("scan")
+	if changed:
+		_apply_vis()
+	if _rev_combat and _ability_uses >= 2:
+		tip("swap")
+
+## One place decides which touch controls are visible (burden, dialogue-free mode and the reveal all feed it).
+func _apply_vis() -> void:
+	var on := _ctrl_on and not _burden_on
+	btn_attack.visible = on
+	for b in btn_ab:
+		b.visible = on and _rev_combat
+	btn_dash.visible = on and _rev_combat
+	btn_scan.visible = _ctrl_on and _rev_scan
+	if _portraits.size() > 1:
+		(_portraits[1]["holder"] as Control).visible = _rev_combat
+	_layout_dirty = true
+
+# ---------------- guide arrow ----------------
+## Called by ExploreHud (a few times a second): `dir` is the screen-space direction (x right, y down) to the story target.
+func set_guide(dir: Vector2, dist: float) -> void:
+	var show_it := dist >= 6.0 and dir != Vector2.ZERO and not _boss_panel.visible
+	if _guide.visible != show_it:
+		_guide.visible = show_it
+	if not show_it:
+		return
+	var nd := dir.normalized()
+	if int(dist) != int(_guide_dist) or nd.distance_to(_guide_dir) > 0.04:
+		_guide_dir = nd
+		_guide_dist = dist
+		_guide.queue_redraw()
+
+func _draw_guide() -> void:
+	var c := Vector2(30, 26)
+	var ang := _guide_dir.angle()
+	var pts := PackedVector2Array()
+	for q in [[18.0, 0.0], [-10.0, -13.0], [-4.0, 0.0], [-10.0, 13.0]]:
+		pts.append(c + Vector2(q[0], q[1]).rotated(ang))
+	_guide.draw_rect(Rect2(Vector2.ZERO, Vector2(220, 52)), Color(UiKit.CARD, 0.82))
+	_guide.draw_rect(Rect2(Vector2.ZERO, Vector2(220, 52)), Color(1.0, 0.82, 0.30), false, 2.0)
+	_guide.draw_colored_polygon(pts, Color(1.0, 0.82, 0.30))
+	_guide.draw_string(UiKit.font("bold"), Vector2(62, 36), "%d m" % int(_guide_dist), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, UiKit.PARCHMENT)
 
 func set_boss(b: Node) -> void:
 	_boss = b
@@ -506,11 +644,8 @@ func set_boss(b: Node) -> void:
 func show_burden(on: bool) -> void:
 	_burden_panel.visible = on
 	btn_hold.visible = on
-	for b in btn_ab:
-		b.visible = not on
-	btn_attack.visible = not on
-	btn_dash.visible = not on
-	_layout_dirty = true
+	_burden_on = on
+	_apply_vis()
 
 func set_burden(progress: float, strain: float, holding: bool) -> void:
 	_burden_progress.value = progress
@@ -522,14 +657,17 @@ func hold_pressed() -> bool:
 	return btn_hold.visible and btn_hold.is_held()
 
 func set_controls_visible(on: bool) -> void:
-	for c in [btn_attack, btn_dash, btn_scan, joystick] + btn_ab:
-		c.visible = on
+	_ctrl_on = on
+	joystick.visible = on
+	_apply_vis()
 	if not on:
 		btn_interact.visible = false
 		btn_contain.visible = false
 
 func _on_damaged(actor: Node, amount: float, _src: Node) -> void:
 	if party and actor == party.get_leader() and amount > 0.0:
+		if _rev_combat:
+			tip("dash")
 		var a := clampf(amount / 40.0, 0.25, 0.8)
 		if bool(GameState.settings.get("reduce_flashing", false)):
 			a *= 0.4

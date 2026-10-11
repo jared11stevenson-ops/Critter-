@@ -1,0 +1,5 @@
+[
+ {"t":0.05,"call":"GameState.new_game"},
+ {"t":0.1,"call":"GameState.set_flag","args":["briefed",true]},
+ {"t":0.2,"call":"Router.goto","args":["res://game/world/hub/hub.tscn","fade"]}
+]

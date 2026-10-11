@@ -9,6 +9,7 @@ var title := "WHAT CHANGED BECAUSE OF YOU"
 var subtitle := ""
 var sections: Array = []          # [{heading, lines:[String], color:Color}]
 var button_text := "Continue"
+var footer := ""                  # one closing line: what to do next
 var _btn: Button
 
 static func debrief(since: int = -1, btn: String = "Continue") -> LedgerCard:
@@ -108,6 +109,11 @@ func _ready() -> void:
 			l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			l.custom_minimum_size = Vector2(820, 0)
 			inner.add_child(l)
+	if footer != "":
+		var ft := UiKit.label(footer, 26, UiKit.ACCENT, "bold")
+		ft.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		ft.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		vb.add_child(ft)
 	_btn = UiKit.button(button_text, Vector2(320, 80), 28)
 	_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	_btn.pressed.connect(close)
