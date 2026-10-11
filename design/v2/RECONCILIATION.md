@@ -39,3 +39,6 @@ Rules: one milestone at a time; each ends with a build you play on your phone.
 ## Scope note (creator, 2026-10-11): breeding is DEFERRED
 "We will worry about the breeding way down the line." Breeding, genetics, hybrid species and hybridization rules are parked until after the duel, expedition, tournament, habitat and shelf milestones. The laws that mention them stay in force; nothing may contradict them, but no work or questions on breeding until the creator reopens it.
 Pre-flight impact: none (nothing built depends on breeding). The open breeding questions above are closed for now.
+
+## Scope note 2 (creator, 2026-10-11): hybrids DEFERRED; content scope = the named lore characters
+Hybrids are parked together with breeding. For now the game's playable content is the **named lore characters** (the seven: Aruun, Cigarra, Bramvex, Scarlith, Mollusk, Zephyr, Nyxaris, later the rest of the First Ten and Solthrin), each as a mortal individual of its species (Addendum 1: no plot-protected characters). No generated/hybrid species, no genetics work, no new species definitions beyond the lore cast until the creator reopens it.
