@@ -19,7 +19,7 @@ static func _fuzz(m: Prim, c: Vector3, r: Vector3, col: Color, n: int, ln: float
 		m.lim(T(), [p, p + d * ln], 0.06, 0.0, col, 0.0, 4, true, false)
 
 static func build(b) -> void:
-	b.quality = 0.62
+	b.quality = 0.5
 	var P: Dictionary = b.pal
 	var red: Color = P["main"]; var gold: Color = P["accent"]; var glow: Color = P["glow"]; var rind: Color = P["belly"]
 	var wine := Color.html("4f1a36"); var black := Color.html("171012"); var wood := Color.html("7a4a2a"); var iron := Color.html("4a4852"); var dred := red.darkened(0.25)
@@ -32,12 +32,12 @@ static func build(b) -> void:
 				var xo := dx * 0.0 + (k - 0.5) * 0.5 * signf(dx)
 				var col := red if z > 0 else dred
 				l.lim(T(), [Vector3(xo, 0.1, z * 0.5), Vector3(xo + dx * 0.4, 0.1, z * 1.1), Vector3(xo + dx * 0.55, -0.55, z * 1.5)], 0.15, 0.09, col, 0.0, 5)
-				_fuzz(l, Vector3(xo + dx * 0.4, 0.1, z * 1.1), Vector3(0.1, 0.1, 0.1), col, 4, 0.1)
+				_fuzz(l, Vector3(xo + dx * 0.4, 0.1, z * 1.1), Vector3(0.1, 0.1, 0.1), col, 2, 0.1)
 				l.blob(T(Vector3(xo + dx * 0.6, -0.57, z * 1.55)), Vector3(0.13, 0.05, 0.1), gold.darkened(0.3), 0.0, 1.0, 5, 3)
 	# ---- torso: round plush body, wine coat panels, gold buttons, belt + coin purse
 	var t: Prim = b.part("torso", Vector3(0, 0.55, 0))
 	t.blob(T(Vector3(0, 0.45, 0)), Vector3(0.85, 0.7, 0.8), red, 0.0, 0.95, 12, 8)
-	_fuzz(t, Vector3(0, 0.45, 0), Vector3(0.83, 0.68, 0.78), red, 16, 0.12)
+	_fuzz(t, Vector3(0, 0.45, 0), Vector3(0.83, 0.68, 0.78), red, 12, 0.12)
 	t.blob(T(Vector3(0.38, 0.35, 0)), Vector3(0.5, 0.58, 0.62), wine, 0.0, 0.8, 10, 6)             # coat front
 	for z in [-0.4, -0.2, 0.2, 0.4]:
 		t.flat(T(), [Vector3(0.78, 0.7, z), Vector3(0.86, 0.2, z), Vector3(0.8, -0.2, z * 1.1)], 0.1, 0.06, 0.02, wine.lightened(0.05) if z < 0 else wine, Vector3(0, 0, 1), 0.0, 0.0, true)
