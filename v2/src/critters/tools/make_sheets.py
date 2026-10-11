@@ -46,6 +46,10 @@ def main():
         if acts:
             labels = [os.path.basename(a)[len(cid) + 5:-4].split("_", 1)[1] for a in acts]
             grid(acts, 4, tile, labels, NAMES[cid] + "  - action poses").save(f"{out}/{cid}_actions.png", optimize=True)
+        film = sorted(glob.glob(f"{tiles}/{cid}_film_*.png"), key=lambda x: int(os.path.basename(x).split("_film_")[1].split("_")[0]))
+        if film:
+            labels = [os.path.basename(a).split("_", 3)[3][:-4] for a in film]
+            grid(film, 4, tile, labels, NAMES[cid] + "  - film").save(f"{out}/{cid}_film.png", optimize=True)
         ex = sorted(glob.glob(f"{tiles}/{cid}_expr_*.png"))
         if ex:
             labels = [os.path.basename(a)[len(cid) + 6:-4].split("_", 1)[1] for a in ex]

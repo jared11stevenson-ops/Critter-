@@ -26,8 +26,8 @@ func sock(name: String, part_name: String, local: Vector3) -> void:
 	sockets[name] = {"part": part_name, "pos": local}
 
 func set_face(center: Vector3, radii: Vector3, params: Dictionary, half_lon: float = 0.95, half_lat: float = 0.62,
-		lat_center: float = -0.05) -> void:
-	face = {"center": center, "radii": radii, "half_lon": half_lon, "half_lat": half_lat,
+		lat_center: float = -0.05, e: float = 1.0) -> void:
+	face = {"e": e, "center": center, "radii": radii, "half_lon": half_lon, "half_lat": half_lat,
 			"lat_center": lat_center, "params": params}
 
 ## Build MeshInstance3D per part under `rig_root`; returns {nodes, rest, tris, material, face_mat, face_node}
@@ -79,7 +79,7 @@ func assemble(rig_root: Node3D) -> Dictionary:
 	var res := {"bounds": bb, "nodes": nodes, "rest": rest, "tris": tris, "mat": mat, "face_node": null, "face_mat": null}
 	if not face.is_empty() and nodes.has("head"):
 		var fb := Prim.new()
-		fb.face_patch(face["center"], face["radii"], face["half_lon"], face["half_lat"], face["lat_center"])
+		fb.face_patch(face["center"], face["radii"], face["half_lon"], face["half_lat"], face["lat_center"], 10, 8, 1.015, 0.0, face["e"])
 		var fm := MeshInstance3D.new()
 		fm.name = "face"
 		fm.mesh = fb.build(true)

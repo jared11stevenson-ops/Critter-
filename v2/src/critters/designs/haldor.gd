@@ -75,8 +75,8 @@ static func build(b) -> void:
 	b.sock("chisel", "weapon", Vector3(0.02, -0.42, 0.02))
 	b.sock("head", "head", Vector3(0.12, 0.4, 0))
 	b.set_face(Vector3(0.12, 0.4, 0), Vector3(0.54, 0.47, 0.5),
-			{"eye_sep": 0.36, "eye_y": 0.06, "eye_size": Vector2(0.17, 0.17), "lid_bias": 0.5, "mouth_y": -0.3,
-			"mouth_w": 0.14, "mouth_base": 0.1, "brow_off": 0.07, "brow_len": 0.17})
+			{"eye_sep": 0.4, "eye_y": 0.06, "eye_size": Vector2(0.21, 0.21), "lid_bias": 0.45, "mouth_y": -0.3,
+			"mouth_w": 0.2, "mouth_base": 0.14, "brow_off": 0.08, "brow_len": 0.2, "brow_thick": 0.04}, 0.95, 0.74, -0.05, 0.9)
 	b.cfg = {
 		"height": 2.25, "wa": 123.5, "arm_b_follow": true, "sway": 1.4, "stride": 0.8, "bob": 0.7, "waddle": 1.4,
 		"lag_weapon": 0.035, "guard_th": 45.0, "parry_th": 10.0,

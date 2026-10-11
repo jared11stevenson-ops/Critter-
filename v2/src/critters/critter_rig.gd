@@ -65,6 +65,7 @@ var _fidget_t := -1.0
 var _lag := {}               # part -> [angle, vel]
 var _drv_prev := {}
 var _vit := 1.0
+var _expr_manual := ""
 var _smear_active := false
 var _hit_dir := 1.0
 var _action_frame := 0
@@ -114,9 +115,11 @@ func setup(critter_id_in: String) -> void:
 func socket(sname: String) -> Node3D:
 	return _sockets.get(sname, _sockets.get("ground"))
 
+## Manual expression (wins over the automatic state/vitality expression). Pass "auto" to hand control back.
 func set_expression(ename: String) -> void:
-	if face:
-		face.set_base(ename)
+	_expr_manual = "" if ename == "auto" else ename
+	if face and _expr_manual != "":
+		face.set_base(_expr_manual)
 
 ## Flat-black rendering for the silhouette gate (hides the face and FX).
 func set_silhouette(on: bool) -> void:
@@ -363,7 +366,7 @@ func _update_expression(action: String, dt: float) -> void:
 			e = "hurt"
 		"ko":
 			e = "dying"
-	face.set_base(e)
+	face.set_base(_expr_manual if _expr_manual != "" else e)
 
 func _update_smear(action: String, frame: int) -> void:
 	if not is_inside_tree():

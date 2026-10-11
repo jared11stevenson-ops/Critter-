@@ -173,7 +173,7 @@ func ring(xf: Transform3D, big_r: float, small_r: float, color: Color, glow: flo
 ## UV x -1..1 across (left..right when looking at the face from the front), y 0..1 bottom..top ->
 ## the face shader reads UV in 0..1.
 func face_patch(center: Vector3, radii: Vector3, half_lon: float, half_lat: float, lat_center: float = 0.0,
-		lon_n: int = 8, lat_n: int = 6, bulge: float = 1.012, yaw: float = 0.0) -> void:
+		lon_n: int = 10, lat_n: int = 8, bulge: float = 1.015, yaw: float = 0.0, e: float = 1.0) -> void:
 	var base := verts.size()
 	var uvs_local := PackedVector2Array()
 	for j in range(lat_n + 1):
@@ -183,9 +183,11 @@ func face_patch(center: Vector3, radii: Vector3, half_lon: float, half_lat: floa
 			var fu := float(i) / lon_n
 			# looking at the face from +X toward -X, screen-right is -Z... we map UV x so +x is rig-left? keep +Z = right of viewer.
 			var lon := yaw + lerpf(-half_lon, half_lon, fu)
-			var dir := Vector3(cos(lat) * cos(lon), sin(lat), cos(lat) * sin(lon))
+			var cl := cos(lat)
+			var dir := Vector3(_sp(cl, e) * _sp(cos(lon), e), _sp(sin(lat), e), _sp(cl, e) * _sp(sin(lon), e))
 			var p := center + Vector3(dir.x * radii.x, dir.y * radii.y, dir.z * radii.z) * bulge
-			var n := Vector3(dir.x / radii.x, dir.y / radii.y, dir.z / radii.z).normalized()
+			var n := Vector3(_sp(cl, 2.0 - e) * _sp(cos(lon), 2.0 - e) / radii.x, _sp(sin(lat), 2.0 - e) / radii.y,
+					_sp(cl, 2.0 - e) * _sp(sin(lon), 2.0 - e) / radii.z).normalized()
 			verts.append(p)
 			norms.append(n)
 			cols.append(Color(1, 1, 1, 0))

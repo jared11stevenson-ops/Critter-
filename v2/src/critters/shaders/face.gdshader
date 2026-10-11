@@ -66,37 +66,37 @@ void fragment() {
 		float lid_y = er * (2.0 * min(o_eff, 1.0) - 1.0);   // cut line (relative to eye centre)
 		float disc = length(q) - er;
 		float cut = q.y - lid_y;                             // >0 = covered by the lid
-		float vis = max(disc, cut);
-		float body = fill(vis, aa);
+		float body = fill(max(disc, cut), aa);
+		vec3 ec = vec3(0.0);
+		float ea = 0.0;
 		if (eye_white > 0.5) {
 			float ring_d = abs(disc) - 0.012;
-			vec2 pu = q - look * er * 0.4 - vec2(0.0, 0.0);
+			vec2 pu = q - look * er * 0.4;
 			float pupil = fill(max(length(pu) - er * 0.56, cut), aa);
 			float shine = fill(length(pu - vec2(er * 0.2, er * 0.26)) - er * 0.17, aa) * glint;
-			col = mix(col, sclera, body);
-			col = mix(col, ink, fill(max(ring_d, cut), aa) * 0.9);
-			col = mix(col, eye_col, pupil);
-			col = mix(col, vec3(1.0), shine * pupil);
-			a = max(a, max(body, fill(max(ring_d, cut), aa)));
+			float rr = fill(max(ring_d, cut), aa);
+			ec = mix(sclera, ink, rr * 0.9);
+			ec = mix(ec, eye_col, pupil);
+			ec = mix(ec, vec3(1.0), shine * pupil);
+			ea = max(body, rr);
 		} else {
 			vec2 pu = q - look * er * 0.25;
 			float shine = fill(length(pu - vec2(er * 0.28, er * 0.34)) - er * 0.27, aa) * glint;
-			col = mix(col, eye_col, body);
-			col = mix(col, vec3(1.0), shine * body * 0.95);
-			a = max(a, body);
+			ec = mix(eye_col, vec3(1.0), shine * 0.95);
+			ea = body;
 		}
 		// lid stroke when mostly closed (blink / dying) so a closed eye reads as a line
 		float closed = smoothstep(0.55, 0.15, o_eff);
 		float lid_line = fill(seg(q, vec2(-er * 1.05, lid_y), vec2(er * 1.05, lid_y)) - 0.016, aa) * closed;
-		col = mix(col, ink, lid_line);
-		a = max(a, lid_line);
-		// X eyes
-		float xe = max(fill(seg(q, vec2(-er, -er), vec2(er, er)) - 0.02, aa), fill(seg(q, vec2(-er, er), vec2(er, -er)) - 0.02, aa)) * xeyes;
-		col = mix(col, ink, xe);
-		a = max(a * (1.0 - xeyes * 0.0), a);
-		if (xeyes > 0.5) {   // hide the dot under the X
-			a = max(xe, a * (1.0 - xeyes));
-		}
+		ec = mix(ec, ink, lid_line);
+		ea = max(ea, lid_line);
+		// X eyes replace the eye entirely
+		float xe = max(fill(seg(q, vec2(-er * 0.8, -er * 0.8), vec2(er * 0.8, er * 0.8)) - 0.022, aa),
+				fill(seg(q, vec2(-er * 0.8, er * 0.8), vec2(er * 0.8, -er * 0.8)) - 0.022, aa));
+		ec = mix(ec, ink, xeyes);
+		ea = mix(ea, xe, xeyes);
+		col = mix(col, ec, ea);
+		a = max(a, ea);
 		// brows: inner end is toward x = 0
 		if (no_brow < 0.5) {
 			float lift = brow_lift + brow_bias[i];

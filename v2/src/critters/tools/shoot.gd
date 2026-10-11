@@ -16,11 +16,13 @@ func _init() -> void:
 	var mode := "turn"
 	var out := "/tmp/shots"
 	var size := 512
+	var action_arg := "strike_heavy"
 	for a in OS.get_cmdline_user_args():
 		if a.begins_with("--ids="): ids = a.substr(6).split(",")
 		if a.begins_with("--mode="): mode = a.substr(7)
 		if a.begins_with("--out="): out = a.substr(6)
 		if a.begins_with("--size="): size = int(a.substr(7))
+		if a.begins_with("--action="): action_arg = a.substr(9)
 	DirAccess.make_dir_recursive_absolute(out)
 	vp = SubViewport.new()
 	vp.size = Vector2i(size, size)
@@ -36,6 +38,7 @@ func _init() -> void:
 		"expr": await _expr(ids, out)
 		"lineup": await _lineup(ids, out, size)
 		"sil": await _sil(ids, out)
+		"film": await _film(ids, out, action_arg)
 	quit()
 
 func _spawn(id: String) -> Node3D:
@@ -148,4 +151,27 @@ func _sil(ids, out: String) -> void:
 		_step(rig, "idle", 0, 3)
 		_frame_cam(2.4, 0.0)
 		await _save("%s/%s_sil.png" % [out, id])
+		rig.free()
+
+func _film(ids, out: String, action: String) -> void:
+	# 8 evenly spaced frames across startup/active/recovery of one action, played in order (so lag springs and blends run)
+	for id in ids:
+		var rig := _spawn(id)
+		rig.three_quarter = 35.0
+		var h: float = rig.nominal_height()
+		var tim: Vector3i = rig.call("_timing_for", action)
+		var total := tim.x + tim.y + tim.z
+		_step(rig, "idle", 0, 20)
+		var marks := []
+		for i in range(8):
+			marks.append(int(float(i) / 7.0 * float(total - 1)))
+		var f := 0
+		var i := 0
+		while f < total and i < 8:
+			_step(rig, action, f, 1)
+			if f >= marks[i]:
+				_frame_cam(h * 1.2, 0.0, 0.3, 1.7)
+				await _save("%s/%s_film_%d_%s_f%d.png" % [out, id, i, action, f])
+				i += 1
+			f += 1
 		rig.free()

@@ -1,16 +1,16 @@
 extends RefCounted
 ## Critter palettes (ROSTER.md: main / accent / glow). Hex values chosen by the Character Artist from the Lead's
 ## color names; `sig` is the signature hue used by the palette-distance gate and UI tinting.
-## Warm hues crowd the wheel, so signatures are spread: brick 355, tangerine 28, gold 50, moss 100,
-## cyan 190, violet 268, magenta 322 (min gap 22 degrees).
+## Warm hues crowd the wheel, so signatures are spread: brick 3, tangerine 26, gold 47, moss 90,
+## cyan 190, violet 262, magenta 320 (min gap >= 20 degrees, enforced by test_art_palette).
 
 const IDS := ["haldor", "sessa", "weft", "cinder", "marro", "zell", "kragg"]
 
 const DATA := {
-	"haldor": {"main": "3b3a46", "accent": "f5b82e", "glow": "ff6a1f", "sig": "f5b82e", "belly": "6a6676"},
+	"haldor": {"main": "3b3a46", "accent": "fbcf33", "glow": "ff6a1f", "sig": "fbcf33", "belly": "6a6676"},
 	"sessa": {"main": "9be21f", "accent": "17141f", "glow": "ff2fb8", "sig": "ff2fb8", "belly": "d8f58a"},
 	"weft": {"main": "7a45d8", "accent": "c8d3e6", "glow": "23e6cf", "sig": "7a45d8", "belly": "a98ae8"},
-	"cinder": {"main": "ff861a", "accent": "2c2624", "glow": "ffe336", "sig": "ff861a", "belly": "ffc27a"},
+	"cinder": {"main": "ff7718", "accent": "2c2624", "glow": "ffe336", "sig": "ff7718", "belly": "ffc27a"},
 	"marro": {"main": "b8362e", "accent": "d9a73c", "glow": "f5e8c6", "sig": "b8362e", "belly": "e0786a"},
 	"zell": {"main": "17c4e8", "accent": "f4fbff", "glow": "2d5cff", "sig": "17c4e8", "belly": "b9f0fb"},
 	"kragg": {"main": "7b2f1e", "accent": "ebdfc2", "glow": "74b535", "sig": "74b535", "belly": "b4654a"},
