@@ -43,7 +43,8 @@ uniform float xeyes = 0.0;
 uniform float sweat = 0.0;
 uniform float wobble = 0.0;
 uniform float time = 0.0;
-uniform float compel_spiral = 0.0;       // compelled: hypnotic spiral in the eyes (0..1)
+uniform float compel_spiral = 0.0;
+uniform float ringed = 0.0;        // concentric iris ring (Cigarra's ringed eyes)       // compelled: hypnotic spiral in the eyes (0..1)
 uniform float mark = 0.0;         // eye-patch markings under the eyes (Aruun)
 uniform vec3 mark_col : source_color = vec3(0.7, 0.1, 0.1);
 
@@ -93,6 +94,8 @@ void fragment() {
 			float rr = fill(max(ring_d, cut), aa);
 			ec = mix(sclera, ink, rr * 0.9);
 			ec = mix(ec, eye_col, pupil);
+			float irr = fill(abs(length(pu) - er * 0.8) - 0.016, aa) * ringed * body;
+			ec = mix(ec, accent, irr);
 			ec = mix(ec, vec3(1.0), shine * pupil);
 			ea = max(body, rr);
 		} else {

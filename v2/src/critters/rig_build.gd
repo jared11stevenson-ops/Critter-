@@ -15,6 +15,7 @@ var parts: Dictionary = {}      # name -> {mb: Prim, pos: Vector3, parent: Strin
 var sockets: Dictionary = {}    # name -> {part: String, pos: Vector3}
 var face: Dictionary = {}       # {center, radii, half_lon, half_lat, lat_center, params}
 var rest_rot: Dictionary = {}   # part -> Vector3 euler degrees baked into the rest pose (poses are relative to it)
+var swarm: Dictionary = {}      # {mb: Prim (ONE body), rest: [Vector3], parent: String, pos: Vector3 (body space)} drawn with a MultiMesh
 var quality := 1.0              # tri-budget knob, see Prim.quality
 var glass: Array = []           # part names rendered with the transparent glass material (no outline)
 var cfg: Dictionary = {}        # design config (styles, poses, timings stub, ...)
@@ -80,7 +81,23 @@ func assemble(rig_root: Node3D) -> Dictionary:
 				first = false
 			else:
 				bb = bb.expand(wp)
-	var res := {"rest_rot": rest_rot, "bounds": bb, "nodes": nodes, "rest": rest, "tris": tris, "mat": mat, "face_node": null, "face_mat": null}
+	var swarm_node: MultiMeshInstance3D = null
+	if not swarm.is_empty():
+		swarm_node = MultiMeshInstance3D.new()
+		swarm_node.name = "swarm"
+		var mmesh := MultiMesh.new()
+		mmesh.transform_format = MultiMesh.TRANSFORM_3D
+		mmesh.mesh = (swarm["mb"] as Prim).build()
+		mmesh.instance_count = (swarm["rest"] as Array).size()
+		swarm_node.multimesh = mmesh
+		swarm_node.material_override = mat
+		swarm_node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		swarm_node.extra_cull_margin = 4.0
+		var sp: String = swarm["parent"]
+		nodes[sp].add_child(swarm_node)
+		swarm_node.position = (swarm["pos"] as Vector3) - (parts[sp]["pos"] as Vector3)
+		tris += (swarm["mb"] as Prim).tris() * (swarm["rest"] as Array).size()
+	var res := {"swarm_node": swarm_node, "rest_rot": rest_rot, "bounds": bb, "nodes": nodes, "rest": rest, "tris": tris, "mat": mat, "face_node": null, "face_mat": null}
 	if not face.is_empty() and nodes.has("head"):
 		var fb := Prim.new()
 		fb.face_patch(face["center"], face["radii"], face["half_lon"], face["half_lat"], face["lat_center"], 10, 8, 1.015, 0.0, face["e"])

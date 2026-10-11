@@ -32,6 +32,16 @@ static func count(node: Node) -> Vector2i:
 				else:
 					idx = ((mi.mesh as PrimitiveMesh).get_mesh_arrays()[Mesh.ARRAY_INDEX] as PackedInt32Array).size() / 3
 				tris += idx * passes
+	if node is MultiMeshInstance3D and (node as MultiMeshInstance3D).multimesh != null:
+		var mmi := node as MultiMeshInstance3D
+		var mmesh := mmi.multimesh.mesh as ArrayMesh
+		var passes2 := 0
+		var m2: Material = mmi.material_override
+		while m2 != null:
+			passes2 += 1
+			m2 = m2.next_pass
+		draws += passes2
+		tris += mmesh.surface_get_array_index_len(0) / 3 * mmi.multimesh.instance_count * passes2
 	for c in node.get_children():
 		var v := count(c)
 		draws += v.x

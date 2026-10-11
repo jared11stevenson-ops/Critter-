@@ -122,6 +122,11 @@ var _th_b := Vector3.ZERO
 var _th_life := 1.0
 
 func _update_thread(dt: float) -> void:
+	if _multi_t > 0.0:
+		_multi_t -= dt
+		if _multi_t <= 0.0 and thread_t >= 1.0:
+			thread.visible = false
+		return
 	if thread_t >= 1.0:
 		return
 	thread_t += dt / _th_life
@@ -150,6 +155,48 @@ func _update_thread(dt: float) -> void:
 	m.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arr)
 	thread.mesh = m
 	thread_mat.set_shader_parameter("alpha", 1.0 - thread_t)
+
+## One ribbon per pair (world points), rebuilt each call; fades out after the last call (see _update_thread).
+func thread_multi(pairs: Array) -> void:
+	_multi = pairs
+	_multi_t = 0.15
+	thread.visible = true
+	_rebuild_multi()
+
+var _multi: Array = []
+var _multi_t := 0.0
+
+func _rebuild_multi() -> void:
+	var vs := PackedVector3Array()
+	var uv := PackedVector2Array()
+	var idx := PackedInt32Array()
+	var seg := 10
+	for pr in _multi:
+		var a: Vector3 = rig.to_local(pr[0])
+		var b: Vector3 = rig.to_local(pr[1])
+		var side := (b - a).cross(Vector3(0, 0, 1)).normalized()
+		if side.length() < 0.1:
+			side = Vector3(0, 0, 1)
+		var base := vs.size()
+		for i in range(seg + 1):
+			var f := float(i) / seg
+			var p := a.lerp(b, f) + Vector3(0, sin(f * 7.0 + Time.get_ticks_msec() * 0.01) * 0.06 * sin(f * PI), 0)
+			vs.append(p + side * 0.025); uv.append(Vector2(f, 1.0))
+			vs.append(p - side * 0.025); uv.append(Vector2(f, 0.0))
+			if i > 0:
+				var q := base + (i - 1) * 2
+				idx.append_array([q, q + 1, q + 2, q + 2, q + 1, q + 3])
+	if vs.is_empty():
+		return
+	var arr: Array = []
+	arr.resize(Mesh.ARRAY_MAX)
+	arr[Mesh.ARRAY_VERTEX] = vs
+	arr[Mesh.ARRAY_TEX_UV] = uv
+	arr[Mesh.ARRAY_INDEX] = idx
+	var m := ArrayMesh.new()
+	m.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arr)
+	thread.mesh = m
+	thread_mat.set_shader_parameter("alpha", 0.9)
 
 func flash() -> void:
 	flash_t = FLASH_LIFE

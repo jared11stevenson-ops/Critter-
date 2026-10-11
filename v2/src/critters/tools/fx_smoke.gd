@@ -7,7 +7,7 @@ func _initialize() -> void:
 		var r = Rig.new()
 		root.add_child(r)
 		r.setup(id)
-		for act in ["ability1", "ability2", "strike_light", "laststand"]:
+		for act in ["ability1", "strike_light", "strike_heavy", "laststand"]:
 			var tim: Vector3i = r._timing_for(act)
 			for f in range(tim.x + tim.y + tim.z + 20):
 				r.apply_fighter_state({"action": act, "action_frame": f, "vitality_ratio": 0.4, "rage": 0.8, "facing": 1.0}, 1.0 / 60.0)
@@ -18,6 +18,6 @@ func _initialize() -> void:
 		for i in range(30):
 			r.apply_fighter_state({"action": "idle", "action_frame": 0, "vitality_ratio": 0.2}, 1.0 / 60.0)
 			await process_frame
-		print("SMOKE ", id, " plates=", r._plates, " weapon_free=", r.detach_part("weapon").is_free())
+		print("SMOKE ", id, " plates=", r._plates, " swarm_away=", (r.swarm.any_away() if r.swarm else false))
 		r.free()
 	quit()

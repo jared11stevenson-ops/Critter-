@@ -12,6 +12,7 @@ const Timing := preload("res://src/critters/timing.gd")
 const FaceCtl := preload("res://src/critters/face_ctl.gd")
 const FxCtl := preload("res://src/critters/fx_ctrl.gd")
 const Toon := preload("res://src/critters/toon.gd")
+const SwarmCtl := preload("res://src/critters/swarm_ctl.gd")
 const DetachCtl := preload("res://src/critters/detach_ctl.gd")
 const GhostFx := preload("res://src/critters/ghost_fx.gd")
 const RigEvents := preload("res://src/critters/rig_events.gd")
@@ -69,8 +70,10 @@ var _fidget_t := -1.0
 var _lag := {}               # part -> [angle, vel]
 var _drv_prev := {}
 var _vit := 1.0
+var swarm: SwarmCtl = null
 var _dcs: Dictionary = {}      # detachable part name -> DetachCtl
 var _ghosted := -1
+var _swarm_last_action := ""
 var _plates := 0
 var _expr_manual := ""
 var _smear_active := false
@@ -113,6 +116,8 @@ func setup(critter_id_in: String) -> void:
 		_sockets["head"] = _nodes["head"]
 	if not _sockets.has("weapon_tip"):
 		_sockets["weapon_tip"] = _sockets.get("hand", g)
+	if res["swarm_node"] != null:
+		swarm = SwarmCtl.new(self, res["swarm_node"], cfg.get("swarm_rest", []))
 	for dn in cfg.get("detach", []):
 		if _nodes.has(dn):
 			_dcs[dn] = DetachCtl.new(self, dn, _nodes[dn])
@@ -230,6 +235,25 @@ func _detach_logic(action: String, frame: int, dt: float) -> void:
 		else:
 			ctl.recall()
 		ctl.update(dt)
+	if swarm != null:
+		var sa: Dictionary = cfg.get("swarm_act", {}).get(action, {})
+		if not sa.is_empty():
+			var s0 := _timing.x
+			var e0 := s0 + _timing.y + int(sa.get("hold", 0))
+			if frame == s0:
+				match str(sa.get("mode", "orbit")):
+					"orbit": swarm.orbit_all(sa.get("center", Vector3(0, 0.3, 0)), float(sa.get("radius", 1.6)), float(sa.get("hz", 1.0)))
+					"flick": swarm.flick(sa.get("dir", Vector3(1, 0.1, 0)), float(sa.get("dist", 3.0)))
+					"volley": swarm.volley(sa.get("dir", Vector3(1, 0.1, 0)), float(sa.get("dist", 3.5)), float(sa.get("fan", 1.2)))
+			elif frame >= e0:
+				swarm.recall()
+		elif action != _swarm_last_action and swarm.any_away() and action in ["idle", "walk", "hit", "ko", "guard"]:
+			swarm.recall()
+		_swarm_last_action = action
+		swarm.update(dt)
+		var pairs := swarm.thread_pairs()
+		if pairs.size() > 0:
+			fx.thread_multi(pairs)
 	var gc: Dictionary = cfg.get("ghost_act", {}).get(action, {})
 	if not gc.is_empty() and frame == _timing.x and _ghosted != _tick - 1 and _timing.x >= 1:
 		_ghosted = _tick

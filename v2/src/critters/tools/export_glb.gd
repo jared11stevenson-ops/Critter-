@@ -45,6 +45,16 @@ func _prep(n: Node, parts: Array) -> void:
 			par.add_child(e)
 			par.move_child(e, idx)
 			continue
+		if c is MultiMeshInstance3D:   # swarm -> individual named meshes (one per body) so Blender gets separate spheres
+			var mmi := c as MultiMeshInstance3D
+			for i in range(mmi.multimesh.instance_count):
+				var one := MeshInstance3D.new()
+				one.name = "%s_%d" % [mmi.name, i]
+				one.mesh = mmi.multimesh.mesh
+				one.transform = mmi.multimesh.get_instance_transform(i)
+				mmi.get_parent().add_child(one)
+			c.free()
+			continue
 		if c is MeshInstance3D:
 			var mi := c as MeshInstance3D
 			var isface: bool = mi.name == "face"
