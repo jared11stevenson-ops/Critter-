@@ -1,0 +1,55 @@
+{
+ "id": "nyxaris",
+ "name": "Nyxaris",
+ "species": "Frostbloom silk-weaver",
+ "archetype": "Grappler / binder",
+ "weapon": "Cryogenic silk and venom fangs",
+ "palette": {
+  "main": "frost blue",
+  "accent": "silk white",
+  "glow": "venom violet"
+ },
+ "stats": {
+  "vit": 7,
+  "sta": 6,
+  "poi": 7,
+  "spd": 4,
+  "rch": 3,
+  "dmg": 9
+ },
+ "moves": {
+  "light": [
+   "nyxaris_light1",
+   "nyxaris_light2"
+  ],
+  "heavy": "nyxaris_heavy",
+  "grab": "nyxaris_grab",
+  "dodge": "nyxaris_dodge",
+  "ability1": "nyxaris_frost_bind",
+  "ability2": "nyxaris_silk_pull",
+  "laststand": "nyxaris_cold_archive"
+ },
+ "tuning": {
+  "body_radius": 0.65,
+  "block_chip": 0.2,
+  "crush_resist": 0.2,
+  "damage_mult": 1.0
+ },
+ "ai": {
+  "style": "grappler",
+  "ability1": {
+   "min": 0.0,
+   "max": 2.2,
+   "when": "close"
+  },
+  "ability2": {
+   "min": 2.5,
+   "max": 6.0,
+   "when": "far"
+  },
+  "range": [
+   1.3,
+   2.3
+  ]
+ }
+}

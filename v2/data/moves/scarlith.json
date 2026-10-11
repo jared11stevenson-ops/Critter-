@@ -1,10 +1,10 @@
 {
- "critter": "cinder",
+ "critter": "scarlith",
  "moves": {
-  "cinder_light1": {
-   "name": "Nozzle Jab",
+  "scarlith_light1": {
+   "name": "Bottle Jab",
    "kind": "light",
-   "tell_anim": "cinder_jab",
+   "tell_anim": "punch",
    "startup": 13,
    "active": 3,
    "recovery": 15,
@@ -20,14 +20,14 @@
     "reach": 2.2,
     "arc": 60
    },
-   "chain": "cinder_light2",
+   "chain": "scarlith_light2",
    "cancel_from": 15,
    "track": 6
   },
-  "cinder_light2": {
-   "name": "Nozzle Hook",
+  "scarlith_light2": {
+   "name": "Barrel Hook",
    "kind": "light",
-   "tell_anim": "cinder_jab2",
+   "tell_anim": "slash_back",
    "startup": 12,
    "active": 3,
    "recovery": 20,
@@ -45,10 +45,10 @@
    },
    "track": 5
   },
-  "cinder_heavy": {
-   "name": "Boiler Slam",
+  "scarlith_heavy": {
+   "name": "Cheese-Wheel Slam",
    "kind": "heavy",
-   "tell_anim": "cinder_slam",
+   "tell_anim": "overhead",
    "startup": 26,
    "active": 4,
    "recovery": 30,
@@ -67,10 +67,10 @@
     "arc": 90
    }
   },
-  "cinder_grab": {
-   "name": "Nozzle Hook Pull",
+  "scarlith_grab": {
+   "name": "Tab Collector",
    "kind": "grab",
-   "tell_anim": "cinder_hook",
+   "tell_anim": "grab",
    "startup": 17,
    "active": 3,
    "recovery": 28,
@@ -88,10 +88,10 @@
     "arc": 40
    }
   },
-  "cinder_dodge": {
+  "scarlith_dodge": {
    "name": "Hop Clear",
    "kind": "dodge",
-   "tell_anim": "cinder_dodge",
+   "tell_anim": "leap",
    "startup": 0,
    "active": 6,
    "recovery": 14,
@@ -109,10 +109,10 @@
     }
    ]
   },
-  "cinder_pressure_burst": {
-   "name": "Pressure Burst",
+  "scarlith_rot_burst": {
+   "name": "Rot Burst",
    "kind": "ability",
-   "tell_anim": "cinder_burst",
+   "tell_anim": "roar",
    "startup": 20,
    "active": 4,
    "recovery": 28,
@@ -136,10 +136,10 @@
     "knockdown": true
    }
   },
-  "cinder_scorch_spray": {
-   "name": "Scorch Spray",
+  "scarlith_spoil_zone": {
+   "name": "Spoil Zone",
    "kind": "ability",
-   "tell_anim": "cinder_spray",
+   "tell_anim": "hook",
    "startup": 16,
    "active": 1,
    "recovery": 24,
@@ -163,10 +163,10 @@
     }
    ]
   },
-  "cinder_overpressure": {
-   "name": "Overpressure",
+  "scarlith_aged_to_perfection": {
+   "name": "Aged to Perfection",
    "kind": "laststand",
-   "tell_anim": "cinder_overpressure",
+   "tell_anim": "roar",
    "startup": 34,
    "active": 3,
    "recovery": 50,

@@ -1,13 +1,13 @@
 {
- "id": "cinder",
- "name": "Cinder",
- "species": "Bombardier beetle",
- "archetype": "Burst striker",
- "weapon": "Boiler Gauntlet",
+ "id": "scarlith",
+ "name": "Scarlith",
+ "species": "Red-velvet mite kingpin",
+ "archetype": "Burst / decay striker",
+ "weapon": "Barrel-and-bottle brew kit",
  "palette": {
-  "main": "tangerine",
-  "accent": "soot",
-  "glow": "yellow"
+  "main": "red velvet",
+  "accent": "cheese gold",
+  "glow": "fermentation green"
  },
  "stats": {
   "vit": 5,
@@ -19,15 +19,15 @@
  },
  "moves": {
   "light": [
-   "cinder_light1",
-   "cinder_light2"
+   "scarlith_light1",
+   "scarlith_light2"
   ],
-  "heavy": "cinder_heavy",
-  "grab": "cinder_grab",
-  "dodge": "cinder_dodge",
-  "ability1": "cinder_pressure_burst",
-  "ability2": "cinder_scorch_spray",
-  "laststand": "cinder_overpressure"
+  "heavy": "scarlith_heavy",
+  "grab": "scarlith_grab",
+  "dodge": "scarlith_dodge",
+  "ability1": "scarlith_rot_burst",
+  "ability2": "scarlith_spoil_zone",
+  "laststand": "scarlith_aged_to_perfection"
  },
  "tuning": {
   "body_radius": 0.5,

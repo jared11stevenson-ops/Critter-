@@ -136,10 +136,17 @@ static func start_move(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, kind:
 		f.chain_idx += 1
 	else:
 		f.chain_idx = 0
-	sim.emit("tell", f.idx, m.id, f.pos, 0.0, {"startup": m.startup, "tell_anim": m.tell_anim, "kind": m.kind})
+	sim.emit("tell", f.idx, m.id, f.pos, 0.0, {"startup": m.startup, "tell_anim": m.tell_anim, "kind": m.kind, "hidden": f.has("camo")})
 	sim.fx.on_start(sim, f, o, m)
 
+## A store move with props.release == "debt" turns what it absorbed into damage owed later.
+static func release_store(f: Fighter, rules: Dictionary) -> void:
+	if f.move != null and f.move.props.get("release", "") == "debt":
+		f.debt += f.stored * float(rules["debt_factor"])
+		f.stored = 0.0
+
 static func end_move(sim: CombatSim, f: Fighter) -> void:
+	release_store(f, sim.R)
 	f.move = null
 	f.action = "idle"
 	f.af = 0
@@ -331,7 +338,7 @@ static func _walk(sim: CombatSim, f: Fighter) -> void:
 			mult = m.move_mult
 		else:
 			return
-	var dir: Vector2 = f.move_in
+	var dir: Vector2 = -f.move_in if f.has("confused") else f.move_in
 	var dz: float = float(sim.R["walk_deadzone"])
 	if dir.length_squared() < dz * dz:
 		return

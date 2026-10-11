@@ -1,12 +1,12 @@
 {
  "roster": [
-  "haldor",
-  "sessa",
-  "weft",
-  "cinder",
-  "marro",
-  "zell",
-  "kragg"
+  "aruun",
+  "cigarra",
+  "bramvex",
+  "scarlith",
+  "mollusk",
+  "zephyr",
+  "nyxaris"
  ],
  "timeout_ticks": 7200,
  "input_buffer": 6,
@@ -126,5 +126,10 @@
  "parry_min_poise": 1.0,
  "ghost_frames": 2,
  "facing_epsilon": 0.01,
- "side_deadzone": 0.1
+ "side_deadzone": 0.1,
+ "premonition_bonus": 8,
+ "camo_crit_mult": 1.5,
+ "debt_rate": 30.0,
+ "debt_factor": 0.8,
+ "boomerang_cooldown": 10
 }

@@ -1,0 +1,58 @@
+{
+ "id": "cigarra",
+ "name": "Cigarra",
+ "species": "Brazilian treehopper",
+ "archetype": "Counter duelist",
+ "weapon": "Crown spheres and charms",
+ "palette": {
+  "main": "leaf green",
+  "accent": "crown black",
+  "glow": "yellow-green"
+ },
+ "stats": {
+  "vit": 4,
+  "sta": 7,
+  "poi": 3,
+  "spd": 9,
+  "rch": 4,
+  "dmg": 9
+ },
+ "moves": {
+  "light": [
+   "cigarra_light1",
+   "cigarra_light2",
+   "cigarra_light3"
+  ],
+  "heavy": "cigarra_heavy",
+  "grab": "cigarra_grab",
+  "dodge": "cigarra_dodge",
+  "ability1": "cigarra_premonition",
+  "ability2": "cigarra_branching_sphere",
+  "laststand": "cigarra_future_touched"
+ },
+ "tuning": {
+  "body_radius": 0.4,
+  "parry_window": 10,
+  "block_chip": 0.35,
+  "block_poise": 0.6,
+  "guard_drain": 0.6,
+  "damage_mult": 1.0
+ },
+ "ai": {
+  "style": "duelist",
+  "range": [
+   1.6,
+   2.6
+  ],
+  "ability1": {
+   "min": 0.0,
+   "max": 3.0,
+   "when": "defensive"
+  },
+  "ability2": {
+   "min": 2.0,
+   "max": 5.5,
+   "when": "far"
+  }
+ }
+}

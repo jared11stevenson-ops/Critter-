@@ -19,4 +19,10 @@ var buff: Dictionary = {}
 var timer := 0
 var interval := 30
 var reach := 1.5
-var arm := 0                # frames before a trap becomes active
+var arm := 0
+var wait := 0               # frames hovering before a probe launches
+var age := 0
+var turn_at := 0            # boomerang: frame at which it returns (0 = never)
+var returning := false
+var dodged := false                # frames before a trap becomes active
+var cool := 0

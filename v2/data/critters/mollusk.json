@@ -1,0 +1,58 @@
+{
+ "id": "mollusk",
+ "name": "Mollusk",
+ "species": "Giant African snail",
+ "archetype": "Shield tank / time-delay",
+ "weapon": "Carved memory shell",
+ "palette": {
+  "main": "shell brown",
+  "accent": "memory-mark cream",
+  "glow": "slow teal"
+ },
+ "stats": {
+  "vit": 8,
+  "sta": 8,
+  "poi": 7,
+  "spd": 4,
+  "rch": 5,
+  "dmg": 4
+ },
+ "moves": {
+  "light": [
+   "mollusk_light1",
+   "mollusk_light2"
+  ],
+  "heavy": "mollusk_heavy",
+  "grab": "mollusk_grab",
+  "dodge": "mollusk_dodge",
+  "ability1": "mollusk_delay",
+  "ability2": "mollusk_shell_brace",
+  "laststand": "mollusk_everything_arrives"
+ },
+ "tuning": {
+  "body_radius": 0.55,
+  "block_chip": 0.05,
+  "guard_drain": 0.25,
+  "block_poise": 0.1,
+  "crush_resist": 0.5,
+  "guard_move_mult": 0.6,
+  "damage_mult": 1.0
+ },
+ "ai": {
+  "style": "tank",
+  "range": [
+   1.7,
+   2.7
+  ],
+  "ability1": {
+   "min": 0.0,
+   "max": 3.0,
+   "when": "defensive"
+  },
+  "ability2": {
+   "min": 0.0,
+   "max": 3.0,
+   "when": "defensive"
+  }
+ }
+}

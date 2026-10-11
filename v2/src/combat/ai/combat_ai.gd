@@ -192,7 +192,7 @@ func _habit_ctx(gap: float) -> String:
 func _react(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float) -> void:
 	var ob := _seen()
 	var react: int = int(P["reaction"])
-	if ob["mid"] == "" or me.stun > 0 or not alive_ok(me):
+	if ob["mid"] == "" or me.stun > 0 or not alive_ok(me) or op.has("camo"):
 		return
 	var m: MoveDef = op.def.move(ob["mid"])
 	if m == null or m.hits.is_empty():

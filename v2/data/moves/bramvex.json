@@ -1,10 +1,10 @@
 {
- "critter": "weft",
+ "critter": "bramvex",
  "moves": {
-  "weft_light1": {
-   "name": "Lance Jab",
+  "bramvex_light1": {
+   "name": "Diplomacy Jab",
    "kind": "light",
-   "tell_anim": "weft_jab",
+   "tell_anim": "thrust",
    "startup": 14,
    "active": 3,
    "recovery": 16,
@@ -19,14 +19,14 @@
     "reach": 3.0,
     "arc": 40
    },
-   "chain": "weft_light2",
+   "chain": "bramvex_light2",
    "cancel_from": 16,
    "track": 6
   },
-  "weft_light2": {
-   "name": "Lance Flick",
+  "bramvex_light2": {
+   "name": "Diplomacy Flick",
    "kind": "light",
-   "tell_anim": "weft_jab2",
+   "tell_anim": "thrust",
    "startup": 13,
    "active": 3,
    "recovery": 20,
@@ -43,10 +43,10 @@
    },
    "track": 5
   },
-  "weft_heavy": {
-   "name": "Needle Thrust",
+  "bramvex_heavy": {
+   "name": "Final Notice",
    "kind": "heavy",
-   "tell_anim": "weft_thrust",
+   "tell_anim": "overhead",
    "startup": 28,
    "active": 4,
    "recovery": 30,
@@ -64,11 +64,11 @@
     "arc": 30
    }
   },
-  "weft_grab": {
-   "name": "Tether Pull",
+  "bramvex_grab": {
+   "name": "Haft Shove",
    "kind": "grab",
-   "tell_anim": "weft_tether",
-   "startup": 20,
+   "tell_anim": "grab",
+   "startup": 18,
    "active": 3,
    "recovery": 30,
    "stamina_cost": 12,
@@ -77,19 +77,17 @@
    "poise_damage": 8.0,
    "hitstop": 6,
    "grab": true,
-   "hitstun": 26,
    "hitbox": {
-    "reach": 4.5,
-    "arc": 30
+    "reach": 2.2,
+    "arc": 90
    },
-   "on_hit": {
-    "pull_to": 1.1
-   }
+   "throw_dist": 1.8,
+   "throw_stun": 6
   },
-  "weft_dodge": {
+  "bramvex_dodge": {
    "name": "Silk Drop",
    "kind": "dodge",
-   "tell_anim": "weft_dodge",
+   "tell_anim": "leap",
    "startup": 0,
    "active": 6,
    "recovery": 14,
@@ -107,33 +105,25 @@
     }
    ]
   },
-  "weft_thread_snare": {
-   "name": "Thread Snare",
+  "bramvex_ghost_thorn": {
+   "name": "Ghost Thorn",
    "kind": "ability",
-   "tell_anim": "weft_snare",
-   "startup": 20,
-   "active": 3,
-   "recovery": 24,
-   "stamina_cost": 14,
-   "cooldown": 420,
-   "track": 8,
-   "damage": 8.3,
-   "poise_damage": 6,
-   "hitstun": 18,
-   "blockstun": 10,
-   "hitstop": 4,
-   "hitbox": {
-    "reach": 6.5,
-    "arc": 24
-   },
-   "on_hit": {
-    "root": 70
+   "tell_anim": "stance",
+   "startup": 6,
+   "active": 1,
+   "recovery": 14,
+   "stamina_cost": 10,
+   "cooldown": 480,
+   "stance": {
+    "status": "camo",
+    "from": 6,
+    "frames": 150
    }
   },
-  "weft_web_mine": {
-   "name": "Web Mine",
+  "bramvex_thorn_line": {
+   "name": "Thorn Line",
    "kind": "ability",
-   "tell_anim": "weft_mine",
+   "tell_anim": "hook",
    "startup": 14,
    "active": 1,
    "recovery": 16,
@@ -144,26 +134,62 @@
      "at": 14,
      "type": "zone",
      "place": "front",
-     "dist": 1.6,
-     "radius": 1.1,
+     "dist": 1.4,
+     "radius": 0.8,
      "life": 900,
      "once": true,
-     "arm": 30,
-     "tag": "web_mine",
-     "max": 2,
+     "arm": 24,
+     "tag": "thorn",
+     "max": 4,
      "on_enter": {
-      "damage": 16.5,
-      "root": 55,
-      "slow": 120,
+      "damage": 6.0,
+      "root": 30,
+      "slow": 90,
+      "poise": 6
+     }
+    },
+    {
+     "at": 14,
+     "type": "zone",
+     "place": "front",
+     "dist": 2.6,
+     "radius": 0.8,
+     "life": 900,
+     "once": true,
+     "arm": 24,
+     "tag": "thorn",
+     "max": 4,
+     "on_enter": {
+      "damage": 6.0,
+      "root": 30,
+      "slow": 90,
+      "poise": 6
+     }
+    },
+    {
+     "at": 14,
+     "type": "zone",
+     "place": "front",
+     "dist": 3.8,
+     "radius": 0.8,
+     "life": 900,
+     "once": true,
+     "arm": 24,
+     "tag": "thorn",
+     "max": 4,
+     "on_enter": {
+      "damage": 6.0,
+      "root": 30,
+      "slow": 90,
       "poise": 6
      }
     }
    ]
   },
-  "weft_silk_cathedral": {
-   "name": "Silk Cathedral",
+  "bramvex_hold_the_line": {
+   "name": "Hold the Line",
    "kind": "laststand",
-   "tell_anim": "weft_cathedral",
+   "tell_anim": "roar",
    "startup": 30,
    "active": 1,
    "recovery": 20,

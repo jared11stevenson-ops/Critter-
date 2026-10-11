@@ -1,10 +1,10 @@
 {
- "critter": "zell",
+ "critter": "zephyr",
  "moves": {
-  "zell_light1": {
-   "name": "Glaive Jab",
+  "zephyr_light1": {
+   "name": "Needle Jab",
    "kind": "light",
-   "tell_anim": "zell_jab",
+   "tell_anim": "thrust",
    "startup": 11,
    "active": 3,
    "recovery": 12,
@@ -19,14 +19,14 @@
     "reach": 2.6,
     "arc": 50
    },
-   "chain": "zell_light2",
+   "chain": "zephyr_light2",
    "cancel_from": 13,
    "track": 5
   },
-  "zell_light2": {
-   "name": "Glaive Flick",
+  "zephyr_light2": {
+   "name": "Needle Flick",
    "kind": "light",
-   "tell_anim": "zell_jab2",
+   "tell_anim": "thrust",
    "startup": 11,
    "active": 3,
    "recovery": 16,
@@ -43,10 +43,10 @@
    },
    "track": 5
   },
-  "zell_heavy": {
+  "zephyr_heavy": {
    "name": "Wing Cleave",
    "kind": "heavy",
-   "tell_anim": "zell_cleave",
+   "tell_anim": "slash_up",
    "startup": 24,
    "active": 4,
    "recovery": 26,
@@ -64,10 +64,10 @@
     "arc": 90
    }
   },
-  "zell_grab": {
+  "zephyr_grab": {
    "name": "Dive Snatch",
    "kind": "grab",
-   "tell_anim": "zell_snatch",
+   "tell_anim": "grab",
    "startup": 14,
    "active": 3,
    "recovery": 28,
@@ -92,10 +92,10 @@
     }
    ]
   },
-  "zell_dodge": {
+  "zephyr_dodge": {
    "name": "Air Dodge",
    "kind": "dodge",
-   "tell_anim": "zell_dodge",
+   "tell_anim": "leap",
    "startup": 0,
    "active": 6,
    "recovery": 10,
@@ -115,72 +115,70 @@
    "cancel_from": 8,
    "chain_on": "always"
   },
-  "zell_skybound": {
-   "name": "Skybound",
+  "zephyr_gust_step": {
+   "name": "Gust Step",
    "kind": "ability",
-   "tell_anim": "zell_skybound",
-   "startup": 30,
-   "active": 6,
-   "recovery": 24,
-   "stamina_cost": 14,
-   "cooldown": 360,
+   "tell_anim": "leap",
+   "startup": 10,
+   "active": 3,
+   "recovery": 16,
+   "stamina_cost": 12,
+   "cooldown": 300,
    "iframes": [
-    6,
-    12
+    0,
+    8
    ],
-   "damage": 23.0,
-   "poise_damage": 14,
-   "hitstun": 28,
-   "blockstun": 14,
-   "knockback": 1.0,
-   "hitstop": 8,
+   "damage": 11.0,
+   "poise_damage": 9,
+   "hitstun": 22,
+   "blockstun": 12,
+   "knockback": 0.6,
+   "hitstop": 5,
    "hitbox": {
-    "reach": 1.6,
-    "arc": 360
-   },
-   "props": {
-    "knockdown": true
+    "reach": 2.4,
+    "arc": 140
    },
    "motion": [
     {
-     "at": 4,
-     "len": 24,
-     "dist": 5.5,
+     "at": 0,
+     "len": 10,
+     "dist": 4.5,
      "dir": "to_target",
-     "gap": 0.2
+     "gap": 0.3
     }
    ]
   },
-  "zell_glass_gale": {
-   "name": "Glass Gale",
+  "zephyr_pollen_cloud": {
+   "name": "Pollen Cloud",
    "kind": "ability",
-   "tell_anim": "zell_gale",
-   "startup": 18,
+   "tell_anim": "roar",
+   "startup": 16,
    "active": 1,
    "recovery": 22,
    "stamina_cost": 12,
-   "cooldown": 240,
-   "track": 10,
+   "cooldown": 420,
    "spawns": [
     {
-     "at": 18,
-     "type": "projectile",
-     "speed": 14,
-     "radius": 0.45,
-     "life": 45,
-     "damage": 10.8,
-     "poise_damage": 8,
-     "hitstun": 20,
-     "blockstun": 10,
-     "knockback": 0.4,
-     "hitstop": 4
+     "at": 16,
+     "type": "zone",
+     "place": "front",
+     "dist": 2.2,
+     "radius": 1.7,
+     "life": 240,
+     "affect": "enemy",
+     "tag": "pollen",
+     "max": 1,
+     "buff": {
+      "slow": 1,
+      "confuse": 1
+     }
     }
    ]
   },
-  "zell_final_flight": {
-   "name": "Final Flight",
+  "zephyr_promise_kept": {
+   "name": "A Promise Kept",
    "kind": "laststand",
-   "tell_anim": "zell_final",
+   "tell_anim": "leap",
    "startup": 14,
    "active": 70,
    "recovery": 24,

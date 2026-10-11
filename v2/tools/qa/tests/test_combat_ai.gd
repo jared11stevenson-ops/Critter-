@@ -24,7 +24,7 @@ func _play(a: String, b: String, pa: String, pb: String, seed_value: int, max_ti
 	return sim
 
 func _full_bouts(fails: Array) -> void:
-	var pairs := [["haldor", "sessa"], ["weft", "cinder"], ["marro", "zell"], ["kragg", "haldor"], ["sessa", "kragg"]]
+	var pairs := [["aruun", "cigarra"], ["bramvex", "scarlith"], ["mollusk", "zephyr"], ["nyxaris", "aruun"], ["cigarra", "nyxaris"]]
 	var i := 0
 	for p in pairs:
 		for prof in CombatAI.profile_names():
@@ -40,7 +40,7 @@ func _full_bouts(fails: Array) -> void:
 func _determinism(fails: Array) -> void:
 	var h: Array = []
 	for k in 2:
-		var sim := _play("cinder", "zell", "expert", "standard", 77, 1500)
+		var sim := _play("scarlith", "zephyr", "expert", "standard", 77, 1500)
 		h.append(sim.state_hash())
 	if h[0] != h[1]:
 		fails.append("ai: AI vs AI not deterministic for the same seeds")
@@ -74,7 +74,7 @@ func _parry(fails: Array) -> void:
 	var parries := 0
 	var hits := 0
 	for s in 6:
-		var sim := U.make("sessa", "haldor", "ring", 1, 300 + s)
+		var sim := U.make("cigarra", "aruun", "ring", 1, 300 + s)
 		U.face_off(sim, 1.8)
 		var ai := CombatAI.new(1, "expert", 900 + s, false)
 		for t in 700:
@@ -93,7 +93,7 @@ func _parry(fails: Array) -> void:
 	# novice parries far less
 	var novice_parries := 0
 	for s in 6:
-		var sim2 := U.make("sessa", "haldor", "ring", 1, 300 + s)
+		var sim2 := U.make("cigarra", "aruun", "ring", 1, 300 + s)
 		U.face_off(sim2, 1.8)
 		var ai2 := CombatAI.new(1, "novice", 900 + s, false)
 		for t in 700:
@@ -111,7 +111,7 @@ func _parry(fails: Array) -> void:
 func _yield_and_last_stand(fails: Array) -> void:
 	var yielded := false
 	for s in 5:
-		var sim := U.make("sessa", "haldor", "ring", 2, 50 + s)
+		var sim := U.make("cigarra", "aruun", "ring", 2, 50 + s)
 		U.face_off(sim, 4.0)
 		sim.fighters[1].vit = sim.fighters[1].max_vit * 0.05
 		sim.fighters[1].last_stand_used = true
@@ -127,7 +127,7 @@ func _yield_and_last_stand(fails: Array) -> void:
 		fails.append("ai: a beaten expert should yield (loser lives)")
 	var used := false
 	for s in 5:
-		var sim2 := U.make("kragg", "marro", "ring", 1, 60 + s)
+		var sim2 := U.make("nyxaris", "mollusk", "ring", 1, 60 + s)
 		U.face_off(sim2, 2.2)
 		sim2.fighters[0].vit = sim2.fighters[0].max_vit * 0.15
 		var ai2 := CombatAI.new(0, "expert", 8 + s, false)
@@ -144,7 +144,7 @@ func _abilities_used(fails: Array) -> void:
 	for id in CombatData.critter_ids():
 		var used := 0
 		for s in 3:
-			var sim := _play(id, "marro" if id != "marro" else "haldor", "standard", "standard", 200 + s, 6000)
+			var sim := _play(id, "mollusk" if id != "mollusk" else "aruun", "standard", "standard", 200 + s, 6000)
 			for k in sim.fighters[0].cooldowns.keys():
 				used += 1
 			if sim.fighters[0].last_stand_used:

@@ -1,10 +1,10 @@
 {
- "critter": "sessa",
+ "critter": "cigarra",
  "moves": {
-  "sessa_light1": {
-   "name": "Reaper Cut",
+  "cigarra_light1": {
+   "name": "Charm Strike",
    "kind": "light",
-   "tell_anim": "sessa_cut1",
+   "tell_anim": "punch",
    "startup": 10,
    "active": 3,
    "recovery": 10,
@@ -19,14 +19,14 @@
     "reach": 1.5,
     "arc": 100
    },
-   "chain": "sessa_light2",
+   "chain": "cigarra_light2",
    "cancel_from": 11,
    "track": 5
   },
-  "sessa_light2": {
-   "name": "Reaper Cross",
+  "cigarra_light2": {
+   "name": "Charm Cross",
    "kind": "light",
-   "tell_anim": "sessa_cut2",
+   "tell_anim": "slash_back",
    "startup": 10,
    "active": 3,
    "recovery": 10,
@@ -41,14 +41,14 @@
     "reach": 1.5,
     "arc": 100
    },
-   "chain": "sessa_light3",
+   "chain": "cigarra_light3",
    "cancel_from": 11,
    "track": 5
   },
-  "sessa_light3": {
-   "name": "Reaper Finish",
+  "cigarra_light3": {
+   "name": "Charm Finish",
    "kind": "light",
-   "tell_anim": "sessa_cut3",
+   "tell_anim": "slash_up",
    "startup": 12,
    "active": 3,
    "recovery": 18,
@@ -65,10 +65,10 @@
    },
    "track": 4
   },
-  "sessa_heavy": {
-   "name": "Scissor Rend",
+  "cigarra_heavy": {
+   "name": "Branch Rend",
    "kind": "heavy",
-   "tell_anim": "sessa_scissor",
+   "tell_anim": "spin",
    "startup": 24,
    "active": 4,
    "recovery": 24,
@@ -89,10 +89,10 @@
     "guard_crush": true
    }
   },
-  "sessa_grab": {
-   "name": "Blade Lock",
+  "cigarra_grab": {
+   "name": "Cloak Snare",
    "kind": "grab",
-   "tell_anim": "sessa_bladelock",
+   "tell_anim": "grab",
    "startup": 15,
    "active": 3,
    "recovery": 26,
@@ -109,10 +109,10 @@
     "arc": 110
    }
   },
-  "sessa_dodge": {
+  "cigarra_dodge": {
    "name": "Skitter",
    "kind": "dodge",
-   "tell_anim": "sessa_dodge",
+   "tell_anim": "leap",
    "startup": 0,
    "active": 6,
    "recovery": 11,
@@ -130,73 +130,58 @@
     }
    ]
   },
-  "sessa_riposte_stance": {
-   "name": "Riposte Stance",
+  "cigarra_premonition": {
+   "name": "Premonition",
    "kind": "ability",
-   "tell_anim": "sessa_stance",
+   "tell_anim": "stance",
    "startup": 6,
-   "active": 40,
-   "recovery": 22,
+   "active": 60,
+   "recovery": 20,
    "stamina_cost": 12,
    "cooldown": 420,
    "stance": {
-    "status": "stance_riposte",
+    "status": "premonition",
     "from": 6,
-    "frames": 40
+    "frames": 60
    }
   },
-  "sessa_riposte_combo": {
-   "name": "Riposte Combo",
-   "kind": "light",
-   "tell_anim": "sessa_riposte_combo",
-   "startup": 10,
-   "active": 18,
-   "recovery": 14,
-   "track": 8,
-   "damage": 12.4,
-   "poise_damage": 5,
-   "hitstun": 16,
-   "blockstun": 8,
-   "knockback": 0.2,
-   "hitstop": 3,
-   "hitbox": {
-    "reach": 1.7,
-    "arc": 120
-   },
-   "rehit": {
-    "every": 6,
-    "count": 3,
-    "from": 10,
-    "len": 2
-   }
-  },
-  "sessa_blur_step": {
-   "name": "Blur Step",
+  "cigarra_branching_sphere": {
+   "name": "Branching Sphere",
    "kind": "ability",
-   "tell_anim": "sessa_blur",
-   "startup": 10,
+   "tell_anim": "hook",
+   "startup": 18,
    "active": 1,
-   "recovery": 10,
+   "recovery": 24,
    "stamina_cost": 14,
    "cooldown": 300,
-   "iframes": [
-    0,
-    10
-   ],
-   "motion": [
+   "track": 8,
+   "spawns": [
     {
-     "at": 9,
-     "len": 1,
-     "dist": 0.0,
-     "dir": "behind",
-     "gap": 0.2
+     "at": 18,
+     "type": "projectile",
+     "angles": [
+      -26,
+      0,
+      26
+     ],
+     "wait": 14,
+     "wait_step": 6,
+     "speed": 9,
+     "radius": 0.45,
+     "life": 55,
+     "damage": 9.0,
+     "poise_damage": 7,
+     "hitstun": 20,
+     "blockstun": 10,
+     "knockback": 0.3,
+     "hitstop": 4
     }
    ]
   },
-  "sessa_thousand_cuts": {
-   "name": "Thousand Cuts",
+  "cigarra_future_touched": {
+   "name": "A Future Touched",
    "kind": "laststand",
-   "tell_anim": "sessa_thousand",
+   "tell_anim": "spin",
    "startup": 18,
    "active": 60,
    "recovery": 30,
@@ -222,7 +207,30 @@
     "count": 12,
     "from": 18,
     "len": 2
-   }
+   },
+   "spawns": [
+    {
+     "at": 20,
+     "type": "projectile",
+     "angles": [
+      -36,
+      -18,
+      0,
+      18,
+      36
+     ],
+     "wait": 8,
+     "wait_step": 4,
+     "speed": 10,
+     "radius": 0.4,
+     "life": 50,
+     "damage": 5.0,
+     "poise_damage": 4,
+     "hitstun": 14,
+     "blockstun": 8,
+     "hitstop": 2
+    }
+   ]
   }
  }
 }

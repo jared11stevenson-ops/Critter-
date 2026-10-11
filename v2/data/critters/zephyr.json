@@ -1,0 +1,58 @@
+{
+ "id": "zephyr",
+ "name": "Zephyr",
+ "species": "Hummingbird hawk-moth fairy",
+ "archetype": "Aerial skirmisher",
+ "weapon": "Light needle-lance and wings",
+ "palette": {
+  "main": "moth brown",
+  "accent": "pollen gold",
+  "glow": "briar green"
+ },
+ "stats": {
+  "vit": 4,
+  "sta": 7,
+  "poi": 3,
+  "spd": 10,
+  "rch": 6,
+  "dmg": 6
+ },
+ "moves": {
+  "light": [
+   "zephyr_light1",
+   "zephyr_light2"
+  ],
+  "heavy": "zephyr_heavy",
+  "grab": "zephyr_grab",
+  "dodge": "zephyr_dodge",
+  "ability1": "zephyr_gust_step",
+  "ability2": "zephyr_pollen_cloud",
+  "laststand": "zephyr_promise_kept"
+ },
+ "tuning": {
+  "body_radius": 0.4,
+  "block_chip": 0.5,
+  "block_poise": 1.0,
+  "guard_drain": 1.0,
+  "dodge_chain": 1,
+  "guard_move_mult": 0.7,
+  "damage_mult": 1.0
+ },
+ "ai": {
+  "style": "skirmisher",
+  "range": [
+   2.2,
+   3.4
+  ],
+  "ability1": {
+   "min": 2.0,
+   "max": 5.5,
+   "when": "gap"
+  },
+  "ability2": {
+   "min": 1.5,
+   "max": 4.0,
+   "when": "any"
+  }
+ }
+}

@@ -3,6 +3,7 @@ extends RefCounted
 ## armor, poise and stagger. Static helpers operating on a CombatSim.
 
 const Fighter = preload("res://src/combat/fighter.gd")
+const Actions = preload("res://src/combat/sim_actions.gd")
 
 static func in_range(a: Fighter, d: Fighter, h: Dictionary) -> bool:
 	var to: Vector2 = d.pos - a.pos
@@ -120,18 +121,14 @@ static func apply_hit(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary,
 	if dfn.has("wall") and front and not (is_grab and h["command"]):
 		_wall_absorb(sim, atk, dfn, h, move_id)
 		return 1
-	# Riposte Stance: any parryable strike is auto-parried.
-	if dfn.has("stance_riposte") and front and not is_grab and not h["unparryable"] and not projectile:
-		_parry(sim, atk, dfn, h, move_id, atk_kind, true)
-		return 1
 	if is_grab:
 		_grab(sim, atk, dfn, h, move_id)
 		return 1
 	if dfn.action == "guard" and front and not h["unblockable"]:
-		var window := int(dfn.T["parry_window"])
+		var window := int(dfn.T["parry_window"]) + (int(R["premonition_bonus"]) if dfn.has("premonition") else 0)
 		var eligible: bool = dfn.stun == 0 and sim.frame - dfn.guard_press_frame <= window and not h["unparryable"]
 		if eligible:
-			_parry(sim, atk, dfn, h, move_id, atk_kind, false, projectile)
+			_parry(sim, atk, dfn, h, move_id, atk_kind, projectile)
 		else:
 			_block(sim, atk, dfn, h, move_id, kdir)
 		return 1
@@ -149,6 +146,16 @@ static func _scaled_damage(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictio
 		dmg *= float(R["stagger_dmg_mult"])
 	if dfn.combo_hits > 0:
 		dmg *= pow(float(R["combo_scale"]), dfn.combo_hits)
+	if atk.has("camo"):
+		dmg *= float(R["camo_crit_mult"])
+		atk.st.erase("camo")
+	if atk.move != null and atk.move.props.has("stored_mult"):
+		var pool: float = atk.stored
+		if atk.move.props.get("release_debt", false):
+			pool += atk.debt
+			atk.debt = 0.0
+		dmg += pool * float(atk.move.props["stored_mult"])
+		atk.stored = 0.0
 	return dmg
 
 static func _hurt(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary, move_id: String, kdir: Vector2) -> void:
@@ -159,10 +166,14 @@ static func _hurt(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary, mov
 		dmg *= float(R["counter_hit_mult"])
 	var armor: float = dfn.armor_now()
 	if armor > 0.0:
+		if dfn.move != null and dfn.move.props.has("store_ratio"):
+			dfn.stored += dmg * armor * float(dfn.move.props["store_ratio"])
 		dmg *= (1.0 - armor)
 	sim.damage(dfn, atk, dmg, move_id)
 	var pd: float = float(h["poise"]) * atk.dmg_mult
-	if armor > 0.0:
+	if armor >= 1.0:
+		pd = 0.0
+	elif armor > 0.0:
 		pd *= float(R["armor_poise_mult"])
 	if h.get("pressure_gain", 0.0) > 0.0:
 		pass
@@ -208,6 +219,7 @@ static func kdir_to(dfn: Fighter, atk: Fighter, kdir: Vector2) -> Vector2:
 	return (d.normalized() * (1.0 - bl) + kdir * bl).normalized()
 
 static func _interrupt(f: Fighter) -> void:
+	Actions.release_store(f, CombatData.rules())
 	f.move = null
 	f.af = 0
 	f.contact = false
@@ -261,7 +273,7 @@ static func _block(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary, mo
 	if dfn.T["parry_blast"] > 0.0 and false:
 		pass
 
-static func _parry(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary, move_id: String, atk_kind: String, auto: bool, projectile: bool = false) -> void:
+static func _parry(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary, move_id: String, atk_kind: String, projectile: bool = false) -> void:
 	var R: Dictionary = sim.R
 	if not projectile:
 		_interrupt(atk)
@@ -286,11 +298,9 @@ static func _parry(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary, mo
 	var blast := float(dfn.T["parry_blast"])
 	if blast > 0.0 and not projectile:
 		sim.damage(atk, dfn, blast, "parry_blast")
-	if auto:
-		sim.fx.on_auto_parry(sim, dfn, atk)
 	var hs := int(R["parry_hitstop"])
 	sim.hitstop = maxi(sim.hitstop, hs)
-	sim.emit("parry", dfn.idx, move_id, dfn.pos, 0.0, {"attacker": atk.idx, "hitstop": hs, "auto": auto})
+	sim.emit("parry", dfn.idx, move_id, dfn.pos, 0.0, {"attacker": atk.idx, "hitstop": hs})
 
 static func _wall_absorb(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary, move_id: String) -> void:
 	var R: Dictionary = sim.R

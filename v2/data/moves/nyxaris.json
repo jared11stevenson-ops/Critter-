@@ -1,10 +1,10 @@
 {
- "critter": "kragg",
+ "critter": "nyxaris",
  "moves": {
-  "kragg_light1": {
-   "name": "Mandible Snap",
+  "nyxaris_light1": {
+   "name": "Fang Snap",
    "kind": "light",
-   "tell_anim": "kragg_snap",
+   "tell_anim": "punch",
    "startup": 15,
    "active": 3,
    "recovery": 18,
@@ -19,14 +19,14 @@
     "reach": 1.3,
     "arc": 100
    },
-   "chain": "kragg_light2",
+   "chain": "nyxaris_light2",
    "cancel_from": 18,
    "track": 6
   },
-  "kragg_light2": {
-   "name": "Chain Whip",
+  "nyxaris_light2": {
+   "name": "Silk Lash",
    "kind": "light",
-   "tell_anim": "kragg_snap2",
+   "tell_anim": "slash_back",
    "startup": 15,
    "active": 3,
    "recovery": 22,
@@ -43,10 +43,10 @@
    },
    "track": 5
   },
-  "kragg_heavy": {
-   "name": "Hook Smash",
+  "nyxaris_heavy": {
+   "name": "Venom Crush",
    "kind": "heavy",
-   "tell_anim": "kragg_smash",
+   "tell_anim": "overhead",
    "startup": 30,
    "active": 4,
    "recovery": 30,
@@ -67,10 +67,10 @@
     "guard_crush": true
    }
   },
-  "kragg_grab": {
-   "name": "Pincer Slam",
+  "nyxaris_grab": {
+   "name": "Cocoon Throw",
    "kind": "grab",
-   "tell_anim": "kragg_grab",
+   "tell_anim": "grab",
    "startup": 14,
    "active": 4,
    "recovery": 26,
@@ -87,10 +87,10 @@
     "arc": 150
    }
   },
-  "kragg_dodge": {
-   "name": "Showman Hop",
+  "nyxaris_dodge": {
+   "name": "Silk Hop",
    "kind": "dodge",
-   "tell_anim": "kragg_dodge",
+   "tell_anim": "leap",
    "startup": 0,
    "active": 6,
    "recovery": 16,
@@ -108,10 +108,10 @@
     }
    ]
   },
-  "kragg_pincer_hold": {
-   "name": "Pincer Hold",
+  "nyxaris_frost_bind": {
+   "name": "Frost Bind",
    "kind": "ability",
-   "tell_anim": "kragg_hold",
+   "tell_anim": "grab",
    "startup": 22,
    "active": 3,
    "recovery": 40,
@@ -129,12 +129,15 @@
    "hitbox": {
     "reach": 1.9,
     "arc": 100
+   },
+   "on_hit": {
+    "root": 45
    }
   },
-  "kragg_chain_pull": {
-   "name": "Chain Pull",
+  "nyxaris_silk_pull": {
+   "name": "Silk Pull",
    "kind": "ability",
-   "tell_anim": "kragg_chain",
+   "tell_anim": "hook",
    "startup": 18,
    "active": 3,
    "recovery": 26,
@@ -155,10 +158,10 @@
     "slow": 60
    }
   },
-  "kragg_main_event": {
-   "name": "Main Event",
+  "nyxaris_cold_archive": {
+   "name": "Cold Archive",
    "kind": "laststand",
-   "tell_anim": "kragg_main_event",
+   "tell_anim": "grab",
    "startup": 40,
    "active": 4,
    "recovery": 50,
@@ -178,6 +181,9 @@
    "hitbox": {
     "reach": 2.4,
     "arc": 120
+   },
+   "on_hit": {
+    "root": 90
    }
   }
  }

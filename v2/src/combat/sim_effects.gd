@@ -64,19 +64,23 @@ static func _spawn(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, sp: Dicti
 	var t := str(sp["type"])
 	match t:
 		"projectile":
-			var e = Ent.new()
-			e.kind = "proj"
-			e.owner = f.idx
-			e.move_id = m.id
-			e.dir = f.facing
-			e.pos = f.pos + f.facing * (f.radius + float(sp.get("start", 0.3)))
-			e.speed = float(sp["speed"]) * sim.dt
-			e.radius = float(sp.get("radius", 0.4))
-			e.life = int(sp.get("life", 60))
-			e.pierce = bool(sp.get("pierce", false))
-			e.hit = _hit_from_spec(sp)
-			sim.ents.append(e)
-			sim.emit("projectile", f.idx, m.id, e.pos, 0.0)
+			var angles: Array = sp.get("angles", [0.0])
+			for ai in angles.size():
+				var e = Ent.new()
+				e.kind = "proj"
+				e.owner = f.idx
+				e.move_id = m.id
+				e.dir = f.facing.rotated(deg_to_rad(float(angles[ai])))
+				e.pos = f.pos + f.facing * (f.radius + float(sp.get("start", 0.3)))
+				e.speed = float(sp["speed"]) * sim.dt
+				e.radius = float(sp.get("radius", 0.4))
+				e.life = int(sp.get("life", 60))
+				e.pierce = bool(sp.get("pierce", false))
+				e.wait = int(sp.get("wait", 0)) + int(sp.get("wait_step", 0)) * ai
+				e.turn_at = int(sp.get("return_after", 0))
+				e.hit = _hit_from_spec(sp)
+				sim.ents.append(e)
+				sim.emit("projectile", f.idx, m.id, e.pos, 0.0, {"angle": angles[ai]})
 		"zone":
 			var e = Ent.new()
 			e.kind = "zone"
@@ -146,18 +150,6 @@ static func on_hit(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary) ->
 	if oh.has("self_heal"):
 		atk.vit = minf(atk.max_vit, atk.vit + float(oh["self_heal"]))
 
-## Riposte Stance: after the auto-parry the owner launches its counter combo for free.
-static func on_auto_parry(sim: CombatSim, dfn: Fighter, atk: Fighter) -> void:
-	dfn.st.erase("stance_riposte")
-	var cid: String = str(dfn.def.move_ids.get("ability1_counter", ""))
-	if cid == "":
-		return
-	var m: MoveDef = dfn.def.move(cid)
-	if m != null:
-		dfn.stun = 0
-		dfn.stun_kind = ""
-		Actions.start_move(sim, dfn, atk, m, "a1")
-
 ## Per-tick world update: statuses, hazards, entities.
 static func tick_world(sim: CombatSim) -> void:
 	var R: Dictionary = sim.R
@@ -166,6 +158,10 @@ static func tick_world(sim: CombatSim) -> void:
 			continue
 		if f.has("burning"):
 			sim.damage(f, sim.fighters[1 - f.idx], float(R["burn_dps"]) * sim.dt, "burn")
+		if f.debt > 0.0 and not f.has("delay_hold"):
+			var pay: float = minf(f.debt, float(R["debt_rate"]) * sim.dt)
+			f.debt -= pay
+			sim.damage(f, null, pay, "borrowed_seconds")
 		if f.has("wall"):
 			f.sta = maxf(0.0, f.sta - float(R["wall_idle_drain"]) * sim.dt)
 			f.sta_delay = int(R["sta_regen_delay"])
@@ -212,16 +208,36 @@ static func _update_entities(sim: CombatSim) -> void:
 			i += 1
 
 static func _proj(sim: CombatSim, e) -> bool:
+	if e.wait > 0:
+		e.wait -= 1
+		return false
+	e.age += 1
+	var owner_f: Fighter = sim.fighters[e.owner]
+	if e.turn_at > 0 and e.age == e.turn_at:
+		e.returning = true
+		e.timer = 0
+		e.dodged = false
+	if e.returning:
+		var back: Vector2 = owner_f.pos - e.pos
+		if back.length() <= e.radius + owner_f.radius + e.speed:
+			return true
+		e.dir = back.normalized()
 	e.pos += e.dir * e.speed
 	if sim.arena.depth(e.pos) > float(sim.R["projectile_margin"]):
 		return true
-	var owner = sim.fighters[e.owner]
-	var tgt = sim.fighters[1 - e.owner]
-	if e.pos.distance_to(tgt.pos) <= e.radius + tgt.radius:
+	var owner: Fighter = sim.fighters[e.owner]
+	var tgt: Fighter = sim.fighters[1 - e.owner]
+	if e.cool > 0:
+		e.cool -= 1
+	elif e.pos.distance_to(tgt.pos) <= e.radius + tgt.radius:
 		var r := Hits.apply_hit(sim, owner, tgt, e.hit, e.move_id, e.pos, e.dir, "ranged", true, e.timer == 1)
 		if r == 2:
 			e.timer = 1
-		if r == 1 and not e.pierce:
+		if r == 1 and e.turn_at > 0 and not e.returning:
+			e.returning = true      # boomerang: a connecting throw recalls itself
+			e.timer = 0
+			e.cool = int(sim.R["boomerang_cooldown"])
+		elif r == 1 and not e.pierce:
 			return true
 	return false
 
@@ -245,6 +261,8 @@ static func _zone(sim: CombatSim, e) -> bool:
 			f.add_status("slowed", 2)
 		if b.has("haste") and is_owner:
 			f.add_status("haste", 2)
+		if b.has("confuse") and not is_owner:
+			f.add_status("confused", 2)
 		if b.has("regen_block") and not is_owner:
 			f.add_status("regen_block", 2)
 		if e.once and not f.invulnerable():

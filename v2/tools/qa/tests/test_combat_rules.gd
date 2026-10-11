@@ -61,8 +61,8 @@ func _data(fails: Array) -> void:
 		if c.moves.size() == 0:
 			fails.append("data: no moves for " + id)
 
-func _kragg_throw_sim(stakes: int) -> CombatSim:
-	var sim := U.make("kragg", "sessa", "ring", stakes, 3)
+func _nyxaris_throw_sim(stakes: int) -> CombatSim:
+	var sim := U.make("nyxaris", "cigarra", "ring", stakes, 3)
 	sim.fighters[0].pos = Vector2(5.2, 0.0)
 	sim.fighters[1].pos = Vector2(6.3, 0.0)
 	U.run(sim, 90, {1: _grab})
@@ -70,7 +70,7 @@ func _kragg_throw_sim(stakes: int) -> CombatSim:
 
 func _ringout_and_stakes(fails: Array) -> void:
 	for stakes: int in [0, 1, 2]:
-		var sim := _kragg_throw_sim(stakes)
+		var sim := _nyxaris_throw_sim(stakes)
 		if not sim.is_over():
 			fails.append("ringout(stakes %d): bout should end" % stakes)
 			continue
@@ -85,7 +85,7 @@ func _ringout_and_stakes(fails: Array) -> void:
 		if stakes != 1 and not r["injury"].is_empty():
 			fails.append("stakes %d: no injury expected" % stakes)
 	# wall edge: no ring-out
-	var sim := U.make("kragg", "sessa", "pit", 2, 3)
+	var sim := U.make("nyxaris", "cigarra", "pit", 2, 3)
 	sim.fighters[0].pos = Vector2(4.2, 0.0)
 	sim.fighters[1].pos = Vector2(5.3, 0.0)
 	U.run(sim, 90, {1: _grab})
@@ -94,7 +94,7 @@ func _ringout_and_stakes(fails: Array) -> void:
 
 func _ko_stakes(fails: Array) -> void:
 	for stakes: int in [0, 1, 2]:
-		var sim := U.make("haldor", "sessa", "ring", stakes, 5)
+		var sim := U.make("aruun", "cigarra", "ring", stakes, 5)
 		U.face_off(sim, 1.8)
 		sim.fighters[1].vit = 1.0
 		U.run(sim, 60, {1: _tap})
@@ -110,7 +110,7 @@ func _ko_stakes(fails: Array) -> void:
 			fails.append("ko(stakes 1): injury missing")
 
 func _yield(fails: Array) -> void:
-	var sim := U.make("haldor", "sessa", "ring", 2, 5)
+	var sim := U.make("aruun", "cigarra", "ring", 2, 5)
 	U.run(sim, 10, {5: func(i: CombatInput) -> void: i.yield_pressed = true})
 	var r := sim.result()
 	if not sim.is_over() or r["reason"] != "yield" or r["winner"] != 1 or r["killed"]:
@@ -120,7 +120,7 @@ func _last_stand(fails: Array) -> void:
 	var both := func(i: CombatInput) -> void:
 		i.ability1 = true
 		i.ability2 = true
-	var sim := U.make("sessa", "haldor", "ring", 1, 5)
+	var sim := U.make("cigarra", "aruun", "ring", 1, 5)
 	U.face_off(sim, 3.0)
 	var evs := U.run(sim, 20, {2: both})
 	if U.count(evs, "laststand") != 0:
@@ -140,14 +140,14 @@ func _last_stand(fails: Array) -> void:
 		fails.append("laststand: used flag not set")
 
 func _clash(fails: Array) -> void:
-	var sim := U.make("sessa", "sessa", "ring", 1, 5)
+	var sim := U.make("cigarra", "cigarra", "ring", 1, 5)
 	U.face_off(sim, 1.5)
 	var evs := U.run(sim, 20, {1: _tap}, {1: _tap})
 	if U.count(evs, "clash") < 2 or U.count(evs, "hit") != 0:
 		fails.append("clash: same-tick strikes should clash with no damage (clash=%d hit=%d)" % [U.count(evs, "clash"), U.count(evs, "hit")])
 
 func _chain_and_hitstop(fails: Array) -> void:
-	var sim := U.make("sessa", "haldor", "ring", 1, 5)
+	var sim := U.make("cigarra", "aruun", "ring", 1, 5)
 	U.face_off(sim, 1.8)
 	var evs := U.run(sim, 40, {1: _tap, 12: _tap, 25: _tap})
 	var h := U.first(evs, "hit", 1)
@@ -155,12 +155,12 @@ func _chain_and_hitstop(fails: Array) -> void:
 		fails.append("hitstop: hit event must carry hitstop frames")
 	var tells := 0
 	for e in evs:
-		if e["type"] == "tell" and str(e["move_id"]).begins_with("sessa_light"):
+		if e["type"] == "tell" and str(e["move_id"]).begins_with("cigarra_light"):
 			tells += 1
 	if tells < 2:
 		fails.append("chain: tapping again after a hit should chain the next light (tells=%d)" % tells)
 	# hit-stop freezes the simulation: frame counter pauses while tick advances
-	var sim2 := U.make("sessa", "haldor", "ring", 1, 5)
+	var sim2 := U.make("cigarra", "aruun", "ring", 1, 5)
 	U.face_off(sim2, 1.8)
 	U.run(sim2, 11, {1: _tap})
 	var f0 := sim2.frame
@@ -169,7 +169,7 @@ func _chain_and_hitstop(fails: Array) -> void:
 		fails.append("hitstop: sim should freeze after a hit")
 
 func _hazard(fails: Array) -> void:
-	var sim := U.make("marro", "marro", "pit", 1, 5)
+	var sim := U.make("mollusk", "mollusk", "pit", 1, 5)
 	sim.fighters[0].pos = Vector2(0.0, 0.0)
 	sim.fighters[1].pos = Vector2(4.0, 0.0)
 	U.run(sim, 120)
@@ -177,13 +177,13 @@ func _hazard(fails: Array) -> void:
 		fails.append("hazard: standing in a dps zone should hurt")
 
 func _timeout(fails: Array) -> void:
-	var sim := U.make("marro", "marro", "ring", 1, 5)
+	var sim := U.make("mollusk", "mollusk", "ring", 1, 5)
 	U.run(sim, int(CombatData.rules()["timeout_ticks"]) + 600)
 	if not sim.is_over() or sim.result()["reason"] != "timeout":
 		fails.append("timeout: idle bout should time out")
 
 func _team_vitality(fails: Array) -> void:
-	var sim := U.make("marro", "zell")
+	var sim := U.make("mollusk", "zephyr")
 	sim.set_vitality_ratio(0, 0.5)
 	if absf(sim.fighters[0].ratio() - 0.5) > 0.001:
 		fails.append("set_vitality_ratio failed")

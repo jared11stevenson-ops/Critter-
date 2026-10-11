@@ -211,7 +211,7 @@ func state() -> Dictionary:
 		fs.append({"pos": f.pos, "facing": f.facing, "vitality": f.vit, "vitality_max": f.max_vit, "stamina": f.sta,
 			"stamina_max": f.max_sta, "poise": f.poise, "poise_max": f.max_poise, "pressure": f.pressure,
 			"action": act, "action_frame": f.af, "move_id": f.move.id if f.move != null else "",
-			"stun": f.stun, "status": names, "cooldowns": f.cooldowns.duplicate(), "winded": f.winded,
+			"stun": f.stun, "tell_anim": f.move.tell_anim if f.move != null else "", "stored": f.stored, "debt": f.debt, "status": names, "cooldowns": f.cooldowns.duplicate(), "winded": f.winded,
 			"can_last_stand": (not f.last_stand_used) and f.alive and f.ratio() < float(R["last_stand_ratio"]),
 			"last_stand_used": f.last_stand_used, "alive": f.alive})
 	var es: Array = []

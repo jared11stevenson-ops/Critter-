@@ -1,0 +1,55 @@
+{
+ "id": "aruun",
+ "name": "Aruun",
+ "species": "Giraffe-beetle barbarian",
+ "archetype": "Heavy bruiser",
+ "weapon": "Morrow (psionically bonded mace)",
+ "palette": {
+  "main": "red-reaches ochre",
+  "accent": "stone grey",
+  "glow": "psionic amber"
+ },
+ "stats": {
+  "vit": 8,
+  "sta": 5,
+  "poi": 8,
+  "spd": 3,
+  "rch": 4,
+  "dmg": 8
+ },
+ "moves": {
+  "light": [
+   "aruun_light1",
+   "aruun_light2"
+  ],
+  "heavy": "aruun_heavy",
+  "grab": "aruun_grab",
+  "dodge": "aruun_dodge",
+  "ability1": "aruun_morrow_throw",
+  "ability2": "aruun_burden_slam",
+  "laststand": "aruun_carry_the_bridge"
+ },
+ "tuning": {
+  "body_radius": 0.65,
+  "block_chip": 0.15,
+  "crush_resist": 0.2,
+  "damage_mult": 1.0
+ },
+ "ai": {
+  "style": "bruiser",
+  "range": [
+   1.6,
+   2.6
+  ],
+  "ability1": {
+   "min": 2.0,
+   "max": 6.0,
+   "when": "far"
+  },
+  "ability2": {
+   "min": 0.0,
+   "max": 2.6,
+   "when": "close"
+  }
+ }
+}
