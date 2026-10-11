@@ -9,7 +9,7 @@ const IDS := ["aruun", "cigarra", "bramvex", "scarlith", "mollusk", "zephyr", "n
 const DATA := {
 	"aruun": {"main": "2a2428", "accent": "a82a22", "glow": "e8502a", "sig": "e8582a", "belly": "d3b48c"},
 	"cigarra": {"main": "3b2f4d", "accent": "a9c83c", "glow": "c9e04a", "sig": "7a4fc0", "belly": "e2dcc4"},
-	"bramvex": {"main": "55603a", "accent": "7a1f24", "glow": "ff4a2a", "sig": "7b8a2a", "belly": "c9b078"},
+	"bramvex": {"main": "6a5238", "accent": "b0322a", "glow": "ffa845", "sig": "7b8a2a", "belly": "cbb98c"},
 	"scarlith": {"main": "b01c2c", "accent": "e0a53a", "glow": "ffc24a", "sig": "b01c2c", "belly": "ecd49a"},
 	"mollusk": {"main": "d9a46c", "accent": "6b3326", "glow": "e8603c", "sig": "3aa86a", "belly": "f0d8a8"},
 	"zephyr": {"main": "7d8442", "accent": "c43a5e", "glow": "ff5fa0", "sig": "d63a9c", "belly": "e8b5a0"},
