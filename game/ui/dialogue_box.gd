@@ -24,6 +24,9 @@ var _comms_tag: Label
 var _input_cool := 0.0
 var _last_n := 0
 var _pcache: Dictionary = {}   # holder id -> {portrait key -> Control}
+var _freeze: TextureRect       # still of the world while a paused conversation is open (3D rendering is switched off)
+var _frozen := false
+var _freezing := false
 
 func bind(r: DialogueRunner) -> void:
 	runner = r
@@ -137,9 +140,50 @@ func _style(style: String, who: String) -> void:
 		col = UiKit.MUTED
 	_name.label_settings.font_color = col.lightened(0.35) if dark else col.darkened(0.15)
 
+## The tree is paused during a conversation, but the renderer still redraws the whole 3D world every frame, which is
+## what makes the typewriter stutter on phones. Grab one still of the finished frame and stop rendering 3D until the
+## conversation ends. The readback costs one frame, once per conversation, not per line.
+func _freeze_world() -> void:
+	if _frozen or _freezing or DisplayServer.get_name() == "headless" or not runner or not runner._pause:
+		return
+	_freezing = true
+	visible = false
+	await RenderingServer.frame_post_draw
+	var img := get_viewport().get_texture().get_image()
+	_freezing = false
+	if img == null or img.is_empty() or not runner.active:
+		visible = runner.active
+		return
+	if _freeze == null:
+		_freeze = TextureRect.new()
+		_freeze.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		_freeze.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_freeze.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		_freeze.stretch_mode = TextureRect.STRETCH_SCALE
+		add_child(_freeze)
+		move_child(_freeze, 0)
+	_freeze.texture = ImageTexture.create_from_image(img)
+	_freeze.visible = true
+	_frozen = true
+	Quality.set_covered(true)
+	visible = true
+
+func _exit_tree() -> void:
+	_thaw_world()   # scene change mid-conversation must not leave 3D switched off
+
+func _thaw_world() -> void:
+	if _frozen:
+		_frozen = false
+		Quality.set_covered(false)
+	if _freeze:
+		_freeze.visible = false
+		_freeze.texture = null
+
 func _on_line(line: Dictionary) -> void:
 	_line = line
-	visible = true
+	if not _frozen and not _freezing and runner and runner._pause:
+		_freeze_world()
+	visible = not _freezing
 	_clear_choices()
 	var style: String = line["style"]
 	var who: String = line["who"]
@@ -212,11 +256,13 @@ func _clear_choices() -> void:
 		c.queue_free()
 
 func _on_finished(_id: String) -> void:
+	if runner and runner._queue.is_empty():
+		_thaw_world()
 	visible = false
 	_clear_choices()
 
 func _process(delta: float) -> void:
-	if not visible:
+	if not visible and not _freezing:
 		return
 	_input_cool = maxf(0.0, _input_cool - delta)
 	if _typing:
