@@ -4,6 +4,8 @@ extends RefCounted
 func run() -> Array:
 	var fails: Array = []
 	var tree := Engine.get_main_loop() as SceneTree
+	UiPrefs.path_override = "user://v2_ui_prefs_flowtest.json"
+	UiPrefs._loaded = false
 	var boot: Control = load("res://src/boot/boot.tscn").instantiate()
 	tree.root.add_child(boot)
 	QaCheck.is_true(fails, boot.screen is TitleScreen, "boots to the title")
@@ -50,4 +52,7 @@ func run() -> Array:
 	QaCheck.is_true(fails, sp.get_child_count() > 0, "settings panel builds")
 	sp.free()
 	boot.free()
+	DirAccess.remove_absolute(UiPrefs.path_override)
+	UiPrefs.path_override = ""
+	UiPrefs._loaded = false
 	return fails

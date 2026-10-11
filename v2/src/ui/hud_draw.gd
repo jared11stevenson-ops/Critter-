@@ -223,12 +223,12 @@ func _draw_banner() -> void:
 	if banner == "" or banner_t > banner_life:
 		return
 	var k := clampf(banner_t / 0.18, 0.0, 1.0)
-	var sc := lerpf(1.7, 1.0, 1.0 - pow(1.0 - k, 3.0))
+	var sc := lerpf(1.35, 1.0, 1.0 - pow(1.0 - k, 3.0))
 	var fade := clampf((banner_life - banner_t) / 0.25, 0.0, 1.0)
 	var c := Vector2(size.x * 0.5, size.y * 0.40)
 	draw_set_transform(c, 0.0, Vector2(sc, sc))
-	_ink_b.text(Vector2(-500, 30), banner, 110, Color(UiStyle.GOLD, fade), HORIZONTAL_ALIGNMENT_CENTER, 1000, 18)
+	_ink_b.text(Vector2(-600, 30), banner, 84, Color(UiStyle.GOLD, fade), HORIZONTAL_ALIGNMENT_CENTER, 1200, 16)
 	if banner_sub != "":
-		_ink_b.text(Vector2(-500, 84), banner_sub, 36, Color(UiStyle.PAPER, fade), HORIZONTAL_ALIGNMENT_CENTER, 1000, 10)
+		_ink_b.text(Vector2(-600, 84), banner_sub, 36, Color(UiStyle.PAPER, fade), HORIZONTAL_ALIGNMENT_CENTER, 1200, 10)
 	_ink_b.flush()
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)

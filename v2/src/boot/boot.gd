@@ -128,7 +128,14 @@ func go_bout() -> void:
 
 func _on_finished(res: Dictionary) -> void:
 	var r := ResultScreen.new()
-	add_child(r)
+	var layer := CanvasLayer.new()
+	layer.layer = 30
+	add_child(layer)
+	layer.add_child(r)
+	r.tree_exited.connect(layer.queue_free)
+	if bout != null:
+		bout.hud.touch.release_all()
+		bout.hud.visible = false
 	r.show_result(res)
 	r.rematch_requested.connect(go_bout)
 	r.change_requested.connect(go_select)
