@@ -12,7 +12,7 @@ const DATA := {
 	"bramvex": {"main": "6a5238", "accent": "b0322a", "glow": "ffa845", "sig": "7b8a2a", "belly": "cbb98c"},
 	"scarlith": {"main": "b01c2c", "accent": "e3b04a", "glow": "ffc24a", "sig": "b01c2c", "belly": "d98a3a"},
 	"mollusk": {"main": "8f946a", "accent": "ff7a1a", "glow": "ffb347", "sig": "3aa86a", "belly": "d7d3a8"},
-	"zephyr": {"main": "7d8442", "accent": "c43a5e", "glow": "ff5fa0", "sig": "d63a9c", "belly": "e8b5a0"},
+	"zephyr": {"main": "7a6a3e", "accent": "d63a9c", "glow": "ffd24a", "sig": "d63a9c", "belly": "ecd9b0"},
 	"nyxaris": {"main": "25202e", "accent": "ee4fa8", "glow": "7fd2ea", "sig": "6cc4e6", "belly": "efe8dc"},
 }
 
