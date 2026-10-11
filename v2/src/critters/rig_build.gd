@@ -14,6 +14,8 @@ var pal: Dictionary = {}
 var parts: Dictionary = {}      # name -> {mb: Prim, pos: Vector3, parent: String}
 var sockets: Dictionary = {}    # name -> {part: String, pos: Vector3}
 var face: Dictionary = {}       # {center, radii, half_lon, half_lat, lat_center, params}
+var rest_rot: Dictionary = {}   # part -> Vector3 euler degrees baked into the rest pose (poses are relative to it)
+var glass: Array = []           # part names rendered with the transparent glass material (no outline)
 var cfg: Dictionary = {}        # design config (styles, poses, timings stub, ...)
 
 func part(name: String, pos: Vector3, parent: String = "-") -> Prim:
@@ -49,7 +51,7 @@ func assemble(rig_root: Node3D) -> Dictionary:
 		var mb: Prim = d["mb"]
 		mi.mesh = mb.build()
 		tris += mb.tris()
-		mi.material_override = mat
+		mi.material_override = Toon.glass(pal["glow"]) if glass.has(n) else mat
 		mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		mi.extra_cull_margin = 2.0
 		var parent_node: Node3D = rig_root if d["parent"] == "" else nodes[d["parent"]]
@@ -76,7 +78,7 @@ func assemble(rig_root: Node3D) -> Dictionary:
 				first = false
 			else:
 				bb = bb.expand(wp)
-	var res := {"bounds": bb, "nodes": nodes, "rest": rest, "tris": tris, "mat": mat, "face_node": null, "face_mat": null}
+	var res := {"rest_rot": rest_rot, "bounds": bb, "nodes": nodes, "rest": rest, "tris": tris, "mat": mat, "face_node": null, "face_mat": null}
 	if not face.is_empty() and nodes.has("head"):
 		var fb := Prim.new()
 		fb.face_patch(face["center"], face["radii"], face["half_lon"], face["half_lat"], face["lat_center"], 10, 8, 1.015, 0.0, face["e"])

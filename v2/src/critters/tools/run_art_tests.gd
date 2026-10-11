@@ -19,7 +19,7 @@ func _initialize() -> void:
 			total += 1
 			continue
 		var t = scr.new()
-		var fails: Array = t.run()
+		var fails: Array = await t.run()
 		print("[%s] %s" % ["PASS" if fails.is_empty() else "FAIL", f])
 		for x in fails:
 			print("    - ", x)

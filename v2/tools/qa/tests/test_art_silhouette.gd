@@ -3,6 +3,7 @@ extends RefCounted
 ## flat black on white at 64x64 (side-on, orthographic, one shared world scale so size differences count) and require the
 ## pairwise intersection-over-union of the masks to stay below MAX_IOU. Threshold: two silhouettes sharing more than 60% of
 ## their combined area read as the same blob at thumbnail size; measured values are printed in `report` so it can be tuned.
+## NOTE: this test awaits frames, so the runner must call `await t.run()`.
 ## Runs only when a renderer exists (skipped under --headless; use xvfb-run with --rendering-driver opengl3).
 
 const Rig := preload("res://src/critters/critter_rig.gd")
@@ -13,8 +14,10 @@ var RES := 64
 var report: Array = []
 var skipped := false
 
-func _render(rig: Node3D, cam: Camera3D, vp: SubViewport) -> Image:
-	RenderingServer.force_draw(false)
+func _render(loop: SceneTree, vp: SubViewport) -> Image:
+	# transform changes reach the RenderingServer at the end of a frame, so wait real frames (this test is a coroutine: `await t.run()`)
+	await loop.process_frame
+	await loop.process_frame
 	RenderingServer.force_draw(false)
 	return vp.get_texture().get_image()
 
@@ -56,7 +59,7 @@ func run() -> Array:
 		rig.three_quarter = 0.0
 		rig.set_silhouette(true)
 		rig.apply_fighter_state({"action": "idle", "action_frame": 0, "facing": 1.0}, 1.0 / 60.0)
-		var img := _render(rig, cam, vp)
+		var img: Image = await _render(loop, vp)
 		if OS.get_environment("ART_DUMP") != "":
 			img.save_png("%s/%s_sil64.png" % [OS.get_environment("ART_DUMP"), id])
 		var m := PackedByteArray()

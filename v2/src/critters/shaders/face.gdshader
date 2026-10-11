@@ -28,6 +28,9 @@ uniform float mouth_base = 0.15;
 uniform float ring = 0.0;
 uniform float glint = 1.0;
 uniform float brow_color_accent = 0.0;
+uniform float glasses = 0.0;       // 1 = round spectacle frames with spiral lenses (Weft)
+uniform float goggle = 0.0;        // 1 = thick goggle rims (Zell)
+uniform float mouth_skew = 0.0;    // smirk: one corner higher
 // expression state
 uniform float open = 1.0;
 uniform float brow_tilt = 0.0;
@@ -95,8 +98,20 @@ void fragment() {
 				fill(seg(q, vec2(-er * 0.8, er * 0.8), vec2(er * 0.8, -er * 0.8)) - 0.022, aa));
 		ec = mix(ec, ink, xeyes);
 		ea = mix(ea, xe, xeyes);
+		if (glasses > 0.5) {
+			float lr = length(q);
+			float ang = atan(q.y, q.x);
+			float spiral = smoothstep(0.30, 0.1, abs(fract(lr / (er * 0.34) - ang / 6.2832) - 0.5));
+			ec = mix(ec, accent, spiral * 0.55 * step(lr, er));
+		}
 		col = mix(col, ec, ea);
 		a = max(a, ea);
+		if (glasses > 0.5 || goggle > 0.5) {
+			float fr = fill(abs(length(q) - er * 1.32) - (goggle > 0.5 ? 0.03 : 0.02), aa);
+			vec3 fcol = goggle > 0.5 ? mix(ink, accent, 0.6) : vec3(0.78, 0.82, 0.9);
+			col = mix(col, fcol, fr);
+			a = max(a, fr);
+		}
 		// brows: inner end is toward x = 0
 		if (no_brow < 0.5) {
 			float lift = brow_lift + brow_bias[i];
@@ -122,13 +137,18 @@ void fragment() {
 		a = max(a, sd);
 	}
 
+	if (glasses > 0.5) {   // bridge between the lenses
+		float br2 = fill(seg(p, vec2(-eye_sep + eye_size[0] * 1.32, eye_y + 0.02), vec2(eye_sep - eye_size[1] * 1.32, eye_y + 0.02)) - 0.016, aa);
+		col = mix(col, vec3(0.78, 0.82, 0.9), br2);
+		a = max(a, br2);
+	}
 	// mouth
 	float mw = mouth_w * mouth_wide;
 	float t = p.x / max(mw, 0.001);
 	float inside = step(abs(t), 1.0);
 	float curve = mouth_base + mouth_curve;
 	float wob = sin(p.x * 26.0 + time * 10.0) * 0.014 * wobble;
-	float ym = mouth_y + curve * 0.13 * t * t + wob;
+	float ym = mouth_y + curve * 0.13 * t * t + wob + mouth_skew * t * 0.09;
 	float op = clamp(mouth_open, 0.0, 1.0);
 	float top = ym + op * max(curve, 0.0) * 0.13 * (1.0 - t * t);
 	float bot = ym - op * 0.14 * (1.0 - t * t);

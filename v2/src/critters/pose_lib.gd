@@ -88,7 +88,7 @@ static func _mk(p: Dictionary, wa: float, cfg: Dictionary) -> Dictionary:
 	if cfg.get("arm_b_follow", false):
 		out["arm_b"] = K(0, 0, th, ax, 0, 0)
 	else:
-		out["arm_b"] = K(0, 0, -th * 0.3 + p.get("armb", 0.0), 0, 0, 0)
+		out["arm_b"] = K(0, 0, -th * float(cfg.get("armb_gain", 0.3)) + p.get("armb", 0.0), 0, 0, 0)
 	return out
 
 ## Returns {ant, strike, rec, hold, smear, shake, kind} for an action using the critter cfg.

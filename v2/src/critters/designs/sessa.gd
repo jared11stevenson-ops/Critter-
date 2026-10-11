@@ -70,6 +70,7 @@ static func build(b) -> void:
 			"mouth_y": -0.34, "mouth_w": 0.22, "mouth_base": 0.7, "brow_off": 0.02, "brow_len": 0.14, "brow_thick": 0.03},
 			1.15, 0.86, 0.0, 0.82)
 	b.cfg = {
+		"scale": 1.0,
 		"wa": 42.0, "sway": 3.0, "stride": 1.35, "bob": 0.5, "waddle": 0.35, "blink_scale": 1.3,
 		"lag_extra": 0.03, "guard_th": 78.0, "parry_th": 30.0,
 		"style": {"strike_light": "slash_up", "strike_heavy": "slash_back", "ability1": "stance", "ability2": "leap",

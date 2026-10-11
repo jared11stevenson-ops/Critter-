@@ -39,6 +39,7 @@ var _pivot: Node3D          # yaw / facing
 var _body: Node3D           # pose root (squash anchored at the feet)
 var _nodes: Dictionary = {}
 var _rest: Dictionary = {}
+var _rest_basis: Dictionary = {}
 var _mat: ShaderMaterial
 var _sockets: Dictionary = {}
 var _cur: Dictionary = {}
@@ -87,9 +88,15 @@ func setup(critter_id_in: String) -> void:
 	var res := b.assemble(_body)
 	_nodes = res["nodes"]
 	_rest = res["rest"]
+	for rn in res["rest_rot"]:
+		var rr: Vector3 = res["rest_rot"][rn]
+		_rest_basis[rn] = Basis.from_euler(Vector3(deg_to_rad(rr.x), deg_to_rad(rr.y), deg_to_rad(rr.z)))
 	_mat = res["mat"]
 	tri_count = res["tris"]
 	bounds = res["bounds"]
+	var sc := float(cfg.get("scale", 1.0))   # presentation scale (silhouette variety); gameplay reach lives in data
+	_pivot.scale = Vector3.ONE * sc
+	bounds = AABB(bounds.position * sc, bounds.size * sc)
 	for n in _nodes:
 		if str(n).begins_with("sock_"):
 			_sockets[str(n).substr(5)] = _nodes[n]
@@ -127,6 +134,10 @@ func set_silhouette(on: bool) -> void:
 	var fn := _body.get_node_or_null("head/face")
 	if fn:
 		fn.visible = not on
+	for gp in _nodes:
+		var gn = _nodes[gp]
+		if gn is MeshInstance3D and (gn as MeshInstance3D).material_override != _mat and (gn as MeshInstance3D).material_override is ShaderMaterial:
+			((gn as MeshInstance3D).material_override as ShaderMaterial).set_shader_parameter("silhouette", 1.0 if on else 0.0)
 	fx.smear.visible = false if on else fx.smear.visible
 
 func part(pname: String) -> Node3D:
@@ -303,12 +314,15 @@ func _layer_procedural(pose: Dictionary, action: String, fs: Dictionary, dt: flo
 		_shake_f -= 1
 		body[3] += sin(_tick * 12.9) * _shake_amp * 0.05
 		body[4] += cos(_tick * 15.3) * _shake_amp * 0.035
+	var hover := float(cfg.get("hover", 0.0))
+	if hover > 0.0 and action != "ko":
+		body[4] += hover + sin(_time * 2.4) * hover * 0.2
 	# wings flap / secondary lag for weapon + extra
 	var ex: PackedFloat32Array = pose["extra"]
 	var flap := float(cfg.get("flap", 0.0))
 	if flap > 0.0:
 		var airborne := 1.0 if action in ["dodge", "strike_heavy", "ability1", "ability2", "laststand", "walk"] else 0.45
-		ex[0] += sin(_time * 38.0) * flap * airborne
+		ex[0] += sin(_time * float(cfg.get("flap_hz", 38.0))) * flap * airborne
 	_lag_update(pose, dt)
 	pose["body"] = body
 
@@ -341,6 +355,8 @@ func _apply_pose(pose: Dictionary) -> void:
 		if p == "body":
 			_body.transform = Transform3D(basis, Vector3(a[3], a[4], a[5]))
 		elif _nodes.has(p):
+			if _rest_basis.has(p):
+				basis = basis * (_rest_basis[p] as Basis)
 			(_nodes[p] as Node3D).transform = Transform3D(basis, (_rest[p] as Vector3) + Vector3(a[3], a[4], a[5]))
 
 func _update_facing(dt: float) -> void:

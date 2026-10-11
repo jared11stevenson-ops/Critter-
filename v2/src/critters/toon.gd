@@ -5,6 +5,7 @@ const TOON := preload("res://src/critters/shaders/toon.gdshader")
 const OUTLINE := preload("res://src/critters/shaders/outline.gdshader")
 const FACE := preload("res://src/critters/shaders/face.gdshader")
 const FX := preload("res://src/critters/shaders/fx.gdshader")
+const GLASS := preload("res://src/critters/shaders/glass.gdshader")
 
 ## Presentation constant (not gameplay): outline thickness in screen pixels at 720p, scaled by viewport height.
 const OUTLINE_PX := 3.2
@@ -26,6 +27,13 @@ static func face(ink: Color, accent: Color) -> ShaderMaterial:
 	m.render_priority = 2
 	m.set_shader_parameter("ink", ink)
 	m.set_shader_parameter("accent", accent)
+	return m
+
+static func glass(edge: Color) -> ShaderMaterial:
+	var m := ShaderMaterial.new()
+	m.shader = GLASS
+	m.render_priority = 1
+	m.set_shader_parameter("edge_col", edge)
 	return m
 
 static func fx(color: Color, mode: int) -> ShaderMaterial:

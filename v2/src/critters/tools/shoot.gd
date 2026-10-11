@@ -100,7 +100,7 @@ func _actions(ids, out: String) -> void:
 			for k in range(1):
 				_step(rig, act, f, 6)
 			var cam: Camera3D = st["cam"]
-			_frame_cam(h * 1.2, 0.0, 0.3, 1.7)
+			_frame_cam(h * 1.1, 0.0, 0.25 * h / 2.0, 1.75)
 			await _save("%s/%s_act_%d_%s.png" % [out, id, i, act])
 			i += 1
 		rig.free()
@@ -170,7 +170,7 @@ func _film(ids, out: String, action: String) -> void:
 		while f < total and i < 8:
 			_step(rig, action, f, 1)
 			if f >= marks[i]:
-				_frame_cam(h * 1.2, 0.0, 0.3, 1.7)
+				_frame_cam(h * 1.1, 0.0, 0.25 * h / 2.0, 1.75)
 				await _save("%s/%s_film_%d_%s_f%d.png" % [out, id, i, action, f])
 				i += 1
 			f += 1
