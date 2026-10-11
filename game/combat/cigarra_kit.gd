@@ -142,7 +142,9 @@ func _spawn_ghosts() -> void:
 			if _ghosts.is_empty():
 				break
 			var src: Array = _ghosts[randi() % _ghosts.size()]
-			var e2: Node = src[1]
+			var e2: Variant = src[1]
+			if not is_instance_valid(e2):
+				continue
 			var fg: Node3D = e2.make_ghost_visual()
 			if fg:
 				f.add_child(fg)
@@ -153,8 +155,8 @@ func _spawn_ghosts() -> void:
 func _update_ghosts() -> void:
 	var lead := Balance.f("cigarra.premonition.ghost_lead", 0.9)
 	for pair in _ghosts:
-		var g: Node3D = pair[0]
-		var e: Node = pair[1]
+		var g: Variant = pair[0]       # Variant: either side may already be freed (an enemy dies mid-vision)
+		var e: Variant = pair[1]
 		if not is_instance_valid(g):
 			continue
 		if not is_instance_valid(e) or not e.is_targetable():

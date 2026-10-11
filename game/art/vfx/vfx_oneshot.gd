@@ -506,8 +506,10 @@ func _p_psychic_bolt() -> void:
 	orb.material_override = _glow_mat(Color(0.82, 1.0, 0.3), 2.8)
 	orb.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(orb)
-	var halo := _flash(Color(0.4, 1.0, 0.7, 0.8), 1.5, 9999.0)
-	halo.scale = Vector3.ONE * 1.3 * _sc()
+	# draw-call budget: the soft halo is the first thing to go when several effects overlap (the orb + sparks still read)
+	if CritterVFX.live <= 2:
+		var halo := _flash(Color(0.4, 1.0, 0.7, 0.8), 1.5, 9999.0)
+		halo.scale = Vector3.ONE * 1.3 * _sc()
 	_emit({"amount": 24, "life": 0.35, "one_shot": false, "expl": 0.0, "c0": Color(0.85, 1.0, 0.35, 0.95), "c1": Color(0.2, 0.9, 0.7, 0), "size": Vector2(0.14, 0.3), "vel": Vector2(0.0, 0.4), "gravity": Vector3.ZERO, "sphere": 0.15})
 
 
@@ -535,13 +537,14 @@ func _p_brain_skip_glitch() -> void:
 	var mi := ToonKit.mesh_instance(st.commit(), m, "Glitch")
 	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(mi)
-	var tw := create_tween()
+	# tween lives on the mesh (dies with it) and captures no `self`: under slow-mo/hit-stop the vfx node could be freed
+	# before its scaled-time tween ends, which spammed "Lambda capture ... was freed".
+	var tw := mi.create_tween()
+	var cols := [_tint(Color(0.5, 0.95, 1.0)) * 1.8, _tint(Color(0.85, 0.4, 1.0)) * 1.8]
 	for k in 6:
 		tw.tween_callback(func() -> void:
-			if not is_instance_valid(mi):
-				return
 			mi.position.x = randf_range(-0.25, 0.25)
-			m.albedo_color = (_tint(Color(0.5, 0.95, 1.0)) if k % 2 == 0 else _tint(Color(0.85, 0.4, 1.0))) * 1.8)
+			m.albedo_color = cols[k % 2])
 		tw.tween_interval(0.05)
 	tw.tween_property(m, "albedo_color:a", 0.0, 0.1)
 	_free_after(0.45)
