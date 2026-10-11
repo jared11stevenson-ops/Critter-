@@ -9,7 +9,7 @@
    "active": 3,
    "recovery": 15,
    "stamina_cost": 7,
-   "damage": 7.0,
+   "damage": 3.4,
    "poise_damage": 7,
    "hitstun": 20,
    "blockstun": 11,
@@ -28,9 +28,9 @@
     "dot": {
      "name": "culture",
      "life": 420,
-     "dps": 0.6,
-     "grow": 1.0,
-     "burst": 10.0,
+     "dps": 0.63,
+     "grow": 1.59,
+     "burst": 15.87,
      "ripe": 300,
      "max": 6
     }
@@ -44,7 +44,7 @@
    "active": 3,
    "recovery": 20,
    "stamina_cost": 7,
-   "damage": 7.0,
+   "damage": 3.4,
    "poise_damage": 7,
    "hitstun": 22,
    "blockstun": 11,
@@ -61,9 +61,9 @@
     "dot": {
      "name": "culture",
      "life": 420,
-     "dps": 0.6,
-     "grow": 1.0,
-     "burst": 10.0,
+     "dps": 0.63,
+     "grow": 1.59,
+     "burst": 15.87,
      "ripe": 300,
      "max": 6
     }
@@ -79,7 +79,7 @@
    "stamina_cost": 18,
    "feint": true,
    "track": 10,
-   "damage": 20.0,
+   "damage": 9.7,
    "poise_damage": 18,
    "pressure_gain": 16,
    "hitstun": 36,
@@ -104,7 +104,7 @@
    "recovery": 28,
    "stamina_cost": 12,
    "track": 8,
-   "damage": 8.0,
+   "damage": 3.9,
    "poise_damage": 8,
    "hitstop": 6,
    "grab": true,
@@ -151,7 +151,7 @@
    "stamina_cost": 12,
    "cooldown": 420,
    "track": 8,
-   "damage": 2.0,
+   "damage": 1.0,
    "poise_damage": 4,
    "hitstun": 20,
    "blockstun": 8,
@@ -165,9 +165,9 @@
     "dot": {
      "name": "culture",
      "life": 420,
-     "dps": 0.6,
-     "grow": 1.0,
-     "burst": 10.0,
+     "dps": 0.63,
+     "grow": 1.59,
+     "burst": 15.87,
      "ripe": 300,
      "max": 6
     }
@@ -184,7 +184,7 @@
    "stamina_cost": 12,
    "cooldown": 480,
    "track": 8,
-   "damage": 4.0,
+   "damage": 1.9,
    "poise_damage": 6,
    "hitstun": 18,
    "blockstun": 8,

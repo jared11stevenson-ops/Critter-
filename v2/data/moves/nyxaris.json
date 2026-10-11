@@ -9,7 +9,7 @@
    "active": 3,
    "recovery": 18,
    "stamina_cost": 9,
-   "damage": 11.0,
+   "damage": 10.0,
    "poise_damage": 10,
    "hitstun": 22,
    "blockstun": 11,
@@ -32,7 +32,7 @@
    "active": 3,
    "recovery": 22,
    "stamina_cost": 9,
-   "damage": 12.0,
+   "damage": 10.9,
    "poise_damage": 10,
    "hitstun": 24,
    "blockstun": 11,
@@ -55,7 +55,7 @@
    "stamina_cost": 20,
    "feint": true,
    "track": 12,
-   "damage": 24.0,
+   "damage": 21.8,
    "poise_damage": 22,
    "hitstun": 38,
    "blockstun": 18,
@@ -83,7 +83,7 @@
    "stamina_cost": 12,
    "reserve_cost": 15,
    "track": 8,
-   "damage": 18.0,
+   "damage": 16.4,
    "poise_damage": 14,
    "hitstop": 9,
    "grab": true,
@@ -145,7 +145,7 @@
      "tag": "boundary",
      "max": 5,
      "on_enter": {
-      "damage": 4.0,
+      "damage": 3.9,
       "root": 50,
       "slow": 120,
       "poise": 6
@@ -164,7 +164,7 @@
      "tag": "boundary",
      "max": 5,
      "on_enter": {
-      "damage": 4.0,
+      "damage": 3.9,
       "root": 50,
       "slow": 120,
       "poise": 6
@@ -183,7 +183,7 @@
      "tag": "boundary",
      "max": 5,
      "on_enter": {
-      "damage": 4.0,
+      "damage": 3.9,
       "root": 50,
       "slow": 120,
       "poise": 6
@@ -202,7 +202,7 @@
      "tag": "boundary",
      "max": 5,
      "on_enter": {
-      "damage": 4.0,
+      "damage": 3.9,
       "root": 50,
       "slow": 120,
       "poise": 6
@@ -221,7 +221,7 @@
      "tag": "boundary",
      "max": 5,
      "on_enter": {
-      "damage": 4.0,
+      "damage": 3.9,
       "root": 50,
       "slow": 120,
       "poise": 6
@@ -241,7 +241,7 @@
    "reserve_cost": 10,
    "cooldown": 120,
    "track": 6,
-   "damage": 3.0,
+   "damage": 2.7,
    "poise_damage": 4,
    "hitstun": 18,
    "blockstun": 10,
@@ -254,7 +254,7 @@
     "dot": {
      "name": "venom",
      "life": 300,
-     "dps": 1.8,
+     "dps": 1.83,
      "max": 5
     }
    },
@@ -295,7 +295,7 @@
      "place": "self",
      "radius": 50,
      "life": 420,
-     "dps": 4.0,
+     "dps": 3.9,
      "affect": "both",
      "tag": "archive",
      "buff": {

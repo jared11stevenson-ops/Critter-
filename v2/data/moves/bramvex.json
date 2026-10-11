@@ -9,7 +9,7 @@
    "active": 3,
    "recovery": 16,
    "stamina_cost": 8,
-   "damage": 10.0,
+   "damage": 6.0,
    "poise_damage": 6,
    "hitstun": 20,
    "blockstun": 11,
@@ -27,7 +27,7 @@
     "dot": {
      "name": "bleed",
      "life": 150,
-     "dps": 2.0,
+     "dps": 2.08,
      "max": 1
     }
    }
@@ -40,7 +40,7 @@
    "active": 3,
    "recovery": 20,
    "stamina_cost": 8,
-   "damage": 10.0,
+   "damage": 6.0,
    "poise_damage": 6,
    "hitstun": 20,
    "blockstun": 11,
@@ -56,7 +56,7 @@
     "dot": {
      "name": "bleed",
      "life": 150,
-     "dps": 2.0,
+     "dps": 2.08,
      "max": 1
     }
    }
@@ -71,7 +71,7 @@
    "stamina_cost": 20,
    "feint": true,
    "track": 10,
-   "damage": 28.0,
+   "damage": 16.9,
    "poise_damage": 16,
    "hitstun": 34,
    "blockstun": 18,
@@ -88,7 +88,7 @@
     "dot": {
      "name": "bleed",
      "life": 150,
-     "dps": 2.0,
+     "dps": 2.08,
      "max": 1
     }
    },
@@ -103,7 +103,7 @@
    "recovery": 30,
    "stamina_cost": 12,
    "track": 8,
-   "damage": 14.0,
+   "damage": 8.4,
    "poise_damage": 8,
    "hitstop": 6,
    "grab": true,
@@ -241,7 +241,7 @@
     0,
     80
    ],
-   "damage": 6.0,
+   "damage": 3.6,
    "poise_damage": 6,
    "hitstun": 16,
    "blockstun": 8,
