@@ -1,0 +1,52 @@
+{
+ "id": "cinder",
+ "name": "Cinder",
+ "species": "Bombardier beetle",
+ "archetype": "Burst striker",
+ "weapon": "Boiler Gauntlet",
+ "palette": {
+  "main": "tangerine",
+  "accent": "soot",
+  "glow": "yellow"
+ },
+ "stats": {
+  "vit": 5,
+  "sta": 4,
+  "poi": 5,
+  "spd": 6,
+  "rch": 6,
+  "dmg": 10
+ },
+ "moves": {
+  "light": [
+   "cinder_light1",
+   "cinder_light2"
+  ],
+  "heavy": "cinder_heavy",
+  "grab": "cinder_grab",
+  "dodge": "cinder_dodge",
+  "ability1": "cinder_pressure_burst",
+  "ability2": "cinder_scorch_spray",
+  "laststand": "cinder_overpressure"
+ },
+ "tuning": {
+  "body_radius": 0.5,
+  "parry_blast": 6.0,
+  "pressure_decay": 3.0,
+  "block_chip": 0.25,
+  "block_poise": 0.4
+ },
+ "ai": {
+  "style": "burst",
+  "ability1": {
+   "min": 0.0,
+   "max": 2.8,
+   "when": "pressure"
+  },
+  "ability2": {
+   "min": 1.0,
+   "max": 4.0,
+   "when": "any"
+  }
+ }
+}

@@ -1,0 +1,195 @@
+{
+ "critter": "cinder",
+ "moves": {
+  "cinder_light1": {
+   "name": "Nozzle Jab",
+   "kind": "light",
+   "tell_anim": "cinder_jab",
+   "startup": 13,
+   "active": 3,
+   "recovery": 15,
+   "stamina_cost": 7,
+   "damage": 8,
+   "poise_damage": 7,
+   "pressure_gain": 10,
+   "hitstun": 20,
+   "blockstun": 12,
+   "knockback": 0.3,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 2.2,
+    "arc": 60
+   },
+   "chain": "cinder_light2",
+   "cancel_from": 15,
+   "track": 6
+  },
+  "cinder_light2": {
+   "name": "Nozzle Hook",
+   "kind": "light",
+   "tell_anim": "cinder_jab2",
+   "startup": 12,
+   "active": 3,
+   "recovery": 20,
+   "stamina_cost": 7,
+   "damage": 8,
+   "poise_damage": 7,
+   "pressure_gain": 10,
+   "hitstun": 22,
+   "blockstun": 12,
+   "knockback": 0.5,
+   "hitstop": 5,
+   "hitbox": {
+    "reach": 2.2,
+    "arc": 70
+   },
+   "track": 5
+  },
+  "cinder_heavy": {
+   "name": "Boiler Slam",
+   "kind": "heavy",
+   "tell_anim": "cinder_slam",
+   "startup": 26,
+   "active": 4,
+   "recovery": 30,
+   "stamina_cost": 18,
+   "feint": true,
+   "track": 10,
+   "damage": 24,
+   "poise_damage": 18,
+   "pressure_gain": 20,
+   "hitstun": 36,
+   "blockstun": 18,
+   "knockback": 1.0,
+   "hitstop": 9,
+   "hitbox": {
+    "reach": 2.4,
+    "arc": 90
+   }
+  },
+  "cinder_grab": {
+   "name": "Nozzle Hook Pull",
+   "kind": "grab",
+   "tell_anim": "cinder_hook",
+   "startup": 17,
+   "active": 3,
+   "recovery": 28,
+   "stamina_cost": 12,
+   "track": 8,
+   "damage": 9,
+   "poise_damage": 8,
+   "pressure_gain": 12,
+   "hitstop": 6,
+   "grab": true,
+   "throw_dist": 1.2,
+   "throw_stun": 6,
+   "hitbox": {
+    "reach": 2.0,
+    "arc": 40
+   }
+  },
+  "cinder_dodge": {
+   "name": "Hop Clear",
+   "kind": "dodge",
+   "tell_anim": "cinder_dodge",
+   "startup": 0,
+   "active": 6,
+   "recovery": 14,
+   "stamina_cost": 18,
+   "iframes": [
+    0,
+    6
+   ],
+   "motion": [
+    {
+     "at": 0,
+     "len": 8,
+     "dist": 2.2,
+     "dir": "input"
+    }
+   ]
+  },
+  "cinder_pressure_burst": {
+   "name": "Pressure Burst",
+   "kind": "ability",
+   "tell_anim": "cinder_burst",
+   "startup": 20,
+   "active": 4,
+   "recovery": 28,
+   "stamina_cost": 10,
+   "cooldown": 240,
+   "track": 8,
+   "require_pressure": 20,
+   "pressure_cost": -1,
+   "damage": 8,
+   "poise_damage": 16,
+   "hitstun": 34,
+   "blockstun": 16,
+   "knockback": 1.4,
+   "hitstop": 9,
+   "hitbox": {
+    "reach": 2.8,
+    "arc": 100
+   },
+   "props": {
+    "pressure_damage": 0.4,
+    "knockdown": true
+   }
+  },
+  "cinder_scorch_spray": {
+   "name": "Scorch Spray",
+   "kind": "ability",
+   "tell_anim": "cinder_spray",
+   "startup": 16,
+   "active": 1,
+   "recovery": 24,
+   "stamina_cost": 12,
+   "cooldown": 480,
+   "spawns": [
+    {
+     "at": 16,
+     "type": "zone",
+     "place": "front",
+     "dist": 2.2,
+     "radius": 1.5,
+     "life": 240,
+     "dps": 16,
+     "affect": "enemy",
+     "tag": "scorch",
+     "max": 1,
+     "buff": {
+      "slow": 1
+     }
+    }
+   ]
+  },
+  "cinder_overpressure": {
+   "name": "Overpressure",
+   "kind": "laststand",
+   "tell_anim": "cinder_overpressure",
+   "startup": 34,
+   "active": 3,
+   "recovery": 50,
+   "self_damage_ratio": 0.3,
+   "armor": 0.5,
+   "armor_frames": [
+    0,
+    40
+   ],
+   "damage": 60,
+   "poise_damage": 40,
+   "hitstun": 40,
+   "blockstun": 24,
+   "knockback": 3.0,
+   "hitstop": 14,
+   "hitbox": {
+    "reach": 3.4,
+    "arc": 220
+   },
+   "props": {
+    "guard_crush": true,
+    "knockdown": true
+   }
+  }
+ }
+}

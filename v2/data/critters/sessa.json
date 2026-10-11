@@ -1,0 +1,25 @@
+{
+  "id": "sessa",
+  "name": "Sessa",
+  "species": "Praying mantis",
+  "archetype": "Assassin duelist",
+  "weapon": "Twin Reapers",
+  "palette": {"main": "chartreuse", "accent": "black", "glow": "magenta"},
+  "stats": {"vit": 4, "sta": 7, "poi": 3, "spd": 9, "rch": 4, "dmg": 9},
+  "moves": {
+    "light": ["sessa_light1", "sessa_light2", "sessa_light3"],
+    "heavy": "sessa_heavy",
+    "grab": "sessa_grab",
+    "dodge": "sessa_dodge",
+    "ability1": "sessa_riposte_stance",
+    "ability1_counter": "sessa_riposte_combo",
+    "ability2": "sessa_blur_step",
+    "laststand": "sessa_thousand_cuts"
+  },
+  "tuning": {"body_radius": 0.4, "parry_window": 10, "block_chip": 0.35, "block_poise": 0.6, "guard_drain": 0.6},
+  "ai": {
+    "style": "duelist",
+    "ability1": {"min": 0.0, "max": 3.0, "when": "defensive"},
+    "ability2": {"min": 1.5, "max": 5.0, "when": "gap"}
+  }
+}

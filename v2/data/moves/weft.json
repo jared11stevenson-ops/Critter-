@@ -1,0 +1,192 @@
+{
+ "critter": "weft",
+ "moves": {
+  "weft_light1": {
+   "name": "Lance Jab",
+   "kind": "light",
+   "tell_anim": "weft_jab",
+   "startup": 14,
+   "active": 3,
+   "recovery": 16,
+   "stamina_cost": 8,
+   "damage": 6,
+   "poise_damage": 6,
+   "hitstun": 20,
+   "blockstun": 11,
+   "knockback": 0.3,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 3.0,
+    "arc": 40
+   },
+   "chain": "weft_light2",
+   "cancel_from": 16,
+   "track": 6
+  },
+  "weft_light2": {
+   "name": "Lance Flick",
+   "kind": "light",
+   "tell_anim": "weft_jab2",
+   "startup": 13,
+   "active": 3,
+   "recovery": 20,
+   "stamina_cost": 8,
+   "damage": 6,
+   "poise_damage": 6,
+   "hitstun": 20,
+   "blockstun": 11,
+   "knockback": 0.5,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 3.1,
+    "arc": 40
+   },
+   "track": 5
+  },
+  "weft_heavy": {
+   "name": "Needle Thrust",
+   "kind": "heavy",
+   "tell_anim": "weft_thrust",
+   "startup": 28,
+   "active": 4,
+   "recovery": 30,
+   "stamina_cost": 20,
+   "feint": true,
+   "track": 10,
+   "damage": 19,
+   "poise_damage": 16,
+   "hitstun": 34,
+   "blockstun": 18,
+   "knockback": 1.0,
+   "hitstop": 8,
+   "hitbox": {
+    "reach": 3.6,
+    "arc": 30
+   }
+  },
+  "weft_grab": {
+   "name": "Tether Pull",
+   "kind": "grab",
+   "tell_anim": "weft_tether",
+   "startup": 20,
+   "active": 3,
+   "recovery": 30,
+   "stamina_cost": 12,
+   "track": 8,
+   "damage": 6,
+   "poise_damage": 6,
+   "hitstop": 6,
+   "grab": true,
+   "hitstun": 26,
+   "hitbox": {
+    "reach": 4.5,
+    "arc": 30
+   },
+   "on_hit": {
+    "pull_to": 1.1
+   }
+  },
+  "weft_dodge": {
+   "name": "Silk Drop",
+   "kind": "dodge",
+   "tell_anim": "weft_dodge",
+   "startup": 0,
+   "active": 6,
+   "recovery": 14,
+   "stamina_cost": 20,
+   "iframes": [
+    0,
+    6
+   ],
+   "motion": [
+    {
+     "at": 0,
+     "len": 8,
+     "dist": 2.2,
+     "dir": "input"
+    }
+   ]
+  },
+  "weft_thread_snare": {
+   "name": "Thread Snare",
+   "kind": "ability",
+   "tell_anim": "weft_snare",
+   "startup": 20,
+   "active": 3,
+   "recovery": 24,
+   "stamina_cost": 14,
+   "cooldown": 420,
+   "track": 8,
+   "damage": 4,
+   "poise_damage": 6,
+   "hitstun": 18,
+   "blockstun": 10,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 6.5,
+    "arc": 24
+   },
+   "on_hit": {
+    "root": 70
+   }
+  },
+  "weft_web_mine": {
+   "name": "Web Mine",
+   "kind": "ability",
+   "tell_anim": "weft_mine",
+   "startup": 14,
+   "active": 1,
+   "recovery": 16,
+   "stamina_cost": 12,
+   "cooldown": 360,
+   "spawns": [
+    {
+     "at": 14,
+     "type": "zone",
+     "place": "front",
+     "dist": 1.6,
+     "radius": 1.1,
+     "life": 900,
+     "once": true,
+     "arm": 30,
+     "tag": "web_mine",
+     "max": 2,
+     "on_enter": {
+      "damage": 8,
+      "root": 55,
+      "slow": 120,
+      "poise": 6
+     }
+    }
+   ]
+  },
+  "weft_silk_cathedral": {
+   "name": "Silk Cathedral",
+   "kind": "laststand",
+   "tell_anim": "weft_cathedral",
+   "startup": 30,
+   "active": 1,
+   "recovery": 20,
+   "spawns": [
+    {
+     "at": 30,
+     "type": "zone",
+     "place": "self",
+     "radius": 50,
+     "life": 420,
+     "affect": "both",
+     "tag": "cathedral",
+     "buff": {
+      "slow": 1,
+      "haste": 1,
+      "regen_block": 1
+     }
+    }
+   ],
+   "iframes": [
+    0,
+    30
+   ]
+  }
+ }
+}

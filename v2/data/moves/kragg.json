@@ -1,0 +1,183 @@
+{
+ "critter": "kragg",
+ "moves": {
+  "kragg_light1": {
+   "name": "Mandible Snap",
+   "kind": "light",
+   "tell_anim": "kragg_snap",
+   "startup": 15,
+   "active": 3,
+   "recovery": 18,
+   "stamina_cost": 9,
+   "damage": 11,
+   "poise_damage": 10,
+   "hitstun": 22,
+   "blockstun": 12,
+   "knockback": 0.4,
+   "hitstop": 5,
+   "hitbox": {
+    "reach": 1.3,
+    "arc": 100
+   },
+   "chain": "kragg_light2",
+   "cancel_from": 18,
+   "track": 6
+  },
+  "kragg_light2": {
+   "name": "Chain Whip",
+   "kind": "light",
+   "tell_anim": "kragg_snap2",
+   "startup": 15,
+   "active": 3,
+   "recovery": 22,
+   "stamina_cost": 9,
+   "damage": 12,
+   "poise_damage": 10,
+   "hitstun": 24,
+   "blockstun": 12,
+   "knockback": 0.6,
+   "hitstop": 5,
+   "hitbox": {
+    "reach": 1.4,
+    "arc": 100
+   },
+   "track": 5
+  },
+  "kragg_heavy": {
+   "name": "Hook Smash",
+   "kind": "heavy",
+   "tell_anim": "kragg_smash",
+   "startup": 30,
+   "active": 4,
+   "recovery": 30,
+   "stamina_cost": 22,
+   "feint": true,
+   "track": 12,
+   "damage": 28,
+   "poise_damage": 24,
+   "hitstun": 40,
+   "blockstun": 20,
+   "knockback": 1.0,
+   "hitstop": 10,
+   "hitbox": {
+    "reach": 1.5,
+    "arc": 120
+   },
+   "props": {
+    "guard_crush": true
+   }
+  },
+  "kragg_grab": {
+   "name": "Pincer Slam",
+   "kind": "grab",
+   "tell_anim": "kragg_grab",
+   "startup": 14,
+   "active": 4,
+   "recovery": 26,
+   "stamina_cost": 12,
+   "track": 8,
+   "damage": 18,
+   "poise_damage": 14,
+   "hitstop": 9,
+   "grab": true,
+   "throw_dist": 3.8,
+   "throw_stun": 10,
+   "hitbox": {
+    "reach": 2.2,
+    "arc": 150
+   }
+  },
+  "kragg_dodge": {
+   "name": "Showman Hop",
+   "kind": "dodge",
+   "tell_anim": "kragg_dodge",
+   "startup": 0,
+   "active": 6,
+   "recovery": 16,
+   "stamina_cost": 22,
+   "iframes": [
+    0,
+    6
+   ],
+   "motion": [
+    {
+     "at": 0,
+     "len": 8,
+     "dist": 2.0,
+     "dir": "input"
+    }
+   ]
+  },
+  "kragg_pincer_hold": {
+   "name": "Pincer Hold",
+   "kind": "ability",
+   "tell_anim": "kragg_hold",
+   "startup": 22,
+   "active": 3,
+   "recovery": 40,
+   "stamina_cost": 16,
+   "cooldown": 480,
+   "track": 8,
+   "damage": 26,
+   "poise_damage": 20,
+   "hitstop": 12,
+   "grab": true,
+   "command": true,
+   "throw_dist": 2.2,
+   "throw_stun": 14,
+   "kd_frames": 60,
+   "hitbox": {
+    "reach": 1.9,
+    "arc": 100
+   }
+  },
+  "kragg_chain_pull": {
+   "name": "Chain Pull",
+   "kind": "ability",
+   "tell_anim": "kragg_chain",
+   "startup": 20,
+   "active": 3,
+   "recovery": 26,
+   "stamina_cost": 12,
+   "cooldown": 360,
+   "track": 8,
+   "damage": 7,
+   "poise_damage": 8,
+   "hitstun": 30,
+   "blockstun": 12,
+   "hitstop": 5,
+   "hitbox": {
+    "reach": 6.0,
+    "arc": 20
+   },
+   "on_hit": {
+    "pull_to": 1.2
+   }
+  },
+  "kragg_main_event": {
+   "name": "Main Event",
+   "kind": "laststand",
+   "tell_anim": "kragg_main_event",
+   "startup": 40,
+   "active": 4,
+   "recovery": 50,
+   "armor": 0.8,
+   "armor_frames": [
+    0,
+    40
+   ],
+   "damage": 70,
+   "poise_damage": 30,
+   "hitstop": 20,
+   "grab": true,
+   "command": true,
+   "throw_dist": 4.5,
+   "throw_stun": 20,
+   "kd_frames": 70,
+   "hitbox": {
+    "reach": 2.4,
+    "arc": 120
+   }
+  }
+ }
+}

@@ -1,0 +1,53 @@
+{
+ "id": "zell",
+ "name": "Zell",
+ "species": "Dragonfly",
+ "archetype": "Aerial skirmisher",
+ "weapon": "Glass Glaive",
+ "palette": {
+  "main": "cyan",
+  "accent": "white",
+  "glow": "electric blue"
+ },
+ "stats": {
+  "vit": 4,
+  "sta": 7,
+  "poi": 3,
+  "spd": 10,
+  "rch": 6,
+  "dmg": 6
+ },
+ "moves": {
+  "light": [
+   "zell_light1",
+   "zell_light2"
+  ],
+  "heavy": "zell_heavy",
+  "grab": "zell_grab",
+  "dodge": "zell_dodge",
+  "ability1": "zell_skybound",
+  "ability2": "zell_glass_gale",
+  "laststand": "zell_final_flight"
+ },
+ "tuning": {
+  "body_radius": 0.4,
+  "block_chip": 0.5,
+  "block_poise": 1.0,
+  "guard_drain": 1.0,
+  "dodge_chain": 1,
+  "guard_move_mult": 0.7
+ },
+ "ai": {
+  "style": "skirmisher",
+  "ability1": {
+   "min": 2.0,
+   "max": 5.5,
+   "when": "gap"
+  },
+  "ability2": {
+   "min": 2.5,
+   "max": 8.0,
+   "when": "far"
+  }
+ }
+}

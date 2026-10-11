@@ -1,0 +1,245 @@
+{
+ "critter": "zell",
+ "moves": {
+  "zell_light1": {
+   "name": "Glaive Jab",
+   "kind": "light",
+   "tell_anim": "zell_jab",
+   "startup": 11,
+   "active": 3,
+   "recovery": 12,
+   "stamina_cost": 6,
+   "damage": 5,
+   "poise_damage": 5,
+   "hitstun": 18,
+   "blockstun": 10,
+   "knockback": 0.3,
+   "hitstop": 3,
+   "hitbox": {
+    "reach": 2.6,
+    "arc": 50
+   },
+   "chain": "zell_light2",
+   "cancel_from": 13,
+   "track": 5
+  },
+  "zell_light2": {
+   "name": "Glaive Flick",
+   "kind": "light",
+   "tell_anim": "zell_jab2",
+   "startup": 11,
+   "active": 3,
+   "recovery": 16,
+   "stamina_cost": 6,
+   "damage": 5,
+   "poise_damage": 5,
+   "hitstun": 18,
+   "blockstun": 10,
+   "knockback": 0.5,
+   "hitstop": 3,
+   "hitbox": {
+    "reach": 2.7,
+    "arc": 50
+   },
+   "track": 5
+  },
+  "zell_heavy": {
+   "name": "Wing Cleave",
+   "kind": "heavy",
+   "tell_anim": "zell_cleave",
+   "startup": 24,
+   "active": 4,
+   "recovery": 26,
+   "stamina_cost": 16,
+   "feint": true,
+   "track": 10,
+   "damage": 15,
+   "poise_damage": 12,
+   "hitstun": 30,
+   "blockstun": 16,
+   "knockback": 1.0,
+   "hitstop": 7,
+   "hitbox": {
+    "reach": 3.0,
+    "arc": 90
+   }
+  },
+  "zell_grab": {
+   "name": "Dive Snatch",
+   "kind": "grab",
+   "tell_anim": "zell_snatch",
+   "startup": 14,
+   "active": 3,
+   "recovery": 28,
+   "stamina_cost": 12,
+   "track": 6,
+   "damage": 9,
+   "poise_damage": 8,
+   "hitstop": 6,
+   "grab": true,
+   "throw_dist": 1.6,
+   "throw_stun": 6,
+   "hitbox": {
+    "reach": 1.5,
+    "arc": 90
+   },
+   "motion": [
+    {
+     "at": 10,
+     "len": 4,
+     "dist": 1.4,
+     "dir": "fwd"
+    }
+   ]
+  },
+  "zell_dodge": {
+   "name": "Air Dodge",
+   "kind": "dodge",
+   "tell_anim": "zell_dodge",
+   "startup": 0,
+   "active": 6,
+   "recovery": 10,
+   "stamina_cost": 14,
+   "iframes": [
+    0,
+    6
+   ],
+   "motion": [
+    {
+     "at": 0,
+     "len": 7,
+     "dist": 2.8,
+     "dir": "input"
+    }
+   ],
+   "cancel_from": 8,
+   "chain_on": "always"
+  },
+  "zell_skybound": {
+   "name": "Skybound",
+   "kind": "ability",
+   "tell_anim": "zell_skybound",
+   "startup": 30,
+   "active": 6,
+   "recovery": 24,
+   "stamina_cost": 14,
+   "cooldown": 360,
+   "iframes": [
+    6,
+    12
+   ],
+   "damage": 17,
+   "poise_damage": 14,
+   "hitstun": 28,
+   "blockstun": 14,
+   "knockback": 1.0,
+   "hitstop": 8,
+   "hitbox": {
+    "reach": 1.6,
+    "arc": 360
+   },
+   "props": {
+    "knockdown": true
+   },
+   "motion": [
+    {
+     "at": 4,
+     "len": 24,
+     "dist": 5.5,
+     "dir": "to_target",
+     "gap": 0.2
+    }
+   ]
+  },
+  "zell_glass_gale": {
+   "name": "Glass Gale",
+   "kind": "ability",
+   "tell_anim": "zell_gale",
+   "startup": 18,
+   "active": 1,
+   "recovery": 22,
+   "stamina_cost": 12,
+   "cooldown": 240,
+   "track": 10,
+   "spawns": [
+    {
+     "at": 18,
+     "type": "projectile",
+     "speed": 14,
+     "radius": 0.45,
+     "life": 45,
+     "damage": 8,
+     "poise_damage": 8,
+     "hitstun": 20,
+     "blockstun": 10,
+     "knockback": 0.4,
+     "hitstop": 4
+    }
+   ]
+  },
+  "zell_final_flight": {
+   "name": "Final Flight",
+   "kind": "laststand",
+   "tell_anim": "zell_final",
+   "startup": 14,
+   "active": 70,
+   "recovery": 24,
+   "iframes": [
+    0,
+    108
+   ],
+   "damage": 8,
+   "poise_damage": 6,
+   "hitstun": 14,
+   "blockstun": 8,
+   "hitstop": 3,
+   "hitbox": {
+    "reach": 1.8,
+    "arc": 360
+   },
+   "props": {
+    "unblockable": true
+   },
+   "rehit": {
+    "every": 20,
+    "count": 4,
+    "from": 18,
+    "len": 6
+   },
+   "motion": [
+    {
+     "at": 14,
+     "len": 8,
+     "dist": 7.0,
+     "dir": "to_target",
+     "gap": -1.2,
+     "nocollide": true
+    },
+    {
+     "at": 34,
+     "len": 8,
+     "dist": 7.0,
+     "dir": "to_target",
+     "gap": -1.2,
+     "nocollide": true
+    },
+    {
+     "at": 54,
+     "len": 8,
+     "dist": 7.0,
+     "dir": "to_target",
+     "gap": -1.2,
+     "nocollide": true
+    },
+    {
+     "at": 74,
+     "len": 8,
+     "dist": 7.0,
+     "dir": "to_target",
+     "gap": -1.2,
+     "nocollide": true
+    }
+   ]
+  }
+ }
+}

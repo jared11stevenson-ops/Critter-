@@ -1,0 +1,186 @@
+{
+ "critter": "marro",
+ "moves": {
+  "marro_light1": {
+   "name": "Pike Thrust",
+   "kind": "light",
+   "tell_anim": "marro_thrust",
+   "startup": 14,
+   "active": 3,
+   "recovery": 16,
+   "stamina_cost": 7,
+   "damage": 5,
+   "poise_damage": 6,
+   "hitstun": 18,
+   "blockstun": 10,
+   "knockback": 0.3,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 2.0,
+    "arc": 40
+   },
+   "chain": "marro_light2",
+   "cancel_from": 16,
+   "track": 6
+  },
+  "marro_light2": {
+   "name": "Pike Jab",
+   "kind": "light",
+   "tell_anim": "marro_thrust2",
+   "startup": 13,
+   "active": 3,
+   "recovery": 20,
+   "stamina_cost": 7,
+   "damage": 5,
+   "poise_damage": 6,
+   "hitstun": 18,
+   "blockstun": 10,
+   "knockback": 0.4,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 2.1,
+    "arc": 40
+   },
+   "track": 5
+  },
+  "marro_heavy": {
+   "name": "Pike Drive",
+   "kind": "heavy",
+   "tell_anim": "marro_drive",
+   "startup": 28,
+   "active": 4,
+   "recovery": 30,
+   "stamina_cost": 16,
+   "feint": true,
+   "track": 10,
+   "damage": 14,
+   "poise_damage": 14,
+   "hitstun": 30,
+   "blockstun": 16,
+   "knockback": 0.8,
+   "hitstop": 8,
+   "hitbox": {
+    "reach": 2.3,
+    "arc": 40
+   }
+  },
+  "marro_grab": {
+   "name": "Shield Bash",
+   "kind": "grab",
+   "tell_anim": "marro_bash",
+   "startup": 18,
+   "active": 3,
+   "recovery": 26,
+   "stamina_cost": 12,
+   "track": 8,
+   "damage": 5,
+   "poise_damage": 28,
+   "hitstop": 8,
+   "grab": true,
+   "throw_dist": 1.0,
+   "throw_stun": 10,
+   "hitbox": {
+    "reach": 1.3,
+    "arc": 110
+   }
+  },
+  "marro_dodge": {
+   "name": "Shield Slide",
+   "kind": "dodge",
+   "tell_anim": "marro_dodge",
+   "startup": 0,
+   "active": 6,
+   "recovery": 16,
+   "stamina_cost": 22,
+   "iframes": [
+    0,
+    6
+   ],
+   "motion": [
+    {
+     "at": 0,
+     "len": 8,
+     "dist": 1.8,
+     "dir": "input"
+    }
+   ]
+  },
+  "marro_shield_wall": {
+   "name": "Shield Wall",
+   "kind": "ability",
+   "tell_anim": "marro_wall",
+   "startup": 8,
+   "active": 70,
+   "recovery": 24,
+   "stamina_cost": 10,
+   "cooldown": 600,
+   "move_mult": 0.0,
+   "stance": {
+    "status": "wall",
+    "from": 8,
+    "frames": 70
+   }
+  },
+  "marro_pike_lunge": {
+   "name": "Pike Lunge",
+   "kind": "ability",
+   "tell_anim": "marro_lunge",
+   "startup": 26,
+   "active": 5,
+   "recovery": 34,
+   "stamina_cost": 18,
+   "cooldown": 420,
+   "track": 10,
+   "damage": 16,
+   "poise_damage": 18,
+   "hitstun": 34,
+   "blockstun": 18,
+   "knockback": 1.0,
+   "hitstop": 9,
+   "hitbox": {
+    "reach": 3.6,
+    "arc": 30
+   },
+   "props": {
+    "guard_crush": true
+   },
+   "motion": [
+    {
+     "at": 26,
+     "len": 5,
+     "dist": 1.8,
+     "dir": "fwd"
+    }
+   ]
+  },
+  "marro_colony_call": {
+   "name": "Colony Call",
+   "kind": "laststand",
+   "tell_anim": "marro_colony",
+   "startup": 24,
+   "active": 1,
+   "recovery": 20,
+   "iframes": [
+    0,
+    24
+   ],
+   "spawns": [
+    {
+     "at": 24,
+     "type": "phantom",
+     "count": 3,
+     "life": 300,
+     "reach": 1.4,
+     "interval": 40,
+     "speed": 3.2,
+     "spread": 1.0,
+     "damage": 5,
+     "poise_damage": 6,
+     "hitstun": 12,
+     "blockstun": 6,
+     "hitstop": 3
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,53 @@
+{
+ "id": "marro",
+ "name": "Marro",
+ "species": "Army ant",
+ "archetype": "Shield tank",
+ "weapon": "Bulwark & Pike",
+ "palette": {
+  "main": "brick red",
+  "accent": "brass",
+  "glow": "cream"
+ },
+ "stats": {
+  "vit": 8,
+  "sta": 8,
+  "poi": 7,
+  "spd": 4,
+  "rch": 5,
+  "dmg": 4
+ },
+ "moves": {
+  "light": [
+   "marro_light1",
+   "marro_light2"
+  ],
+  "heavy": "marro_heavy",
+  "grab": "marro_grab",
+  "dodge": "marro_dodge",
+  "ability1": "marro_shield_wall",
+  "ability2": "marro_pike_lunge",
+  "laststand": "marro_colony_call"
+ },
+ "tuning": {
+  "body_radius": 0.55,
+  "block_chip": 0.05,
+  "guard_drain": 0.25,
+  "block_poise": 0.1,
+  "crush_resist": 0.5,
+  "guard_move_mult": 0.6
+ },
+ "ai": {
+  "style": "tank",
+  "ability1": {
+   "min": 0.0,
+   "max": 3.0,
+   "when": "defensive"
+  },
+  "ability2": {
+   "min": 1.8,
+   "max": 4.0,
+   "when": "gap"
+  }
+ }
+}
