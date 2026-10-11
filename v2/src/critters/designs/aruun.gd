@@ -22,6 +22,11 @@ static func _cracks(m: Prim, c: Vector3, r: float, side: float) -> void:
 			pts.append(c + Vector3(d.x, d.y, d.z * side).normalized() * r * 1.01)
 		m.lim(T(), pts, 0.028, 0.02, Color.html("ffb070"), t[0], 3, false, false)
 
+static func _along(pts: Array, f: float) -> Vector3:
+	var x := f * (pts.size() - 1)
+	var i := mini(int(x), pts.size() - 2)
+	return (pts[i] as Vector3).lerp(pts[i + 1], x - i)
+
 static func _dome(m: Prim, c: Vector3, r: float, red: Color, dark: Color, side: float) -> void:
 	m.blob(T(c), Vector3(r, r * 0.88, r), red, 0.0, 1.0, 9, 6)
 	for sp in [Vector3(0.1, 0.5, 0.82), Vector3(-0.5, 0.1, 0.8), Vector3(0.45, -0.25, 0.85)]:
@@ -61,15 +66,37 @@ static func build(b) -> void:
 	for dz in [-0.16, 0.0, 0.16]:
 		t.flat(T(), [Vector3(0.38, 0.18, dz), Vector3(0.4, -0.15, dz), Vector3(0.38, -0.5, dz * 1.1)], 0.07, 0.04, 0.015, cream, Vector3(0, 0, 1), 0.0, 0.0, true)
 	t.blob(T(Vector3(0.38, 0.0, 0.2)), Vector3(0.05, 0.08, 0.04), cream, 0.0, 1.0, 5, 3)                          # bone charm
-	t.lim(T(), [Vector3(0.0, 1.15, 0), Vector3(0.12, 1.5, 0), Vector3(0.3, 1.95, 0), Vector3(0.45, 2.3, 0)], 0.17, 0.11, neckc, 0.0, 8)   # neck
+	var npts := [Vector3(0.0, 1.15, 0), Vector3(0.12, 1.5, 0), Vector3(0.3, 1.95, 0), Vector3(0.45, 2.3, 0)]
+	t.lim(T(), npts, 0.12, 0.085, neckc, 0.0, 7)   # neck core
+	for k in range(4):   # truss: cream collars + cross-braces on both sides + glowing Rage veins
+		var f0 := float(k) / 4.0
+		var f1 := float(k + 1) / 4.0
+		var pa: Vector3 = _along(npts, f0)
+		var pb: Vector3 = _along(npts, f1)
+		t.ring(T(pa + (pb - pa) * 0.5, Vector3(75, 0, -18)), 0.12, 0.03, cream, 0.0, 8, 3)
+		for sd in [-1.0, 1.0]:
+			t.lim(T(), [pa + Vector3(0, 0, 0.13 * sd), pb + Vector3(0, 0, -0.13 * sd)], 0.022, 0.022, brown, 0.0, 3, false, false)
+			t.lim(T(), [pa + Vector3(0, 0, -0.13 * sd), pb + Vector3(0, 0, 0.13 * sd)], 0.022, 0.022, brown, 0.0, 3, false, false)
+	for sd in [-1.0, 1.0]:
+		t.lim(T(), [Vector3(0.04, 1.2, 0.1 * sd), Vector3(0.14, 1.55, 0.1 * sd), Vector3(0.32, 2.0, 0.08 * sd), Vector3(0.44, 2.28, 0.06 * sd)], 0.025, 0.02, ember, 0.2, 3, false, false)  # rage veins
 	for k in range(4):
 		var f := 0.15 + k * 0.22
 		for sd in [-1.0, 1.0]:
 			t.blob(T(Vector3(0.12 + 0.33 * f * 1.6, 1.15 + f * 1.1, 0.12 * sd)), Vector3(0.055, 0.08, 0.03), char, 0.0, 1.0, 5, 3)
+	# Spanwright kit: rope coil across the chest, hammer + chisel at the belt
+	t.lim(T(), [Vector3(-0.3, 1.2, 0.36), Vector3(0.1, 0.9, 0.46), Vector3(0.28, 0.45, 0.4), Vector3(0.1, 0.1, 0.4)], 0.05, 0.05, tan.darkened(0.1), 0.0, 4, false, false)
+	for rk in range(4):
+		t.ring(T(Vector3(0.12 + 0.02 * rk, 0.62 - rk * 0.14, 0.44), Vector3(0, 80, 0)), 0.09, 0.025, tan, 0.0, 8, 3)
+	t.lim(T(), [Vector3(-0.15, 0.2, 0.42), Vector3(-0.3, -0.25, 0.46)], 0.04, 0.04, brown, 0.0, 4)
+	t.blob(T(Vector3(-0.33, -0.3, 0.46), Vector3(0, 0, 20)), Vector3(0.14, 0.09, 0.08), Color.html("8b929b"), 0.0, 0.7, 6, 4)    # sledge head
+	t.lim(T(), [Vector3(0.0, 0.2, -0.42), Vector3(0.05, -0.2, -0.46)], 0.025, 0.0, Color.html("8b929b"), 0.0, 4, true, false)   # chisel
 	# ---- head: small, long mask-like beetle face, red eye-patches (face shader), pale leaf mane, long antlers arcing back
 	var h: Prim = b.part("head", Vector3(0.5, 3.75, 0))
 	h.blob(T(Vector3(0.12, 0.05, 0)), Vector3(0.28, 0.2, 0.2), char.lightened(0.06), 0.0, 0.9, 10, 6)
-	h.blob(T(Vector3(0.44, -0.07, 0), Vector3(0, 0, -10)), Vector3(0.32, 0.13, 0.14), char.lightened(0.1), 0.0, 0.9, 9, 5)
+	h.blob(T(Vector3(0.44, -0.17, 0), Vector3(0, 0, -8)), Vector3(0.3, 0.085, 0.11), char.lightened(0.1), 0.0, 0.9, 9, 5)
+	for sd2 in [-1.0, 1.0]:   # mask-like cheek plates framing the eyes
+		h.blob(T(Vector3(0.2, -0.02, 0.17 * sd2), Vector3(0, 12 * sd2, -10)), Vector3(0.2, 0.11, 0.03), red, 0.0, 0.7, 7, 4)
+		h.blob(T(Vector3(0.1, 0.19, 0.12 * sd2), Vector3(0, 0, 0)), Vector3(0.16, 0.035, 0.1), red.darkened(0.1), 0.0, 0.7, 6, 3)   # brow ridge plate
 	for s in [-1.0, 1.0]:
 		var ant := [Vector3(0.0, 0.17, 0.1 * s), Vector3(-0.14, 0.45, 0.25 * s), Vector3(-0.42, 0.7, 0.42 * s), Vector3(-0.85, 0.78, 0.5 * s)]
 		h.lim(T(), ant, 0.1, 0.03, horn, 0.0, 5, true, false)
@@ -80,9 +107,9 @@ static func build(b) -> void:
 		h.flat(T(), [Vector3(-0.1, 0.12, 0.14 * s), Vector3(-0.36, 0.2, 0.26 * s), Vector3(-0.6, 0.1, 0.24 * s)], 0.09, 0.04, 0.015, olive.lightened(0.18), Vector3(0, 1, 0), 0.0, 0.2, true)
 	b.sock("head", "head", Vector3(0.12, 0.05, 0) * 1.5)
 	b.set_face(Vector3(0.12, 0.05, 0) * 1.5, Vector3(0.28, 0.2, 0.2) * 1.5,
-			{"eye_sep": 0.55, "eye_y": 0.16, "eye_size": Vector2(0.13, 0.13), "eye_white": 1.0, "sclera": gold, "eye_col": Color.html("140a0c"),
+			{"eye_sep": 0.5, "eye_y": 0.1, "eye_size": Vector2(0.2, 0.2), "eye_white": 1.0, "sclera": gold, "eye_col": Color.html("140a0c"),
 			"lid_bias": 0.3, "mark": 1.0, "mark_col": Color.html("a82a22"), "accent": gold, "mouth_y": -0.5, "mouth_w": 0.34, "mouth_base": -0.15,
-			"brow_off": 0.0, "brow_len": 0.14, "brow_thick": 0.045}, 1.25, 0.95, 0.0, 0.9)
+			"brow_off": 0.0, "brow_len": 0.14, "brow_thick": 0.045}, 1.2, 0.8, 0.12, 0.9)
 	# ---- arms: long, wrapped, red-plated, domed ladybug shoulders (cracking)
 	for side in [1.0, -1.0]:
 		var nm := "arm_f" if side > 0 else "arm_b"

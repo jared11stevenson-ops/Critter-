@@ -75,6 +75,7 @@ var _dcs: Dictionary = {}      # detachable part name -> DetachCtl
 var _ghosted := -1
 var _swarm_last_action := ""
 var _plates := 0
+var _rage := 0.0
 var _expr_manual := ""
 var _smear_active := false
 var _hit_dir := 1.0
@@ -204,6 +205,7 @@ func _timing_for(action: String) -> Vector3i:
 ## Visible overdrive (Aruun Rage / Strain, any critter's 'pressure' state): fs["rage"] 0..1 drives a hot rim aura, pulsing emissive
 ## (Morrow's dome-eye, veins, gems) and a heartbeat shake. The sim owns the value; the rig only displays it.
 func _apply_rage(r: float) -> void:
+	_rage = r
 	var pulse := 0.5 + 0.5 * sin(_time * (8.0 + 8.0 * r))
 	_mat.set_shader_parameter("rim_strength", 0.9 + r * (1.6 + pulse * 0.8))
 	_mat.set_shader_parameter("rim_color", (palette["glow"] as Color).lerp(Color(1.0, 0.25, 0.1), r))
@@ -212,6 +214,7 @@ func _apply_rage(r: float) -> void:
 ## Shell-plate crack tiers (0..3): fs.plates if the sim supplies it, otherwise derived from missing vitality (plates crack as he takes hits).
 func _apply_plates(fs: Dictionary) -> void:
 	var lv: int = int(fs["plates"]) if fs.has("plates") else int(ceil(clampf((1.0 - _vit) * 3.0, 0.0, 3.0) - 0.001))
+	lv = maxi(lv, int(ceil(clampf(_rage * 3.0, 0.0, 3.0) - 0.001)))    # Rage strain: the shell fractures as the overdrive climbs
 	_plates = lv
 	Toon.set_both(_mat, "crack_level", float(lv))
 
