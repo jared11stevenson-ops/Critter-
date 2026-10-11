@@ -9,6 +9,90 @@ I is scope tiers, J is risks, K is what I need from you.
 
 ---------------------------------------------------------------------------------------------------------------------
 
+## AMENDMENT 1 — Creator's definition of the game (2026-10-11). Where this conflicts with the rest of this plan, THIS WINS.
+
+> CRITTER: a world eight times the size of Earth, found in the quantum realm. Humans descend, meet the bug creatures called Critters, capture them, shrink them into
+> **Habitat Jars**, and bring them to Earth. They upgrade the habitats and **battle** the critters. Unlike Pokemon, **when a critter dies it is dead forever.**
+> Fights play like **For Honor**: stance-based, directional, read-the-opponent duels.
+
+### AM1.1 The new core loop (replaces the table in C1)
+
+```
+DESCEND  ->  HUNT & READ  ->  DUEL  ->  SEAL IN A JAR  ->  RETURN  ->  UPGRADE THE HABITAT  ->  TRAIN / BREED  ->  BATTLE (arena or wild)  ->  LOSS OR LEGACY  ->  DESCEND
+```
+
+One sentence: **Hunt a critter in the wild, beat it in a duel, seal it in a jar, grow it in your habitat, and risk it in battle, knowing a death is forever.**
+
+| Beat | What the player does | Skill / decision |
+|---|---|---|
+| **Hunt & Read** | Track a species in its region; watch its fighting style and habits (Field Notes) | Which critter do I want; what stance set and weaknesses does it have |
+| **Duel** | For Honor-style fight to wound it | Reading, guard direction, stamina, mix-ups |
+| **Seal** | At low health, throw a Scale Anchor jar; risk vs reward (kill = no capture) | Spare/capture vs finishing it; a dead critter cannot be captured |
+| **Return** | Jars come home through the Gate; the Tilt applies to them too (Scale Signature stress) | How many can I safely carry |
+| **Habitat** | Each jar is a living diorama: soil, microbes, humidity, light, food web, anchor tier | What this species needs; upgrades that raise health, temperament, moves |
+| **Train / Breed** | Sparring (safe), feeding, metamorphosis, breeding lines | Build the critter and its lineage |
+| **Battle** | Handler League tiers and wild fights | **Which fights to risk it in** |
+| **Loss or Legacy** | A death is permanent; it leaves something behind | Memorial, relic, offspring, taught technique |
+
+### AM1.2 Permadeath: the rules that make it meaningful, not miserable
+
+1. **Death is permanent.** No revive, no restore from the jar, no reload-the-fight trick (the save commits on the finishing blow; see AM1.5).
+2. **Downed is not dead.** At 0 health a critter is *Broken*. Whether it can die then depends on the *stakes of the bout*, chosen before the fight:
+   - **Exhibition** (League, consented, welfare rules): cannot die, small rewards.
+   - **Contest**: can be *Injured* (scars, lost limbs, changed moveset), cannot die.
+   - **Blood Bout / the wild**: a finishing blow kills; highest rewards and rarest captures.
+   This is straight from the lore: the Handler League's early cruelty and later welfare reforms (Bk IV §18) coexist, and "both positions exist at once."
+3. **Everything dead leaves something behind** (Design Law): a name on the Wall of the Fallen in the Common, a *relic* (shell, silk, a stance fragment) that can be crafted into gear, possibly an *egg/clutch*, and a **taught technique** a surviving relative can learn. A critter's life is written to the Ledger.
+4. **Scars are permanent too.** Injuries change how a critter fights (a cracked horn shifts a charge; a lost leg changes its stance set). That gives every survivor a story.
+5. **Retirement and release** are real options: a veteran can be released into a safe region or kept as a breeder, so the player can protect something they love.
+6. **Replaceability tuning:** captures, breeding and the economy are balanced so a loss *hurts* but never bricks a save. We simulate rosters over many battles to tune this.
+7. **Sapient characters (the First Ten and other bonded characters) are not jarred.** They are bonded by trust and contract (the lore's Contract Bonding), and capturing a sapient is the lore's *Criminal Extraction*. Whether bonded characters can die is a creator decision (K11).
+
+### AM1.3 For Honor-style combat, adapted to touch (replaces C7)
+
+The heart of For Honor is the **Art of Battle**: you pick a guard direction, read which direction the enemy attacks from, and the fight is a mind game of block, parry, dodge, feint, guard break and stamina, in a lock-on duel. We keep that and fit it to a phone and to bug anatomy.
+
+- **Lock-on duel camera** (close, over-shoulder or side-on); free orbit is limited during duels. Duels are mostly 1v1; **2v2 and 3v3 squad fights** use the same system with gank rules.
+- **Three guard directions** (left, right, top). Your guard is the stance you hold; the opponent's stance and attack direction are shown by an indicator ring (the For Honor "Art of Battle" UI).
+- **Moves:** light attack (fast), heavy attack (slow, high damage), **guard break** (beats block; loses to a dodge/attack), **parry** (timed block on the correct direction; opens a punish), **dodge/evade** (stamina), **feints** (cancel a heavy into a mix-up), **chains**, and a **feat/Knack** (one species move with an ecological cost: Aruun's Rage, Cigarra's foresight overload).
+- **Stamina** is the rhythm: attacks, dodges and blocks spend it; exhausted critters are open to a free hit. Fights are decided by reading and stamina management, not by button speed.
+- **Species-shaped movesets (Pillar 3):** the *body* decides the stance set, not a number. A horned beetle has a charging top-guard and a hook-flip; a mantis has two fast scythe lights and a narrow guard; a spider uses tether and venom at range; an armored beetle has a slow wide guard and a shell-slam. A critter's four-stance wheel is learnable, so reading a species is itself gameplay (this unifies the *Understand* pillar with combat).
+- **Environment kills:** ring-outs off a span edge, into a pit, under a collapse, which uses the lore (Red Reaches fractures, bridges, Spanwright structures) as combat terrain.
+- **Touch controls (to test in the M1 prototype):**
+  - *Scheme A (my starting pick):* right-thumb **flick** toward left/right/up sets the guard direction; tap = light, hold = heavy; left thumb moves/locks; two buttons: Dodge and Feat.
+  - *Scheme B:* a stance wheel on the right (three zones) plus attack buttons.
+  - *Scheme C:* controller layout for tablets and gamepads.
+  The best is chosen by phone playtesting. Accessibility: assist modes (auto-guard timing windows, slow-time) must exist and never replace skill in the ranked/blood tiers.
+- **Frame-based fixed-tick combat:** combat simulates at a fixed 60 Hz regardless of render FPS, with frame data per move (startup, active, recovery). This makes the game fair at 30 fps cap, deterministic for replays and AI testing, and *makes online duels possible later* (rollback is a post-launch option).
+- **AI that reads the player:** the opponent AI has mix-ups, baits and punishes, and adapts to the player's habits over a bout (builds on Ledger Rivals).
+
+### AM1.4 Habitat Jars and the Terrarium
+
+- A **Habitat Jar** is the portable form of a Habitat (Bk I §5): a sealed, tuned Scale Anchor containing pieces of the creature's home.
+- On Earth the player's **Terrarium** is shelves, tanks and rooms of jars. Each jar is a small **diorama** the player can open: place soil/food/plants, set light and humidity, and watch the critter live, sleep and train.
+- **Habitat quality drives the critter:** health, temperament, growth, metamorphosis (the lore's "Habitat conditions decide adult form"), breeding, and unlocks of new moves. Habitat chains (a plant that needs a fungus...) make good habitats an engineering puzzle (Bk III §13).
+- **Upgrades** are the economy: jar tiers, anchor tuners, climate modules, training rigs, a vet bay, an arena. Earth currency plus materials gathered in the field.
+- **Wild captures vs raising:** the first jar of a species teaches its needs; learned needs are recorded in the journal so later captures start better.
+
+### AM1.5 Technical consequences of the amendment
+
+- **M1 "The Toy" becomes the Duel Prototype:** a greybox arena, two critters (placeholder bodies), three guard directions, light/heavy, parry, guard break, dodge, stamina, one AI opponent with a basic mix-up model, an indicator ring, hit-stop, camera. **Gate: five minutes of dueling is fun on a phone with zero content.** Nothing else starts until this passes.
+- **M2 becomes "Capture to Jar to Battle" in greybox:** hunt, wound, seal, return, a jar with two habitat variables, then risk the critter in a duel, with a real permadeath and a Wall of the Fallen entry.
+- Combat is a **deterministic fixed-tick module** with data-driven move definitions (Resources/JSON: stance, startup/active/recovery frames, hitboxes, stamina cost, damage, guard properties), headless-testable.
+- **Save safety vs "no reload cheating":** autosave at the *moment of lethal resolution* and at jar transfer; the app can be backgrounded and resumes the same state; a power loss mid-bout resumes at the last committed tick without granting a free undo.
+- **Netplay readiness** (not built at launch): deterministic sim, input-only sync, so ranked/online duels are a post-launch module.
+
+### AM1.6 What this does to the earlier plan
+
+- **Pillars:** keep all five, but reweight: *Actions accumulate* (permadeath is the sharpest form) and *Bodies make powers* (species movesets) move to the front; *Understand before you act* now means *read the critter's fighting style and habitat needs*.
+- **Field Notes** stay: they reveal stance set, tells, habitat needs and value; capture is only available after a duel is won non-lethally.
+- **The 8 verbs** shrink for critters to: **Duel, Seal, Spare, Release, Trade, Rescue**, with Negotiate/Bond reserved for sapients. (Build and Sneak remain as world verbs.)
+- **Companions (First Ten)** stay as bonded characters who fight beside you in squad fights and teach techniques; they are not jarred.
+- **Regions** still hold unique ecologies, but each region's critter set is now a *roster of fighting styles* (Red Reaches: bridge-fighting horned and plated species; Canopy Fold: aerial and silk-tethered; etc.).
+- **Open decisions** are in K11-K16 below.
+
+---------------------------------------------------------------------------------------------------------------------
+
 ## A. Honest diagnosis: why the current build does not feel like a game yet
 
 What exists is real: ~27,500 lines of GDScript, a Ledger/Rivals/Bonds/Promises engine, 310 automated tests, data validators, a QA
@@ -504,3 +588,10 @@ Cut order if scope pressure appears: Tier 3 stays out, then Expeditions, then Ha
 5. Start M1 "The Toy" immediately after the M0 gate.
 
 I will stay in the Director role: planning, integrating, measuring, and reporting each gate with screenshots and numbers.
+
+11. **Who can die?** Wild/jarred critters die permanently (your rule). What about the **First Ten and other bonded sapient characters**: protected (they can be hurt, "Broken," or leave, but not die unless the story authors it), or truly mortal?
+12. **Death stakes:** the three bout tiers (Exhibition / Contest / Blood Bout, wild = Blood) so players can protect a favorite while risking others. Yes, or do you want death in every fight?
+13. **Scope of battle modes at launch:** 1v1 duels against AI + 2v2/3v3 squad fights (my proposal), with online PvP as a later module. Or do you want online duels in the first release?
+14. **Touch control scheme:** I'll prototype A (flick guard) and B (stance wheel) and test both on your phone.
+15. **Breeding:** include breeding/lineages at launch, or only capture + metamorphosis first?
+16. **Tone of killing:** the lore frames this morally (League reforms, Criminal Extraction). Do you want death to be somber (memorials, scars, consequences) as proposed, or more arcade?
