@@ -15,12 +15,14 @@ var parts: Dictionary = {}      # name -> {mb: Prim, pos: Vector3, parent: Strin
 var sockets: Dictionary = {}    # name -> {part: String, pos: Vector3}
 var face: Dictionary = {}       # {center, radii, half_lon, half_lat, lat_center, params}
 var rest_rot: Dictionary = {}   # part -> Vector3 euler degrees baked into the rest pose (poses are relative to it)
+var quality := 1.0              # tri-budget knob, see Prim.quality
 var glass: Array = []           # part names rendered with the transparent glass material (no outline)
 var cfg: Dictionary = {}        # design config (styles, poses, timings stub, ...)
 
 func part(name: String, pos: Vector3, parent: String = "-") -> Prim:
 	var p: String = DEFAULT_PARENT[name] if parent == "-" else parent
 	var mb := Prim.new()
+	mb.quality = quality
 	parts[name] = {"mb": mb, "pos": pos, "parent": p}
 	return mb
 

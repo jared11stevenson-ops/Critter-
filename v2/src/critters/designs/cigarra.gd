@@ -24,6 +24,7 @@ static func _wing(m: Prim, z: float, c: Vector3, len: float, wid: float, tilt: f
 	m.lim(xf, [Vector3(0.012, len * 0.5, 0), Vector3(0.012, 0.0, wid * 0.6 * side), Vector3(0.012, -len * 0.6, wid * 0.8 * side)], 0.01, 0.008, vein, 1.0, 3, false, false)
 
 static func build(b) -> void:
+	b.quality = 0.7
 	var P: Dictionary = b.pal
 	var purple: Color = P["main"]; var green: Color = P["accent"]; var lime: Color = P["glow"]; var cream: Color = P["belly"]
 	var skin := Color.html("e2b58a"); var hair := Color.html("ece6d2"); var boot := Color.html("3b3a1f"); var orange := Color.html("e0873a")

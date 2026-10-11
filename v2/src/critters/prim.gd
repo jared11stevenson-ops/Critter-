@@ -4,6 +4,8 @@ extends RefCounted
 ## hull normals, so every primitive is closed and smooth (rounded "toy" shapes by construction).
 ## Triangle budget is the caller's job: use `tris()` and keep each critter under 3000 (x2 with outline).
 
+## Detail scale applied to every primitive's segment/ring counts (design sets it to fit the tri budget).
+var quality := 1.0
 var verts := PackedVector3Array()
 var norms := PackedVector3Array()
 var cols := PackedColorArray()
@@ -30,6 +32,8 @@ func _push(p: Vector3, n: Vector3, c: Color, xf: Transform3D, nb: Basis) -> void
 ## Poles on local Y. `cut_bottom` flattens below (-1..1 in unit-y) for feet/domes.
 func blob(xf: Transform3D, radii: Vector3, color: Color, glow: float = 0.0, e: float = 1.0,
 		segs: int = 10, rings: int = 6, cut_bottom: float = -1.0) -> void:
+	segs = maxi(int(round(segs * quality)), 4)
+	rings = maxi(int(round(rings * quality)), 3)
 	var base := verts.size()
 	var nb := xf.basis.inverse().transposed()
 	var c := Color(color.r, color.g, color.b, glow)
@@ -67,6 +71,7 @@ func blob(xf: Transform3D, radii: Vector3, color: Color, glow: float = 0.0, e: f
 func tube(xf: Transform3D, pts: Array, rad: Array, color: Color, glow: float = 0.0,
 		wide_hint: Vector3 = Vector3(0, 0, 1), segs: int = 8, cap_start: bool = true, cap_end: bool = true,
 		colors: Array = []) -> void:
+	segs = maxi(int(round(segs * quality)), 3)
 	var nb := xf.basis.inverse().transposed()
 	var n_pts := pts.size()
 	var rings_data: Array = []   # each: [center, X1, X2, rx, rz, color, normal_tilt]
@@ -171,6 +176,8 @@ func flat(xf: Transform3D, pts: Array, w0: float, w1: float, th: float, color: C
 ## Torus ring (goggles, hard-hat brims, spectacle lenses, rivets). Axis = local Z.
 func ring(xf: Transform3D, big_r: float, small_r: float, color: Color, glow: float = 0.0, segs: int = 14, tsegs: int = 6,
 		squash: float = 1.0) -> void:
+	segs = maxi(int(round(segs * quality)), 5)
+	tsegs = maxi(int(round(tsegs * quality)), 3)
 	var base := verts.size()
 	var nb := xf.basis.inverse().transposed()
 	var c := Color(color.r, color.g, color.b, glow)

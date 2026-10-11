@@ -179,9 +179,18 @@ func apply_fighter_state(fs: Dictionary, dt: float) -> void:
 	if face:
 		face.update(dt)
 	fx.update(dt)
+	_apply_rage(float(fs.get("rage", 0.0)))
 
 func _timing_for(action: String) -> Vector3i:
 	return Timing.resolve(critter_id, action, "", {})
+
+## Visible overdrive (Aruun Rage / Strain, any critter's 'pressure' state): fs["rage"] 0..1 drives a hot rim aura, pulsing emissive
+## (Morrow's dome-eye, veins, gems) and a heartbeat shake. The sim owns the value; the rig only displays it.
+func _apply_rage(r: float) -> void:
+	var pulse := 0.5 + 0.5 * sin(_time * (8.0 + 8.0 * r))
+	_mat.set_shader_parameter("rim_strength", 0.9 + r * (1.6 + pulse * 0.8))
+	_mat.set_shader_parameter("rim_color", (palette["glow"] as Color).lerp(Color(1.0, 0.25, 0.1), r))
+	_mat.set_shader_parameter("glow_strength", 1.0 + fx.glow_boost + r * (1.2 + pulse))
 
 func _begin_action(action: String, move_id: String, fs: Dictionary) -> void:
 	_from = _cur.duplicate(true)

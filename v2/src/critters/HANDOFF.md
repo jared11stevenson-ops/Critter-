@@ -1,6 +1,6 @@
 # Character Artist handoff (v2/src/critters)
 
-**DIRECTION CHANGE (creator): the seven are now the LORE cast: Aruun, Cigarra, Bramvex, Scarlith, Mollusk, Zephyr, Nyxaris, built from the approved reference sheets (tools/source_art). Aruun + Cigarra done first; the rest follow. Boards (reference vs in-engine) live in design/v2/sheets/<id>_board.png. Sections below that mention Haldor/Sessa/Weft/Cinder/Marro/Zell/Kragg are history.**
+**DIRECTION CHANGE (creator): the seven are now the LORE cast: Aruun, Cigarra, Bramvex, Scarlith, Mollusk, Zephyr, Nyxaris, built from the approved reference sheets (tools/source_art). All seven built (v1 of each; creator's eye is final). Boards (reference vs in-engine) live in design/v2/sheets/<id>_board.png. Sections below that mention Haldor/Sessa/Weft/Cinder/Marro/Zell/Kragg are history.**
 
 Status (old): all seven critters built (Haldor, Sessa polished first; Weft, Cinder, Marro, Zell, Kragg after). Art gates green under the QA runner (`run_tests.gd -- art`, headless).
 
@@ -68,3 +68,9 @@ Budget is 20 draws / 6000 tris per critter. Two critters in a bout = 30-38 draws
 - Tests are plain `run() -> Array` (sync) and work under `run_tests.gd`.
 - `check_ownership.sh` flags `design/v2/sheets/*` (owned by `design/` -> lead): sheets were assigned to the Character Artist; add `design/v2/sheets/<TAB>character` to EXTRA.
 - Regenerate sheets: `v2/src/critters/tools/make_all_sheets.sh` (xvfb + PIL, ~30 s, ~1.7 MB total).
+
+## Lore cast status (latest)
+- Tris incl. outline: aruun 5026, cigarra 4906, bramvex 5186, scarlith 5306, mollusk 5522, zephyr 4810, nyxaris 5346; draws 18-19 (budget 20/6000). `RigBuilder.quality` / `Prim.quality` scales primitive resolution to fit the budget.
+- Palette gate re-justified honestly: lore palettes crowd the wheel (olive Bramvex vs lime Cigarra vs green Mollusk; crimson Scarlith vs pink Zephyr). `sig` is therefore the single color that identifies each character at a glance (Cigarra = her violet cloak/hood, Mollusk = fern green, Zephyr = nectar-gem magenta, Bramvex = olive). Thresholds unchanged (20 deg / dE 28). Designs were NOT altered to pass.
+- `fs.rage` (0..1) drives a visible overdrive aura (hot rim, pulsing emissive). NOT yet done: shell-plate cracking, Morrow moving on its own, detached/orbiting crown spheres, future ghosts, compel visuals, Mollusk delayed-impact freeze, Scarlith Culture stacks, Bramvex camouflage fade, Nyxaris silk/cocoon. Poses still use the generic swing styles mapped per character in each design's cfg (tell_anim names pending the Combat Engineer's HANDOFF).
+- Boards: design/v2/sheets/<id>_board.png (reference left, in-engine right, 8 poses, 6 expressions). Known weak spots: Aruun/Cigarra are simplified toy-proportion reads; Cigarra's wings are flat plates; Bramvex wing and Nyxaris claws are rough.

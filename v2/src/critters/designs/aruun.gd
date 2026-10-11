@@ -17,6 +17,7 @@ static func _dome(m: Prim, c: Vector3, r: float, red: Color, dark: Color, side: 
 		m.blob(T(c + d * r * 0.97), Vector3(r * 0.3, r * 0.3, r * 0.12), dark, 0.0, 1.0, 6, 3)
 
 static func build(b) -> void:
+	b.quality = 0.8
 	var P: Dictionary = b.pal
 	var plum: Color = P["main"]; var red: Color = P["accent"]; var orange: Color = P["glow"]; var tan: Color = P["belly"]
 	var cream := Color.html("dcc9a4"); var olive := Color.html("737a3a"); var brass := Color.html("c9a24a"); var brown := Color.html("6b4a36")
