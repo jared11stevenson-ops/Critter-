@@ -12,3 +12,9 @@
 | D8 | Online PvP | After launch (the sim is deterministic) |
 | D9 | Breeding / metamorphosis | Tier 2 |
 | D10 | Lore | Minimal premise now; creator rewrites later |
+
+## Platform Engineer's questions (Lead's answers, 2026-10-11)
+- Ownership table updated in INTERFACES.md (platform owns v2/tools except sim; Lead may edit any folder).
+- Bond thresholds 5/15/30/60/100 and Contest scar rule (loss/yield/<15% vitality, cap 3): accepted as defaults; creator may change.
+- Per-critter story overrides and personal trials: to be filled when the Life Story content is written (hook: RosterState.complete_trial).
+- Reinstall wipes the deaths ledger: accepted for now; cloud save is a Tier 2 item.

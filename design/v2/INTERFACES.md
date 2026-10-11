@@ -9,7 +9,9 @@ v2/src/critters/**  Character Artist  (rigs, shaders for characters, expressions
 v2/src/arena/**     Arena/Scene Engineer (arenas, camera, hazards, wiring a bout together)
 v2/src/ui/**        UI Engineer       (HUD, menus, Rack, jars, story panels, touch controls)
 v2/data/critters/*.json, v2/data/moves/*.json   Combat Engineer owns the numbers; Lead owns identity (names, palettes)
-v2/tools/**         QA Engineer
+v2/tools/** (qa runner, smoke, lint)   Platform Engineer; v2/tools/sim/** Combat Engineer; v2/tools/qa/tests/ shared (each agent owns its own test files)
+v2/data/story/**    Platform Engineer (chapter rules; Lead owns story content)
+Lead exemption: the Lead may edit any folder (integration, project.godot).
 ```
 ## 1. Combat simulation (pure logic, no Nodes; deterministic; 60 Hz)
 ```gdscript
