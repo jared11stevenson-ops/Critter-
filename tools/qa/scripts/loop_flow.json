@@ -1,0 +1,8 @@
+[
+ {"t":0.05,"call":"GameState.new_game"},
+ {"t":0.1,"call":"GameState.set_flag","args":["briefed",true]},
+ {"t":0.2,"call":"Router.goto","args":["res://game/world/red_reaches/red_reaches.tscn","gate"]},
+ {"t":2.0,"call":"scene.qa_auto_dialogue","args":[true,0,0.2]},
+ {"t":14.0,"call":"scene.qa_teleport","args":["t_valley"]},
+ {"t":15.0,"action":"move_right","dur":1.0}
+]

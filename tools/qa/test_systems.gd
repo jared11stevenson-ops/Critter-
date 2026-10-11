@@ -24,6 +24,8 @@ func _ready() -> void:
 	_test_persistence()
 	_test_rivals()
 	_test_combat_feel()
+	_test_hub_flow()
+	_test_hud_flow()
 	await _test_npcs()
 	_test_explore()
 	await _test_explore_level()
@@ -512,3 +514,67 @@ func _test_explore_level() -> void:
 	fresh()                          # leave no test flags behind for the quit-time autosave
 	GameState.codex = []
 	GameState.items = {}
+
+
+func _test_hub_flow() -> void:
+	var f := {}
+	ok(HubFlow.objective_id(f) == "table" and HubFlow.primary_label(f) == "Meet Mara", "hub: new game objective is Mara")
+	ok(not HubFlow.spot_visible("gate", f) and HubFlow.spot_visible("table", f), "hub: gate hidden before briefing")
+	ok(HubFlow.places_list(f).is_empty(), "hub: no places list before briefing")
+	ok(not HubFlow.show_gear_bonds(f), "hub: gear/bonds hidden at start")
+	f["briefed"] = true
+	ok(HubFlow.objective_id(f) == "gate" and HubFlow.primary_label(f) == "Descend" and HubFlow.primary_spot(f) == "gate", "hub: briefed -> Descend")
+	ok(HubFlow.spot_visible("lab", f) and not HubFlow.spot_visible("ledger", f) and not HubFlow.spot_visible("habitat", f), "hub: secondary places unlock gradually")
+	ok(not ("gate" in HubFlow.places_list(f)), "hub: objective not duplicated in Places")
+	f["descents"] = 1
+	ok(HubFlow.spot_visible("board", f) and HubFlow.show_gear_bonds(f), "hub: board/gear after first descent")
+	f["rr_complete"] = true
+	ok(HubFlow.objective_id(f) == "table" and HubFlow.primary_label(f) == "Debrief", "hub: debrief after descent")
+	f["debriefed"] = true
+	ok(HubFlow.objective_id(f) == "habitat" and HubFlow.spot_visible("habitat", f), "hub: habitat objective")
+	f["habitat_built"] = true
+	f["slice_complete"] = true
+	ok(HubFlow.objective_id(f) == "" and HubFlow.primary_spot(f) == "gate" and HubFlow.primary_label(f) == "Descend", "hub: free roam falls back to Descend")
+	var rc := HubFlow.recap_lines({"items": {"salvage": 1}, "specimens": 0, "codex": 3, "standing": 0}, {"items": {"salvage": 7, "reach_soil": 2}, "specimens": 1, "codex": 5, "standing": 2})
+	ok(rc.size() == 4 and "+6 salvage" in rc[0] and "+2 reach_soil" in rc[0], "hub: recap gathered items diff")
+	ok(HubFlow.recap_lines({"items": {}}, {"items": {}}).is_empty(), "hub: empty recap when nothing changed")
+
+func _test_hud_flow() -> void:
+	ok(HudFlow.shorten("short") == "short", "hud: short text untouched")
+	var long := HudFlow.shorten("Combo unlocked: PROBABLE IMPACT — Gravity Pull during Premonition, then keep going")
+	ok(long.length() <= HudFlow.TOAST_MAX_CHARS and long.ends_with("…"), "hud: long toast is cut with ellipsis")
+	ok(HudFlow.shorten("Codex updated: Lichen") == "Codex: Lichen", "hud: codex prefix shortened")
+	var q := HudFlow.ToastQueue.new()
+	q.push("a", "info", 0.0)
+	q.push("a", "info", 0.0)
+	ok(q.queue.size() == 1, "hud: duplicate toast ignored")
+	ok(q.tick(0.0) and q.current["text"] == "a", "hud: first toast shows")
+	q.push("b", "info", 0.1)
+	q.push("c", "warning", 0.1)
+	q.push("d", "codex", 0.1)
+	q.push("e", "info", 0.1)
+	ok(q.queue.size() == HudFlow.ToastQueue.MAX_QUEUE and q.dropped == 1, "hud: backlog capped, lowest priority dropped")
+	q.tick(0.5)
+	ok(q.current["text"] == "a", "hud: no cut-in before MIN_SHOW")
+	q.tick(1.0)
+	ok(q.current["text"] == "c", "hud: warning cuts in after MIN_SHOW")
+	var t := 1.0
+	var seen: Array = []
+	for i in 40:
+		t += 0.5
+		q.tick(t)
+		if not q.current.is_empty() and (seen.is_empty() or seen[-1] != q.current["text"]):
+			seen.append(q.current["text"])
+	ok(q.current.is_empty() and q.queue.is_empty(), "hud: queue drains")
+	ok(seen.size() == 3, "hud: backlog shows one at a time")
+	var fl := {}
+	ok(HudFlow.take_tip(fl, "scan") != "" and HudFlow.take_tip(fl, "scan") == "", "hud: tip shown once")
+	ok(HudFlow.take_tip(fl, "nope") == "", "hud: unknown tip ignored")
+	var r0 := HudFlow.reveal({}, INF, false, false)
+	ok(not r0["combat"] and not r0["scan"], "hud: new player sees only core controls")
+	ok(HudFlow.reveal({}, 10.0, false, false)["combat"], "hud: enemy near reveals abilities")
+	ok(HudFlow.reveal({}, INF, true, false)["combat"], "hud: using an ability reveals them")
+	ok(HudFlow.reveal({"_hud_combat": true}, INF, false, false)["combat"], "hud: reveal latches")
+	ok(HudFlow.reveal({"valley_clear": true}, INF, false, false)["scan"], "hud: scan reveals when the valley asks for it")
+	var vet := HudFlow.reveal({"rr_complete": true}, INF, false, false)
+	ok(vet["combat"] and vet["scan"], "hud: veterans see everything")

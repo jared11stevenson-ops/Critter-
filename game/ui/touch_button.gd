@@ -22,6 +22,7 @@ var glyph_size := 26
 var _touch := -1
 var _pressed := false
 var _pulse := 0.0
+var hint := 0.0               # >0: a first-time tip is pointing at this control (pulsing ring; static with reduce-flashing)
 var _ready_flash := 0.0
 var _font: Font
 var _tex_up: Texture2D
@@ -67,6 +68,7 @@ func _hit(p: Vector2, slack: float = 8.0) -> bool:
 	return c.distance_to(p) <= size.x * 0.5 + slack
 
 func _press() -> void:
+	hint = 0.0
 	_pressed = true
 	_pulse = 1.0
 	if action != "" and enabled:
@@ -85,6 +87,9 @@ func is_held() -> bool:
 	return _pressed
 
 func _process(delta: float) -> void:
+	if hint > 0.0:
+		hint = maxf(0.0, hint - delta)
+		redraw()
 	if _pulse > 0.0:
 		_pulse = maxf(0.0, _pulse - delta * 5.0)
 		redraw()
@@ -186,6 +191,13 @@ func paint(ci: CanvasItem, phase: int) -> void:
 			if caption != "" and _font:
 				ci.draw_string(_font, Vector2(c.x - cap_w * 0.5, cap_y), caption, HORIZONTAL_ALIGNMENT_LEFT, -1, fs2, UiKit.PARCHMENT)
 		4:
+			if hint > 0.0:
+				var k := 0.5 if bool(GameState.settings.get("reduce_flashing", false)) else 0.5 + 0.5 * sin(Time.get_ticks_msec() * 0.008)
+				var hc := Color(1.0, 0.9, 0.45, 0.55 + 0.4 * k)
+				if pill:
+					ci.draw_rect(Rect2(Vector2(-6, -6), s + Vector2(12, 12)), hc, false, 5.0)
+				else:
+					ci.draw_arc(c, r + 6.0 + 6.0 * k, 0, TAU, 40, hc, 5.0, true)
 			if _ready_flash > 0.0 and not bool(GameState.settings.get("reduce_flashing", false)):
 				ci.draw_arc(c, r * (0.9 + (1.0 - _ready_flash) * 0.3), 0, TAU, 40, Color(1.0, 0.95, 0.6, _ready_flash * 0.9), 5.0 * _ready_flash + 1.0, true)
 			if _pulse > 0.0 and not bool(GameState.settings.get("reduce_flashing", false)):
