@@ -11,7 +11,7 @@ const DATA := {
 	"cigarra": {"main": "3b2f4d", "accent": "a9c83c", "glow": "c9e04a", "sig": "7a4fc0", "belly": "e2dcc4"},
 	"bramvex": {"main": "6a5238", "accent": "b0322a", "glow": "ffa845", "sig": "7b8a2a", "belly": "cbb98c"},
 	"scarlith": {"main": "b01c2c", "accent": "e3b04a", "glow": "ffc24a", "sig": "b01c2c", "belly": "d98a3a"},
-	"mollusk": {"main": "d9a46c", "accent": "6b3326", "glow": "e8603c", "sig": "3aa86a", "belly": "f0d8a8"},
+	"mollusk": {"main": "8f946a", "accent": "ff7a1a", "glow": "ffb347", "sig": "3aa86a", "belly": "d7d3a8"},
 	"zephyr": {"main": "7d8442", "accent": "c43a5e", "glow": "ff5fa0", "sig": "d63a9c", "belly": "e8b5a0"},
 	"nyxaris": {"main": "25202e", "accent": "ee4fa8", "glow": "7fd2ea", "sig": "6cc4e6", "belly": "efe8dc"},
 }
