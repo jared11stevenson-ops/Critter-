@@ -44,8 +44,10 @@ Chapter structure and unlock rules per GDD section 7 (survival counters, a near-
 - **Nyxaris:** Frostbloom silk culture; sentinel; extraction; Nyxaris v. Helix ("Who gave you permission?"); pattern as personhood; the Cold Archive.
 Rival-species chapter (6) for each: use a lore-appropriate rival or antagonist (Helix/Dominion enforcers, regional predators), decided with the creator.
 
-## Art rules for the lore cast
-1. **Binding designs:** match silhouette, anatomy, costume, equipment, palette from the reference sheets. Do not humanize. Do not simplify away a defining feature.
-2. **Style:** cute-grim ink-and-gold rendering (cel shading, outlines, expressive faces, chunky readable proportions in the ART_BIBLE sense). "Chunky" means readable at 64 px, never a different design.
-3. **Review loop:** each critter gets a side-by-side board (reference vs in-engine) for the creator; the creator's eye is final.
-4. **Existing rig system stays:** CritterRig, toon and outline shaders, pose library, faces and FX are reusable; only the seven character builds change.
+## Art rules for the lore cast (REVISED by the creator: redesign from the lore for 3D)
+The reference sheets are *not* a good enough base to translate into 3D. So each character is **redesigned from the lore** into a clean, modelable 3D character:
+1. **Identity anchors, not copies:** keep what the lore says defines them (species, Knack, key features, role, palette family from the species), and the personality. Do not copy the 2D sheet's rendering or its unmodelable detail.
+2. **Model-first design:** symmetrical base pose, strong silhouette at 64 px, 8-15 clear major parts, simple material zones (3 main colors + accent + glow), no painted-only detail that cannot be modeled, readable from all angles.
+3. **Deliverables per character** (see REDESIGN_BRIEFS.md): orthographic model sheet (front, side, back, top) with a proportion grid, part breakdown, color callouts, expression sheet, move poses, rig socket list, and a **.glb export** (Blender-ready names, pivots, materials).
+4. **Style:** cute-grim ink-and-gold per ART_BIBLE.md.
+5. **Creator review:** the creator's eye is final; designs are placeholders until approved.
