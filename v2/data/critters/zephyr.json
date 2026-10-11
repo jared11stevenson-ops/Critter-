@@ -36,7 +36,7 @@
   "guard_drain": 1.0,
   "dodge_chain": 1,
   "guard_move_mult": 0.7,
-  "damage_mult": 1.0
+  "damage_mult": 1.239
  },
  "ai": {
   "style": "skirmisher",

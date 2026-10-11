@@ -36,7 +36,7 @@
   "block_poise": 0.1,
   "crush_resist": 0.5,
   "guard_move_mult": 0.6,
-  "damage_mult": 1.0
+  "damage_mult": 1.665
  },
  "ai": {
   "style": "tank",
