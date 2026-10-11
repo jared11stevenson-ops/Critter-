@@ -60,6 +60,9 @@ func _data(fails: Array) -> void:
 				fails.append("data: light %s startup %d outside 10-16" % [mid, m.startup])
 		if c.moves.size() == 0:
 			fails.append("data: no moves for " + id)
+		for mid in c.moves.keys():
+			if c.moves[mid].lore_source.strip_edges() == "":
+				fails.append("data: move %s has no lore_source (every move must cite LORE_MOVES.md)" % mid)
 
 func _nyxaris_throw_sim(stakes: int) -> CombatSim:
 	var sim := U.make("nyxaris", "cigarra", "ring", stakes, 3)

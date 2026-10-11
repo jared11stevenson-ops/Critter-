@@ -19,7 +19,8 @@
   "stamina_care": 0.2,
   "yield_ratio": 0.0,
   "last_stand": 0.5,
-  "edge_margin": 0.2
+  "edge_margin": 0.2,
+  "rage": 0.02
  },
  "standard": {
   "reaction": 11,
@@ -41,7 +42,8 @@
   "stamina_care": 0.6,
   "yield_ratio": 0.1,
   "last_stand": 0.8,
-  "edge_margin": 0.6
+  "edge_margin": 0.6,
+  "rage": 0.05
  },
  "expert": {
   "reaction": 6,
@@ -63,7 +65,8 @@
   "stamina_care": 0.9,
   "yield_ratio": 0.12,
   "last_stand": 0.95,
-  "edge_margin": 1.0
+  "edge_margin": 1.0,
+  "rage": 0.1
  },
  "common": {
   "band_close": 1.0,
@@ -135,6 +138,13 @@
   "parry_k_hi_extra": 4,
   "guard_hold_after": 10,
   "parry_hold_after": 8,
-  "dodge_lead": 2
+  "dodge_lead": 2,
+  "rage_margin": 10.0,
+  "rage_range": 3.6,
+  "rage_end_ratio": 0.3,
+  "rage_idle_gap": 3.0,
+  "rage_end_prob": 0.05,
+  "volley_lead": 6,
+  "premonition_dodge": 0.8
  }
 }

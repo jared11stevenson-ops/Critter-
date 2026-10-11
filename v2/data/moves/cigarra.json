@@ -1,121 +1,139 @@
 {
  "critter": "cigarra",
  "moves": {
-  "cigarra_light1": {
-   "name": "Charm Strike",
+  "cigarra_bad_thought1": {
+   "name": "Bad Thought",
    "kind": "light",
    "tell_anim": "punch",
    "startup": 10,
    "active": 3,
    "recovery": 10,
-   "stamina_cost": 6,
-   "damage": 11.1,
-   "poise_damage": 4,
+   "stamina_cost": 5,
+   "damage": 8.0,
+   "poise_damage": 5,
    "hitstun": 18,
    "blockstun": 10,
    "knockback": 0.2,
-   "hitstop": 3,
+   "hitstop": 4,
    "hitbox": {
-    "reach": 1.5,
-    "arc": 100
+    "reach": 3.2,
+    "arc": 36
    },
-   "chain": "cigarra_light2",
-   "cancel_from": 11,
-   "track": 5
+   "track": 5,
+   "lore_source": "canon:bad_thought flicks a crown sphere, distorted psychic object",
+   "chain": "cigarra_bad_thought2",
+   "cancel_from": 11
   },
-  "cigarra_light2": {
-   "name": "Charm Cross",
+  "cigarra_bad_thought2": {
+   "name": "Bad Thought II",
    "kind": "light",
    "tell_anim": "slash_back",
    "startup": 10,
    "active": 3,
    "recovery": 10,
-   "stamina_cost": 6,
-   "damage": 11.1,
-   "poise_damage": 4,
+   "stamina_cost": 5,
+   "damage": 8.0,
+   "poise_damage": 5,
    "hitstun": 18,
    "blockstun": 10,
    "knockback": 0.2,
-   "hitstop": 3,
+   "hitstop": 4,
    "hitbox": {
-    "reach": 1.5,
-    "arc": 100
+    "reach": 3.2,
+    "arc": 36
    },
-   "chain": "cigarra_light3",
-   "cancel_from": 11,
-   "track": 5
+   "track": 5,
+   "lore_source": "canon:bad_thought flicks a crown sphere, distorted psychic object",
+   "chain": "cigarra_bad_thought3",
+   "cancel_from": 11
   },
-  "cigarra_light3": {
-   "name": "Charm Finish",
+  "cigarra_bad_thought3": {
+   "name": "Bad Thought III",
    "kind": "light",
    "tell_anim": "slash_up",
    "startup": 12,
    "active": 3,
    "recovery": 18,
-   "stamina_cost": 8,
-   "damage": 14.8,
-   "poise_damage": 6,
+   "stamina_cost": 7,
+   "damage": 11.0,
+   "poise_damage": 8,
    "hitstun": 22,
-   "blockstun": 12,
+   "blockstun": 10,
    "knockback": 0.6,
-   "hitstop": 5,
+   "hitstop": 4,
    "hitbox": {
-    "reach": 1.6,
-    "arc": 110
+    "reach": 3.2,
+    "arc": 36
    },
-   "track": 4
+   "track": 5,
+   "lore_source": "canon:bad_thought flicks a crown sphere, distorted psychic object"
   },
-  "cigarra_heavy": {
-   "name": "Branch Rend",
+  "cigarra_crown_barrage": {
+   "name": "Crown Barrage",
    "kind": "heavy",
    "tell_anim": "spin",
-   "startup": 24,
-   "active": 4,
-   "recovery": 24,
-   "stamina_cost": 16,
+   "startup": 28,
+   "active": 1,
+   "recovery": 30,
+   "stamina_cost": 18,
    "feint": true,
-   "track": 10,
-   "damage": 39.6,
-   "poise_damage": 14,
-   "hitstun": 30,
-   "blockstun": 16,
-   "knockback": 0.9,
-   "hitstop": 8,
-   "hitbox": {
-    "reach": 1.8,
-    "arc": 120
-   },
-   "props": {
-    "guard_crush": true
-   }
+   "track": 12,
+   "spawns": [
+    {
+     "at": 28,
+     "type": "projectile",
+     "angles": [
+      -30,
+      -15,
+      0,
+      15,
+      30
+     ],
+     "speed": 11,
+     "radius": 0.45,
+     "life": 42,
+     "damage": 8.0,
+     "poise_damage": 7,
+     "hitstun": 22,
+     "blockstun": 10,
+     "knockback": 0.4,
+     "hitstop": 4
+    }
+   ],
+   "lore_source": "lore:branching black-sphere crown volley"
   },
-  "cigarra_grab": {
-   "name": "Cloak Snare",
+  "cigarra_puppet_thought": {
+   "name": "Puppet Thought",
    "kind": "grab",
-   "tell_anim": "grab",
-   "startup": 15,
+   "tell_anim": "roar",
+   "startup": 26,
    "active": 3,
-   "recovery": 26,
-   "stamina_cost": 10,
+   "recovery": 34,
+   "stamina_cost": 14,
    "track": 6,
-   "damage": 24.7,
-   "poise_damage": 8,
-   "hitstop": 6,
+   "damage": 5.0,
+   "poise_damage": 6,
+   "hitstop": 8,
    "grab": true,
-   "throw_dist": 1.8,
-   "throw_stun": 6,
+   "unparryable": true,
    "hitbox": {
-    "reach": 1.3,
-    "arc": 110
-   }
+    "reach": 3.0,
+    "arc": 36
+   },
+   "on_hit": {
+    "compel": {
+     "mode": "auto"
+    }
+   },
+   "lore_source": "creator direction + lore:Psychic Interference; crown spheres flare"
   },
-  "cigarra_dodge": {
-   "name": "Skitter",
+  "cigarra_grasshopper_thought": {
+   "name": "Grasshopper Thought",
    "kind": "dodge",
    "tell_anim": "leap",
    "startup": 0,
    "active": 6,
-   "recovery": 11,
+   "recovery": 12,
    "stamina_cost": 16,
    "iframes": [
     0,
@@ -124,113 +142,85 @@
    "motion": [
     {
      "at": 0,
-     "len": 7,
-     "dist": 2.4,
+     "len": 12,
+     "dist": 4.2,
      "dir": "input"
     }
-   ]
+   ],
+   "lore_source": "canon:grasshopper_thought crouch then launch, cloak steers"
+  },
+  "cigarra_brain_skip": {
+   "name": "Brain Skip",
+   "kind": "counter",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "canon:brain_skip cooldown 9s, counter when dodging through a Premonition ghost"
   },
   "cigarra_premonition": {
    "name": "Premonition",
    "kind": "ability",
    "tell_anim": "stance",
    "startup": 6,
-   "active": 60,
-   "recovery": 20,
-   "stamina_cost": 12,
-   "cooldown": 420,
+   "active": 150,
+   "recovery": 14,
+   "stamina_cost": 10,
+   "cooldown": 720,
+   "pressure_on_use": 22,
    "stance": {
     "status": "premonition",
     "from": 6,
-    "frames": 60
-   }
+    "frames": 150
+   },
+   "lore_source": "canon:premonition cooldown 12s, future ghosts, dodge through one to counter"
   },
-  "cigarra_branching_sphere": {
-   "name": "Branching Sphere",
+  "cigarra_false_memory": {
+   "name": "False Memory",
    "kind": "ability",
-   "tell_anim": "hook",
-   "startup": 18,
+   "tell_anim": "roar",
+   "startup": 20,
    "active": 1,
-   "recovery": 24,
+   "recovery": 22,
    "stamina_cost": 14,
-   "cooldown": 300,
-   "track": 8,
+   "cooldown": 840,
+   "pressure_on_use": 22,
    "spawns": [
     {
-     "at": 18,
-     "type": "projectile",
-     "angles": [
-      -26,
-      0,
-      26
-     ],
-     "wait": 14,
-     "wait_step": 6,
-     "speed": 9,
-     "radius": 0.45,
-     "life": 55,
-     "damage": 9.0,
-     "poise_damage": 7,
-     "hitstun": 20,
-     "blockstun": 10,
-     "knockback": 0.3,
-     "hitstop": 4
+     "at": 20,
+     "type": "false_memory",
+     "frames": 180
     }
-   ]
+   ],
+   "lore_source": "canon:false_memory cooldown 14s, hallucination decoy the enemy attacks"
   },
   "cigarra_future_touched": {
    "name": "A Future Touched",
    "kind": "laststand",
-   "tell_anim": "spin",
-   "startup": 18,
-   "active": 60,
-   "recovery": 30,
-   "armor": 0.7,
-   "armor_frames": [
+   "tell_anim": "stance",
+   "startup": 24,
+   "active": 240,
+   "recovery": 14,
+   "pressure_on_use": 100,
+   "iframes": [
     0,
-    90
+    24
    ],
-   "damage": 8.7,
-   "poise_damage": 3,
-   "hitstun": 12,
-   "blockstun": 8,
-   "hitstop": 2,
-   "hitbox": {
-    "reach": 2.0,
-    "arc": 160
+   "stance": {
+    "status": "touched",
+    "from": 24,
+    "frames": 240
    },
-   "props": {
-    "unblockable": true
-   },
-   "rehit": {
-    "every": 5,
-    "count": 12,
-    "from": 18,
-    "len": 2
-   },
-   "spawns": [
-    {
-     "at": 20,
-     "type": "projectile",
-     "angles": [
-      -36,
-      -18,
-      0,
-      18,
-      36
-     ],
-     "wait": 8,
-     "wait_step": 4,
-     "speed": 10,
-     "radius": 0.4,
-     "life": 50,
-     "damage": 5.0,
-     "poise_damage": 4,
-     "hitstun": 14,
-     "blockstun": 8,
-     "hitstop": 2
-    }
-   ]
+   "lore_source": "lore:Bk XIV a future seen is a future touched; ends in Future-Noise overload"
+  },
+  "cigarra_future_noise": {
+   "name": "Future-Noise",
+   "kind": "resource",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "lore:L330 she experiences noise; competing outcome-images"
   }
  }
 }

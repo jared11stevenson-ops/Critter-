@@ -157,7 +157,7 @@ func _physics() -> void:
 					_ringout(f)
 					continue
 				f.forced = Vector2.ZERO
-			f.pos = arena.clamp_inside(np, lip) if arena.depth(np) > -lip else np
+			f.pos = arena.clamp_inside(np, lip) if (arena.depth(np) > -lip and arena.edge_type(np) != "drop") else np
 	var a = fighters[0]
 	var b = fighters[1]
 	if a.alive and b.alive and not a.has("ghost") and not b.has("ghost"):

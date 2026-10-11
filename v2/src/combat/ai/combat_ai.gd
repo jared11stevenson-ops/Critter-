@@ -137,6 +137,16 @@ func decide(sim: CombatSim) -> CombatInput:
 			sched.clear()
 			guard_from = -1
 			return _finish(inp, me)
+	# --- Rage (Aruun): enter when the bar is high and the fight is on, leave early when low on Vitality
+	if me.def.move_ids.has("rage") and me.stun == 0 and not (not me.last_stand_used and me.ratio() < sim.R["last_stand_ratio"]):
+		var want_chord := false
+		if not me.raging and me.rage >= float(sim.R["rage_enter"]) + float(C["rage_margin"]) and gap < float(C["rage_range"]) and rng.randf() < float(P["rage"]):
+			want_chord = true
+		elif me.raging and (me.ratio() < float(C["rage_end_ratio"]) or gap > float(C["rage_idle_gap"]) * 2.0) and rng.randf() < float(C["rage_end_prob"]):
+			want_chord = true
+		if want_chord:
+			_press(inp, "ls")
+			return _finish(inp, me)
 	# --- scheduled presses --------------------------------------------------
 	var pending_press := false
 	for i in range(sched.size() - 1, -1, -1):
@@ -195,7 +205,7 @@ func _react(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float) -> vo
 	if ob["mid"] == "" or me.stun > 0 or not alive_ok(me) or op.has("camo"):
 		return
 	var m: MoveDef = op.def.move(ob["mid"])
-	if m == null or m.hits.is_empty():
+	if m == null:
 		return
 	var sig: String = ob["mid"] + ":" + str(sim.frame - op.af)
 	if sig == handled_sig:
@@ -239,6 +249,8 @@ func _react(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float) -> vo
 		w["parry"] *= float(C["winded_parry_mult"])
 	if me.sta < float(C["dodge_min_sta"]):
 		w["dodge"] = 0.0
+	if me.has("premonition") and not me.winded and me.sta >= float(C["dodge_min_sta"]) and not is_grab:
+		w["dodge"] = maxf(w["dodge"], float(P["dodge_prob"]) * float(C["premonition_dodge"]) * 1.6)   # dodge through the ghost
 	# defensive ability hint (stances)
 	for slot in ["a1", "a2"]:
 		var hint: Dictionary = me.def.ai_hints.get("ability1" if slot == "a1" else "ability2", {})
@@ -291,6 +303,10 @@ func alive_ok(me) -> bool:
 func _first_threat(m: MoveDef) -> Dictionary:
 	for h in m.hits:
 		return h
+	for sp in m.spawns:      # projectile volleys: treat the launch as the threat
+		if str(sp.get("type", "")) == "projectile":
+			var rng_m: float = float(sp.get("speed", 8.0)) * float(sp.get("life", 40)) / 60.0
+			return {"at": int(sp["at"]) + int(C["volley_lead"]), "reach": rng_m, "grab": false, "len": 3}
 	return {}
 
 func gap_ok(me, op, kind: String) -> bool:

@@ -19,21 +19,26 @@
  },
  "moves": {
   "light": [
-   "aruun_light1",
-   "aruun_light2"
+   "aruun_combo1",
+   "aruun_combo2",
+   "aruun_combo3"
   ],
-  "heavy": "aruun_heavy",
-  "grab": "aruun_grab",
+  "heavy": "aruun_overhead",
+  "grab": "aruun_drag",
   "dodge": "aruun_dodge",
-  "ability1": "aruun_morrow_throw",
-  "ability2": "aruun_burden_slam",
-  "laststand": "aruun_carry_the_bridge"
+  "ability1": "aruun_reaching_strike",
+  "ability2": "aruun_gravity_pull",
+  "laststand": "aruun_carry_the_bridge",
+  "auto_counter": "aruun_morrow_first",
+  "rage": "aruun_beetle_rage"
  },
  "tuning": {
   "body_radius": 0.65,
   "block_chip": 0.15,
   "crush_resist": 0.2,
-  "damage_mult": 0.873
+  "plate_pool": 90.0,
+  "rage_max": 100.0,
+  "damage_mult": 1.0
  },
  "ai": {
   "style": "bruiser",
@@ -42,14 +47,14 @@
    2.6
   ],
   "ability1": {
-   "min": 2.0,
-   "max": 6.0,
+   "min": 2.2,
+   "max": 4.6,
    "when": "far"
   },
   "ability2": {
-   "min": 0.0,
-   "max": 2.6,
-   "when": "close"
+   "min": 2.0,
+   "max": 5.0,
+   "when": "far"
   }
  }
 }
