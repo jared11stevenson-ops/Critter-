@@ -9,7 +9,7 @@ permissions:
   contents: read
 env:
   GODOT_VERSION: "4.7.2"
-  GODOT_DIR: ${{ github.workspace }}/.godot-bin
+  GODOT_DIR: /home/runner/godot-bin
 jobs:
   test:
     runs-on: ubuntu-latest
