@@ -45,6 +45,7 @@ func _init() -> void:
 		"perf": await _perf(ids)
 		"ortho": await _ortho(ids, out)
 		"states": await _states(ids, out)
+		"vfx": await _vfx(ids, out)
 	quit()
 
 func _spawn(id: String) -> Node3D:
@@ -326,4 +327,51 @@ func _states(ids, out: String) -> void:
 			await _save("%s/%s_state_%d_%s.png" % [out, id, i, st_def[0]])
 			i += 1
 			_step(rig, "idle", 0, 90)
+		rig.free()
+
+## VFX gallery: every ability recipe (go + persist phases) rendered at 3 moments next to the critter; frame strips per critter.
+const VfxStage := preload("res://src/critters/vfx/vfx_stage.gd")
+const VfxRec := preload("res://src/critters/vfx/vfx_recipes.gd")
+const ABIL := {
+	"aruun": ["reaching_strike", "gravity_pull", "beetle_rage", "carry_the_bridge"],
+	"cigarra": ["premonition", "false_memory", "puppet_thought", "future_touched"],
+	"bramvex": ["ghost", "ground_prep", "detain", "day_20"],
+	"scarlith": ["ferment", "decompose", "cultivate", "aged_to_perfection"],
+	"mollusk": ["inertia_field", "borrowed_seconds", "lift", "everything_arrives"],
+	"zephyr": ["gust", "pollen", "promise", "a_promise_kept"],
+	"nyxaris": ["boundary", "venom_fang", "cocoon", "cold_archive"]}
+
+func _vfx(ids, out: String) -> void:
+	no_shadow = true
+	for id in ids:
+		var rig := _spawn(id)
+		rig.three_quarter = 0.0
+		var stage = VfxStage.new()
+		stage.manual_tick = true
+		world.add_child(stage)
+		var h: float = _ext(rig)
+		var n := 0
+		for ab in ABIL[id]:
+			var times := [0.12, 0.35, 0.7]
+			for ti in range(3):
+				stage.clear()
+				var ctx: Dictionary = {"pal": rig.palette, "facing": 1.0, "reach": 5.0, "radius": 3.0, "dur": 1.2}
+				var rec: Dictionary = VfxRec.build(ab, ctx)
+				var layers: Array = []
+				layers.append_array(rec.get("tell", []))
+				layers.append_array(rec.get("go", []))
+				if ti == 2:
+					layers.append_array(rec.get("end", []))
+				var fx = stage._make(layers, rig.position, 1.0)
+				if ti == 2:
+					rig.apply_fighter_state({"action": "ability1", "action_frame": 3, "facing": 1.0}, 1.0 / 60.0)
+				if fx != null:
+					fx.tick(times[ti] * 1.2 if ti < 2 else 0.5)
+					if ti == 0:
+						fx.age = 0.1
+						fx.tick(0.02)
+				_frame_cam(h * 1.15, 0.0, 0.3 * h / 2.0, 1.85, 0.5)
+				await _save("%s/%s_vfx_%d_%s_%d.png" % [out, id, n, ab, ti])
+			n += 1
+		stage.queue_free()
 		rig.free()

@@ -70,10 +70,14 @@ var _fidget_t := -1.0
 var _lag := {}               # part -> [angle, vel]
 var _drv_prev := {}
 var _vit := 1.0
+## Set by the BoutScene to its VfxStage (vfx/vfx_stage.gd): the rig then spawns ability VFX itself at tell / active / recovery frames.
+var vfx: Node = null
 var swarm: SwarmCtl = null
 var _dcs: Dictionary = {}      # detachable part name -> DetachCtl
 var _ghosted := -1
 var _swarm_last_action := ""
+var _vfx_frame := -1
+var _dissolve := 0.0
 var _plates := 0
 var _rage := 0.0
 var _expr_manual := ""
@@ -197,6 +201,7 @@ func apply_fighter_state(fs: Dictionary, dt: float) -> void:
 	fx.update(dt)
 	_apply_rage(float(fs.get("rage", 0.0)))
 	_apply_plates(fs)
+	_vfx_hooks(action, frame, move_id, fs)
 	_detach_logic(action, frame, dt)
 
 func _timing_for(action: String) -> Vector3i:
@@ -270,6 +275,31 @@ func detach_part(pname: String) -> DetachCtl:
 func spawn_ghost(action: String, frame: int, offset: Vector3, life: float = 0.9) -> Node3D:
 	return GhostFx.spawn(self, action, frame, offset, life)
 
+const VFX_ACTIONS := ["ability1", "ability2", "ability3", "laststand", "grab"]
+
+## Spawns this ability's VFX from real frames: tell on the first frame, go on the first active frame, end when recovery starts. Also drives the camouflage dissolve.
+func _vfx_hooks(action: String, frame: int, move_id: String, fs: Dictionary) -> void:
+	var camo := false
+	for st in fs.get("status", []):
+		var nm := str(st.get("name", st.get("status", ""))) if st is Dictionary else str(st)
+		if nm == "camo":
+			camo = true
+	_dissolve = move_toward(_dissolve, 0.62 if camo else 0.0, 0.05)
+	Toon.set_both(_mat, "dissolve", _dissolve)
+	if vfx == null or not (action in VFX_ACTIONS) or move_id == "" or frame == _vfx_frame:
+		_vfx_frame = frame
+		return
+	var s := _timing.x
+	var e := s + _timing.y
+	var style: String = str((_keys.get("style_name", "")))
+	if frame == 0 or (_vfx_frame < 0 and frame < s):
+		vfx.ability(self, move_id, "tell", style)
+	if frame == s:
+		vfx.ability(self, move_id, "go", style)
+	if frame == e:
+		vfx.ability(self, move_id, "end", style)
+	_vfx_frame = frame
+
 func _begin_action(action: String, move_id: String, fs: Dictionary) -> void:
 	_from = _cur.duplicate(true)
 	_blend_f = 0
@@ -290,6 +320,7 @@ func _begin_action(action: String, move_id: String, fs: Dictionary) -> void:
 	if action in ["strike_heavy", "strike_light", "ability1", "ability2", "grab", "laststand"]:
 		_kick(-0.0)
 	_idle_time = 0.0
+	_vfx_frame = -1
 	if action in ["ability1", "ability2", "laststand"]:
 		fx.boost_glow(1.8)
 	elif action != "idle":

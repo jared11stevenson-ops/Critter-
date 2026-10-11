@@ -6,7 +6,7 @@ extends RefCounted
 
 const PARTS := ["body", "torso", "head", "arm_f", "arm_b", "leg_f", "leg_b", "weapon", "extra"]
 const ACTIONS := ["idle", "walk", "strike_light", "strike_heavy", "guard", "parry", "grab", "dodge", "ability1",
-		"ability2", "laststand", "hit", "stagger", "ko"]
+		"ability2", "ability3", "laststand", "hit", "stagger", "knockdown", "clash", "ko"]
 const IDENT := [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0]
 
 static func K(rx: float = 0.0, ry: float = 0.0, rz: float = 0.0, px: float = 0.0, py: float = 0.0, pz: float = 0.0,
@@ -104,11 +104,12 @@ static func keys_for(action: String, cfg: Dictionary) -> Dictionary:
 			"strike_heavy": sname = "overhead"
 			"ability1": sname = "roar"
 			"ability2": sname = "thrust"
+			"ability3": sname = "stance"
 			"laststand": sname = "roar"
 			"grab": sname = "grab"
 	var amp: float = cfg.get("amp", {}).get(action, 1.0)
 	match action:
-		"strike_light", "strike_heavy", "ability1", "ability2", "laststand", "grab":
+		"strike_light", "strike_heavy", "ability1", "ability2", "ability3", "laststand", "grab":
 			var st: Dictionary = STYLES[sname]
 			for k in ["ant", "strike", "rec"]:
 				var ph: Dictionary = (st[k] as Dictionary).duplicate()

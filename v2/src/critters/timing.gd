@@ -11,7 +11,7 @@ extends RefCounted
 
 const STUB_DEFAULT := {
 	"strike_light": [12, 3, 12], "strike_heavy": [24, 5, 18], "guard": [4, 1, 6], "parry": [2, 6, 10],
-	"grab": [10, 3, 16], "dodge": [2, 10, 8], "ability1": [18, 6, 24], "ability2": [14, 6, 20],
+	"grab": [10, 3, 16], "dodge": [2, 10, 8], "ability1": [18, 6, 24], "ability2": [14, 6, 20], "ability3": [16, 6, 22],
 	"laststand": [30, 40, 20], "hit": [1, 4, 12], "stagger": [2, 30, 10], "ko": [8, 40, 60], "knockdown": [6, 30, 24], "clash": [1, 4, 10],
 }
 const STUB := {

@@ -15,7 +15,8 @@ uniform float glow_strength : hint_range(0.0, 4.0) = 1.0;   // pulsed by the rig
 uniform float flash : hint_range(0.0, 1.0) = 0.0;           // white hit flash
 uniform float invert_mode : hint_range(0.0, 1.0) = 0.0;     // impact frame: flat white critter
 uniform vec3 flash_color : source_color = vec3(1.0);
-uniform float crack_level = 0.0;                              // 0..3 shell-plate crack tiers revealed
+uniform float crack_level = 0.0;
+uniform float dissolve = 0.0;                               // camouflage: ink-dither dissolve (Bramvex Ghost)                              // 0..3 shell-plate crack tiers revealed
 uniform vec3 crack_col = vec3(1.0, 0.35, 0.15);
 uniform float silhouette : hint_range(0.0, 1.0) = 0.0;     // flat black (silhouette gate / lookdev)
 
@@ -33,6 +34,10 @@ float crack_tier(float a) {
 }
 
 void fragment() {
+	if (dissolve > 0.001) {
+		float dn = fract(sin(dot(floor(FRAGCOORD.xy / 2.0), vec2(12.9898, 78.233))) * 43758.5453);
+		if (dn < dissolve) { discard; }
+	}
 	float tier = crack_tier(v_glow);
 	if (tier > crack_level + 0.5) { discard; }
 	vec3 base = v_col;

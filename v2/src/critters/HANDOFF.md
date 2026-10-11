@@ -80,3 +80,21 @@ Budget is 20 draws / 6000 tris per critter. Two critters in a bout = 30-38 draws
 - Tell keys: `timing.gd` reads `res://data/moves/<critter>.json` (Combat Engineer layout: moves{id:{startup,active,recovery,tell_anim}}); every `tell_anim` they use (chop overhead slash_up slash_back thrust punch hook charge spin stance roar leap grab) is a PoseLib style. `knockdown` plays the KO keys (not held), `clash` plays hit keys.
 - Rig features: detachable part (`cfg.detach` + `detach_act`), MultiMesh swarm (Cigarra crown, `cfg.swarm_act`), future ghosts (`ghost_act` or event `premonition`), compel (event `compel`: eye spiral + thread), shell cracks (`fs.plates` / vitality / rage), rage aura (`fs.rage`), A-pose (`apose_deg`).
 - `v2/src/critters/tools/`: shoot.gd (modes turn actions expr ortho states lineup sil perf), make_sheets.py, export_glb.gd, fx_smoke.gd.
+
+## VFX API (for the Arena/Scene Engineer)  - v2/src/critters/vfx/
+28 bespoke ability VFX (21 abilities + 7 Last Stands), per-critter hit/block/parry/dodge/ko/teleport/summon, projectile bodies, zone/trap visuals, status visuals.
+Ink-style quads from ONE shader (`shaders/vfx.gdshader`, 26 pattern kinds); no particle systems; <= 15 quad draws alive (12 med, 8 low: `stage.quality = 0|1|2`).
+```gdscript
+const VfxStage := preload("res://src/critters/vfx/vfx_stage.gd")
+var vfx := VfxStage.new(); arena.add_child(vfx)          # one per bout; vfx.manual_tick = true if you want to pass dt = 0 during hit-stop
+rig_a.vfx = vfx; rig_b.vfx = vfx                          # rigs now spawn ability VFX THEMSELVES from real frames (tell / active frame / recovery), sized by the MoveDef hitbox reach/radius + stance frames
+# every render frame:
+for ev in sim.take_events(): vfx.event(ev, [rig_a, rig_b])   # hit block parry dodge ko teleport summon laststand tell (ev.fighter = who it is about; ev.heavy optional)
+vfx.sync(sim.state(), [rig_a, rig_b], dt)                     # persistent: zones / traps / projectiles / summons / entities arrays + fighters[i].status
+vfx.tick(dt)                                                  # only if manual_tick
+```
+- **Driven by real sim data, not decoration:** `sync` reads each entity {id, kind|type (zone trap projectile summon), owner, pos Vector2, radius, remaining|ttl|ticks_left (ticks), tag, move_id, angle}. A zone's visual diameter = 2 x its real radius and it fades when the entity disappears or its remaining ticks run out; statuses (`fighters[i].status` = names or {name, remaining}) show on the victim for their real remaining time; projectiles are re-positioned to the sim position every frame and turned to `angle`. Missing keys fall back to sensible defaults. `stage.to_world` (Callable Vector2 -> Vector3, default (x, 0, y)) maps the sim plane to your arena.
+- Ability recipes are keyed by move id (the critter prefix is stripped): reaching_strike gravity_pull beetle_rage carry_the_bridge | premonition false_memory puppet_thought future_touched | ghost ground_prep detain day_20 | ferment decompose cultivate aged_to_perfection | inertia_field borrowed_seconds lift everything_arrives | gust pollen promise a_promise_kept | boundary venom_fang cocoon cold_archive (+ permission). Unknown moves fall back to a swing-style effect via their `tell_anim`.
+- Rig-side visuals that go with them: camouflage dissolve (`status` containing `camo`), Rage aura (`fs.rage`), shell cracks (`fs.plates`), Cigarra crown swarm + threads, future ghosts, compel eye-spiral.
+- Frame strips of every ability: design/v2/sheets/vfx/<critter>_abilities.png (3 moments each). Regenerate: `shoot.gd --mode=vfx`.
+- Test: v2/tools/qa/tests/test_art_vfx.gd (every ability has a distinct recipe, per-critter flavors, draw cap).

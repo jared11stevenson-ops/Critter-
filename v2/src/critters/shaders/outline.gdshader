@@ -12,6 +12,7 @@ uniform vec3 ink : source_color = vec3(0.05, 0.03, 0.05);
 uniform float ink_mix : hint_range(0.0, 1.0) = 0.45;
 uniform float invert_mode : hint_range(0.0, 1.0) = 0.0;
 uniform float crack_level = 0.0;
+uniform float dissolve = 0.0;
 uniform float silhouette : hint_range(0.0, 1.0) = 0.0;
 
 varying vec3 v_ink;
@@ -31,5 +32,9 @@ void vertex() {
 }
 
 void fragment() {
+	if (dissolve > 0.001) {
+		float dn = fract(sin(dot(floor(FRAGCOORD.xy / 2.0), vec2(12.9898, 78.233))) * 43758.5453);
+		if (dn < dissolve) { discard; }
+	}
 	ALBEDO = mix(v_ink, vec3(0.0), max(invert_mode, silhouette));
 }
