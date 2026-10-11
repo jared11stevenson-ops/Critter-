@@ -113,6 +113,8 @@ static func start_move(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, kind:
 	if m.pressure_on_use > 0.0:
 		f.pressure = minf(float(f.T["pressure_max"]), f.pressure + m.pressure_on_use)
 	f.charge = 0
+	if m.props.get("cleanse", false):
+		Res.cleanse(sim, f)
 	if m.stamina_cost > 0.0:
 		f.sta_delay = int(R["sta_regen_delay"])
 		if f.sta <= 0.0:

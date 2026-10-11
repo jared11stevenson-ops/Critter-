@@ -19,15 +19,18 @@
  },
  "moves": {
   "light": [
-   "zephyr_light1",
-   "zephyr_light2"
+   "zephyr_flutter1",
+   "zephyr_flutter2",
+   "zephyr_flutter3"
   ],
-  "heavy": "zephyr_heavy",
-  "grab": "zephyr_grab",
-  "dodge": "zephyr_dodge",
-  "ability1": "zephyr_gust_step",
-  "ability2": "zephyr_pollen_cloud",
-  "laststand": "zephyr_promise_kept"
+  "heavy": "zephyr_delivery",
+  "grab": "zephyr_catch",
+  "dodge": "zephyr_air_dodge",
+  "ability1": "zephyr_gust",
+  "ability2": "zephyr_pollen",
+  "laststand": "zephyr_a_promise_kept",
+  "guard": "zephyr_loophole",
+  "mechanic": "zephyr_promise"
  },
  "tuning": {
   "body_radius": 0.4,
@@ -36,7 +39,9 @@
   "guard_drain": 1.0,
   "dodge_chain": 1,
   "guard_move_mult": 0.7,
-  "damage_mult": 1.239
+  "loophole_window": 5,
+  "marks_bonus": 1,
+  "damage_mult": 1.0
  },
  "ai": {
   "style": "skirmisher",
@@ -45,9 +50,9 @@
    3.4
   ],
   "ability1": {
-   "min": 2.0,
-   "max": 5.5,
-   "when": "gap"
+   "min": 0.0,
+   "max": 3.2,
+   "when": "close"
   },
   "ability2": {
    "min": 1.5,

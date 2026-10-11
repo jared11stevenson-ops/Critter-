@@ -107,4 +107,5 @@ func actionable() -> bool:
 
 ## Outgoing damage multiplier: temporary (riposte, buffs) times the critter's tuned damage_mult.
 func out_mult() -> float:
-	return dmg_mult * float(T["damage_mult"]) * (float(T["rage_dmg"]) if raging else 1.0)
+	var brew: float = 1.0 + (pressure / maxf(1.0, float(T["pressure_max"]))) * float(T["brew_bonus"])
+	return dmg_mult * float(T["damage_mult"]) * (float(T["rage_dmg"]) if raging else 1.0) * brew

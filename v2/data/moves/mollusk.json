@@ -1,71 +1,79 @@
 {
  "critter": "mollusk",
  "moves": {
-  "mollusk_light1": {
-   "name": "Shell Knock",
+  "mollusk_shell_shove1": {
+   "name": "Slow Shell Shove",
    "kind": "light",
    "tell_anim": "punch",
-   "startup": 14,
+   "startup": 16,
    "active": 3,
-   "recovery": 16,
-   "stamina_cost": 7,
-   "damage": 8.3,
-   "poise_damage": 6,
+   "recovery": 18,
+   "stamina_cost": 8,
+   "damage": 6.0,
+   "poise_damage": 14,
    "hitstun": 18,
-   "blockstun": 10,
-   "knockback": 0.3,
-   "hitstop": 4,
-   "hitbox": {
-    "reach": 2.0,
-    "arc": 40
-   },
-   "chain": "mollusk_light2",
-   "cancel_from": 16,
-   "track": 6
-  },
-  "mollusk_light2": {
-   "name": "Shell Bump",
-   "kind": "light",
-   "tell_anim": "slash_back",
-   "startup": 13,
-   "active": 3,
-   "recovery": 20,
-   "stamina_cost": 7,
-   "damage": 8.3,
-   "poise_damage": 6,
-   "hitstun": 18,
-   "blockstun": 10,
+   "blockstun": 11,
    "knockback": 0.4,
    "hitstop": 4,
    "hitbox": {
-    "reach": 2.1,
-    "arc": 40
+    "reach": 2.0,
+    "arc": 70
    },
-   "track": 5
+   "track": 5,
+   "lore_source": "lore:body and shell; deliberate heavy body strikes",
+   "chain": "mollusk_shell_shove2",
+   "cancel_from": 18
   },
-  "mollusk_heavy": {
-   "name": "Tide Slam",
-   "kind": "heavy",
-   "tell_anim": "overhead",
-   "startup": 28,
-   "active": 4,
-   "recovery": 30,
-   "stamina_cost": 16,
-   "feint": true,
-   "track": 10,
-   "damage": 23.3,
+  "mollusk_shell_shove2": {
+   "name": "Slow Shell Shove II",
+   "kind": "light",
+   "tell_anim": "slash_back",
+   "startup": 15,
+   "active": 3,
+   "recovery": 22,
+   "stamina_cost": 8,
+   "damage": 6.0,
    "poise_damage": 14,
-   "hitstun": 30,
-   "blockstun": 16,
-   "knockback": 0.8,
-   "hitstop": 8,
+   "hitstun": 18,
+   "blockstun": 11,
+   "knockback": 0.5,
+   "hitstop": 4,
    "hitbox": {
-    "reach": 2.3,
-    "arc": 40
-   }
+    "reach": 2.1,
+    "arc": 70
+   },
+   "track": 5,
+   "lore_source": "lore:body and shell; deliberate heavy body strikes"
   },
-  "mollusk_grab": {
-   "name": "Shell Bash",
+  "mollusk_gathering_blow": {
+   "name": "Gathering Blow",
+   "kind": "heavy",
+   "tell_anim": "charge",
+   "startup": 36,
+   "active": 4,
+   "recovery": 32,
+   "stamina_cost": 18,
+   "feint": true,
+   "track": 14,
+   "charge_max": 40,
+   "charge_at": 22,
+   "damage": 16.0,
+   "poise_damage": 16,
+   "hitstun": 32,
+   "blockstun": 16,
+   "knockback": 0.9,
+   "hitstop": 9,
+   "hitbox": {
+    "reach": 2.2,
+    "arc": 60
+   },
+   "props": {
+    "charge_gain": 1.6
+   },
+   "lore_source": "lore:inertia accumulates; the heavy keeps growing while held"
+  },
+  "mollusk_lift": {
+   "name": "Lift",
    "kind": "grab",
    "tell_anim": "grab",
    "startup": 18,
@@ -73,18 +81,19 @@
    "recovery": 26,
    "stamina_cost": 12,
    "track": 8,
-   "damage": 8.3,
-   "poise_damage": 28,
+   "damage": 9.0,
+   "poise_damage": 22,
    "hitstop": 8,
    "grab": true,
    "throw_dist": 1.0,
    "throw_stun": 10,
    "hitbox": {
-    "reach": 1.3,
+    "reach": 1.4,
     "arc": 110
-   }
+   },
+   "lore_source": "lore:love of forklifts; hoist and set down"
   },
-  "mollusk_dodge": {
+  "mollusk_shell_slide": {
    "name": "Shell Slide",
    "kind": "dodge",
    "tell_anim": "leap",
@@ -103,45 +112,54 @@
      "dist": 1.8,
      "dir": "input"
     }
-   ]
+   ],
+   "lore_source": "lore:slow heavy body; shell slide"
   },
-  "mollusk_shell_brace": {
-   "name": "Shell Brace",
+  "mollusk_inertia_field": {
+   "name": "Inertia Field",
    "kind": "ability",
    "tell_anim": "stance",
-   "startup": 8,
-   "active": 70,
-   "recovery": 24,
-   "stamina_cost": 10,
+   "startup": 14,
+   "active": 1,
+   "recovery": 20,
+   "stamina_cost": 14,
    "cooldown": 600,
-   "move_mult": 0.0,
-   "stance": {
-    "status": "wall",
-    "from": 8,
-    "frames": 70
-   }
+   "spawns": [
+    {
+     "at": 14,
+     "type": "zone",
+     "place": "self",
+     "radius": 2.8,
+     "life": 300,
+     "affect": "enemy",
+     "tag": "inertia",
+     "max": 1,
+     "buff": {
+      "slow": 1,
+      "inertia": 1
+     }
+    }
+   ],
+   "lore_source": "lore:L525 resistance to change; actions lengthen, impacts stay incomplete"
   },
-  "mollusk_delay": {
-   "name": "Delay",
+  "mollusk_borrowed_seconds": {
+   "name": "Borrowed Seconds",
    "kind": "ability",
    "tell_anim": "stance",
    "startup": 6,
-   "active": 50,
-   "recovery": 20,
+   "active": 1,
+   "recovery": 16,
    "stamina_cost": 10,
-   "cooldown": 480,
-   "armor": 0.8,
-   "armor_frames": [
-    0,
-    56
-   ],
-   "props": {
-    "store_ratio": 1.0,
-    "release": "debt"
-   }
+   "cooldown": 900,
+   "stance": {
+    "status": "borrowed",
+    "from": 6,
+    "frames": 240
+   },
+   "lore_source": "lore:Bk XIV every second he creates is a debt"
   },
   "mollusk_everything_arrives": {
-   "name": "Everything Arrives At Once",
+   "name": "Everything Arrives at Once",
    "kind": "laststand",
    "tell_anim": "stance",
    "startup": 80,
@@ -168,7 +186,26 @@
     "store_ratio": 1.0,
     "stored_mult": 1.2,
     "release_debt": true
-   }
+   },
+   "lore_source": "lore:delayed effects eventually resolve; releases every held impact"
+  },
+  "mollusk_hold": {
+   "name": "Hold",
+   "kind": "resource",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "lore:L525 an impact can remain incomplete; blocked force is delayed, not erased"
+  },
+  "mollusk_shell_memory": {
+   "name": "Shell Memory",
+   "kind": "resource",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "lore:shell records journeys; each bout survived adds a carved mark"
   }
  }
 }

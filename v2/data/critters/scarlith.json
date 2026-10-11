@@ -19,39 +19,46 @@
  },
  "moves": {
   "light": [
-   "scarlith_light1",
-   "scarlith_light2"
+   "scarlith_culture_jab1",
+   "scarlith_culture_jab2"
   ],
-  "heavy": "scarlith_heavy",
-  "grab": "scarlith_grab",
-  "dodge": "scarlith_dodge",
-  "ability1": "scarlith_rot_burst",
-  "ability2": "scarlith_spoil_zone",
-  "laststand": "scarlith_aged_to_perfection"
+  "heavy": "scarlith_aged_smash",
+  "grab": "scarlith_barter",
+  "dodge": "scarlith_hop_clear",
+  "ability1": "scarlith_ferment",
+  "ability2": "scarlith_decompose",
+  "laststand": "scarlith_aged_to_perfection",
+  "resource": "scarlith_cultivate",
+  "guard": "scarlith_rind_guard",
+  "passive": "scarlith_waste_not"
  },
  "tuning": {
   "body_radius": 0.5,
-  "parry_blast": 6.0,
-  "pressure_decay": 3.0,
+  "pressure_decay": 2.0,
+  "pressure_max": 100.0,
   "block_chip": 0.25,
   "block_poise": 0.4,
-  "damage_mult": 0.869
+  "parry_spoil": 1,
+  "waste_not": 0.5,
+  "cultivate_interval": 300,
+  "brew_bonus": 0.3,
+  "damage_mult": 1.0
  },
  "ai": {
   "style": "burst",
-  "ability1": {
-   "min": 0.0,
-   "max": 2.8,
-   "when": "pressure"
-  },
-  "ability2": {
-   "min": 1.0,
-   "max": 4.0,
-   "when": "any"
-  },
   "range": [
    1.7,
    2.8
-  ]
+  ],
+  "ability1": {
+   "min": 1.5,
+   "max": 4.2,
+   "when": "any"
+  },
+  "ability2": {
+   "min": 1.5,
+   "max": 3.0,
+   "when": "any"
+  }
  }
 }

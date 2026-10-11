@@ -145,6 +145,8 @@
   "rage_idle_gap": 3.0,
   "rage_end_prob": 0.05,
   "volley_lead": 6,
-  "premonition_dodge": 0.8
+  "premonition_dodge": 0.8,
+  "counter_weight": 0.7,
+  "ls_idle_range": 4.5
  }
 }

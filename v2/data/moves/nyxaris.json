@@ -1,93 +1,105 @@
 {
  "critter": "nyxaris",
  "moves": {
-  "nyxaris_light1": {
-   "name": "Fang Snap",
+  "nyxaris_silk_lash1": {
+   "name": "Silk Lash",
    "kind": "light",
    "tell_anim": "punch",
    "startup": 15,
    "active": 3,
    "recovery": 18,
    "stamina_cost": 9,
-   "damage": 9.5,
+   "damage": 11.0,
    "poise_damage": 10,
    "hitstun": 22,
-   "blockstun": 12,
+   "blockstun": 11,
    "knockback": 0.4,
-   "hitstop": 5,
+   "hitstop": 4,
    "hitbox": {
-    "reach": 1.3,
-    "arc": 100
+    "reach": 2.0,
+    "arc": 80
    },
-   "chain": "nyxaris_light2",
-   "cancel_from": 18,
-   "track": 6
+   "track": 5,
+   "lore_source": "lore:silk can be bridges, traps...; whip-like lashes",
+   "chain": "nyxaris_silk_lash2",
+   "cancel_from": 18
   },
-  "nyxaris_light2": {
-   "name": "Silk Lash",
+  "nyxaris_silk_lash2": {
+   "name": "Silk Lash II",
    "kind": "light",
    "tell_anim": "slash_back",
    "startup": 15,
    "active": 3,
    "recovery": 22,
    "stamina_cost": 9,
-   "damage": 10.2,
+   "damage": 12.0,
    "poise_damage": 10,
    "hitstun": 24,
-   "blockstun": 12,
+   "blockstun": 11,
    "knockback": 0.6,
-   "hitstop": 5,
+   "hitstop": 4,
    "hitbox": {
-    "reach": 1.4,
-    "arc": 100
+    "reach": 2.1,
+    "arc": 80
    },
-   "track": 5
+   "track": 5,
+   "lore_source": "lore:silk can be bridges, traps...; whip-like lashes"
   },
-  "nyxaris_heavy": {
-   "name": "Venom Crush",
+  "nyxaris_frost_lance": {
+   "name": "Frost Lance",
    "kind": "heavy",
-   "tell_anim": "overhead",
-   "startup": 30,
+   "tell_anim": "thrust",
+   "startup": 32,
    "active": 4,
    "recovery": 30,
-   "stamina_cost": 22,
+   "stamina_cost": 20,
    "feint": true,
    "track": 12,
-   "damage": 23.9,
-   "poise_damage": 24,
-   "hitstun": 40,
-   "blockstun": 20,
+   "damage": 24.0,
+   "poise_damage": 22,
+   "hitstun": 38,
+   "blockstun": 18,
    "knockback": 1.0,
    "hitstop": 10,
    "hitbox": {
-    "reach": 1.5,
-    "arc": 120
+    "reach": 2.6,
+    "arc": 40
    },
    "props": {
     "guard_crush": true
-   }
+   },
+   "on_hit": {
+    "slow": 120
+   },
+   "lore_source": "lore:unusually cold-reactive silk; slow lance that chills on hit"
   },
-  "nyxaris_grab": {
-   "name": "Cocoon Throw",
+  "nyxaris_cocoon": {
+   "name": "Cocoon",
    "kind": "grab",
    "tell_anim": "grab",
    "startup": 14,
    "active": 4,
    "recovery": 26,
    "stamina_cost": 12,
+   "reserve_cost": 15,
    "track": 8,
-   "damage": 15.5,
+   "damage": 18.0,
    "poise_damage": 14,
    "hitstop": 9,
    "grab": true,
-   "throw_dist": 3.2,
+   "command": true,
+   "throw_dist": 3.4,
    "throw_stun": 10,
    "hitbox": {
-    "reach": 2.2,
-    "arc": 150
-   }
+    "reach": 2.4,
+    "arc": 120
+   },
+   "on_hit": {
+    "root": 30
+   },
+   "lore_source": "lore:silk as trap; command grab that wraps and drags the target"
   },
-  "nyxaris_dodge": {
+  "nyxaris_silk_hop": {
    "name": "Silk Hop",
    "kind": "dodge",
    "tell_anim": "leap",
@@ -106,85 +118,211 @@
      "dist": 2.0,
      "dir": "input"
     }
-   ]
+   ],
+   "lore_source": "lore:patient weaver; silk-line hop"
   },
-  "nyxaris_frost_bind": {
-   "name": "Frost Bind",
-   "kind": "ability",
-   "tell_anim": "grab",
-   "startup": 22,
-   "active": 3,
-   "recovery": 40,
-   "stamina_cost": 16,
-   "cooldown": 480,
-   "track": 8,
-   "damage": 22.1,
-   "poise_damage": 20,
-   "hitstop": 12,
-   "grab": true,
-   "command": true,
-   "throw_dist": 2.2,
-   "throw_stun": 14,
-   "kd_frames": 60,
-   "hitbox": {
-    "reach": 1.9,
-    "arc": 100
-   },
-   "on_hit": {
-    "root": 45
-   }
-  },
-  "nyxaris_silk_pull": {
-   "name": "Silk Pull",
+  "nyxaris_boundary": {
+   "name": "Boundary",
    "kind": "ability",
    "tell_anim": "hook",
-   "startup": 18,
+   "startup": 16,
+   "active": 1,
+   "recovery": 22,
+   "stamina_cost": 10,
+   "reserve_cost": 35,
+   "cooldown": 540,
+   "spawns": [
+    {
+     "at": 16,
+     "type": "zone",
+     "place": "front",
+     "dist": 3.4,
+     "lateral": -2.0,
+     "radius": 0.85,
+     "life": 900,
+     "once": true,
+     "arm": 20,
+     "tag": "boundary",
+     "max": 5,
+     "on_enter": {
+      "damage": 4.0,
+      "root": 50,
+      "slow": 120,
+      "poise": 6
+     }
+    },
+    {
+     "at": 16,
+     "type": "zone",
+     "place": "front",
+     "dist": 3.4,
+     "lateral": -1.0,
+     "radius": 0.85,
+     "life": 900,
+     "once": true,
+     "arm": 20,
+     "tag": "boundary",
+     "max": 5,
+     "on_enter": {
+      "damage": 4.0,
+      "root": 50,
+      "slow": 120,
+      "poise": 6
+     }
+    },
+    {
+     "at": 16,
+     "type": "zone",
+     "place": "front",
+     "dist": 3.4,
+     "lateral": 0.0,
+     "radius": 0.85,
+     "life": 900,
+     "once": true,
+     "arm": 20,
+     "tag": "boundary",
+     "max": 5,
+     "on_enter": {
+      "damage": 4.0,
+      "root": 50,
+      "slow": 120,
+      "poise": 6
+     }
+    },
+    {
+     "at": 16,
+     "type": "zone",
+     "place": "front",
+     "dist": 3.4,
+     "lateral": 1.0,
+     "radius": 0.85,
+     "life": 900,
+     "once": true,
+     "arm": 20,
+     "tag": "boundary",
+     "max": 5,
+     "on_enter": {
+      "damage": 4.0,
+      "root": 50,
+      "slow": 120,
+      "poise": 6
+     }
+    },
+    {
+     "at": 16,
+     "type": "zone",
+     "place": "front",
+     "dist": 3.4,
+     "lateral": 2.0,
+     "radius": 0.85,
+     "life": 900,
+     "once": true,
+     "arm": 20,
+     "tag": "boundary",
+     "max": 5,
+     "on_enter": {
+      "damage": 4.0,
+      "root": 50,
+      "slow": 120,
+      "poise": 6
+     }
+    }
+   ],
+   "lore_source": "lore:patient until a boundary is crossed; territorial markers"
+  },
+  "nyxaris_venom_fang": {
+   "name": "Venom Fang",
+   "kind": "ability",
+   "tell_anim": "thrust",
+   "startup": 14,
    "active": 3,
-   "recovery": 26,
-   "stamina_cost": 12,
-   "cooldown": 300,
-   "track": 8,
-   "damage": 6.0,
-   "poise_damage": 8,
-   "hitstun": 30,
-   "blockstun": 12,
-   "hitstop": 5,
+   "recovery": 22,
+   "stamina_cost": 10,
+   "reserve_cost": 10,
+   "cooldown": 120,
+   "track": 6,
+   "damage": 3.0,
+   "poise_damage": 4,
+   "hitstun": 18,
+   "blockstun": 10,
+   "hitstop": 4,
    "hitbox": {
-    "reach": 6.0,
-    "arc": 20
+    "reach": 1.8,
+    "arc": 60
    },
    "on_hit": {
-    "pull_to": 1.2,
-    "slow": 60
-   }
+    "dot": {
+     "name": "venom",
+     "life": 300,
+     "dps": 1.8,
+     "max": 5
+    }
+   },
+   "lore_source": "lore:Venom; poison damage-over-time with a visible ticking stack"
+  },
+  "nyxaris_permission": {
+   "name": "Who Gave You Permission?",
+   "kind": "ability",
+   "tell_anim": "stance",
+   "startup": 4,
+   "active": 36,
+   "recovery": 16,
+   "stamina_cost": 8,
+   "reserve_cost": 15,
+   "cooldown": 480,
+   "stance": {
+    "status": "permission",
+    "from": 4,
+    "frames": 36
+   },
+   "lore_source": "lore quote: Nyxaris v. Helix, 'Who gave you permission?'"
   },
   "nyxaris_cold_archive": {
    "name": "Cold Archive",
    "kind": "laststand",
-   "tell_anim": "grab",
-   "startup": 40,
-   "active": 4,
-   "recovery": 50,
-   "armor": 0.8,
-   "armor_frames": [
+   "tell_anim": "roar",
+   "startup": 30,
+   "active": 1,
+   "recovery": 20,
+   "iframes": [
     0,
-    40
+    30
    ],
-   "damage": 59.6,
-   "poise_damage": 30,
-   "hitstop": 20,
-   "grab": true,
-   "command": true,
-   "throw_dist": 4.5,
-   "throw_stun": 20,
-   "kd_frames": 70,
-   "hitbox": {
-    "reach": 2.4,
-    "arc": 120
-   },
-   "on_hit": {
-    "root": 90
-   }
+   "spawns": [
+    {
+     "at": 30,
+     "type": "zone",
+     "place": "self",
+     "radius": 50,
+     "life": 420,
+     "dps": 4.0,
+     "affect": "both",
+     "tag": "archive",
+     "buff": {
+      "slow": 1,
+      "archive": 1
+     }
+    }
+   ],
+   "lore_source": "lore:Bk XIV Cold Archive, frozen silk preserving testimony"
+  },
+  "nyxaris_silk_reserve": {
+   "name": "Silk Reserve",
+   "kind": "resource",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "lore:Bk III s12 cannot endlessly generate cryogenic silk without replenishing minerals"
+  },
+  "nyxaris_silk_screen": {
+   "name": "Silk Screen",
+   "kind": "resource",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "lore:silk as insulation; woven barrier block"
   }
  }
 }

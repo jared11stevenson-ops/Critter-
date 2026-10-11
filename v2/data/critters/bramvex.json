@@ -19,23 +19,27 @@
  },
  "moves": {
   "light": [
-   "bramvex_light1",
-   "bramvex_light2"
+   "bramvex_diplomacy1",
+   "bramvex_diplomacy2"
   ],
-  "heavy": "bramvex_heavy",
-  "grab": "bramvex_grab",
-  "dodge": "bramvex_dodge",
-  "ability1": "bramvex_ghost_thorn",
-  "ability2": "bramvex_thorn_line",
-  "laststand": "bramvex_hold_the_line"
+  "heavy": "bramvex_final_offer",
+  "grab": "bramvex_detain",
+  "dodge": "bramvex_cigarra_hole",
+  "ability1": "bramvex_ghost",
+  "ability2": "bramvex_ground_prep",
+  "laststand": "bramvex_day_20",
+  "resource": "bramvex_observation",
+  "guard": "bramvex_stand_firm"
  },
  "tuning": {
   "body_radius": 0.5,
   "block_chip": 0.3,
   "block_poise": 0.5,
   "guard_drain": 0.6,
-  "parry_window": 12,
-  "damage_mult": 0.773
+  "parry_window": 10,
+  "intel_gain": 1.0,
+  "dodge_chain": 1,
+  "damage_mult": 1.0
  },
  "ai": {
   "style": "zoner",

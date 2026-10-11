@@ -56,8 +56,10 @@ func _data(fails: Array) -> void:
 				fails.append("data: move %s bad frames" % mid)
 			if m.kind == "heavy" and m.startup < 24:
 				fails.append("data: heavy %s startup %d < 24" % [mid, m.startup])
-			if m.kind == "light" and mid != c.move_ids.get("ability1_counter", "") and (m.startup < 10 or m.startup > 16):
-				fails.append("data: light %s startup %d outside 10-16" % [mid, m.startup])
+			if m.kind == "light" and mid in c.move_ids["light"]:
+				var last: bool = mid == c.move_ids["light"][c.move_ids["light"].size() - 1] and c.move_ids["light"].size() > 1
+				if m.startup < 10 or m.startup > (18 if last else 16):
+					fails.append("data: light %s startup %d outside 10-16 (finisher 18)" % [mid, m.startup])
 		if c.moves.size() == 0:
 			fails.append("data: no moves for " + id)
 		for mid in c.moves.keys():
@@ -123,7 +125,7 @@ func _last_stand(fails: Array) -> void:
 	var both := func(i: CombatInput) -> void:
 		i.ability1 = true
 		i.ability2 = true
-	var sim := U.make("cigarra", "aruun", "ring", 1, 5)
+	var sim := U.make("zephyr", "aruun", "ring", 1, 5)
 	U.face_off(sim, 3.0)
 	var evs := U.run(sim, 20, {2: both})
 	if U.count(evs, "laststand") != 0:
@@ -143,14 +145,14 @@ func _last_stand(fails: Array) -> void:
 		fails.append("laststand: used flag not set")
 
 func _clash(fails: Array) -> void:
-	var sim := U.make("cigarra", "cigarra", "ring", 1, 5)
+	var sim := U.make("zephyr", "zephyr", "ring", 1, 5)
 	U.face_off(sim, 1.5)
 	var evs := U.run(sim, 20, {1: _tap}, {1: _tap})
 	if U.count(evs, "clash") < 2 or U.count(evs, "hit") != 0:
 		fails.append("clash: same-tick strikes should clash with no damage (clash=%d hit=%d)" % [U.count(evs, "clash"), U.count(evs, "hit")])
 
 func _chain_and_hitstop(fails: Array) -> void:
-	var sim := U.make("cigarra", "aruun", "ring", 1, 5)
+	var sim := U.make("zephyr", "aruun", "ring", 1, 5)
 	U.face_off(sim, 1.8)
 	var evs := U.run(sim, 40, {1: _tap, 12: _tap, 25: _tap})
 	var h := U.first(evs, "hit", 1)
@@ -158,12 +160,12 @@ func _chain_and_hitstop(fails: Array) -> void:
 		fails.append("hitstop: hit event must carry hitstop frames")
 	var tells := 0
 	for e in evs:
-		if e["type"] == "tell" and str(e["move_id"]).begins_with("cigarra_light"):
+		if e["type"] == "tell" and str(e["move_id"]).begins_with("zephyr_flutter"):
 			tells += 1
 	if tells < 2:
 		fails.append("chain: tapping again after a hit should chain the next light (tells=%d)" % tells)
 	# hit-stop freezes the simulation: frame counter pauses while tick advances
-	var sim2 := U.make("cigarra", "aruun", "ring", 1, 5)
+	var sim2 := U.make("zephyr", "aruun", "ring", 1, 5)
 	U.face_off(sim2, 1.8)
 	U.run(sim2, 11, {1: _tap})
 	var f0 := sim2.frame

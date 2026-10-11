@@ -103,6 +103,15 @@ static func steal_buff(sim: CombatSim, thief: Fighter, victim: Fighter) -> void:
 			sim.emit("steal", thief.idx, name, victim.pos, 0.0)
 			return
 
+## Day 20: clears every debuff, DOT and compulsion.
+static func cleanse(sim: CombatSim, f: Fighter) -> void:
+	for k in sim.R["cleanse_statuses"]:
+		f.st.erase(k)
+	f.dots.clear()
+	if not f.compel.is_empty():
+		sim.mind.end_compel(sim, f)
+	sim.emit("cleanse", f.idx, "", f.pos, 0.0)
+
 # --- ticking ---------------------------------------------------------------------
 static func tick(sim: CombatSim, f: Fighter) -> void:
 	var R: Dictionary = sim.R

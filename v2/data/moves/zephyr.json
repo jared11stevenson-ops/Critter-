@@ -1,71 +1,118 @@
 {
  "critter": "zephyr",
  "moves": {
-  "zephyr_light1": {
-   "name": "Needle Jab",
+  "zephyr_flutter1": {
+   "name": "Flutter Strike",
    "kind": "light",
    "tell_anim": "thrust",
-   "startup": 11,
+   "startup": 10,
    "active": 3,
-   "recovery": 12,
+   "recovery": 11,
    "stamina_cost": 6,
-   "damage": 6.8,
+   "damage": 6.0,
    "poise_damage": 5,
-   "hitstun": 18,
-   "blockstun": 10,
+   "hitstun": 16,
+   "blockstun": 11,
    "knockback": 0.3,
-   "hitstop": 3,
+   "hitstop": 4,
    "hitbox": {
     "reach": 2.6,
     "arc": 50
    },
-   "chain": "zephyr_light2",
-   "cancel_from": 13,
-   "track": 5
+   "track": 5,
+   "lore_source": "lore:Motion; very fast strikes from hover",
+   "chain": "zephyr_flutter2",
+   "cancel_from": 12
   },
-  "zephyr_light2": {
-   "name": "Needle Flick",
+  "zephyr_flutter2": {
+   "name": "Flutter Strike II",
    "kind": "light",
    "tell_anim": "thrust",
-   "startup": 11,
+   "startup": 10,
    "active": 3,
-   "recovery": 16,
+   "recovery": 11,
    "stamina_cost": 6,
-   "damage": 6.8,
+   "damage": 6.0,
    "poise_damage": 5,
-   "hitstun": 18,
-   "blockstun": 10,
-   "knockback": 0.5,
-   "hitstop": 3,
+   "hitstun": 16,
+   "blockstun": 11,
+   "knockback": 0.3,
+   "hitstop": 4,
    "hitbox": {
     "reach": 2.7,
     "arc": 50
    },
-   "track": 5
+   "track": 5,
+   "lore_source": "lore:Motion; very fast strikes from hover",
+   "chain": "zephyr_flutter3",
+   "cancel_from": 12
   },
-  "zephyr_heavy": {
-   "name": "Wing Cleave",
+  "zephyr_flutter3": {
+   "name": "Flutter Side-Step",
+   "kind": "light",
+   "tell_anim": "slash_back",
+   "startup": 11,
+   "active": 3,
+   "recovery": 16,
+   "stamina_cost": 6,
+   "damage": 7.0,
+   "poise_damage": 6,
+   "hitstun": 18,
+   "blockstun": 11,
+   "knockback": 0.5,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 2.7,
+    "arc": 60
+   },
+   "track": 5,
+   "lore_source": "lore:Motion; ends with a side step",
+   "motion": [
+    {
+     "at": 16,
+     "len": 8,
+     "dist": 1.4,
+     "dir": "side"
+    }
+   ]
+  },
+  "zephyr_delivery": {
+   "name": "Delivery",
    "kind": "heavy",
-   "tell_anim": "slash_up",
-   "startup": 24,
-   "active": 4,
+   "tell_anim": "charge",
+   "startup": 26,
+   "active": 8,
    "recovery": 26,
    "stamina_cost": 16,
    "feint": true,
    "track": 10,
-   "damage": 20.2,
+   "damage": 18.0,
    "poise_damage": 12,
    "hitstun": 30,
    "blockstun": 16,
    "knockback": 1.0,
    "hitstop": 7,
    "hitbox": {
-    "reach": 3.0,
-    "arc": 90
-   }
+    "reach": 1.8,
+    "arc": 100
+   },
+   "motion": [
+    {
+     "at": 22,
+     "len": 12,
+     "dist": 6.0,
+     "dir": "fwd"
+    }
+   ],
+   "promise": {
+    "bonus": 1.35,
+    "refund": 18,
+    "penalty": 16
+   },
+   "lore_source": "lore:courier, crossing spaces quickly; a declared Promise (Promise Law)"
   },
-  "zephyr_grab": {
-   "name": "Dive Snatch",
+  "zephyr_catch": {
+   "name": "Catch",
    "kind": "grab",
    "tell_anim": "grab",
    "startup": 14,
@@ -73,14 +120,14 @@
    "recovery": 28,
    "stamina_cost": 12,
    "track": 6,
-   "damage": 12.2,
+   "damage": 9.0,
    "poise_damage": 8,
    "hitstop": 6,
    "grab": true,
-   "throw_dist": 1.6,
+   "throw_dist": 3.6,
    "throw_stun": 6,
    "hitbox": {
-    "reach": 1.5,
+    "reach": 1.6,
     "arc": 90
    },
    "motion": [
@@ -90,9 +137,10 @@
      "dist": 1.4,
      "dir": "fwd"
     }
-   ]
+   ],
+   "lore_source": "lore:seizes in mid-air and releases for a ring-out"
   },
-  "zephyr_dodge": {
+  "zephyr_air_dodge": {
    "name": "Air Dodge",
    "kind": "dodge",
    "tell_anim": "leap",
@@ -112,44 +160,43 @@
      "dir": "input"
     }
    ],
+   "lore_source": "lore:hummingbird-hawk-moth hover; crossing spaces is joy",
    "cancel_from": 8,
    "chain_on": "always"
   },
-  "zephyr_gust_step": {
-   "name": "Gust Step",
+  "zephyr_gust": {
+   "name": "Gust",
    "kind": "ability",
-   "tell_anim": "leap",
-   "startup": 10,
-   "active": 3,
-   "recovery": 16,
+   "tell_anim": "roar",
+   "startup": 16,
+   "active": 4,
+   "recovery": 24,
    "stamina_cost": 12,
-   "cooldown": 300,
-   "iframes": [
-    0,
-    8
-   ],
-   "damage": 11.0,
-   "poise_damage": 9,
-   "hitstun": 22,
-   "blockstun": 12,
-   "knockback": 0.6,
+   "cooldown": 360,
+   "track": 8,
+   "damage": 2.0,
+   "poise_damage": 6,
+   "hitstun": 20,
+   "blockstun": 8,
+   "knockback": 3.4,
    "hitstop": 5,
    "hitbox": {
-    "reach": 2.4,
-    "arc": 140
+    "reach": 3.6,
+    "arc": 110
    },
-   "motion": [
+   "props": {
+    "unparryable": true
+   },
+   "spawns": [
     {
-     "at": 0,
-     "len": 10,
-     "dist": 4.5,
-     "dir": "to_target",
-     "gap": 0.3
+     "at": 16,
+     "type": "gust"
     }
-   ]
+   ],
+   "lore_source": "lore:Atmospheric Disturbance; knocks back, pushes projectiles, ring-out"
   },
-  "zephyr_pollen_cloud": {
-   "name": "Pollen Cloud",
+  "zephyr_pollen": {
+   "name": "Pollen",
    "kind": "ability",
    "tell_anim": "roar",
    "startup": 16,
@@ -170,12 +217,13 @@
      "max": 1,
      "buff": {
       "slow": 1,
-      "confuse": 1
+      "mark": 240
      }
     }
-   ]
+   ],
+   "lore_source": "lore:Pollination; a cloud marks the enemy (slow, bonus damage from Zephyr)"
   },
-  "zephyr_promise_kept": {
+  "zephyr_a_promise_kept": {
    "name": "A Promise Kept",
    "kind": "laststand",
    "tell_anim": "leap",
@@ -186,7 +234,7 @@
     0,
     108
    ],
-   "damage": 10.8,
+   "damage": 8.0,
    "poise_damage": 6,
    "hitstun": 14,
    "blockstun": 8,
@@ -196,13 +244,19 @@
     "arc": 360
    },
    "props": {
-    "unblockable": true
+    "unblockable": true,
+    "ignore_iframes": true
    },
    "rehit": {
     "every": 20,
     "count": 4,
     "from": 18,
     "len": 6
+   },
+   "promise": {
+    "bonus": 1.0,
+    "refund": 0,
+    "penalty": 0
    },
    "motion": [
     {
@@ -237,7 +291,26 @@
      "gap": -1.2,
      "nocollide": true
     }
-   ]
+   ],
+   "lore_source": "lore:promises are sacred; a declared sequence nothing can interrupt or dodge"
+  },
+  "zephyr_loophole": {
+   "name": "Loophole",
+   "kind": "resource",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "lore:loves loopholes; a freshly raised guard slips through a strike"
+  },
+  "zephyr_promise": {
+   "name": "Promise",
+   "kind": "resource",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "lore:Promise Law, wording matters; follow through for bonus, break it and pay"
   }
  }
 }

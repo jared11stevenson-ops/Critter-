@@ -126,7 +126,9 @@
   "marks_armor": 0,
   "cultivate_interval": 0,
   "guard_delay": 0.0,
-  "intel_gain": 0.0
+  "intel_gain": 0.0,
+  "brew_bonus": 0.0,
+  "marks_bonus": 0.0
  },
  "tick_rate": 60,
  "input_deadzone": 0.2,
@@ -210,5 +212,18 @@
  "ripen_frames": 90,
  "ripen_burst_mult": 1.0,
  "borrowed_window": 6,
- "morrow_counter_cd": 60
+ "morrow_counter_cd": 60,
+ "cleanse_statuses": [
+  "slowed",
+  "rooted",
+  "burning",
+  "confused",
+  "compelled",
+  "marked",
+  "rotted",
+  "inertia",
+  "owed",
+  "spoiled"
+ ],
+ "random_dodge_arc": 70.0
 }

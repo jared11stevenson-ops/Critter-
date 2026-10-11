@@ -37,7 +37,7 @@ func _fuzz_inputs(rng: RandomNumberGenerator, i: CombatInput) -> void:
 	i.ability2 = r > 0.9 and r < 0.93
 
 func _determinism(fails: Array) -> void:
-	for pair in [["aruun", "cigarra"], ["bramvex", "scarlith"], ["mollusk", "zephyr"], ["nyxaris", "aruun"]]:
+	for pair in [["aruun", "zephyr"], ["bramvex", "scarlith"], ["mollusk", "zephyr"], ["nyxaris", "aruun"]]:
 		var hashes: Array = []
 		for run_i in 2:
 			var sim := U.make(pair[0], pair[1], "ring", 1, 1234)
@@ -57,29 +57,29 @@ func _determinism(fails: Array) -> void:
 
 func _triangle(fails: Array) -> void:
 	# Strike beats Grab (faster startup): Cigarra light (10f) vs Aruun grab (18f) started together.
-	var sim := U.make("cigarra", "aruun")
+	var sim := U.make("zephyr", "aruun")
 	U.face_off(sim, 1.8)
 	var evs := U.run(sim, 40, {1: _tap}, {1: _grab})
 	if U.count(evs, "hit", 1) < 1 or U.count(evs, "grab", 0) > 0:
 		fails.append("triangle: strike should beat slower grab (hit_on_aruun=%d grab_on_cigarra=%d)" % [U.count(evs, "hit", 1), U.count(evs, "grab", 0)])
 	# Strike beats Grab on the same active tick: Aruun grab starts 8 ticks earlier (active at af 18 == tick 19; light active tick 19).
-	sim = U.make("cigarra", "aruun")
+	sim = U.make("zephyr", "aruun")
 	U.face_off(sim, 1.8)
-	evs = U.run(sim, 40, {9: _tap}, {1: _grab})
+	evs = U.run(sim, 40, {11: _tap}, {1: _grab})
 	if U.count(evs, "hit", 1) < 1 or U.count(evs, "grab", 0) > 0:
 		fails.append("triangle: same-tick strike must beat grab")
 	# Guard beats Strike
-	sim = U.make("cigarra", "aruun")
+	sim = U.make("zephyr", "aruun")
 	U.face_off(sim, 1.8)
 	var hold_guard := func(i: CombatInput, t: int) -> void: i.guard = true
 	evs = U.run(sim, 14, {20: _tap}, {}, Callable(), hold_guard)
-	sim = U.make("cigarra", "aruun")
+	sim = U.make("zephyr", "aruun")
 	U.face_off(sim, 1.8)
 	evs = U.run(sim, 50, {30: _tap}, {}, Callable(), hold_guard)
 	if U.count(evs, "block", 1) < 1 or U.count(evs, "hit", 1) > 0 or U.count(evs, "parry", 1) > 0:
 		fails.append("triangle: held guard should block strike (block=%d hit=%d parry=%d)" % [U.count(evs, "block", 1), U.count(evs, "hit", 1), U.count(evs, "parry", 1)])
 	# Grab beats Guard
-	sim = U.make("cigarra", "aruun")
+	sim = U.make("zephyr", "aruun")
 	U.face_off(sim, 1.8)
 	evs = U.run(sim, 60, {30: _grab}, {}, Callable(), hold_guard)
 	if U.count(evs, "grab", 1) < 1:
@@ -89,7 +89,7 @@ func _impact_tick_light1() -> int:
 	return 1 + 10   # Cigarra light1: input at tick 1, startup 10 -> first active tick 11
 
 func _parry_case(press_tick: int) -> Dictionary:
-	var sim := U.make("cigarra", "aruun")
+	var sim := U.make("zephyr", "mollusk")
 	U.face_off(sim, 1.8)
 	var press := func(i: CombatInput, t: int) -> void: i.guard = t >= press_tick
 	var evs := U.run(sim, 16, {1: _tap}, {}, Callable(), press)
@@ -114,24 +114,23 @@ func _parry_edges(fails: Array) -> void:
 		fails.append("parry: attacker not stunned")
 	if not sim.fighters[1].has("riposte"):
 		fails.append("parry: no riposte status")
-	# Cigarra's longer window (10f): Aruun attacking Cigarra, press 10 frames before parries
+	# Cigarra's longer window (12f): Aruun light1 (startup 16) impacts on tick 17
 	var sim2 := U.make("aruun", "cigarra")
 	U.face_off(sim2, 2.0)
-	# Aruun light1 startup 16 -> impact tick 17; Cigarra presses at tick 7 (k=10)
-	var press2 := func(i: CombatInput, t: int) -> void: i.guard = t >= 7
+	var press2 := func(i: CombatInput, t: int) -> void: i.guard = t >= 5
 	var evs2 := U.run(sim2, 20, {1: _tap}, {}, Callable(), press2)
 	if U.count(evs2, "parry", 1) != 1:
-		fails.append("parry: Cigarra 10-frame window should parry at k=10")
+		fails.append("parry: Cigarra 12-frame window should parry at k=12")
 	var sim3 := U.make("aruun", "cigarra")
 	U.face_off(sim3, 2.0)
-	var press3 := func(i: CombatInput, t: int) -> void: i.guard = t >= 6
+	var press3 := func(i: CombatInput, t: int) -> void: i.guard = t >= 4
 	var evs3 := U.run(sim3, 20, {1: _tap}, {}, Callable(), press3)
 	if U.count(evs3, "parry", 1) != 0:
-		fails.append("parry: Cigarra k=11 must not parry")
+		fails.append("parry: Cigarra k=13 must not parry")
 
 func _iframes(fails: Array) -> void:
 	# exactly 6 invulnerable ticks from the start of a dodge
-	var sim := U.make("cigarra", "aruun")
+	var sim := U.make("zephyr", "aruun")
 	U.face_off(sim, 6.0)
 	var n := 0
 	for t in 40:
@@ -149,20 +148,20 @@ func _iframes(fails: Array) -> void:
 	var toward := func(i: CombatInput) -> void:
 		i.dodge = true
 		i.move = Vector2(-1, 0)
-	sim = U.make("cigarra", "aruun")
+	sim = U.make("zephyr", "aruun")
 	U.face_off(sim, 1.8)
 	var evs := U.run(sim, 16, {1: _tap}, {1: toward})
 	if U.count(evs, "hit", 1) != 1:
 		fails.append("iframes: dodge too early must be hit after i-frames end")
 	# Well-timed dodge: no damage, dodge event
-	sim = U.make("cigarra", "aruun")
+	sim = U.make("zephyr", "aruun")
 	U.face_off(sim, 1.8)
-	evs = U.run(sim, 16, {1: _tap}, {8: side})
+	evs = U.run(sim, 16, {1: _tap}, {8: toward})
 	if U.count(evs, "hit", 1) != 0 or U.count(evs, "dodge", 1) < 1:
 		fails.append("iframes: well timed dodge should evade (hit=%d dodge=%d)" % [U.count(evs, "hit", 1), U.count(evs, "dodge", 1)])
 
 func _stamina(fails: Array) -> void:
-	var sim := U.make("aruun", "cigarra")
+	var sim := U.make("aruun", "zephyr")
 	U.face_off(sim, 6.0)
 	var f = sim.fighters[0]
 	f.sta = 4.0
@@ -170,7 +169,7 @@ func _stamina(fails: Array) -> void:
 	if not f.winded or f.sta > 0.0:
 		fails.append("stamina: spending to zero should cause Winded")
 	# winded cannot dodge or heavy
-	var sim2 := U.make("aruun", "cigarra")
+	var sim2 := U.make("aruun", "zephyr")
 	var f2 = sim2.fighters[0]
 	f2.sta = 0.0
 	f2.winded = true
@@ -182,7 +181,7 @@ func _stamina(fails: Array) -> void:
 	if f.winded or f.sta < 20.0:
 		fails.append("stamina: should regenerate and recover from Winded (sta=%f)" % f.sta)
 	# winded guard breaks hard: chip is larger
-	var sim3 := U.make("cigarra", "aruun")
+	var sim3 := U.make("zephyr", "aruun")
 	U.face_off(sim3, 1.8)
 	var hg := func(i: CombatInput, t: int) -> void: i.guard = true
 	U.run(sim3, 20, {}, {}, Callable(), hg)
@@ -195,14 +194,14 @@ func _stamina(fails: Array) -> void:
 		fails.append("stamina: guard with no stamina should break")
 
 func _poise(fails: Array) -> void:
-	var sim := U.make("aruun", "cigarra")
+	var sim := U.make("aruun", "zephyr")
 	U.face_off(sim, 1.8)
 	sim.fighters[1].poise = 5.0
 	var evs := U.run(sim, 60, {1: func(i: CombatInput) -> void: i.strike_hold = true})
 	if U.count(evs, "stagger", 1) < 1:
 		fails.append("poise: heavy against low poise should stagger")
 	# Chip: hit lowers poise but regenerates after delay
-	var sim2 := U.make("aruun", "cigarra")
+	var sim2 := U.make("aruun", "zephyr")
 	U.face_off(sim2, 1.8)
 	U.run(sim2, 30, {1: _tap})
 	var p: float = sim2.fighters[1].poise
@@ -214,20 +213,20 @@ func _poise(fails: Array) -> void:
 
 func _buffer(fails: Array) -> void:
 	# Cigarra light1 (whiff, far away): total 23 frames, idle at tick 24. Dodge pressed 4 ticks earlier is buffered.
-	var sim := U.make("cigarra", "aruun")
+	var sim := U.make("zephyr", "aruun")
 	U.face_off(sim, 8.0)
-	var evs := U.run(sim, 30, {1: _tap, 20: _dodge})
+	var evs := U.run(sim, 30, {1: _tap, 21: _dodge})
 	var dodge_tell := false
 	for e in evs:
-		if e["type"] == "tell" and e["move_id"] == "cigarra_dodge":
+		if e["type"] == "tell" and e["move_id"] == "zephyr_air_dodge":
 			dodge_tell = true
-			if e["tick"] != 24:
-				fails.append("buffer: buffered dodge should start on tick 24, got %d" % e["tick"])
+			if e["tick"] != 25:
+				fails.append("buffer: buffered dodge should start on tick 25, got %d" % e["tick"])
 	if not dodge_tell:
 		fails.append("buffer: input pressed 4 frames early should execute")
-	sim = U.make("cigarra", "aruun")
+	sim = U.make("zephyr", "aruun")
 	U.face_off(sim, 8.0)
-	evs = U.run(sim, 30, {1: _tap, 16: _dodge})
+	evs = U.run(sim, 30, {1: _tap, 17: _dodge})
 	for e in evs:
-		if e["type"] == "tell" and e["move_id"] == "cigarra_dodge":
+		if e["type"] == "tell" and e["move_id"] == "zephyr_air_dodge":
 			fails.append("buffer: input older than 6 frames must expire")

@@ -28,6 +28,9 @@ static func motion(sim: CombatSim, f: Fighter, o: Fighter) -> void:
 			f.add_status("ghost", int(sim.R["ghost_frames"]))
 		if af == at:
 			match kind:
+				"random":
+					var ang := deg_to_rad(sim.rng.randf_range(-float(sim.R["random_dodge_arc"]), float(sim.R["random_dodge_arc"])))
+					f.mvec = (f.facing.rotated(ang) * (1.0 if sim.rng.randf() < 0.5 else -1.0)).normalized()
 				"input":
 					f.mvec = f.mvec if f.action == "dodge" else (f.move_in.normalized() if f.move_in.length() > float(sim.R["input_deadzone"]) else f.facing)
 				"side":
@@ -47,7 +50,7 @@ static func motion(sim: CombatSim, f: Fighter, o: Fighter) -> void:
 		match kind:
 			"fwd": step = f.facing * dist / float(ln)
 			"back": step = -f.facing * dist / float(ln)
-			"input", "side": step = f.mvec * dist / float(ln)
+			"input", "side", "random": step = f.mvec * dist / float(ln)
 			"to_target": step = f.mvec
 		if f.has("rooted") and f.action != "dodge":
 			step = Vector2.ZERO
@@ -113,6 +116,9 @@ static func _spawn(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, sp: Dicti
 					same.remove_at(0)
 			sim.ents.append(e)
 			sim.emit("zone", f.idx, m.id, e.pos, 0.0, {"radius": e.radius, "tag": e.tag})
+		"ripen_all":
+			Res.ripen_all(sim, o, f)
+			f.pressure = float(f.T["pressure_max"])
 		"false_memory":
 			Mind.start_decoy(sim, f, o, sp)
 		"gust":

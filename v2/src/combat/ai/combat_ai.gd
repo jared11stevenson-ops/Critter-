@@ -29,6 +29,7 @@ var feint_done := ""
 var hold_guard_until := -1
 var _last_guard := false
 var _danger_cache := -1.0
+var charge_goal := 0
 
 static func profile_names() -> Array:
 	return ["novice", "standard", "expert"]
@@ -66,6 +67,7 @@ func _move_of(me, kind: String) -> MoveDef:
 		"a1": return me.def.move(ids["ability1"])
 		"a2": return me.def.move(ids["ability2"])
 		"ls": return me.def.move(ids["laststand"])
+		"counter": return me.def.move(ids["counter"]) if ids.has("counter") else null
 	return null
 
 func _kind_of(m: MoveDef) -> String:
@@ -92,6 +94,8 @@ func _ready_for(me, kind: String) -> bool:
 		return false
 	if me.winded and (m.kind == "heavy" or m.kind == "ability"):
 		return false
+	if m.reserve_cost > 0.0 and not me.has("archive") and me.reserve < m.reserve_cost:
+		return false
 	if (m.pressure_cost != 0.0 or m.require_pressure > 0.0) and me.pressure < maxf(maxf(m.pressure_cost, 0.0), m.require_pressure):
 		return false
 	return true
@@ -110,6 +114,9 @@ func _press(inp: CombatInput, key: String, away: Vector2 = Vector2.ZERO) -> void
 		"ls":
 			inp.ability1 = true
 			inp.ability2 = true
+		"counter":
+			inp.grab = true
+			inp.guard = true
 
 # ---------------------------------------------------------------- main
 func decide(sim: CombatSim) -> CombatInput:
@@ -131,7 +138,7 @@ func decide(sim: CombatSim) -> CombatInput:
 		return inp
 	if (not me.last_stand_used) and me.ratio() < sim.R["last_stand_ratio"] and me.alive:
 		var lsm := _move_of(me, "ls")
-		var lsr := _reach(me, "ls") + (float(C["ls_slack"]) if lsm.hits.size() > 0 else 0.0)
+		var lsr: float = _reach(me, "ls") + float(C["ls_slack"]) if lsm.hits.size() > 0 else float(C["ls_idle_range"])
 		if (gap + me.radius <= lsr or me.ratio() < float(C["ls_panic"])) and rng.randf() < float(P["last_stand"]) * float(C["ls_prob"]):
 			_press(inp, "ls")
 			sched.clear()
@@ -229,7 +236,7 @@ func _react(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float) -> vo
 	var impact: int = ft + rem
 	var is_grab: bool = h["grab"]
 	var heavy: bool = m.kind == "heavy" or m.kind == "ability" or m.kind == "laststand"
-	var w := {"parry": 0.0, "block": 0.0, "dodge": 0.0, "interrupt": 0.0, "ability": 0.0}
+	var w := {"parry": 0.0, "block": 0.0, "dodge": 0.0, "interrupt": 0.0, "ability": 0.0, "counter": 0.0}
 	if is_grab:
 		w["dodge"] = float(P["dodge_prob"]) * float(C["block_weight_dodge_grab"])
 		w["interrupt"] = float(P["interrupt_prob"]) * float(C["interrupt_grab_mult"])
@@ -259,6 +266,8 @@ func _react(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float) -> vo
 			var lead := int(am.stance.get("from", am.startup)) + int(C["stance_lead"]) if not am.stance.is_empty() else am.startup
 			if rem >= lead - int(C["stance_slack"]):
 				w["ability"] = float(P["ability"]) * 0.9
+	if _ready_for(me, "counter") and not is_grab and rem >= 6:
+		w["counter"] = float(P["ability"]) * float(C["counter_weight"])
 	# habit-informed anticipation raises parry/dodge for experts
 	var pick := _weighted(w)
 	if pick == "":
@@ -288,6 +297,8 @@ func _react(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float) -> vo
 			var mine := _move_of(me, "light")
 			if mine != null and mine.startup + 1 < rem and gap_ok(me, op, "light"):
 				sched.append([ft, "light"])
+		"counter":
+			sched.append([maxi(impact - 6, ft), "counter"])
 		"ability":
 			for slot in ["a1", "a2"]:
 				var hint2: Dictionary = me.def.ai_hints.get("ability1" if slot == "a1" else "ability2", {})
@@ -451,6 +462,7 @@ func _neutral(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float, gua
 	if choice == "":
 		return
 	_press(inp, choice)
+	charge_goal = rng.randi_range(0, 40) if choice == "heavy" else 0
 	my_last = {"light": "light", "heavy": "heavy", "grab": "grab", "a1": "ability", "a2": "ability"}.get(choice, "light")
 	my_last_frame = sim.frame
 	chain_done = ""
@@ -501,4 +513,6 @@ func _manage_move(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float)
 				feint_done = sig
 				guard_from = ft
 				guard_to = ft + 14
+	if m.charge_max > 0 and me.charge < charge_goal and me.af + 1 == m.charge_at:
+		inp.strike_hold = true          # keep gathering
 	inp.move = Vector2.ZERO
