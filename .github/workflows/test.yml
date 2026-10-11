@@ -1,0 +1,62 @@
+name: v2 tests
+# Every push: import the v2 project with Godot 4.7.2 (headless), run the unit tests, the smoke boot, the file-size lint
+# and the folder-ownership check. Owner: Platform Engineer.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  GODOT_VERSION: "4.7.2"
+  GODOT_DIR: ${{ github.workspace }}/.godot-bin
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          sparse-checkout: |
+            v2
+            design/v2
+            production
+            tools
+            .github
+          sparse-checkout-cone-mode: true
+      - name: Cache Godot
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.GODOT_DIR }}
+          key: godot-${{ env.GODOT_VERSION }}-linux-x86_64
+      - name: Download Godot ${{ env.GODOT_VERSION }}
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p "$GODOT_DIR"
+          URL="https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          curl -fsSL --retry 3 -o "$GODOT_DIR/godot.zip" "$URL"
+          unzip -q -o "$GODOT_DIR/godot.zip" -d "$GODOT_DIR"
+          rm "$GODOT_DIR/godot.zip"
+      - name: Locate the binary
+        run: |
+          BIN="$GODOT_DIR/Godot_v${GODOT_VERSION}-stable_linux.x86_64"
+          chmod +x "$BIN"
+          echo "GODOT=$BIN" >> "$GITHUB_ENV"
+          "$BIN" --version
+      - name: Import project
+        run: |
+          "$GODOT" --headless --path v2 --import || true
+          "$GODOT" --headless --path v2 --import
+      - name: Unit tests
+        run: v2/tools/qa/run_tests.sh
+      - name: Smoke boot
+        run: v2/tools/smoke.sh 5
+      - name: File-size lint (soft 400 / hard 700)
+        run: tools/lint_filesize.sh
+      - name: Folder ownership
+        run: |
+          git fetch origin master:refs/remotes/origin/master 2>/dev/null || true
+          tools/check_ownership.sh
