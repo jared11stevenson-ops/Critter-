@@ -4,7 +4,7 @@ class_name PlayerInput extends InputProvider
 ## Guard is a level (the sim reads the press timing as a parry). Grab / dodge / abilities are latched presses.
 ## Last Stand = ability1 + ability2 raised together for two ticks. Yield is the 'yield' key or the long press in the HUD.
 
-const HOLD_TICKS := 11
+const HOLD_TICKS := 8        # shorter hold = light fires on release sooner (<= ~130 ms); trade-off: heavies need a firmer hold
 const LS_TICKS := 2
 const DODGE_STEER_TICKS := 6
 

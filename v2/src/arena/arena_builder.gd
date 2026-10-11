@@ -74,6 +74,8 @@ static func _platform(k: MeshKit, a: ArenaDef) -> void:
 		for i in 8:                                                               # spokes
 			var ang := TAU * float(i) / 8.0
 			k.box(Vector3(cos(ang) * r * 0.46, 0.012, sin(ang) * r * 0.46), Vector3(r * 0.32, 0.01, 0.14), STONE_DK, -rad_to_deg(ang))
+		for dm in [2.0, 4.0]:                                                     # distance-to-edge markers (2 m / 4 m)
+			k.ring_band(Vector3(0, 0.012, 0), r - dm - 0.05, r - dm + 0.05, 56, STONE_DK)
 		k.cyl(Vector3(0, -0.7, 0), r, r, 0.7, 56, STONE_DK, false)
 		k.cyl(Vector3(0, -12.0, 0), r * 0.35, r, 11.3, 28, TEAL_DK, false)
 		_circle_edges(k, a)
@@ -106,7 +108,8 @@ static func _circle_edges(k: MeshKit, a: ArenaDef) -> void:
 			var len := r * (a1 - a0) * 1.02
 			k.box(Vector3(cos(am) * (r + 0.1), 0.45, sin(am) * (r + 0.1)), Vector3(len, 0.9 + (0.25 if i % 3 == 0 else 0.0), 0.55), k.jitter(STONE_LT, 0.04), -rad_to_deg(am) + 90.0)
 		else:
-			k.ring_band(Vector3(0, 0.012, 0), r - 0.34, r - 0.18, 2, GOLD, a0, a1)
+			k.ring_band(Vector3(0, 0.014, 0), r - 0.62, r - 0.12, 2, GOLD, a0, a1)
+			k.ring_band(Vector3(0, 0.013, 0), r - 0.12, r, 2, RUST, a0, a1)
 			if i % 4 == 0:                                                         # rubble chips at the lip
 				var am2 := (a0 + a1) * 0.5
 				k.box(Vector3(cos(am2) * (r - 0.05), -0.12, sin(am2) * (r - 0.05)), Vector3(0.5, 0.3, 0.4), STONE_DK, -rad_to_deg(am2), 0, 12)

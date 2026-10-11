@@ -83,6 +83,7 @@ func start(config: BoutConfig) -> void:
 	cam = BoutCamera.new()
 	add_child(cam)
 	cam.current = true
+	cam.reach = (arena_def.radius if arena_def.shape == "circle" else maxf(arena_def.half.x, arena_def.half.y)) * 1.45 + 3.0
 	cam.intro = 1.0 if cfg.intro else 0.0
 	_make_providers()
 	hud = Hud.new()

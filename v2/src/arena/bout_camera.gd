@@ -3,12 +3,12 @@ class_name BoutCamera extends Camera3D
 ## (distance grows with their separation and the screen aspect), keeps a 3/4 angle so faces read, and adds hit punch,
 ## directional shake and intro / outro moves. Pure presentation: it never feeds anything back to the sim.
 
-const SHOULDER_DEG := 24.0        # yaw offset of the camera from the player->target axis
-const BASE_DIST := 10.5
-const HEIGHT := 3.3
-const LOOK_HEIGHT := 1.6
+const SHOULDER_DEG := 38.0        # yaw offset of the camera from the player->target axis
+const BASE_DIST := 14.0
+const HEIGHT := 6.0
+const LOOK_HEIGHT := 1.2
 const FOV_V := 40.0
-const FIT := 0.80                 # fighters must stay inside this fraction of the half-width
+const FIT := 0.66                 # fighters must stay inside this fraction of the half-width
 
 var yaw := 0.0                    # smoothed yaw of the player->target axis
 var focus := Vector3(0, LOOK_HEIGHT, 0)
@@ -23,6 +23,7 @@ var _sh_amp := 0.0
 var _sh_dir := Vector2.RIGHT
 var _sh_t := 0.0
 var _snap := true
+var reach := 13.0                 # max horizontal distance of the camera from the arena centre (set by BoutScene)
 var aspect_override := 0.0        # tests: pretend the viewport has this aspect
 
 func _ready() -> void:
@@ -63,7 +64,7 @@ func update(dt: float, pa: Vector3, pb: Vector3) -> void:
 	var want_yaw := atan2(axis.x, axis.z)      # angle of the axis seen from +z
 	var k := 1.0 if _snap else 1.0 - exp(-5.5 * dt)
 	yaw = want_yaw if _snap else lerp_angle(yaw, want_yaw, k)
-	var mid := pa.lerp(pb, 0.58)
+	var mid := pa.lerp(pb, 0.5)
 	var want_focus := Vector3(mid.x, LOOK_HEIGHT, mid.z)
 	if outro_focus != null and outro_blend > 0.0:
 		var of: Vector3 = outro_focus
@@ -80,7 +81,15 @@ func update(dt: float, pa: Vector3, pb: Vector3) -> void:
 	var cy := yaw + deg_to_rad(SHOULDER_DEG) * side + outro_yaw + ease_i * 1.4 * side
 	var d := dist + ease_i * 7.0
 	var dirv := Vector3(sin(cy), 0, cos(cy))
-	var pos := focus - dirv * d + Vector3(0, HEIGHT + ease_i * 2.5 - outro_blend * 0.7, 0)
+	var close := clampf(1.0 - sep / 7.0, 0.0, 1.0)          # fighters close: tip the camera up a little
+	var h := HEIGHT + close * 1.6 + ease_i * 2.5 - outro_blend * 0.7
+	var pos := focus - dirv * d + Vector3(0, h, 0)
+	var flat := Vector2(pos.x, pos.z)
+	if flat.length() > reach:                                  # never hang past the rim: pull in and rise instead
+		var c2 := flat.normalized() * reach
+		pos.x = c2.x
+		pos.z = c2.y
+		pos.y += (flat.length() - reach) * 0.45
 	_sh_t += dt
 	var off := Vector3.ZERO
 	if _sh_amp > 0.001:
@@ -107,7 +116,7 @@ func fit_distance(pa: Vector3, pb: Vector3, sep: float) -> float:
 	var dirv := Vector3(sin(cy), 0, cos(cy))
 	var right := dirv.cross(Vector3.UP).normalized()
 	var d := BASE_DIST + sep * 0.28
-	var mid := pa.lerp(pb, 0.58)
+	var mid := pa.lerp(pb, 0.5)
 	for _i in 8:
 		var campos := Vector3(mid.x, 0, mid.z) - dirv * d
 		var ok := true
