@@ -24,7 +24,7 @@
  "standard": {
   "reaction": 11,
   "react_prob": 0.75,
-  "parry_prob": 0.35,
+  "parry_prob": 0.3,
   "parry_jitter": 3,
   "dodge_prob": 0.5,
   "block_prob": 0.7,
@@ -46,11 +46,11 @@
  "expert": {
   "reaction": 6,
   "react_prob": 0.93,
-  "parry_prob": 0.65,
+  "parry_prob": 0.5,
   "parry_jitter": 1,
   "dodge_prob": 0.7,
   "block_prob": 0.85,
-  "interrupt_prob": 0.45,
+  "interrupt_prob": 0.35,
   "aggression": 0.6,
   "think_min": 5,
   "think_max": 20,
