@@ -1,0 +1,246 @@
+{
+ "critter": "scarlith",
+ "moves": {
+  "scarlith_culture_jab1": {
+   "name": "Culture Jab",
+   "kind": "light",
+   "tell_anim": "punch",
+   "startup": 13,
+   "active": 3,
+   "recovery": 15,
+   "stamina_cost": 7,
+   "damage": 7.0,
+   "poise_damage": 7,
+   "hitstun": 20,
+   "blockstun": 11,
+   "knockback": 0.3,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 2.2,
+    "arc": 60
+   },
+   "track": 5,
+   "lore_source": "lore:fermentation; jabs apply a Culture stack",
+   "chain": "scarlith_culture_jab2",
+   "cancel_from": 15,
+   "pressure_gain": 8,
+   "on_hit": {
+    "dot": {
+     "name": "culture",
+     "life": 420,
+     "dps": 0.6,
+     "grow": 1.0,
+     "burst": 10.0,
+     "ripe": 300,
+     "max": 6
+    }
+   }
+  },
+  "scarlith_culture_jab2": {
+   "name": "Culture Jab II",
+   "kind": "light",
+   "tell_anim": "slash_back",
+   "startup": 12,
+   "active": 3,
+   "recovery": 20,
+   "stamina_cost": 7,
+   "damage": 7.0,
+   "poise_damage": 7,
+   "hitstun": 22,
+   "blockstun": 11,
+   "knockback": 0.5,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 2.2,
+    "arc": 70
+   },
+   "track": 5,
+   "lore_source": "lore:fermentation; jabs apply a Culture stack",
+   "pressure_gain": 8,
+   "on_hit": {
+    "dot": {
+     "name": "culture",
+     "life": 420,
+     "dps": 0.6,
+     "grow": 1.0,
+     "burst": 10.0,
+     "ripe": 300,
+     "max": 6
+    }
+   }
+  },
+  "scarlith_aged_smash": {
+   "name": "Aged Smash",
+   "kind": "heavy",
+   "tell_anim": "overhead",
+   "startup": 26,
+   "active": 4,
+   "recovery": 30,
+   "stamina_cost": 18,
+   "feint": true,
+   "track": 10,
+   "damage": 20.0,
+   "poise_damage": 18,
+   "pressure_gain": 16,
+   "hitstun": 36,
+   "blockstun": 18,
+   "knockback": 1.0,
+   "hitstop": 9,
+   "hitbox": {
+    "reach": 2.4,
+    "arc": 90
+   },
+   "props": {
+    "culture_scale": 0.3
+   },
+   "lore_source": "lore:Bk VIII age can create value; damage scales with Cultures on the target"
+  },
+  "scarlith_barter": {
+   "name": "Barter",
+   "kind": "grab",
+   "tell_anim": "grab",
+   "startup": 17,
+   "active": 3,
+   "recovery": 28,
+   "stamina_cost": 12,
+   "track": 8,
+   "damage": 8.0,
+   "poise_damage": 8,
+   "hitstop": 6,
+   "grab": true,
+   "throw_dist": 1.0,
+   "throw_stun": 6,
+   "hitbox": {
+    "reach": 2.0,
+    "arc": 50
+   },
+   "on_hit": {
+    "steal": true
+   },
+   "lore_source": "lore:Undermarket broker; snatch and swap a buff for a penalty"
+  },
+  "scarlith_hop_clear": {
+   "name": "Hop Clear",
+   "kind": "dodge",
+   "tell_anim": "leap",
+   "startup": 0,
+   "active": 6,
+   "recovery": 14,
+   "stamina_cost": 18,
+   "iframes": [
+    0,
+    6
+   ],
+   "motion": [
+    {
+     "at": 0,
+     "len": 8,
+     "dist": 2.2,
+     "dir": "input"
+    }
+   ],
+   "lore_source": "lore:everything has value; nimble broker"
+  },
+  "scarlith_ferment": {
+   "name": "Ferment",
+   "kind": "ability",
+   "tell_anim": "hook",
+   "startup": 20,
+   "active": 3,
+   "recovery": 26,
+   "stamina_cost": 12,
+   "cooldown": 420,
+   "track": 8,
+   "damage": 2.0,
+   "poise_damage": 4,
+   "hitstun": 20,
+   "blockstun": 8,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 4.2,
+    "arc": 30
+   },
+   "on_hit": {
+    "ripen": true,
+    "dot": {
+     "name": "culture",
+     "life": 420,
+     "dps": 0.6,
+     "grow": 1.0,
+     "burst": 10.0,
+     "ripe": 300,
+     "max": 6
+    }
+   },
+   "lore_source": "lore:Fermentation; Culture stacks ripen over time and burst"
+  },
+  "scarlith_decompose": {
+   "name": "Decompose",
+   "kind": "ability",
+   "tell_anim": "roar",
+   "startup": 22,
+   "active": 3,
+   "recovery": 26,
+   "stamina_cost": 12,
+   "cooldown": 480,
+   "track": 8,
+   "damage": 4.0,
+   "poise_damage": 6,
+   "hitstun": 18,
+   "blockstun": 8,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 3.0,
+    "arc": 50
+   },
+   "on_hit": {
+    "status": {
+     "rotted": 300
+    }
+   },
+   "lore_source": "lore:Decomposition; rots armor and guard"
+  },
+  "scarlith_aged_to_perfection": {
+   "name": "Aged to Perfection",
+   "kind": "laststand",
+   "tell_anim": "roar",
+   "startup": 30,
+   "active": 1,
+   "recovery": 30,
+   "spawns": [
+    {
+     "at": 30,
+     "type": "ripen_all"
+    }
+   ],
+   "lore_source": "lore:age creates value; instantly ripens every Culture"
+  },
+  "scarlith_cultivate": {
+   "name": "Cultivate",
+   "kind": "resource",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "lore:Cultivation; fungus patches feed Brew and heal him"
+  },
+  "scarlith_rind_guard": {
+   "name": "Rind Guard",
+   "kind": "resource",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "lore:cheese flavor; a parry spoils the attacker's next move"
+  },
+  "scarlith_waste_not": {
+   "name": "Waste Not",
+   "kind": "resource",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "lore:waste can become food; damage taken becomes Brew"
+  }
+ }
+}

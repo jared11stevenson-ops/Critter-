@@ -1,0 +1,316 @@
+{
+ "critter": "zephyr",
+ "moves": {
+  "zephyr_flutter1": {
+   "name": "Flutter Strike",
+   "kind": "light",
+   "tell_anim": "thrust",
+   "startup": 10,
+   "active": 3,
+   "recovery": 11,
+   "stamina_cost": 6,
+   "damage": 6.0,
+   "poise_damage": 5,
+   "hitstun": 16,
+   "blockstun": 11,
+   "knockback": 0.3,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 2.6,
+    "arc": 50
+   },
+   "track": 5,
+   "lore_source": "lore:Motion; very fast strikes from hover",
+   "chain": "zephyr_flutter2",
+   "cancel_from": 12
+  },
+  "zephyr_flutter2": {
+   "name": "Flutter Strike II",
+   "kind": "light",
+   "tell_anim": "thrust",
+   "startup": 10,
+   "active": 3,
+   "recovery": 11,
+   "stamina_cost": 6,
+   "damage": 6.0,
+   "poise_damage": 5,
+   "hitstun": 16,
+   "blockstun": 11,
+   "knockback": 0.3,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 2.7,
+    "arc": 50
+   },
+   "track": 5,
+   "lore_source": "lore:Motion; very fast strikes from hover",
+   "chain": "zephyr_flutter3",
+   "cancel_from": 12
+  },
+  "zephyr_flutter3": {
+   "name": "Flutter Side-Step",
+   "kind": "light",
+   "tell_anim": "slash_back",
+   "startup": 11,
+   "active": 3,
+   "recovery": 16,
+   "stamina_cost": 6,
+   "damage": 7.0,
+   "poise_damage": 6,
+   "hitstun": 18,
+   "blockstun": 11,
+   "knockback": 0.5,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 2.7,
+    "arc": 60
+   },
+   "track": 5,
+   "lore_source": "lore:Motion; ends with a side step",
+   "motion": [
+    {
+     "at": 16,
+     "len": 8,
+     "dist": 1.4,
+     "dir": "side"
+    }
+   ]
+  },
+  "zephyr_delivery": {
+   "name": "Delivery",
+   "kind": "heavy",
+   "tell_anim": "charge",
+   "startup": 26,
+   "active": 8,
+   "recovery": 26,
+   "stamina_cost": 16,
+   "feint": true,
+   "track": 10,
+   "damage": 18.0,
+   "poise_damage": 12,
+   "hitstun": 30,
+   "blockstun": 16,
+   "knockback": 1.0,
+   "hitstop": 7,
+   "hitbox": {
+    "reach": 1.8,
+    "arc": 100
+   },
+   "motion": [
+    {
+     "at": 22,
+     "len": 12,
+     "dist": 6.0,
+     "dir": "fwd"
+    }
+   ],
+   "promise": {
+    "bonus": 1.35,
+    "refund": 18,
+    "penalty": 16
+   },
+   "lore_source": "lore:courier, crossing spaces quickly; a declared Promise (Promise Law)"
+  },
+  "zephyr_catch": {
+   "name": "Catch",
+   "kind": "grab",
+   "tell_anim": "grab",
+   "startup": 14,
+   "active": 3,
+   "recovery": 28,
+   "stamina_cost": 12,
+   "track": 6,
+   "damage": 9.0,
+   "poise_damage": 8,
+   "hitstop": 6,
+   "grab": true,
+   "throw_dist": 3.6,
+   "throw_stun": 6,
+   "hitbox": {
+    "reach": 1.6,
+    "arc": 90
+   },
+   "motion": [
+    {
+     "at": 10,
+     "len": 4,
+     "dist": 1.4,
+     "dir": "fwd"
+    }
+   ],
+   "lore_source": "lore:seizes in mid-air and releases for a ring-out"
+  },
+  "zephyr_air_dodge": {
+   "name": "Air Dodge",
+   "kind": "dodge",
+   "tell_anim": "leap",
+   "startup": 0,
+   "active": 6,
+   "recovery": 10,
+   "stamina_cost": 14,
+   "iframes": [
+    0,
+    6
+   ],
+   "motion": [
+    {
+     "at": 0,
+     "len": 7,
+     "dist": 2.8,
+     "dir": "input"
+    }
+   ],
+   "lore_source": "lore:hummingbird-hawk-moth hover; crossing spaces is joy",
+   "cancel_from": 8,
+   "chain_on": "always"
+  },
+  "zephyr_gust": {
+   "name": "Gust",
+   "kind": "ability",
+   "tell_anim": "roar",
+   "startup": 16,
+   "active": 4,
+   "recovery": 24,
+   "stamina_cost": 12,
+   "cooldown": 360,
+   "track": 8,
+   "damage": 2.0,
+   "poise_damage": 6,
+   "hitstun": 20,
+   "blockstun": 8,
+   "knockback": 3.4,
+   "hitstop": 5,
+   "hitbox": {
+    "reach": 3.6,
+    "arc": 110
+   },
+   "props": {
+    "unparryable": true
+   },
+   "spawns": [
+    {
+     "at": 16,
+     "type": "gust"
+    }
+   ],
+   "lore_source": "lore:Atmospheric Disturbance; knocks back, pushes projectiles, ring-out"
+  },
+  "zephyr_pollen": {
+   "name": "Pollen",
+   "kind": "ability",
+   "tell_anim": "roar",
+   "startup": 16,
+   "active": 1,
+   "recovery": 22,
+   "stamina_cost": 12,
+   "cooldown": 420,
+   "spawns": [
+    {
+     "at": 16,
+     "type": "zone",
+     "place": "front",
+     "dist": 2.2,
+     "radius": 1.7,
+     "life": 240,
+     "affect": "enemy",
+     "tag": "pollen",
+     "max": 1,
+     "buff": {
+      "slow": 1,
+      "mark": 240
+     }
+    }
+   ],
+   "lore_source": "lore:Pollination; a cloud marks the enemy (slow, bonus damage from Zephyr)"
+  },
+  "zephyr_a_promise_kept": {
+   "name": "A Promise Kept",
+   "kind": "laststand",
+   "tell_anim": "leap",
+   "startup": 14,
+   "active": 70,
+   "recovery": 24,
+   "iframes": [
+    0,
+    108
+   ],
+   "damage": 8.0,
+   "poise_damage": 6,
+   "hitstun": 14,
+   "blockstun": 8,
+   "hitstop": 3,
+   "hitbox": {
+    "reach": 1.8,
+    "arc": 360
+   },
+   "props": {
+    "unblockable": true,
+    "ignore_iframes": true
+   },
+   "rehit": {
+    "every": 20,
+    "count": 4,
+    "from": 18,
+    "len": 6
+   },
+   "promise": {
+    "bonus": 1.0,
+    "refund": 0,
+    "penalty": 0
+   },
+   "motion": [
+    {
+     "at": 14,
+     "len": 8,
+     "dist": 7.0,
+     "dir": "to_target",
+     "gap": -1.2,
+     "nocollide": true
+    },
+    {
+     "at": 34,
+     "len": 8,
+     "dist": 7.0,
+     "dir": "to_target",
+     "gap": -1.2,
+     "nocollide": true
+    },
+    {
+     "at": 54,
+     "len": 8,
+     "dist": 7.0,
+     "dir": "to_target",
+     "gap": -1.2,
+     "nocollide": true
+    },
+    {
+     "at": 74,
+     "len": 8,
+     "dist": 7.0,
+     "dir": "to_target",
+     "gap": -1.2,
+     "nocollide": true
+    }
+   ],
+   "lore_source": "lore:promises are sacred; a declared sequence nothing can interrupt or dodge"
+  },
+  "zephyr_loophole": {
+   "name": "Loophole",
+   "kind": "resource",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "lore:loves loopholes; a freshly raised guard slips through a strike"
+  },
+  "zephyr_promise": {
+   "name": "Promise",
+   "kind": "resource",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "lore:Promise Law, wording matters; follow through for bonus, break it and pay"
+  }
+ }
+}

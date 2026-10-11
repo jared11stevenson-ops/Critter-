@@ -1,0 +1,64 @@
+{
+ "id": "scarlith",
+ "name": "Scarlith",
+ "species": "Red-velvet mite kingpin",
+ "archetype": "Burst / decay striker",
+ "weapon": "Barrel-and-bottle brew kit",
+ "palette": {
+  "main": "red velvet",
+  "accent": "cheese gold",
+  "glow": "fermentation green"
+ },
+ "stats": {
+  "vit": 5,
+  "sta": 4,
+  "poi": 5,
+  "spd": 6,
+  "rch": 6,
+  "dmg": 10
+ },
+ "moves": {
+  "light": [
+   "scarlith_culture_jab1",
+   "scarlith_culture_jab2"
+  ],
+  "heavy": "scarlith_aged_smash",
+  "grab": "scarlith_barter",
+  "dodge": "scarlith_hop_clear",
+  "ability1": "scarlith_ferment",
+  "ability2": "scarlith_decompose",
+  "laststand": "scarlith_aged_to_perfection",
+  "resource": "scarlith_cultivate",
+  "guard": "scarlith_rind_guard",
+  "passive": "scarlith_waste_not"
+ },
+ "tuning": {
+  "body_radius": 0.5,
+  "pressure_decay": 2.0,
+  "pressure_max": 100.0,
+  "block_chip": 0.25,
+  "block_poise": 0.4,
+  "parry_spoil": 1,
+  "waste_not": 0.5,
+  "cultivate_interval": 300,
+  "brew_bonus": 0.3,
+  "damage_mult": 1.0
+ },
+ "ai": {
+  "style": "burst",
+  "range": [
+   1.7,
+   2.8
+  ],
+  "ability1": {
+   "min": 1.5,
+   "max": 4.2,
+   "when": "any"
+  },
+  "ability2": {
+   "min": 1.5,
+   "max": 3.0,
+   "when": "any"
+  }
+ }
+}

@@ -1,0 +1,61 @@
+{
+ "id": "bramvex",
+ "name": "Bramvex",
+ "species": "Prickly stick insect sergeant",
+ "archetype": "Zoner / terrain tactician",
+ "weapon": "Diplomacy (huge thorned weapon)",
+ "palette": {
+  "main": "bark olive",
+  "accent": "restrained red insignia",
+  "glow": "dull signal red"
+ },
+ "stats": {
+  "vit": 5,
+  "sta": 7,
+  "poi": 4,
+  "spd": 5,
+  "rch": 9,
+  "dmg": 6
+ },
+ "moves": {
+  "light": [
+   "bramvex_diplomacy1",
+   "bramvex_diplomacy2"
+  ],
+  "heavy": "bramvex_final_offer",
+  "grab": "bramvex_detain",
+  "dodge": "bramvex_cigarra_hole",
+  "ability1": "bramvex_ghost",
+  "ability2": "bramvex_ground_prep",
+  "laststand": "bramvex_day_20",
+  "resource": "bramvex_observation",
+  "guard": "bramvex_stand_firm"
+ },
+ "tuning": {
+  "body_radius": 0.5,
+  "block_chip": 0.3,
+  "block_poise": 0.5,
+  "guard_drain": 0.6,
+  "parry_window": 10,
+  "intel_gain": 1.0,
+  "dodge_chain": 1,
+  "damage_mult": 1.0
+ },
+ "ai": {
+  "style": "zoner",
+  "range": [
+   2.3,
+   3.8
+  ],
+  "ability1": {
+   "min": 2.0,
+   "max": 9.0,
+   "when": "far"
+  },
+  "ability2": {
+   "min": 1.5,
+   "max": 9.0,
+   "when": "any"
+  }
+ }
+}

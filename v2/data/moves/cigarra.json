@@ -1,0 +1,226 @@
+{
+ "critter": "cigarra",
+ "moves": {
+  "cigarra_bad_thought1": {
+   "name": "Bad Thought",
+   "kind": "light",
+   "tell_anim": "punch",
+   "startup": 10,
+   "active": 3,
+   "recovery": 10,
+   "stamina_cost": 5,
+   "damage": 8.0,
+   "poise_damage": 5,
+   "hitstun": 18,
+   "blockstun": 10,
+   "knockback": 0.2,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 3.2,
+    "arc": 36
+   },
+   "track": 5,
+   "lore_source": "canon:bad_thought flicks a crown sphere, distorted psychic object",
+   "chain": "cigarra_bad_thought2",
+   "cancel_from": 11
+  },
+  "cigarra_bad_thought2": {
+   "name": "Bad Thought II",
+   "kind": "light",
+   "tell_anim": "slash_back",
+   "startup": 10,
+   "active": 3,
+   "recovery": 10,
+   "stamina_cost": 5,
+   "damage": 8.0,
+   "poise_damage": 5,
+   "hitstun": 18,
+   "blockstun": 10,
+   "knockback": 0.2,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 3.2,
+    "arc": 36
+   },
+   "track": 5,
+   "lore_source": "canon:bad_thought flicks a crown sphere, distorted psychic object",
+   "chain": "cigarra_bad_thought3",
+   "cancel_from": 11
+  },
+  "cigarra_bad_thought3": {
+   "name": "Bad Thought III",
+   "kind": "light",
+   "tell_anim": "slash_up",
+   "startup": 12,
+   "active": 3,
+   "recovery": 18,
+   "stamina_cost": 7,
+   "damage": 11.0,
+   "poise_damage": 8,
+   "hitstun": 22,
+   "blockstun": 10,
+   "knockback": 0.6,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 3.2,
+    "arc": 36
+   },
+   "track": 5,
+   "lore_source": "canon:bad_thought flicks a crown sphere, distorted psychic object"
+  },
+  "cigarra_crown_barrage": {
+   "name": "Crown Barrage",
+   "kind": "heavy",
+   "tell_anim": "spin",
+   "startup": 28,
+   "active": 1,
+   "recovery": 30,
+   "stamina_cost": 18,
+   "feint": true,
+   "track": 12,
+   "spawns": [
+    {
+     "at": 28,
+     "type": "projectile",
+     "angles": [
+      -30,
+      -15,
+      0,
+      15,
+      30
+     ],
+     "speed": 11,
+     "radius": 0.45,
+     "life": 42,
+     "damage": 8.0,
+     "poise_damage": 7,
+     "hitstun": 22,
+     "blockstun": 10,
+     "knockback": 0.4,
+     "hitstop": 4
+    }
+   ],
+   "lore_source": "lore:branching black-sphere crown volley"
+  },
+  "cigarra_puppet_thought": {
+   "name": "Puppet Thought",
+   "kind": "grab",
+   "tell_anim": "roar",
+   "startup": 26,
+   "active": 3,
+   "recovery": 34,
+   "stamina_cost": 14,
+   "track": 6,
+   "damage": 5.0,
+   "poise_damage": 6,
+   "hitstop": 8,
+   "grab": true,
+   "unparryable": true,
+   "hitbox": {
+    "reach": 3.0,
+    "arc": 36
+   },
+   "on_hit": {
+    "compel": {
+     "mode": "auto"
+    }
+   },
+   "lore_source": "creator direction + lore:Psychic Interference; crown spheres flare"
+  },
+  "cigarra_grasshopper_thought": {
+   "name": "Grasshopper Thought",
+   "kind": "dodge",
+   "tell_anim": "leap",
+   "startup": 0,
+   "active": 6,
+   "recovery": 12,
+   "stamina_cost": 16,
+   "iframes": [
+    0,
+    6
+   ],
+   "motion": [
+    {
+     "at": 0,
+     "len": 12,
+     "dist": 4.2,
+     "dir": "input"
+    }
+   ],
+   "lore_source": "canon:grasshopper_thought crouch then launch, cloak steers"
+  },
+  "cigarra_brain_skip": {
+   "name": "Brain Skip",
+   "kind": "counter",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "canon:brain_skip cooldown 9s, counter when dodging through a Premonition ghost"
+  },
+  "cigarra_premonition": {
+   "name": "Premonition",
+   "kind": "ability",
+   "tell_anim": "stance",
+   "startup": 6,
+   "active": 150,
+   "recovery": 14,
+   "stamina_cost": 10,
+   "cooldown": 720,
+   "pressure_on_use": 22,
+   "stance": {
+    "status": "premonition",
+    "from": 6,
+    "frames": 150
+   },
+   "lore_source": "canon:premonition cooldown 12s, future ghosts, dodge through one to counter"
+  },
+  "cigarra_false_memory": {
+   "name": "False Memory",
+   "kind": "ability",
+   "tell_anim": "roar",
+   "startup": 20,
+   "active": 1,
+   "recovery": 22,
+   "stamina_cost": 14,
+   "cooldown": 840,
+   "pressure_on_use": 22,
+   "spawns": [
+    {
+     "at": 20,
+     "type": "false_memory",
+     "frames": 180
+    }
+   ],
+   "lore_source": "canon:false_memory cooldown 14s, hallucination decoy the enemy attacks"
+  },
+  "cigarra_future_touched": {
+   "name": "A Future Touched",
+   "kind": "laststand",
+   "tell_anim": "stance",
+   "startup": 24,
+   "active": 240,
+   "recovery": 14,
+   "pressure_on_use": 100,
+   "iframes": [
+    0,
+    24
+   ],
+   "stance": {
+    "status": "touched",
+    "from": 24,
+    "frames": 240
+   },
+   "lore_source": "lore:Bk XIV a future seen is a future touched; ends in Future-Noise overload"
+  },
+  "cigarra_future_noise": {
+   "name": "Future-Noise",
+   "kind": "resource",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "lore:L330 she experiences noise; competing outcome-images"
+  }
+ }
+}

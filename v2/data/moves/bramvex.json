@@ -1,0 +1,294 @@
+{
+ "critter": "bramvex",
+ "moves": {
+  "bramvex_diplomacy1": {
+   "name": "Diplomacy Swing",
+   "kind": "light",
+   "tell_anim": "thrust",
+   "startup": 14,
+   "active": 3,
+   "recovery": 16,
+   "stamina_cost": 8,
+   "damage": 10.0,
+   "poise_damage": 6,
+   "hitstun": 20,
+   "blockstun": 11,
+   "knockback": 0.3,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 3.0,
+    "arc": 40
+   },
+   "track": 5,
+   "lore_source": "lore:L810 enormous thorned weapon nicknamed Diplomacy; thorn hits bleed",
+   "chain": "bramvex_diplomacy2",
+   "cancel_from": 16,
+   "on_hit": {
+    "dot": {
+     "name": "bleed",
+     "life": 150,
+     "dps": 2.0,
+     "max": 1
+    }
+   }
+  },
+  "bramvex_diplomacy2": {
+   "name": "Diplomacy Swing II",
+   "kind": "light",
+   "tell_anim": "thrust",
+   "startup": 13,
+   "active": 3,
+   "recovery": 20,
+   "stamina_cost": 8,
+   "damage": 10.0,
+   "poise_damage": 6,
+   "hitstun": 20,
+   "blockstun": 11,
+   "knockback": 0.5,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 3.1,
+    "arc": 40
+   },
+   "track": 5,
+   "lore_source": "lore:L810 enormous thorned weapon nicknamed Diplomacy; thorn hits bleed",
+   "on_hit": {
+    "dot": {
+     "name": "bleed",
+     "life": 150,
+     "dps": 2.0,
+     "max": 1
+    }
+   }
+  },
+  "bramvex_final_offer": {
+   "name": "Diplomacy, Final Offer",
+   "kind": "heavy",
+   "tell_anim": "overhead",
+   "startup": 30,
+   "active": 4,
+   "recovery": 30,
+   "stamina_cost": 20,
+   "feint": true,
+   "track": 10,
+   "damage": 28.0,
+   "poise_damage": 16,
+   "hitstun": 34,
+   "blockstun": 18,
+   "knockback": 1.0,
+   "hitstop": 8,
+   "hitbox": {
+    "reach": 3.6,
+    "arc": 50
+   },
+   "props": {
+    "guard_crush": true
+   },
+   "on_hit": {
+    "dot": {
+     "name": "bleed",
+     "life": 150,
+     "dps": 2.0,
+     "max": 1
+    }
+   },
+   "lore_source": "lore:L810 nickname Diplomacy; slow overhead guard-crush"
+  },
+  "bramvex_detain": {
+   "name": "Detain",
+   "kind": "grab",
+   "tell_anim": "grab",
+   "startup": 18,
+   "active": 3,
+   "recovery": 30,
+   "stamina_cost": 12,
+   "track": 8,
+   "damage": 14.0,
+   "poise_damage": 8,
+   "hitstop": 6,
+   "grab": true,
+   "throw_dist": 0.9,
+   "throw_stun": 6,
+   "hitbox": {
+    "reach": 2.2,
+    "arc": 90
+   },
+   "on_hit": {
+    "root": 30
+   },
+   "lore_source": "lore:restrains and frees detainees; thorn-lock hold"
+  },
+  "bramvex_cigarra_hole": {
+   "name": "Cigarra Hole",
+   "kind": "dodge",
+   "tell_anim": "leap",
+   "startup": 0,
+   "active": 6,
+   "recovery": 12,
+   "stamina_cost": 18,
+   "iframes": [
+    0,
+    6
+   ],
+   "motion": [
+    {
+     "at": 0,
+     "len": 7,
+     "dist": 2.6,
+     "dir": "random"
+    }
+   ],
+   "lore_source": "lore:Bk XIV Cigarra Holes: deliberate blank spaces in plans",
+   "cancel_from": 8,
+   "chain_on": "always"
+  },
+  "bramvex_ghost": {
+   "name": "Ghost",
+   "kind": "ability",
+   "tell_anim": "stance",
+   "startup": 6,
+   "active": 1,
+   "recovery": 14,
+   "stamina_cost": 10,
+   "cooldown": 480,
+   "stance": {
+    "status": "camo",
+    "from": 6,
+    "frames": 150
+   },
+   "lore_source": "lore:Camouflage / Sensory Adaptation; next hit is an ambush crit"
+  },
+  "bramvex_ground_prep": {
+   "name": "Ground Prep",
+   "kind": "ability",
+   "tell_anim": "hook",
+   "startup": 14,
+   "active": 1,
+   "recovery": 16,
+   "stamina_cost": 12,
+   "cooldown": 360,
+   "spawns": [
+    {
+     "at": 14,
+     "type": "zone",
+     "place": "front",
+     "dist": 1.4,
+     "radius": 0.8,
+     "life": 900,
+     "once": true,
+     "arm": 24,
+     "tag": "thorn",
+     "max": 4,
+     "on_enter": {
+      "damage": 6.0,
+      "root": 30,
+      "slow": 90,
+      "poise": 6
+     }
+    },
+    {
+     "at": 14,
+     "type": "zone",
+     "place": "front",
+     "dist": 2.6,
+     "radius": 0.8,
+     "life": 900,
+     "once": true,
+     "arm": 24,
+     "tag": "thorn",
+     "max": 4,
+     "on_enter": {
+      "damage": 6.0,
+      "root": 30,
+      "slow": 90,
+      "poise": 6
+     }
+    },
+    {
+     "at": 14,
+     "type": "zone",
+     "place": "front",
+     "dist": 3.8,
+     "radius": 0.8,
+     "life": 900,
+     "once": true,
+     "arm": 24,
+     "tag": "thorn",
+     "max": 4,
+     "on_enter": {
+      "damage": 6.0,
+      "root": 30,
+      "slow": 90,
+      "poise": 6
+     }
+    }
+   ],
+   "lore_source": "lore:Tactical Terrain Use; thorn lines and chokepoints"
+  },
+  "bramvex_day_20": {
+   "name": "Day 20",
+   "kind": "laststand",
+   "tell_anim": "leap",
+   "startup": 14,
+   "active": 60,
+   "recovery": 24,
+   "iframes": [
+    0,
+    14
+   ],
+   "armor": 0.6,
+   "armor_frames": [
+    0,
+    80
+   ],
+   "damage": 6.0,
+   "poise_damage": 6,
+   "hitstun": 16,
+   "blockstun": 8,
+   "hitstop": 3,
+   "hitbox": {
+    "reach": 3.4,
+    "arc": 160
+   },
+   "props": {
+    "cleanse": true,
+    "intel_scale": 1.5,
+    "unblockable": true
+   },
+   "rehit": {
+    "every": 9,
+    "count": 7,
+    "from": 18,
+    "len": 3
+   },
+   "motion": [
+    {
+     "at": 8,
+     "len": 8,
+     "dist": 3.0,
+     "dir": "to_target",
+     "gap": 0.5
+    }
+   ],
+   "lore_source": "lore:escape on Day 20; plans built from observation"
+  },
+  "bramvex_observation": {
+   "name": "Observation (Intel)",
+   "kind": "resource",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "lore:nineteen days of observation; reads improve over the bout"
+  },
+  "bramvex_stand_firm": {
+   "name": "Stand Firm",
+   "kind": "resource",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "lore:sergeant, field equipment; perfect guard grants Intel"
+  }
+ }
+}

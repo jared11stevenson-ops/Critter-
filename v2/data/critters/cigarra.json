@@ -1,0 +1,62 @@
+{
+ "id": "cigarra",
+ "name": "Cigarra",
+ "species": "Brazilian treehopper",
+ "archetype": "Counter duelist",
+ "weapon": "Crown spheres and charms",
+ "palette": {
+  "main": "leaf green",
+  "accent": "crown black",
+  "glow": "yellow-green"
+ },
+ "stats": {
+  "vit": 4,
+  "sta": 7,
+  "poi": 3,
+  "spd": 9,
+  "rch": 4,
+  "dmg": 9
+ },
+ "moves": {
+  "light": [
+   "cigarra_bad_thought1",
+   "cigarra_bad_thought2",
+   "cigarra_bad_thought3"
+  ],
+  "heavy": "cigarra_crown_barrage",
+  "grab": "cigarra_puppet_thought",
+  "dodge": "cigarra_grasshopper_thought",
+  "ability1": "cigarra_premonition",
+  "ability2": "cigarra_false_memory",
+  "laststand": "cigarra_future_touched",
+  "counter_effect": "cigarra_brain_skip",
+  "resource": "cigarra_future_noise"
+ },
+ "tuning": {
+  "body_radius": 0.4,
+  "parry_window": 12,
+  "block_chip": 0.35,
+  "block_poise": 0.6,
+  "guard_drain": 0.6,
+  "pressure_decay": 6.0,
+  "pressure_max": 100.0,
+  "damage_mult": 1.0
+ },
+ "ai": {
+  "style": "duelist",
+  "range": [
+   2.2,
+   3.0
+  ],
+  "ability1": {
+   "min": 0.0,
+   "max": 6.0,
+   "when": "any"
+  },
+  "ability2": {
+   "min": 1.5,
+   "max": 6.0,
+   "when": "any"
+  }
+ }
+}
