@@ -145,6 +145,29 @@ func tube(xf: Transform3D, pts: Array, rad: Array, color: Color, glow: float = 0
 			var f := d2 + 1
 			idx.append_array([a, d2, b, b, d2, f])
 
+## Round tapered tube: radius r0 at the first point to r1 at the last (linear along the point index).
+func lim(xf: Transform3D, pts: Array, r0: float, r1: float, color: Color, glow: float = 0.0, segs: int = 6,
+		cap_start: bool = true, cap_end: bool = true) -> void:
+	var rad: Array = []
+	for i in range(pts.size()):
+		var r := lerpf(r0, r1, float(i) / maxf(pts.size() - 1, 1))
+		rad.append(Vector2(r, r))
+	tube(xf, pts, rad, color, glow, Vector3(0, 0, 1), segs, cap_start, cap_end)
+
+## Flat ribbon / blade / leaf: width w0 -> w1 along the path, thickness `th`; `wide` = direction the width runs.
+## `bulge` > 0 swells the middle (leaf shape); the last radius is 0 when `point` is true.
+func flat(xf: Transform3D, pts: Array, w0: float, w1: float, th: float, color: Color, wide: Vector3 = Vector3(0, 1, 0),
+		glow: float = 0.0, bulge: float = 0.0, point: bool = false, segs: int = 4) -> void:
+	var rad: Array = []
+	var n := pts.size()
+	for i in range(n):
+		var f := float(i) / maxf(n - 1, 1)
+		var w := lerpf(w0, w1, f) * (1.0 + bulge * sin(f * PI))
+		if point and i == n - 1:
+			w = 0.0
+		rad.append(Vector2(w, th))
+	tube(xf, pts, rad, color, glow, wide, segs, false, false)
+
 ## Torus ring (goggles, hard-hat brims, spectacle lenses, rivets). Axis = local Z.
 func ring(xf: Transform3D, big_r: float, small_r: float, color: Color, glow: float = 0.0, segs: int = 14, tsegs: int = 6,
 		squash: float = 1.0) -> void:

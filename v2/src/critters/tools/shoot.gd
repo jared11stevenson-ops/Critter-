@@ -54,7 +54,7 @@ func _spawn(id: String) -> Node3D:
 		Stage.blob_shadow(rig, 0.9)
 	return rig
 
-func _frame_cam(h: float, yaw_deg: float, center_x: float = 0.0, fit: float = 1.32, tilt: float = 0.14) -> void:
+func _frame_cam(h: float, yaw_deg: float, center_x: float = 0.0, fit: float = 1.18, tilt: float = 0.14) -> void:
 	var cam: Camera3D = st["cam"]
 	var d: float = (h * fit * 0.5) / tan(deg_to_rad(cam.fov * 0.5))
 	var y := deg_to_rad(yaw_deg)

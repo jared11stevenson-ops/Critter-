@@ -15,6 +15,6 @@ run --mode=actions --out="$TILES" --size=512
 run --mode=expr --out="$TILES" --size=512
 run --mode=lineup --out="$TILES" --size=560
 run --mode=sil --out="$TILES" --size=256
-run --mode=fx --ids=haldor,sessa,zell --out="$TILES" --size=512
+run --mode=fx --ids=aruun,cigarra,nyxaris --out="$TILES" --size=512
 python3 "$HERE/make_sheets.py" "$TILES" "$OUT" --tile=340
 du -sh "$OUT"

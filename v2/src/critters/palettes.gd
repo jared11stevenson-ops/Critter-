@@ -1,23 +1,23 @@
 extends RefCounted
-## Critter palettes (ROSTER.md: main / accent / glow). Hex values chosen by the Character Artist from the Lead's
-## color names; `sig` is the signature hue used by the palette-distance gate and UI tinting.
-## Warm hues crowd the wheel, so signatures are spread: brick 3, tangerine 26, gold 47, moss 90,
-## cyan 190, violet 262, magenta 320 (min gap >= 20 degrees, enforced by test_art_palette).
+## Critter palettes for the lore cast (see DATA). Gate: test_art_palette.gd.
 
-const IDS := ["haldor", "sessa", "weft", "cinder", "marro", "zell", "kragg"]
+const IDS := ["aruun", "cigarra", "bramvex", "scarlith", "mollusk", "zephyr", "nyxaris"]
 
+## Palettes are sampled from the approved reference sheets (tools/source_art/*_sheet.*), NOT invented.
+## main = dominant body color, accent = second identity color, glow = emissive/rim color from the art, belly = light tone,
+## sig = the one color that carries the character at a glance (used by the palette gate and UI tinting).
 const DATA := {
-	"haldor": {"main": "3b3a46", "accent": "fbcf33", "glow": "ff6a1f", "sig": "fbcf33", "belly": "6a6676"},
-	"sessa": {"main": "9be21f", "accent": "17141f", "glow": "ff2fb8", "sig": "ff2fb8", "belly": "d8f58a"},
-	"weft": {"main": "7a45d8", "accent": "c8d3e6", "glow": "23e6cf", "sig": "7a45d8", "belly": "a98ae8"},
-	"cinder": {"main": "ff7718", "accent": "2c2624", "glow": "ffe336", "sig": "ff7718", "belly": "ffc27a"},
-	"marro": {"main": "b8362e", "accent": "d9a73c", "glow": "f5e8c6", "sig": "b8362e", "belly": "e0786a"},
-	"zell": {"main": "17c4e8", "accent": "f4fbff", "glow": "2d5cff", "sig": "17c4e8", "belly": "b9f0fb"},
-	"kragg": {"main": "8a3822", "accent": "ebdfc2", "glow": "74b535", "sig": "74b535", "belly": "b4654a"},
+	"aruun": {"main": "30262f", "accent": "b8321f", "glow": "e8582a", "sig": "c8401f", "belly": "d3b48c"},
+	"cigarra": {"main": "3b2f4d", "accent": "a9c83c", "glow": "c9e04a", "sig": "a9c83c", "belly": "e2dcc4"},
+	"bramvex": {"main": "55603a", "accent": "7a1f24", "glow": "ff4a2a", "sig": "6f7a2f", "belly": "c9b078"},
+	"scarlith": {"main": "b01c2c", "accent": "e0a53a", "glow": "ffc24a", "sig": "b01c2c", "belly": "ecd49a"},
+	"mollusk": {"main": "d9a46c", "accent": "6b3326", "glow": "e8603c", "sig": "7a8a34", "belly": "f0d8a8"},
+	"zephyr": {"main": "7d8442", "accent": "c43a5e", "glow": "ff5fa0", "sig": "d6457f", "belly": "e8b5a0"},
+	"nyxaris": {"main": "25202e", "accent": "ee4fa8", "glow": "7fd2ea", "sig": "6cc4e6", "belly": "efe8dc"},
 }
 
 static func get_pal(id: String) -> Dictionary:
-	var d: Dictionary = DATA.get(id, DATA["haldor"])
+	var d: Dictionary = DATA.get(id, DATA["aruun"])
 	var out := {}
 	for k in d:
 		out[k] = Color.html(d[k])

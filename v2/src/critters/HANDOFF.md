@@ -1,6 +1,8 @@
 # Character Artist handoff (v2/src/critters)
 
-Status: all seven critters built (Haldor, Sessa polished first; Weft, Cinder, Marro, Zell, Kragg after). Art gates green under the QA runner (`run_tests.gd -- art`, headless).
+**DIRECTION CHANGE (creator): the seven are now the LORE cast: Aruun, Cigarra, Bramvex, Scarlith, Mollusk, Zephyr, Nyxaris, built from the approved reference sheets (tools/source_art). Aruun + Cigarra done first; the rest follow. Boards (reference vs in-engine) live in design/v2/sheets/<id>_board.png. Sections below that mention Haldor/Sessa/Weft/Cinder/Marro/Zell/Kragg are history.**
+
+Status (old): all seven critters built (Haldor, Sessa polished first; Weft, Cinder, Marro, Zell, Kragg after). Art gates green under the QA runner (`run_tests.gd -- art`, headless).
 
 ## How to use the rig (Arena/Scene Engineer)
 ```gdscript
