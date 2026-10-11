@@ -95,6 +95,9 @@ func _build_background() -> void:
 		tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var grade := ShaderMaterial.new()   # LOOK_PASS colour grade (split-tone + vignette), no extra draw
+		grade.shader = load("res://game/art/shaders/title_grade.gdshader")
+		tr.material = grade
 		_bg.add_child(tr)
 		return
 	# Painted-sky fallback: Red Reaches dusk gradient + mesa silhouettes + ringed planet + drifting motes

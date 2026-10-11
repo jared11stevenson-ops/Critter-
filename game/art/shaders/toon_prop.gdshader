@@ -55,6 +55,9 @@ uniform vec3 critter_cam_pos;
 
 varying vec3 w_pos;
 varying vec3 w_nrm;
+// LOOK_PASS: large soft warm/cool + light/dark patches from world position (props are often merged into one mesh, so a
+// per-object hash would not vary; smooth noise does, without hard seams).
+uniform float inst_var = 1.0;
 
 void vertex() {
 	VERTEX = gait_offset(VERTEX, UV2);
@@ -71,6 +74,8 @@ void fragment() {
 		discard;
 	}
 	vec3 base = albedo.rgb * mix(vec3(1.0), COLOR.rgb, use_vertex_color);
+	float pv = texture(noise_tex, w_pos.xz * 0.11 + w_pos.y * 0.03).g;
+	base *= mix(vec3(1.0), mix(vec3(0.88, 0.97, 1.06), vec3(1.08, 1.0, 0.90), smoothstep(0.25, 0.75, pv)) * (0.9 + 0.2 * pv), inst_var);
 #if defined(QUALITY_LOW) || defined(QUALITY_MEDIUM)
 	vec3 an = abs(w_nrm);
 #ifdef QUALITY_LOW
