@@ -3,7 +3,6 @@
  "name": "Bramvex",
  "species": "Prickly stick insect sergeant",
  "archetype": "Zoner / terrain tactician",
- "weapon": "Diplomacy (huge thorned weapon)",
  "palette": {
   "main": "bark olive",
   "accent": "restrained red insignia",
@@ -39,7 +38,7 @@
   "parry_window": 10,
   "intel_gain": 1.0,
   "dodge_chain": 1,
-  "damage_mult": 1.0
+  "damage_mult": 0.906
  },
  "ai": {
   "style": "zoner",
@@ -57,5 +56,7 @@
    "max": 9.0,
    "when": "any"
   }
- }
+ },
+ "weapon": "Diplomacy (huge thorned weapon)",
+ "powers": "camouflage, terrain tactics, thorned Diplomacy"
 }

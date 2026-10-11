@@ -22,7 +22,8 @@
    "track": 6,
    "lore_source": "canon:aruun_combo three-strike mace combo",
    "chain": "aruun_combo2",
-   "cancel_from": 20
+   "cancel_from": 20,
+   "power": "weapon:Morrow"
   },
   "aruun_combo2": {
    "name": "Morrow Combo 2",
@@ -45,7 +46,8 @@
    "track": 6,
    "lore_source": "canon:aruun_combo three-strike mace combo",
    "chain": "aruun_combo3",
-   "cancel_from": 19
+   "cancel_from": 19,
+   "power": "weapon:Morrow"
   },
   "aruun_combo3": {
    "name": "Morrow Combo Finisher",
@@ -69,7 +71,8 @@
    "lore_source": "canon:aruun_combo the last swing knocks enemies back",
    "props": {
     "knockdown": false
-   }
+   },
+   "power": "weapon:Morrow"
   },
   "aruun_overhead": {
    "name": "Morrow Overhead",
@@ -95,7 +98,8 @@
     "guard_crush": true,
     "knockdown": true
    },
-   "lore_source": "lore:L424 Morrow transmits impact sensation"
+   "lore_source": "lore:L424 Morrow transmits impact sensation",
+   "power": "weapon:Morrow"
   },
   "aruun_drag": {
    "name": "Morrow Drag",
@@ -116,7 +120,8 @@
     "reach": 2.8,
     "arc": 80
    },
-   "lore_source": "canon:gravity_pull concept, short pull-and-slam"
+   "lore_source": "canon:gravity_pull concept, short pull-and-slam",
+   "power": "weapon:Morrow"
   },
   "aruun_dodge": {
    "name": "Heavy Roll",
@@ -138,7 +143,8 @@
      "dir": "input"
     }
    ],
-   "lore_source": "lore:L424 Morrow redirects; body weight dodge"
+   "lore_source": "lore:L424 Morrow redirects; body weight dodge",
+   "power": "psionic"
   },
   "aruun_reaching_strike": {
    "name": "Reaching Strike",
@@ -171,7 +177,8 @@
      "radius": 2.0
     }
    ],
-   "lore_source": "canon:reaching_strike cooldown 6s, shatters cracked Thoughtstone"
+   "lore_source": "canon:reaching_strike cooldown 6s, shatters cracked Thoughtstone",
+   "power": "psionic"
   },
   "aruun_gravity_pull": {
    "name": "Gravity Pull",
@@ -217,7 +224,8 @@
      "hitstop": 12
     }
    ],
-   "lore_source": "canon:gravity_pull cooldown 10s, floats ahead, drags then slams"
+   "lore_source": "canon:gravity_pull cooldown 10s, floats ahead, drags then slams",
+   "power": "psionic"
   },
   "aruun_morrow_first": {
    "name": "Morrow Moves First",
@@ -238,7 +246,8 @@
     "arc": 150
    },
    "track": 8,
-   "lore_source": "lore:L426 sometimes it appears to move before he commands it"
+   "lore_source": "lore:L426 sometimes it appears to move before he commands it",
+   "power": "weapon:Morrow"
   },
   "aruun_carry_the_bridge": {
    "name": "Carry the Bridge",
@@ -268,7 +277,8 @@
     "store_ratio": 1.0,
     "stored_mult": 1.5
    },
-   "lore_source": "lore:Red Span carries part of a bridge, redistributes force"
+   "lore_source": "lore:Red Span carries part of a bridge, redistributes force",
+   "power": "weapon:Morrow"
   },
   "aruun_beetle_rage": {
    "name": "Beetle Rage",
@@ -277,7 +287,8 @@
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "canon:beetle_rage cooldown 18s; lore:L439 deliberate overdrive, self-damage (Strain)"
+   "lore_source": "canon:beetle_rage cooldown 18s; lore:L439 deliberate overdrive, self-damage (Strain)",
+   "power": "psionic"
   }
  }
 }

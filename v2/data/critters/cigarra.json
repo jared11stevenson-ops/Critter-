@@ -3,7 +3,6 @@
  "name": "Cigarra",
  "species": "Brazilian treehopper",
  "archetype": "Counter duelist",
- "weapon": "Crown spheres and charms",
  "palette": {
   "main": "leaf green",
   "accent": "crown black",
@@ -40,7 +39,7 @@
   "guard_drain": 0.6,
   "pressure_decay": 6.0,
   "pressure_max": 100.0,
-  "damage_mult": 1.0
+  "damage_mult": 1.16
  },
  "ai": {
   "style": "duelist",
@@ -58,5 +57,6 @@
    "max": 6.0,
    "when": "any"
   }
- }
+ },
+ "powers": "treehopper crown spheres, premonition, mind control"
 }

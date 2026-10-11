@@ -16,13 +16,14 @@
    "knockback": 0.2,
    "hitstop": 4,
    "hitbox": {
-    "reach": 3.2,
-    "arc": 36
+    "reach": 2.6,
+    "arc": 44
    },
    "track": 5,
    "lore_source": "canon:bad_thought flicks a crown sphere, distorted psychic object",
    "chain": "cigarra_bad_thought2",
-   "cancel_from": 11
+   "cancel_from": 11,
+   "power": "anatomy:crown spheres"
   },
   "cigarra_bad_thought2": {
    "name": "Bad Thought II",
@@ -39,13 +40,14 @@
    "knockback": 0.2,
    "hitstop": 4,
    "hitbox": {
-    "reach": 3.2,
-    "arc": 36
+    "reach": 2.6,
+    "arc": 44
    },
    "track": 5,
    "lore_source": "canon:bad_thought flicks a crown sphere, distorted psychic object",
    "chain": "cigarra_bad_thought3",
-   "cancel_from": 11
+   "cancel_from": 11,
+   "power": "anatomy:crown spheres"
   },
   "cigarra_bad_thought3": {
    "name": "Bad Thought III",
@@ -62,11 +64,12 @@
    "knockback": 0.6,
    "hitstop": 4,
    "hitbox": {
-    "reach": 3.2,
-    "arc": 36
+    "reach": 2.6,
+    "arc": 44
    },
    "track": 5,
-   "lore_source": "canon:bad_thought flicks a crown sphere, distorted psychic object"
+   "lore_source": "canon:bad_thought flicks a crown sphere, distorted psychic object",
+   "power": "anatomy:crown spheres"
   },
   "cigarra_crown_barrage": {
    "name": "Crown Barrage",
@@ -100,7 +103,8 @@
      "hitstop": 4
     }
    ],
-   "lore_source": "lore:branching black-sphere crown volley"
+   "lore_source": "lore:branching black-sphere crown volley",
+   "power": "anatomy:crown spheres"
   },
   "cigarra_puppet_thought": {
    "name": "Puppet Thought",
@@ -125,7 +129,9 @@
      "mode": "auto"
     }
    },
-   "lore_source": "creator direction + lore:Psychic Interference; crown spheres flare"
+   "lore_source": "creator direction + lore:Psychic Interference; crown spheres flare",
+   "power": "anatomy:crown spheres",
+   "cooldown": 360
   },
   "cigarra_grasshopper_thought": {
    "name": "Grasshopper Thought",
@@ -147,7 +153,8 @@
      "dir": "input"
     }
    ],
-   "lore_source": "canon:grasshopper_thought crouch then launch, cloak steers"
+   "lore_source": "canon:grasshopper_thought crouch then launch, cloak steers",
+   "power": "psionic"
   },
   "cigarra_brain_skip": {
    "name": "Brain Skip",
@@ -156,7 +163,8 @@
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "canon:brain_skip cooldown 9s, counter when dodging through a Premonition ghost"
+   "lore_source": "canon:brain_skip cooldown 9s, counter when dodging through a Premonition ghost",
+   "power": "psionic"
   },
   "cigarra_premonition": {
    "name": "Premonition",
@@ -173,7 +181,8 @@
     "from": 6,
     "frames": 150
    },
-   "lore_source": "canon:premonition cooldown 12s, future ghosts, dodge through one to counter"
+   "lore_source": "canon:premonition cooldown 12s, future ghosts, dodge through one to counter",
+   "power": "psionic"
   },
   "cigarra_false_memory": {
    "name": "False Memory",
@@ -192,7 +201,8 @@
      "frames": 180
     }
    ],
-   "lore_source": "canon:false_memory cooldown 14s, hallucination decoy the enemy attacks"
+   "lore_source": "canon:false_memory cooldown 14s, hallucination decoy the enemy attacks",
+   "power": "psionic"
   },
   "cigarra_future_touched": {
    "name": "A Future Touched",
@@ -211,7 +221,8 @@
     "from": 24,
     "frames": 240
    },
-   "lore_source": "lore:Bk XIV a future seen is a future touched; ends in Future-Noise overload"
+   "lore_source": "lore:Bk XIV a future seen is a future touched; ends in Future-Noise overload",
+   "power": "psionic"
   },
   "cigarra_future_noise": {
    "name": "Future-Noise",
@@ -220,7 +231,8 @@
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "lore:L330 she experiences noise; competing outcome-images"
+   "lore_source": "lore:L330 she experiences noise; competing outcome-images",
+   "power": "psionic"
   }
  }
 }

@@ -3,7 +3,6 @@
  "name": "Zephyr",
  "species": "Hummingbird hawk-moth fairy",
  "archetype": "Aerial skirmisher",
- "weapon": "Light needle-lance and wings",
  "palette": {
   "main": "moth brown",
   "accent": "pollen gold",
@@ -41,7 +40,7 @@
   "guard_move_mult": 0.7,
   "loophole_window": 5,
   "marks_bonus": 1,
-  "damage_mult": 1.0
+  "damage_mult": 0.767
  },
  "ai": {
   "style": "skirmisher",
@@ -59,5 +58,6 @@
    "max": 4.0,
    "when": "any"
   }
- }
+ },
+ "powers": "flight, atmospheric disturbance, pollination, promise law"
 }

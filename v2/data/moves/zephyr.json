@@ -22,7 +22,8 @@
    "track": 5,
    "lore_source": "lore:Motion; very fast strikes from hover",
    "chain": "zephyr_flutter2",
-   "cancel_from": 12
+   "cancel_from": 12,
+   "power": "anatomy"
   },
   "zephyr_flutter2": {
    "name": "Flutter Strike II",
@@ -45,7 +46,8 @@
    "track": 5,
    "lore_source": "lore:Motion; very fast strikes from hover",
    "chain": "zephyr_flutter3",
-   "cancel_from": 12
+   "cancel_from": 12,
+   "power": "anatomy"
   },
   "zephyr_flutter3": {
    "name": "Flutter Side-Step",
@@ -74,7 +76,8 @@
      "dist": 1.4,
      "dir": "side"
     }
-   ]
+   ],
+   "power": "anatomy"
   },
   "zephyr_delivery": {
    "name": "Delivery",
@@ -109,7 +112,8 @@
     "refund": 18,
     "penalty": 16
    },
-   "lore_source": "lore:courier, crossing spaces quickly; a declared Promise (Promise Law)"
+   "lore_source": "lore:courier, crossing spaces quickly; a declared Promise (Promise Law)",
+   "power": "anatomy"
   },
   "zephyr_catch": {
    "name": "Catch",
@@ -138,7 +142,8 @@
      "dir": "fwd"
     }
    ],
-   "lore_source": "lore:seizes in mid-air and releases for a ring-out"
+   "lore_source": "lore:seizes in mid-air and releases for a ring-out",
+   "power": "anatomy"
   },
   "zephyr_air_dodge": {
    "name": "Air Dodge",
@@ -162,7 +167,8 @@
    ],
    "lore_source": "lore:hummingbird-hawk-moth hover; crossing spaces is joy",
    "cancel_from": 8,
-   "chain_on": "always"
+   "chain_on": "always",
+   "power": "anatomy"
   },
   "zephyr_gust": {
    "name": "Gust",
@@ -193,7 +199,8 @@
      "type": "gust"
     }
    ],
-   "lore_source": "lore:Atmospheric Disturbance; knocks back, pushes projectiles, ring-out"
+   "lore_source": "lore:Atmospheric Disturbance; knocks back, pushes projectiles, ring-out",
+   "power": "supernatural"
   },
   "zephyr_pollen": {
    "name": "Pollen",
@@ -221,7 +228,8 @@
      }
     }
    ],
-   "lore_source": "lore:Pollination; a cloud marks the enemy (slow, bonus damage from Zephyr)"
+   "lore_source": "lore:Pollination; a cloud marks the enemy (slow, bonus damage from Zephyr)",
+   "power": "supernatural"
   },
   "zephyr_a_promise_kept": {
    "name": "A Promise Kept",
@@ -292,7 +300,8 @@
      "nocollide": true
     }
    ],
-   "lore_source": "lore:promises are sacred; a declared sequence nothing can interrupt or dodge"
+   "lore_source": "lore:promises are sacred; a declared sequence nothing can interrupt or dodge",
+   "power": "supernatural"
   },
   "zephyr_loophole": {
    "name": "Loophole",
@@ -301,7 +310,8 @@
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "lore:loves loopholes; a freshly raised guard slips through a strike"
+   "lore_source": "lore:loves loopholes; a freshly raised guard slips through a strike",
+   "power": "anatomy"
   },
   "zephyr_promise": {
    "name": "Promise",
@@ -310,7 +320,8 @@
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "lore:Promise Law, wording matters; follow through for bonus, break it and pay"
+   "lore_source": "lore:Promise Law, wording matters; follow through for bonus, break it and pay",
+   "power": "supernatural"
   }
  }
 }

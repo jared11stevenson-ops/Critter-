@@ -128,7 +128,9 @@
   "guard_delay": 0.0,
   "intel_gain": 0.0,
   "brew_bonus": 0.0,
-  "marks_bonus": 0.0
+  "marks_bonus": 0.0,
+  "desperation_mult": 1.3,
+  "desperation_ratio": 0.35
  },
  "tick_rate": 60,
  "input_deadzone": 0.2,
@@ -154,8 +156,8 @@
  "morrow_odds": 0.004,
  "morrow_range": 2.4,
  "plate_size": 30.0,
- "compel_frames": 72,
- "compel_poise_ref": 120.0,
+ "compel_frames": 60,
+ "compel_poise_ref": 200.0,
  "compel_max_resist": 0.75,
  "compel_edge_range": 3.5,
  "compel_stumble_speed": 3.4,
@@ -193,7 +195,7 @@
   "borrowed",
   "touched"
  ],
- "inertia_rate": 0.6,
+ "inertia_rate": 0.7,
  "owed_speed": 0.75,
  "owed_frames": 240,
  "mark_armor": 0.02,
@@ -225,5 +227,6 @@
   "owed",
   "spoiled"
  ],
- "random_dodge_arc": 70.0
+ "random_dodge_arc": 70.0,
+ "default_stakes": 2
 }

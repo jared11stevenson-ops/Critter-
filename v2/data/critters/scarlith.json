@@ -3,7 +3,6 @@
  "name": "Scarlith",
  "species": "Red-velvet mite kingpin",
  "archetype": "Burst / decay striker",
- "weapon": "Barrel-and-bottle brew kit",
  "palette": {
   "main": "red velvet",
   "accent": "cheese gold",
@@ -42,7 +41,7 @@
   "waste_not": 0.5,
   "cultivate_interval": 300,
   "brew_bonus": 0.3,
-  "damage_mult": 1.0
+  "damage_mult": 1.029
  },
  "ai": {
   "style": "burst",
@@ -60,5 +59,6 @@
    "max": 3.0,
    "when": "any"
   }
- }
+ },
+ "powers": "fermentation, decomposition, cultivation"
 }
