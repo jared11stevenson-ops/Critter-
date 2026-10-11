@@ -71,3 +71,9 @@ The current list lives in `production/PREFLIGHT.md` and is updated every sprint.
 
 ## 9. The Laws gate (creator, 2026-10-11)
 design/v2/CREATOR_GDD.md section 14 is law. Gate 0 for every ticket and merge: "Does this contradict a Core Design Law?" If yes, it is rejected or escalated to the creator as a design revision request. Tickets must list the laws they touch.
+
+## 10. Move Effect Gate (creator, 2026-10-11)
+"Make sure the moves actually do stuff." Every move and ability (strike, heavy, guard, grab, 3 abilities, last stand, dodge variants) must have a REAL, measurable effect in combat: damage, status effect, terrain/zone/trap, displacement, resource change, defense change, or control effect. A move that is purely cosmetic fails the gate.
+- Each move declares `effect_kind` (physical, special, status, terrain, displacement, control, defense, resource, summon) and an `expected` block (what must change, by how much).
+- `v2/tools/qa/tests/test_combat_effects_proof.gd` runs a scripted scenario per move and asserts the measured change vs a baseline run (e.g., enemy vitality delta, status present with duration and tick damage, zone exists and affects an enemy inside it, enemy position moved, cooldown/resource changed). It writes `v2/tools/out/move_audit.md` (one row per move: kind, measured effect, PASS/FAIL).
+- VFX must reflect the real effect: they spawn from sim events, and a zone's visual matches its real radius/duration; status icons show real remaining duration.
