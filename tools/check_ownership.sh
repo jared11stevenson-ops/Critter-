@@ -24,7 +24,7 @@ done
 
 # prefix<TAB>owners (comma separated; 'any' = shared)
 EXTRA=$'v2/tools/\tplatform,qa\nv2/tools/sim/\tcombat\nv2/tools/qa/tests/\tany\nv2/data/story/\tplatform
-.github/\tplatform\ntools/check_ownership.sh\tplatform\ntools/lint_filesize.sh\tplatform\ndesign/\tlead\nproduction/\tlead
+.github/\tplatform\ntools/check_ownership.sh\tplatform\ntools/lint_filesize.sh\tplatform\ndesign/v2/sheets/\tcharacter\nv2/art_export/\tcharacter\ndesign/\tlead\nproduction/\tlead
 v2/src/boot/\tlead\nv2/project.godot\tlead\nv2/icon.svg\tlead\nv2/icon.svg.import\tlead\nv2/data/\tcombat,lead'
 
 normalize_owner() {  # first word of the table's owner column -> agent id
