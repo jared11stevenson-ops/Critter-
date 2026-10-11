@@ -1129,6 +1129,15 @@ func _compute_objective() -> String:
 	return "Return to the exfil beacon"
 
 # ================= QA helpers =================
+func qa_explore() -> void:
+	if explore == null or explore.hud == null:
+		return
+	var h: ExploreHud = explore.hud
+	var c := party.get_leader().global_position
+	var px := int((c.x - ExploreHud.MAP_X0) * ExploreHud.PX_M)
+	var py := int((c.z - ExploreHud.MAP_Z0) * ExploreHud.PX_M)
+	print("[QA] explore found=%d/%d baked=%d queue=%d pix_under_player=%s seen=%d" % [explore.found_count(), explore.pois.size(), h._baked.size(), h._bake_q.size(), h._chart.get_pixel(px, py), explore.floors.filter(func(f): return explore.floor_seen(f)).size()])
+
 func qa_travel(wp_id: String) -> void:
 	print("[QA] travel %s -> '%s'" % [wp_id, explore.travel(wp_id) if explore else "no explore"])
 

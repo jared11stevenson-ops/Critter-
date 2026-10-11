@@ -369,6 +369,12 @@ func _test_explore_level() -> void:
 	var unl: Array = wps.filter(func(w): return w["unlocked"]).map(func(w): return w["id"])
 	ok("gate_landing" in unl and "waystation_camp" in unl and not ("survey_camp" in unl), "waypoints: gate + found places only (%s)" % [unl])
 	ok(ex.floors.any(func(f): return ex.floor_seen(f)), "walked ground is charted on the map")
+	for _i in 6:
+		await get_tree().process_frame
+	var hx := int((118.0 - ExploreHud.MAP_X0) * ExploreHud.PX_M)
+	var hy := int((-2.0 - ExploreHud.MAP_Z0) * ExploreHud.PX_M)
+	ok(ex.hud._chart.get_pixel(hx, hy).r > 0.5, "charted Waystation floor is baked into the minimap texture")
+	ok(ex.hud._chart.get_pixel(int((300.0 - ExploreHud.MAP_X0) * ExploreHud.PX_M), hy).r < 0.2, "unwalked ground stays blank")
 	# fast-travel rules
 	ok(ex.travel_reason("gate_landing") == "The way is blocked", "no fast travel back across the uncrossed Gap (%s)" % ex.travel_reason("gate_landing"))
 	ok(ex.travel_reason("survey_camp") == "Not found yet", "undiscovered waypoint refused")

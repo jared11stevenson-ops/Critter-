@@ -11,13 +11,27 @@ const REDRAW_S := 0.12
 
 var ex: RrExplore
 var _map: Control
-var _title: Label
+var _title := ""
 var _panel: PanelContainer
 var _list: VBoxContainer
 var _msg: Label
 var _redraw_t := 0.0
 var _was_paused := false
-var _polys: Array = []                # [{f, poly}]
+## The charted ground is baked once into one texture (2 px per metre) and drawn as a single rect: the minimap costs a
+## handful of canvas draws no matter how much of the Reaches is charted.
+const PX_M := 2.0
+const BG := Color(0.10, 0.07, 0.06, 0.62)
+const MAP_X0 := -90.0
+const MAP_Z0 := -120.0
+const MAP_W := 500.0                  # metres covered by the texture (padded so the view never leaves it)
+const MAP_H := 240.0
+
+var _chart: Image
+var _chart_tex: ImageTexture
+var _baked: Dictionary = {}           # floor id -> true
+var _bake_q: Array = []               # floors still to rasterise (one per frame)
+var _dot: Texture2D                   # tiny shared textures so every marker is the same draw state
+var _dia: Texture2D
 
 func setup(explore: RrExplore) -> void:
 	ex = explore
@@ -25,31 +39,27 @@ func setup(explore: RrExplore) -> void:
 func _ready() -> void:
 	layer = 19
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	for f in ex.floors:
-		_polys.append({"f": f, "poly": ExploreRules.shape_poly(f)})
+	_chart = Image.create(int(MAP_W * PX_M), int(MAP_H * PX_M), false, Image.FORMAT_RGBA8)
+	_chart.fill(BG)                       # the panel background lives in the texture: one draw for both
+	_chart_tex = ImageTexture.create_from_image(_chart)
+	_dot = _make_tex(false)
+	_dia = _make_tex(true)
 	_map = Control.new()
 	_map.name = "Map"
-	_map.custom_minimum_size = Vector2(SIZE, SIZE)
-	_map.size = Vector2(SIZE, SIZE)
-	_map.clip_contents = true
+	_map.custom_minimum_size = Vector2(SIZE, SIZE + 22.0)
+	_map.size = Vector2(SIZE, SIZE + 22.0)
 	_map.mouse_filter = Control.MOUSE_FILTER_STOP
 	_map.draw.connect(_draw_map)
 	_map.gui_input.connect(_on_map_input)
 	add_child(_map)
-	_title = UiKit.label("", 18, UiKit.PARCHMENT, "bold", 6, Color(0, 0, 0, 0.9))
-	_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_title)
 	get_viewport().size_changed.connect(_layout)
 	_layout()
 
 func _layout() -> void:
 	var vs := get_viewport().get_visible_rect().size
 	var lh := bool(GameState.settings.get("left_handed", false))
-	var pos := Vector2(18.0, 150.0) if lh else Vector2(vs.x - 18.0 - SIZE, 118.0)
+	var pos := Vector2(18.0, 150.0) if lh else Vector2(vs.x - 18.0 - SIZE, 128.0)
 	_map.position = pos
-	_title.position = pos + Vector2(0, SIZE + 2)
-	_title.size = Vector2(SIZE, 24)
-	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	if _panel:
 		_panel.position = (vs - _panel.size) * 0.5
 
@@ -59,6 +69,7 @@ func _process(delta: float) -> void:
 	var party: Variant = ex.level.get("party")
 	if party == null or party.get_leader() == null:
 		return
+	_bake_step()
 	_redraw_t -= delta
 	if _redraw_t <= 0.0:
 		_redraw_t = REDRAW_S
@@ -79,14 +90,58 @@ func _update_title() -> void:
 	var lp: Vector3 = ex.level.get("party").get_leader().global_position
 	var g := ex.guide_target()
 	if g.x == INF:
-		_title.text = "%d/%d places" % [ex.found_count(), ex.pois.size()]
+		_title = "%d/%d places" % [ex.found_count(), ex.pois.size()]
 		return
 	var d := Vector2(g.x - lp.x, g.z - lp.z)
-	_title.text = "Next: %d m %s  ·  %d/%d" % [int(d.length()), ExploreRules.compass_word(d.x, d.y), ex.found_count(), ex.pois.size()]
+	_title = "Next: %d m %s  ·  %d/%d" % [int(d.length()), ExploreRules.compass_word(d.x, d.y), ex.found_count(), ex.pois.size()]
+
+# ------------------------------------------------------------------ chart texture
+static func _make_tex(diamond: bool) -> Texture2D:
+	var im := Image.create(16, 16, false, Image.FORMAT_RGBA8)
+	for y in 16:
+		for x in 16:
+			var dx := float(x) - 7.5
+			var dy := float(y) - 7.5
+			var inside := (absf(dx) + absf(dy) <= 7.5) if diamond else (dx * dx + dy * dy <= 56.0)
+			im.set_pixel(x, y, Color.WHITE if inside else Color(1, 1, 1, 0))
+	return ImageTexture.create_from_image(im)
+
+## Queue every charted floor that is not on the texture yet; rasterise one per frame (no load-time hitch).
+func _bake_step() -> void:
+	if _bake_q.is_empty():
+		for f in ex.floors:
+			if ex.floor_seen(f) and not _baked.has(f["id"]):
+				_baked[f["id"]] = true
+				_bake_q.append(f)
+		if _bake_q.is_empty():
+			return
+	_bake_floor(_bake_q.pop_front())
+	_chart_tex.update(_chart)
+
+func _bake_floor(f: Dictionary) -> void:
+	var poly := ExploreRules.shape_poly(f, 24)
+	var lo := Vector2(INF, INF)
+	var hi := Vector2(-INF, -INF)
+	for p in poly:
+		lo = lo.min(p)
+		hi = hi.max(p)
+	var col := Color(0.70, 0.43, 0.28, 0.78)
+	var x0 := maxi(0, int((lo.x - MAP_X0) * PX_M))
+	var x1 := mini(_chart.get_width() - 1, int((hi.x - MAP_X0) * PX_M))
+	var y0 := maxi(0, int((lo.y - MAP_Z0) * PX_M))
+	var y1 := mini(_chart.get_height() - 1, int((hi.y - MAP_Z0) * PX_M))
+	for py in range(y0, y1 + 1):
+		var wz := MAP_Z0 + (float(py) + 0.5) / PX_M
+		for px in range(x0, x1 + 1):
+			if ExploreRules.shape_dist(f, MAP_X0 + (float(px) + 0.5) / PX_M, wz) <= 0.0:
+				_chart.set_pixel(px, py, col)
 
 # ------------------------------------------------------------------ drawing
 func _w2m(p: Vector3, c: Vector3) -> Vector2:
 	return Vector2(SIZE, SIZE) * 0.5 + ExploreRules.to_map(p.x - c.x, p.z - c.z, SIZE * 0.5 / RANGE_M)
+
+func _mark(tex: Texture2D, p: Vector2, r: float, col: Color) -> void:
+	_map.draw_texture_rect(tex, Rect2(p - Vector2(r, r), Vector2(r, r) * 2.0), false, col)
 
 func _draw_map() -> void:
 	var party: Variant = ex.level.get("party")
@@ -95,69 +150,52 @@ func _draw_map() -> void:
 	var lead: PlayableCritter = party.get_leader()
 	var c: Vector3 = lead.global_position
 	var half := SIZE * 0.5
-	_map.draw_rect(Rect2(Vector2.ZERO, Vector2(SIZE, SIZE)), Color(0.10, 0.07, 0.06, 0.62))
-	for pl in _polys:
-		if not ex.floor_seen(pl["f"]):
-			continue
-		var src: PackedVector2Array = pl["poly"]
-		var out := PackedVector2Array()
-		out.resize(src.size())
-		for i in src.size():
-			out[i] = _w2m(Vector3(src[i].x, 0.0, src[i].y), c)
-		_map.draw_colored_polygon(out, Color(0.70, 0.43, 0.28, 0.55))
+	var inner := half - 6.0
+	# charted ground: one textured rect cut out of the baked chart around the player
+	var src_c := Vector2((c.x - MAP_X0) * PX_M, (c.z - MAP_Z0) * PX_M)
+	var src_h := RANGE_M * PX_M
+	_map.draw_texture_rect_region(_chart_tex, Rect2(Vector2.ZERO, Vector2(SIZE, SIZE)), Rect2(src_c - Vector2(src_h, src_h), Vector2(src_h, src_h) * 2.0))
 	# secrets: a quiet pulse, only when close
 	var pulse := fmod(Time.get_ticks_msec() * 0.001, 1.6) / 1.6
 	for h in ex.hot_secrets(c):
-		_map.draw_arc(_w2m(h["pos"], c), 6.0 + 14.0 * pulse, 0.0, TAU, 20, Color(UiKit.SCAN, 1.0 - pulse), 2.0)
-	# places
+		_map.draw_arc(_w2m(h["pos"], c), 6.0 + 14.0 * pulse, 0.0, TAU, 16, Color(UiKit.SCAN, 1.0 - pulse), 2.0)
+	# places (only those inside the view are drawn; undiscovered ones nearby as an edge chevron)
 	var sense := float(ex.data.get("sense_r", 70.0))
 	for p in ex.pois:
 		var pp: Vector3 = p["pos"]
 		var off := _w2m(pp, c)
 		var d := Vector2(pp.x - c.x, pp.z - c.z).length()
+		var inside := absf(off.x - half) < inner and absf(off.y - half) < inner
 		if ex.is_discovered(p):
-			_diamond(off, 5.0, UiKit.PARCHMENT, p.has("wp"))
-		elif d <= sense:
-			var inside := absf(off.x - half) < half - 6.0 and absf(off.y - half) < half - 6.0
 			if inside:
-				_diamond(off, 3.5, Color(UiKit.PARCHMENT, 0.35), false)
+				_mark(_dia, off, 5.0, UiKit.SCAN if p.has("wp") else UiKit.PARCHMENT)
+		elif d <= sense:
+			if inside:
+				_mark(_dia, off, 3.5, Color(UiKit.PARCHMENT, 0.35))
 			else:
-				_chevron(Vector2(half, half) + ExploreRules.clamp_to_edge(off - Vector2(half, half), half - 7.0), (off - Vector2(half, half)).angle(), Color(UiKit.PARCHMENT, 0.4), 5.0)
-	# hostiles awake near you
+				_mark(_dia, Vector2(half, half) + ExploreRules.clamp_to_edge(off - Vector2(half, half), inner), 3.0, Color(UiKit.PARCHMENT, 0.4))
+	# hostiles near you (red = awake, dim = asleep)
 	var f: Variant = ex.level.get("field")
 	if f != null:
 		for e in f.enemies:
-			if is_instance_valid(e) and e.get("team") == "enemy" and e.get("alive") != false:
+			if is_instance_valid(e) and e.get("team") == "enemy" and e.get("alive") != false and (e.get("aggro") == true or e.global_position.distance_squared_to(c) < 900.0):
 				var eo := _w2m(e.global_position, c)
-				if absf(eo.x - half) < half and absf(eo.y - half) < half:
-					_map.draw_circle(eo, 2.6, Color(0.9, 0.25, 0.2, 0.9 if e.get("aggro") == true else 0.45))
-	# partner
+				if absf(eo.x - half) < inner and absf(eo.y - half) < inner:
+					_mark(_dot, eo, 2.6, Color(0.9, 0.25, 0.2, 0.95 if e.get("aggro") == true else 0.45))
 	var pt: PlayableCritter = party.get_partner()
 	if pt:
-		_map.draw_circle(_w2m(pt.global_position, c), 3.0, Color(UiKit.PSI, 0.9))
-	# story guide
+		_mark(_dot, _w2m(pt.global_position, c), 3.0, Color(UiKit.PSI, 0.9))
+	# story guide: gold marker, on the edge when it is off the map
 	var g := ex.guide_target()
 	if g.x != INF:
 		var go := _w2m(g, c)
-		var gp := Vector2(half, half) + ExploreRules.clamp_to_edge(go - Vector2(half, half), half - 8.0)
-		var a := 0.65 + 0.35 * sin(Time.get_ticks_msec() * 0.006)
-		_chevron(gp, (go - Vector2(half, half)).angle(), Color(1.0, 0.82, 0.30, a), 7.0)
-	# player (north up: -z is up; facing from the actor)
-	var fa := Vector2(lead.facing.x, lead.facing.z).angle() if "facing" in lead else -PI * 0.5
-	_chevron(Vector2(half, half), fa, UiKit.PARCHMENT, 6.0, true)
-	_map.draw_string(UiKit.font("bold"), Vector2(half - 5, 15), "N", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color(UiKit.PARCHMENT, 0.8))
-	_map.draw_rect(Rect2(Vector2.ZERO, Vector2(SIZE, SIZE)), Color(UiKit.PARCHMENT_DARK, 0.9), false, 2.0)
-
-func _diamond(p: Vector2, r: float, col: Color, ring: bool) -> void:
-	_map.draw_colored_polygon(PackedVector2Array([p + Vector2(0, -r), p + Vector2(r, 0), p + Vector2(0, r), p + Vector2(-r, 0)]), col)
-	if ring:
-		_map.draw_arc(p, r + 3.0, 0.0, TAU, 14, Color(UiKit.SCAN, 0.9), 1.5)
-
-func _chevron(p: Vector2, ang: float, col: Color, r: float, filled: bool = true) -> void:
-	var tip := p + Vector2.from_angle(ang) * r
-	var l := p + Vector2.from_angle(ang + 2.5) * r
-	var rr := p + Vector2.from_angle(ang - 2.5) * r
-	_map.draw_colored_polygon(PackedVector2Array([tip, l, p + Vector2.from_angle(ang + PI) * r * 0.2, rr]), col)
+		var gp := Vector2(half, half) + ExploreRules.clamp_to_edge(go - Vector2(half, half), inner)
+		_mark(_dia, gp, 6.5, Color(1.0, 0.82, 0.30, 0.65 + 0.35 * sin(Time.get_ticks_msec() * 0.006)))
+	# player
+	_mark(_dia, Vector2(half, half), 5.0, Color.WHITE)
+	_map.draw_rect(Rect2(0.0, SIZE, SIZE, 22.0), Color(0.10, 0.07, 0.06, 0.8))
+	_map.draw_rect(Rect2(Vector2.ZERO, Vector2(SIZE, SIZE + 22.0)), Color(UiKit.PARCHMENT_DARK, 0.9), false, 2.0)
+	_map.draw_string(UiKit.font("bold"), Vector2(4.0, SIZE + 16.0), _title, HORIZONTAL_ALIGNMENT_CENTER, SIZE - 8.0, 15, UiKit.PARCHMENT)
 
 # ------------------------------------------------------------------ waypoint panel (fast travel)
 func toggle_panel() -> void:
