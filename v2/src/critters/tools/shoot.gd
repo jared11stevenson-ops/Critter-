@@ -43,6 +43,8 @@ func _init() -> void:
 		"fx": await _fx(ids, out)
 		"walk": await _walk(ids, out)
 		"perf": await _perf(ids)
+		"ortho": await _ortho(ids, out)
+		"states": await _states(ids, out)
 	quit()
 
 func _spawn(id: String) -> Node3D:
@@ -254,4 +256,74 @@ func _perf(ids) -> void:
 		var dw := _info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME) - base_d
 		var pw := _info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME) - base_p
 		print("PERF %s idle draws=%d tris=%d | worst(strike+smear+spark) draws=%d tris=%d" % [id, d, p, dw, pw])
+		rig.free()
+
+## Orthographic model-sheet views (front = camera on +X, side = +Z, back = -X, top = +Y) in A-pose, plus part pivot positions in screen space
+## (JSON) for the label overlay. Output: <id>_ortho_<view>.png and <id>_ortho.json {view: {px_per_m, center, parts: {name: [x, y]}}}.
+func _ortho(ids, out: String) -> void:
+	no_shadow = true
+	st["ground"].visible = false
+	st["env"].background_mode = Environment.BG_COLOR
+	st["env"].background_color = Color(0.82, 0.83, 0.85)
+	st["env"].ambient_light_color = Color(0.7, 0.72, 0.78)
+	var res := 640
+	vp.size = Vector2i(res, res)
+	var cam: Camera3D = st["cam"]
+	cam.projection = Camera3D.PROJECTION_ORTHOGONAL
+	for id in ids:
+		var rig = _spawn(id)
+		rig.apose_deg = 35.0
+		rig.three_quarter = 0.0
+		_step(rig, "idle", 0, 3)
+		rig.fx.smear.visible = false
+		var b: AABB = rig.bounds
+		var ext := maxf(b.end.y, maxf(b.size.x, b.size.z)) * 1.12
+		var center := Vector3(b.position.x + b.size.x * 0.5, b.end.y * 0.5, b.position.z + b.size.z * 0.5)
+		cam.size = ext
+		var js := {}
+		for v in [["front", Vector3(1, 0, 0)], ["side", Vector3(0, 0, 1)], ["back", Vector3(-1, 0, 0)], ["top", Vector3(0, 1, 0)]]:
+			var dirv: Vector3 = v[1]
+			var up := Vector3.UP if v[0] != "top" else Vector3(-1, 0, 0)
+			var cpos := center + dirv * 30.0
+			if v[0] != "top":
+				cpos.y = center.y
+			cam.look_at_from_position(cpos, center if v[0] == "top" else Vector3(center.x, center.y, center.z), up)
+			st["sun"].rotation_degrees = Vector3(-35, 35.0 + (0 if v[0] == "front" else (90 if v[0] == "side" else (180 if v[0] == "back" else 0))), 0)
+			await _save("%s/%s_ortho_%s.png" % [out, id, v[0]])
+			var parts := {}
+			for pn in ["head", "torso", "arm_f", "arm_b", "leg_f", "leg_b", "weapon", "extra"]:
+				var nd: Node3D = rig.part(pn)
+				if nd:
+					var sp := cam.unproject_position(nd.global_position)
+					parts[pn] = [sp.x / res, sp.y / res]
+			for sn in ["weapon_tip", "hand", "head", "weapon_base"]:
+				var sk: Node3D = rig.socket(sn)
+				var sp2 := cam.unproject_position(sk.global_position)
+				parts["@" + sn] = [sp2.x / res, sp2.y / res]
+			var gp := cam.unproject_position(Vector3(center.x, 0, center.z))
+			js[v[0]] = {"px_per_m": res / ext, "ground": [gp.x / res, gp.y / res], "parts": parts, "center": [center.x, center.y, center.z]}
+		var f := FileAccess.open("%s/%s_ortho.json" % [out, id], FileAccess.WRITE)
+		f.store_string(JSON.stringify(js))
+		f.close()
+		rig.free()
+
+## Gameplay-state frames: rage + cracked plates (low vitality), mid-throw (detached part), orbiting crown, future ghosts, compel.
+func _states(ids, out: String) -> void:
+	for id in ids:
+		var rig := _spawn(id)
+		rig.three_quarter = 35.0
+		var h: float = _ext(rig)
+		var i := 0
+		for st_def in [["rage_cracked", "idle", 0, {"rage": 1.0, "vitality_ratio": 0.2}], ["detached", "ability1", -1, {"vitality_ratio": 0.8}], ["ghosts", "ability1", -2, {"vitality_ratio": 0.8}]]:
+			var tim: Vector3i = rig.call("_timing_for", st_def[1])
+			var fr: int = st_def[2]
+			if fr == -1: fr = tim.x + 6
+			if fr == -2: fr = tim.x + 3
+			for f in range(0, fr + 1):
+				_step(rig, st_def[1], f, 1, st_def[3])
+			await process_frame
+			_frame_cam(h * 1.1, 0.0, 0.25 * h / 2.0, 1.9)
+			await _save("%s/%s_state_%d_%s.png" % [out, id, i, st_def[0]])
+			i += 1
+			_step(rig, "idle", 0, 90)
 		rig.free()

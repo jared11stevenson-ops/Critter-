@@ -11,11 +11,14 @@ uniform float darken : hint_range(0.0, 1.0) = 0.16;
 uniform vec3 ink : source_color = vec3(0.05, 0.03, 0.05);
 uniform float ink_mix : hint_range(0.0, 1.0) = 0.45;
 uniform float invert_mode : hint_range(0.0, 1.0) = 0.0;
+uniform float crack_level = 0.0;
 uniform float silhouette : hint_range(0.0, 1.0) = 0.0;
 
 varying vec3 v_ink;
 
 void vertex() {
+	float ca = COLOR.a;
+	float tier = ca > 0.005 && ca < 0.04 ? (ca < 0.015 ? 1.0 : (ca < 0.025 ? 2.0 : 3.0)) : 0.0;
 	vec4 vv = MODELVIEW_MATRIX * vec4(VERTEX, 1.0);
 	float depth = max(-vv.z, 0.05);
 	float w = px_width * 2.0 * depth / (abs(PROJECTION_MATRIX[1][1]) * max(VIEWPORT_SIZE.y, 1.0));
@@ -23,6 +26,7 @@ void vertex() {
 	vec3 nv = normalize((MODELVIEW_MATRIX * vec4(NORMAL, 0.0)).xyz);
 	vv.xyz += nv * w;
 	POSITION = PROJECTION_MATRIX * vv;
+	if (tier > crack_level + 0.5) { POSITION = vec4(2.0, 2.0, 2.0, 1.0); }
 	v_ink = mix(COLOR.rgb * darken, ink, ink_mix);
 }
 

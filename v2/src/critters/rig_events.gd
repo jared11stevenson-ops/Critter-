@@ -68,6 +68,13 @@ static func play(rig: Node3D, ev: Dictionary) -> void:
 			rig._shake_f = 18; rig._shake_amp = 1.0
 			if face:
 				face.flash_expression("angry", 3.0)
+		"compel":   # this rig is the victim of mind control: eye-spiral + thread from the source (ev.source_pos world Vector3)
+			if face:
+				face.spiral = 1.0
+			if ev.get("source_pos") is Vector3:
+				fx.thread_from(ev["source_pos"], rig.socket("head").global_position, 1.0)
+		"premonition":   # ghost of the next move: ev.ghost_action, ev.ghost_frame, ev.offset
+			rig.spawn_ghost(str(ev.get("ghost_action", "strike_heavy")), int(ev.get("ghost_frame", 8)), ev.get("offset", Vector3(1.4, 0, 0)))
 		"yield":
 			if face:
 				face.flash_expression("hurt", 1.2)

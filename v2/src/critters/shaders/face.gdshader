@@ -43,6 +43,9 @@ uniform float xeyes = 0.0;
 uniform float sweat = 0.0;
 uniform float wobble = 0.0;
 uniform float time = 0.0;
+uniform float compel_spiral = 0.0;       // compelled: hypnotic spiral in the eyes (0..1)
+uniform float mark = 0.0;         // eye-patch markings under the eyes (Aruun)
+uniform vec3 mark_col : source_color = vec3(0.7, 0.1, 0.1);
 
 float fill(float d, float aa) { return smoothstep(aa, -aa, d); }
 
@@ -60,6 +63,16 @@ void fragment() {
 	float a = 0.0;
 	float o_eff = clamp(open - lid_bias, 0.04, 1.4);
 
+	if (mark > 0.5) {
+		for (int mi = 0; mi < 2; mi++) {
+			float ms = mi == 0 ? -1.0 : 1.0;
+			vec2 mc = vec2(ms * (eye_sep + 0.1), eye_y - 0.08);
+			float md = seg(p, mc + vec2(ms * 0.12, 0.1), mc + vec2(-ms * 0.1, -0.16)) - 0.045;
+			float mm = fill(md, aa);
+			col = mix(col, mark_col, mm);
+			a = max(a, mm);
+		}
+	}
 	for (int i = 0; i < 2; i++) {
 		float s = i == 0 ? -1.0 : 1.0;
 		float er = eye_size[i] * (1.0 + max(open - 1.0, 0.0) * 0.35);
@@ -87,6 +100,12 @@ void fragment() {
 			float shine = fill(length(pu - vec2(er * 0.28, er * 0.34)) - er * 0.27, aa) * glint;
 			ec = mix(eye_col, vec3(1.0), shine * 0.95);
 			ea = body;
+		}
+		if (compel_spiral > 0.01) {
+			float lr2 = length(q);
+			float an = atan(q.y, q.x);
+			float sp = smoothstep(0.35, 0.1, abs(fract(lr2 / (er * 0.3) - an / 6.2832 - time * 1.5) - 0.5)) * step(lr2, er * 1.02);
+			ec = mix(ec, accent, sp * compel_spiral);
 		}
 		// lid stroke when mostly closed (blink / dying) so a closed eye reads as a line
 		float closed = smoothstep(0.55, 0.15, o_eff);

@@ -15,6 +15,8 @@ uniform float glow_strength : hint_range(0.0, 4.0) = 1.0;   // pulsed by the rig
 uniform float flash : hint_range(0.0, 1.0) = 0.0;           // white hit flash
 uniform float invert_mode : hint_range(0.0, 1.0) = 0.0;     // impact frame: flat white critter
 uniform vec3 flash_color : source_color = vec3(1.0);
+uniform float crack_level = 0.0;                              // 0..3 shell-plate crack tiers revealed
+uniform vec3 crack_col = vec3(1.0, 0.35, 0.15);
 uniform float silhouette : hint_range(0.0, 1.0) = 0.0;     // flat black (silhouette gate / lookdev)
 
 varying vec3 v_col;
@@ -25,14 +27,22 @@ void vertex() {
 	v_glow = COLOR.a;
 }
 
+// Crack geometry is authored with vertex alpha 0.01 / 0.02 / 0.03 = tier 1 / 2 / 3 (see Prim crack tubes); ordinary glow is >= 0.1.
+float crack_tier(float a) {
+	return a > 0.005 && a < 0.04 ? (a < 0.015 ? 1.0 : (a < 0.025 ? 2.0 : 3.0)) : 0.0;
+}
+
 void fragment() {
+	float tier = crack_tier(v_glow);
+	if (tier > crack_level + 0.5) { discard; }
 	vec3 base = v_col;
 	// Cel shading is computed in light(); here we only set albedo, rim and emission.
 	ALBEDO = base;
 	float rim = pow(1.0 - clamp(dot(normalize(NORMAL), normalize(VIEW)), 0.0, 1.0), rim_power);
 	rim = smoothstep(0.35, 0.95, rim);
 	vec3 em = rim_color * rim * rim_strength;
-	em += base * v_glow * glow_strength * 1.4;
+	em += base * (tier > 0.5 ? 0.0 : v_glow) * glow_strength * 1.4;
+	if (tier > 0.5) { base = vec3(0.02); em += crack_col * 1.7 * (0.7 + 0.3 * glow_strength); }
 	em += base * shade_amb * 1.0;
 	em = mix(em, flash_color, flash * 0.85);
 	EMISSION = em;

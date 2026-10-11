@@ -24,6 +24,9 @@ var spark_t := 1.0
 var spark_active := false
 var flash_t := 0.0
 var impact_left := 0
+var thread: MeshInstance3D
+var thread_mat: ShaderMaterial
+var thread_t := 1.0
 var glow_boost := 0.0
 var glow_target := 0.0
 
@@ -48,6 +51,13 @@ func _init(r: Node3D, character_mat: ShaderMaterial, accent: Color, glow: Color)
 	spark.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	spark.visible = false
 	rig.add_child(spark)
+	thread = MeshInstance3D.new()
+	thread.name = "thread"
+	thread_mat = Toon.fx(glow, 0)
+	thread.material_override = thread_mat
+	thread.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	thread.visible = false
+	rig.add_child(thread)
 
 func start_smear() -> void:
 	smear_on = true
@@ -99,6 +109,48 @@ func hit_spark(local_pos: Vector3, size: float, color: Color) -> void:
 	spark_active = true
 	spark.visible = true
 
+## A wavering psychic thread (ribbon) between two world points for `life` seconds (compel / mind control).
+func thread_from(a: Vector3, b: Vector3, life: float) -> void:
+	_th_a = rig.to_local(a)
+	_th_b = rig.to_local(b)
+	thread_t = 0.0
+	_th_life = life
+	thread.visible = true
+
+var _th_a := Vector3.ZERO
+var _th_b := Vector3.ZERO
+var _th_life := 1.0
+
+func _update_thread(dt: float) -> void:
+	if thread_t >= 1.0:
+		return
+	thread_t += dt / _th_life
+	if thread_t >= 1.0:
+		thread.visible = false
+		return
+	var vs := PackedVector3Array()
+	var uv := PackedVector2Array()
+	var idx := PackedInt32Array()
+	var n := 14
+	var side := (_th_b - _th_a).cross(Vector3.UP).normalized()
+	for i in range(n + 1):
+		var f := float(i) / n
+		var p := _th_a.lerp(_th_b, f) + Vector3(0, sin(f * 9.0 + thread_t * 20.0) * 0.12 * sin(f * PI), 0)
+		vs.append(p + side * 0.04); uv.append(Vector2(f, 1.0))
+		vs.append(p - side * 0.04); uv.append(Vector2(f, 0.0))
+		if i > 0:
+			var a := (i - 1) * 2
+			idx.append_array([a, a + 1, a + 2, a + 2, a + 1, a + 3])
+	var arr: Array = []
+	arr.resize(Mesh.ARRAY_MAX)
+	arr[Mesh.ARRAY_VERTEX] = vs
+	arr[Mesh.ARRAY_TEX_UV] = uv
+	arr[Mesh.ARRAY_INDEX] = idx
+	var m := ArrayMesh.new()
+	m.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arr)
+	thread.mesh = m
+	thread_mat.set_shader_parameter("alpha", 1.0 - thread_t)
+
 func flash() -> void:
 	flash_t = FLASH_LIFE
 
@@ -109,6 +161,7 @@ func boost_glow(amount: float) -> void:
 	glow_target = amount
 
 func update(dt: float) -> void:
+	_update_thread(dt)
 	if spark_active:
 		spark_t += dt / SPARK_LIFE
 		spark_mat.set_shader_parameter("t", spark_t)

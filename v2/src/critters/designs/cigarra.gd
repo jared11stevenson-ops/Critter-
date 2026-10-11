@@ -12,16 +12,18 @@ static func T(p: Vector3 = Vector3.ZERO, r: Vector3 = Vector3.ZERO, s: Vector3 =
 	return Prim.T(p, r, s)
 
 static func _wing(m: Prim, z: float, c: Vector3, len: float, wid: float, tilt: float, sweep: float, col: Color, spot: Color, vein: Color) -> void:
-	# oval treehopper wing plate hanging from the shoulder: black oval spots + pale veins
-	var xf := T(c, Vector3(tilt * signf(z), 0, sweep))
-	m.blob(xf, Vector3(0.012, len, wid), col, 0.0, 1.0, 8, 6)
+	# leaf-veined cloak wing: 3 overlapping scalloped lobes fanning down from the shoulder, each with a vein spine and black oval spots
 	var side := signf(z)
-	for k in range(4):
-		var yy := (-0.55 + k * 0.3) * len
-		var zz := (0.25 + 0.2 * sin(k * 2.1)) * wid * side
-		m.blob(xf * T(Vector3(0.012, yy, zz)), Vector3(0.01, 0.1 * len, 0.1 * wid), spot, 0.0, 1.0, 6, 3)
-	m.lim(xf, [Vector3(0.012, len * 0.9, 0), Vector3(0.012, 0.0, 0), Vector3(0.012, -len * 0.9, 0)], 0.014, 0.01, vein, 1.0, 3, false, false)
-	m.lim(xf, [Vector3(0.012, len * 0.5, 0), Vector3(0.012, 0.0, wid * 0.6 * side), Vector3(0.012, -len * 0.6, wid * 0.8 * side)], 0.01, 0.008, vein, 1.0, 3, false, false)
+	for k in range(3):
+		var fan := (k - 1) * 17.0
+		var xf := T(c, Vector3(tilt * side, 0, sweep + fan))
+		var l := len * (0.82 + 0.18 * (1 - absf(k - 1)))
+		var ctr := Vector3(0.012 * (k - 1), -l * 0.5, 0)
+		m.blob(xf * T(ctr), Vector3(0.012, l * 0.5, wid * 0.34), col if k != 1 else col.lightened(0.05), 0.0, 1.0, 8, 5)
+		m.lim(xf, [Vector3(0.014, -0.02, 0), Vector3(0.014, -l * 0.5, 0), Vector3(0.014, -l * 0.98, 0)], 0.014, 0.008, vein, 1.0, 3, false, false)
+		for q in range(2):
+			m.lim(xf, [Vector3(0.014, -l * (0.3 + q * 0.25), 0), Vector3(0.014, -l * (0.4 + q * 0.25), wid * 0.22), Vector3(0.014, -l * (0.5 + q * 0.25), wid * 0.3)], 0.008, 0.005, vein, 1.0, 3, false, false)
+		m.blob(xf * T(Vector3(0.015, -l * 0.42, wid * 0.1 * side)), Vector3(0.01, l * 0.1, wid * 0.07), spot, 0.0, 1.0, 6, 3)
 
 static func build(b) -> void:
 	b.quality = 0.7
@@ -69,14 +71,16 @@ static func build(b) -> void:
 		h.blob(T(pr), Vector3(0.04, 0.04, 0.04), black, 0.0, 1.0, 5, 3)
 	# crown: branching black twig with six spheres
 	var tw := Vector3(0.1, 0.9, 0)
+	var orbs: Prim = b.part("weapon", Vector3(0.05, 1.3, 0) + tw, "head")   # crown spheres: DETACHABLE (orbit / flick / recall)
 	h.lim(T(), [tw, tw + Vector3(0.0, 0.25, 0.0)], 0.06, 0.04, black, 0.0, 5)
 	var branches := [[Vector3(0.0, 0.25, 0.0), Vector3(0.1, 0.5, 0.3), Vector3(0.2, 0.62, 0.55), 0.17], [Vector3(0.0, 0.25, 0.0), Vector3(-0.05, 0.55, 0.12), Vector3(0.0, 0.8, 0.1), 0.19],
 			[Vector3(0.0, 0.25, 0.0), Vector3(0.1, 0.5, -0.3), Vector3(0.2, 0.66, -0.58), 0.17], [Vector3(0.0, 0.25, 0.0), Vector3(-0.2, 0.42, 0.28), Vector3(-0.36, 0.5, 0.45), 0.15],
 			[Vector3(0.0, 0.25, 0.0), Vector3(-0.2, 0.42, -0.28), Vector3(-0.36, 0.54, -0.5), 0.15], [Vector3(0.1, 0.5, 0.3), Vector3(0.3, 0.8, 0.3), Vector3(0.35, 0.98, 0.22), 0.14]]
 	for br in branches:
 		h.lim(T(), [tw + br[0], tw + br[1], tw + br[2]], 0.035, 0.022, black, 0.0, 4, false, false)
-		h.blob(T(tw + br[2]), Vector3(br[3], br[3], br[3]), black.lightened(0.04), 0.0, 1.0, 8, 5)
-		h.blob(T(tw + br[2] + Vector3(br[3] * 0.35, br[3] * 0.45, br[3] * 0.5)), Vector3(br[3] * 0.22, br[3] * 0.22, br[3] * 0.1), Color.html("e8e4f0"), 0.5, 1.0, 5, 3)  # shine
+		orbs.blob(T(br[2]), Vector3(br[3], br[3], br[3]), black.lightened(0.04), 0.0, 1.0, 8, 5)
+		orbs.blob(T(br[2] + Vector3(br[3] * 0.35, br[3] * 0.45, br[3] * 0.5)), Vector3(br[3] * 0.22, br[3] * 0.22, br[3] * 0.1), Color.html("e8e4f0"), 0.6, 1.0, 5, 3)  # shine
+		orbs.blob(T(br[2]), Vector3(br[3] * 0.45, br[3] * 0.45, br[3] * 1.06), Color.html("c9e04a"), 0.35, 1.0, 5, 3)   # gold-green core glow (flares as the tell)
 	b.sock("head", "head", Vector3(0.1, 0.38, 0))
 	b.set_face(Vector3(0.1, 0.38, 0), Vector3(0.44, 0.42, 0.42),
 			{"eye_sep": 0.38, "eye_y": 0.0, "eye_size": Vector2(0.2, 0.2), "eye_white": 1.0, "sclera": Color.html("e8ee7a"), "eye_col": Color.html("141008"),
@@ -94,26 +98,27 @@ static func build(b) -> void:
 	b.sock("hand", "arm_f", Vector3(0.16, -0.7, 0.06))
 	b.sock("weapon_base", "arm_f", Vector3(0.16, -0.7, 0.06))
 	b.sock("weapon_tip", "arm_f", Vector3(0.32, -0.9, 0.07))
-	# ---- belt charms: skull-egg and orange egg on cords (lag)
-	var w: Prim = b.part("weapon", Vector3(0.25, 0.72, 0.28))
-	w.lim(T(), [Vector3(0, 0, 0), Vector3(0.0, -0.2, 0.02)], 0.012, 0.012, orange, 0.0, 3, false, false)
-	w.blob(T(Vector3(0.0, -0.3, 0.02)), Vector3(0.1, 0.13, 0.08), cream, 0.0, 1.0, 7, 5)
-	w.blob(T(Vector3(0.05, -0.3, 0.09)), Vector3(0.03, 0.035, 0.02), black, 0.0, 1.0, 4, 3)
-	w.blob(T(Vector3(-0.04, -0.3, 0.09)), Vector3(0.03, 0.035, 0.02), black, 0.0, 1.0, 4, 3)
-	w.lim(T(), [Vector3(0.12, 0.0, -0.04), Vector3(0.12, -0.25, -0.03)], 0.012, 0.012, orange, 0.0, 3, false, false)
-	w.blob(T(Vector3(0.12, -0.38, -0.03)), Vector3(0.09, 0.12, 0.08), orange.lightened(0.15), 0.0, 1.0, 7, 5)
-	w.lim(T(), [Vector3(-0.1, 0.0, 0.0), Vector3(-0.1, -0.12, 0.0)], 0.012, 0.012, orange, 0.0, 3, false, false)
-	w.blob(T(Vector3(-0.1, -0.2, 0.0)), Vector3(0.07, 0.09, 0.06), olive, 0.0, 1.0, 6, 4)
+	# ---- belt charms (static on the torso): skull-egg, orange egg, olive pod on cords
+	var t2: Prim = b.parts["torso"]["mb"]
+	for ch in [[Vector3(0.27, 0.05, 0.22), cream, 0.1, 0.13], [Vector3(0.22, 0.02, -0.24), orange.lightened(0.15), 0.09, 0.12], [Vector3(0.1, 0.03, 0.3), olive, 0.07, 0.09]]:
+		t2.lim(T(), [ch[0] + Vector3(0, 0.12, 0), ch[0]], 0.012, 0.012, orange, 0.0, 3, false, false)
+		t2.blob(T(ch[0] + Vector3(0, -ch[3] * 0.9, 0)), Vector3(ch[2], ch[3], ch[2] * 0.8), ch[1], 0.0, 1.0, 7, 5)
+	t2.blob(T(Vector3(0.3, -0.07, 0.23)), Vector3(0.03, 0.035, 0.02), black, 0.0, 1.0, 4, 3)
+	t2.blob(T(Vector3(0.24, -0.07, 0.23)), Vector3(0.03, 0.035, 0.02), black, 0.0, 1.0, 4, 3)
 	# ---- treehopper wing cloak (translucent green, black oval spots, purple edge): two big drooping sheets + two lower ones
 	var e: Prim = b.part("extra", Vector3(-0.2, 1.1, 0))
 	var spot := Color.html("2a2236"); var wg := Color.html("a8c93e"); var vein := Color.html("e2f08a")
-	for z in [0.12, -0.12]:
-		_wing(e, z, Vector3(-0.12, -0.6, z * 6.5), 0.85, 0.5, 38.0, -10.0, wg, spot, vein)
-		_wing(e, z, Vector3(-0.3, -0.5, z * 3.0), 0.7, 0.4, 18.0, -16.0, wg.darkened(0.12), spot, vein)
+	for z in [0.14, -0.14]:
+		_wing(e, z, Vector3(-0.05, -0.1, z * 3.2), 1.0, 0.8, 30.0, -8.0, wg, spot, vein)
+		_wing(e, z, Vector3(-0.2, -0.2, z * 1.8), 0.85, 0.65, 14.0, -12.0, wg.darkened(0.1), spot, vein)
 	e.flat(T(), [Vector3(0.05, 0.12, 0), Vector3(-0.05, -0.3, 0), Vector3(-0.12, -0.7, 0)], 0.26, 0.24, 0.02, purple, Vector3(0, 0, 1), 0.0, 0.0, true)
 	b.cfg = {
 		"scale": 1.0, "wa": -50.0, "sway": 3.0, "stride": 1.1, "bob": 0.6, "waddle": 0.5, "lag_weapon": 0.05, "lag_extra": 0.02, "flap": 3.0, "flap_hz": 6.0,
-		"blink_scale": 1.0, "armb_gain": 0.5, "guard_th": 40.0, "parry_th": 10.0, "hover": 0.0,
+		"blink_scale": 1.0, "armb_gain": 0.5, "guard_th": 40.0, "parry_th": 10.0, "hover": 0.0, "detach": ["weapon"],
+		"detach_act": {"strike_light": {"part": "weapon", "mode": "goto", "out": Vector3(3.0, 2.3, 0.0), "spin": 360.0, "hold": 4},
+				"ability1": {"part": "weapon", "mode": "orbit", "out": Vector3(0.2, 2.6, 0.0), "radius": 1.7, "hz": 1.1, "hold": 30},
+				"laststand": {"part": "weapon", "mode": "orbit", "out": Vector3(0.2, 2.6, 0.0), "radius": 2.0, "hz": 1.6, "hold": 30}},
+		"ghost_act": {"ability1": {"as": "strike_heavy", "frame": 12, "offset": Vector3(1.3, 0, 0), "count": 2, "life": 1.0}},
 		"style": {"strike_light": "punch", "strike_heavy": "slash_up", "ability1": "stance", "ability2": "hook", "laststand": "roar", "grab": "hook"},
 		"amp": {"strike_light": 0.7, "strike_heavy": 0.9, "laststand": 1.2},
 		"fidget": {"head": PL.K(14, 0, -6), "arm_f": PL.K(0, 0, 40, 0.05, 0.0)},

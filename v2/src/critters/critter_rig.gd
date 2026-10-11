@@ -12,6 +12,8 @@ const Timing := preload("res://src/critters/timing.gd")
 const FaceCtl := preload("res://src/critters/face_ctl.gd")
 const FxCtl := preload("res://src/critters/fx_ctrl.gd")
 const Toon := preload("res://src/critters/toon.gd")
+const DetachCtl := preload("res://src/critters/detach_ctl.gd")
+const GhostFx := preload("res://src/critters/ghost_fx.gd")
 const RigEvents := preload("res://src/critters/rig_events.gd")
 
 const DESIGN_PATH := "res://src/critters/designs/%s.gd"
@@ -26,6 +28,8 @@ const WALK_RATE := 9.0
 
 ## 3/4 turn toward the camera (deg). Side-on bouts read faces best at ~30; lookdev sets 0 and orbits the camera.
 var three_quarter := 38.0
+## A-pose arm splay (deg outward from the body); 0 in play unless the BoutScene wants it, 35 for model sheets / .glb (modeling rule 1).
+var apose_deg := 0.0
 var critter_id := ""
 var palette: Dictionary = {}
 var cfg: Dictionary = {}
@@ -65,6 +69,9 @@ var _fidget_t := -1.0
 var _lag := {}               # part -> [angle, vel]
 var _drv_prev := {}
 var _vit := 1.0
+var _dcs: Dictionary = {}      # detachable part name -> DetachCtl
+var _ghosted := -1
+var _plates := 0
 var _expr_manual := ""
 var _smear_active := false
 var _hit_dir := 1.0
@@ -106,6 +113,9 @@ func setup(critter_id_in: String) -> void:
 		_sockets["head"] = _nodes["head"]
 	if not _sockets.has("weapon_tip"):
 		_sockets["weapon_tip"] = _sockets.get("hand", g)
+	for dn in cfg.get("detach", []):
+		if _nodes.has(dn):
+			_dcs[dn] = DetachCtl.new(self, dn, _nodes[dn])
 	if res["face_mat"] != null:
 		face = FaceCtl.new(res["face_mat"])
 		face.blink_scale = float(cfg.get("blink_scale", 1.0))
@@ -180,6 +190,8 @@ func apply_fighter_state(fs: Dictionary, dt: float) -> void:
 		face.update(dt)
 	fx.update(dt)
 	_apply_rage(float(fs.get("rage", 0.0)))
+	_apply_plates(fs)
+	_detach_logic(action, frame, dt)
 
 func _timing_for(action: String) -> Vector3i:
 	return Timing.resolve(critter_id, action, "", {})
@@ -191,6 +203,45 @@ func _apply_rage(r: float) -> void:
 	_mat.set_shader_parameter("rim_strength", 0.9 + r * (1.6 + pulse * 0.8))
 	_mat.set_shader_parameter("rim_color", (palette["glow"] as Color).lerp(Color(1.0, 0.25, 0.1), r))
 	_mat.set_shader_parameter("glow_strength", 1.0 + fx.glow_boost + r * (1.2 + pulse))
+
+## Shell-plate crack tiers (0..3): fs.plates if the sim supplies it, otherwise derived from missing vitality (plates crack as he takes hits).
+func _apply_plates(fs: Dictionary) -> void:
+	var lv: int = int(fs["plates"]) if fs.has("plates") else int(ceil(clampf((1.0 - _vit) * 3.0, 0.0, 3.0) - 0.001))
+	_plates = lv
+	Toon.set_both(_mat, "crack_level", float(lv))
+
+## Auto detach behavior from cfg.detach_act[action] = {part, mode: goto|orbit, out: Vector3, spin, radius, hz, hold}: the part stays
+## held through startup, flies out for the active phase (+hold frames), then is recalled. cfg.ghost_act[action] = {as, frame, offset, life, count}.
+func _detach_logic(action: String, frame: int, dt: float) -> void:
+	var da: Dictionary = cfg.get("detach_act", {})
+	for dn in _dcs:
+		var ctl: DetachCtl = _dcs[dn]
+		var c: Dictionary = da.get(action, {})
+		if c.get("part", "") == dn:
+			var s := _timing.x
+			var e := s + _timing.y + int(c.get("hold", 0))
+			if frame >= s and frame < e:
+				if str(c.get("mode", "goto")) == "orbit":
+					ctl.orbit(c.get("out", Vector3(0, 1.2, 0)), float(c.get("radius", 2.0)), float(c.get("hz", 1.2)))
+				else:
+					ctl.goto(c.get("out", Vector3(2.5, 1.0, 0)), float(c.get("spin", 0.0)))
+			elif frame >= e:
+				ctl.recall()
+		else:
+			ctl.recall()
+		ctl.update(dt)
+	var gc: Dictionary = cfg.get("ghost_act", {}).get(action, {})
+	if not gc.is_empty() and frame == _timing.x and _ghosted != _tick - 1 and _timing.x >= 1:
+		_ghosted = _tick
+		for i in range(int(gc.get("count", 1))):
+			GhostFx.spawn(self, str(gc.get("as", "strike_heavy")), int(gc.get("frame", 8)), (gc.get("offset", Vector3(1.4, 0, 0)) as Vector3) * float(1 + i), float(gc.get("life", 0.9)))
+
+## Manual control for the BoutScene / sim events (counters, "moves on its own"): rig.detach_part("weapon").goto(...)
+func detach_part(pname: String) -> DetachCtl:
+	return _dcs.get(pname)
+
+func spawn_ghost(action: String, frame: int, offset: Vector3, life: float = 0.9) -> Node3D:
+	return GhostFx.spawn(self, action, frame, offset, life)
 
 func _begin_action(action: String, move_id: String, fs: Dictionary) -> void:
 	_from = _cur.duplicate(true)
@@ -351,9 +402,12 @@ func _apply_pose(pose: Dictionary) -> void:
 		basis = basis.scaled(Vector3(a[6], a[7], a[8]))
 		if p == "body":
 			_body.transform = Transform3D(basis, Vector3(a[3], a[4], a[5]))
-		elif _nodes.has(p):
+		elif _nodes.has(p) and not (_dcs.has(p) and (_dcs[p] as DetachCtl).is_free()):
 			if _rest_basis.has(p):
 				basis = basis * (_rest_basis[p] as Basis)
+			if apose_deg != 0.0 and (p == "arm_f" or p == "arm_b"):
+				var sgn := -1.0 if (_rest[p] as Vector3).z > 0.0 else 1.0
+				basis = Basis(Vector3.RIGHT, deg_to_rad(apose_deg) * sgn) * basis
 			(_nodes[p] as Node3D).transform = Transform3D(basis, (_rest[p] as Vector3) + Vector3(a[3], a[4], a[5]))
 
 func _update_facing(dt: float) -> void:

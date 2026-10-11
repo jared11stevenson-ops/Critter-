@@ -19,6 +19,12 @@ static func T(p: Vector3 = Vector3.ZERO, r_deg: Vector3 = Vector3.ZERO, s: Vecto
 static func _sp(x: float, e: float) -> float:
 	return signf(x) * pow(absf(x), e)
 
+## Rescale everything already built in this builder about its origin (design-time proportion tuning without re-authoring numbers).
+func scale_all(k: Vector3) -> void:
+	for i in range(verts.size()):
+		verts[i] = verts[i] * k
+		norms[i] = Vector3(norms[i].x / k.x, norms[i].y / k.y, norms[i].z / k.z).normalized()
+
 func tris() -> int:
 	return idx.size() / 3
 

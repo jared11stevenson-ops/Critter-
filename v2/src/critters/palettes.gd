@@ -7,7 +7,7 @@ const IDS := ["aruun", "cigarra", "bramvex", "scarlith", "mollusk", "zephyr", "n
 ## main = dominant body color, accent = second identity color, glow = emissive/rim color from the art, belly = light tone,
 ## sig = the one color that carries the character at a glance (used by the palette gate and UI tinting).
 const DATA := {
-	"aruun": {"main": "30262f", "accent": "b8321f", "glow": "e8582a", "sig": "e8582a", "belly": "d3b48c"},
+	"aruun": {"main": "2a2428", "accent": "a82a22", "glow": "e8502a", "sig": "e8582a", "belly": "d3b48c"},
 	"cigarra": {"main": "3b2f4d", "accent": "a9c83c", "glow": "c9e04a", "sig": "7a4fc0", "belly": "e2dcc4"},
 	"bramvex": {"main": "55603a", "accent": "7a1f24", "glow": "ff4a2a", "sig": "7b8a2a", "belly": "c9b078"},
 	"scarlith": {"main": "b01c2c", "accent": "e0a53a", "glow": "ffc24a", "sig": "b01c2c", "belly": "ecd49a"},

@@ -49,7 +49,7 @@ func run() -> Array:
 		var c := count(rig)
 		# hidden-by-default dynamic FX: smear (ribbon, built at runtime) + spark quad (already counted as a mesh)
 		var smear_tris := (FxCtl.TRAIL_LEN - 1) * 2
-		var smear_draw := 1 if (rig.fx.smear.mesh == null) else 0
+		var smear_draw := (1 if rig.fx.smear.mesh == null else 0) + (1 if rig.fx.thread.mesh == null else 0)
 		var draws: int = c.x + smear_draw
 		var tris: int = c.y + smear_tris
 		report.append({"id": id, "draws": draws, "tris": tris, "bounds": rig.bounds})

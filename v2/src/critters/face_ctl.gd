@@ -28,7 +28,8 @@ var _time := 0.0
 var look := Vector2.ZERO
 var _look_t := 3.0
 var _look_goal := Vector2.ZERO
-var blink_scale := 1.0   # critters with huge eyes blink slower/rounder
+var blink_scale := 1.0
+var spiral := 0.0        # compelled eye-spiral, decays   # critters with huge eyes blink slower/rounder
 
 ## Presentation thresholds (not gameplay): below these vitality ratios the fighter looks scared / dying.
 const LOW_VIT_SCARED := 0.3
@@ -103,6 +104,8 @@ func update(dt: float) -> void:
 		if key == "open":
 			v *= open_mul
 		mat.set_shader_parameter(key, v)
+	spiral = maxf(0.0, spiral - dt * 0.8)
+	mat.set_shader_parameter("compel_spiral", spiral)
 	mat.set_shader_parameter("look", look)
 	mat.set_shader_parameter("time", _time)
 
