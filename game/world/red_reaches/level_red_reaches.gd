@@ -44,6 +44,7 @@ var extra: Dictionary = {}           # world_extra.json: settlements, loot, sign
 var settlements: RrSettlements = null
 var ambient: RrAmbient = null
 var npcs: NpcLife = null
+var explore: RrExplore = null          # discovery / minimap / fast travel / climb links / roaming encounters
 var _marker_mesh: ArrayMesh = null
 var _marker_mats: Array = []
 const EXTRA := "res://game/world/red_reaches/world_extra.json"
@@ -110,6 +111,8 @@ func _ready() -> void:
 	_build_world_life()
 	_build_interactables()
 	replay = bool(GameState.get_flag("rr_complete", false))
+	if str(GameState.get_flag("_checkpoint", "")) in ["", "t_arrival"]:
+		RrExplore.regrow_common_loot(extra, layout, region.recipe.get("loot_table", []))   # a fresh descent: common pickups grow back
 	_spawn_content()
 	_spawn_spokes()
 	if replay:
@@ -382,6 +385,8 @@ func _build_interactables() -> void:
 		_interactables = _interactables.filter(func(it): return not drop.has(str(it["id"])))
 		_interactables.append_array(npcs.interactables())
 		_interactables.append_array(npcs.ambient_interactables())
+	if explore:
+		_interactables.append_array(explore.interactables())
 	_marker_mesh = _make_marker_mesh()
 	_marker_mats = [ToonKit.glow(UiKit.ACCENT_2, 1.4), ToonKit.glow(UiKit.PSI, 1.6)]
 	for it in _interactables:
@@ -428,6 +433,10 @@ func _build_world_life() -> void:
 	npcs.hide_fn = func(id: String) -> bool:
 		# the claims broker is a truce form of the Undermarket rival: hide him while the rival fight is on the field
 		return id == "vesk_dunmore" and rivals != null and not rivals.live.is_empty() and rivals.any_engaged()
+	explore = RrExplore.new()
+	explore.name = "Explore"
+	add_child(explore)
+	explore.setup(self)
 	if OS.get_cmdline_user_args().has("qa"):
 		print("[PERF] world life (ambient+settlement dispatch+npcs) ms=%d" % (Time.get_ticks_msec() - _w0))
 
@@ -1120,6 +1129,18 @@ func _compute_objective() -> String:
 	return "Return to the exfil beacon"
 
 # ================= QA helpers =================
+func qa_explore() -> void:
+	if explore == null or explore.hud == null:
+		return
+	var h: ExploreHud = explore.hud
+	var c := party.get_leader().global_position
+	var px := int((c.x - ExploreHud.MAP_X0) * ExploreHud.PX_M)
+	var py := int((c.z - ExploreHud.MAP_Z0) * ExploreHud.PX_M)
+	print("[QA] explore found=%d/%d baked=%d queue=%d pix_under_player=%s seen=%d" % [explore.found_count(), explore.pois.size(), h._baked.size(), h._bake_q.size(), h._chart.get_pixel(px, py), explore.floors.filter(func(f): return explore.floor_seen(f)).size()])
+
+func qa_travel(wp_id: String) -> void:
+	print("[QA] travel %s -> '%s'" % [wp_id, explore.travel(wp_id) if explore else "no explore"])
+
 func qa_teleport(marker_name: String) -> void:
 	var p := Vector3.ZERO if marker_name.begins_with("site:") else marker(marker_name)
 	var t := _trigger(marker_name)
