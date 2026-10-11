@@ -60,10 +60,15 @@ uniform vec3 critter_cam_pos;
 
 varying vec3 w_pos;
 varying vec3 w_nrm;
+// LOOK_PASS: per-instance colour variation (rocks / props / scatter share one material, so each instance gets its own warm-cool
+// and light-dark nudge from a hash of its origin; no per-frame cost, no extra draw calls).
+uniform float inst_var = 1.0;
+varying float v_inst;
 
 void vertex() {
 	VERTEX = gait_offset(VERTEX, UV2);
 	w_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	v_inst = fract(sin(dot(MODEL_MATRIX[3].xz, vec2(12.9898, 78.233))) * 43758.5453);
 	w_nrm = normalize((MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
 	v_rev = UV2.x;
 	if (wind_sway > 0.0) {
@@ -82,6 +87,7 @@ void fragment() {
 		discard;
 	}
 	vec3 base = albedo.rgb * mix(vec3(1.0), COLOR.rgb, use_vertex_color);
+	base *= mix(vec3(1.0), mix(vec3(0.88, 0.97, 1.06), vec3(1.08, 1.0, 0.90), v_inst) * (0.88 + 0.24 * fract(v_inst * 7.31)), inst_var);
 	vec4 kt = texture(kit_tex, UV);
 	base = mix(base, kt.rgb * mix(vec3(1.0), COLOR.rgb, 0.35), kt.a);
 	float kglow = clamp((kt.b - kt.r) * 3.0, 0.0, 1.0) * kt.a * kit_glow;

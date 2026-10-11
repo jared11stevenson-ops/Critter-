@@ -39,7 +39,7 @@ uniform float normal_strength = 1.5;
 uniform vec3 strata_0 : source_color = vec3(0.62, 0.24, 0.17);
 uniform vec3 strata_1 : source_color = vec3(0.80, 0.42, 0.26);
 uniform vec3 strata_2 : source_color = vec3(0.93, 0.70, 0.52);
-uniform vec3 strata_3 : source_color = vec3(0.46, 0.17, 0.14);
+uniform vec3 strata_3 : source_color = vec3(0.42, 0.22, 0.28);   // plum-rust shade band
 uniform vec3 strata_4 : source_color = vec3(0.72, 0.33, 0.21);
 uniform float strata_band = 0.21;     // world bands per meter
 uniform float strata_mix = 0.55;
@@ -53,8 +53,35 @@ uniform float glow_silt = 0.0;                           // Lumen: soft silt tha
 uniform float ripple_amp = 0.22;                         // wind-ripple normals on loose sand
 uniform vec3 deep_color : source_color = vec3(0.36, 0.22, 0.26);
 
+// LOOK_PASS colour script for the ground: calmer (desaturated) base so characters are the most saturated thing on screen,
+// plus very large-scale colour patches (sage-teal scrub, pale sand, plum-rust shade) from a third, un-aligned macro sample
+// so no tile repeat is visible. Costs 1 texture sample (Low reuses the macro sample it already has).
+uniform float look_sat = 0.78;
+uniform float look_patch = 0.85;
+uniform vec3 patch_teal : source_color = vec3(0.40, 0.50, 0.40);
+uniform vec3 patch_sand : source_color = vec3(0.86, 0.70, 0.54);
+uniform vec3 patch_plum : source_color = vec3(0.46, 0.27, 0.34);
+
 varying vec3 w_pos;
 varying vec3 w_nrm;
+
+vec3 retint(float l, vec3 t) {
+	return t * (l / max(dot(t, vec3(0.3, 0.59, 0.11)), 0.05));
+}
+
+vec3 look_ground(vec3 c, vec4 m3) {
+	float l0 = dot(c, vec3(0.3, 0.59, 0.11));
+	float l = mix(0.36, l0, 0.84);                 // calm the texture's crack / pebble contrast a little
+	c = c * (l / max(l0, 0.02));
+	c = mix(vec3(l), c, look_sat);
+	float kt = smoothstep(0.54, 0.70, m3.g) * look_patch;
+	float ks = smoothstep(0.50, 0.66, 1.0 - m3.b) * look_patch * (1.0 - kt);
+	float kp = smoothstep(0.62, 0.82, m3.r) * look_patch;
+	c = mix(c, retint(l * 1.05, patch_teal), kt * 0.75);
+	c = mix(c, retint(l * 1.12, patch_sand), ks * 0.6);
+	c = mix(c, retint(l * 0.9, patch_plum), kp * 0.6);
+	return c;
+}
 
 void vertex() {
 	w_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
@@ -116,6 +143,11 @@ void fragment() {
 #endif
 	g_col *= mix(0.84, 1.12, mac.r) * ground_tint;
 	g_col = mix(g_col, g_col * vec3(1.06, 0.92, 0.86), smoothstep(0.4, 0.8, mac.g) * 0.6);
+#ifdef QUALITY_LOW
+	g_col = look_ground(g_col, mac.brga);
+#else
+	g_col = look_ground(g_col, texture(macro_tex, mat2(vec2(0.8, 0.6), vec2(-0.6, 0.8)) * xz * 0.0043 + vec2(0.21, 0.63)));
+#endif
 	float dust = mac.a * smoothstep(0.62, 0.35, g_h) * (1.0 - sw * 0.7);
 	g_col = mix(g_col, dust_color, dust * 0.5);
 	// cliff
@@ -203,6 +235,7 @@ void fragment() {
 	g_col *= mix(0.84, 1.12, mac.r) * ground_tint;
 	g_col = mix(g_col, g_col * vec3(1.06, 0.92, 0.86), smoothstep(0.4, 0.8, mac.g) * 0.6);
 	g_col = mix(g_col, g_col * vec3(0.95, 1.02, 1.04), smoothstep(0.55, 0.9, mac.b) * 0.5);
+	g_col = look_ground(g_col, texture(macro_tex, mat2(vec2(0.8, 0.6), vec2(-0.6, 0.8)) * xz * 0.0043 + vec2(0.21, 0.63)));
 	float dust = mac.a * smoothstep(0.62, 0.35, g_h) * (1.0 - sw * 0.7);
 	g_col = mix(g_col, dust_color * mix(0.9, 1.05, mac2.b), dust * 0.55);
 	g_n = mix(g_n, vec3(0.0, 0.0, 1.0), dust * 0.6);

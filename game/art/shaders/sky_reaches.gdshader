@@ -6,6 +6,7 @@ uniform vec3 zenith_color : source_color = vec3(0.27, 0.42, 0.74);
 uniform vec3 mid_color : source_color = vec3(0.55, 0.66, 0.88);
 uniform vec3 horizon_color : source_color = vec3(0.98, 0.80, 0.66);
 uniform vec3 ground_color : source_color = vec3(0.55, 0.33, 0.25);
+uniform vec3 haze_color : source_color = vec3(0.84, 0.66, 0.70);   // = distance fog colour: far terrain dissolves into this band
 uniform vec3 cloud_color : source_color = vec3(1.0, 0.93, 0.90);
 uniform vec3 cloud_shade : source_color = vec3(0.86, 0.62, 0.70);
 uniform vec3 planet_color : source_color = vec3(0.80, 0.66, 0.86);
@@ -50,8 +51,10 @@ void sky() {
 	if (h > 0.0) {
 		col = mix(horizon_color, mid_color, smoothstep(0.0, 0.25, h));
 		col = mix(col, zenith_color, smoothstep(0.25, 0.9, h));
+		// LOOK_PASS: low rose-lilac haze band hugging the horizon (matches the fog), thinning into clear teal-blue sky
+		col = mix(col, haze_color, (1.0 - smoothstep(0.0, 0.14, h)) * 0.8);
 	} else {
-		col = mix(horizon_color * 0.9, ground_color, smoothstep(0.0, 0.25, -h));
+		col = mix(haze_color, ground_color, smoothstep(0.0, 0.25, -h));
 	}
 	// sun glow
 	if (LIGHT0_ENABLED) {

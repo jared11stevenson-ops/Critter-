@@ -20,6 +20,10 @@ uniform vec3 strata_2 : source_color = vec3(0.84, 0.56, 0.38);
 uniform vec3 strata_3 : source_color = vec3(0.34, 0.11, 0.11);
 uniform vec3 strata_4 : source_color = vec3(0.60, 0.23, 0.16);
 uniform vec3 ink : source_color = vec3(0.16, 0.07, 0.07);
+uniform vec3 stone_c : source_color = vec3(0.50, 0.55, 0.54);   // cool teal-slate flags scattered through the paving
+uniform vec3 stone_d : source_color = vec3(0.90, 0.78, 0.60);   // pale gold-sand flags
+uniform float stone_mix = 0.0;                                   // 0 = old two-tone paving, 1 = full LOOK_PASS paving
+uniform float mortar_ink = 0.85;
 uniform float strata_scale = 0.42;
 uniform float flag_scale = 0.3;
 uniform float deep_fade_y = -14.0;
@@ -67,9 +71,18 @@ void fragment() {
 	dirt = mix(dirt, ink, crack * 0.55);
 	// --- stone paving (flagstones with ink mortar)
 	vec4 fl = texture(flag_tex, xz * flag_scale);
-	vec3 stone = mix(stone_b, stone_a, fl.r) * (0.82 + 0.18 * fl.g);
+	vec3 stone = mix(stone_b, stone_a, fl.r);
+	// LOOK_PASS: every flag keeps its own tone (fl.r is constant per stone): the lowest ~25 % turn slate-teal, the top ~15 %
+	// pale sand, and a large soft warm/cool wash across the plaza breaks the repeat.
+	float wash = texture(noise_tex, xz * 0.045 + vec2(0.4, 0.1)).g;
+	float k_slate = 1.0 - smoothstep(0.04 + 0.22 * wash, 0.12 + 0.22 * wash, fl.r);
+	float k_sand = smoothstep(0.84, 0.95, fl.r) * 0.8;
+	vec3 pick = mix(stone, stone_c, k_slate);
+	pick = mix(pick, stone_d, k_sand);
+	stone = mix(stone, pick, stone_mix);
+	stone *= (0.82 + 0.18 * fl.g);
 	stone = mix(stone, dirt_dark, smoothstep(0.55, 0.8, n2.b) * 0.35);
-	stone = mix(stone, ink, fl.a * 0.85);
+	stone = mix(stone, ink, fl.a * mortar_ink);
 	float sw = smoothstep(0.35, 0.65, stone_w + (n2.r - 0.5) * 0.5);
 	vec3 ground = mix(dirt, stone, sw);
 	// --- mesa tops: dusty scrub

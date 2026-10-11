@@ -107,14 +107,20 @@ func _tune_lighting() -> void:
 	var env: Environment = lighting.get("env")
 	var sun: DirectionalLight3D = lighting.get("sun")
 	if env:
-		env.background_color = Color(0.16, 0.12, 0.13)
-		env.ambient_light_color = Color(0.82, 0.70, 0.66)
-		env.ambient_light_energy = 0.62
-		env.fog_density = 0.008
-		env.fog_light_color = Color(0.36, 0.26, 0.26)
+		# LOOK_PASS hub: warm gold-hour key, cool teal fill in the shade, dusty-rose haze toward the walls
+		env.background_color = Color(0.20, 0.15, 0.17)
+		env.ambient_light_color = Color(0.58, 0.70, 0.76)
+		env.ambient_light_energy = 0.74
+		env.fog_density = 0.011
+		env.fog_light_color = Color(0.52, 0.36, 0.38)
 	if sun:
-		sun.light_energy = 0.95
-		sun.rotation_degrees = Vector3(-58, -24, 0)
+		sun.light_energy = 1.15
+		sun.light_color = Color(1.0, 0.80, 0.52)
+		sun.rotation_degrees = Vector3(-46, -26, 0)
+		var rl: DirectionalLight3D = lighting.get("rim")
+		if rl:
+			rl.light_color = Color(0.62, 0.92, 0.92)
+			rl.light_energy = 0.9
 		sun.directional_shadow_max_distance = 45.0
 		var q := ToonKit.quality()
 		if q:
@@ -165,8 +171,10 @@ func _build_floor(geo: Node3D) -> void:
 	m.shader = load("res://game/art/shaders/terrain_toon.gdshader")
 	m.set_shader_parameter("noise_tex", load("res://game/art/world/terrain_noise.png"))
 	m.set_shader_parameter("flag_tex", load("res://game/art/world/flagstone.png"))
-	m.set_shader_parameter("stone_a", Color(0.70, 0.58, 0.48))
-	m.set_shader_parameter("stone_b", Color(0.55, 0.43, 0.38))
+	m.set_shader_parameter("stone_a", Color(0.84, 0.68, 0.50))
+	m.set_shader_parameter("stone_b", Color(0.60, 0.46, 0.42))
+	m.set_shader_parameter("stone_mix", 1.0)
+	m.set_shader_parameter("mortar_ink", 0.55)
 	m.set_shader_parameter("flag_scale", 0.42)
 	var fl := ToonKit.mesh_instance(am, m, "Floor")
 	geo.add_child(fl)

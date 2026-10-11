@@ -31,53 +31,55 @@ var motes: GPUParticles3D
 
 ## Mood table. sun_rot = Vector2(pitch, yaw) degrees. All colours are linear-ish artist values.
 const MOODS := {
+	# LOOK_PASS color script: gold sun + cool teal/violet shadow fill, rose-lilac haze that is lighter and cooler than the
+	# red ground (so each distance layer separates), teal-blue zenith, golden character rim.
 	"gate": {
-		"sun_col": Color(1.0, 0.86, 0.68), "sun_e": 2.1, "sun_rot": Vector2(-38, -118),
-		"amb_col": Color(0.56, 0.58, 0.72), "amb_e": 0.62, "sky_e": 0.35,
-		"fog_col": Color(0.92, 0.70, 0.58), "fog_d": 0.0021, "fog_h": -12.0, "fog_hd": 0.035, "fog_sun": 0.18,
-		"exposure": 1.10, "sat": 1.06, "contrast": 1.06, "glow": 0.42,
-		"rim_col": Color(0.82, 0.88, 1.0), "rim_e": 0.9,
-		"horizon": Color(0.98, 0.80, 0.66), "zenith": Color(0.28, 0.44, 0.74),
+		"sun_col": Color(1.0, 0.84, 0.58), "sun_e": 2.2, "sun_rot": Vector2(-36, -118),
+		"amb_col": Color(0.40, 0.58, 0.70), "amb_e": 0.70, "sky_e": 0.40,
+		"fog_col": Color(0.84, 0.66, 0.70), "fog_d": 0.0030, "fog_h": -12.0, "fog_hd": 0.040, "fog_sun": 0.22,
+		"exposure": 1.10, "sat": 1.06, "contrast": 1.08, "glow": 0.42,
+		"rim_col": Color(1.0, 0.86, 0.58), "rim_e": 1.25,
+		"horizon": Color(0.98, 0.78, 0.68), "zenith": Color(0.16, 0.42, 0.70),
 	},
 	"valley": {
-		"sun_col": Color(1.0, 0.80, 0.58), "sun_e": 2.0, "sun_rot": Vector2(-34, -124),
-		"amb_col": Color(0.62, 0.52, 0.62), "amb_e": 0.56, "sky_e": 0.3,
-		"fog_col": Color(0.95, 0.66, 0.48), "fog_d": 0.0037, "fog_h": -12.0, "fog_hd": 0.035, "fog_sun": 0.28,
+		"sun_col": Color(1.0, 0.80, 0.52), "sun_e": 2.1, "sun_rot": Vector2(-34, -124),
+		"amb_col": Color(0.42, 0.56, 0.68), "amb_e": 0.64, "sky_e": 0.36,
+		"fog_col": Color(0.86, 0.62, 0.64), "fog_d": 0.0046, "fog_h": -12.0, "fog_hd": 0.040, "fog_sun": 0.30,
 		"exposure": 1.10, "sat": 1.04, "contrast": 1.08, "glow": 0.5,
-		"rim_col": Color(1.0, 0.86, 0.70), "rim_e": 1.0,
-		"horizon": Color(1.0, 0.76, 0.58), "zenith": Color(0.34, 0.46, 0.72),
+		"rim_col": Color(1.0, 0.84, 0.56), "rim_e": 1.3,
+		"horizon": Color(0.99, 0.74, 0.62), "zenith": Color(0.18, 0.42, 0.68),
 	},
 	"waystation": {
-		"sun_col": Color(1.0, 0.84, 0.62), "sun_e": 1.95, "sun_rot": Vector2(-36, -112),
-		"amb_col": Color(0.60, 0.56, 0.66), "amb_e": 0.62, "sky_e": 0.35,
-		"fog_col": Color(0.94, 0.74, 0.58), "fog_d": 0.0027, "fog_h": -12.0, "fog_hd": 0.035, "fog_sun": 0.22,
-		"exposure": 1.12, "sat": 1.06, "contrast": 1.05, "glow": 0.45,
-		"rim_col": Color(0.85, 0.9, 1.0), "rim_e": 0.85,
-		"horizon": Color(0.99, 0.80, 0.64), "zenith": Color(0.30, 0.45, 0.74),
+		"sun_col": Color(1.0, 0.84, 0.58), "sun_e": 2.05, "sun_rot": Vector2(-36, -112),
+		"amb_col": Color(0.42, 0.60, 0.68), "amb_e": 0.68, "sky_e": 0.40,
+		"fog_col": Color(0.82, 0.68, 0.68), "fog_d": 0.0034, "fog_h": -12.0, "fog_hd": 0.040, "fog_sun": 0.24,
+		"exposure": 1.12, "sat": 1.06, "contrast": 1.07, "glow": 0.45,
+		"rim_col": Color(1.0, 0.88, 0.62), "rim_e": 1.2,
+		"horizon": Color(0.98, 0.80, 0.66), "zenith": Color(0.16, 0.44, 0.68),
 	},
 	"drill": {
-		"sun_col": Color(1.0, 0.72, 0.52), "sun_e": 1.6, "sun_rot": Vector2(-30, -128),
-		"amb_col": Color(0.58, 0.42, 0.46), "amb_e": 0.5, "sky_e": 0.25,
-		"fog_col": Color(0.78, 0.44, 0.34), "fog_d": 0.0055, "fog_h": -12.0, "fog_hd": 0.035, "fog_sun": 0.3,
-		"exposure": 1.02, "sat": 0.9, "contrast": 1.12, "glow": 0.62,
-		"rim_col": Color(1.0, 0.45, 0.38), "rim_e": 1.1,
-		"horizon": Color(0.92, 0.58, 0.44), "zenith": Color(0.36, 0.36, 0.56),
+		"sun_col": Color(1.0, 0.72, 0.48), "sun_e": 1.7, "sun_rot": Vector2(-30, -128),
+		"amb_col": Color(0.42, 0.46, 0.62), "amb_e": 0.60, "sky_e": 0.30,
+		"fog_col": Color(0.70, 0.46, 0.52), "fog_d": 0.0062, "fog_h": -12.0, "fog_hd": 0.040, "fog_sun": 0.32,
+		"exposure": 1.04, "sat": 0.95, "contrast": 1.12, "glow": 0.62,
+		"rim_col": Color(1.0, 0.66, 0.42), "rim_e": 1.3,
+		"horizon": Color(0.90, 0.58, 0.48), "zenith": Color(0.24, 0.34, 0.58),
 	},
 	"span": {
-		"sun_col": Color(1.0, 0.70, 0.40), "sun_e": 2.2, "sun_rot": Vector2(-17, -100),
-		"amb_col": Color(0.64, 0.50, 0.60), "amb_e": 0.55, "sky_e": 0.3,
-		"fog_col": Color(1.0, 0.68, 0.42), "fog_d": 0.0032, "fog_h": -12.0, "fog_hd": 0.035, "fog_sun": 0.45,
-		"exposure": 1.12, "sat": 1.1, "contrast": 1.06, "glow": 0.6,
-		"rim_col": Color(1.0, 0.78, 0.5), "rim_e": 1.2,
-		"horizon": Color(1.0, 0.66, 0.42), "zenith": Color(0.36, 0.38, 0.66),
+		"sun_col": Color(1.0, 0.72, 0.38), "sun_e": 2.3, "sun_rot": Vector2(-17, -100),
+		"amb_col": Color(0.46, 0.52, 0.68), "amb_e": 0.62, "sky_e": 0.34,
+		"fog_col": Color(0.96, 0.66, 0.50), "fog_d": 0.0040, "fog_h": -12.0, "fog_hd": 0.040, "fog_sun": 0.50,
+		"exposure": 1.12, "sat": 1.10, "contrast": 1.07, "glow": 0.6,
+		"rim_col": Color(1.0, 0.80, 0.46), "rim_e": 1.4,
+		"horizon": Color(1.0, 0.66, 0.44), "zenith": Color(0.26, 0.38, 0.68),
 	},
 	"boss": {
-		"sun_col": Color(1.0, 0.62, 0.40), "sun_e": 1.9, "sun_rot": Vector2(-22, -165),
-		"amb_col": Color(0.46, 0.38, 0.52), "amb_e": 0.5, "sky_e": 0.25,
-		"fog_col": Color(0.82, 0.48, 0.40), "fog_d": 0.0045, "fog_h": -12.0, "fog_hd": 0.035, "fog_sun": 0.5,
+		"sun_col": Color(1.0, 0.62, 0.38), "sun_e": 2.0, "sun_rot": Vector2(-22, -165),
+		"amb_col": Color(0.40, 0.38, 0.58), "amb_e": 0.58, "sky_e": 0.30,
+		"fog_col": Color(0.74, 0.46, 0.50), "fog_d": 0.0052, "fog_h": -12.0, "fog_hd": 0.040, "fog_sun": 0.52,
 		"exposure": 1.10, "sat": 1.04, "contrast": 1.14, "glow": 0.7,
-		"rim_col": Color(1.0, 0.70, 0.52), "rim_e": 1.0,
-		"horizon": Color(0.98, 0.56, 0.40), "zenith": Color(0.24, 0.24, 0.46),
+		"rim_col": Color(1.0, 0.72, 0.48), "rim_e": 1.2,
+		"horizon": Color(0.96, 0.56, 0.42), "zenith": Color(0.20, 0.24, 0.48),
 	},
 }
 ## Lumen Depths moods (sky_kind "lumen"): a dim cool key standing in for far vault light, glittering fill, constellation overhead.
@@ -170,6 +172,7 @@ func _build() -> void:
 	env.fog_enabled = true
 	env.fog_mode = Environment.FOG_MODE_EXPONENTIAL
 	env.adjustment_enabled = true
+	env.adjustment_color_correction = _grade_lut()
 	world_env.environment = env
 	add_child(world_env)
 	sun = DirectionalLight3D.new()
@@ -195,6 +198,7 @@ func _build() -> void:
 	rim.sky_mode = DirectionalLight3D.SKY_MODE_LIGHT_ONLY
 	add_child(rim)
 	_build_motes()
+	_build_vignette()
 	_tune_shadow_quality()
 	_apply_quality()
 
@@ -206,11 +210,57 @@ func _apply_quality(_lv: int = -1) -> void:
 		return
 	q.call("setup_sun", sun, 36.0)
 	q.call("setup_environment", env)
+	var glv: int = q.get("level")
+	# colour grade + vignette are the one post pass: Medium/High only. Low bakes the look into sky / fog / ground colours.
+	env.adjustment_enabled = glv >= 1
+	if _vignette:
+		_vignette.visible = glv >= 1
 	if motes:
 		var lv: int = q.get("level")
 		motes.visible = lv > 0
 		motes.emitting = lv > 0
 		motes.amount = maxi(8, int(_motes_amount * (0.6 if lv == 1 else 1.0)))
+
+
+## Split-tone grade as a 1D LUT (per-channel curves, free inside the tonemap pass): shadows lean teal, mids stay neutral,
+## highlights lean gold. Characters (the most saturated thing on screen) keep their local colour.
+func _grade_lut() -> GradientTexture1D:
+	var g := Gradient.new()
+	g.offsets = PackedFloat32Array([0.0, 0.25, 0.6, 1.0])
+	g.colors = PackedColorArray([Color(0.010, 0.030, 0.050), Color(0.230, 0.265, 0.290), Color(0.620, 0.600, 0.560), Color(1.0, 0.975, 0.925)])
+	var t := GradientTexture1D.new()
+	t.gradient = g
+	t.width = 64
+	return t
+
+
+var _vignette: TextureRect
+
+## Soft screen-edge darkening (one textured quad, no shader, below every HUD layer): pulls the eye to the party in the middle.
+func _build_vignette() -> void:
+	var cl := CanvasLayer.new()
+	cl.name = "Vignette"
+	cl.layer = 3
+	var tr := TextureRect.new()
+	tr.name = "VignetteRect"
+	tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	tr.set_anchors_preset(Control.PRESET_FULL_RECT)
+	tr.stretch_mode = TextureRect.STRETCH_SCALE
+	tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	var g := Gradient.new()
+	g.offsets = PackedFloat32Array([0.0, 0.55, 0.85, 1.0])
+	g.colors = PackedColorArray([Color(0.06, 0.03, 0.10, 0.0), Color(0.06, 0.03, 0.10, 0.0), Color(0.06, 0.03, 0.10, 0.20), Color(0.05, 0.02, 0.09, 0.42)])
+	var gt := GradientTexture2D.new()
+	gt.gradient = g
+	gt.fill = GradientTexture2D.FILL_RADIAL
+	gt.fill_from = Vector2(0.5, 0.5)
+	gt.fill_to = Vector2(1.0, 0.5)
+	gt.width = 128
+	gt.height = 128
+	tr.texture = gt
+	cl.add_child(tr)
+	add_child(cl)
+	_vignette = tr
 
 
 ## Sunlit dust motes drifting around the camera focus (one draw call; follows the active camera).
@@ -243,6 +293,12 @@ func _build_motes() -> void:
 	var gt := GradientTexture1D.new()
 	gt.gradient = g
 	pm.color_ramp = gt
+	var ig := Gradient.new()
+	ig.offsets = PackedFloat32Array([0.0, 0.7, 1.0])
+	ig.colors = PackedColorArray([Color(1.0, 0.86, 0.60), Color(1.0, 0.90, 0.72), Color(0.62, 1.0, 0.90)])
+	var igt := GradientTexture1D.new()
+	igt.gradient = ig
+	pm.color_initial_ramp = igt
 	motes.process_material = pm
 	var q := QuadMesh.new()
 	q.size = Vector2(0.06, 0.06)
@@ -252,7 +308,7 @@ func _build_motes() -> void:
 	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	m.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
 	m.vertex_color_use_as_albedo = true
-	m.albedo_color = Color(1.0, 0.86, 0.66, 0.55)
+	m.albedo_color = Color(1.0, 1.0, 1.0, 0.6)
 	var rt := GradientTexture2D.new()
 	rt.fill = GradientTexture2D.FILL_RADIAL
 	rt.fill_from = Vector2(0.5, 0.5)
@@ -323,6 +379,7 @@ func apply_preset(p: String) -> void:
 					motes.amount = 140
 					var ppm := motes.process_material as ParticleProcessMaterial
 					if ppm:
+						ppm.color_initial_ramp = null
 						ppm.gravity = Vector3(0, 0.05, 0)
 						ppm.initial_velocity_max = 0.25
 			elif MOODS.has(p):
@@ -437,6 +494,8 @@ func _apply_sky_params(force: bool = true) -> void:
 		sky_mat.set_shader_parameter("zenith_color", m["zenith"])
 		sky_mat.set_shader_parameter("mid_color", (m["horizon"] as Color).lerp(m["zenith"], 0.55))
 		sky_mat.set_shader_parameter("sun_tint", m["sun_col"])
+		sky_mat.set_shader_parameter("haze_color", m["fog_col"])
+		sky_mat.set_shader_parameter("ground_color", (m["fog_col"] as Color) * 0.8)
 
 
 func _process(delta: float) -> void:

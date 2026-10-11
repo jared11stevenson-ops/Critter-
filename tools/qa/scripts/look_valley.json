@@ -1,0 +1,5 @@
+[
+ {"t":0.3,"call":"scene.qa_auto_dialogue","args":[true,0,0.2]},
+ {"t":1.0,"call":"scene.qa_teleport","args":["t_valley"]},
+ {"t":2.0,"action":"move_right","dur":0.6}
+]

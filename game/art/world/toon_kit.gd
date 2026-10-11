@@ -73,6 +73,8 @@ static func material(opts: Dictionary = {}) -> ShaderMaterial:
 	if opts.has("wind"):
 		m.set_shader_parameter("wind_sway", float(opts["wind"]))
 	m.set_shader_parameter("noise_tex", NOISE_TEX)
+	# LOOK_PASS prop colour variation: off for unique (creature / habitat) materials so characters keep their authored colours
+	m.set_shader_parameter("inst_var", 0.0 if opts.get("unique", false) else float(opts.get("inst_var", 1.0)))
 	m.set_shader_parameter("detail_tex", DETAIL_TEX)
 	m.set_shader_parameter("detail_normal", DETAIL_NRM)
 	m.set_shader_parameter("roughness", float(opts.get("roughness", 0.82)))

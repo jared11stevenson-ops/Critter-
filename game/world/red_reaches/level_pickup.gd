@@ -41,7 +41,8 @@ func _ready() -> void:
 	var m := StandardMaterial3D.new()
 	m.albedo_color = col
 	m.emission_enabled = true
-	m.emission = col * 0.6
+	m.emission = col * 0.9
+	m.emission_energy_multiplier = 1.9   # LOOK_PASS: above the glow HDR threshold so pickups bloom and pop against the ground
 	m.diffuse_mode = BaseMaterial3D.DIFFUSE_TOON
 	_mesh.material_override = m
 	_mesh.rotation_degrees = Vector3(35, 0, 45)
