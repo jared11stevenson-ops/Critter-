@@ -35,7 +35,7 @@ static func _dome(m: Prim, c: Vector3, r: float, red: Color, dark: Color, side: 
 	_cracks(m, c, r, side)
 
 static func build(b) -> void:
-	b.quality = 0.66
+	b.quality = 0.56
 	var P: Dictionary = b.pal
 	var char: Color = P["main"]; var red: Color = P["accent"]; var ember: Color = P["glow"]; var tan: Color = P["belly"]
 	var cream := Color.html("dcc9a4"); var olive := Color.html("6f7a3c"); var brass := Color.html("c9a24a"); var brown := Color.html("5b4030")

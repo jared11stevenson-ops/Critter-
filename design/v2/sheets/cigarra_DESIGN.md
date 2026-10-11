@@ -1,5 +1,5 @@
-# Cigarra - design note (pass 3, from the lore brief)
-**Lore anchors used:** Brazilian-treehopper crown of branching black spheres; pale leaflike hair; yellow-green ringed eyes; dark oversized collar; loose layered clothing; charms; translucent green treehopper-wing cloak; sees possibilities (ghosts), compels via crown.
-**What changed from the 2D sheet:** springy chibi build (~3.5 heads), hair as leaf-like spikes (still spiky cones, to be made leaf-shaped), crown rebuilt as a branch twig (head) + a separate sphere cluster (`weapon` part) that detaches.
-**Rig features:** crown spheres detach/orbit/recall (`cfg.detach_act`: Bad Thought flick, Premonition orbit, Last Stand orbit); future ghosts (`GhostFx`, translucent rig copies posed to a predicted move; auto on Premonition); compel threads + eye spiral (`play_event compel`); glowing sphere cores (tell flare via glow boost).
-**Known gaps:** the cloak is a 6-lobed fan of flat glass plates hanging behind her, not yet a draped scalloped cloak that wraps the shoulders; spheres are one rigid cluster, not individual orbiting bodies; threads are a single ribbon; hair is not leaf-shaped; skin tone / face is a plain disc.
+# Cigarra - design note (pass 4)
+**Lore anchors:** treehopper crown of branching black spheres, pale leaf-like hair, yellow-green ringed eyes, dark oversized collar, loose clothing, charms, translucent green wing cloak; sees possibilities; compels via crown.
+**Changed vs 2D sheet:** chibi ~3.5 heads; hair as leaf strands + leaf ears; forehead gem; cloak as two layers of scalloped leaf-veined glass panels draped around the back from the hood; crown = twig + 6 individual spheres in a MultiMesh swarm.
+**Rig features:** per-sphere orbit / flick / volley / recall with a thread ribbon each (Bad Thought, Crown Barrage, Premonition, Last Stand); future ghosts (translucent rig copies); compel threads + eye spiral.
+**Still short:** cloak reads as a leafy skirt more than a cloak that opens for leaps; hands/arms simple; hood-collar blocky; no per-sphere shine variation.

@@ -1,6 +1,6 @@
-# Aruun - design note (pass 3, from the lore brief)
-**Lore anchors used:** giraffe-beetle barbarian, elongated build; psionically bonded mace Morrow (moves on its own, returns); Rage = overdrive that costs his body; "his shell fractures" (Red Span / Burden Architecture); Spanwright (rope, wraps).
-**Species language:** giraffe weevil: long articulated neck, small hard head with swept branching horn-antennae, red wing-case pauldrons, black legs.
-**What the 2D sheet gave / what changed:** kept only loosely: black carapace + red plates + cream wraps + olive tattered cloak. Re-proportioned for modeling: ~4.5 heads incl. head, broad shoulders, chunky legs, symmetrical A-pose (arms 35 deg), 9 rigid parts (head, torso+neck, arm x2, leg x2, Morrow, cloak, face plate).
-**Rig features:** Morrow = detachable part `weapon` (throw / hover / recall, `cfg.detach_act` for Reaching Strike + Gravity Pull); 3-tier shell-plate cracks on shoulder domes + chest (vertex alpha 0.01/0.02/0.03, driven by `fs.plates` or missing vitality); Rage aura (`fs.rage`).
-**Known gaps:** neck is a plain tube (no truss bracing / articulation yet); legs lack bridge-truss detail; face is a plate under a long snout and reads weakly in close-up; no Spanwright rope/tools yet; Rage has no steam/veins.
+# Aruun - design note (pass 4)
+**Lore anchors:** giraffe-beetle barbarian; psionically bonded mace Morrow; Rage = overdrive that costs his body; shell fractures; Spanwright (rope, hammer, chisel).
+**Species language:** giraffe weevil: truss-braced long neck, small beetle head with mask plates + swept branching antlers, red wing-case pauldrons, black legs.
+**Changed vs 2D sheet:** loose inspiration only; heroic ~4.5-head build, broad shoulders, thick limbs, A-pose, 9 rigid parts.
+**Rig features:** Morrow detachable (`weapon`); 3-tier shell cracks (also driven by Rage); Rage aura + glowing neck veins; face plate with red eye-mark.
+**Still short:** cloak/legs plain, no truss on legs, Rage has no steam, face still reads small, head-to-snout read is generic.
