@@ -35,3 +35,7 @@ Rules: one milestone at a time; each ends with a build you play on your phone.
 - **Founders:** the first Critter of any species, including a hybrid species, is its founding monarch; the named lore characters are founders only if they are the first of their species captured.
 - **Genetics:** inherited traits for same-species lineages (appearance, physical stats, tendencies; not combat experience).
 - **Tutorial:** Aruun is the player's first Critter (separate introductory process), still mortal.
+
+## Scope note (creator, 2026-10-11): breeding is DEFERRED
+"We will worry about the breeding way down the line." Breeding, genetics, hybrid species and hybridization rules are parked until after the duel, expedition, tournament, habitat and shelf milestones. The laws that mention them stay in force; nothing may contradict them, but no work or questions on breeding until the creator reopens it.
+Pre-flight impact: none (nothing built depends on breeding). The open breeding questions above are closed for now.
