@@ -34,13 +34,13 @@ static func resolve_tick(sim: CombatSim) -> void:
 				continue
 			if not in_range(f, o, h):
 				continue
-			att.append([f, i])
+			att.append([f, i, h, m.id, m.kind])
 			break
 	if att.size() == 2:
 		var fa = att[0][0]
 		var fb = att[1][0]
-		var ha: Dictionary = fa.move.hits[att[0][1]]
-		var hb: Dictionary = fb.move.hits[att[1][1]]
+		var ha: Dictionary = att[0][2]
+		var hb: Dictionary = att[1][2]
 		if ha["grab"] and hb["grab"]:
 			fa.hits_done[att[0][1]] = 1
 			fb.hits_done[att[1][1]] = 1
@@ -58,8 +58,8 @@ static func resolve_tick(sim: CombatSim) -> void:
 	for e in att:
 		var f = e[0]
 		var o = sim.fighters[1 - f.idx]
-		var h: Dictionary = f.move.hits[e[1]]
-		var r := apply_hit(sim, f, o, h, f.move.id, f.pos, f.facing, f.move.kind, false, f.hits_done[e[1]] == 2)
+		var h: Dictionary = e[2]
+		var r := apply_hit(sim, f, o, h, e[3], f.pos, f.facing, e[4], false, f.hits_done[e[1]] == 2)
 		if r == 1:
 			f.hits_done[e[1]] = 1
 		elif r == 2 and f.hits_done[e[1]] == 0:

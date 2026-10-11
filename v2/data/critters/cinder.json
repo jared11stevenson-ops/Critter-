@@ -34,7 +34,8 @@
   "parry_blast": 6.0,
   "pressure_decay": 3.0,
   "block_chip": 0.25,
-  "block_poise": 0.4
+  "block_poise": 0.4,
+  "damage_mult": 0.825
  },
  "ai": {
   "style": "burst",

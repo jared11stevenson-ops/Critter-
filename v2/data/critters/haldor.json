@@ -32,7 +32,8 @@
  "tuning": {
   "body_radius": 0.65,
   "block_chip": 0.15,
-  "crush_resist": 0.2
+  "crush_resist": 0.2,
+  "damage_mult": 0.724
  },
  "ai": {
   "style": "bruiser",

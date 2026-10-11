@@ -34,7 +34,8 @@
   "block_chip": 0.3,
   "block_poise": 0.5,
   "guard_drain": 0.6,
-  "parry_window": 12
+  "parry_window": 12,
+  "damage_mult": 1.99
  },
  "ai": {
   "style": "zoner",

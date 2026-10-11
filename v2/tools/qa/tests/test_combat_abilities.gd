@@ -144,7 +144,7 @@ func _cinder(fails: Array) -> void:
 	sim.fighters[0].pressure = 80.0
 	var evs := U.run(sim, 80, {2: _press("ability1")})
 	var h := _hits_by(evs, "cinder_pressure_burst")
-	if h.is_empty() or float(h[0]["damage"]) < 20.0:
+	if h.is_empty() or float(h[0]["damage"]) < 20.0 * sim.fighters[0].out_mult():
 		fails.append("cinder pressure burst: damage should scale with pressure")
 	if sim.fighters[0].pressure > 0.1:
 		fails.append("cinder pressure burst: should spend pressure")
@@ -261,7 +261,7 @@ func _kragg(fails: Array) -> void:
 	U.face_off(sim, 2.6)
 	var evs := U.run(sim, 70, {2: _press("ability1")})
 	var g := _hits_by(evs, "kragg_pincer_hold", "grab")
-	if g.is_empty() or float(g[0]["damage"]) < 20.0:
+	if g.is_empty() or float(g[0]["damage"]) < 20.0 * sim.fighters[0].out_mult():
 		fails.append("kragg pincer hold: command grab should land hard")
 	sim = U.make("kragg", "marro", "ring", 1, 2)
 	U.face_off(sim, 5.0)
@@ -273,5 +273,5 @@ func _kragg(fails: Array) -> void:
 	sim.fighters[0].vit = sim.fighters[0].max_vit * 0.2
 	evs = U.run(sim, 120, {2: _press("laststand")})
 	var m := _hits_by(evs, "kragg_main_event", "grab")
-	if m.is_empty() or float(m[0]["damage"]) < 50.0:
+	if m.is_empty() or float(m[0]["damage"]) < 50.0 * sim.fighters[0].out_mult():
 		fails.append("kragg main event: huge command throw expected")
