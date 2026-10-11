@@ -22,7 +22,7 @@ lore (Book VI and XIV) and are delivered as the survival-unlocked Life Story cha
 Next four (post-launch or swap-ins): **Nerit** (glow-worm, light/dark), **Solmara** (5.5 m sea spider, tides/gravity), **Pharilux** (the watcher, thresholds), **Solthrin** (centipede with ember grove, Second Contact).
 Human characters (Mara Venn, Dexter Mane) stay non-playable story figures.
 
-## Kit themes (keep each archetype's 36-point stat budget; the Combat Engineer reskins the data to these Knacks)
+## Kit themes (SUPERSEDED by design/v2/LORE_MOVES.md, which is binding and quotes the lore for every move; this table is only a summary)
 | Critter | Knack as combat identity | Signature weapon / tool (from the design) | Abilities (2) + Last Stand |
 |---|---|---|---|
 | Aruun | Psionic Bond / Kinetic Force; **Rage** = deliberate self-damage for more power | **Morrow**: throw, redirect, recall; mace is a living partner | *Morrow Throw/Recall*, *Burden Slam*; Last Stand: **Carry the Bridge** (absorb and redistribute a lethal blow, then a huge counter) |
