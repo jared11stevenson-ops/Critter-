@@ -1,7 +1,8 @@
 extends RefCounted
 ## Input ingestion, input buffer, action state machine and voluntary movement.
 ## Static helpers operating on a CombatSim; holds no state (avoids reference cycles).
-const KIND_PRIO := {"ls": 0, "dodge": 1, "grab": 2, "heavy": 3, "light": 4, "a1": 5, "a2": 6}
+const Res = preload("res://src/combat/sim_res.gd")
+const KIND_PRIO := {"ls": 0, "dodge": 1, "counter": 2, "grab": 2, "heavy": 3, "light": 4, "a1": 5, "a2": 6}
 const Fighter = preload("res://src/combat/fighter.gd")
 
 static func ingest(sim: CombatSim, f: Fighter, inp: CombatInput) -> void:
@@ -12,21 +13,33 @@ static func ingest(sim: CombatSim, f: Fighter, inp: CombatInput) -> void:
 		["light", inp.strike_tap, "tap"], ["heavy", inp.strike_hold, "hold"], ["grab", inp.grab, "grab"],
 		["dodge", inp.dodge, "dodge"], ["a1", inp.ability1, "a1"], ["a2", inp.ability2, "a2"]]
 	var ls_combo := inp.ability1 and inp.ability2
-	if ls_combo and (not p.get("a1", false) or not p.get("a2", false)):
+	var chord_new: bool = ls_combo and (not p.get("a1", false) or not p.get("a2", false))
+	var rage_chord := false
+	if chord_new:
 		if _ls_ready(sim, f):
 			kind = "ls"
 			best = 0
+		elif float(f.T["rage_max"]) > 0.0:
+			rage_chord = true           # Rage toggle (Aruun): ability1 + ability2 when Last Stand is not available
+			Res.toggle_rage(sim, f)
+	if rage_chord:
+		pairs[4][1] = false
+		pairs[5][1] = false
 	for pr in pairs:
 		var edge: bool = pr[1] and not p.get(pr[2], false)
 		if edge and KIND_PRIO[pr[0]] < best and not (ls_combo and kind == "ls"):
 			kind = pr[0]
 			best = KIND_PRIO[pr[0]]
+	if inp.guard and inp.grab and not p.get("grab", false) and f.def.move_ids.has("counter") and kind != "ls":
+		kind = "counter"                # guard + grab: counter-stance (Nyxaris)
+		best = 0
 	p["tap"] = inp.strike_tap
 	p["hold"] = inp.strike_hold
 	p["grab"] = inp.grab
 	p["dodge"] = inp.dodge
 	p["a1"] = inp.ability1
 	p["a2"] = inp.ability2
+	f.hold_level = inp.strike_hold
 	f.guard_rise = inp.guard and not f.prev_guard
 	if f.guard_rise:
 		f.guard_press_frame = sim.frame + 1
@@ -57,6 +70,8 @@ static func move_for(f: Fighter, kind: String) -> MoveDef:
 			return f.def.move(ids["ability2"])
 		"ls":
 			return f.def.move(ids["laststand"])
+		"counter":
+			return f.def.move(ids["counter"])
 	return null
 
 static func can_start(sim: CombatSim, f: Fighter, m: MoveDef) -> bool:
@@ -68,6 +83,8 @@ static func can_start(sim: CombatSim, f: Fighter, m: MoveDef) -> bool:
 	elif m.stamina_cost > 0.0 and f.sta <= 0.0:
 		return false
 	if f.winded and (m.kind == "heavy" or m.kind == "ability"):
+		return false
+	if m.reserve_cost > 0.0 and not f.has("archive") and f.reserve < m.reserve_cost:
 		return false
 	if (m.pressure_cost != 0.0 or m.require_pressure > 0.0) and f.pressure < maxf(maxf(m.pressure_cost, 0.0), m.require_pressure):
 		return false
@@ -82,11 +99,20 @@ static func action_name(f: Fighter, m: MoveDef, kind: String) -> String:
 		"a1": return "ability1"
 		"a2": return "ability2"
 		"ls": return "laststand"
+		"counter": return "ability2"
 	return "strike_light"
 
 static func start_move(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, kind: String) -> void:
 	var R: Dictionary = sim.R
-	f.sta = maxf(0.0, f.sta - m.stamina_cost)
+	var cost: float = m.stamina_cost
+	if m.kind == "dodge" and float(f.T["intel_gain"]) > 0.0:
+		cost *= 1.0 - f.intel * float(R["intel_dodge_discount"])
+	f.sta = maxf(0.0, f.sta - cost)
+	if m.reserve_cost > 0.0 and not f.has("archive"):
+		f.reserve = maxf(0.0, f.reserve - m.reserve_cost)
+	if m.pressure_on_use > 0.0:
+		f.pressure = minf(float(f.T["pressure_max"]), f.pressure + m.pressure_on_use)
+	f.charge = 0
 	if m.stamina_cost > 0.0:
 		f.sta_delay = int(R["sta_regen_delay"])
 		if f.sta <= 0.0:
@@ -113,9 +139,16 @@ static func start_move(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, kind:
 	f.riposte_boost = false
 	f.buf_kind = ""
 	f.idle_frames = 0
-	var to_o: Vector2 = o.pos - f.pos
+	var aim: Vector2 = f.compel["pos"] if f.compel.get("mode", "") == "decoy" else o.pos
+	var to_o: Vector2 = aim - f.pos
 	if to_o.length_squared() > 0.0:
 		f.facing = to_o.normalized()
+	if not m.promise.is_empty():
+		sim.emit("promise", f.idx, m.id, f.pos, 0.0)
+	if float(o.T["intel_gain"]) > 0.0 and m.kind != "dodge":
+		o.intel = minf(1.0, o.intel + float(R["intel_per_tell"]) * float(o.T["intel_gain"]))
+	if o.has("premonition") or o.has("touched"):
+		sim.mind.spawn_ghost(sim, o, f, m)
 	if f.has("riposte") and (m.kind == "light" or m.kind == "heavy"):
 		f.af = int(m.startup * (1.0 - float(R["riposte_startup_mult"])))
 		f.dmg_mult = float(R["riposte_dmg_mult"])
@@ -126,7 +159,7 @@ static func start_move(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, kind:
 		if dir.length() < float(sim.R["input_deadzone"]):
 			dir = -f.facing
 		f.mvec = dir.normalized()
-		f.dodge_chain_left = int(f.T["dodge_chain"])
+		f.dodge_chain_left = int(f.T["dodge_chain"]) + (1 if f.has("borrowed") else 0)
 	if kind == "ls":
 		f.last_stand_used = true
 		f.last_stand_active = true
@@ -147,6 +180,7 @@ static func release_store(f: Fighter, rules: Dictionary) -> void:
 
 static func end_move(sim: CombatSim, f: Fighter) -> void:
 	release_store(f, sim.R)
+	Res.move_over(f, sim.R)
 	f.move = null
 	f.action = "idle"
 	f.af = 0
@@ -190,6 +224,10 @@ static func tick_fighter(sim: CombatSim, f: Fighter, o: Fighter) -> void:
 	f.slow_mult = 1.0
 	f.haste_mult = 1.0
 	f.take_mult = 1.0
+	if int(f.T["marks_armor"]) > 0:
+		f.take_mult = 1.0 - minf(float(R["mark_cap"]), float(f.marks) * float(R["mark_armor"]))
+	if f.facing_lock > 0:
+		f.facing_lock -= 1
 	for k in f.st.keys():
 		f.st[k] -= 1
 		if f.st[k] <= 0:
@@ -198,6 +236,10 @@ static func tick_fighter(sim: CombatSim, f: Fighter, o: Fighter) -> void:
 		f.slow_mult = float(f.T["slow_value"])
 	if f.has("haste"):
 		f.haste_mult = float(f.T["haste_value"])
+	if f.raging:
+		f.haste_mult *= float(f.T["rage_haste"])
+	if f.has("owed"):
+		f.slow_mult *= float(R["owed_speed"])
 	if f.combo_timer > 0:
 		f.combo_timer -= 1
 		if f.combo_timer == 0:
@@ -209,14 +251,29 @@ static func tick_fighter(sim: CombatSim, f: Fighter, o: Fighter) -> void:
 		if f.stun == 0:
 			_stun_end(sim, f)
 	elif f.move != null:
-		f.af += 1
-		if f.af >= f.move.total:
-			end_move(sim, f)
+		var advance := true
+		if f.has("inertia"):                  # Inertia Field: the victim's actions run in slow motion
+			f.slow_acc += float(R["inertia_rate"])
+			if f.slow_acc < 1.0:
+				advance = false
+			else:
+				f.slow_acc -= 1.0
+		if advance and f.move.charge_max > 0 and f.af + 1 == f.move.charge_at and f.hold_level and f.charge < f.move.charge_max:
+			f.charge += 1                     # Gathering blow: keeps growing while the button is held
+			advance = false
+		if advance:
+			f.af += 1
+			if f.af >= f.move.total:
+				end_move(sim, f)
 	# --- decisions ---------------------------------------------------------
 	_decide(sim, f, o)
+	sim.res.tick(sim, f)
+	sim.mind.tick(sim, f)
+	_morrow(sim, f, o)
 	# --- facing + movement -------------------------------------------------
-	var to_o: Vector2 = o.pos - f.pos
-	var can_turn: bool = f.stun == 0 and (f.move == null or f.af < f.move.track) and f.action != "dodge"
+	var look: Vector2 = f.compel["pos"] if f.compel.get("mode", "") == "decoy" else o.pos
+	var to_o: Vector2 = look - f.pos
+	var can_turn: bool = f.stun == 0 and f.facing_lock == 0 and (f.move == null or f.af < f.move.track) and f.action != "dodge"
 	if can_turn and to_o.length_squared() > 0.0:
 		f.facing = to_o.normalized()
 	sim.fx.motion(sim, f, o)
@@ -225,6 +282,17 @@ static func tick_fighter(sim: CombatSim, f: Fighter, o: Fighter) -> void:
 		f.idle_frames += 1
 	else:
 		f.idle_frames = 0
+
+## "Morrow moves first": in Rage the mace sometimes strikes before it is commanded.
+static func _morrow(sim: CombatSim, f: Fighter, o: Fighter) -> void:
+	if not f.raging or f.move != null or not f.actionable() or not f.def.move_ids.has("auto_counter"):
+		return
+	if f.cooldowns.get("morrow_first", 0) > 0 or f.pos.distance_to(o.pos) > float(sim.R["morrow_range"]):
+		return
+	if sim.rng.randf() < float(sim.R["morrow_odds"]):
+		f.cooldowns["morrow_first"] = int(sim.R["morrow_counter_cd"])
+		start_move(sim, f, o, f.def.move(str(f.def.move_ids["auto_counter"])), "light")
+		sim.emit("morrow_first", f.idx, f.move.id, f.pos, 0.0)
 
 static func _regen(sim: CombatSim, f: Fighter) -> void:
 	var R: Dictionary = sim.R

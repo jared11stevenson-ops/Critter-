@@ -10,6 +10,7 @@ var walls: Array = []                 # circle: [[deg_from, deg_to], ...] arcs t
 var sides: Dictionary = {"n": "drop", "s": "drop", "e": "drop", "w": "drop"}   # rect
 var hazards: Array = []               # {kind: dps|pulse|slow, shape: circle|rect, pos:[x,y], radius, half, dps, period, knock, slow}
 var spawns: Array = [Vector2(-3.0, 0.0), Vector2(3.0, 0.0)]
+var cracks: Array = []                # [[x, y, radius]] cracked Thoughtstone (Reaching Strike shatters it)
 
 static func from_dict(d: Dictionary) -> ArenaDef:
 	var a := ArenaDef.new()
@@ -22,6 +23,7 @@ static func from_dict(d: Dictionary) -> ArenaDef:
 	a.walls = d.get("walls", [])
 	a.sides = d.get("sides", a.sides)
 	a.hazards = d.get("hazards", [])
+	a.cracks = d.get("cracks", []).duplicate(true)
 	if d.has("spawns"):
 		a.spawns = [Vector2(d["spawns"][0][0], d["spawns"][0][1]), Vector2(d["spawns"][1][0], d["spawns"][1][1])]
 	return a

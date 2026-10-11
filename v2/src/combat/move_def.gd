@@ -25,6 +25,12 @@ var cancel_from := -1        # frame from which the chain / cancel is accepted
 var chain_on := "contact"    # contact | always
 var feint := false           # startup may be cancelled into guard / grab
 var require_pressure := 0.0
+var lore_source := ""        # tag + quote key from design/v2/LORE_MOVES.md (mandatory, validator-enforced)
+var pressure_on_use := 0.0   # resource gained when the move is used (Future-Noise)
+var reserve_cost := 0.0      # silk reserve spent
+var promise: Dictionary = {} # declared Promise attack {bonus, refund, penalty}
+var charge_max := 0          # heavy that keeps growing while held (frames)
+var charge_at := 0           # frame at which the charge holds
 var self_damage_ratio := 0.0 # fraction of CURRENT vitality paid on use (cannot kill)
 var motion: Array = []
 var hits: Array = []
@@ -61,6 +67,12 @@ static func from_dict(move_id: String, d: Dictionary) -> MoveDef:
 	m.chain_on = str(d.get("chain_on", "contact"))
 	m.feint = bool(d.get("feint", false))
 	m.require_pressure = float(d.get("require_pressure", 0.0))
+	m.lore_source = str(d.get("lore_source", ""))
+	m.pressure_on_use = float(d.get("pressure_on_use", 0.0))
+	m.reserve_cost = float(d.get("reserve_cost", 0.0))
+	m.promise = d.get("promise", {})
+	m.charge_max = int(d.get("charge_max", 0))
+	m.charge_at = int(d.get("charge_at", 0))
 	m.self_damage_ratio = float(d.get("self_damage_ratio", 0.0))
 	m.motion = d.get("motion", [])
 	m.spawns = d.get("spawns", [])
@@ -102,7 +114,7 @@ static func _norm(src: Dictionary) -> Dictionary:
 		if k in ["hitbox", "props"]:
 			for kk in src[k].keys():
 				h[kk] = src[k][kk]
-		elif k in ["startup", "active", "recovery", "name", "kind", "tell_anim", "iframes", "motion", "spawns", "stance", "hits", "rehit", "chain", "stamina_cost"]:
+		elif k in ["startup", "active", "recovery", "name", "kind", "tell_anim", "iframes", "motion", "spawns", "stance", "hits", "rehit", "chain", "stamina_cost", "lore_source", "promise"]:
 			continue
 		else:
 			h[rename.get(k, k)] = src[k]

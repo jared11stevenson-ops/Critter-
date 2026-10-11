@@ -4,6 +4,8 @@ extends RefCounted
 const Ent = preload("res://src/combat/entity.gd")
 const Hits = preload("res://src/combat/sim_hits.gd")
 const Actions = preload("res://src/combat/sim_actions.gd")
+const Res = preload("res://src/combat/sim_res.gd")
+const Mind = preload("res://src/combat/sim_mind.gd")
 const Fighter = preload("res://src/combat/fighter.gd")
 
 static func on_start(_sim: CombatSim, _f, _o, _m: MoveDef) -> void:
@@ -91,7 +93,7 @@ static func _spawn(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, sp: Dicti
 			match place:
 				"self": e.pos = f.pos
 				"target": e.pos = o.pos
-				_: e.pos = f.pos + f.facing * float(sp.get("dist", 2.0))
+				_: e.pos = f.pos + f.facing * float(sp.get("dist", 2.0)) + Vector2(-f.facing.y, f.facing.x) * float(sp.get("lateral", 0.0))
 			e.radius = float(sp.get("radius", 1.2))
 			e.life = int(sp.get("life", 300))
 			e.dps = float(sp.get("dps", 0.0))
@@ -111,6 +113,19 @@ static func _spawn(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, sp: Dicti
 					same.remove_at(0)
 			sim.ents.append(e)
 			sim.emit("zone", f.idx, m.id, e.pos, 0.0, {"radius": e.radius, "tag": e.tag})
+		"false_memory":
+			Mind.start_decoy(sim, f, o, sp)
+		"gust":
+			var n := 0
+			for pe in sim.ents:
+				if pe.kind == "proj" and pe.owner != f.idx and pe.pos.distance_to(f.pos) <= float(sim.R["gust_reflect_range"]):
+					pe.owner = f.idx                       # reflected
+					pe.dir = f.facing
+					pe.returning = false
+					n += 1
+			sim.emit("gust", f.idx, m.id, f.pos, 0.0, {"reflected": n})
+		"shatter":
+			sim.shatter(f.pos + f.facing * float(sp.get("dist", 3.0)), float(sp.get("radius", 2.0)))
 		"phantom":
 			var cnt := int(sp.get("count", 3))
 			for i in cnt:
@@ -134,6 +149,17 @@ static func on_hit(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary) ->
 	var oh: Dictionary = h.get("on_hit", {})
 	if oh.is_empty():
 		return
+	if oh.has("dot"):
+		Res.add_dot(dfn, oh["dot"])
+	if oh.get("ripen", false):
+		Res.ferment(sim, dfn)
+	if oh.get("ripen_all", false):
+		Res.ripen_all(sim, dfn, atk)
+	if oh.get("steal", false):
+		Res.steal_buff(sim, atk, dfn)
+	if oh.has("status"):
+		for k in oh["status"].keys():
+			dfn.add_status(str(k), int(oh["status"][k]))
 	if oh.has("root"):
 		dfn.add_status("rooted", int(oh["root"]))
 	if oh.has("slow"):
@@ -242,6 +268,8 @@ static func _proj(sim: CombatSim, e) -> bool:
 	return false
 
 static func _zone(sim: CombatSim, e) -> bool:
+	if e.tag == "fungus":
+		return Res.fungus_step(sim, e)
 	if e.arm > 0:
 		e.arm -= 1
 		return false
@@ -261,6 +289,12 @@ static func _zone(sim: CombatSim, e) -> bool:
 			f.add_status("slowed", 2)
 		if b.has("haste") and is_owner:
 			f.add_status("haste", 2)
+		if b.has("inertia") and not is_owner:
+			f.add_status("inertia", 2)
+		if b.has("mark") and not is_owner:
+			f.add_status("marked", int(b["mark"]))
+		if b.has("archive") and is_owner:
+			f.add_status("archive", 2)
 		if b.has("confuse") and not is_owner:
 			f.add_status("confused", 2)
 		if b.has("regen_block") and not is_owner:

@@ -6,6 +6,8 @@ const Fighter = FighterT
 const Actions = preload("res://src/combat/sim_actions.gd")
 const Hits = preload("res://src/combat/sim_hits.gd")
 const Fx = preload("res://src/combat/sim_effects.gd")
+const Mind = preload("res://src/combat/sim_mind.gd")
+const Res = preload("res://src/combat/sim_res.gd")
 
 var R: Dictionary
 var arena: ArenaDef
@@ -16,8 +18,11 @@ var ents: Array = []
 var tick := 0              # real ticks (including hit-stop)
 var frame := 0             # simulation frames (hit-stop frames excluded)
 var hitstop := 0
+var cracks: Array = []     # remaining cracked Thoughtstone (copied from the arena)
 var dt := 1.0 / 60.0       # seconds per tick (rules.tick_rate)
 var fx = Fx
+var mind = Mind
+var res = Res
 var _events: Array[Dictionary] = []
 var _over := false
 var _result: Dictionary = {}
@@ -29,6 +34,7 @@ func _init(a: CritterDef, b: CritterDef, arena_def: ArenaDef, stakes_tier: int, 
 	R = CombatData.rules()
 	dt = 1.0 / float(R["tick_rate"])
 	arena = arena_def
+	cracks = arena_def.cracks.duplicate(true)
 	stakes = stakes_tier
 	rng.seed = seed_value
 	var defs := [a, b]
@@ -57,10 +63,22 @@ func _setup_fighter(f: Fighter, i: int, d: CritterDef) -> void:
 	f.sta = f.max_sta
 	f.max_poise = float(f.T["max_poise"])
 	f.poise = f.max_poise
+	Res.setup(self, f)
+
+## Mollusk's Shell Memory: each bout survived carves a mark (permanent small armor).
+func set_shell_marks(idx: int, marks: int) -> void:
+	fighters[idx].marks = marks
 
 ## Team bouts: a critter keeps the vitality it had (ratio 0..1).
 func set_vitality_ratio(idx: int, ratio: float) -> void:
 	fighters[idx].vit = maxf(1.0, fighters[idx].max_vit * clampf(ratio, 0.0, 1.0))
+
+## "Shatters cracked Thoughtstone": removes arena cracks inside the radius.
+func shatter(p: Vector2, radius: float) -> void:
+	for c in cracks.duplicate():
+		if p.distance_to(Vector2(float(c[0]), float(c[1]))) <= radius + float(c[2]):
+			cracks.erase(c)
+			emit("shatter", 0, "", Vector2(float(c[0]), float(c[1])), 0.0)
 
 func emit(type: String, fighter: int, move_id: String, pos: Vector2, damage: float, extra: Dictionary = {}) -> void:
 	var e := {"type": type, "fighter": fighter, "move_id": move_id, "pos": pos, "damage": damage, "tick": tick}
@@ -82,11 +100,14 @@ func result() -> Dictionary:
 func damage(target: Fighter, source: Fighter, amount: float, move_id: String, chip: bool = false) -> void:
 	if amount <= 0.0 or not target.alive:
 		return
+	if source != null:
+		_dealt[source.idx] += amount
+	amount = Res.on_damage(self, target, source, amount)
+	if amount <= 0.0:
+		return
 	if chip and R["chip_cannot_kill"]:
 		amount = minf(amount, maxf(0.0, target.vit - 1.0))
 	target.vit -= amount
-	if source != null:
-		_dealt[source.idx] += amount
 	if target.vit <= 0.0:
 		target.vit = 0.0
 		if not _pending.has(target.idx):
@@ -98,6 +119,8 @@ func step(input_a: CombatInput, input_b: CombatInput) -> void:
 		return
 	tick += 1
 	var inps := [input_a, input_b]
+	for i in 2:
+		inps[i] = Mind.compel_input(self, fighters[i], inps[i])
 	for i in 2:
 		Actions.ingest(self, fighters[i], inps[i])
 	for i in 2:
@@ -209,7 +232,7 @@ func state() -> Dictionary:
 		if f.last_stand_active:
 			names.append("last_stand")
 		fs.append({"pos": f.pos, "facing": f.facing, "vitality": f.vit, "vitality_max": f.max_vit, "stamina": f.sta,
-			"stamina_max": f.max_sta, "poise": f.poise, "poise_max": f.max_poise, "pressure": f.pressure,
+			"stamina_max": f.max_sta, "poise": f.poise, "poise_max": f.max_poise, "pressure": f.pressure, "rage": f.rage, "raging": f.raging, "plates": ceili(f.plate_pool / float(R["plate_size"])), "intel": f.intel, "reserve": f.reserve, "dots": f.dots.size(), "compelled": f.has("compelled"),
 			"action": act, "action_frame": f.af, "move_id": f.move.id if f.move != null else "",
 			"stun": f.stun, "tell_anim": f.move.tell_anim if f.move != null else "", "stored": f.stored, "debt": f.debt, "status": names, "cooldowns": f.cooldowns.duplicate(), "winded": f.winded,
 			"can_last_stand": (not f.last_stand_used) and f.alive and f.ratio() < float(R["last_stand_ratio"]),

@@ -54,6 +54,22 @@ var want_guard := false
 var move_in := Vector2.ZERO
 var idle_frames := 0
 var guard_rise := false     # guard went up this tick
+var rage := 0.0             # Rage bar (Aruun)
+var raging := false
+var plate_pool := 0.0       # shell plates: absorb damage before Vitality
+var plates_seen := 0
+var intel := 0.0            # Bramvex observation 0..1
+var reserve := 0.0          # Nyxaris silk reserve
+var dots: Array = []        # damage-over-time stacks {name, age, life, dps, grow, burst, ripe}
+var compel: Dictionary = {} # mind control {mode, left, dir, pos, timer}
+var facing_lock := 0        # frames the facing may not retarget
+var hold_level := false     # strike_hold level (charged heavy)
+var charge := 0
+var slow_acc := 0.0         # Inertia Field time scaling accumulator
+var marks := 0              # Mollusk shell memory marks (survived bouts)
+var killer_idx := -1
+var borrow_prev := false
+var fungus_timer := 0
 
 func ratio() -> float:
 	return vit / max_vit
@@ -79,13 +95,16 @@ func invulnerable() -> bool:
 	return false
 
 func armor_now() -> float:
+	var a := 0.0
 	if move != null and move.armor > 0.0 and af >= move.armor_from and af < move.armor_to:
-		return move.armor
-	return 0.0
+		a = move.armor
+	if raging and move != null and move.kind == "heavy" and af < move.startup + move.active:
+		a = maxf(a, float(T["rage_armor"]))
+	return a
 
 func actionable() -> bool:
 	return stun == 0 and (action == "idle" or action == "guard")
 
 ## Outgoing damage multiplier: temporary (riposte, buffs) times the critter's tuned damage_mult.
 func out_mult() -> float:
-	return dmg_mult * float(T["damage_mult"])
+	return dmg_mult * float(T["damage_mult"]) * (float(T["rage_dmg"]) if raging else 1.0)
