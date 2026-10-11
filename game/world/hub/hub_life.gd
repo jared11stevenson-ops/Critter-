@@ -8,6 +8,8 @@ extends Node
 const DATA := "res://game/narrative/hub_ambient.json"
 const WALK_SPEED := 1.25
 const HEAR_RANGE := 15.0
+const AVOID_R := 1.35          # personal space while walking: NPCs sidestep each other instead of overlapping
+const STATION_GAP := 1.5       # two NPCs never reserve stations closer than this
 
 var hub: Node3D
 var cam: Camera3D
@@ -23,6 +25,8 @@ var _pair_t := 22.0
 var _pair: Dictionary = {}      # active pair state
 var _rng := RandomNumberGenerator.new()
 var enabled := true
+var _pos: Array = []            # reused each frame: every NPC's current position (avoidance)
+var _tgt: Array = []            # ... and where each is heading or standing (station reservation)
 
 func setup(hub_node: Node3D, visual: Node3D, camera: Camera3D, ui: Control, focus_fn: Callable, anchor_fn: Callable) -> void:
 	hub = hub_node
@@ -54,6 +58,10 @@ func setup(hub_node: Node3D, visual: Node3D, camera: Camera3D, ui: Control, focu
 		_npcs[id] = {"node": n, "bb": bb, "home": n.position, "stations": st, "state": "idle", "target": n.position,
 			"wait": _rng.randf_range(2.0, 8.0), "face": Vector3(0, 0, 1)}
 		_npcs[id]["face"] = faces.get(id, Vector3(0, 0, 1))
+		_npcs[id]["idx"] = _pos.size()
+		_npcs[id]["walk_t"] = 0.0
+		_pos.append(n.position)
+		_tgt.append(n.position)
 	for i in 2:
 		_bubbles.append(_make_bubble())
 
@@ -75,6 +83,9 @@ func _make_bubble() -> Dictionary:
 func _process(delta: float) -> void:
 	if not enabled:
 		return
+	for id in _npcs:
+		var r: Dictionary = _npcs[id]
+		_pos[r["idx"]] = (r["node"] as Node3D).position
 	for id in _npcs:
 		_tick_npc(_npcs[id], delta)
 	_tick_bubbles(delta)
@@ -99,15 +110,18 @@ func _tick_npc(n: Dictionary, delta: float) -> void:
 			d.y = 0.0
 			var dist := d.length()
 			if dist < 0.12:
-				n["state"] = "idle"
-				n["wait"] = _rng.randf_range(4.0, 11.0)
-				if bb and bb.has_method("set_move_amount"):
-					bb.set_move_amount(0.0)
+				_stop_walking(n)
 				return
+			n["walk_t"] = float(n["walk_t"]) - delta
+			# Close enough when someone is standing on the spot, or when the walk has taken far too long (blocked).
+			if float(n["walk_t"]) <= 0.0 or (dist < 0.5 and ExploreRules.overlaps(tp, _others(n), 0.9)):
+				_stop_walking(n)
+				return
+			var dir := ExploreRules.steer(node.position, d / dist, _pos, AVOID_R)
 			var step := minf(dist, WALK_SPEED * delta)
-			node.position += d / dist * step
+			node.position += dir * step
 			if bb and bb.has_method("set_facing"):
-				bb.set_facing(d)
+				bb.set_facing(dir)
 		"idle":
 			n["wait"] = float(n["wait"]) - delta
 			if float(n["wait"]) <= 0.0:
@@ -115,7 +129,9 @@ func _tick_npc(n: Dictionary, delta: float) -> void:
 				var roll := _rng.randf()
 				var sts: Array = n["stations"]
 				if roll < 0.45 and sts.size() > 1 and _pair.is_empty():
-					walk_to(n, sts[_rng.randi() % sts.size()])
+					var free := ExploreRules.free_indices(sts, _others_targets(n), STATION_GAP)
+					if not free.is_empty():
+						walk_to(n, sts[free[_rng.randi() % free.size()]])
 				elif bb and bb.has_method("set_facing"):
 					# glance somewhere else
 					var base: Vector3 = n["face"]
@@ -126,9 +142,36 @@ func _tick_npc(n: Dictionary, delta: float) -> void:
 func walk_to(n: Dictionary, p: Vector3) -> void:
 	n["target"] = p
 	n["state"] = "walk"
+	_tgt[n["idx"]] = p
+	var from: Vector3 = (n["node"] as Node3D).position
+	n["walk_t"] = Vector2(p.x - from.x, p.z - from.z).length() / WALK_SPEED * 2.2 + 3.0
 	var bb: Node = n["bb"]
 	if bb and bb.has_method("set_move_amount"):
 		bb.set_move_amount(1.0)
+
+func _stop_walking(n: Dictionary) -> void:
+	n["state"] = "idle"
+	n["wait"] = _rng.randf_range(4.0, 11.0)
+	_tgt[n["idx"]] = (n["node"] as Node3D).position
+	var bb: Node = n["bb"]
+	if bb and bb.has_method("set_move_amount"):
+		bb.set_move_amount(0.0)
+
+## Positions of everybody except `n` (used for arrival checks).
+func _others(n: Dictionary) -> Array:
+	var out: Array = []
+	for i in _pos.size():
+		if i != int(n["idx"]):
+			out.append(_pos[i])
+	return out
+
+## Where everybody except `n` is heading or standing (station reservation).
+func _others_targets(n: Dictionary) -> Array:
+	var out: Array = []
+	for i in _tgt.size():
+		if i != int(n["idx"]):
+			out.append(_tgt[i])
+	return out
 
 # ------------------------------------------------------------------ barks
 func _near_focus(node: Node3D) -> bool:

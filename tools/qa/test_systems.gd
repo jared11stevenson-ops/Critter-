@@ -24,6 +24,8 @@ func _ready() -> void:
 	_test_persistence()
 	_test_rivals()
 	await _test_npcs()
+	_test_explore()
+	await _test_explore_level()
 	print("[TEST] pass=%d fail=%d" % [passed, failed])
 	get_tree().quit(1 if failed > 0 else 0)
 
@@ -236,3 +238,233 @@ func _test_npcs() -> void:
 	dlg.skip_all()
 	host.queue_free()
 	dlg.queue_free()
+
+# ---------------------------------------------------------------- exploration layer (Red Reaches open-world feel)
+func _test_explore() -> void:
+	fresh()
+	var d := RrExplore.load_data()
+	ok(not d.is_empty(), "rr_explore.json loads")
+	var floors := RrExplore.load_floors()
+	ok(floors.size() >= 20, "layout floors load (%d)" % floors.size())
+	var reg := RegionRunner.load_recipe("red_reaches")
+	# data integrity: every authored point stands on a floor, ids are unique, species exist
+	var ids: Dictionary = {}
+	for p in d["places"]:
+		ok(not ids.has(p["id"]), "unique place id %s" % p["id"])
+		ids[p["id"]] = true
+		ok(ExploreRules.on_floor(floors, float(p["pos"][0]), float(p["pos"][1]), -p.get("r", 10.0)), "place %s is near walkable ground" % p["id"])
+		if p.has("waypoint"):
+			ok(ExploreRules.on_floor(floors, float(p["waypoint"][0]), float(p["waypoint"][1]), 1.5), "waypoint of %s stands on a floor" % p["id"])
+		if p.has("codex"):
+			ok(codex_has(str(p["codex"])), "codex page %s exists" % p["codex"])
+	var spoke_ids: Array = reg["spokes"].map(func(s): return s["id"])
+	for sid in spoke_ids:
+		ok(d["spoke_waypoints"].has(sid), "spoke %s has a waypoint" % sid)
+	for sid in d["spoke_waypoints"]:
+		var w: Array = d["spoke_waypoints"][sid]
+		ok(ExploreRules.on_floor(floors, float(w[0]), float(w[1]), 1.5), "spoke waypoint %s on floor" % sid)
+	var g: Array = d["gate_landing"]["pos"]
+	ok(ExploreRules.on_floor(floors, float(g[0]), float(g[1]), 1.5), "gate landing on floor")
+	for l in d["links"]:
+		ok(ExploreRules.on_floor(floors, float(l["a"][0]), float(l["a"][1]), 1.0) and ExploreRules.on_floor(floors, float(l["b"][0]), float(l["b"][1]), 1.0), "link %s ends on floors" % l["id"])
+		var span := Vector2(float(l["a"][0]) - float(l["b"][0]), float(l["a"][1]) - float(l["b"][1])).length()
+		ok(span <= 20.0, "link %s hop is %.1f m (<= 20)" % [l["id"], span])
+	var zone_ids: Dictionary = {}
+	for z in d["roaming"]["zones"]:
+		ok(not zone_ids.has(z["id"]), "unique zone %s" % z["id"])
+		zone_ids[z["id"]] = true
+		ok(ExploreRules.on_floor(floors, float(z["c"][0]), float(z["c"][1]), float(z["r"]) * 0.5), "zone %s core is on a floor" % z["id"])
+		for gr in z["groups"]:
+			ok(gr["species"] in ["skitter_mite", "dominion_drone", "plate_beetle"], "zone %s species %s is a roamer" % [z["id"], gr["species"]])
+			ok(int(gr["n"]) <= int(d["roaming"]["global_cap"]), "group fits the cap")
+		for s in d["roaming"]["safe"]:
+			ok(Vector2(float(z["c"][0]) - float(s[0]), float(z["c"][1]) - float(s[1])).length() > float(s[2]) + float(z["r"]) * 0.5, "zone %s clear of safe area" % z["id"])
+	# guide ladder: markers exist in layout
+	var lay: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://game/world/red_reaches/layout.json"))
+	for gd in d["guide"]:
+		ok(lay["markers"].has(gd["marker"]), "guide marker %s exists" % gd["marker"])
+	# rules: steering
+	var me := Vector3.ZERO
+	var s1 := ExploreRules.steer(me, Vector3(1, 0, 0), [Vector3(0.6, 0, 0)], 1.35)
+	ok(absf(s1.z) > 0.3 and s1.length() > 0.99, "steer sidesteps a body dead ahead (%s)" % s1)
+	var s2 := ExploreRules.steer(me, Vector3(1, 0, 0), [Vector3(5, 0, 0)], 1.35)
+	ok(s2.is_equal_approx(Vector3(1, 0, 0)), "steer ignores far bodies")
+	var s3 := ExploreRules.steer(me, Vector3(1, 0, 0), [Vector3(0, 0, 0.5)], 1.35)
+	ok(s3.z < 0.0, "steer pushes away from a body beside us")
+	ok(ExploreRules.steer(me, Vector3(1, 0, 0), [me], 1.35).is_equal_approx(Vector3(1, 0, 0)), "steer ignores itself")
+	# two NPCs walking head-on pass each other without ever overlapping closer than 0.5 m
+	var a := Vector3(-4, 0, 0)
+	var b := Vector3(4, 0, 0)
+	var min_gap := 99.0
+	for _i in 600:
+		var da := ExploreRules.steer(a, (Vector3(4, 0, 0) - a).normalized(), [b], 1.35)
+		var db := ExploreRules.steer(b, (Vector3(-4, 0, 0) - b).normalized(), [a], 1.35)
+		a += da * 0.02
+		b += db * 0.02
+		min_gap = minf(min_gap, a.distance_to(b))
+	ok(min_gap > 0.5 and a.x > 3.0 and b.x < -3.0, "head-on NPCs slip past each other (gap %.2f, a.x %.1f)" % [min_gap, a.x])
+	ok(ExploreRules.free_indices([Vector3(0, 0, 0), Vector3(1, 0, 0), Vector3(5, 0, 0)], [Vector3(0.5, 0, 0)], 1.5) == [2], "free_indices drops reserved stations")
+	# respawn rules
+	ok(ExploreRules.cooldown(100.0, 0) == 100.0 and ExploreRules.cooldown(100.0, 1) == 160.0 and ExploreRules.cooldown(100.0, 20) == 400.0, "respawn cooldown grows then caps")
+	var ents := [{"species": "a", "w": 3}, {"species": "b", "w": 1}]
+	ok(ExploreRules.pick_weighted(ents, 0.0) == 0 and ExploreRules.pick_weighted(ents, 0.99) == 1, "weighted pick ends")
+	ok(ExploreRules.pick_weighted(ents, 0.5, {"a": 0.0}) == 1, "phase mod can zero a species")
+	ok(ExploreRules.pick_weighted(ents, 0.5, {"a": 0.0, "b": 0.0}) == -1, "all zero -> no pick")
+	# map maths
+	ok(ExploreRules.to_map(10, -5, 2.0) == Vector2(20, -10), "to_map scales")
+	ok(ExploreRules.clamp_to_edge(Vector2(100, 50), 40.0) == Vector2(40, 20), "clamp_to_edge keeps the ray")
+	ok(ExploreRules.compass_word(0, -10) == "N" and ExploreRules.compass_word(10, 0) == "E" and ExploreRules.compass_word(-10, 10) == "SW", "compass words")
+	ok(ExploreRules.shape_poly(floors[0]).size() >= 12 and ExploreRules.shape_poly(floors[1]).size() >= 12, "floor polygons")
+	ok(ExploreRules.on_floor(floors, 0, 0) and not ExploreRules.on_floor(floors, 0, 45), "on_floor query")
+	# common loot regrows each descent, uncommon stays taken
+	var extra: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://game/world/red_reaches/world_extra.json"))
+	var common_i := -1
+	var rare_i := -1
+	var li := 0
+	var rarity: Dictionary = {}
+	for row in reg["loot_table"]:
+		rarity[row["item"]] = row.get("rarity", "common")
+	for lt in extra["loot"]:
+		if rarity.get(lt["item"], "") == "common" and common_i < 0:
+			common_i = li
+		if rarity.get(lt["item"], "") != "common" and rare_i < 0:
+			rare_i = li
+		li += 1
+	ok(common_i >= 0 and rare_i >= 0, "loot table has common and rarer drops")
+	GameState.flags["_loot_%d" % common_i] = true
+	GameState.flags["_loot_%d" % rare_i] = true
+	var cleared := RrExplore.regrow_common_loot(extra, lay, reg["loot_table"])
+	ok(cleared >= 1 and not GameState.flags.has("_loot_%d" % common_i) and bool(GameState.flags.get("_loot_%d" % rare_i, false)), "common loot regrows, rarer stays taken (%d)" % cleared)
+
+func codex_has(id: String) -> bool:
+	var cj: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://game/canon/codex.json"))
+	return cj is Dictionary and (cj as Dictionary).get("entries", {}).has(id)
+
+## Drives the real Red Reaches level headless: discovery, waypoints, fast-travel rules, climb links, roaming spawn / respawn rules.
+func _test_explore_level() -> void:
+	fresh()
+	GameState.items = {}
+	GameState.codex = []
+	var lvl: Node3D = load("res://game/world/red_reaches/red_reaches.tscn").instantiate()
+	add_child(lvl)
+	for _i in 6:
+		await get_tree().process_frame
+	var ex: RrExplore = lvl.explore
+	ok(ex != null and ex.hud != null, "level builds the exploration layer + HUD")
+	if ex == null:
+		lvl.queue_free()
+		return
+	ok(ex.pois.size() == 13, "13 places (7 + 6 spokes): %d" % ex.pois.size())
+	lvl.runner.skip_all()
+	lvl.party.input_enabled = true
+	var lead: PlayableCritter = lvl.party.get_leader()
+	# discovery
+	lead.teleport(lvl.ground(Vector3(118, 0, -2), 0.3))
+	ex._discover_tick(lead.global_position)
+	ok(bool(GameState.flags.get("_poi_waystation_camp", false)) and "place_waystation" in GameState.codex, "walking into the Waystation discovers it and opens its codex page")
+	ok(Ledger.count({"type": "discovered", "target": "waystation_camp"}) == 1, "discovery recorded in the Ledger")
+	ex._discover_tick(lead.global_position)
+	ok(Ledger.count({"type": "discovered", "target": "waystation_camp"}) == 1, "discovery fires once")
+	var wps := ex.waypoints()
+	var unl: Array = wps.filter(func(w): return w["unlocked"]).map(func(w): return w["id"])
+	ok("gate_landing" in unl and "waystation_camp" in unl and not ("survey_camp" in unl), "waypoints: gate + found places only (%s)" % [unl])
+	ok(ex.floors.any(func(f): return ex.floor_seen(f)), "walked ground is charted on the map")
+	# fast-travel rules
+	ok(ex.travel_reason("gate_landing") == "The way is blocked", "no fast travel back across the uncrossed Gap (%s)" % ex.travel_reason("gate_landing"))
+	ok(ex.travel_reason("survey_camp") == "Not found yet", "undiscovered waypoint refused")
+	GameState.set_flag("rope_dropped", true)
+	ok(ex.travel_reason("gate_landing") == "", "fast travel allowed once the road is open (%s)" % ex.travel_reason("gate_landing"))
+	var foe: EnemyBase = lvl.spawn_enemy("skitter_mite", lead.global_position + Vector3(6, 0, 0))
+	foe.aggro = true
+	ok(ex.travel_reason("gate_landing") == "Enemies nearby", "awake enemies block fast travel")
+	foe.queue_free()
+	await get_tree().process_frame
+	lvl.field.enemies.erase(foe)
+	ok(ex.travel("gate_landing") == "", "travel starts")
+	await get_tree().create_timer(1.2).timeout
+	ok(lead.global_position.x < 12.0 and lvl.party.input_enabled, "party arrived at the Gate and has control again (x=%.1f)" % lead.global_position.x)
+	ok(ex.travel_reason("waystation_camp").begins_with("Catch your breath"), "travel has a cooldown")
+	# climb links
+	var inter := ex.interactables()
+	ok(inter.size() == 4, "two climb links -> four interact points")
+	var l0: Dictionary = ex.data["links"][0]
+	ok(not ex._link_ok(l0, 0), "the cut to the Vault is closed until the boulder is broken (story barrier)")
+	GameState.set_flag("boulder_broken", true)
+	ok(ex._link_ok(l0, 0) and ex._link_ok(l0, 1), "...and open both ways after")
+	var e := ex.link_ends(l0, 0)
+	lead.teleport(lvl.ground(e[0], 0.3))
+	lead.state = "normal"
+	ex._do_link(l0, 0)
+	await get_tree().create_timer(2.0).timeout
+	var dest: Vector3 = e[1]
+	ok(Vector2(lead.global_position.x - dest.x, lead.global_position.z - dest.z).length() < 1.5, "leader hops the cut (%s)" % lead.global_position)
+	var partner: PlayableCritter = lvl.party.get_partner()
+	ok(Vector2(partner.global_position.x - dest.x, partner.global_position.z - dest.z).length() < 4.0, "partner follows the hop")
+	# roaming encounters
+	GameState.set_flag("valley_clear", true)
+	lead.teleport(lvl.ground(Vector3(104, 0, -1), 0.3))
+	var z: Dictionary = ex._zones[0]
+	ok(z["def"]["id"] == "valley_flats" and (z["live"] as Array).is_empty(), "valley zone starts empty")
+	ex._roam_tick()
+	ok(ex._spawn_queue.is_empty(), "nothing spawns before the zone's initial delay")
+	z["next_ok"] = 0.0
+	lead.teleport(lvl.ground(Vector3(56, 0, 0), 0.3))
+	ex._roam_tick()
+	ok(ex._spawn_queue.is_empty(), "nothing spawns within sight of the player")
+	lead.teleport(lvl.ground(Vector3(104, 0, -1), 0.3))
+	lvl.field.in_combat = false     # the valley's own mites are awake; roamers only join a quiet field
+	ex._roam_tick()
+	var queued := ex._spawn_queue.size()
+	ok(queued >= 2 and queued <= 3, "a mite group is queued when the player is 48 m away (%d)" % queued)
+	var t0 := Time.get_ticks_usec()
+	ex._spawn_one()
+	var one_ms := float(Time.get_ticks_usec() - t0) / 1000.0
+	while not ex._spawn_queue.is_empty():
+		ex._spawn_one()
+	print("[TEST] info roamer spawn cost %.1f ms for the first mite" % one_ms)
+	var live: Array = z["live"].duplicate()
+	ok(live.size() == queued, "queued group spawned one per call")
+	for m in live:
+		ok(absf(lvl.height_at(m.global_position.x, m.global_position.z) + 4.0) < 2.0, "roamer stands on the valley floor")
+	ex._roam_tick()
+	ok(ex._spawn_queue.is_empty() and z["live"].size() == queued, "a populated zone does not stack groups")
+	for m in live:
+		m.removed.emit(m)
+	ok(int(z["clears"]) == 1 and float(z["next_ok"]) >= ex.clock + 149.0, "group cleared -> 150 s cooldown")
+	ex._roam_tick()
+	ok(ex._spawn_queue.is_empty(), "zone rests during its cooldown")
+	z["next_ok"] = 0.0
+	lvl.field.in_combat = false
+	ex._roam_tick()
+	while not ex._spawn_queue.is_empty():
+		ex._spawn_one()
+	for m in z["live"].duplicate():
+		m.removed.emit(m)
+	ok(int(z["clears"]) == 2 and float(z["next_ok"]) >= ex.clock + 239.0, "second clear -> longer cooldown (x1.6)")
+	z["next_ok"] = 0.0
+	lvl.field.in_combat = false
+	ex._roam_tick()
+	while not ex._spawn_queue.is_empty():
+		ex._spawn_one()
+	for m in z["live"].duplicate():
+		m.removed.emit(m)
+	ok(bool(z["retired"]), "zone retires after max_clears (no endless grind)")
+	# the live cap
+	var cap := int(ex.data["roaming"]["global_cap"])
+	ok(ex.live_roamers() <= cap, "live roamers never exceed the cap")
+	# busy states suppress spawning
+	var z2: Dictionary = ex._zones[1]
+	GameState.flags["_spoke_echo_hollow"] = true
+	z2["next_ok"] = 0.0
+	lead.teleport(lvl.ground(Vector3(104, 0, -1), 0.3))
+	lvl.burden_active = true
+	ex._roam_tick()
+	ok(ex._spawn_queue.is_empty(), "no roamers during the Burden crossing")
+	lvl.burden_active = false
+	for _i in 12:
+		await get_tree().process_frame
+	lvl.queue_free()
+	await get_tree().process_frame
+	fresh()                          # leave no test flags behind for the quit-time autosave
+	GameState.codex = []
+	GameState.items = {}

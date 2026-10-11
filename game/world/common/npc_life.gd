@@ -462,10 +462,12 @@ func _tick_npc(n: Dictionary, delta: float) -> void:
 				_arrive(n)
 			else:
 				var step := minf(dist, WALK_SPEED * delta)
-				node.position.x += dx / dist * step
-				node.position.z += dz / dist * step
+				# walkers give the player and each other a little room instead of walking through them
+				var dir := ExploreRules.steer(node.position, Vector3(dx / dist, 0.0, dz / dist), _bodies_near(n) if dist > 0.6 else [], 1.4)
+				node.position.x += dir.x * step
+				node.position.z += dir.z * step
 				node.position.y = float(ground_fn.call(node.position.x, node.position.z))
-				_face_dir(n, dx, dz)
+				_face_dir(n, dir.x, dir.z)
 		"talk":
 			n["talk_t"] = float(n["talk_t"]) - delta
 			if float(n["talk_t"]) <= 0.0:
@@ -496,6 +498,18 @@ func _tick_npc(n: Dictionary, delta: float) -> void:
 		var yw := float(n["yaw"])
 		if not body.has_method("set_facing"):
 			body.rotation.y = lerp_angle(body.rotation.y, yw, minf(1.0, delta * 8.0))
+
+## Positions of the player and the other NPCs within a few metres of `n` (usually 0-2 entries).
+func _bodies_near(n: Dictionary) -> Array:
+	var me: Vector3 = (n["node"] as Node3D).position
+	var out: Array = []
+	if _focus.distance_squared_to(me) < 9.0:
+		out.append(_focus)
+	for id in _order:
+		var o: Dictionary = _npcs[id]
+		if o != n and (o["node"] as Node3D).visible and (o["node"] as Node3D).position.distance_squared_to(me) < 6.25:
+			out.append((o["node"] as Node3D).position)
+	return out
 
 func _arrive(n: Dictionary) -> void:
 	n["state"] = "idle"
