@@ -16,7 +16,7 @@
    "knockback": 0.3,
    "hitstop": 4,
    "hitbox": {
-    "reach": 3.0,
+    "reach": 2.8,
     "arc": 40
    },
    "track": 5,
@@ -30,7 +30,8 @@
      "dps": 2.08,
      "max": 1
     }
-   }
+   },
+   "power": "weapon:Diplomacy"
   },
   "bramvex_diplomacy2": {
    "name": "Diplomacy Swing II",
@@ -47,7 +48,7 @@
    "knockback": 0.5,
    "hitstop": 4,
    "hitbox": {
-    "reach": 3.1,
+    "reach": 2.8,
     "arc": 40
    },
    "track": 5,
@@ -59,7 +60,8 @@
      "dps": 2.08,
      "max": 1
     }
-   }
+   },
+   "power": "weapon:Diplomacy"
   },
   "bramvex_final_offer": {
    "name": "Diplomacy, Final Offer",
@@ -78,7 +80,7 @@
    "knockback": 1.0,
    "hitstop": 8,
    "hitbox": {
-    "reach": 3.6,
+    "reach": 3.3,
     "arc": 50
    },
    "props": {
@@ -92,7 +94,8 @@
      "max": 1
     }
    },
-   "lore_source": "lore:L810 nickname Diplomacy; slow overhead guard-crush"
+   "lore_source": "lore:L810 nickname Diplomacy; slow overhead guard-crush",
+   "power": "weapon:Diplomacy"
   },
   "bramvex_detain": {
    "name": "Detain",
@@ -116,7 +119,8 @@
    "on_hit": {
     "root": 30
    },
-   "lore_source": "lore:restrains and frees detainees; thorn-lock hold"
+   "lore_source": "lore:restrains and frees detainees; thorn-lock hold",
+   "power": "anatomy"
   },
   "bramvex_cigarra_hole": {
    "name": "Cigarra Hole",
@@ -140,7 +144,8 @@
    ],
    "lore_source": "lore:Bk XIV Cigarra Holes: deliberate blank spaces in plans",
    "cancel_from": 8,
-   "chain_on": "always"
+   "chain_on": "always",
+   "power": "biology"
   },
   "bramvex_ghost": {
    "name": "Ghost",
@@ -156,7 +161,8 @@
     "from": 6,
     "frames": 150
    },
-   "lore_source": "lore:Camouflage / Sensory Adaptation; next hit is an ambush crit"
+   "lore_source": "lore:Camouflage / Sensory Adaptation; next hit is an ambush crit",
+   "power": "biology"
   },
   "bramvex_ground_prep": {
    "name": "Ground Prep",
@@ -223,7 +229,8 @@
      }
     }
    ],
-   "lore_source": "lore:Tactical Terrain Use; thorn lines and chokepoints"
+   "lore_source": "lore:Tactical Terrain Use; thorn lines and chokepoints",
+   "power": "biology"
   },
   "bramvex_day_20": {
    "name": "Day 20",
@@ -270,7 +277,8 @@
      "gap": 0.5
     }
    ],
-   "lore_source": "lore:escape on Day 20; plans built from observation"
+   "lore_source": "lore:escape on Day 20; plans built from observation",
+   "power": "biology"
   },
   "bramvex_observation": {
    "name": "Observation (Intel)",
@@ -279,7 +287,8 @@
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "lore:nineteen days of observation; reads improve over the bout"
+   "lore_source": "lore:nineteen days of observation; reads improve over the bout",
+   "power": "biology"
   },
   "bramvex_stand_firm": {
    "name": "Stand Firm",
@@ -288,7 +297,8 @@
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "lore:sergeant, field equipment; perfect guard grants Intel"
+   "lore_source": "lore:sergeant, field equipment; perfect guard grants Intel",
+   "power": "biology"
   }
  }
 }

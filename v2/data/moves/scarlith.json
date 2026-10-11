@@ -29,12 +29,13 @@
      "name": "culture",
      "life": 420,
      "dps": 0.63,
-     "grow": 1.59,
-     "burst": 15.87,
+     "grow": 0.9,
+     "burst": 9.0,
      "ripe": 300,
      "max": 6
     }
-   }
+   },
+   "power": "biology"
   },
   "scarlith_culture_jab2": {
    "name": "Culture Jab II",
@@ -62,12 +63,13 @@
      "name": "culture",
      "life": 420,
      "dps": 0.63,
-     "grow": 1.59,
-     "burst": 15.87,
+     "grow": 0.9,
+     "burst": 9.0,
      "ripe": 300,
      "max": 6
     }
-   }
+   },
+   "power": "biology"
   },
   "scarlith_aged_smash": {
    "name": "Aged Smash",
@@ -91,9 +93,10 @@
     "arc": 90
    },
    "props": {
-    "culture_scale": 0.3
+    "culture_scale": 0.25
    },
-   "lore_source": "lore:Bk VIII age can create value; damage scales with Cultures on the target"
+   "lore_source": "lore:Bk VIII age can create value; damage scales with Cultures on the target",
+   "power": "biology"
   },
   "scarlith_barter": {
    "name": "Barter",
@@ -117,7 +120,8 @@
    "on_hit": {
     "steal": true
    },
-   "lore_source": "lore:Undermarket broker; snatch and swap a buff for a penalty"
+   "lore_source": "lore:Undermarket broker; snatch and swap a buff for a penalty",
+   "power": "biology"
   },
   "scarlith_hop_clear": {
    "name": "Hop Clear",
@@ -139,7 +143,8 @@
      "dir": "input"
     }
    ],
-   "lore_source": "lore:everything has value; nimble broker"
+   "lore_source": "lore:everything has value; nimble broker",
+   "power": "biology"
   },
   "scarlith_ferment": {
    "name": "Ferment",
@@ -166,13 +171,14 @@
      "name": "culture",
      "life": 420,
      "dps": 0.63,
-     "grow": 1.59,
-     "burst": 15.87,
+     "grow": 0.9,
+     "burst": 9.0,
      "ripe": 300,
      "max": 6
     }
    },
-   "lore_source": "lore:Fermentation; Culture stacks ripen over time and burst"
+   "lore_source": "lore:Fermentation; Culture stacks ripen over time and burst",
+   "power": "biology"
   },
   "scarlith_decompose": {
    "name": "Decompose",
@@ -198,7 +204,8 @@
      "rotted": 300
     }
    },
-   "lore_source": "lore:Decomposition; rots armor and guard"
+   "lore_source": "lore:Decomposition; rots armor and guard",
+   "power": "biology"
   },
   "scarlith_aged_to_perfection": {
    "name": "Aged to Perfection",
@@ -213,7 +220,8 @@
      "type": "ripen_all"
     }
    ],
-   "lore_source": "lore:age creates value; instantly ripens every Culture"
+   "lore_source": "lore:age creates value; instantly ripens every Culture",
+   "power": "biology"
   },
   "scarlith_cultivate": {
    "name": "Cultivate",
@@ -222,7 +230,8 @@
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "lore:Cultivation; fungus patches feed Brew and heal him"
+   "lore_source": "lore:Cultivation; fungus patches feed Brew and heal him",
+   "power": "biology"
   },
   "scarlith_rind_guard": {
    "name": "Rind Guard",
@@ -231,7 +240,8 @@
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "lore:cheese flavor; a parry spoils the attacker's next move"
+   "lore_source": "lore:cheese flavor; a parry spoils the attacker's next move",
+   "power": "biology"
   },
   "scarlith_waste_not": {
    "name": "Waste Not",
@@ -240,7 +250,8 @@
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "lore:waste can become food; damage taken becomes Brew"
+   "lore_source": "lore:waste can become food; damage taken becomes Brew",
+   "power": "biology"
   }
  }
 }

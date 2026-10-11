@@ -22,7 +22,8 @@
    "track": 5,
    "lore_source": "lore:body and shell; deliberate heavy body strikes",
    "chain": "mollusk_shell_shove2",
-   "cancel_from": 18
+   "cancel_from": 18,
+   "power": "anatomy:shell"
   },
   "mollusk_shell_shove2": {
    "name": "Slow Shell Shove II",
@@ -43,7 +44,8 @@
     "arc": 70
    },
    "track": 5,
-   "lore_source": "lore:body and shell; deliberate heavy body strikes"
+   "lore_source": "lore:body and shell; deliberate heavy body strikes",
+   "power": "anatomy:shell"
   },
   "mollusk_gathering_blow": {
    "name": "Gathering Blow",
@@ -70,7 +72,8 @@
    "props": {
     "charge_gain": 1.6
    },
-   "lore_source": "lore:inertia accumulates; the heavy keeps growing while held"
+   "lore_source": "lore:inertia accumulates; the heavy keeps growing while held",
+   "power": "anatomy:shell"
   },
   "mollusk_lift": {
    "name": "Lift",
@@ -91,7 +94,8 @@
     "reach": 1.4,
     "arc": 110
    },
-   "lore_source": "lore:love of forklifts; hoist and set down"
+   "lore_source": "lore:love of forklifts; hoist and set down",
+   "power": "anatomy:shell"
   },
   "mollusk_shell_slide": {
    "name": "Shell Slide",
@@ -113,7 +117,8 @@
      "dir": "input"
     }
    ],
-   "lore_source": "lore:slow heavy body; shell slide"
+   "lore_source": "lore:slow heavy body; shell slide",
+   "power": "anatomy:shell"
   },
   "mollusk_inertia_field": {
    "name": "Inertia Field",
@@ -123,24 +128,24 @@
    "active": 1,
    "recovery": 20,
    "stamina_cost": 14,
-   "cooldown": 600,
+   "cooldown": 480,
    "spawns": [
     {
      "at": 14,
      "type": "zone",
      "place": "self",
-     "radius": 2.8,
+     "radius": 3.4,
      "life": 300,
      "affect": "enemy",
      "tag": "inertia",
      "max": 1,
      "buff": {
-      "slow": 1,
       "inertia": 1
      }
     }
    ],
-   "lore_source": "lore:L525 resistance to change; actions lengthen, impacts stay incomplete"
+   "lore_source": "lore:L525 resistance to change; actions lengthen, impacts stay incomplete",
+   "power": "supernatural"
   },
   "mollusk_borrowed_seconds": {
    "name": "Borrowed Seconds",
@@ -156,7 +161,8 @@
     "from": 6,
     "frames": 240
    },
-   "lore_source": "lore:Bk XIV every second he creates is a debt"
+   "lore_source": "lore:Bk XIV every second he creates is a debt",
+   "power": "supernatural"
   },
   "mollusk_everything_arrives": {
    "name": "Everything Arrives at Once",
@@ -187,7 +193,8 @@
     "stored_mult": 1.2,
     "release_debt": true
    },
-   "lore_source": "lore:delayed effects eventually resolve; releases every held impact"
+   "lore_source": "lore:delayed effects eventually resolve; releases every held impact",
+   "power": "supernatural"
   },
   "mollusk_hold": {
    "name": "Hold",
@@ -196,7 +203,8 @@
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "lore:L525 an impact can remain incomplete; blocked force is delayed, not erased"
+   "lore_source": "lore:L525 an impact can remain incomplete; blocked force is delayed, not erased",
+   "power": "anatomy:shell"
   },
   "mollusk_shell_memory": {
    "name": "Shell Memory",
@@ -205,7 +213,8 @@
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "lore:shell records journeys; each bout survived adds a carved mark"
+   "lore_source": "lore:shell records journeys; each bout survived adds a carved mark",
+   "power": "anatomy:shell"
   }
  }
 }

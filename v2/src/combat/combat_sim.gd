@@ -30,12 +30,12 @@ var _pending: Array = []   # fighter indices whose vitality reached 0 this tick
 var _finisher := ""
 var _dealt := [0.0, 0.0]
 
-func _init(a: CritterDef, b: CritterDef, arena_def: ArenaDef, stakes_tier: int, seed_value: int) -> void:
+func _init(a: CritterDef, b: CritterDef, arena_def: ArenaDef, stakes_tier: int = -1, seed_value: int = 0) -> void:
 	R = CombatData.rules()
 	dt = 1.0 / float(R["tick_rate"])
 	arena = arena_def
 	cracks = arena_def.cracks.duplicate(true)
-	stakes = stakes_tier
+	stakes = stakes_tier if stakes_tier >= 0 else int(R["default_stakes"])      # default: Blood (lethal); 0/1 only for Training / Contest
 	rng.seed = seed_value
 	var defs := [a, b]
 	for i in 2:

@@ -4,7 +4,7 @@ class_name Tournament extends RefCounted
 const MAX_TICKS_GUARD := 20000
 
 ## Plays one AI-vs-AI bout. Returns the sim result plus per-fighter stats.
-static func run_bout(a_id: String, b_id: String, profile_a: String, profile_b: String, seed_value: int, arena_id: String = "ring", stakes: int = 1) -> Dictionary:
+static func run_bout(a_id: String, b_id: String, profile_a: String, profile_b: String, seed_value: int, arena_id: String = "ring", stakes: int = -1) -> Dictionary:
 	var sim := CombatSim.new(CombatData.critter(a_id), CombatData.critter(b_id), CombatData.arena(arena_id), stakes, seed_value)
 	var ai_a := CombatAI.new(0, profile_a, seed_value * 2 + 1, false)
 	var ai_b := CombatAI.new(1, profile_b, seed_value * 2 + 2, false)
@@ -26,7 +26,7 @@ static func _empty_cell() -> Dictionary:
 
 ## Runs the shard `shard_index` of `shard_count` (ordered matchups are dealt round robin). Returns raw counts:
 ## {"cells": {"a>b": {profile: cell}}, "bouts": n}
-static func run_shard(n_per_matchup: int, base_seed: int, shard_index: int, shard_count: int, arena_id: String = "ring", stakes: int = 1, only_profiles: Array = []) -> Dictionary:
+static func run_shard(n_per_matchup: int, base_seed: int, shard_index: int, shard_count: int, arena_id: String = "ring", stakes: int = -1, only_profiles: Array = []) -> Dictionary:
 	var ids: Array = CombatData.critter_ids()
 	var profiles: Array = only_profiles if not only_profiles.is_empty() else CombatAI.profile_names()
 	var per_profile := maxi(1, int(ceil(float(n_per_matchup) / float(profiles.size()))))
@@ -99,7 +99,7 @@ static func to_markdown(data: Dictionary, base_seed: int, n: int) -> String:
 	var out := PackedStringArray()
 	out.append("# CRITTER v2 balance matrix")
 	out.append("")
-	out.append("Bouts: %d (about %d per ordered matchup, split over profiles novice/standard/expert, both seats), seed base %d, stakes 1, arena ring." % [int(data["bouts"]), n, base_seed])
+	out.append("Bouts: %d (about %d per ordered matchup, split over profiles novice/standard/expert, both seats), seed base %d, default stakes (Blood, lethal), arena ring." % [int(data["bouts"]), n, base_seed])
 	out.append("Cell = win rate of ROW critter against COLUMN critter. Targets: overall 45-55%, no matchup beyond 40/60.")
 	out.append("")
 	var head := "| row \\ col |"

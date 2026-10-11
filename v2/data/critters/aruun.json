@@ -3,7 +3,6 @@
  "name": "Aruun",
  "species": "Giraffe-beetle barbarian",
  "archetype": "Heavy bruiser",
- "weapon": "Morrow (psionically bonded mace)",
  "palette": {
   "main": "red-reaches ochre",
   "accent": "stone grey",
@@ -38,7 +37,7 @@
   "crush_resist": 0.2,
   "plate_pool": 90.0,
   "rage_max": 100.0,
-  "damage_mult": 1.0
+  "damage_mult": 0.941
  },
  "ai": {
   "style": "bruiser",
@@ -56,5 +55,7 @@
    "max": 5.0,
    "when": "far"
   }
- }
+ },
+ "weapon": "Morrow (psionically bonded mace)",
+ "powers": "psionic bond with Morrow, giraffe-beetle body, Rage"
 }

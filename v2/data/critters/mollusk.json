@@ -3,7 +3,6 @@
  "name": "Mollusk",
  "species": "Giant African snail",
  "archetype": "Shield tank / time-delay",
- "weapon": "Carved memory shell",
  "palette": {
   "main": "shell brown",
   "accent": "memory-mark cream",
@@ -40,7 +39,7 @@
   "guard_move_mult": 0.6,
   "guard_delay": 0.7,
   "marks_armor": 1,
-  "damage_mult": 1.0
+  "damage_mult": 0.904
  },
  "ai": {
   "style": "tank",
@@ -58,5 +57,6 @@
    "max": 9.0,
    "when": "any"
   }
- }
+ },
+ "powers": "temporal inertia, memory shell"
 }
