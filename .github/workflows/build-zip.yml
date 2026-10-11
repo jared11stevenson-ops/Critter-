@@ -1,0 +1,35 @@
+name: Build importable zip
+# On every push to master: package the project (tools/package.sh) and publish it as a GitHub Release named
+# after config/version in project.godot. Download it from the repo's Releases page on a phone, then import it
+# into the Godot mobile editor. Release assets can be up to 2 GB, so the 30 MiB chat limit does not apply.
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq zip
+          mkdir -p out
+          tools/package.sh "$PWD/out"
+          ls -la out
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VER=$(grep -oP 'config/version="\K[^"]+' project.godot)
+          SHA=$(git rev-parse --short HEAD)
+          TAG="v$VER"
+          ZIP="out/CRITTER_v$VER.zip"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$ZIP" --clobber
+            gh release edit "$TAG" --notes "Latest build of $TAG (commit $SHA)"
+          else
+            gh release create "$TAG" "$ZIP" --target "$GITHUB_SHA" --title "CRITTER $TAG" --notes "Build of $TAG (commit $SHA)"
+          fi
