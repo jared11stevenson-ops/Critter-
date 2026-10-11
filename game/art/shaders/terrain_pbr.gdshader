@@ -56,7 +56,7 @@ uniform vec3 deep_color : source_color = vec3(0.36, 0.22, 0.26);
 // LOOK_PASS colour script for the ground: calmer (desaturated) base so characters are the most saturated thing on screen,
 // plus very large-scale colour patches (sage-teal scrub, pale sand, plum-rust shade) from a third, un-aligned macro sample
 // so no tile repeat is visible. Costs 1 texture sample (Low reuses the macro sample it already has).
-uniform float look_sat = 0.78;
+uniform float look_sat = 0.90;
 uniform float look_patch = 0.85;
 uniform vec3 patch_teal : source_color = vec3(0.40, 0.50, 0.40);
 uniform vec3 patch_sand : source_color = vec3(0.86, 0.70, 0.54);
@@ -71,7 +71,7 @@ vec3 retint(float l, vec3 t) {
 
 vec3 look_ground(vec3 c, vec4 m3) {
 	float l0 = dot(c, vec3(0.3, 0.59, 0.11));
-	float l = mix(0.36, l0, 0.84);                 // calm the texture's crack / pebble contrast a little
+	float l = mix(0.42, l0, 0.88);                 // calm the texture's crack / pebble contrast a little
 	c = c * (l / max(l0, 0.02));
 	c = mix(vec3(l), c, look_sat);
 	float kt = smoothstep(0.54, 0.70, m3.g) * look_patch;

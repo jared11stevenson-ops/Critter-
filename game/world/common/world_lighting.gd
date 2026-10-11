@@ -18,8 +18,8 @@ const RIM_LAYER := 1 << 10
 ## Blend moods along the Red Reaches path (set by RedReachesTerrain).
 @export var zone_blend: bool = false
 ## Global multipliers for the mood table (sun, ambient).
-@export var sun_scale: float = 0.36
-@export var amb_scale: float = 0.6
+@export var sun_scale: float = 0.42
+@export var amb_scale: float = 0.76
 
 var env: Environment
 var sun: DirectionalLight3D
@@ -198,7 +198,6 @@ func _build() -> void:
 	rim.sky_mode = DirectionalLight3D.SKY_MODE_LIGHT_ONLY
 	add_child(rim)
 	_build_motes()
-	_build_vignette()
 	_tune_shadow_quality()
 	_apply_quality()
 
@@ -211,10 +210,8 @@ func _apply_quality(_lv: int = -1) -> void:
 	q.call("setup_sun", sun, 36.0)
 	q.call("setup_environment", env)
 	var glv: int = q.get("level")
-	# colour grade + vignette are the one post pass: Medium/High only. Low bakes the look into sky / fog / ground colours.
+	# colour grade is the one post pass: Medium/High only. Low bakes the look into sky / fog / ground colours.
 	env.adjustment_enabled = glv >= 1
-	if _vignette:
-		_vignette.visible = glv >= 1
 	if motes:
 		var lv: int = q.get("level")
 		motes.visible = lv > 0
@@ -227,40 +224,11 @@ func _apply_quality(_lv: int = -1) -> void:
 func _grade_lut() -> GradientTexture1D:
 	var g := Gradient.new()
 	g.offsets = PackedFloat32Array([0.0, 0.25, 0.6, 1.0])
-	g.colors = PackedColorArray([Color(0.010, 0.030, 0.050), Color(0.230, 0.265, 0.290), Color(0.620, 0.600, 0.560), Color(1.0, 0.975, 0.925)])
+	g.colors = PackedColorArray([Color(0.010, 0.030, 0.050), Color(0.260, 0.285, 0.300), Color(0.650, 0.625, 0.580), Color(1.0, 0.975, 0.925)])
 	var t := GradientTexture1D.new()
 	t.gradient = g
 	t.width = 64
 	return t
-
-
-var _vignette: TextureRect
-
-## Soft screen-edge darkening (one textured quad, no shader, below every HUD layer): pulls the eye to the party in the middle.
-func _build_vignette() -> void:
-	var cl := CanvasLayer.new()
-	cl.name = "Vignette"
-	cl.layer = 3
-	var tr := TextureRect.new()
-	tr.name = "VignetteRect"
-	tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	tr.set_anchors_preset(Control.PRESET_FULL_RECT)
-	tr.stretch_mode = TextureRect.STRETCH_SCALE
-	tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	var g := Gradient.new()
-	g.offsets = PackedFloat32Array([0.0, 0.55, 0.85, 1.0])
-	g.colors = PackedColorArray([Color(0.06, 0.03, 0.10, 0.0), Color(0.06, 0.03, 0.10, 0.0), Color(0.06, 0.03, 0.10, 0.20), Color(0.05, 0.02, 0.09, 0.42)])
-	var gt := GradientTexture2D.new()
-	gt.gradient = g
-	gt.fill = GradientTexture2D.FILL_RADIAL
-	gt.fill_from = Vector2(0.5, 0.5)
-	gt.fill_to = Vector2(1.0, 0.5)
-	gt.width = 128
-	gt.height = 128
-	tr.texture = gt
-	cl.add_child(tr)
-	add_child(cl)
-	_vignette = tr
 
 
 ## Sunlit dust motes drifting around the camera focus (one draw call; follows the active camera).

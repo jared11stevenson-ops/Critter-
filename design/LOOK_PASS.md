@@ -58,7 +58,7 @@ TextureRect, no extra draw.
 | | Low | Medium | High |
 |---|---|---|---|
 | Sun shadows | off | 1 split | 2 split soft |
-| Grade LUT + vignette | off | on | on |
+| Grade LUT | off | on | on |
 | Glow | off | on | on |
 | Sky haze band, fog gradient, ground patches, prop variation, rim | on | on | on |
 | Ground patch cost | reuses an existing sample | +1 sample | +1 sample |
