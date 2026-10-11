@@ -61,3 +61,6 @@ Creator is outsourcing the 3D models (Aruun, Cigarra, cast). Lead + agents focus
 
 ## Standing order (creator, 2026-10-11, restart) — SUPERSEDES the earlier orders
 Restart from the ground up under design/AAA_PLAN.md. Nothing is built until the creator approves the plan. Restore point: branch archive/v0.15.0-before-restart.
+
+## Delivery (creator, 2026-10-11)
+Builds ship as GitHub Releases, built by .github/workflows/build-zip.yml on every master push. Repo is public by the creator's choice. Download page: https://github.com/jared11stevenson-ops/Critter-/releases . Bump config/version in project.godot for a new release tag; same version re-uploads the zip. Chat attachments are no longer used for builds.
