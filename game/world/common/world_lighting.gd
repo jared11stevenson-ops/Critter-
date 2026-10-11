@@ -18,7 +18,7 @@ const RIM_LAYER := 1 << 10
 ## Blend moods along the Red Reaches path (set by RedReachesTerrain).
 @export var zone_blend: bool = false
 ## Global multipliers for the mood table (sun, ambient).
-@export var sun_scale: float = 0.42
+@export var sun_scale: float = 0.48
 @export var amb_scale: float = 0.76
 
 var env: Environment
@@ -423,14 +423,14 @@ func _apply_mood(m: Dictionary, soft: bool = false) -> void:
 	env.ambient_light_sky_contribution = m["sky_e"]
 	env.fog_light_color = m["fog_col"]
 	env.fog_light_energy = 1.0
-	env.fog_density = m["fog_d"]
+	env.fog_density = float(m["fog_d"]) * 0.72   # lighter haze: the first look pass washed the valley out
 	env.fog_sky_affect = 0.12
 	env.fog_height = m["fog_h"]
 	env.fog_height_density = m["fog_hd"]
 	env.fog_sun_scatter = m["fog_sun"]
 	env.fog_aerial_perspective = 0.25
 	env.tonemap_exposure = m["exposure"]
-	env.adjustment_saturation = m["sat"]
+	env.adjustment_saturation = float(m["sat"]) + 0.10
 	env.adjustment_contrast = m["contrast"]
 	env.glow_intensity = m["glow"]
 	sun.light_color = m["sun_col"]
