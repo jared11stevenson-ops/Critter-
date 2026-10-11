@@ -1,0 +1,10 @@
+{
+	"version": 1,
+	"_doc": "Basic reward table per stakes tier (0 Sparring, 1 Contest, 2 Blood) and outcome. Yield forfeits the reward; killed critters earn nothing (relic + last move instead).",
+	"rewards": {
+		"0": {"win": {"scrap": 3}, "loss": {"scrap": 1}, "yield": {}},
+		"1": {"win": {"scrap": 12, "reputation": 2}, "loss": {"scrap": 3}, "yield": {}},
+		"2": {"win": {"scrap": 25, "amber": 1, "reputation": 4}, "loss": {"scrap": 5, "reputation": 1}, "yield": {}}
+	},
+	"bond": {"thresholds": [5, 15, 30, 60, 100]}
+}
