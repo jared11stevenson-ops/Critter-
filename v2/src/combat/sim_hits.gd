@@ -2,7 +2,9 @@ extends RefCounted
 ## Hit detection and resolution: the Strike / Guard / Grab / Dodge triangle, parry, clash,
 ## armor, poise and stagger. Static helpers operating on a CombatSim.
 
-static func in_range(a, d, h: Dictionary) -> bool:
+const Fighter = preload("res://src/combat/fighter.gd")
+
+static func in_range(a: Fighter, d: Fighter, h: Dictionary) -> bool:
 	var to: Vector2 = d.pos - a.pos
 	var dist := to.length()
 	if dist > a.radius + float(h["reach"]) + d.radius:
@@ -13,7 +15,7 @@ static func in_range(a, d, h: Dictionary) -> bool:
 		return true
 	return a.facing.dot(to / dist) >= float(h["cos_half"]) or dist < a.radius + d.radius + 0.05
 
-static func facing_ok(sim: CombatSim, d, src: Vector2) -> bool:
+static func facing_ok(sim: CombatSim, d: Fighter, src: Vector2) -> bool:
 	var to: Vector2 = src - d.pos
 	if to.length_squared() < 0.0001:
 		return true
@@ -65,7 +67,7 @@ static func resolve_tick(sim: CombatSim) -> void:
 		elif r == 2 and f.hits_done[e[1]] == 0:
 			f.hits_done[e[1]] = 2
 
-static func _clash(sim: CombatSim, a, b) -> void:
+static func _clash(sim: CombatSim, a: Fighter, b: Fighter) -> void:
 	var R: Dictionary = sim.R
 	var mid: Vector2 = (a.pos + b.pos) * 0.5
 	var dir: Vector2 = (b.pos - a.pos).normalized()
@@ -86,7 +88,7 @@ static func _clash(sim: CombatSim, a, b) -> void:
 	sim.emit("clash", a.idx, "", mid, 0.0, {"hitstop": R["clash_hitstop"], "other": b.idx})
 	sim.emit("clash", b.idx, "", mid, 0.0, {"hitstop": R["clash_hitstop"], "other": a.idx})
 
-static func _grab_clash(sim: CombatSim, a, b) -> void:
+static func _grab_clash(sim: CombatSim, a: Fighter, b: Fighter) -> void:
 	var R: Dictionary = sim.R
 	var dir: Vector2 = (b.pos - a.pos).normalized()
 	for f in [a, b]:
@@ -101,7 +103,7 @@ static func _grab_clash(sim: CombatSim, a, b) -> void:
 	sim.emit("clash", a.idx, "", (a.pos + b.pos) * 0.5, 0.0, {"grab": true, "other": b.idx})
 
 ## Returns 1 = resolved (hit / block / parry / grab), 2 = target was invulnerable (dodged), 0 = ignored.
-static func apply_hit(sim: CombatSim, atk, dfn, h: Dictionary, move_id: String, src: Vector2, kdir: Vector2, atk_kind: String, projectile: bool = false, quiet: bool = false) -> int:
+static func apply_hit(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary, move_id: String, src: Vector2, kdir: Vector2, atk_kind: String, projectile: bool = false, quiet: bool = false) -> int:
 	var R: Dictionary = sim.R
 	if not dfn.alive or dfn.action == "ko":
 		return 0
@@ -135,7 +137,7 @@ static func apply_hit(sim: CombatSim, atk, dfn, h: Dictionary, move_id: String, 
 	_hurt(sim, atk, dfn, h, move_id, kdir)
 	return 1
 
-static func _scaled_damage(sim: CombatSim, atk, dfn, h: Dictionary) -> float:
+static func _scaled_damage(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary) -> float:
 	var R: Dictionary = sim.R
 	var dmg: float = float(h["damage"]) * atk.out_mult() * dfn.take_mult
 	if atk.burst > 0.0 and atk.move != null and atk.move.props.has("pressure_damage"):
@@ -148,7 +150,7 @@ static func _scaled_damage(sim: CombatSim, atk, dfn, h: Dictionary) -> float:
 		dmg *= pow(float(R["combo_scale"]), dfn.combo_hits)
 	return dmg
 
-static func _hurt(sim: CombatSim, atk, dfn, h: Dictionary, move_id: String, kdir: Vector2) -> void:
+static func _hurt(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary, move_id: String, kdir: Vector2) -> void:
 	var R: Dictionary = sim.R
 	var counter: bool = dfn.move != null and dfn.stun == 0
 	var dmg: float = _scaled_damage(sim, atk, dfn, h)
@@ -197,13 +199,13 @@ static func _hurt(sim: CombatSim, atk, dfn, h: Dictionary, move_id: String, kdir
 	sim.emit("hit", dfn.idx, move_id, dfn.pos, dmg, {"attacker": atk.idx, "counter": counter, "hitstop": hs, "armor": armor > 0.0})
 	sim.fx.on_hit(sim, atk, dfn, h)
 
-static func kdir_to(dfn, atk, kdir: Vector2) -> Vector2:
+static func kdir_to(dfn: Fighter, atk: Fighter, kdir: Vector2) -> Vector2:
 	var d: Vector2 = dfn.pos - atk.pos
 	if d.length_squared() < 0.0001:
 		return kdir
 	return (d.normalized() * 0.5 + kdir * 0.5).normalized()
 
-static func _interrupt(f) -> void:
+static func _interrupt(f: Fighter) -> void:
 	f.move = null
 	f.af = 0
 	f.contact = false
@@ -212,11 +214,11 @@ static func _interrupt(f) -> void:
 	f.mvec = Vector2.ZERO
 	f.buf_kind = ""
 
-static func _gain_pressure(sim: CombatSim, atk) -> void:
+static func _gain_pressure(sim: CombatSim, atk: Fighter) -> void:
 	if atk.move != null and atk.move.pressure_gain > 0.0:
 		atk.pressure = minf(float(atk.T["pressure_max"]), atk.pressure + atk.move.pressure_gain)
 
-static func _block(sim: CombatSim, atk, dfn, h: Dictionary, move_id: String, kdir: Vector2) -> void:
+static func _block(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary, move_id: String, kdir: Vector2) -> void:
 	var R: Dictionary = sim.R
 	var dmg: float = float(h["damage"]) * atk.out_mult()
 	var chip := float(dfn.T["block_chip"])
@@ -257,7 +259,7 @@ static func _block(sim: CombatSim, atk, dfn, h: Dictionary, move_id: String, kdi
 	if dfn.T["parry_blast"] > 0.0 and false:
 		pass
 
-static func _parry(sim: CombatSim, atk, dfn, h: Dictionary, move_id: String, atk_kind: String, auto: bool, projectile: bool = false) -> void:
+static func _parry(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary, move_id: String, atk_kind: String, auto: bool, projectile: bool = false) -> void:
 	var R: Dictionary = sim.R
 	if not projectile:
 		_interrupt(atk)
@@ -288,7 +290,7 @@ static func _parry(sim: CombatSim, atk, dfn, h: Dictionary, move_id: String, atk
 	sim.hitstop = maxi(sim.hitstop, hs)
 	sim.emit("parry", dfn.idx, move_id, dfn.pos, 0.0, {"attacker": atk.idx, "hitstop": hs, "auto": auto})
 
-static func _wall_absorb(sim: CombatSim, atk, dfn, h: Dictionary, move_id: String) -> void:
+static func _wall_absorb(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary, move_id: String) -> void:
 	var R: Dictionary = sim.R
 	dfn.sta = maxf(0.0, dfn.sta - float(h["damage"]) * atk.out_mult() * float(R["wall_drain"]))
 	dfn.sta_delay = int(R["sta_regen_delay"])
@@ -300,7 +302,7 @@ static func _wall_absorb(sim: CombatSim, atk, dfn, h: Dictionary, move_id: Strin
 	sim.hitstop = maxi(sim.hitstop, int(R["block_hitstop"]))
 	sim.emit("block", dfn.idx, move_id, dfn.pos, 0.0, {"attacker": atk.idx, "wall": true, "hitstop": R["block_hitstop"]})
 
-static func _grab(sim: CombatSim, atk, dfn, h: Dictionary, move_id: String) -> void:
+static func _grab(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary, move_id: String) -> void:
 	var R: Dictionary = sim.R
 	var dmg: float = _scaled_damage(sim, atk, dfn, h)
 	sim.damage(dfn, atk, dmg, move_id)

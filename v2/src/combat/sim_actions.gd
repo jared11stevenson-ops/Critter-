@@ -2,8 +2,9 @@ extends RefCounted
 ## Input ingestion, input buffer, action state machine and voluntary movement.
 ## Static helpers operating on a CombatSim; holds no state (avoids reference cycles).
 const KIND_PRIO := {"ls": 0, "dodge": 1, "grab": 2, "heavy": 3, "light": 4, "a1": 5, "a2": 6}
+const Fighter = preload("res://src/combat/fighter.gd")
 
-static func ingest(sim: CombatSim, f, inp: CombatInput) -> void:
+static func ingest(sim: CombatSim, f: Fighter, inp: CombatInput) -> void:
 	var p: Dictionary = f.prev
 	var kind := ""
 	var best := 99
@@ -36,10 +37,10 @@ static func ingest(sim: CombatSim, f, inp: CombatInput) -> void:
 		f.buf_kind = kind
 		f.buf_age = 0
 
-static func _ls_ready(sim: CombatSim, f) -> bool:
+static func _ls_ready(sim: CombatSim, f: Fighter) -> bool:
 	return not f.last_stand_used and f.alive and f.ratio() < sim.R["last_stand_ratio"] and f.def.move_ids.has("laststand")
 
-static func move_for(f, kind: String) -> MoveDef:
+static func move_for(f: Fighter, kind: String) -> MoveDef:
 	var ids: Dictionary = f.def.move_ids
 	match kind:
 		"light":
@@ -58,7 +59,7 @@ static func move_for(f, kind: String) -> MoveDef:
 			return f.def.move(ids["laststand"])
 	return null
 
-static func can_start(sim: CombatSim, f, m: MoveDef) -> bool:
+static func can_start(sim: CombatSim, f: Fighter, m: MoveDef) -> bool:
 	if f.cooldowns.get(m.id, 0) > 0:
 		return false
 	if m.kind == "dodge":
@@ -72,7 +73,7 @@ static func can_start(sim: CombatSim, f, m: MoveDef) -> bool:
 		return false
 	return true
 
-static func action_name(f, m: MoveDef, kind: String) -> String:
+static func action_name(f: Fighter, m: MoveDef, kind: String) -> String:
 	match kind:
 		"light": return "strike_light"
 		"heavy": return "strike_heavy"
@@ -83,7 +84,7 @@ static func action_name(f, m: MoveDef, kind: String) -> String:
 		"ls": return "laststand"
 	return "strike_light"
 
-static func start_move(sim: CombatSim, f, o, m: MoveDef, kind: String) -> void:
+static func start_move(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, kind: String) -> void:
 	var R: Dictionary = sim.R
 	f.sta = maxf(0.0, f.sta - m.stamina_cost)
 	if m.stamina_cost > 0.0:
@@ -138,7 +139,7 @@ static func start_move(sim: CombatSim, f, o, m: MoveDef, kind: String) -> void:
 	sim.emit("tell", f.idx, m.id, f.pos, 0.0, {"startup": m.startup, "tell_anim": m.tell_anim, "kind": m.kind})
 	sim.fx.on_start(sim, f, o, m)
 
-static func end_move(sim: CombatSim, f) -> void:
+static func end_move(sim: CombatSim, f: Fighter) -> void:
 	f.move = null
 	f.action = "idle"
 	f.af = 0
@@ -147,7 +148,7 @@ static func end_move(sim: CombatSim, f) -> void:
 	f.last_stand_active = false
 	f.mvec = Vector2.ZERO
 
-static func try_buffered(sim: CombatSim, f, o) -> bool:
+static func try_buffered(sim: CombatSim, f: Fighter, o: Fighter) -> bool:
 	if f.buf_kind == "":
 		return false
 	var m := move_for(f, f.buf_kind)
@@ -162,7 +163,7 @@ static func try_buffered(sim: CombatSim, f, o) -> bool:
 	start_move(sim, f, o, m, f.buf_kind)
 	return true
 
-static func tick_fighter(sim: CombatSim, f, o) -> void:
+static func tick_fighter(sim: CombatSim, f: Fighter, o: Fighter) -> void:
 	var R: Dictionary = sim.R
 	if not f.alive:
 		return
@@ -218,7 +219,7 @@ static func tick_fighter(sim: CombatSim, f, o) -> void:
 	else:
 		f.idle_frames = 0
 
-static func _regen(sim: CombatSim, f) -> void:
+static func _regen(sim: CombatSim, f: Fighter) -> void:
 	var R: Dictionary = sim.R
 	if f.sta_delay > 0:
 		f.sta_delay -= 1
@@ -238,7 +239,7 @@ static func _regen(sim: CombatSim, f) -> void:
 	if f.pressure > 0.0 and f.T["pressure_decay"] > 0.0:
 		f.pressure = maxf(0.0, f.pressure - float(f.T["pressure_decay"]) / 60.0)
 
-static func _stun_end(sim: CombatSim, f) -> void:
+static func _stun_end(sim: CombatSim, f: Fighter) -> void:
 	var kind: String = f.stun_kind
 	f.stun_kind = ""
 	if kind == "knockdown":
@@ -253,7 +254,7 @@ static func _stun_end(sim: CombatSim, f) -> void:
 	f.af = 0
 	f.contact = false
 
-static func _decide(sim: CombatSim, f, o) -> void:
+static func _decide(sim: CombatSim, f: Fighter, o: Fighter) -> void:
 	var R: Dictionary = sim.R
 	# Last Stand may break out of stun (once, below the threshold)
 	if f.stun > 0:
@@ -313,7 +314,7 @@ static func _decide(sim: CombatSim, f, o) -> void:
 		f.action = "idle"
 		f.guard_lag = int(R["guard_lag"])
 
-static func _walk(sim: CombatSim, f) -> void:
+static func _walk(sim: CombatSim, f: Fighter) -> void:
 	f.moving = false
 	if f.has("rooted") or not f.alive:
 		return

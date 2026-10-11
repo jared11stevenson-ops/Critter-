@@ -62,8 +62,8 @@ func _haldor(fails: Array) -> void:
 		fails.append("haldor quake slam: should knock down")
 	# Horn Charge: super-armor charge rings the target out
 	sim = U.make("haldor", "sessa", "ring", 2, 2)
-	sim.fighters[0].pos = Vector2(2.0, 0.0)
-	sim.fighters[1].pos = Vector2(5.4, 0.0)
+	sim.fighters[0].pos = Vector2(3.0, 0.0)
+	sim.fighters[1].pos = Vector2(6.4, 0.0)
 	U.run(sim, 120, {2: _press("ability2")})
 	if not sim.is_over() or sim.result()["reason"] != "ringout" or sim.result()["winner"] != 0:
 		fails.append("haldor horn charge: expected ring-out, got %s" % str(sim.result()))

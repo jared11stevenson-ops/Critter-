@@ -4,12 +4,13 @@ extends RefCounted
 const Ent = preload("res://src/combat/entity.gd")
 const Hits = preload("res://src/combat/sim_hits.gd")
 const Actions = preload("res://src/combat/sim_actions.gd")
+const Fighter = preload("res://src/combat/fighter.gd")
 
 static func on_start(_sim: CombatSim, _f, _o, _m: MoveDef) -> void:
 	pass
 
 ## Per-tick: motion segments, frame-triggered spawns and stance activation for f's current move.
-static func motion(sim: CombatSim, f, o) -> void:
+static func motion(sim: CombatSim, f: Fighter, o: Fighter) -> void:
 	var m: MoveDef = f.move
 	if m == null or f.stun > 0 or not f.alive:
 		return
@@ -59,7 +60,7 @@ static func motion(sim: CombatSim, f, o) -> void:
 static func _hit_from_spec(spec: Dictionary) -> Dictionary:
 	return MoveDef._merge({}, MoveDef._norm(spec), 0, 1)
 
-static func _spawn(sim: CombatSim, f, o, m: MoveDef, sp: Dictionary) -> void:
+static func _spawn(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, sp: Dictionary) -> void:
 	var t := str(sp["type"])
 	match t:
 		"projectile":
@@ -125,7 +126,7 @@ static func _spawn(sim: CombatSim, f, o, m: MoveDef, sp: Dictionary) -> void:
 				sim.ents.append(e)
 			sim.emit("summon", f.idx, m.id, f.pos, 0.0, {"count": cnt})
 
-static func on_hit(sim: CombatSim, atk, dfn, h: Dictionary) -> void:
+static func on_hit(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary) -> void:
 	var oh: Dictionary = h.get("on_hit", {})
 	if oh.is_empty():
 		return
@@ -146,7 +147,7 @@ static func on_hit(sim: CombatSim, atk, dfn, h: Dictionary) -> void:
 		atk.vit = minf(atk.max_vit, atk.vit + float(oh["self_heal"]))
 
 ## Riposte Stance: after the auto-parry the owner launches its counter combo for free.
-static func on_auto_parry(sim: CombatSim, dfn, atk) -> void:
+static func on_auto_parry(sim: CombatSim, dfn: Fighter, atk: Fighter) -> void:
 	dfn.st.erase("stance_riposte")
 	var cid: String = str(dfn.def.move_ids.get("ability1_counter", ""))
 	if cid == "":

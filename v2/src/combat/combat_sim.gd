@@ -2,6 +2,7 @@ class_name CombatSim extends RefCounted
 ## Deterministic 60 Hz 1v1 duel simulation (pure logic, no Nodes). See SCHEMA.md and
 ## design/v2/INTERFACES.md. All gameplay numbers come from data (rules.json, critters, moves).
 const FighterT = preload("res://src/combat/fighter.gd")
+const Fighter = FighterT
 const Actions = preload("res://src/combat/sim_actions.gd")
 const Hits = preload("res://src/combat/sim_hits.gd")
 const Fx = preload("res://src/combat/sim_effects.gd")
@@ -39,7 +40,7 @@ func _init(a: CritterDef, b: CritterDef, arena_def: ArenaDef, stakes_tier: int, 
 	fighters[0].facing = (sp[1] - sp[0]).normalized()
 	fighters[1].facing = -fighters[0].facing
 
-func _setup_fighter(f, i: int, d: CritterDef) -> void:
+func _setup_fighter(f: Fighter, i: int, d: CritterDef) -> void:
 	f.idx = i
 	f.def = d
 	var defaults: Dictionary = R["tuning_defaults"]
@@ -76,7 +77,7 @@ func is_over() -> bool:
 func result() -> Dictionary:
 	return _result
 
-func damage(target, source, amount: float, move_id: String, chip: bool = false) -> void:
+func damage(target: Fighter, source: Fighter, amount: float, move_id: String, chip: bool = false) -> void:
 	if amount <= 0.0 or not target.alive:
 		return
 	if chip and R["chip_cannot_kill"]:
@@ -144,7 +145,7 @@ func _physics() -> void:
 			a.pos = arena.clamp_inside(a.pos - n * push, lip)
 			b.pos = arena.clamp_inside(b.pos + n * push, lip)
 
-func _ringout(f) -> void:
+func _ringout(f: Fighter) -> void:
 	f.alive = false
 	f.action = "ko"
 	f.move = null
