@@ -192,3 +192,46 @@ static func copy(pose: Dictionary) -> Dictionary:
 	for part in pose:
 		out[part] = (pose[part] as PackedFloat32Array).duplicate()
 	return out
+
+static func ease_out(u: float) -> float:
+	return 1.0 - pow(1.0 - clampf(u, 0.0, 1.0), 3.0)
+
+static func rest_pose() -> Dictionary:
+	var d := {}
+	for p in PARTS:
+		d[p] = PackedFloat32Array(IDENT)
+	return d
+
+## Anticipation / strike / recovery from frame counts: tim = (startup, active, recovery) frames, `tick` seeds the tremble.
+static func evaluate(k: Dictionary, tim: Vector3i, frame: int, tick: int) -> Dictionary:
+	var s := maxi(tim.x, 1)
+	var a := maxi(tim.y, 1)
+	var r := maxi(tim.z, 1)
+	var rest := rest_pose()
+	if frame < s:
+		var u := float(frame) / float(s)
+		var pose := blend(rest, k["ant"], ease_out(u / 0.7))
+		var sh: float = float(k.get("shake", 0.0))
+		if sh > 0.0 and u > 0.6:   # tremble = the "tell" before the strike
+			var m := (u - 0.6) / 0.4 * sh
+			var bp: PackedFloat32Array = pose["body"]
+			bp[3] += sin(tick * 2.3) * 0.012 * m
+			bp[4] += cos(tick * 3.1) * 0.01 * m
+			bp[2] += sin(tick * 1.7) * 1.5 * m
+			pose["body"] = bp
+		return pose
+	if frame < s + a:
+		var v := float(frame - s) / float(a)
+		# strike lands within ~2 frames then holds, drifting toward recovery (follow-through)
+		var snap := clampf(float(frame - s + 1) / minf(float(a), 2.0), 0.0, 1.0)
+		var pose2 := blend(k["ant"], k["strike"], snap)
+		if bool(k.get("hold", false)):
+			return pose2
+		return blend(pose2, k["rec"], v * 0.25)
+	if bool(k.get("hold", false)):
+		return k["strike"]
+	var u3 := float(frame - s - a) / float(r)
+	if u3 >= 1.0:
+		return rest
+	var settle := blend(k["strike"], k["rec"], clampf(u3 / 0.35, 0.0, 1.0))
+	return blend(settle, rest, ease_out((u3 - 0.2) / 0.8))

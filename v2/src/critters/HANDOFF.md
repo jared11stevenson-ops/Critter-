@@ -1,6 +1,6 @@
 # Character Artist handoff (v2/src/critters)
 
-Status: Haldor + Sessa polished (milestone 1). Weft, Cinder, Marro, Zell, Kragg follow (milestone 2). See bottom for the latest state.
+Status: all seven critters built (Haldor, Sessa polished first; Weft, Cinder, Marro, Zell, Kragg after). Art gates green under the QA runner (`run_tests.gd -- art`, headless).
 
 ## How to use the rig (Arena/Scene Engineer)
 ```gdscript
@@ -45,3 +45,24 @@ Run: `godot --headless --path v2 --script res://src/critters/tools/run_art_tests
 - `set_silhouette(true)` renders flat black (used by the silhouette gate).
 - Software GL (xvfb llvmpipe) renders fine; ~2 s per run.
 - Godot rewrites `v2/project.godot` when it opens the project; revert that file before committing (not ours).
+
+## Numbers (measured with RenderingServer info under software GL; static counts in test_art_build.gd match)
+| Critter | draws idle / worst (strike+smear+spark) | tris incl. outline | notes |
+|---|---|---|---|
+| Haldor | 15 / 17 | 4210 | |
+| Sessa | 15 / 17 | 2974 | |
+| Weft | 17 / 19 | 4602 | |
+| Cinder | 17 / 19 | 4910 | closest to the 6000 tri budget |
+| Marro | 17 / 19 | 4530 | |
+| Zell | 16 / 18 | 3306 | wings are one transparent mesh, no outline pass |
+| Kragg | 17 / 19 | 4626 | |
+Budget is 20 draws / 6000 tris per critter. Two critters in a bout = 30-38 draws of the 150 bout budget.
+
+## Things other teams must know
+- `three_quarter` (default 38 deg) turns the rig toward the camera; BoutScene may set 0 for pure profile. Rig scale is baked per critter (`cfg.scale`: Cinder 0.82 ... Kragg 1.18) for silhouette variety: it is presentation only, gameplay reach/hurtboxes come from data.
+- Sockets per critter: `weapon_tip`, `weapon_base`, `hand`, `head`, `ground` always; `hook` (Kragg), `chisel` (Haldor) extra.
+- `timing.gd` STUB table: **replace by data/moves** (or pass `phase` in the snapshot). Nothing in the rig decides gameplay.
+- The silhouette gate is a CPU rasterizer (no renderer needed). If the Lead wants a pixel-exact GPU gate add it next to it; `tools/shoot.gd --mode=sil` renders the same view.
+- Tests are plain `run() -> Array` (sync) and work under `run_tests.gd`.
+- `check_ownership.sh` flags `design/v2/sheets/*` (owned by `design/` -> lead): sheets were assigned to the Character Artist; add `design/v2/sheets/<TAB>character` to EXTRA.
+- Regenerate sheets: `v2/src/critters/tools/make_all_sheets.sh` (xvfb + PIL, ~30 s, ~1.7 MB total).

@@ -12,6 +12,7 @@ const Timing := preload("res://src/critters/timing.gd")
 const FaceCtl := preload("res://src/critters/face_ctl.gd")
 const FxCtl := preload("res://src/critters/fx_ctrl.gd")
 const Toon := preload("res://src/critters/toon.gd")
+const RigEvents := preload("res://src/critters/rig_events.gd")
 
 const DESIGN_PATH := "res://src/critters/designs/%s.gd"
 
@@ -21,8 +22,6 @@ const BLEND_DEFAULT := 2
 const TURN_RATE := 22.0
 const FIDGET_GAP := Vector2(6.0, 10.0)
 const FIDGET_LEN := 1.4
-const LOW_VIT_SCARED := 0.3
-const LOW_VIT_DYING := 0.12
 const WALK_RATE := 9.0
 
 ## 3/4 turn toward the camera (deg). Side-on bouts read faces best at ~30; lookdev sets 0 and orbits the camera.
@@ -175,7 +174,7 @@ func apply_fighter_state(fs: Dictionary, dt: float) -> void:
 	_cur = pose
 	_apply_pose(pose)
 	_update_facing(dt)
-	_update_expression(action, dt)
+	_update_expression(action)
 	_update_smear(action, frame)
 	if face:
 		face.update(dt)
@@ -206,45 +205,10 @@ func _begin_action(action: String, move_id: String, fs: Dictionary) -> void:
 	elif action != "idle":
 		fx.boost_glow(0.0)
 
-func _ease_out(u: float) -> float:
-	return 1.0 - pow(1.0 - clampf(u, 0.0, 1.0), 3.0)
-
-## Evaluates anticipation / strike / recovery from frame counts. Returns a full pose dict.
 func _eval_action(action: String, frame: int) -> Dictionary:
 	if action == "idle" or action == "walk":
 		return _rest_pose()
-	var k: Dictionary = _keys
-	var s := maxi(_timing.x, 1)
-	var a := maxi(_timing.y, 1)
-	var r := maxi(_timing.z, 1)
-	var rest := _rest_pose()
-	if frame < s:
-		var u := float(frame) / float(s)
-		var pose := PoseLib.blend(rest, k["ant"], _ease_out(u / 0.7))
-		var sh: float = float(k.get("shake", 0.0))
-		if sh > 0.0 and u > 0.6:   # tremble = the "tell" before the strike
-			var m := (u - 0.6) / 0.4 * sh
-			var bp: PackedFloat32Array = pose["body"]
-			bp[3] += sin(_tick * 2.3) * 0.012 * m
-			bp[4] += cos(_tick * 3.1) * 0.01 * m
-			bp[2] += sin(_tick * 1.7) * 1.5 * m
-			pose["body"] = bp
-		return pose
-	if frame < s + a:
-		var v := float(frame - s) / float(a)
-		# strike lands within ~2 frames then holds, drifting toward recovery (follow-through)
-		var snap := clampf(float(frame - s + 1) / minf(float(a), 2.0), 0.0, 1.0)
-		var pose2 := PoseLib.blend(k["ant"], k["strike"], snap)
-		if bool(k.get("hold", false)):
-			return pose2
-		return PoseLib.blend(pose2, k["rec"], v * 0.25)
-	if bool(k.get("hold", false)):
-		return k["strike"]
-	var u3 := float(frame - s - a) / float(r)
-	if u3 >= 1.0:
-		return rest
-	var settle := PoseLib.blend(k["strike"], k["rec"], clampf(u3 / 0.35, 0.0, 1.0))
-	return PoseLib.blend(settle, rest, _ease_out((u3 - 0.2) / 0.8))
+	return PoseLib.evaluate(_keys, _timing, frame, _tick)
 
 ## Packed arrays inside a Dictionary are copy-on-write: always modify through these helpers (read, change, write back).
 func _padd(pose: Dictionary, part_name: String, i: int, v: float) -> void:
@@ -389,24 +353,10 @@ func _update_facing(dt: float) -> void:
 	_yaw = lerp_angle(_yaw, goal, 1.0 - exp(-TURN_RATE * maxf(dt, 1.0 / 60.0)))
 	_pivot.rotation.y = _yaw
 
-func _update_expression(action: String, dt: float) -> void:
+func _update_expression(action: String) -> void:
 	if face == null:
 		return
-	var e := "calm"
-	if _vit < LOW_VIT_DYING:
-		e = "dying"
-	elif _vit < LOW_VIT_SCARED:
-		e = "scared"
-	match action:
-		"strike_heavy", "ability1", "ability2", "laststand", "guard", "parry":
-			e = "angry"
-		"strike_light", "grab", "dodge":
-			e = "grin" if _vit >= LOW_VIT_SCARED else e
-		"hit", "stagger":
-			e = "hurt"
-		"ko":
-			e = "dying"
-	face.set_base(_expr_manual if _expr_manual != "" else e)
+	face.set_base(_expr_manual if _expr_manual != "" else FaceCtl.auto_pick(action, _vit))
 
 func _update_smear(action: String, frame: int) -> void:
 	if not is_inside_tree():
@@ -423,77 +373,10 @@ func _update_smear(action: String, frame: int) -> void:
 	var base_s: Node3D = socket("weapon_base") if _sockets.has("weapon_base") else socket("hand")
 	fx.sample(tip.global_position, base_s.global_position)
 
-## ---------------------------------------------------------------- events
+## ---------------------------------------------------------------- events (see rig_events.gd)
 func _kick(amount: float) -> void:
 	_sqv += amount * 60.0
 
-func _event_local_pos(ev: Dictionary) -> Vector3:
-	var wp = ev.get("world_pos", null)   # optional Vector3 impact point; otherwise the chest, front side
-	if wp is Vector3:
-		return to_local(wp)
-	return Vector3(0.45 * _facing, 0.95, 0.5)
-
 func play_event(ev: Dictionary) -> void:
-	if _body == null:
-		return
-	var t: String = str(ev.get("type", ""))
-	var heavy: bool = bool(ev.get("heavy", false))
-	match t:
-		"hit":
-			fx.flash()
-			_kick(0.28 if not heavy else 0.45)
-			_shake_f = 8 if not heavy else 14
-			_shake_amp = 1.0 if not heavy else 2.2
-			fx.hit_spark(_event_local_pos(ev), 1.5 if not heavy else 2.4, palette["glow"].lerp(Color(1.0, 0.95, 0.7), 0.5))
-			if face:
-				face.flash_expression("hurt", 0.5)
-			if heavy:
-				fx.impact_frame()
-		"block":
-			_kick(0.1)
-			_shake_f = 4; _shake_amp = 0.5
-			fx.hit_spark(_event_local_pos(ev), 0.7, Color(0.8, 0.95, 1.0))
-		"parry":
-			fx.flash()
-			_kick(-0.12)
-			fx.hit_spark(_event_local_pos(ev), 1.5, Color(1.0, 0.95, 0.6))
-			fx.impact_frame()
-			if face:
-				face.flash_expression("grin", 0.8)
-		"clash":
-			_kick(0.2)
-			_shake_f = 6; _shake_amp = 1.2
-			fx.hit_spark(_event_local_pos(ev), 1.3, Color(1.0, 1.0, 1.0))
-		"grab":
-			if face:
-				face.flash_expression("grin", 0.8)
-			_kick(0.15)
-		"dodge":
-			_kick(-0.2)
-		"stagger":
-			if face:
-				face.flash_expression("hurt", 0.8)
-			_shake_f = 10; _shake_amp = 1.4
-		"tell":
-			_kick(-0.1)
-			fx.boost_glow(1.2)
-		"ringout":
-			if face:
-				face.flash_expression("scared", 2.0)
-		"ko":
-			fx.impact_frame()
-			fx.flash()
-			if face:
-				face.flash_expression("dying", 10.0)
-		"laststand":
-			fx.flash()
-			fx.boost_glow(2.4)
-			_kick(-0.25)
-			_shake_f = 18; _shake_amp = 1.0
-			if face:
-				face.flash_expression("angry", 3.0)
-		"yield":
-			if face:
-				face.flash_expression("hurt", 1.2)
-	if face:
-		face.update(0.0)
+	if _body != null:
+		RigEvents.play(self, ev)

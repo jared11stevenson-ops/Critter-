@@ -30,6 +30,29 @@ var _look_t := 3.0
 var _look_goal := Vector2.ZERO
 var blink_scale := 1.0   # critters with huge eyes blink slower/rounder
 
+## Presentation thresholds (not gameplay): below these vitality ratios the fighter looks scared / dying.
+const LOW_VIT_SCARED := 0.3
+const LOW_VIT_DYING := 0.12
+
+## State -> expression (hurt on hit, determined when committing, scared at low vitality, dying when KO'd).
+static func auto_pick(action: String, vit: float) -> String:
+	var e := "calm"
+	if vit < LOW_VIT_DYING:
+		e = "dying"
+	elif vit < LOW_VIT_SCARED:
+		e = "scared"
+	match action:
+		"strike_heavy", "ability1", "ability2", "laststand", "guard", "parry":
+			e = "angry"
+		"strike_light", "grab", "dodge":
+			if vit >= LOW_VIT_SCARED:
+				e = "grin"
+		"hit", "stagger":
+			e = "hurt"
+		"ko":
+			e = "dying"
+	return e
+
 func _init(m: ShaderMaterial) -> void:
 	mat = m
 	cur = (EXPR["calm"] as Dictionary).duplicate()
