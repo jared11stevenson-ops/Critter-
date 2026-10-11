@@ -10,6 +10,7 @@ const Pal := preload("res://src/critters/palettes.gd")
 var vp: SubViewport
 var world: Node3D
 var st: Dictionary
+var no_shadow := false
 
 func _init() -> void:
 	var ids: PackedStringArray = Pal.IDS
@@ -39,6 +40,9 @@ func _init() -> void:
 		"lineup": await _lineup(ids, out, size)
 		"sil": await _sil(ids, out)
 		"film": await _film(ids, out, action_arg)
+		"fx": await _fx(ids, out)
+		"walk": await _walk(ids, out)
+		"perf": await _perf(ids)
 	quit()
 
 func _spawn(id: String) -> Node3D:
@@ -46,6 +50,8 @@ func _spawn(id: String) -> Node3D:
 	world.add_child(rig)
 	rig.setup(id)
 	rig.three_quarter = 0.0
+	if not no_shadow:
+		Stage.blob_shadow(rig, 0.9)
 	return rig
 
 func _frame_cam(h: float, yaw_deg: float, center_x: float = 0.0, fit: float = 1.32, tilt: float = 0.14) -> void:
@@ -55,6 +61,11 @@ func _frame_cam(h: float, yaw_deg: float, center_x: float = 0.0, fit: float = 1.
 	var sun: DirectionalLight3D = st["sun"]
 	sun.rotation_degrees = Vector3(-30, yaw_deg + 35.0, 0)   # key light follows the camera so every view is front-lit
 	cam.look_at_from_position(Vector3(center_x, h * 0.5, 0) + Vector3(sin(y), tilt, cos(y)).normalized() * d, Vector3(center_x, h * 0.48, 0))
+
+func _ext(rig: Node3D) -> float:
+	# framing extent: tall or wide, whichever is bigger (weapons and wings count)
+	var b: AABB = rig.bounds
+	return maxf(b.end.y, maxf(b.size.x, b.size.z) * 0.8)
 
 func _step(rig: Node3D, action: String, frame: int, n: int = 3, extra: Dictionary = {}) -> void:
 	for i in range(n):
@@ -72,7 +83,7 @@ func _turn(ids, out: String) -> void:
 	var views := {"front": 90.0, "three_quarter": 52.0, "side": 0.0, "back": -90.0}
 	for id in ids:
 		var rig := _spawn(id)
-		var h: float = rig.nominal_height()
+		var h: float = _ext(rig)
 		_step(rig, "idle", 0, 4)
 		for v in views:
 			_frame_cam(h, views[v])
@@ -84,7 +95,7 @@ func _actions(ids, out: String) -> void:
 	for id in ids:
 		var rig := _spawn(id)
 		rig.three_quarter = 35.0
-		var h: float = rig.nominal_height()
+		var h: float = _ext(rig)
 		var shots := [["idle", 0], ["strike_light", -1], ["strike_heavy", -2], ["strike_heavy", -3], ["guard", 8], ["hit", 3], ["ability1", -3], ["ko", 60]]
 		var i := 0
 		for sh in shots:
@@ -131,17 +142,19 @@ func _lineup(ids, out: String, size: int) -> void:
 	for id in ids:
 		var rig := _spawn(id)
 		rig.three_quarter = 35.0
-		rig.position = Vector3(float(i) * 2.6 - (ids.size() - 1) * 1.3, 0, 0)
+		rig.position = Vector3(float(i) * 3.5 - (ids.size() - 1) * 1.75, 0, 0)
 		_step(rig, "idle", 0, 4)
 		rigs.append(rig)
 		i += 1
-	vp.size = Vector2i(size * 3, int(size * 0.9))
+	vp.size = Vector2i(size * 3, int(size * 0.62))
 	var cam: Camera3D = st["cam"]
-	cam.fov = 24.0
-	cam.look_at_from_position(Vector3(0, 1.5, 17.5), Vector3(0, 1.05, 0))
+	cam.fov = 22.0
+	cam.look_at_from_position(Vector3(0, 1.5, 20.5), Vector3(0, 1.25, 0))
 	await _save("%s/lineup.png" % out)
 
 func _sil(ids, out: String) -> void:
+	no_shadow = true
+	st["env"].background_mode = Environment.BG_COLOR
 	st["env"].background_color = Color.WHITE
 	st["ground"].visible = false
 	for id in ids:
@@ -149,7 +162,7 @@ func _sil(ids, out: String) -> void:
 		rig.three_quarter = 0.0
 		rig.set_silhouette(true)
 		_step(rig, "idle", 0, 3)
-		_frame_cam(2.4, 0.0)
+		_frame_cam(_ext(rig) * 1.05, 0.0, 0.0, 1.25)
 		await _save("%s/%s_sil.png" % [out, id])
 		rig.free()
 
@@ -158,7 +171,7 @@ func _film(ids, out: String, action: String) -> void:
 	for id in ids:
 		var rig := _spawn(id)
 		rig.three_quarter = 35.0
-		var h: float = rig.nominal_height()
+		var h: float = _ext(rig)
 		var tim: Vector3i = rig.call("_timing_for", action)
 		var total := tim.x + tim.y + tim.z
 		_step(rig, "idle", 0, 20)
@@ -174,4 +187,71 @@ func _film(ids, out: String, action: String) -> void:
 				await _save("%s/%s_film_%d_%s_f%d.png" % [out, id, i, action, f])
 				i += 1
 			f += 1
+		rig.free()
+
+func _fx(ids, out: String) -> void:
+	# swing smear, hit spark, impact-frame inversion
+	for id in ids:
+		var rig := _spawn(id)
+		rig.three_quarter = 35.0
+		var h: float = _ext(rig)
+		var tim: Vector3i = rig.call("_timing_for", "strike_heavy")
+		_step(rig, "idle", 0, 10)
+		for f in range(0, tim.x + 3):
+			_step(rig, "strike_heavy", f, 1)
+		_frame_cam(h * 1.1, 0.0, 0.25 * h / 2.0, 1.75)
+		await _save("%s/%s_fx_0_smear.png" % [out, id])
+		_step(rig, "hit", 2, 1)
+		rig.play_event({"type": "hit", "heavy": false})
+		_step(rig, "hit", 3, 1)
+		await _save("%s/%s_fx_1_spark.png" % [out, id])
+		rig.play_event({"type": "hit", "heavy": true})
+		_step(rig, "hit", 4, 1)
+		await _save("%s/%s_fx_2_impact.png" % [out, id])
+		rig.free()
+
+func _walk(ids, out: String) -> void:
+	for id in ids:
+		var rig := _spawn(id)
+		rig.three_quarter = 35.0
+		var h: float = _ext(rig)
+		_step(rig, "idle", 0, 10)
+		for i in range(8):
+			_step(rig, "walk", i, 5, {"speed": 1.0})
+			_frame_cam(h * 1.05, 0.0, 0.0, 1.6)
+			await _save("%s/%s_film_%d_walk.png" % [out, id, i])
+		rig.free()
+
+func _info(what: int) -> int:
+	return int(RenderingServer.get_rendering_info(what))
+
+## Measured draw calls / primitives in a real frame (baseline = empty stage with ground, subtracted). Software GL counts match hardware counts.
+func _perf(ids) -> void:
+	no_shadow = true
+	st["ground"].visible = false
+	await process_frame
+	await process_frame
+	var base_d := _info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME)
+	var base_p := _info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME)
+	print("PERF baseline draws=%d prims=%d" % [base_d, base_p])
+	for id in ids:
+		var rig := _spawn(id)
+		rig.three_quarter = 30.0
+		_step(rig, "idle", 0, 3)
+		_frame_cam(_ext(rig), 0.0)
+		await process_frame
+		await process_frame
+		var d := _info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME) - base_d
+		var p := _info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME) - base_p
+		# worst case: heavy strike active (smear visible) + spark
+		var tim: Vector3i = rig.call("_timing_for", "strike_heavy")
+		for f in range(0, tim.x + 3):
+			_step(rig, "strike_heavy", f, 1)
+		rig.play_event({"type": "hit", "heavy": false})
+		_step(rig, "strike_heavy", tim.x + 3, 1)
+		await process_frame
+		await process_frame
+		var dw := _info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME) - base_d
+		var pw := _info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME) - base_p
+		print("PERF %s idle draws=%d tris=%d | worst(strike+smear+spark) draws=%d tris=%d" % [id, d, p, dw, pw])
 		rig.free()

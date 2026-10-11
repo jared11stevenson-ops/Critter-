@@ -190,7 +190,14 @@ func _begin_action(action: String, move_id: String, fs: Dictionary) -> void:
 	_blend_n = int(BLEND_FRAMES.get(action, BLEND_DEFAULT))
 	_action = action
 	_move_id = move_id
-	_keys = PoseLib.keys_for(action, cfg) if action not in ["idle", "walk"] else {}
+	var c := cfg
+	var ta: String = str(fs.get("tell_anim", ""))   # data/moves `tell_anim` may name any swing style in PoseLib.STYLES
+	if ta != "" and PoseLib.STYLES.has(ta):
+		c = cfg.duplicate()
+		var st: Dictionary = (cfg.get("style", {}) as Dictionary).duplicate()
+		st[action] = ta
+		c["style"] = st
+	_keys = PoseLib.keys_for(action, c) if action not in ["idle", "walk"] else {}
 	if action in ["strike_heavy", "strike_light", "ability1", "ability2", "grab", "laststand"]:
 		_kick(-0.0)
 	_idle_time = 0.0
@@ -221,6 +228,7 @@ func _eval_action(action: String, frame: int) -> Dictionary:
 			bp[3] += sin(_tick * 2.3) * 0.012 * m
 			bp[4] += cos(_tick * 3.1) * 0.01 * m
 			bp[2] += sin(_tick * 1.7) * 1.5 * m
+			pose["body"] = bp
 		return pose
 	if frame < s + a:
 		var v := float(frame - s) / float(a)
@@ -237,6 +245,17 @@ func _eval_action(action: String, frame: int) -> Dictionary:
 		return rest
 	var settle := PoseLib.blend(k["strike"], k["rec"], clampf(u3 / 0.35, 0.0, 1.0))
 	return PoseLib.blend(settle, rest, _ease_out((u3 - 0.2) / 0.8))
+
+## Packed arrays inside a Dictionary are copy-on-write: always modify through these helpers (read, change, write back).
+func _padd(pose: Dictionary, part_name: String, i: int, v: float) -> void:
+	var a: PackedFloat32Array = pose[part_name]
+	a[i] += v
+	pose[part_name] = a
+
+func _pmul(pose: Dictionary, part_name: String, i: int, v: float) -> void:
+	var a: PackedFloat32Array = pose[part_name]
+	a[i] *= v
+	pose[part_name] = a
 
 func _rest_pose() -> Dictionary:
 	var d := {}
@@ -258,8 +277,8 @@ func _layer_procedural(pose: Dictionary, action: String, fs: Dictionary, dt: flo
 	torso[6] *= 1.0 - br * 0.01 * calm
 	head[4] += br * 0.01 * calm
 	var sway := float(cfg.get("sway", 2.5))
-	(pose["arm_f"] as PackedFloat32Array)[2] += sin(_time * 1.3) * sway * calm
-	(pose["arm_b"] as PackedFloat32Array)[2] += sin(_time * 1.3 + 1.2) * sway * 0.6 * calm
+	_padd(pose, "arm_f", 2, sin(_time * 1.3) * sway * calm)
+	_padd(pose, "arm_b", 2, sin(_time * 1.3 + 1.2) * sway * 0.6 * calm)
 	# slouch at low vitality
 	var tired := clampf((0.5 - _vit) / 0.5, 0.0, 1.0)
 	torso[2] -= tired * 8.0 * calm
@@ -273,14 +292,14 @@ func _layer_procedural(pose: Dictionary, action: String, fs: Dictionary, dt: flo
 		var s := sin(_walk_phase)
 		var c := cos(_walk_phase * 2.0)
 		var m := _walk_amt
-		(pose["leg_f"] as PackedFloat32Array)[2] += s * 30.0 * m
-		(pose["leg_b"] as PackedFloat32Array)[2] -= s * 30.0 * m
+		_padd(pose, "leg_f", 2, s * 30.0 * m)
+		_padd(pose, "leg_b", 2, -(s * 30.0 * m))
 		body[4] += absf(s) * 0.07 * m * float(cfg.get("bob", 1.0))
 		torso[0] += s * 5.0 * m * float(cfg.get("waddle", 1.0))
 		torso[2] -= 5.0 * m
 		body[7] *= 1.0 + c * 0.03 * m
-		(pose["arm_b"] as PackedFloat32Array)[2] += s * 22.0 * m
-		(pose["arm_f"] as PackedFloat32Array)[2] -= s * 6.0 * m
+		_padd(pose, "arm_b", 2, s * 22.0 * m)
+		_padd(pose, "arm_f", 2, -(s * 6.0 * m))
 		head[2] += s * 2.0 * m
 	# idle fidget
 	if action == "idle":
@@ -323,8 +342,12 @@ func _layer_procedural(pose: Dictionary, action: String, fs: Dictionary, dt: flo
 	if flap > 0.0:
 		var airborne := 1.0 if action in ["dodge", "strike_heavy", "ability1", "ability2", "laststand", "walk"] else 0.45
 		ex[0] += sin(_time * float(cfg.get("flap_hz", 38.0))) * flap * airborne
-	_lag_update(pose, dt)
+	pose["torso"] = torso
+	pose["head"] = head
+	pose["extra"] = ex
 	pose["body"] = body
+	_lag_update(pose, dt)
+	body = pose["body"]
 
 func _lag_update(pose: Dictionary, dt: float) -> void:
 	for pn in PoseLib.PARTS:
@@ -344,8 +367,9 @@ func _lag_update(pose: Dictionary, dt: float) -> void:
 			st[0] += st[1] * dt
 		var arr: PackedFloat32Array = pose[part_name]
 		arr[2] += st[0] + sin(_time * 2.0 + (1.0 if part_name == "extra" else 0.0)) * 2.0
+		pose[part_name] = arr
 	if dt > 0.0 and cfg.has("lag_extra_x"):
-		(pose["extra"] as PackedFloat32Array)[0] += sin(_time * 3.1) * float(cfg["lag_extra_x"])
+		_padd(pose, "extra", 0, sin(_time * 3.1) * float(cfg["lag_extra_x"]))
 
 func _apply_pose(pose: Dictionary) -> void:
 	for p in pose:
@@ -420,7 +444,7 @@ func play_event(ev: Dictionary) -> void:
 			_kick(0.28 if not heavy else 0.45)
 			_shake_f = 8 if not heavy else 14
 			_shake_amp = 1.0 if not heavy else 2.2
-			fx.hit_spark(_event_local_pos(ev), 1.1 if not heavy else 1.9, palette["glow"].lerp(Color(1.0, 0.95, 0.7), 0.5))
+			fx.hit_spark(_event_local_pos(ev), 1.5 if not heavy else 2.4, palette["glow"].lerp(Color(1.0, 0.95, 0.7), 0.5))
 			if face:
 				face.flash_expression("hurt", 0.5)
 			if heavy:

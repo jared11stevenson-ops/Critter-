@@ -10,7 +10,7 @@ const Pal := preload("res://src/critters/palettes.gd")
 const PoseLib := preload("res://src/critters/pose_lib.gd")
 const Face := preload("res://src/critters/face_ctl.gd")
 
-const SPACING := 3.1
+const SPACING := 3.5
 const MODES := ["lineup", "cycle", "expressions", "silhouette"]
 
 var rigs: Array = []
@@ -35,6 +35,7 @@ func _ready() -> void:
 		rig.setup(Pal.IDS[i])
 		rig.position = Vector3((float(i) - 3.0) * SPACING, 0, 0)
 		rig.three_quarter = 0.0
+		Stage.blob_shadow(rig, 0.9)
 		rigs.append(rig)
 	var cl := CanvasLayer.new()
 	add_child(cl)
@@ -52,7 +53,8 @@ func _ready() -> void:
 
 func _apply_mode() -> void:
 	var sil: bool = MODES[mode] == "silhouette"
-	st["env"].background_color = Color.WHITE if sil else Color(0.36, 0.40, 0.42)
+	st["env"].background_mode = Environment.BG_COLOR if sil else Environment.BG_SKY
+	st["env"].background_color = Color.WHITE
 	st["ground"].visible = not sil
 	for r in rigs:
 		r.set_silhouette(sil)
@@ -112,7 +114,7 @@ func _update_camera() -> void:
 	var y := deg_to_rad(yaw)
 	if focus == 0:
 		cam.fov = 26.0
-		var d := 24.0 * zoom
+		var d := 30.0 * zoom
 		cam.look_at_from_position(Vector3(sin(y), 0.16, cos(y)) * d + Vector3(0, 2.2, 0), Vector3(0, 1.3, 0))
 	else:
 		cam.fov = 28.0

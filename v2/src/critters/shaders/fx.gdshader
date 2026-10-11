@@ -24,12 +24,12 @@ void fragment() {
 		float body = pow(y, 1.4) * pow(along, 1.3);
 		float core_s = smoothstep(0.82, 0.97, y) * pow(along, 1.0);
 		ALBEDO = mix(tint, core, core_s);
-		ALPHA = clamp(body * 0.8 + core_s * 0.6, 0.0, 1.0) * alpha;
+		ALPHA = clamp(body * 1.0 + core_s * 0.7, 0.0, 1.0) * alpha;
 	} else {
 		vec2 p = (uv - 0.5) * 2.0;
 		float r = length(p);
 		float ang = atan(p.y, p.x);
-		float star = 0.35 + 0.65 * pow(abs(cos(ang * spikes * 0.5)), 6.0);
+		float star = 0.35 + 0.65 * pow(abs(cos(ang * spikes * 0.5)), 3.0);
 		float grow = mix(0.5, 1.0, clamp(t * 4.0, 0.0, 1.0));
 		float edge = star * grow * (1.0 - t * 0.5);
 		float body = smoothstep(edge, edge - 0.08, r);

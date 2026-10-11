@@ -8,7 +8,7 @@ const FX := preload("res://src/critters/shaders/fx.gdshader")
 const GLASS := preload("res://src/critters/shaders/glass.gdshader")
 
 ## Presentation constant (not gameplay): outline thickness in screen pixels at 720p, scaled by viewport height.
-const OUTLINE_PX := 3.2
+const OUTLINE_PX := 4.0
 
 static func character(rim: Color, ink: Color) -> ShaderMaterial:
 	var m := ShaderMaterial.new()
