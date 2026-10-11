@@ -55,3 +55,6 @@ Paused by the creator: lore, music, quests, dialogue.
 
 ## Standing order (creator, 2026-10-06)
 Sequence: (1) ARUUN until he passes every fidelity gate (design/FIDELITY_PROTOCOL.md, final >= 92/100 and Silhouette/Proportions/Head-Neck-Horns each >= 90%), (2) then CIGARRA through the same protocol, (3) only then return to the game (integration, zips, world, gameplay). Everything else stays paused until then.
+
+## Standing order (creator, 2026-10-11) — SUPERSEDES 2026-10-06
+Creator is outsourcing the 3D models (Aruun, Cigarra, cast). Lead + agents focus SOLELY on gameplay. Modeling work (design/EXACT_RECONSTRUCTION_PROTOCOL.md, fidelity pipeline) is paused; current shipped models stay as placeholders and must load through stable paths (game/art/models/<name>/) so outsourced GLBs drop in. Lore/music/quests/dialogue remain paused unless gameplay needs them.
