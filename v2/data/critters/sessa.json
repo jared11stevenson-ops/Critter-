@@ -37,7 +37,7 @@
   "block_chip": 0.35,
   "block_poise": 0.6,
   "guard_drain": 0.6,
-  "damage_mult": 2.037
+  "damage_mult": 1.0
  },
  "ai": {
   "style": "duelist",

@@ -33,7 +33,7 @@
   "body_radius": 0.65,
   "block_chip": 0.2,
   "crush_resist": 0.2,
-  "damage_mult": 0.526
+  "damage_mult": 1.0
  },
  "ai": {
   "style": "grappler",

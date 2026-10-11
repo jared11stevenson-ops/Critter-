@@ -1,17 +1,68 @@
 {
-  "novice": {
-    "reaction": 18, "react_prob": 0.45, "parry_prob": 0.08, "parry_jitter": 6, "dodge_prob": 0.25, "block_prob": 0.55,
-    "interrupt_prob": 0.05, "aggression": 0.35, "think_min": 20, "think_max": 55, "noise": 0.35, "habit": 0.0,
-    "feint": 0.0, "ability": 0.35, "chain": 0.45, "punish": 0.4, "stamina_care": 0.2, "yield_ratio": 0.0, "last_stand": 0.5
-  },
-  "standard": {
-    "reaction": 11, "react_prob": 0.75, "parry_prob": 0.35, "parry_jitter": 3, "dodge_prob": 0.5, "block_prob": 0.7,
-    "interrupt_prob": 0.25, "aggression": 0.5, "think_min": 10, "think_max": 32, "noise": 0.18, "habit": 0.4,
-    "feint": 0.1, "ability": 0.65, "chain": 0.7, "punish": 0.75, "stamina_care": 0.6, "yield_ratio": 0.1, "last_stand": 0.8
-  },
-  "expert": {
-    "reaction": 6, "react_prob": 0.93, "parry_prob": 0.65, "parry_jitter": 1, "dodge_prob": 0.7, "block_prob": 0.85,
-    "interrupt_prob": 0.45, "aggression": 0.6, "think_min": 5, "think_max": 20, "noise": 0.07, "habit": 0.85,
-    "feint": 0.25, "ability": 0.9, "chain": 0.85, "punish": 0.95, "stamina_care": 0.9, "yield_ratio": 0.12, "last_stand": 0.95
-  }
+ "novice": {
+  "reaction": 18,
+  "react_prob": 0.45,
+  "parry_prob": 0.08,
+  "parry_jitter": 6,
+  "dodge_prob": 0.25,
+  "block_prob": 0.55,
+  "interrupt_prob": 0.05,
+  "aggression": 0.35,
+  "think_min": 20,
+  "think_max": 55,
+  "noise": 0.35,
+  "habit": 0.0,
+  "feint": 0.0,
+  "ability": 0.35,
+  "chain": 0.45,
+  "punish": 0.4,
+  "stamina_care": 0.2,
+  "yield_ratio": 0.0,
+  "last_stand": 0.5,
+  "edge_margin": 0.2
+ },
+ "standard": {
+  "reaction": 11,
+  "react_prob": 0.75,
+  "parry_prob": 0.35,
+  "parry_jitter": 3,
+  "dodge_prob": 0.5,
+  "block_prob": 0.7,
+  "interrupt_prob": 0.25,
+  "aggression": 0.5,
+  "think_min": 10,
+  "think_max": 32,
+  "noise": 0.18,
+  "habit": 0.4,
+  "feint": 0.1,
+  "ability": 0.65,
+  "chain": 0.7,
+  "punish": 0.75,
+  "stamina_care": 0.6,
+  "yield_ratio": 0.1,
+  "last_stand": 0.8,
+  "edge_margin": 0.6
+ },
+ "expert": {
+  "reaction": 6,
+  "react_prob": 0.93,
+  "parry_prob": 0.65,
+  "parry_jitter": 1,
+  "dodge_prob": 0.7,
+  "block_prob": 0.85,
+  "interrupt_prob": 0.45,
+  "aggression": 0.6,
+  "think_min": 5,
+  "think_max": 20,
+  "noise": 0.07,
+  "habit": 0.85,
+  "feint": 0.25,
+  "ability": 0.9,
+  "chain": 0.85,
+  "punish": 0.95,
+  "stamina_care": 0.9,
+  "yield_ratio": 0.12,
+  "last_stand": 0.95,
+  "edge_margin": 1.0
+ }
 }

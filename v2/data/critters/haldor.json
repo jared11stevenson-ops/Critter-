@@ -33,7 +33,7 @@
   "body_radius": 0.65,
   "block_chip": 0.15,
   "crush_resist": 0.2,
-  "damage_mult": 0.724
+  "damage_mult": 1.0
  },
  "ai": {
   "style": "bruiser",

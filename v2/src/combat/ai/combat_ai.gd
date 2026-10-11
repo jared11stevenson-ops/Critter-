@@ -27,6 +27,7 @@ var chain_done := ""
 var feint_done := ""
 var hold_guard_until := -1
 var _last_guard := false
+var _danger_cache := -1.0
 
 static func profile_names() -> Array:
 	return ["novice", "standard", "expert"]
@@ -352,15 +353,16 @@ func _neutral(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float, gua
 		dir = -to * 0.6 + perp * strafe * 0.5
 	else:
 		dir = perp * strafe * 0.6
-	# stay off drop edges: push toward the middle, never retreat into them
+	# stay off drop edges, more so against opponents who can throw or knock us far
 	var arena: ArenaDef = sim.arena
-	var depth: float = arena.depth(me.pos)
-	if depth > -2.2 and arena.edge_type(me.pos) == "drop":
+	var inside: float = -arena.depth(me.pos)
+	var danger: float = _edge_danger(op) + float(P["edge_margin"])
+	if inside < danger and arena.edge_type(me.pos) == "drop":
 		var inward: Vector2 = -me.pos.normalized()
-		var danger := clampf((depth + 2.2) / 2.2, 0.0, 1.0)
+		var w: float = clampf(1.0 - inside / danger, 0.0, 1.0)
 		if dir.dot(inward) < 0.0:
 			dir -= inward * dir.dot(inward)
-		dir += inward * (0.5 + 1.5 * danger)
+		dir += inward * (0.4 + 1.6 * w)
 	if guarding:
 		dir *= 0.5
 	inp.move = dir.limit_length(1.0)
@@ -435,6 +437,21 @@ func _neutral(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float, gua
 	my_last_frame = sim.frame
 	chain_done = ""
 	feint_done = ""
+
+## How far from a drop edge we want to stay: the longest throw / knockback the opponent has.
+func _edge_danger(op) -> float:
+	if _danger_cache >= 0.0:
+		return _danger_cache
+	var d := 0.0
+	for mid in op.def.moves.keys():
+		var m: MoveDef = op.def.moves[mid]
+		for h in m.hits:
+			d = maxf(d, maxf(float(h["throw_dist"]), float(h["knock"])))
+		for seg in m.motion:
+			if str(seg.get("dir", "")) == "fwd":
+				d = maxf(d, float(seg.get("dist", 0.0)) * 0.5)
+	_danger_cache = d
+	return d
 
 ## Center distance at which `a`'s `kind` move reaches `b`.
 func _cd(a, b, kind: String) -> float:

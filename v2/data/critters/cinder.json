@@ -35,7 +35,7 @@
   "pressure_decay": 3.0,
   "block_chip": 0.25,
   "block_poise": 0.4,
-  "damage_mult": 0.825
+  "damage_mult": 1.0
  },
  "ai": {
   "style": "burst",

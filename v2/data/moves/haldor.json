@@ -1,45 +1,227 @@
 {
-  "critter": "haldor",
-  "moves": {
-    "haldor_light1": {"name": "Maul Swing", "kind": "light", "tell_anim": "haldor_swing_l",
-      "startup": 16, "active": 4, "recovery": 18, "stamina_cost": 9,
-      "damage": 9, "poise_damage": 10, "hitstun": 24, "blockstun": 14, "knockback": 0.35, "hitstop": 5,
-      "hitbox": {"reach": 1.6, "arc": 120}, "chain": "haldor_light2", "cancel_from": 20, "track": 6},
-    "haldor_light2": {"name": "Backswing", "kind": "light", "tell_anim": "haldor_swing_l2",
-      "startup": 15, "active": 4, "recovery": 24, "stamina_cost": 9,
-      "damage": 11, "poise_damage": 12, "hitstun": 26, "blockstun": 14, "knockback": 0.6, "hitstop": 6,
-      "hitbox": {"reach": 1.7, "arc": 130}, "track": 5},
-    "haldor_heavy": {"name": "Quarry Smash", "kind": "heavy", "tell_anim": "haldor_overhead",
-      "startup": 36, "active": 5, "recovery": 32, "stamina_cost": 24, "feint": true, "track": 14,
-      "damage": 30, "poise_damage": 30, "hitstun": 42, "blockstun": 22, "knockback": 1.2, "hitstop": 10,
-      "hitbox": {"reach": 2.0, "arc": 140}, "armor": 0.5, "armor_frames": [12, 41],
-      "props": {"guard_crush": true, "knockdown": true}},
-    "haldor_grab": {"name": "Shoulder Barge", "kind": "grab", "tell_anim": "haldor_barge",
-      "startup": 18, "active": 3, "recovery": 28, "stamina_cost": 14, "track": 8,
-      "damage": 14, "poise_damage": 12, "hitstop": 8, "grab": true, "throw_dist": 2.4, "throw_stun": 8,
-      "hitbox": {"reach": 1.4, "arc": 120}},
-    "haldor_dodge": {"name": "Heavy Roll", "kind": "dodge", "tell_anim": "haldor_dodge",
-      "startup": 0, "active": 6, "recovery": 16, "stamina_cost": 24, "iframes": [0, 6],
-      "motion": [{"at": 0, "len": 8, "dist": 2.0, "dir": "input"}]},
-    "haldor_quake_slam": {"name": "Quake Slam", "kind": "ability", "tell_anim": "haldor_quake",
-      "startup": 34, "active": 4, "recovery": 32, "stamina_cost": 18, "cooldown": 540, "track": 10,
-      "damage": 26, "poise_damage": 24, "hitstun": 40, "blockstun": 20, "knockback": 0.8, "hitstop": 10,
-      "hitbox": {"reach": 3.0, "arc": 150}, "armor": 0.3, "armor_frames": [20, 38],
-      "props": {"guard_crush": true, "knockdown": true}},
-    "haldor_horn_charge": {"name": "Horn Charge", "kind": "ability", "tell_anim": "haldor_charge",
-      "startup": 22, "active": 22, "recovery": 34, "stamina_cost": 22, "cooldown": 600, "track": 14,
-      "armor": 0.7, "armor_frames": [8, 44],
-      "damage": 20, "poise_damage": 20, "hitstun": 30, "blockstun": 18, "knockback": 3.2, "hitstop": 10,
-      "hitbox": {"reach": 1.3, "arc": 100},
-      "motion": [{"at": 22, "len": 22, "dist": 5.0, "dir": "fwd"}]},
-    "haldor_landslide": {"name": "Landslide", "kind": "laststand", "tell_anim": "haldor_landslide",
-      "startup": 30, "active": 53, "recovery": 40, "armor": 0.8, "armor_frames": [0, 90],
-      "hitbox": {"reach": 3.0, "arc": 160}, "poise_damage": 20, "hitstun": 30, "blockstun": 16, "hitstop": 10,
-      "props": {"guard_crush": true},
-      "hits": [
-        {"at": 30, "len": 3, "damage": 16, "knockback": 0.6},
-        {"at": 54, "len": 3, "damage": 22, "knockback": 0.8},
-        {"at": 80, "len": 3, "damage": 32, "knockback": 3.0, "knockdown": true}
-      ]}
+ "critter": "haldor",
+ "moves": {
+  "haldor_light1": {
+   "name": "Maul Swing",
+   "kind": "light",
+   "tell_anim": "haldor_swing_l",
+   "startup": 16,
+   "active": 4,
+   "recovery": 18,
+   "stamina_cost": 9,
+   "damage": 8.1,
+   "poise_damage": 10,
+   "hitstun": 24,
+   "blockstun": 14,
+   "knockback": 0.35,
+   "hitstop": 5,
+   "hitbox": {
+    "reach": 1.6,
+    "arc": 120
+   },
+   "chain": "haldor_light2",
+   "cancel_from": 20,
+   "track": 6
+  },
+  "haldor_light2": {
+   "name": "Backswing",
+   "kind": "light",
+   "tell_anim": "haldor_swing_l2",
+   "startup": 15,
+   "active": 4,
+   "recovery": 24,
+   "stamina_cost": 9,
+   "damage": 9.9,
+   "poise_damage": 12,
+   "hitstun": 26,
+   "blockstun": 14,
+   "knockback": 0.6,
+   "hitstop": 6,
+   "hitbox": {
+    "reach": 1.7,
+    "arc": 130
+   },
+   "track": 5
+  },
+  "haldor_heavy": {
+   "name": "Quarry Smash",
+   "kind": "heavy",
+   "tell_anim": "haldor_overhead",
+   "startup": 36,
+   "active": 5,
+   "recovery": 32,
+   "stamina_cost": 24,
+   "feint": true,
+   "track": 14,
+   "damage": 27.0,
+   "poise_damage": 30,
+   "hitstun": 42,
+   "blockstun": 22,
+   "knockback": 1.2,
+   "hitstop": 10,
+   "hitbox": {
+    "reach": 2.0,
+    "arc": 140
+   },
+   "armor": 0.5,
+   "armor_frames": [
+    12,
+    41
+   ],
+   "props": {
+    "guard_crush": true,
+    "knockdown": true
+   }
+  },
+  "haldor_grab": {
+   "name": "Shoulder Barge",
+   "kind": "grab",
+   "tell_anim": "haldor_barge",
+   "startup": 18,
+   "active": 3,
+   "recovery": 28,
+   "stamina_cost": 14,
+   "track": 8,
+   "damage": 12.6,
+   "poise_damage": 12,
+   "hitstop": 8,
+   "grab": true,
+   "throw_dist": 2.4,
+   "throw_stun": 8,
+   "hitbox": {
+    "reach": 1.4,
+    "arc": 120
+   }
+  },
+  "haldor_dodge": {
+   "name": "Heavy Roll",
+   "kind": "dodge",
+   "tell_anim": "haldor_dodge",
+   "startup": 0,
+   "active": 6,
+   "recovery": 16,
+   "stamina_cost": 24,
+   "iframes": [
+    0,
+    6
+   ],
+   "motion": [
+    {
+     "at": 0,
+     "len": 8,
+     "dist": 2.0,
+     "dir": "input"
+    }
+   ]
+  },
+  "haldor_quake_slam": {
+   "name": "Quake Slam",
+   "kind": "ability",
+   "tell_anim": "haldor_quake",
+   "startup": 34,
+   "active": 4,
+   "recovery": 32,
+   "stamina_cost": 18,
+   "cooldown": 540,
+   "track": 10,
+   "damage": 23.4,
+   "poise_damage": 24,
+   "hitstun": 40,
+   "blockstun": 20,
+   "knockback": 0.8,
+   "hitstop": 10,
+   "hitbox": {
+    "reach": 3.0,
+    "arc": 150
+   },
+   "armor": 0.3,
+   "armor_frames": [
+    20,
+    38
+   ],
+   "props": {
+    "guard_crush": true,
+    "knockdown": true
+   }
+  },
+  "haldor_horn_charge": {
+   "name": "Horn Charge",
+   "kind": "ability",
+   "tell_anim": "haldor_charge",
+   "startup": 22,
+   "active": 22,
+   "recovery": 34,
+   "stamina_cost": 22,
+   "cooldown": 600,
+   "track": 14,
+   "armor": 0.7,
+   "armor_frames": [
+    8,
+    44
+   ],
+   "damage": 18.0,
+   "poise_damage": 20,
+   "hitstun": 30,
+   "blockstun": 18,
+   "knockback": 3.2,
+   "hitstop": 10,
+   "hitbox": {
+    "reach": 1.3,
+    "arc": 100
+   },
+   "motion": [
+    {
+     "at": 22,
+     "len": 22,
+     "dist": 5.0,
+     "dir": "fwd"
+    }
+   ]
+  },
+  "haldor_landslide": {
+   "name": "Landslide",
+   "kind": "laststand",
+   "tell_anim": "haldor_landslide",
+   "startup": 30,
+   "active": 53,
+   "recovery": 40,
+   "armor": 0.8,
+   "armor_frames": [
+    0,
+    90
+   ],
+   "hitbox": {
+    "reach": 3.0,
+    "arc": 160
+   },
+   "poise_damage": 20,
+   "hitstun": 30,
+   "blockstun": 16,
+   "hitstop": 10,
+   "props": {
+    "guard_crush": true
+   },
+   "hits": [
+    {
+     "at": 30,
+     "len": 3,
+     "damage": 14.4,
+     "knockback": 0.6
+    },
+    {
+     "at": 54,
+     "len": 3,
+     "damage": 19.8,
+     "knockback": 0.8
+    },
+    {
+     "at": 80,
+     "len": 3,
+     "damage": 28.8,
+     "knockback": 3.0,
+     "knockdown": true
+    }
+   ]
   }
+ }
 }
