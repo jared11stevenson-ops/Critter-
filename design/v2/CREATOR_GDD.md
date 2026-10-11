@@ -1,4 +1,5 @@
-# CRITTER — UPDATED GAMEPLAY LOOP & CORE SYSTEMS (creator's document, October 2026) — AUTHORITATIVE
+# CRITTER — UPDATED GAMEPLAY LOOP & CORE SYSTEMS (creator's document, October 2026) — **LAW**
+> **The creator declared this document LAW (2026-10-11).** Nothing in the project may contradict it. Changing it requires an explicit design revision by the creator. Every agent brief, ticket and review must check against section 14 (Core Design Laws).
 (Saved verbatim in substance. Where any other doc conflicts with this one, THIS WINS. See RECONCILIATION.md for how the rest of the plan was adjusted.)
 
 ## 1. Core premise

@@ -68,3 +68,6 @@ The current list lives in `production/PREFLIGHT.md` and is updated every sprint.
 ## 8. Communication
 - The creator receives: one summary per release (what changed, how to test, known issues), screenshots, numbers, and the Pre-Flight List.
 - Open decisions are collected in `design/v2/DECISIONS.md` with a recommended default so work never blocks.
+
+## 9. The Laws gate (creator, 2026-10-11)
+design/v2/CREATOR_GDD.md section 14 is law. Gate 0 for every ticket and merge: "Does this contradict a Core Design Law?" If yes, it is rejected or escalated to the creator as a design revision request. Tickets must list the laws they touch.

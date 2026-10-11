@@ -70,3 +70,7 @@ Game is now: capture critters, shrink them into Habitat Jars, raise them, fight 
 backstory chapters unlock only by keeping a critter alive; lore minimal; original character designs by the Lead (creator will designate changes); original art style (Adventure Time / Rick and Morty / Naruto / Elden Ring).
 Run like a studio: tickets, folder ownership, gates (production/PRODUCTION.md). PRE-FLIGHT RULE: before the creator's next additions, present the improvement list (production/PREFLIGHT.md) first.
 Docs: design/v2/{GDD,ROSTER,ART_BIBLE,INTERFACES,DECISIONS}.md. Code: v2/. Wave 1 agents: Combat, Character Art, Platform.
+
+## LAW (creator, 2026-10-11)
+design/v2/CREATOR_GDD.md is LAW. Core Design Laws (its section 14) cannot be contradicted without an explicit design revision from the creator. Anything in design/v2/RECONCILIATION.md, GDD.md, LORE_MOVES.md or agent briefs that conflicts with it is void.
+Process: every ticket cites the laws it touches; the Lead rejects any change that breaks one; questions the document leaves open are listed in RECONCILIATION.md and settled only by the creator.
