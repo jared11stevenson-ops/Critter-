@@ -1,8 +1,9 @@
 class_name PerfReportView
 extends Control
 ## Performance report screen (view only). All formatting lives in PerfReportModel; data comes from the Perf autoload.
-## Buttons: live overlay toggle, Record 60 s, Copy report, Save file, Reset, Back. Open with Perf.open_report().
+## Buttons: live overlay toggle, Record 60 s, Copy report, Save file, Reset, Back. Open with perf.open_report().
 
+var perf: Node    # the Perf autoload, resolved at runtime so this script compiles without autoloads
 var _graph: Control
 var _left: Label
 var _right: Label
@@ -10,6 +11,7 @@ var _status: Label
 
 
 func _ready() -> void:
+	perf = get_node("/root/Perf")
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var bg := ColorRect.new()
@@ -46,14 +48,14 @@ func _ready() -> void:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 10)
 	root.add_child(row)
-	var live := _btn(row, "Live overlay: " + ("ON" if Perf.overlay_enabled() else "OFF"), Callable())
+	var live := _btn(row, "Live overlay: " + ("ON" if perf.overlay_enabled() else "OFF"), Callable())
 	live.pressed.connect(func():
-		Perf.set_overlay(not Perf.overlay_enabled())
-		live.text = "Live overlay: " + ("ON" if Perf.overlay_enabled() else "OFF"))
+		perf.set_overlay(not perf.overlay_enabled())
+		live.text = "Live overlay: " + ("ON" if perf.overlay_enabled() else "OFF"))
 	_btn(row, "Record 60 s", _on_record)
 	_btn(row, "Copy report", _on_copy)
 	_btn(row, "Save file", _on_save)
-	_btn(row, "Reset", func(): Perf.reset_stats(); _refresh())
+	_btn(row, "Reset", func(): perf.reset_stats(); _refresh())
 	_btn(row, "Back", _close)
 	_refresh()
 	var t := Timer.new()
@@ -85,16 +87,16 @@ func _col() -> Label:
 
 
 func _refresh() -> void:
-	var r := Perf.report_dict()
+	var r: Dictionary = perf.report_dict()
 	_left.text = "\n".join(PerfReportModel.left_lines(r))
-	_right.text = "\n".join(PerfReportModel.right_lines(r, Perf.capture_left))
+	_right.text = "\n".join(PerfReportModel.right_lines(r, perf.capture_left))
 	_graph.queue_redraw()
 
 
 func _draw_graph() -> void:
 	var sz := _graph.size
 	_graph.draw_rect(Rect2(Vector2.ZERO, sz), Color(0.12, 0.1, 0.1))
-	var frames := Perf.recent_frames(PerfReportModel.GRAPH_FRAMES)
+	var frames: PackedFloat32Array = perf.recent_frames(PerfReportModel.GRAPH_FRAMES)
 	if frames.is_empty():
 		return
 	for ms: float in [16.7, 33.3, 50.0]:
@@ -108,24 +110,24 @@ func _draw_graph() -> void:
 
 
 func _on_copy() -> void:
-	DisplayServer.clipboard_set(Perf.report_text())
+	DisplayServer.clipboard_set(perf.report_text())
 	_status.text = "Report copied to the clipboard."
 
 
 func _on_save() -> void:
-	_status.text = Perf.save_report()
+	_status.text = perf.save_report()
 
 
 func _on_record() -> void:
 	_status.text = "Recording 60 s: go back to the game and play normally. This screen returns when done."
-	Perf.start_capture(60.0)
-	if not Perf.capture_finished.is_connected(_reopen):
-		Perf.capture_finished.connect(_reopen, CONNECT_ONE_SHOT)
+	perf.start_capture(60.0)
+	if not perf.capture_finished.is_connected(_reopen):
+		perf.capture_finished.connect(_reopen, CONNECT_ONE_SHOT)
 	_close()
 
 
 func _reopen() -> void:
-	Perf.open_report()
+	perf.open_report()
 
 
 func _close() -> void:

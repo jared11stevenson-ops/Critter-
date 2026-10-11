@@ -3,7 +3,7 @@
 ## Run the tests
 ```
 godot --headless --path v2 --import          # once (and after adding any class_name): builds the global class cache
-godot --headless --path v2 -s res://tools/qa/run_tests.gd
+godot --headless --path v2 -s res://tools/qa/run_tests.gd          # or: GODOT=godot v2/tools/qa/run_tests.sh (also fails on SCRIPT ERROR in the log)
 godot --headless --path v2 -s res://tools/qa/run_tests.gd -- roster   # only files whose path contains "roster"
 ```
 Exit code is 0 only when every test file passes (2 if none were found).
@@ -28,3 +28,7 @@ func run() -> Array:
 - `v2/tools/smoke.sh [seconds]` boots the main scene headless and fails on any SCRIPT ERROR.
 - `tools/lint_filesize.sh` (repo root): soft 400 / hard 700 lines for `v2/**/*.gd`.
 - `tools/check_ownership.sh [--agent NAME] [base]`: fails if a branch edits folders it does not own.
+
+## Caveat: runtime errors inside run()
+A runtime script error aborts `run()` and Godot then returns an EMPTY array for a typed `-> Array`, which looks like a pass.
+`v2/tools/qa/run_tests.sh` (used by CI) scans the engine log for `SCRIPT ERROR` / `Parse Error` and fails on them. Use it before pushing.
