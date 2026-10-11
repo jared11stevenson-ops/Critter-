@@ -7,7 +7,19 @@ extends SceneTree
 const TEST_DIR := "res://tools/qa/tests"
 
 
-func _initialize() -> void:
+var _started := false
+
+
+## Tests run on the first frame (not in _initialize) so the scene tree is live and tests may add nodes to root.
+func _process(_delta: float) -> bool:
+	if _started:
+		return false
+	_started = true
+	_run_all()
+	return true
+
+
+func _run_all() -> void:
 	var filter := ""
 	var args := OS.get_cmdline_user_args()
 	if args.size() > 0:
