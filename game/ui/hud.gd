@@ -345,8 +345,8 @@ func _layout() -> void:
 		var a := deg_to_rad(180.0 + 45.0 * i)
 		_place(btn_ab[i], C + Vector2(cos(a), sin(a)) * R, lh, W)
 	_place(btn_dash, C + Vector2(-335, 36), lh, W)
-	_place(btn_interact, C + Vector2(-60, -330), lh, W)
-	_place(btn_contain, C + Vector2(-60, -440), lh, W)
+	_place(btn_interact, C + Vector2(-370, -120), lh, W)    # left of the ability arc, clear of the minimap
+	_place(btn_contain, C + Vector2(-370, -230), lh, W)
 	_place(btn_scan, Vector2(W - 170, 62), lh, W)
 	_place(btn_pause, Vector2(W - 62, 56), lh, W)
 	_place(btn_hold, Vector2(W - 250, H * 0.55), lh, W)
