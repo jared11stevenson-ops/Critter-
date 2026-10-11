@@ -13,7 +13,7 @@ const DATA := {
 	"scarlith": {"main": "b01c2c", "accent": "e3b04a", "glow": "ffc24a", "sig": "b01c2c", "belly": "d98a3a"},
 	"mollusk": {"main": "8f946a", "accent": "ff7a1a", "glow": "ffb347", "sig": "3aa86a", "belly": "d7d3a8"},
 	"zephyr": {"main": "7a6a3e", "accent": "d63a9c", "glow": "ffd24a", "sig": "d63a9c", "belly": "ecd9b0"},
-	"nyxaris": {"main": "25202e", "accent": "ee4fa8", "glow": "7fd2ea", "sig": "6cc4e6", "belly": "efe8dc"},
+	"nyxaris": {"main": "2a2650", "accent": "ee4fa8", "glow": "7fd2ea", "sig": "6cc4e6", "belly": "e8eaf2"},
 }
 
 static func get_pal(id: String) -> Dictionary:
