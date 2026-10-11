@@ -45,16 +45,31 @@ func setup(b: BoutScene) -> void:
 	b.phase_changed.connect(_on_phase)
 	_tune_touch()
 
+## Ability move ids [a1, a2, a3] from the critter def: `abilities` when the sim provides it, else the legacy move_ids keys. "" = none.
+static func ability_ids(d: CritterDef) -> Array:
+	var out: Array = ["", "", ""]
+	var list: Variant = d.get("abilities")
+	if list is Array and not (list as Array).is_empty():
+		for i in mini(3, (list as Array).size()):
+			out[i] = str(list[i])
+	else:
+		for i in 3:
+			out[i] = str(d.move_ids.get("ability%d" % (i + 1), ""))
+	return out
+
 func _tune_touch() -> void:
 	if bout.player_idx < 0:
 		return
 	var d: CritterDef = bout.sim.fighters[bout.player_idx].def
 	var pal: Dictionary = bout.rigs[bout.player_idx].palette
-	for k in [["ab1", "ability1"], ["ab2", "ability2"]]:
-		var m: MoveDef = d.move(str(d.move_ids[k[1]]))
-		touch.ab_names[k[0]] = m.name if m != null else k[0]
+	touch.ab_known = true
+	var ids := ability_ids(d)
+	for i in 3:
+		var m: MoveDef = d.move(ids[i]) if ids[i] != "" else null
+		touch.ab_names["ab%d" % (i + 1)] = m.name if m != null else ""
 	touch.ab_colors["ab1"] = (pal.get("glow", UiStyle.TEAL_LT) as Color).lightened(0.1)
 	touch.ab_colors["ab2"] = (pal.get("accent", UiStyle.GOLD) as Color).lightened(0.25)
+	touch.ab_colors["ab3"] = (pal.get("main", UiStyle.PAPER) as Color).lightened(0.35)
 
 func _build_yield(root: Control) -> void:
 	yield_panel = PanelContainer.new()
@@ -151,8 +166,10 @@ func refresh(dt: float) -> void:
 			and float(f["vitality"]) / maxf(1.0, float(f["vitality_max"])) < float(bout.sim.R["last_stand_ratio"])
 		touch.can_ls = can_ls
 		var d: CritterDef = bout.sim.fighters[pi].def
-		for k in [["ab1", "ability1"], ["ab2", "ability2"]]:
-			var m: MoveDef = d.move(str(d.move_ids[k[1]]))
+		var aids := ability_ids(d)
+		for i in 3:
+			var k := ["ab%d" % (i + 1)]
+			var m: MoveDef = d.move(aids[i]) if aids[i] != "" else null
 			var left := float(f["cooldowns"].get(m.id, 0)) if m != null else 0.0
 			touch.cooldowns[k[0]] = clampf(left / maxf(1.0, float(m.cooldown)), 0.0, 1.0) if (m != null and m.cooldown > 0) else 0.0
 	yield_chip.visible = show_chip

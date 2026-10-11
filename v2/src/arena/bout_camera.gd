@@ -69,7 +69,7 @@ func update(dt: float, pa: Vector3, pb: Vector3) -> void:
 	if outro_focus != null and outro_blend > 0.0:
 		var of: Vector3 = outro_focus
 		want_focus = want_focus.lerp(Vector3(of.x, LOOK_HEIGHT + 0.2, of.z), outro_blend)
-	focus = want_focus if _snap else focus.lerp(want_focus, 1.0 - exp(-8.0 * dt))
+	focus = want_focus if _snap else focus.lerp(want_focus, 1.0 - exp(-10.0 * dt))
 	var sep := axis.length()
 	var want_dist := fit_distance(pa, pb, sep)
 	if outro_blend > 0.0:

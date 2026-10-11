@@ -5,21 +5,24 @@ class_name TouchLayout extends RefCounted
 
 const MIN_DIAMETER := 96.0
 # id: [dx, dy, radius, label]
+## Right-thumb ergonomics: Strike is the big pad in the corner; Guard (left) and Dodge (above) sit next to it, and the three
+## abilities fan out on an arc around Strike (22 / 50 / 78 degrees, radius 225). Grab is Guard + Strike pressed together.
 const A := {
 	"strike": [-150.0, -150.0, 76.0, "STRIKE"],
-	"guard": [-340.0, -92.0, 56.0, "GUARD"],
-	"dodge": [-92.0, -326.0, 56.0, "DODGE"],
-	"grab": [-262.0, -278.0, 52.0, "GRAB"],
-	"ab1": [-456.0, -232.0, 52.0, "A1"],
-	"ab2": [-372.0, -384.0, 52.0, "A2"],
-	"ls": [-230.0, -440.0, 60.0, "LAST STAND"],
+	"guard": [-330.0, -96.0, 54.0, "GUARD"],
+	"dodge": [-80.0, -300.0, 54.0, "DODGE"],
+	"ab1": [-359.0, -234.0, 50.0, "A1"],
+	"ab2": [-295.0, -322.0, 50.0, "A2"],
+	"ab3": [-197.0, -370.0, 50.0, "A3"],
+	"ls": [-110.0, -470.0, 60.0, "LAST STAND"],
 }
+## Layout B: guard / dodge / grab / strike are gestures (hold, swipe, forward swipe, tap); Heavy and the abilities are buttons.
 const B := {
 	"heavy": [-150.0, -150.0, 76.0, "HEAVY"],
-	"grab": [-340.0, -92.0, 56.0, "GRAB"],
-	"ab1": [-92.0, -326.0, 56.0, "A1"],
-	"ab2": [-262.0, -278.0, 52.0, "A2"],
-	"ls": [-230.0, -440.0, 60.0, "LAST STAND"],
+	"ab1": [-359.0, -234.0, 50.0, "A1"],
+	"ab2": [-295.0, -322.0, 50.0, "A2"],
+	"ab3": [-197.0, -370.0, 50.0, "A3"],
+	"ls": [-110.0, -470.0, 60.0, "LAST STAND"],
 }
 const PAUSE_R := 48.0
 const STICK_R := 96.0
