@@ -44,3 +44,14 @@ The look is a blend of four references, each used for one thing:
 3. **Pop test:** the critter's mean saturation exceeds the arena background's by a set margin.
 4. **Style test:** side-by-side sheet reviewed by the creator.
 5. **Perf:** a critter ≤ 20 draw calls, ≤ 6k triangles (rigid parts), outlines included; arena ≤ 80 draw calls; the whole bout ≤ 150.
+
+## 7. The Realism Ladder (creator direction, 2026-10-11: "more realistic, but build to that slowly")
+We move from the current chunky-heroic look toward realistic, insect-true characters in stages. Each stage must pass its gate before the next starts, so we never lose a character that works.
+| Stage | Look | What changes | Gate to leave the stage |
+|---|---|---|---|
+| **R1 (done)** | Chunky-heroic, toon, ink outline, 3.5-4.5 heads tall | Baseline designs from the lore | Creator approves silhouettes and identities |
+| **R2** | Elongated, anatomically truer proportions (Aruun's long neck and 2.4 m frame, thin Bramvex, low Mollusk with a real snail body); same toon style | Proportions, limb lengths, joints, head shape, real insect anatomy, readable faces | Silhouette test passes; creator approves proportions on the model sheets |
+| **R3** | Richer surface: carapace plates, segments, layered armor/cloth, fuzz layer (Scarlith, Zephyr), translucent wings with veins | Detail geometry, vertex-color gradients, normal-style shading in the toon ramp, better outlines (variable width) | Perf budget holds (<= 8k tris, <= 20 draws); creator approves |
+| **R4** | Painterly-realistic: material-aware shading (chitin sheen, wet snail skin, silk translucency), subtle texture, softer outlines, atmospheric lighting | Materials and lighting, optional baked detail | Perf on the creator's phone; creator approves |
+| **R5** | Realistic-leaning hero quality (the creator's Blender models can replace our placeholders here) | Imported GLBs | Import Doctor passes |
+Rules: only one stage at a time; the lineup is judged together so the cast stays coherent; gameplay (hitboxes, reach, timings) never depends on the visual stage; every stage re-runs the silhouette, palette and perf gates.
