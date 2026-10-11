@@ -1,4 +1,6 @@
 # CRITTER v2 — Game Design Document (Lead, 2026-10-11)
+> **SUPERSEDED IN PART by design/v2/CREATOR_GDD.md (authoritative) — see design/v2/RECONCILIATION.md for what changed (stakes, weapons, habitat model, tournaments, retirement, families, shelf).**
+
 
 Status: draft for creator review. Supersedes AAA_PLAN.md amendments where they conflict. Lore is deliberately thin: the premise is a hook, the
 *characters* carry the story. The old Master Lore Bible is archived as optional flavor; the creator will rewrite lore later.
