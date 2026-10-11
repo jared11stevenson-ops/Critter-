@@ -12,6 +12,8 @@ uniform int mode = 0;
 uniform float a0 = 0.0;
 uniform float a1 = 1.0;
 uniform float flash = 0.0;
+uniform float urgent = 0.0;
+uniform float blink = 1.0;
 void fragment() {
 	vec2 p = UV * 2.0 - 1.0;
 	float a = 0.0;
@@ -39,7 +41,10 @@ void fragment() {
 			a = clamp(outline * 0.95 + inner + rim + 0.1, 0.0, 1.0);
 		}
 	}
-	ALBEDO = mix(col.rgb, vec3(1.0, 0.95, 0.85), flash);
+	// last stretch of the windup: pulse faster and brighter so "this is about to land" reads at a glance
+	float pulse = step(0.5, fract(TIME * (5.0 + 9.0 * urgent))) * blink;
+	a = clamp(a + urgent * (0.12 + 0.2 * pulse), 0.0, 1.0);
+	ALBEDO = mix(col.rgb, vec3(1.0, 0.95, 0.85), clamp(flash + urgent * (0.18 + 0.3 * pulse), 0.0, 1.0));
 	ALPHA = a * col.a;
 }
 """
@@ -121,6 +126,7 @@ func _start(dur: float, col: Color, mode: int) -> void:
 	var sat_col := Color.from_hsv(col.h, minf(1.0, col.s * 1.2 + 0.1), 1.0, minf(1.0, col.a + 0.1))
 	_mat.set_shader_parameter("col", sat_col)
 	_mat.set_shader_parameter("mode", mode)
+	_mat.set_shader_parameter("blink", 0.0 if bool(GameState.settings.get("reduce_flashing", false)) else 1.0)
 	_mat.set_shader_parameter("progress", 0.0)
 
 func _process(delta: float) -> void:
@@ -129,6 +135,7 @@ func _process(delta: float) -> void:
 	_t += delta
 	var p := clampf(_t / _dur, 0.0, 1.0)
 	_mat.set_shader_parameter("progress", p)
+	_mat.set_shader_parameter("urgent", CombatTiming.urgency(p, Balance.f("global.telegraph_urgent_from", 0.65)) if hostile else 0.0)
 	if p >= 1.0:
 		_done = true
 		var fl := 0.0 if bool(GameState.settings.get("reduce_flashing", false)) else 0.8

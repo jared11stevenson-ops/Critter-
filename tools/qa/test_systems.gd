@@ -23,9 +23,46 @@ func _ready() -> void:
 	_test_flag_hooks_and_debrief()
 	_test_persistence()
 	_test_rivals()
+	_test_combat_feel()
 	await _test_npcs()
 	print("[TEST] pass=%d fail=%d" % [passed, failed])
 	get_tree().quit(1 if failed > 0 else 0)
+
+func _test_combat_feel() -> void:
+	var P := CombatTiming.Phase
+	ok(CombatTiming.phase_at(0.0, 0.1, 0.08, 0.25) == P.WINDUP, "phase windup at 0")
+	ok(CombatTiming.phase_at(0.1, 0.1, 0.08, 0.25) == P.ACTIVE, "phase active at windup edge")
+	ok(CombatTiming.phase_at(0.2, 0.1, 0.08, 0.25) == P.RECOVER, "phase recover")
+	ok(CombatTiming.phase_at(0.5, 0.1, 0.08, 0.25) == P.DONE, "phase done")
+	ok(CombatTiming.buffer_valid(1.0, 0.8, 0.28) and not CombatTiming.buffer_valid(1.0, 0.6, 0.28), "buffer window")
+	ok(not CombatTiming.buffer_valid(0.0, -1.0, 0.28), "buffer rejects unset press (-1)")
+	# aim stickiness: a current target 1.0 m farther still wins with the default bonus, but not at 3 m farther
+	var bonus := Balance.f("global.autoaim_stick", 1.6)
+	ok(CombatTiming.aim_score(5.0, 0.0, false, true, bonus) < CombatTiming.aim_score(4.0, 0.0, false, false, bonus), "sticky target keeps lock vs +1 m rival")
+	ok(CombatTiming.aim_score(8.0, 0.0, false, true, bonus) > CombatTiming.aim_score(4.0, 0.0, false, false, bonus), "sticky bonus is bounded")
+	ok(CombatTiming.aim_score(3.0, 0.0, true, false, bonus) > CombatTiming.aim_score(3.0, 0.0, false, false, bonus), "objects rank behind creatures")
+	# lunge never overshoots the target
+	ok(is_equal_approx(CombatTiming.lunge_clamp(1.6, 5.0), 1.6), "lunge unclamped when far")
+	ok(is_equal_approx(CombatTiming.lunge_clamp(1.6, 1.2), 0.3), "lunge stops short of target")
+	ok(CombatTiming.lunge_clamp(1.6, 0.2) == 0.0, "no lunge when touching")
+	ok(is_equal_approx(CombatTiming.lunge_clamp(1.0, -1.0), 1.0), "no target -> full lunge")
+	ok(CombatTiming.urgency(0.5) == 0.0 and is_equal_approx(CombatTiming.urgency(1.0), 1.0), "telegraph urgency ramps 0..1")
+	ok(CombatTiming.urgency(0.825) > 0.45 and CombatTiming.urgency(0.825) < 0.55, "telegraph urgency midpoint")
+	ok(CombatTiming.is_perfect_dodge("dash", 0.1) and not CombatTiming.is_perfect_dodge("dash", 0.0) and not CombatTiming.is_perfect_dodge("normal", 0.3), "perfect dodge only inside dash i-frames")
+	# tuning lives in balance.json
+	for k in ["input_buffer", "autoaim_stick", "autoaim_lock_time", "kick_light", "kick_heavy", "kick_hurt", "kick_decay", "perfect_dodge_scale", "perfect_dodge_time", "telegraph_urgent_from"]:
+		ok(Balance.v("global." + k, null) != null, "balance global.%s present" % k)
+	ok(Balance.f("global.input_buffer", 0.0) > 0.1 and Balance.f("global.input_buffer", 0.0) < 0.6, "input buffer in a sane range")
+	for ch in ["aruun", "cigarra"]:
+		ok(Balance.f(ch + ".dash_iframes", 0.0) >= 0.2 and Balance.f(ch + ".dash_iframes", 0.0) <= Balance.f(ch + ".dash_time", 1.0) + 0.1, "%s dash i-frames fit the dash" % ch)
+	# every kit ability has a vector icon and a distinct accent
+	var ids: Array = ["reaching_strike", "gravity_pull", "beetle_rage", "premonition", "false_memory", "brain_skip", "aruun_combo", "bad_thought", "dash", "scan"]
+	var seen := {}
+	for id in ids:
+		ok(AbilityIcons.has_vector(id), "vector icon for %s" % id)
+		var col := AbilityIcons.accent(id)
+		ok(not seen.has(col.to_html()), "icon accent distinct: %s" % id)
+		seen[col.to_html()] = true
 
 func fresh() -> void:
 	Ledger.reset()

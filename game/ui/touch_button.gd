@@ -14,6 +14,7 @@ var icon: Texture2D = null
 var base_col := UiKit.CARD
 var ring_col := UiKit.ACCENT
 var cd_frac := 0.0
+var cd_secs := 0.0           # seconds left, printed on the disc while cooling down (>= 0.1 s)
 var cost_tint := Color(0, 0, 0, 0)
 var enabled := true
 var pill := false           # rounded rectangle instead of disc
@@ -165,12 +166,23 @@ func paint(ci: CanvasItem, phase: int) -> void:
 		2:
 			if icon:
 				var isz := r * (1.4 if not pill else 1.1) * scale_k
-				ci.draw_texture_rect(icon, Rect2(c - Vector2(isz, isz) * 0.5, Vector2(isz, isz)), false, Color(1, 1, 1, 1 if enabled else 0.5))
+				# icon dims while cooling so the remaining-time number reads on top; pops slightly when it comes back
+				var dim := 0.45 if cd_frac > 0.001 else (1.0 if enabled else 0.5)
+				var pop := 1.0 + _ready_flash * 0.12
+				isz *= pop
+				ci.draw_texture_rect(icon, Rect2(c - Vector2(isz, isz) * 0.5, Vector2(isz, isz)), false, Color(1, 1, 1, dim))
 		3:
 			if not icon and glyph != "" and _font:
 				var fs := glyph_size
 				var w := _font.get_string_size(glyph, HORIZONTAL_ALIGNMENT_CENTER, -1, fs).x
 				ci.draw_string(_font, Vector2(c.x - w * 0.5, c.y + fs * 0.36), glyph, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, UiKit.PARCHMENT if enabled else UiKit.MUTED)
+			if cd_frac > 0.001 and cd_secs >= 0.1 and _font and not pill:
+				var txt := "%d" % ceili(cd_secs) if cd_secs >= 3.0 else "%.1f" % cd_secs
+				var cfs := int(r * 0.62)
+				var tw := _font.get_string_size(txt, HORIZONTAL_ALIGNMENT_CENTER, -1, cfs).x
+				var tp := Vector2(c.x - tw * 0.5, c.y + cfs * 0.36)
+				ci.draw_string_outline(_font, tp, txt, HORIZONTAL_ALIGNMENT_LEFT, -1, cfs, 8, Color(0.05, 0.03, 0.03, 0.9))
+				ci.draw_string(_font, tp, txt, HORIZONTAL_ALIGNMENT_LEFT, -1, cfs, Color(1.0, 0.95, 0.8))
 			if caption != "" and _font:
 				ci.draw_string(_font, Vector2(c.x - cap_w * 0.5, cap_y), caption, HORIZONTAL_ALIGNMENT_LEFT, -1, fs2, UiKit.PARCHMENT)
 		4:

@@ -170,6 +170,11 @@ func punch(amount: float) -> void:
 	if camera_rig and camera_rig.has_method("add_punch"):
 		camera_rig.add_punch(amount)
 
+## Directional camera kick along the blow (dir in world space). kind: "light" | "heavy" | "hurt".
+func kick(dir: Vector3, kind: String = "light") -> void:
+	if camera_rig and camera_rig.has_method("add_kick"):
+		camera_rig.add_kick(dir, Balance.f("global.kick_" + kind, 0.16))
+
 func impact(kind: String) -> void:
 	match kind:
 		"light":
@@ -203,7 +208,12 @@ func leader() -> Node:
 	return null
 
 ## Nearest valid hostile target inside a cone. Passive wildlife is never auto-aimed (keystone safety).
-func find_target(origin: Vector3, facing: Vector3, max_range: float, cone_deg: float = -1.0, include_objects: bool = true) -> Node:
+var _aim_lock: Node = null
+var _aim_lock_until := 0
+
+## sticky = true (player aim) keeps the previous target preferred for `autoaim_lock_time`, so aim does not flick
+## between two similar enemies mid-combo.
+func find_target(origin: Vector3, facing: Vector3, max_range: float, cone_deg: float = -1.0, include_objects: bool = true, sticky: bool = false) -> Node:
 	if cone_deg < 0.0:
 		cone_deg = Balance.f("global.autoaim_cone_deg", 70.0)
 	var half := deg_to_rad(cone_deg * 0.5)
@@ -230,10 +240,14 @@ func find_target(origin: Vector3, facing: Vector3, max_range: float, cone_deg: f
 			ang = fwd.angle_to(to.normalized())
 		if ang > half and d > 1.2:
 			continue
-		var score: float = d + ang * 2.0 + (6.0 if e.is_object else 0.0)
+		var locked: bool = sticky and e == _aim_lock and Time.get_ticks_msec() < _aim_lock_until
+		var score: float = CombatTiming.aim_score(d, ang, e.is_object, locked, Balance.f("global.autoaim_stick", 1.6))
 		if score < best_score:
 			best_score = score
 			best = e
+	if sticky and best != null:
+		_aim_lock = best
+		_aim_lock_until = Time.get_ticks_msec() + int(Balance.f("global.autoaim_lock_time", 1.2) * 1000.0)
 	return best
 
 func nearest_enemy(origin: Vector3, max_range: float, hostile_only: bool = true) -> Node:

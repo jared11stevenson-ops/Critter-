@@ -117,6 +117,8 @@ func _ready() -> void:
 		_batch.add_button(bt)
 	_build_top()
 	_build_burden()
+	AbilityIcons.events.baked.connect(_on_icon_baked)
+	AbilityIcons.bake_all()
 	Events.objective_changed.connect(set_objective)
 	Events.toast.connect(toast)
 	Events.actor_damaged.connect(_on_damaged)
@@ -275,6 +277,13 @@ func _rebuild_portraits() -> void:
 	_layout_dirty = true
 	_refresh_ability_icons()
 
+func _on_icon_baked(_id: String) -> void:
+	btn_dash.icon = UiKit.ability_icon("dash")
+	btn_scan.icon = UiKit.ability_icon("scan")
+	btn_dash.redraw()
+	btn_scan.redraw()
+	_refresh_ability_icons()
+
 func _refresh_ability_icons() -> void:
 	if party == null:
 		return
@@ -382,7 +391,10 @@ func _process(delta: float) -> void:
 				var n: float = l.kit.knack_value() / l.kit.knack_max()
 				tint = Color(0.72, 0.76, 0.29, 0.35 + n * 0.6)
 			b.set_state(l.kit.cd_frac(i), tint, l.kit.blocked_reason(i) == "" and not l.downed)
-	btn_dash.set_state(clampf(l.dash_cd / 1.2, 0.0, 1.0), Color(0, 0, 0, 0), true)
+			b.cd_secs = l.kit.cd[i]
+	var dcd := maxf(0.1, Balance.f("%s.dash_cd" % l.char_id, 1.2))
+	btn_dash.set_state(clampf(l.dash_cd / dcd, 0.0, 1.0), Color(0, 0, 0, 0), true)
+	btn_dash.cd_secs = l.dash_cd
 	# portraits
 	for p in _portraits:
 		var m: PlayableCritter = p["member"]

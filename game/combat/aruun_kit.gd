@@ -63,6 +63,10 @@ func _swing(i: int) -> void:
 	Audio.sfx_at("swing_heavy" if heavy else "swing_light", c.global_position)
 	# small forward lunge for weight
 	var lunge := Balance.arr("aruun.combo.lunge", i, 1.0)
+	if a[1] != null:
+		# glide up to the locked target but never through it
+		var edge: float = (a[1].global_position - c.global_position).length() - float(a[1].body_radius)
+		lunge = CombatTiming.lunge_clamp(lunge, edge)
 	c.knock += dir * lunge * 3.2
 	await wait(windup)
 	if not c.action_valid(tok):
@@ -83,13 +87,16 @@ func _swing(i: int) -> void:
 			Field.current.vfx("shockwave", origin + dir * rng * 0.7, {"radius": 2.8})
 			Field.current.vfx("dust_puff", origin + dir * rng * 0.7)
 			Field.current.punch(0.6)
+	if n > 0 and Field.current:
+		Field.current.kick(dir, "heavy" if heavy else "light")
 	if n == 0 and heavy:
 		Field.current.shake(0.12)
 	await wait(active + recover * 0.45)
 	if not c.action_valid(tok):
 		swinging = false
 		return
-	if buffered and clock - _buffer_at < 0.6 and i < 2:
+	var buf_win := Balance.f("global.input_buffer", 0.28) + recover * 0.45
+	if buffered and CombatTiming.buffer_valid(clock, _buffer_at, buf_win) and i < 2:
 		c.action_lock = 0.0
 		_swing(i + 1)
 		return
@@ -97,7 +104,7 @@ func _swing(i: int) -> void:
 	swinging = false
 	if not c.action_valid(tok):
 		return
-	if buffered and clock - _buffer_at < 0.6:
+	if buffered and CombatTiming.buffer_valid(clock, _buffer_at, buf_win):
 		buffered = false
 		_swing(0 if i >= 2 else i + 1)
 		return
@@ -147,6 +154,7 @@ func _reaching_strike() -> void:
 		f.vfx("shockwave", origin + dir * length, {"radius": 3.4})
 		f.shake(0.3)
 		f.punch(1.0)
+		f.kick(dir, "heavy")
 		if f.level and f.level.has_method("on_line_strike"):
 			f.level.on_line_strike(origin, dir, length, "reaching_strike")
 

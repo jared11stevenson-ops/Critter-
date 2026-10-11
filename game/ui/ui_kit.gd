@@ -243,6 +243,9 @@ static func ability_glyph(ability_id: String) -> String:
 	return glyphs.get(ability_id, ability_id.substr(0, 4).to_upper())
 
 static func ability_icon(ability_id: String) -> Texture2D:
+	var baked := AbilityIcons.texture(ability_id)
+	if baked:
+		return baked
 	return tex("res://game/art/icons/%s.png" % ability_id)
 
 ## Row of ability icons (+ names) for every canon ability owned by `owner_id` (character id). Null if none.

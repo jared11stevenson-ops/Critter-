@@ -96,6 +96,18 @@ var _punch := 0.0
 func add_punch(amount: float) -> void:
 	_punch = clampf(_punch + amount * float(GameState.settings.get("screen_shake", 1.0)), 0.0, 1.5)
 
+var _kick := Vector2.ZERO   # camera-local nudge (m) away from the hit direction, decays fast
+
+## Directional camera kick: a short nudge along `world_dir` (the way the blow travelled), unlike trauma shake it has a
+## readable direction. Scaled by the screen-shake setting.
+func add_kick(world_dir: Vector3, amount: float) -> void:
+	var d := Vector3(world_dir.x, 0, world_dir.z)
+	if d.length_squared() < 0.0001:
+		return
+	var local := global_transform.basis.inverse() * d.normalized()
+	_kick += Vector2(local.x, -local.z * 0.5) * amount * float(GameState.settings.get("screen_shake", 1.0))
+	_kick = _kick.limit_length(0.7)
+
 func add_shake(amount: float) -> void:
 	var s := float(GameState.settings.get("screen_shake", 1.0))
 	trauma = clampf(trauma + amount * s, 0.0, 1.0)
@@ -153,11 +165,15 @@ func _process(_delta: float) -> void:
 	# shake
 	trauma = maxf(0.0, trauma - rd * 1.8)
 	var sh := trauma * trauma
+	var kick3 := Vector3.ZERO
+	if _kick.length_squared() > 0.000001:
+		_kick = _kick.lerp(Vector2.ZERO, 1.0 - exp(-Balance.f("global.kick_decay", 10.0) * rd))
+		kick3 = Vector3(_kick.x, _kick.y, 0)
 	if sh > 0.0001:
-		cam.position = Vector3(sin(_t * 47.0) + sin(_t * 23.0) * 0.5, cos(_t * 41.0) + sin(_t * 29.0) * 0.5, 0) * sh * 0.55
+		cam.position = Vector3(sin(_t * 47.0) + sin(_t * 23.0) * 0.5, cos(_t * 41.0) + sin(_t * 29.0) * 0.5, 0) * sh * 0.55 + kick3
 		cam.rotation.z = sin(_t * 37.0) * sh * 0.03
 	else:
-		cam.position = Vector3.ZERO
+		cam.position = kick3
 		cam.rotation.z = 0.0
 	_push_global_params()
 

@@ -43,6 +43,11 @@ var _leap_dur := 1.0
 var _leap_h := 6.0
 var _leap_cb: Callable
 var _step_t := 0.0
+var _buf_kind := ""              # "" | "ability" | "dash": one buffered press (input buffering)
+var _buf_arg := 0
+var _buf_t := 0.0
+var _dodge_lockout := 0.0
+var _dash_if := 0.0              # dash i-frame time still left (only a dash-absorbed hit counts as a perfect dodge)
 
 func setup(id: String) -> void:
 	char_id = id
@@ -109,11 +114,39 @@ func request_attack() -> void:
 		kit.basic_pressed()
 
 func request_ability(i: int) -> void:
-	if kit and can_act():
+	if kit == null or downed:
+		return
+	if can_act():
 		kit.cast(i)
+	elif alive and state == "normal":
+		# mid-swing / recovering: remember the press so the cast fires the moment the lock ends
+		_buf_kind = "ability"
+		_buf_arg = i
+		_buf_t = 0.0
+
+## Fires a buffered ability/dash once it becomes legal; stale presses expire (global.input_buffer seconds, scaled time).
+func _consume_buffer(delta: float) -> void:
+	if _buf_kind == "":
+		return
+	_buf_t += delta
+	if not CombatTiming.buffer_valid(_buf_t, 0.0, Balance.f("global.input_buffer", 0.28)) or downed or not alive:
+		_buf_kind = ""
+		return
+	if _buf_kind == "ability" and can_act():
+		_buf_kind = ""
+		kit.cast(_buf_arg)
+	elif _buf_kind == "dash" and dash_cd <= 0.0 and state == "normal" and stun_t <= 0.0:
+		_buf_kind = ""
+		request_dash()
 
 func request_dash() -> void:
-	if downed or state != "normal" or dash_cd > 0.0 or stun_t > 0.0:
+	if downed or state != "normal" or stun_t > 0.0:
+		return
+	if dash_cd > 0.0:
+		# pressed a hair early: buffer it so back-to-back dodges feel responsive
+		if dash_cd <= Balance.f("global.input_buffer", 0.28):
+			_buf_kind = "dash"
+			_buf_t = 0.0
 		return
 	if kit and kit.has_method("dash_blocked") and kit.dash_blocked():
 		return
@@ -126,7 +159,8 @@ func request_dash() -> void:
 	var dt := float(b.get("dash_time", 0.22))
 	_dash_t = dt
 	_dash_speed = float(b.get("dash_dist", 4.0)) / dt
-	invuln_t = maxf(invuln_t, float(b.get("dash_iframes", 0.25)))
+	_dash_if = float(b.get("dash_iframes", 0.25))
+	invuln_t = maxf(invuln_t, _dash_if)
 	dash_cd = float(b.get("dash_cd", 1.2))
 	_dash_ghost_hit = false
 	interrupt_action()
@@ -149,7 +183,7 @@ func aim(max_range: float, use_stick: bool = true) -> Array:
 		var cone := Balance.f("global.autoaim_cone_deg", 70.0)
 		if use_stick and in_aim.length_squared() > 0.09:
 			cone = 40.0
-		t = f.find_target(global_position, base, max_range, cone)
+		t = f.find_target(global_position, base, max_range, cone, true, controlled)
 	if t:
 		var d: Vector3 = t.global_position - global_position
 		d.y = 0
@@ -161,15 +195,18 @@ func aim(max_range: float, use_stick: bool = true) -> Array:
 func _physics_process(delta: float) -> void:
 	tick_statuses(delta)
 	dash_cd = maxf(0.0, dash_cd - delta)
+	_dodge_lockout = maxf(0.0, _dodge_lockout - delta)
 	action_lock = maxf(0.0, action_lock - delta)
 	if kit:
 		kit.tick(delta)
+	_consume_buffer(delta)
 	match state:
 		"downed":
 			body_move(Vector3.ZERO, accel, friction * 2.0, delta)
 			vis("set_move_amount", 0.0)
 		"dash":
 			_dash_t -= delta
+			_dash_if = maxf(0.0, _dash_if - delta)
 			velocity.x = _dash_dir.x * _dash_speed
 			velocity.z = _dash_dir.z * _dash_speed
 			_knock_applied = Vector3.ZERO
@@ -178,6 +215,7 @@ func _physics_process(delta: float) -> void:
 			_check_ghost_dash()
 			if _dash_t <= 0.0:
 				state = "normal"
+				_dash_if = 0.0
 				velocity.x *= 0.3
 				velocity.z *= 0.3
 		"leap":
@@ -328,12 +366,27 @@ func _scripted_step(delta: float) -> void:
 func receive_hit(hit: Dictionary) -> float:
 	if state == "leap" or state == "scripted":
 		return 0.0
+	if invuln_t > 0.0 and not hit.get("ignore_invuln", false) and CombatTiming.is_perfect_dodge(state, _dash_if) and is_targetable():
+		_perfect_dodge()
+		return 0.0
 	var dealt := super.receive_hit(hit)
 	if dealt > 0.0:
 		invuln_t = maxf(invuln_t, Balance.f("global.invuln_after_hit", 0.3))
 		if controlled and Field.current:
 			Field.current.shake(0.18 if dealt < 25 else 0.4)
+			var hd: Vector3 = hit.get("dir", Vector3.ZERO)
+			Field.current.kick(hd, "hurt")
 	return dealt
+
+## A hit absorbed by dash i-frames: brief slow-mo + cue (rate-limited so a spray of bullets is one dodge).
+func _perfect_dodge() -> void:
+	if _dodge_lockout > 0.0 or not controlled or Field.current == null:
+		return
+	_dodge_lockout = Balance.f("global.perfect_dodge_lockout", 0.8)
+	var f := Field.current
+	f.request_time_scale("dodge", Balance.f("global.perfect_dodge_scale", 0.3), Balance.f("global.perfect_dodge_time", 0.22))
+	f.float_text(global_position + Vector3(0, height + 0.5, 0), "DODGE", Color(0.85, 0.95, 1.0), 40)
+	f.vfx("hit_spark", global_position + Vector3(0, height * 0.5, 0))
 
 func _modify_incoming(amount: float, hit: Dictionary) -> float:
 	if kit:

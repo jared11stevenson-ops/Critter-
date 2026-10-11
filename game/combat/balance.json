@@ -10,7 +10,11 @@
     "respawn_hp_frac": 0.6,
     "contain_hp_frac": 0.30, "contain_channel": 1.2, "contain_range": 7.0,
     "scan_radius": 25.0, "scan_slowmo_scale": 0.3, "scan_slowmo_time": 0.4, "scan_label_time": 5.5,
-    "invuln_after_hit": 0.3, "fall_damage_frac": 0.08
+    "invuln_after_hit": 0.3, "fall_damage_frac": 0.08,
+    "input_buffer": 0.28, "autoaim_stick": 1.6, "autoaim_lock_time": 1.2,
+    "kick_light": 0.16, "kick_heavy": 0.42, "kick_hurt": 0.3, "kick_decay": 10.0,
+    "perfect_dodge_scale": 0.3, "perfect_dodge_time": 0.22, "perfect_dodge_lockout": 0.8,
+    "telegraph_urgent_from": 0.65
   },
   "aruun": {
     "hp": 420, "speed": 4.6, "accel": 38.0, "friction": 30.0, "height": 2.4, "radius": 0.55,
