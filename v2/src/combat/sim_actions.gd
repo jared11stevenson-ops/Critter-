@@ -114,7 +114,7 @@ static func start_move(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, kind:
 	f.buf_kind = ""
 	f.idle_frames = 0
 	var to_o: Vector2 = o.pos - f.pos
-	if to_o.length_squared() > 0.0001:
+	if to_o.length_squared() > 0.0:
 		f.facing = to_o.normalized()
 	if f.has("riposte") and (m.kind == "light" or m.kind == "heavy"):
 		f.af = int(m.startup * (1.0 - float(R["riposte_startup_mult"])))
@@ -123,7 +123,7 @@ static func start_move(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, kind:
 		f.st.erase("riposte")
 	if kind == "dodge":
 		var dir: Vector2 = f.move_in
-		if dir.length() < 0.2:
+		if dir.length() < float(sim.R["input_deadzone"]):
 			dir = -f.facing
 		f.mvec = dir.normalized()
 		f.dodge_chain_left = int(f.T["dodge_chain"])
@@ -210,7 +210,7 @@ static func tick_fighter(sim: CombatSim, f: Fighter, o: Fighter) -> void:
 	# --- facing + movement -------------------------------------------------
 	var to_o: Vector2 = o.pos - f.pos
 	var can_turn: bool = f.stun == 0 and (f.move == null or f.af < f.move.track) and f.action != "dodge"
-	if can_turn and to_o.length_squared() > 0.0001:
+	if can_turn and to_o.length_squared() > 0.0:
 		f.facing = to_o.normalized()
 	sim.fx.motion(sim, f, o)
 	_walk(sim, f)
@@ -224,7 +224,7 @@ static func _regen(sim: CombatSim, f: Fighter) -> void:
 	if f.sta_delay > 0:
 		f.sta_delay -= 1
 	elif f.sta < f.max_sta and not (f.move != null and f.stun == 0):
-		var rate: float = float(f.T["sta_regen"]) / 60.0
+		var rate: float = float(f.T["sta_regen"]) * sim.dt
 		if f.action == "guard":
 			rate *= float(R["guard_regen_mult"])
 		if f.has("regen_block"):
@@ -235,9 +235,9 @@ static func _regen(sim: CombatSim, f: Fighter) -> void:
 	if f.poise_delay > 0:
 		f.poise_delay -= 1
 	elif f.poise < f.max_poise and f.action != "stagger":
-		f.poise = minf(f.max_poise, f.poise + float(f.T["poise_regen"]) / 60.0)
+		f.poise = minf(f.max_poise, f.poise + float(f.T["poise_regen"]) * sim.dt)
 	if f.pressure > 0.0 and f.T["pressure_decay"] > 0.0:
-		f.pressure = maxf(0.0, f.pressure - float(f.T["pressure_decay"]) / 60.0)
+		f.pressure = maxf(0.0, f.pressure - float(f.T["pressure_decay"]) * sim.dt)
 
 static func _stun_end(sim: CombatSim, f: Fighter) -> void:
 	var kind: String = f.stun_kind
@@ -332,12 +332,13 @@ static func _walk(sim: CombatSim, f: Fighter) -> void:
 		else:
 			return
 	var dir: Vector2 = f.move_in
-	if dir.length_squared() < 0.0025:
+	var dz: float = float(sim.R["walk_deadzone"])
+	if dir.length_squared() < dz * dz:
 		return
-	var sp: float = float(f.T["walk_speed"]) / 60.0 * mult * f.slow_mult * f.haste_mult
+	var sp: float = float(f.T["walk_speed"]) * sim.dt * mult * f.slow_mult * f.haste_mult
 	if f.winded:
 		sp *= float(sim.R["winded_move_mult"])
-	if dir.dot(f.facing) < -0.3:
+	if dir.dot(f.facing) < float(sim.R["retreat_dot"]):
 		sp *= float(sim.R["retreat_mult"])
 	f.pos += dir * sp
 	f.moving = true

@@ -23,14 +23,14 @@ static func motion(sim: CombatSim, f: Fighter, o: Fighter) -> void:
 		var dist := float(seg.get("dist", 0.0))
 		var kind := str(seg.get("dir", "fwd"))
 		if seg.get("nocollide", false):
-			f.add_status("ghost", 2)
+			f.add_status("ghost", int(sim.R["ghost_frames"]))
 		if af == at:
 			match kind:
 				"input":
-					f.mvec = f.mvec if f.action == "dodge" else (f.move_in.normalized() if f.move_in.length() > 0.2 else f.facing)
+					f.mvec = f.mvec if f.action == "dodge" else (f.move_in.normalized() if f.move_in.length() > float(sim.R["input_deadzone"]) else f.facing)
 				"side":
 					var perp := Vector2(-f.facing.y, f.facing.x)
-					f.mvec = perp * (signf(f.move_in.dot(perp)) if absf(f.move_in.dot(perp)) > 0.1 else 1.0)
+					f.mvec = perp * (signf(f.move_in.dot(perp)) if absf(f.move_in.dot(perp)) > float(sim.R["side_deadzone"]) else 1.0)
 				"to_target":
 					var v: Vector2 = o.pos - f.pos
 					var gap := float(seg.get("gap", 0.1))
@@ -70,7 +70,7 @@ static func _spawn(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, sp: Dicti
 			e.move_id = m.id
 			e.dir = f.facing
 			e.pos = f.pos + f.facing * (f.radius + float(sp.get("start", 0.3)))
-			e.speed = float(sp["speed"]) / 60.0
+			e.speed = float(sp["speed"]) * sim.dt
 			e.radius = float(sp.get("radius", 0.4))
 			e.life = int(sp.get("life", 60))
 			e.pierce = bool(sp.get("pierce", false))
@@ -116,7 +116,7 @@ static func _spawn(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, sp: Dicti
 				e.move_id = m.id
 				var ang := TAU * float(i) / float(cnt)
 				e.pos = f.pos + Vector2(cos(ang), sin(ang)) * float(sp.get("spread", 1.0))
-				e.speed = float(sp.get("speed", 3.0)) / 60.0
+				e.speed = float(sp.get("speed", 3.0)) * sim.dt
 				e.life = int(sp.get("life", 300))
 				e.reach = float(sp.get("reach", 1.4))
 				e.interval = int(sp.get("interval", 40))
@@ -165,9 +165,9 @@ static func tick_world(sim: CombatSim) -> void:
 		if not f.alive:
 			continue
 		if f.has("burning"):
-			sim.damage(f, sim.fighters[1 - f.idx], float(R["burn_dps"]) / 60.0, "burn")
+			sim.damage(f, sim.fighters[1 - f.idx], float(R["burn_dps"]) * sim.dt, "burn")
 		if f.has("wall"):
-			f.sta = maxf(0.0, f.sta - float(R["wall_idle_drain"]) / 60.0)
+			f.sta = maxf(0.0, f.sta - float(R["wall_idle_drain"]) * sim.dt)
 			f.sta_delay = int(R["sta_regen_delay"])
 			if f.sta <= 0.0:
 				f.st.erase("wall")
@@ -179,7 +179,7 @@ static func tick_world(sim: CombatSim) -> void:
 				continue
 			match kind:
 				"dps":
-					sim.damage(f, null, float(hz["dps"]) / 60.0, "hazard")
+					sim.damage(f, null, float(hz["dps"]) * sim.dt, "hazard")
 				"slow":
 					f.add_status("slowed", 2)
 				"pulse":
@@ -213,7 +213,7 @@ static func _update_entities(sim: CombatSim) -> void:
 
 static func _proj(sim: CombatSim, e) -> bool:
 	e.pos += e.dir * e.speed
-	if sim.arena.depth(e.pos) > 0.5:
+	if sim.arena.depth(e.pos) > float(sim.R["projectile_margin"]):
 		return true
 	var owner = sim.fighters[e.owner]
 	var tgt = sim.fighters[1 - e.owner]
@@ -239,7 +239,7 @@ static func _zone(sim: CombatSim, e) -> bool:
 		if f.pos.distance_to(e.pos) > e.radius + f.radius:
 			continue
 		if e.dps > 0.0 and not f.invulnerable():
-			sim.damage(f, sim.fighters[e.owner], e.dps / 60.0, e.move_id)
+			sim.damage(f, sim.fighters[e.owner], e.dps * sim.dt, e.move_id)
 		var b: Dictionary = e.buff
 		if b.has("slow") and not is_owner:
 			f.add_status("slowed", 2)

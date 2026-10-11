@@ -11,13 +11,14 @@ static func in_range(a: Fighter, d: Fighter, h: Dictionary) -> bool:
 		return false
 	if dist < float(h["offset"]) - d.radius:
 		return false
-	if float(h["arc"]) >= 359.0 or dist < 0.05:
+	var eps: float = float(CombatData.rules()["contact_epsilon"])
+	if float(h["arc"]) >= 359.0 or dist < eps:
 		return true
-	return a.facing.dot(to / dist) >= float(h["cos_half"]) or dist < a.radius + d.radius + 0.05
+	return a.facing.dot(to / dist) >= float(h["cos_half"]) or dist < a.radius + d.radius + eps
 
 static func facing_ok(sim: CombatSim, d: Fighter, src: Vector2) -> bool:
 	var to: Vector2 = src - d.pos
-	if to.length_squared() < 0.0001:
+	if to.length_squared() <= 0.0:
 		return true
 	return d.facing.dot(to.normalized()) >= float(sim.R["guard_cos_half"])
 
@@ -201,9 +202,10 @@ static func _hurt(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary, mov
 
 static func kdir_to(dfn: Fighter, atk: Fighter, kdir: Vector2) -> Vector2:
 	var d: Vector2 = dfn.pos - atk.pos
-	if d.length_squared() < 0.0001:
+	if d.length_squared() <= 0.0:
 		return kdir
-	return (d.normalized() * 0.5 + kdir * 0.5).normalized()
+	var bl: float = float(CombatData.rules()["knock_dir_blend"])
+	return (d.normalized() * (1.0 - bl) + kdir * bl).normalized()
 
 static func _interrupt(f: Fighter) -> void:
 	f.move = null
@@ -272,7 +274,7 @@ static func _parry(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary, mo
 		atk.poise -= float(R["parry_poise_dmg"])
 		atk.poise_delay = int(R["poise_regen_delay"])
 		if atk.poise <= 0.0:
-			atk.poise = 1.0
+			atk.poise = float(R["parry_min_poise"])
 	_interrupt(dfn)
 	dfn.action = "parry"
 	dfn.stun_kind = "parry"

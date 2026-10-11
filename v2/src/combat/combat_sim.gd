@@ -16,6 +16,7 @@ var ents: Array = []
 var tick := 0              # real ticks (including hit-stop)
 var frame := 0             # simulation frames (hit-stop frames excluded)
 var hitstop := 0
+var dt := 1.0 / 60.0       # seconds per tick (rules.tick_rate)
 var fx = Fx
 var _events: Array[Dictionary] = []
 var _over := false
@@ -26,6 +27,7 @@ var _dealt := [0.0, 0.0]
 
 func _init(a: CritterDef, b: CritterDef, arena_def: ArenaDef, stakes_tier: int, seed_value: int) -> void:
 	R = CombatData.rules()
+	dt = 1.0 / float(R["tick_rate"])
 	arena = arena_def
 	stakes = stakes_tier
 	rng.seed = seed_value
@@ -121,10 +123,10 @@ func _physics() -> void:
 	for f in fighters:
 		if not f.alive:
 			continue
-		if f.forced.length_squared() > 0.000001:
+		if f.forced != Vector2.ZERO:
 			var np: Vector2 = f.pos + f.forced
 			f.forced *= decay
-			if f.forced.length() < 0.004:
+			if f.forced.length() < float(R["forced_epsilon"]):
 				f.forced = Vector2.ZERO
 			if arena.depth(np) > 0.0:
 				if arena.edge_type(np) == "drop":

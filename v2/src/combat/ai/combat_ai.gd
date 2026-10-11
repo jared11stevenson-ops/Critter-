@@ -9,6 +9,7 @@ static var _profiles: Dictionary = {}
 var idx := 1
 var profile_name := "standard"
 var P: Dictionary = {}
+var C: Dictionary = {}
 var rng := RandomNumberGenerator.new()
 var habits = Habits.new()
 var allow_yield := true
@@ -41,6 +42,7 @@ func _init(my_index: int, profile: String, seed_value: int, allow_yielding: bool
 	idx = my_index
 	profile_name = profile
 	P = load_profiles()[profile]
+	C = load_profiles()["common"]
 	rng.seed = seed_value
 	allow_yield = allow_yielding
 	strafe = 1.0 if rng.randf() < 0.5 else -1.0
@@ -80,7 +82,7 @@ func _kind_of(m: MoveDef) -> String:
 	return "ability"
 
 func _band(gap: float) -> String:
-	return "close" if gap < 1.0 else ("mid" if gap < 2.6 else "far")
+	return "close" if gap < float(C["band_close"]) else ("mid" if gap < float(C["band_mid"]) else "far")
 
 func _ready_for(me, kind: String) -> bool:
 	var m := _move_of(me, kind)
@@ -123,14 +125,14 @@ func decide(sim: CombatSim) -> CombatInput:
 	_observe(sim, me, op)
 	var gap: float = me.pos.distance_to(op.pos) - me.radius - op.radius
 	# --- yield / last stand ----------------------------------------------
-	if allow_yield and P["yield_ratio"] > 0.0 and me.ratio() < P["yield_ratio"] and op.ratio() > 0.3 \
-			and (me.last_stand_used or not me.def.move_ids.has("laststand")) and rng.randf() < 0.05:
+	if allow_yield and P["yield_ratio"] > 0.0 and me.ratio() < P["yield_ratio"] and op.ratio() > float(C["yield_opp_ratio"]) \
+			and (me.last_stand_used or not me.def.move_ids.has("laststand")) and rng.randf() < float(C["yield_prob"]):
 		inp.yield_pressed = true
 		return inp
 	if (not me.last_stand_used) and me.ratio() < sim.R["last_stand_ratio"] and me.alive:
 		var lsm := _move_of(me, "ls")
-		var lsr := _reach(me, "ls") + (0.3 if lsm.hits.size() > 0 else 0.0)
-		if (gap + me.radius <= lsr or me.ratio() < 0.12) and rng.randf() < float(P["last_stand"]) * 0.35:
+		var lsr := _reach(me, "ls") + (float(C["ls_slack"]) if lsm.hits.size() > 0 else 0.0)
+		if (gap + me.radius <= lsr or me.ratio() < float(C["ls_panic"])) and rng.randf() < float(P["last_stand"]) * float(C["ls_prob"]):
 			_press(inp, "ls")
 			sched.clear()
 			guard_from = -1
@@ -166,13 +168,13 @@ func _finish(inp: CombatInput, _me) -> CombatInput:
 # ---------------------------------------------------------------- perception
 func _observe(sim: CombatSim, me, op) -> void:
 	hist.append({"a": op.action, "mid": op.move.id if op.move != null else "", "af": op.af, "stun": op.stun, "pos": op.pos})
-	if hist.size() > 40:
+	if hist.size() > int(C["history_frames"]):
 		hist.pop_front()
 	# habit learning: record the first committed action of each new opponent move
 	var sig: String = (op.move.id + ":" + str(sim.frame - op.af)) if op.move != null else ""
 	if sig != "" and sig != last_opp_sig:
 		var gap: float = me.pos.distance_to(op.pos) - me.radius - op.radius
-		var ctx := _band(gap) + ":" + (my_last if sim.frame - my_last_frame < 60 else "idle")
+		var ctx := _band(gap) + ":" + (my_last if sim.frame - my_last_frame < int(C["habit_memory"]) else "idle")
 		habits.record(ctx, _kind_of(op.move))
 	if sig != "":
 		last_opp_sig = sig
@@ -208,7 +210,7 @@ func _react(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float) -> vo
 		return
 	rem = maxi(rem, 0)
 	# threatened? use the geometry we can see now
-	var reach_to_me: float = float(h["reach"]) + op.radius + me.radius + 0.35
+	var reach_to_me: float = float(h["reach"]) + op.radius + me.radius + float(C["threat_margin"])
 	var dist: float = me.pos.distance_to(op.pos)
 	if dist > reach_to_me and not (m.motion.size() > 0):
 		return
@@ -219,31 +221,31 @@ func _react(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float) -> vo
 	var heavy: bool = m.kind == "heavy" or m.kind == "ability" or m.kind == "laststand"
 	var w := {"parry": 0.0, "block": 0.0, "dodge": 0.0, "interrupt": 0.0, "ability": 0.0}
 	if is_grab:
-		w["dodge"] = float(P["dodge_prob"]) * 1.4
-		w["interrupt"] = float(P["interrupt_prob"]) * 1.5
-		w["block"] = 0.05
+		w["dodge"] = float(P["dodge_prob"]) * float(C["block_weight_dodge_grab"])
+		w["interrupt"] = float(P["interrupt_prob"]) * float(C["interrupt_grab_mult"])
+		w["block"] = float(C["grab_block"])
 	elif heavy:
-		w["dodge"] = float(P["dodge_prob"]) * 1.2
-		w["parry"] = float(P["parry_prob"]) * 0.8
-		w["block"] = float(P["block_prob"]) * 0.4
-		w["interrupt"] = float(P["interrupt_prob"]) * 0.3
+		w["dodge"] = float(P["dodge_prob"]) * float(C["heavy_dodge_mult"])
+		w["parry"] = float(P["parry_prob"]) * float(C["heavy_parry_mult"])
+		w["block"] = float(P["block_prob"]) * float(C["heavy_block_mult"])
+		w["interrupt"] = float(P["interrupt_prob"]) * float(C["heavy_interrupt_mult"])
 	else:
 		w["parry"] = float(P["parry_prob"])
 		w["block"] = float(P["block_prob"])
-		w["dodge"] = float(P["dodge_prob"]) * 0.3
-		w["interrupt"] = float(P["interrupt_prob"]) * (1.0 if rem > 12 else 0.2)
+		w["dodge"] = float(P["dodge_prob"]) * float(C["light_dodge_mult"])
+		w["interrupt"] = float(P["interrupt_prob"]) * (1.0 if rem > int(C["interrupt_min_rem"]) else float(C["interrupt_late_mult"]))
 	if me.winded:
 		w["dodge"] = 0.0
-		w["parry"] *= 0.5
-	if me.sta < 12.0:
+		w["parry"] *= float(C["winded_parry_mult"])
+	if me.sta < float(C["dodge_min_sta"]):
 		w["dodge"] = 0.0
 	# defensive ability hint (stances)
 	for slot in ["a1", "a2"]:
 		var hint: Dictionary = me.def.ai_hints.get("ability1" if slot == "a1" else "ability2", {})
 		if hint.get("when", "") == "defensive" and _ready_for(me, slot):
 			var am := _move_of(me, slot)
-			var lead := int(am.stance.get("from", am.startup)) + 3 if not am.stance.is_empty() else am.startup
-			if rem >= lead - 2:
+			var lead := int(am.stance.get("from", am.startup)) + int(C["stance_lead"]) if not am.stance.is_empty() else am.startup
+			if rem >= lead - int(C["stance_slack"]):
 				w["ability"] = float(P["ability"]) * 0.9
 	# habit-informed anticipation raises parry/dodge for experts
 	var pick := _weighted(w)
@@ -252,22 +254,22 @@ func _react(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float) -> vo
 	match pick:
 		"parry":
 			var win: int = int(me.T["parry_window"])
-			var k: int = clampi(int(win * 0.5) + rng.randi_range(-int(P["parry_jitter"]), int(P["parry_jitter"])), -2, win + 4)
+			var k: int = clampi(int(win * 0.5) + rng.randi_range(-int(P["parry_jitter"]), int(P["parry_jitter"])), int(C["parry_k_lo"]), win + int(C["parry_k_hi_extra"]))
 			if me.action == "guard" or me.guard_lag > 0:
 				guard_from = ft
-				guard_to = impact + 8
+				guard_to = impact + int(C["parry_hold_after"])
 			else:
 				var press_at: int = impact - k
 				if press_at <= ft:
 					guard_from = ft
 				else:
 					guard_from = press_at
-				guard_to = impact + 10
+				guard_to = impact + int(C["guard_hold_after"])
 		"block":
 			guard_from = ft
-			guard_to = impact + 10
+			guard_to = impact + int(C["guard_hold_after"])
 		"dodge":
-			var s: int = impact - 2 + rng.randi_range(-int(P["parry_jitter"]) / 2, int(P["parry_jitter"]) / 2)
+			var s: int = impact - int(C["dodge_lead"]) + rng.randi_range(-int(P["parry_jitter"]) / 2, int(P["parry_jitter"]) / 2)
 			var side := Vector2(-(op.pos - me.pos).y, (op.pos - me.pos).x).normalized() * strafe
 			sched.append([maxi(s, ft), "dodge", side])
 		"interrupt":
@@ -279,7 +281,7 @@ func _react(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float) -> vo
 				var hint2: Dictionary = me.def.ai_hints.get("ability1" if slot == "a1" else "ability2", {})
 				if hint2.get("when", "") == "defensive" and _ready_for(me, slot):
 					var am2 := _move_of(me, slot)
-					var lead2 := int(am2.stance.get("from", am2.startup)) + 3 if not am2.stance.is_empty() else am2.startup
+					var lead2 := int(am2.stance.get("from", am2.startup)) + int(C["stance_lead"]) if not am2.stance.is_empty() else am2.startup
 					sched.append([maxi(impact - lead2, ft), slot])
 					break
 
@@ -293,19 +295,19 @@ func _first_threat(m: MoveDef) -> Dictionary:
 
 func gap_ok(me, op, kind: String) -> bool:
 	var r := _reach(me, kind)
-	return me.pos.distance_to(op.pos) <= r + op.radius + 0.05
+	return me.pos.distance_to(op.pos) <= r + op.radius + float(C["gap_slack"])
 
 func _weighted(w: Dictionary) -> String:
 	var tot := 0.0
 	for k in w.keys():
 		tot += w[k]
-	if tot <= 0.0001:
+	if tot <= 0.0:
 		return ""
 	# probability of acting at all scales with the strongest option (so weak profiles often do nothing)
 	var best := 0.0
 	for k in w.keys():
 		best = maxf(best, w[k])
-	if rng.randf() > minf(1.0, best * 1.4 + tot * 0.25):
+	if rng.randf() > minf(1.0, best * float(C["act_scale"]) + tot * float(C["act_floor"])):
 		return ""
 	var r := rng.randf() * tot
 	for k in w.keys():
@@ -327,7 +329,7 @@ func _neutral(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float, gua
 		return
 	if strafe_cd <= 0:
 		strafe = 1.0 if rng.randf() < 0.5 else -1.0
-		strafe_cd = rng.randi_range(30, 90)
+		strafe_cd = rng.randi_range(int(C["strafe_min"]), int(C["strafe_max"]))
 	strafe_cd -= 1
 	if think_cd > 0:
 		think_cd -= 1
@@ -335,24 +337,24 @@ func _neutral(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float, gua
 	var threat: float = maxf(_cd(op, me, "light"), maxf(_cd(op, me, "heavy"), _cd(op, me, "grab")))
 	var rmin: float
 	var rmax: float
-	if my_l >= threat + 0.3:
-		rmin = threat + 0.2          # outrange: hold just outside their reach
-		rmax = my_l - 0.15
+	if my_l >= threat + float(C["outrange_margin"]):
+		rmin = threat + float(C["outrange_hold"])          # outrange: hold just outside their reach
+		rmax = my_l - float(C["outrange_edge"])
 	else:
-		rmin = maxf(me.radius + op.radius + 0.2, my_l - 0.8)
-		rmax = my_l - 0.1
+		rmin = maxf(me.radius + op.radius + float(C["close_gap"]), my_l - float(C["close_back"]))
+		rmax = my_l - float(C["band_edge"])
 	var ob := _seen()
 	# --- movement
 	var dir := Vector2.ZERO
-	var low_sta: bool = me.sta < me.max_sta * 0.2 and rng.randf() < float(P["stamina_care"])
+	var low_sta: bool = me.sta < me.max_sta * float(C["low_sta_ratio"]) and rng.randf() < float(P["stamina_care"])
 	if low_sta or me.winded:
-		dir = -to * 0.8 + perp * strafe * 0.3
+		dir = -to * float(C["retreat_back"]) + perp * strafe * float(C["retreat_side"])
 	elif dist > rmax:
-		dir = to + perp * strafe * 0.35
+		dir = to + perp * strafe * float(C["approach_side"])
 	elif dist < rmin:
-		dir = -to * 0.6 + perp * strafe * 0.5
+		dir = -to * float(C["crowd_back"]) + perp * strafe * float(C["crowd_side"])
 	else:
-		dir = perp * strafe * 0.6
+		dir = perp * strafe * float(C["hold_side"])
 	# stay off drop edges, more so against opponents who can throw or knock us far
 	var arena: ArenaDef = sim.arena
 	var inside: float = -arena.depth(me.pos)
@@ -362,18 +364,18 @@ func _neutral(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float, gua
 		var w: float = clampf(1.0 - inside / danger, 0.0, 1.0)
 		if dir.dot(inward) < 0.0:
 			dir -= inward * dir.dot(inward)
-		dir += inward * (0.4 + 1.6 * w)
+		dir += inward * (float(C["edge_base"]) + float(C["edge_gain"]) * w)
 	if guarding:
-		dir *= 0.5
+		dir *= float(C["guarding_move"])
 	inp.move = dir.limit_length(1.0)
 	# --- decisions
 	if think_cd > 0 or guarding:
 		return
 	think_cd = rng.randi_range(int(P["think_min"]), int(P["think_max"]))
-	if rng.randf() > float(P["aggression"]) + (0.25 if ob["a"] in ["stagger", "knockdown", "hit"] else 0.0):
-		if rng.randf() < 0.25:
+	if rng.randf() > float(P["aggression"]) + (float(C["stagger_aggr_bonus"]) if ob["a"] in ["stagger", "knockdown", "hit"] else 0.0):
+		if rng.randf() < float(C["idle_guard_prob"]):
 			guard_from = ft
-			guard_to = ft + rng.randi_range(8, 24)
+			guard_to = ft + rng.randi_range(int(C["idle_guard_min"]), int(C["idle_guard_max"]))
 		return
 	var opts := {}
 	var vulnerable := _opp_vulnerable(op)
@@ -384,12 +386,12 @@ func _neutral(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float, gua
 	var opp_guarding: bool = ob["a"] == "guard"
 	if in_l and _ready_for(me, "light"):
 		opts["light"] = 1.0
-	if in_h and _ready_for(me, "heavy") and me.sta > me.max_sta * 0.3:
-		opts["heavy"] = 0.45 + (1.2 if punish and vulnerable >= _move_of(me, "heavy").startup else 0.0)
+	if in_h and _ready_for(me, "heavy") and me.sta > me.max_sta * float(C["heavy_sta_ratio"]):
+		opts["heavy"] = float(C["heavy_base"]) + (float(C["heavy_punish"]) if punish and vulnerable >= _move_of(me, "heavy").startup else 0.0)
 	if in_g and _ready_for(me, "grab"):
-		opts["grab"] = 0.5 + (1.0 if opp_guarding else 0.0)
-	if punish and opts.has("light") and vulnerable < 24:
-		opts["light"] = 2.0
+		opts["grab"] = float(C["grab_base"]) + (float(C["grab_vs_guard"]) if opp_guarding else 0.0)
+	if punish and opts.has("light") and vulnerable < int(C["punish_light_cutoff"]):
+		opts["light"] = float(C["punish_light_weight"])
 	# abilities
 	for slot in ["a1", "a2"]:
 		var hint: Dictionary = me.def.ai_hints.get("ability1" if slot == "a1" else "ability2", {})
@@ -398,14 +400,14 @@ func _neutral(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float, gua
 		var d: float = dist
 		if d < float(hint["min"]) or d > float(hint["max"]):
 			continue
-		var wt := float(P["ability"]) * 0.8
-		if hint["when"] == "pressure" and me.pressure < 45.0:
+		var wt := float(P["ability"]) * float(C["ability_weight"])
+		if hint["when"] == "pressure" and me.pressure < float(C["pressure_gate"]):
 			continue
 		if hint["when"] == "gap" and vulnerable > 0:
-			wt *= 1.5
+			wt *= float(C["gap_bonus"])
 		opts[slot] = wt
 	if opts.is_empty():
-		if rng.randf() < 0.3 * float(P["feint"]) and _ready_for(me, "heavy") and gap > _reach(me, "heavy") - 0.3:
+		if rng.randf() < float(C["bait_prob"]) * float(P["feint"]) and _ready_for(me, "heavy") and gap > _reach(me, "heavy") - float(C["ls_slack"]):
 			opts["heavy"] = 1.0
 		else:
 			return
@@ -416,7 +418,7 @@ func _neutral(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float, gua
 		for k in opts.keys():
 			var key: String = k
 			if cw.has(key):
-				opts[key] = float(opts[key]) * (1.0 + float(P["habit"]) * conf * 3.0 * float(cw[key]))
+				opts[key] = float(opts[key]) * (1.0 + float(P["habit"]) * conf * float(C["habit_gain"]) * float(cw[key]))
 	var choice := ""
 	if rng.randf() < float(P["noise"]):
 		choice = opts.keys()[rng.randi() % opts.size()]
@@ -473,10 +475,8 @@ func _manage_move(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float)
 		chain_done = sig
 		if m.chain != "" and rng.randf() < float(P["chain"]) and gap_ok(me, op, "light") and me.sta > 6.0:
 			inp.strike_tap = true
-		elif m.kind == "light" and me.contact and rng.randf() < 0.3 and _ready_for(me, "heavy"):
-			pass
 	# feint a heavy windup based on what the opponent shows
-	if m.feint and me.af < m.startup - 3 and me.af >= int(m.startup * 0.4) and feint_done != sig:
+	if m.feint and me.af < m.startup - int(C["feint_window_end"]) and me.af >= int(m.startup * float(C["feint_window_start"])) and feint_done != sig:
 		if rng.randf() < float(P["feint"]):
 			if ob["a"] == "guard" and _ready_for(me, "grab"):
 				feint_done = sig
