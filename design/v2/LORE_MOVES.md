@@ -8,7 +8,8 @@ a character's flavor changes **how** those inputs look and behave. Numbers are t
 
 Legend: **[canon]** = existing ability in canon.json; **[lore:L###]** = line in the lore text.
 
-## 1. Aruun — "The Reacher" (Psionic Bond / Kinetic Force; bonded mace Morrow)
+## 1. Aruun — "The Reacher" (giraffe beetle · psionic mace Morrow · Rage)  — CREATOR FOCUS: his whole kit is built on exactly these three things
+**Design pillars (creator):** (1) the **psionic mace** Morrow is a living partner and the center of every move; (2) the **giraffe beetle** body decides his reach and rhythm (long neck/reach, heavy front, red-and-black beetle build per the reference sheet); (3) **Rage** is the signature system: power paid for with his own body.
 Lore hooks: Morrow "can redirect in flight, return to Aruun and transmit impact sensation. Sometimes it appears to move before he commands it" [lore:L424]; Rage = "deliberate physiological overdrive.
 He suppresses his body's protective limits. Greater strength therefore means greater self-damage" [L439-445]; Red Span: "anchors Morrow and uses their bond to redistribute structural force through his own body. For eleven minutes he carries part of a bridge";
 Burden Architecture: "a structure should sacrifice itself before sacrificing the people inside"; "His shell fractures."
@@ -20,11 +21,13 @@ Burden Architecture: "a structure should sacrifice itself before sacrificing the
 | Grab | **Morrow drag** | [canon] Gravity Pull concept | short-range pull-and-slam |
 | Ability 1 | **Reaching Strike** | [canon] cooldown 6s | Morrow extends through the psionic link: long-range heavy; "shatters cracked Thoughtstone" (breaks arena cracks) |
 | Ability 2 | **Gravity Pull** | [canon] cooldown 10s | Morrow floats ahead, drags enemies together, slams down |
-| Resource | **Beetle Rage / Strain** | [canon] cooldown 18s; [L439] | overdrive: more damage and speed, paid in Aruun's own Vitality (Strain); the more desperate, the more he spends |
+| Resource | **Beetle Rage / Strain** | [canon] cooldown 18s; [L439] | **Rage is a central bar:** it builds as he takes and deals hits; in Rage he is faster and hits harder, protective limits are off (guard-crush on every swing, super-armor on heavies) and he **pays Strain from his own Vitality every second**; he can end it early. Rage never kills him: it stops at 1 Vitality, which is when the Last Stand and the Yield/Last Stand choice matter most |
+| Passive | **Morrow moves first** | [lore:L426] "Sometimes it appears to move before he commands it" | on a perfect parry (and at random low odds in Rage) Morrow launches an automatic counter-strike without input |
 | Last Stand | **Carry the Bridge** | [lore: Red Span] | plants Morrow and absorbs incoming force into his body for a few seconds (no knockback, damage stored), then releases it as one huge hit |
 Rival-species chapter and story beats: see ROSTER.md.
 
-## 2. Cigarra — "The Oracle Hopper" (Probability Perception / Psychic Interference)
+## 2. Cigarra — "The Oracle Hopper" (Brazilian treehopper · psychic premonition · mind control)  — CREATOR FOCUS: her kit is built on exactly these three things
+**Design pillars (creator):** (1) the **Brazilian treehopper** body: the crown of branching black spheres is her instrument and her weapon, with the translucent wing cloak for leaps; (2) **psychic premonition**: she sees the enemy's next move before it happens; (3) **mind control**: she bends the enemy's actions (Psychic Interference).
 Lore hooks: "She experiences noise. Crowded environments can produce dozens of competing outcome-images" [L330-334]; fears "choosing an action because she saw it and thereby causing the future she feared";
 "A future seen is a future touched" [Bk XIV]; uses "humor and apparent instability as psychological armor"; "she improvises around plans."
 | Slot | Move | Source | Behavior |
@@ -32,9 +35,10 @@ Lore hooks: "She experiences noise. Crowded environments can produce dozens of c
 | Strike | **Bad Thought** | [canon] "flicks a crown sphere and fires a distorted psychic object" | fast ranged flick; combos; her light attack |
 | Heavy | **Crown Barrage** | [lore] branching black-sphere crown | slower multi-sphere volley on branching paths |
 | Guard | **Cloak fold** | [lore] translucent treehopper-wing cloak | wing cloak guard with the longest parry window (she sees it coming) |
-| Grab | **Brain Skip** | [canon] cooldown 9s | the target loses a fraction of time; its action jumps forward and it stumbles (works as her tricky "grab": beats Guard) |
+| Grab | **Puppet Thought** (mind control) | creator direction + [lore: Psychic Interference] | a psychic grab (beats Guard): her crown spheres flare (a clear tell, interruptible by hitting her or breaking line of sight with a dodge). On success the enemy is **compelled for about 1.2 s**: Cigarra picks one forced action: *stumble toward the edge (ring-out risk)*, *drop guard and stagger*, or *strike the empty air (whiff and be open)*. Hits on a high-Poise enemy only shorten the compel. |
+| Counter | **Brain Skip** | [canon] cooldown 9s | the counter she gets when she dodges through a Premonition ghost: the target loses a fraction of time, its action jumps forward and it stumbles |
 | Ability 1 | **Premonition** | [canon] cooldown 12s | translucent future ghosts show where the enemy will move or attack; dodge through one to counter |
-| Ability 2 | **False Memory** | [canon] cooldown 14s | a hallucination the enemy believes and attacks |
+| Ability 2 | **False Memory** | [canon] cooldown 14s | mind control by illusion: a hallucination the enemy believes and attacks (it chases and strikes the decoy for a few seconds) |
 | Mobility | **Grasshopper Thought** | [canon] | crouch, then launch great distances; the cloak opens to steer (her Dodge/gap-closer) |
 | Resource | **Future-Noise** | [lore:L330] | builds as she uses Premonition/False Memory; at high noise her predictions contradict (random ghost decoys appear) until it decays |
 | Combo | **Probable Impact** | [canon] with Aruun | exists as a team-up for later (not in 1v1) |
