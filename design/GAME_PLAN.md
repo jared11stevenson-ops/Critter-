@@ -64,3 +64,9 @@ Restart from the ground up under design/AAA_PLAN.md. Nothing is built until the 
 
 ## Delivery (creator, 2026-10-11)
 Builds ship as GitHub Releases, built by .github/workflows/build-zip.yml on every master push. Repo is public by the creator's choice. Download page: https://github.com/jared11stevenson-ops/Critter-/releases . Bump config/version in project.godot for a new release tag; same version re-uploads the zip. Chat attachments are no longer used for builds.
+
+## Standing order (creator, 2026-10-11, v2 direction) — current
+Game is now: capture critters, shrink them into Habitat Jars, raise them, fight 1v1 high-stakes duels; permanent death; up to 7 critters at once; unique weapons and abilities per critter, all equally strong;
+backstory chapters unlock only by keeping a critter alive; lore minimal; original character designs by the Lead (creator will designate changes); original art style (Adventure Time / Rick and Morty / Naruto / Elden Ring).
+Run like a studio: tickets, folder ownership, gates (production/PRODUCTION.md). PRE-FLIGHT RULE: before the creator's next additions, present the improvement list (production/PREFLIGHT.md) first.
+Docs: design/v2/{GDD,ROSTER,ART_BIBLE,INTERFACES,DECISIONS}.md. Code: v2/. Wave 1 agents: Combat, Character Art, Platform.
