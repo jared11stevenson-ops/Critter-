@@ -83,3 +83,7 @@ func armor_now() -> float:
 
 func actionable() -> bool:
 	return stun == 0 and (action == "idle" or action == "guard")
+
+## Outgoing damage multiplier: temporary (riposte, buffs) times the critter's tuned damage_mult.
+func out_mult() -> float:
+	return dmg_mult * float(T["damage_mult"])

@@ -59,7 +59,7 @@ static func resolve_tick(sim: CombatSim) -> void:
 		var f = e[0]
 		var o = sim.fighters[1 - f.idx]
 		var h: Dictionary = f.move.hits[e[1]]
-		var r := apply_hit(sim, f, o, h, f.move.id, f.pos, f.facing, f.move.kind)
+		var r := apply_hit(sim, f, o, h, f.move.id, f.pos, f.facing, f.move.kind, false, f.hits_done[e[1]] == 2)
 		if r == 1:
 			f.hits_done[e[1]] = 1
 		elif r == 2 and f.hits_done[e[1]] == 0:
@@ -101,14 +101,14 @@ static func _grab_clash(sim: CombatSim, a, b) -> void:
 	sim.emit("clash", a.idx, "", (a.pos + b.pos) * 0.5, 0.0, {"grab": true, "other": b.idx})
 
 ## Returns 1 = resolved (hit / block / parry / grab), 2 = target was invulnerable (dodged), 0 = ignored.
-static func apply_hit(sim: CombatSim, atk, dfn, h: Dictionary, move_id: String, src: Vector2, kdir: Vector2, atk_kind: String, projectile: bool = false) -> int:
+static func apply_hit(sim: CombatSim, atk, dfn, h: Dictionary, move_id: String, src: Vector2, kdir: Vector2, atk_kind: String, projectile: bool = false, quiet: bool = false) -> int:
 	var R: Dictionary = sim.R
 	if not dfn.alive or dfn.action == "ko":
 		return 0
 	if dfn.action == "knockdown":
 		return 0
 	if dfn.invulnerable():
-		if h.get("noted_dodge", -1) != dfn.idx:
+		if not quiet:
 			sim.emit("dodge", dfn.idx, move_id, dfn.pos, 0.0, {"attacker": atk.idx})
 		return 2
 	var front := facing_ok(sim, dfn, src)
@@ -137,14 +137,12 @@ static func apply_hit(sim: CombatSim, atk, dfn, h: Dictionary, move_id: String, 
 
 static func _scaled_damage(sim: CombatSim, atk, dfn, h: Dictionary) -> float:
 	var R: Dictionary = sim.R
-	var dmg: float = float(h["damage"]) * atk.dmg_mult * dfn.take_mult
+	var dmg: float = float(h["damage"]) * atk.out_mult() * dfn.take_mult
 	if atk.burst > 0.0 and atk.move != null and atk.move.props.has("pressure_damage"):
-		dmg += atk.burst * float(atk.move.props["pressure_damage"]) * atk.dmg_mult
+		dmg += atk.burst * float(atk.move.props["pressure_damage"]) * atk.out_mult()
 	if atk.has("empower"):
 		dmg *= float(atk.T["empower_value"])
 	if dfn.action == "stagger" and dfn.stun_kind != "parried":
-		dmg *= float(R["stagger_dmg_mult"])
-	elif dfn.action == "stagger":
 		dmg *= float(R["stagger_dmg_mult"])
 	if dfn.combo_hits > 0:
 		dmg *= pow(float(R["combo_scale"]), dfn.combo_hits)
@@ -220,13 +218,13 @@ static func _gain_pressure(sim: CombatSim, atk) -> void:
 
 static func _block(sim: CombatSim, atk, dfn, h: Dictionary, move_id: String, kdir: Vector2) -> void:
 	var R: Dictionary = sim.R
-	var dmg: float = float(h["damage"]) * atk.dmg_mult
+	var dmg: float = float(h["damage"]) * atk.out_mult()
 	var chip := float(dfn.T["block_chip"])
 	if dfn.winded:
 		chip = maxf(chip, float(R["winded_chip"]))
 	var cd: float = dmg * chip
 	sim.damage(dfn, atk, cd, move_id, true)
-	var drain: float = float(h["damage"]) * atk.dmg_mult * float(dfn.T["guard_drain"])
+	var drain: float = float(h["damage"]) * atk.out_mult() * float(dfn.T["guard_drain"])
 	var crush: bool = h["guard_crush"]
 	if crush:
 		drain *= float(R["crush_drain_mult"])
@@ -292,7 +290,7 @@ static func _parry(sim: CombatSim, atk, dfn, h: Dictionary, move_id: String, atk
 
 static func _wall_absorb(sim: CombatSim, atk, dfn, h: Dictionary, move_id: String) -> void:
 	var R: Dictionary = sim.R
-	dfn.sta = maxf(0.0, dfn.sta - float(h["damage"]) * atk.dmg_mult * float(R["wall_drain"]))
+	dfn.sta = maxf(0.0, dfn.sta - float(h["damage"]) * atk.out_mult() * float(R["wall_drain"]))
 	dfn.sta_delay = int(R["sta_regen_delay"])
 	atk.contact = true
 	atk.poise -= float(R["wall_attacker_poise"])

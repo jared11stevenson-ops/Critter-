@@ -54,7 +54,7 @@
   "chip_cannot_kill": true,
   "injury_kinds": ["cracked_shell", "torn_wing", "chipped_blade", "old_scar"],
   "stat_formulas": {
-    "max_vit":      {"stat": "vit", "base": 60.0, "per": 14.0},
+    "max_vit":      {"stat": "vit", "base": 100.0, "per": 24.0},
     "max_sta":      {"stat": "sta", "base": 40.0, "per": 8.0},
     "max_poise":    {"stat": "poi", "base": 20.0, "per": 8.0},
     "walk_speed":   {"stat": "spd", "base": 1.4,  "per": 0.3},
@@ -75,6 +75,7 @@
     "haste_value": 1.3,
     "empower_value": 1.25,
     "pressure_decay": 0.0,
-    "pressure_max": 100.0
+    "pressure_max": 100.0,
+    "damage_mult": 1.0
   }
 }

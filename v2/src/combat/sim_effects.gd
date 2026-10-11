@@ -217,7 +217,9 @@ static func _proj(sim: CombatSim, e) -> bool:
 	var owner = sim.fighters[e.owner]
 	var tgt = sim.fighters[1 - e.owner]
 	if e.pos.distance_to(tgt.pos) <= e.radius + tgt.radius:
-		var r := Hits.apply_hit(sim, owner, tgt, e.hit, e.move_id, e.pos, e.dir, "ranged", true)
+		var r := Hits.apply_hit(sim, owner, tgt, e.hit, e.move_id, e.pos, e.dir, "ranged", true, e.timer == 1)
+		if r == 2:
+			e.timer = 1
 		if r == 1 and not e.pierce:
 			return true
 	return false
