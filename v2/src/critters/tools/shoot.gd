@@ -144,14 +144,14 @@ func _lineup(ids, out: String, size: int) -> void:
 	for id in ids:
 		var rig := _spawn(id)
 		rig.three_quarter = 35.0
-		rig.position = Vector3(float(i) * 3.5 - (ids.size() - 1) * 1.75, 0, 0)
+		rig.position = Vector3(float(i) * 4.6 - (ids.size() - 1) * 2.3, 0, 0)
 		_step(rig, "idle", 0, 4)
 		rigs.append(rig)
 		i += 1
 	vp.size = Vector2i(size * 3, int(size * 0.62))
 	var cam: Camera3D = st["cam"]
 	cam.fov = 22.0
-	cam.look_at_from_position(Vector3(0, 1.5, 20.5), Vector3(0, 1.25, 0))
+	cam.look_at_from_position(Vector3(0, 2.0, 27.0), Vector3(0, 1.6, 0))
 	await _save("%s/lineup.png" % out)
 
 func _sil(ids, out: String) -> void:

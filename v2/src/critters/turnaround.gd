@@ -10,7 +10,7 @@ const Pal := preload("res://src/critters/palettes.gd")
 const PoseLib := preload("res://src/critters/pose_lib.gd")
 const Face := preload("res://src/critters/face_ctl.gd")
 
-const SPACING := 3.5
+const SPACING := 4.6
 const MODES := ["lineup", "cycle", "expressions", "silhouette"]
 
 var rigs: Array = []

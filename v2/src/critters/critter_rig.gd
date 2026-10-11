@@ -277,13 +277,16 @@ func _begin_action(action: String, move_id: String, fs: Dictionary) -> void:
 	_action = action
 	_move_id = move_id
 	var c := cfg
-	var ta: String = str(fs.get("tell_anim", ""))   # data/moves `tell_anim` may name any swing style in PoseLib.STYLES
+	var ta: String = Timing.tell_anim(critter_id, move_id, fs)   # data/moves `tell_anim` names a swing style in PoseLib.STYLES
 	if ta != "" and PoseLib.STYLES.has(ta):
 		c = cfg.duplicate()
 		var st: Dictionary = (cfg.get("style", {}) as Dictionary).duplicate()
 		st[action] = ta
 		c["style"] = st
-	_keys = PoseLib.keys_for(action, c) if action not in ["idle", "walk"] else {}
+	var key_action := {"knockdown": "ko", "clash": "hit"}.get(action, action) as String
+	_keys = PoseLib.keys_for(key_action, c) if action not in ["idle", "walk"] else {}
+	if action == "knockdown":
+		_keys["hold"] = false   # fall, lie, get back up (recovery frames)
 	if action in ["strike_heavy", "strike_light", "ability1", "ability2", "grab", "laststand"]:
 		_kick(-0.0)
 	_idle_time = 0.0

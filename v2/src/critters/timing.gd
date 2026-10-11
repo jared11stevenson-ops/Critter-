@@ -1,5 +1,6 @@
 extends RefCounted
 ## Resolves (startup, active, recovery) frames for visuals so poses sync with frame data.
+## (see _move below for the data/moves layout)
 ## Priority: 1) fs["phase"] / fs["startup","active","recovery"] supplied by the sim snapshot,
 ##           2) res://data/moves/<move_id>.json (INTERFACES.md section 1 schema: startup / active / recovery),
 ##           3) STUB table below.
@@ -11,7 +12,7 @@ extends RefCounted
 const STUB_DEFAULT := {
 	"strike_light": [12, 3, 12], "strike_heavy": [24, 5, 18], "guard": [4, 1, 6], "parry": [2, 6, 10],
 	"grab": [10, 3, 16], "dodge": [2, 10, 8], "ability1": [18, 6, 24], "ability2": [14, 6, 20],
-	"laststand": [30, 40, 20], "hit": [1, 4, 12], "stagger": [2, 30, 10], "ko": [8, 40, 60],
+	"laststand": [30, 40, 20], "hit": [1, 4, 12], "stagger": [2, 30, 10], "ko": [8, 40, 60], "knockdown": [6, 30, 24], "clash": [1, 4, 10],
 }
 const STUB := {
 	"aruun": {"strike_light": [16, 4, 14], "strike_heavy": [36, 6, 24], "ability1": [30, 8, 26], "ability2": [20, 14, 22], "grab": [14, 3, 18]},
@@ -24,6 +25,25 @@ const STUB := {
 }
 static var _cache := {}
 
+## Combat Engineer data layout (v2/data/moves/<critter>.json): {"critter": id, "moves": {move_id: {startup, active, recovery, tell_anim, kind, ...}}}.
+static func _move(critter: String, move_id: String) -> Dictionary:
+	var key := critter + "/" + move_id
+	if not _cache.has(key):
+		var d := {}
+		var path := "res://data/moves/%s.json" % critter
+		if FileAccess.file_exists(path):
+			var j = JSON.parse_string(FileAccess.get_file_as_string(path))
+			if j is Dictionary and j.has("moves") and (j["moves"] as Dictionary).has(move_id):
+				d = j["moves"][move_id]
+		_cache[key] = d
+	return _cache[key]
+
+## The move's swing style key (`tell_anim`): one of PoseLib.STYLES (chop overhead slash_up slash_back thrust punch hook charge spin stance roar leap grab).
+static func tell_anim(critter: String, move_id: String, fs: Dictionary) -> String:
+	if fs.has("tell_anim"):
+		return str(fs["tell_anim"])
+	return str(_move(critter, move_id).get("tell_anim", ""))
+
 static func resolve(critter: String, action: String, move_id: String, fs: Dictionary) -> Vector3i:
 	if fs.has("phase"):
 		var ph = fs["phase"]
@@ -34,15 +54,8 @@ static func resolve(critter: String, action: String, move_id: String, fs: Dictio
 	if fs.has("startup"):
 		return Vector3i(int(fs["startup"]), int(fs.get("active", 1)), int(fs.get("recovery", 1)))
 	if move_id != "":
-		if not _cache.has(move_id):
-			var path := "res://data/moves/%s.json" % move_id
-			var v = null
-			if FileAccess.file_exists(path):
-				var j = JSON.parse_string(FileAccess.get_file_as_string(path))
-				if j is Dictionary and j.has("startup"):
-					v = Vector3i(int(j["startup"]), int(j.get("active", 1)), int(j.get("recovery", 1)))
-			_cache[move_id] = v
-		if _cache[move_id] != null:
-			return _cache[move_id]
+		var m := _move(critter, move_id)
+		if m.has("startup"):
+			return Vector3i(int(m["startup"]), int(m.get("active", 1)), int(m.get("recovery", 1)))
 	var t: Array = STUB.get(critter, {}).get(action, STUB_DEFAULT.get(action, [1, 1, 1]))
 	return Vector3i(t[0], t[1], t[2])
