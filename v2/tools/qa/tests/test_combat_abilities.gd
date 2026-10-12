@@ -152,7 +152,7 @@ func _aruun(fails: Array) -> void:
 func _cigarra(fails: Array) -> void:
 	# Bad Thought: fast ranged flick, chains
 	var sim := U.make("cigarra", "mollusk", "ring", 1, 2)
-	U.face_off(sim, 3.6)
+	U.face_off(sim, 3.2)
 	var evs := U.run(sim, 60, {1: _tap, 12: _tap})
 	if _hits_by(evs, "cigarra_bad_thought1").is_empty():
 		fails.append("cigarra bad thought: should hit at range")
@@ -166,8 +166,8 @@ func _cigarra(fails: Array) -> void:
 		fails.append("cigarra puppet thought: should beat guard and drop it (%s)" % str(comp.get("mode", "none")))
 	# near the edge the target stumbles toward it: ring-out risk
 	sim = U.make("cigarra", "cigarra", "ring", 2, 2)
-	sim.fighters[0].pos = Vector2(5.4, 0.0)
-	sim.fighters[1].pos = Vector2(7.0, 0.0)
+	sim.fighters[0].pos = Vector2(8.6, 0.0)
+	sim.fighters[1].pos = Vector2(10.2, 0.0)
 	evs = U.run(sim, 160, {2: _press("ability3")})
 	if sim.is_over():
 		if sim.result()["reason"] != "ringout":
@@ -216,7 +216,7 @@ func _cigarra(fails: Array) -> void:
 	sim.fighters[0].add_status("premonition", 300)
 	var side := func(i: CombatInput) -> void:
 		i.dodge = true
-		i.move = Vector2(0, 1)
+		i.move = Vector2(1, 0)
 	evs = U.run(sim, 40, {13: side}, {2: _tap})
 	if U.count(evs, "brain_skip", 0) != 1 or sim.fighters[1].stun_kind != "skipped" and U.count(evs, "hit", 1) == 0:
 		fails.append("cigarra brain skip: dodging through a ghost should counter")
