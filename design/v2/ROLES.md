@@ -41,3 +41,6 @@ Rules that keep favorites viable:
 3. **Rules modifiers:** ruleset flags in arenas/tournament config (Sudden Death, Endurance, Hazard, Ring-out, Gauntlet, Fog).
 4. **Career (roster milestone):** Seasoned perks (bouts survived per opponent role), stored in the critter's history.
 5. **Expedition milestone:** role-based expedition requirements and capture methods (Binder subdues, Breaker risks killing, etc.).
+
+## 6. Rule: every new character must fit these roles (creator, 2026-10-11)
+The seven roles above are the complete role set. **Any new character or species must be assigned to one of them** (or be explicitly designed as a blend of two, using the soft-counter cycle and the 54/46 cap). New roles are not added without a creator-approved design revision. Each new character's brief must state: role, how it wins, soft weakness, expedition/capture/economy value, and its place in the role-pair balance matrix.
