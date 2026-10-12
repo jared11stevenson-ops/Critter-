@@ -235,5 +235,29 @@
  "moving_epsilon": 0.15,
  "cancel_window": 8,
  "confirm_cancel_delay": 2,
- "hitstop_cap": 6
+ "hitstop_cap": 6,
+ "sudden_death_vit": 0.5,
+ "endurance_sta": 1.5,
+ "endurance_vit": 1.3,
+ "endurance_timeout": 2.0,
+ "ringout_knock": 1.5,
+ "hazard_default": {
+  "kind": "dps",
+  "shape": "circle",
+  "pos": [
+   0.0,
+   0.0
+  ],
+  "radius": 2.0,
+  "dps": 10.0
+ },
+ "role_cycle": [
+  "breaker",
+  "warden",
+  "drifter",
+  "brewer",
+  "anchor",
+  "binder",
+  "reader"
+ ]
 }

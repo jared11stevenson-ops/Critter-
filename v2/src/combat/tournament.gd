@@ -93,6 +93,64 @@ static func overall(cells: Dictionary, a: String, profile: String = "") -> float
 		k += 1
 	return s / float(k)
 
+## Role-pair matrix and soft-counter cycle check (design/v2/ROLES.md): advantaged role 51-54%, neutral 46-54%, disadvantaged role at expert >= 46%.
+static func role_markdown(data: Dictionary) -> String:
+	var cells: Dictionary = data["cells"]
+	var cycle: Array = CombatData.rules()["role_cycle"]
+	var by_role := {}
+	for id in CombatData.critter_ids():
+		by_role[CombatData.critter(id).role] = id
+	var out := PackedStringArray()
+	out.append("## Role-pair matrix (row role vs column role, win rate of the row)")
+	out.append("")
+	var head := "| role (critter) |"
+	var sep := "|---|"
+	for r in cycle:
+		head += " %s |" % r
+		sep += "---|"
+	out.append(head)
+	out.append(sep)
+	var bad: Array = []
+	for ra in cycle:
+		var row := "| **%s** (%s) |" % [ra, by_role.get(ra, "?")]
+		for rb in cycle:
+			if ra == rb:
+				row += " - |"
+				continue
+			var i: int = cycle.find(ra)
+			var j: int = cycle.find(rb)
+			var rate_ab := rate(cells, by_role[ra], by_role[rb])
+			var adv := (i + 1) % cycle.size() == j        # ra beats rb
+			var dis := (j + 1) % cycle.size() == i        # rb beats ra
+			var tag := ""
+			if adv:
+				tag = " >"
+				if rate_ab < 0.51 or rate_ab > 0.54:
+					bad.append("%s>%s %.1f%% (want 51-54)" % [ra, rb, rate_ab * 100.0])
+			elif not dis:
+				if rate_ab < 0.46 or rate_ab > 0.54:
+					bad.append("%s~%s %.1f%% (want 46-54)" % [ra, rb, rate_ab * 100.0])
+			row += " %.1f%%%s |" % [rate_ab * 100.0, tag]
+		out.append(row)
+	out.append("")
+	out.append("`>` = the row role has the soft-counter advantage. Cycle: " + " > ".join(cycle) + " > " + cycle[0] + ".")
+	out.append("")
+	out.append("| disadvantaged role vs its counter | all AI levels | expert AI only |")
+	out.append("|---|---|---|")
+	var weak: Array = []
+	for i in cycle.size():
+		var adv_role: String = cycle[i]
+		var dis_role: String = cycle[(i + 1) % cycle.size()]
+		var all_r := 1.0 - rate(cells, by_role[adv_role], by_role[dis_role])
+		var exp_r := 1.0 - rate(cells, by_role[adv_role], by_role[dis_role], "expert")
+		if exp_r < 0.46:
+			weak.append("%s vs %s expert %.1f%%" % [dis_role, adv_role, exp_r * 100.0])
+		out.append("| %s vs %s | %.1f%% | %.1f%% |" % [dis_role, adv_role, all_r * 100.0, exp_r * 100.0])
+	out.append("")
+	out.append("Out of role-pair targets: %s" % (", ".join(bad) if not bad.is_empty() else "none"))
+	out.append("Disadvantaged below 46%% at expert: %s" % (", ".join(weak) if not weak.is_empty() else "none"))
+	return "\n".join(out) + "\n"
+
 static func to_markdown(data: Dictionary, base_seed: int, n: int) -> String:
 	var cells: Dictionary = data["cells"]
 	var ids: Array = CombatData.critter_ids()
@@ -171,4 +229,6 @@ static func to_markdown(data: Dictionary, base_seed: int, n: int) -> String:
 	out.append("Seat bias: first seat wins %.1f%% of bouts." % [(seat / seat_n * 100.0) if seat_n > 0.0 else 50.0])
 	out.append("")
 	out.append("Matchups beyond 40/60: %s" % (", ".join(bad_matchups) if not bad_matchups.is_empty() else "none"))
+	out.append("")
+	out.append(role_markdown(data))
 	return "\n".join(out) + "\n"

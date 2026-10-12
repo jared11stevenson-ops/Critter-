@@ -174,6 +174,7 @@ func _chain_and_hitstop(fails: Array) -> void:
 
 func _hazard(fails: Array) -> void:
 	var sim := U.make("mollusk", "mollusk", "pit", 1, 5)
+	sim.apply_modifiers(["hazard"])
 	sim.fighters[0].pos = Vector2(0.0, 0.0)
 	sim.fighters[1].pos = Vector2(4.0, 0.0)
 	U.run(sim, 120)

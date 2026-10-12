@@ -202,7 +202,10 @@ static func tick_world(sim: CombatSim) -> void:
 			if f.sta <= 0.0:
 				f.st.erase("wall")
 				f.winded = true
-	for hz in sim.arena.hazards:
+	var hz_list: Array = sim.arena.hazards if sim.hazards_on else []
+	if sim.hazards_on and hz_list.is_empty():
+		hz_list = [R["hazard_default"]]
+	for hz in hz_list:
 		var kind := str(hz.get("kind", "dps"))
 		for f in sim.fighters:
 			if not f.alive or not sim.arena.hazard_contains(hz, f.pos):

@@ -168,7 +168,7 @@ static func start_move(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, kind:
 		f.chain_idx += 1
 	else:
 		f.chain_idx = 0
-	sim.emit("tell", f.idx, m.id, f.pos, 0.0, {"startup": m.startup, "tell_anim": m.tell_anim, "kind": m.kind, "hidden": f.has("camo")})
+	sim.emit("tell", f.idx, m.id, f.pos, 0.0, {"startup": m.startup, "tell_anim": m.tell_anim, "kind": m.kind, "hidden": f.has("camo") or sim.fog})
 	sim.fx.on_start(sim, f, o, m)
 
 ## A store move with props.release == "debt" turns what it absorbed into damage owed later.
