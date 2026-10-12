@@ -177,7 +177,7 @@ func _draw_world(i: int, st: Dictionary) -> void:
 		_ink.ring(c2, rad + 5.0, Color(0.09, 0.07, 0.07, 0.4), true)
 		if pr > 0.01:
 			draw_arc(c2, rad, -PI * 0.5, -PI * 0.5 + TAU * pr, 40, col, 6.0, true)
-	if i != bout.player_idx and f["alive"]:
+	if i != bout.player_idx and f["alive"] and (bout.player == null or bout.player.locked):
 		_draw_lock(c2, rad + 14.0)
 	if i != bout.player_idx or bout.player_idx < 0:
 		_draw_tell(i, f, c2, rad)

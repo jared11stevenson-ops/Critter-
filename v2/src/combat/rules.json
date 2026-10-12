@@ -22,7 +22,7 @@
  "parry_hitstop": 6,
  "riposte_frames": 60,
  "riposte_startup_mult": 0.5,
- "riposte_dmg_mult": 1.3,
+ "riposte_dmg_mult": 1.1,
  "guard_arc_deg": 150,
  "guard_lag": 6,
  "guard_raise_cost": 2,
@@ -261,5 +261,7 @@
   "anchor",
   "binder",
   "reader"
- ]
+ ],
+ "free_turn_rate": 0.5,
+ "free_aim_assist": 4.0
 }

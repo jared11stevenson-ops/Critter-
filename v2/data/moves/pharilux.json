@@ -9,7 +9,7 @@
    "active": 3,
    "recovery": 11,
    "stamina_cost": 7,
-   "damage": 10.0,
+   "damage": 8.0,
    "poise_damage": 6,
    "hitstun": 17,
    "blockstun": 11,
@@ -48,7 +48,7 @@
    "active": 3,
    "recovery": 11,
    "stamina_cost": 7,
-   "damage": 10.0,
+   "damage": 8.0,
    "poise_damage": 6,
    "hitstun": 17,
    "blockstun": 11,
@@ -91,14 +91,14 @@
    "poise_damage": 8,
    "hitstun": 20,
    "blockstun": 12,
-   "knockback": 0.7,
+   "knockback": 1.6,
    "hitstop": 4,
    "hitbox": {
     "reach": 3.3,
     "arc": 100
    },
    "track": 6,
-   "lore_source": "lore:chains and anchors hang from the keeper; a low sweep",
+   "lore_source": "lore:chains and anchors hang from the keeper; a sweep that shoves toward the edge",
    "power": "anatomy",
    "effect_kind": "physical",
    "expected": {
@@ -124,7 +124,7 @@
    "active": 4,
    "recovery": 26,
    "stamina_cost": 20,
-   "damage": 20.0,
+   "damage": 16.0,
    "poise_damage": 22,
    "hitstun": 36,
    "blockstun": 18,
@@ -175,17 +175,17 @@
    "recovery": 26,
    "stamina_cost": 12,
    "track": 8,
-   "damage": 11.0,
+   "damage": 7.0,
    "poise_damage": 9,
    "hitstop": 6,
    "grab": true,
-   "throw_dist": 2.6,
+   "throw_dist": 5.0,
    "throw_stun": 6,
    "hitbox": {
     "reach": 3.2,
     "arc": 90
    },
-   "lore_source": "lore:chains pull; hauls the target off its footing",
+   "lore_source": "lore:chains pull; hauls the target off its footing and over the edge",
    "power": "anatomy",
    "effect_kind": "displacement",
    "expected": {
@@ -267,14 +267,14 @@
    "stamina_cost": 12,
    "cooldown": 330,
    "track": 8,
-   "damage": 4.5,
+   "damage": 3.0,
    "poise_damage": 10,
    "hitstun": 22,
    "blockstun": 8,
-   "knockback": 3.4,
+   "knockback": 5.4,
    "hitstop": 5,
    "hitbox": {
-    "reach": 3.8,
+    "reach": 4.2,
     "arc": 120
    },
    "props": {
@@ -286,7 +286,7 @@
      "type": "gust"
     }
    ],
-   "lore_source": "lore:Pressure; water pressure shoves, crushes poise, ring-out",
+   "lore_source": "lore:Pressure; water pressure shoves the target toward the ring edge (Pharilux's ring-out kit)",
    "power": "supernatural",
    "effect_kind": "displacement",
    "expected": {
@@ -431,11 +431,11 @@
     0,
     30
    ],
-   "damage": 9.0,
+   "damage": 6.0,
    "poise_damage": 14,
    "hitstun": 24,
    "blockstun": 10,
-   "knockback": 3.6,
+   "knockback": 5.2,
    "hitstop": 6,
    "hitbox": {
     "reach": 3.2,

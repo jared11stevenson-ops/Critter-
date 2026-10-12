@@ -20,4 +20,19 @@ func run() -> Array:
 	QaCheck.is_true(fails, stars.size() == 3, "all three skill levels are used")
 	QaCheck.eq(fails, CombatData.critter("aruun").difficulty, 1, "Aruun is the simple one")
 	QaCheck.eq(fails, CombatData.critter("bramvex").difficulty, 3, "Bramvex demands planning")
+	# free lock-on: an unlocked fighter faces where it moves, a locked one faces the opponent
+	var sim := CombatSim.new(CombatData.critter("aruun"), CombatData.critter("zephyr"), CombatData.arena("ring"), 0, 5)
+	var idle := CombatInput.new()
+	var up := CombatInput.new()
+	up.move = Vector2(0, 1)
+	up.lock = false
+	for i in 20:
+		sim.step(up, idle)
+	QaCheck.is_true(fails, sim.fighters[0].facing.dot(Vector2(0, 1)) > 0.9, "unlocked: facing follows the stick")
+	var sim2 := CombatSim.new(CombatData.critter("aruun"), CombatData.critter("zephyr"), CombatData.arena("ring"), 0, 5)
+	var up2 := CombatInput.new()
+	up2.move = Vector2(0, 1)
+	for i in 20:
+		sim2.step(up2, idle)
+	QaCheck.is_true(fails, sim2.fighters[0].facing.dot(Vector2(1, 0)) > 0.9, "locked: facing stays on the opponent")
 	return fails

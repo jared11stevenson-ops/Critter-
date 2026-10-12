@@ -8,6 +8,7 @@ const HOLD_TICKS := 8        # shorter hold = light fires on release sooner (<= 
 const LS_TICKS := 2
 const DODGE_STEER_TICKS := 6
 
+var locked := true                 # lock-on toggle (button / key): free movement when off
 var cam_right := Vector2.RIGHT
 var cam_forward := Vector2(0, -1)
 var touch: Object = null           # TouchControls (duck typed: stick, strike_down, guard_down, signal pressed(name))
@@ -51,6 +52,8 @@ func frame_update(_delta: float) -> void:
 		for a in ["grab", "dodge", "ability1", "ability2", "ability3", "last_stand", "yield"]:
 			if Input.is_action_just_pressed(a):
 				_latch[{"ability1": "a1", "ability2": "a2", "ability3": "a3", "last_stand": "ls"}.get(a, a)] = true
+		if Input.is_action_just_pressed("lock"):
+			_latch["lock"] = true
 	if touch != null:
 		if touch.stick.length() > s.length():
 			s = touch.stick
@@ -75,6 +78,11 @@ func world_move() -> Vector2:
 
 func tick(_sim: CombatSim, _idx: int) -> CombatInput:
 	var o := CombatInput.new()
+	if _take("lock"):
+		locked = not locked
+		if touch != null and "lock_on" in touch:
+			touch.set("lock_on", locked)
+	o.lock = locked
 	o.move = world_move()
 	o.guard = guard_level
 	if heavy_level:

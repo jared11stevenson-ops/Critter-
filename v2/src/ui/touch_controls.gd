@@ -21,6 +21,7 @@ var guard_down := false
 var heavy_down := false
 var dodge_dir := Vector2.ZERO
 var can_ls := false
+var lock_on := true                                  # lock-on shown on the LOCK button (PlayerInput owns the state)
 var cooldowns := {"ab1": 0.0, "ab2": 0.0, "ab3": 0.0}           # remaining ratio 0..1
 var ab_names := {"ab1": "", "ab2": "", "ab3": ""}
 var ab_colors := {"ab1": UiStyle.TEAL_LT, "ab2": UiStyle.GOLD, "ab3": UiStyle.PAPER}
@@ -224,6 +225,7 @@ func _col_for(id: String) -> Color:
 		"grab": return Color(0.86, 0.45, 0.30)
 		"ab1", "ab2", "ab3": return ab_colors[id]
 		"ls": return Color(0.95, 0.35, 0.30)
+		"lock": return UiStyle.TEAL if lock_on else UiStyle.PAPER_DK
 	return UiStyle.PAPER
 
 func _draw() -> void:
@@ -274,6 +276,8 @@ func _draw_button(id: String, b: Dictionary, washes: Array) -> void:
 	if cd > 0.0:
 		washes.append([c, rr - 1.0, cd])
 	var label := str(b["label"])
+	if id == "lock":
+		label = "LOCK" if lock_on else "FREE"
 	var fsize := 18
 	var icon: Texture2D = ab_icons.get(id, basic_icons.get(id, null))
 	if icon != null:

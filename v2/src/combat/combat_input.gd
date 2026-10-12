@@ -18,6 +18,7 @@ var ability2 := false
 var ability3 := false
 var last_stand := false
 var yield_pressed := false
+var lock := true          # lock-on: true = always face the opponent; false = free movement, facing follows the stick (AI is always locked)
 
 func clear() -> void:
 	move = Vector2.ZERO
@@ -31,3 +32,4 @@ func clear() -> void:
 	ability3 = false
 	last_stand = false
 	yield_pressed = false
+	lock = true

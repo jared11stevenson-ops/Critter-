@@ -5,7 +5,7 @@ extends Node
 
 const MOVE_ACTIONS := ["move_left", "move_right", "move_up", "move_down"]
 const ACTIONS := ["move_left", "move_right", "move_up", "move_down", "strike", "guard", "grab", "dodge",
-	"ability1", "ability2", "ability3", "last_stand", "yield", "pause"]
+	"ability1", "ability2", "ability3", "last_stand", "yield", "pause", "lock"]
 const DEADZONE := 0.25
 
 ## action -> {keys: [Key], buttons: [JoyButton], axes: [[JoyAxis, sign]]}
@@ -23,6 +23,7 @@ const BINDINGS := {
 	"ability3": {"keys": [KEY_O], "buttons": [JOY_BUTTON_RIGHT_STICK], "axes": []},
 	"last_stand": {"keys": [KEY_Q], "buttons": [JOY_BUTTON_LEFT_STICK], "axes": []},
 	"yield": {"keys": [KEY_Y], "buttons": [JOY_BUTTON_BACK], "axes": []},
+	"lock": {"keys": [KEY_TAB, KEY_E], "buttons": [JOY_BUTTON_PADDLE1], "axes": []},
 	"pause": {"keys": [KEY_ESCAPE, KEY_P], "buttons": [JOY_BUTTON_START], "axes": []},
 }
 

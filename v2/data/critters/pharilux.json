@@ -2,7 +2,7 @@
  "id": "pharilux",
  "name": "Pharilux",
  "species": "Ghost prey-mantis (the Watcher Below)",
- "archetype": "Threshold keeper, area control",
+ "archetype": "Threshold keeper, ring-out control",
  "palette": {
   "main": "weathered teal",
   "accent": "amber lantern",
@@ -40,7 +40,7 @@
   "parry_confuse": 120,
   "marks_bonus": 1,
   "dodge_chain": 1,
-  "damage_mult": 0.505
+  "damage_mult": 0.5
  },
  "ai": {
   "style": "zoner",

@@ -52,6 +52,7 @@ var debt := 0.0             # delayed damage still owed (Borrowed Seconds)
 var burst := 0.0            # Pressure spent by the current move (scales damage)
 var want_guard := false
 var move_in := Vector2.ZERO
+var locked := true               # lock-on state from the input: unlocked fighters face where they move
 var idle_frames := 0
 var guard_rise := false     # guard went up this tick
 var rage := 0.0             # Rage bar (Aruun)

@@ -43,6 +43,7 @@ static func ingest(sim: CombatSim, f: Fighter, inp: CombatInput) -> void:
 	f.prev_guard = inp.guard
 	f.want_guard = inp.guard
 	f.move_in = inp.move.limit_length(1.0)
+	f.locked = inp.lock
 	if kind != "":
 		f.buf_kind = kind
 		f.buf_age = 0
@@ -140,8 +141,13 @@ static func start_move(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, kind:
 	f.idle_frames = 0
 	var aim: Vector2 = f.compel["pos"] if f.compel.get("mode", "") == "decoy" else o.pos
 	var to_o: Vector2 = aim - f.pos
-	if to_o.length_squared() > 0.0:
-		f.facing = to_o.normalized()
+	if f.locked:
+		if to_o.length_squared() > 0.0:
+			f.facing = to_o.normalized()
+	elif f.move_in.length() > float(R["input_deadzone"]):
+		f.facing = f.move_in.normalized()                 # free aim: strike where the stick points
+	elif to_o.length() < float(R["free_aim_assist"]) and to_o.length_squared() > 0.0:
+		f.facing = to_o.normalized()                      # no stick and the enemy is close: gentle aim assist
 	if not m.promise.is_empty():
 		sim.emit("promise", f.idx, m.id, f.pos, 0.0)
 	if float(o.T["intel_gain"]) > 0.0 and m.kind != "dodge":
@@ -277,14 +283,21 @@ static func tick_fighter(sim: CombatSim, f: Fighter, o: Fighter) -> void:
 	var look: Vector2 = f.compel["pos"] if f.compel.get("mode", "") == "decoy" else o.pos
 	var to_o: Vector2 = look - f.pos
 	var can_turn: bool = f.stun == 0 and f.facing_lock == 0 and (f.move == null or f.af < f.move.track) and f.action != "dodge"
-	if can_turn and to_o.length_squared() > 0.0:
+	if can_turn and f.locked and to_o.length_squared() > 0.0:
 		f.facing = to_o.normalized()
+	elif can_turn and not f.locked and f.move_in.length() > float(sim.R["input_deadzone"]):
+		f.facing = _turn_toward(f.facing, f.move_in.normalized(), float(sim.R["free_turn_rate"]))
 	sim.fx.motion(sim, f, o)
 	_walk(sim, f)
 	if f.move == null and f.stun == 0 and f.action == "idle":
 		f.idle_frames += 1
 	else:
 		f.idle_frames = 0
+
+## Free (unlocked) turning: rotate `from` toward `to` by at most `max_rad` per tick.
+static func _turn_toward(from: Vector2, to: Vector2, max_rad: float) -> Vector2:
+	var d := wrapf(to.angle() - from.angle(), -PI, PI)
+	return from.rotated(clampf(d, -max_rad, max_rad))
 
 ## "Morrow moves first": in Rage the mace sometimes strikes before it is commanded.
 static func _morrow(sim: CombatSim, f: Fighter, o: Fighter) -> void:

@@ -15,6 +15,7 @@ const A := {
 	"ab2": [-295.0, -322.0, 50.0, "A2"],
 	"ab3": [-197.0, -370.0, 50.0, "A3"],
 	"ls": [-110.0, -470.0, 60.0, "LAST STAND"],
+	"lock": [-452.0, -96.0, 48.0, "LOCK"],
 }
 ## Layout B: guard / dodge / grab / strike are gestures (hold, swipe, forward swipe, tap); Heavy and the abilities are buttons.
 const B := {
@@ -23,6 +24,7 @@ const B := {
 	"ab2": [-295.0, -322.0, 50.0, "A2"],
 	"ab3": [-197.0, -370.0, 50.0, "A3"],
 	"ls": [-110.0, -470.0, 60.0, "LAST STAND"],
+	"lock": [-330.0, -96.0, 48.0, "LOCK"],
 }
 const PAUSE_R := 48.0
 const STICK_R := 96.0
