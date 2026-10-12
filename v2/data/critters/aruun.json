@@ -38,7 +38,7 @@
   "crush_resist": 0.2,
   "plate_pool": 90.0,
   "rage_max": 100.0,
-  "damage_mult": 0.916
+  "damage_mult": 0.863
  },
  "ai": {
   "style": "bruiser",

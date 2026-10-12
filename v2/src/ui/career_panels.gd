@@ -209,6 +209,8 @@ static func jar(parent: Control, c: CritterInstance) -> void:
 	frame.custom_minimum_size = Vector2(380, 420)
 	row.add_child(frame)
 	frame.show_critter(c.species)
+	var hb := Career.roster().habitat(c.species)
+	frame.set_habitat(hb, Career.roster().retired_adults(c.species).size(), c.species)
 	var right := VBoxContainer.new()
 	right.add_theme_constant_override("separation", 6)
 	row.add_child(right)

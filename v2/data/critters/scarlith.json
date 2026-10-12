@@ -41,7 +41,7 @@
   "waste_not": 0.5,
   "cultivate_interval": 0,
   "brew_bonus": 0.3,
-  "damage_mult": 1.53
+  "damage_mult": 1.517
  },
  "ai": {
   "style": "burst",

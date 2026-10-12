@@ -41,7 +41,7 @@
   "guard_drain": 0.6,
   "pressure_decay": 6.0,
   "pressure_max": 100.0,
-  "damage_mult": 1.373
+  "damage_mult": 1.334
  },
  "ai": {
   "style": "duelist",
