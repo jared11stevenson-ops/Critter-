@@ -54,3 +54,6 @@ Open: Pharilux balance (first sharded run in tools/out/matrix.md), Homeland is "
 ## v0.8.0 — Expedition depth slice 1
 Scout panel now has three approaches: STALK (5 scrap of bait; prey starts at 70% Vitality for Reader/Warden/Drifter/Binder, 85% for others; haul x0.8), DIRECT, PROVOKE (AI one skill level up; haul x1.7). Expedition wins now pay scrap + habitat materials for the sender's jar (feeds the Habitat Jars loop). Tests in test_career.gd. Jar view draws built structures and family. Balance round: all 8 critters 46.7-51.7% overall (30 bouts per pair, extremes remain).
 Open: persuade/observe outcomes that change capture odds, region exploration, tournament rule modifiers, Pharilux model polish.
+
+## v0.9.0 — Counterplay + skill stars
+Two fight kinds only (Blood Bout, Practice); no role multipliers. Parry now cleanses statuses/DoT/compulsion; Tenacity halves repeated slow/root/confuse within 4 s; 1-3 skill stars per critter (display only). Matrix (30 bouts/pair): overall 46.7-54.3%. Open: Pharilux 25% vs expert AI and Bramvex 71% novice vs 36% expert (AI behaviour, not stats); counterplay gap audit per COUNTERPLAY.md; Pharilux model polish.
