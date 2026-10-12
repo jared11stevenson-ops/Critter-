@@ -17,6 +17,7 @@ lore (Book VI and XIV) and are delivered as the survival-unlocked Life Story cha
 | 4 | **Scarlith** | Red-velvet-mite kingpin, cheese/pirate flavor (Velvet Warrens) | Burst / decay striker (old slot: Cinder) | Believes everything has value, risks treating everything as merchandise |
 | 5 | **Mollusk** | Giant-African-snail design with a carved memory shell (Rainward) | Shield tank / time-delay (old slot: Marro) | Can delay consequences, believes they must be faced |
 | 6 | **Zephyr** | Hummingbird-hawk-moth + old-folklore-fairy design (Briarwild) | Aerial skirmisher (old slot: Zell) | Treats rules as games, treats promises as sacred |
+| 8 | **Pharilux** | The Watcher Below: ghost prey-mantis fused with diving and lighthouse forms (approved concept sheet is immutable visual canon) | Threshold keeper / area control (added v0.7.1 as the 8th playable) | Guides others while refusing to explain where he came from |
 | 7 | **Nyxaris** | Frostbloom silk-weaver (approved concept sheet and comic are immutable) | Grappler / binder (old slot: Kragg) | Creates beautiful things specifically to control danger |
 
 Next four (post-launch or swap-ins): **Nerit** (glow-worm, light/dark), **Solmara** (5.5 m sea spider, tides/gravity), **Pharilux** (the watcher, thresholds), **Solthrin** (centipede with ember grove, Second Contact).
@@ -31,6 +32,7 @@ Human characters (Mara Venn, Dexter Mane) stay non-playable story figures.
 | Scarlith | Fermentation / Decomposition / Cultivation: **Brew** resource builds, decay over time | Barrel-and-bottle pirate/cheese kit | *Rot Burst* (spend Brew, cone), *Spoil Zone* (DoT); Last Stand: **Aged to Perfection** |
 | Mollusk | Temporal Inertia: delays impacts; **Borrowed Seconds** debt | Memory shell as shield; slow heavy body | *Delay* (store incoming damage, release later), *Shell Brace*; Last Stand: **Everything Arrives At Once** |
 | Zephyr | Motion / Atmospheric Disturbance / Pollination | Wings and light needle-lance (per design) | *Gust Step* (air dash), *Pollen Cloud* (slow/confuse); Last Stand: **A Promise Kept** |
+| Pharilux | Pressure / Guiding Light / Spectral Tide: water pressure, lighthouse beam, anchors and chains | Claw hooks, chain sweep, anchor drop | *Pressure* (shove), *Anchor Field* (slowing zone), *Guiding Light* (beam that marks); guard *Depth Veil* (parry confuses); Last Stand: **Tidal Ascension** |
 | Nyxaris | Cryogenic Silk / Venom: binds and freezes | Silk lines, venom fangs | *Frost Bind* (command-grab cocoon), *Silk Pull* (drag; ring-out); Last Stand: **Cold Archive** |
 
 ## Life Stories (7 chapters each, unlocked by survival; written from the lore)

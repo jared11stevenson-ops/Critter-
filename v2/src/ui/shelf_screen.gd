@@ -55,7 +55,7 @@ func setup(r: RosterState, select_uid := "") -> void:
 	for i in Rack.CAPACITY:
 		var s := JarSlot.new()
 		s.slot = i
-		s.pressed.connect(_select)
+		s.pressed.connect(_slot_pressed)
 		grid.add_child(s)
 		_slots.append(s)
 	var dp := PanelContainer.new()
@@ -119,6 +119,13 @@ func refresh(select_uid := "") -> void:
 				want = i
 				break
 	_select(want)
+
+## Tap a jar to select it; tap the selected jar again to look inside (the species, its habitat and family).
+func _slot_pressed(i: int) -> void:
+	if i == _sel and _uid() != "":
+		CareerPanels.jar(self, roster.get_critter(_uid()))
+	else:
+		_select(i)
 
 func _select(i: int) -> void:
 	_sel = i

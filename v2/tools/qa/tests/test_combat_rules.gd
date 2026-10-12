@@ -25,8 +25,8 @@ func _grab(i: CombatInput) -> void:
 
 func _data(fails: Array) -> void:
 	var ids: Array = CombatData.critter_ids()
-	if ids.size() != 7:
-		fails.append("data: roster must have 7 critters")
+	if ids.size() != 8:
+		fails.append("data: roster must have 8 critters")
 	for id in ids:
 		var c := CombatData.critter(id)
 		if c == null:

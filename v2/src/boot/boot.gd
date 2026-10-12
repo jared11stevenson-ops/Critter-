@@ -122,7 +122,7 @@ func _debug_shelf() -> void:
 	a.bond_points = 40
 	a.chapters_unlocked = [1, 2, 3]
 	a.vitality = 0.8
-	for sp in ["cigarra", "bramvex", "scarlith", "mollusk", "zephyr", "nyxaris", "aruun", "cigarra"]:
+	for sp in ["cigarra", "bramvex", "scarlith", "mollusk", "zephyr", "nyxaris", "pharilux", "aruun", "cigarra"]:
 		var c := r.seal(sp, Career.random_name(sp, r))
 		c.vitality = randf_range(0.3, 1.0)
 	var ch := r.seal("mollusk", "Pebble")

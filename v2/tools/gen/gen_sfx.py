@@ -127,6 +127,11 @@ S["bramvex_detain"]=mix(whoosh(0.12,700,3500,0.7),np.pad(mix(clang(310,0.3,0.1,0
 S["bramvex_day_20"]=mix(rattle(0.9,22,1200),sat(sweep(100,300,0.9,"lin"),2)*0.25*expenv(int(SR*0.9),0.8),clang(500,0.5,0.2,0.4))
 S["bramvex_diplomacy"]=mix(whoosh(0.2,300,3000,0.9),np.pad(impact(95,0.18,1.1,0.7),(int(SR*0.12),0)))
 S["bramvex_cigarra_hole"]=whoosh(0.15,1200,7000,0.8)
+# ---- Pharilux
+S["pharilux_pressure"]=mix(sat(sweep(180,60,0.7),2)*expenv(int(SR*0.7),0.3)*0.7,whoosh(0.5,200,2500,1.0),np.pad(impact(70,0.3,1.3,0.7),(int(SR*0.15),0)))
+S["pharilux_anchor_field"]=mix(*[np.pad(clang(220+i*60,0.35,0.15,0.6),(int(SR*i*0.09),0)) for i in range(4)],lp_fast(noise(0.9),700)*expenv(int(SR*0.9),0.4)*0.3)
+S["pharilux_guiding_light"]=mix(sweep(300,1400,0.8,"lin")*0.3*env(int(SR*0.8),0.3,0.2,0.4,0.2),chime(988,1.0,0.5)*0.5,bp(noise(0.8),2000,6000)*env(int(SR*0.8),0.3,0.2,0.4,0.2)*0.2)
+S["pharilux_tidal_ascension"]=mix(sat(sweep(70,260,1.3,"lin"),2)*env(int(SR*1.3),0.5,0.3,0.4,0.3)*0.6,lp_fast(noise(1.3),900)*env(int(SR*1.3),0.5,0.3,0.4,0.3)*0.5,np.pad(chime(660,1.0,0.5)*0.4,(int(SR*0.5),0)))
 # ---- Scarlith
 S["scarlith_ferment"]=mix(bubbles(1.0,14)*0.9,lp_fast(noise(1.0),600)*0.15)
 S["scarlith_decompose"]=mix(hp(noise(0.9),3500)*env(int(SR*0.9),0.05,0.4,0.4,0.3)*0.5,bubbles(0.9,6)*0.4)

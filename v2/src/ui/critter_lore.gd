@@ -33,6 +33,11 @@ const DATA := {
 		"win": "A promise kept. The rest was weather.",
 		"epitaph": "Zephyr kept every promise but the last. The Briarwild remembers it anyway.",
 	},
+	"pharilux": {
+		"line": "Threshold keeper. Pressure, a guiding light and the tide hold the ground and mark the prey.",
+		"win": "Closed is still working.",
+		"epitaph": "Pharilux kept the watch for longer than anyone could say. The lamp is still lit; nobody will say who lit it.",
+	},
 	"nyxaris": {
 		"line": "Grappler and binder. Frost silk and venom hold a rival where they stand.",
 		"win": "Pattern, pulled tight. The cold archive keeps this one too.",

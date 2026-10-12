@@ -46,3 +46,7 @@ Open before adding more:
 ## v0.7.0 — Habitat Jars (slice 1)
 Done: per-species `Habitat` (data/career/habitats.json, 5-step ladder per species), saved in RosterState; jars advance in real time (1 habitat day per 10 min, max 48 days catch-up on load); only retired critters breed; descendants are peaceful family, not fighters; critters build the next structure on their own once the player supplies materials; player allocates scrap (feed / supply / expand) and collects settlement tribute; Jar panel shows stage, family, food, built structures, latest log line. Test: test_habitat.gd.
 Open: structure names are placeholders (not lore); no visuals of structures inside the jar yet; cross-jar links (shelf network); observation (watch family lives); founder succession; breeding between species stays deferred; tune food/tribute numbers after playtest.
+
+## v0.7.1 — Pharilux (8th playable)
+Added from the approved concept sheet + lore bible entry 28: data/critters/pharilux.json, data/moves/pharilux.json (11 moves, all pass the Move Effect Gate), rig design (procedural placeholder until the Blender model), palette, VFX recipes (4 abilities + hit style), SFX (4), icons (4), region The Drowned Expanse, 7 lore chapters, jar ladder, rival = Cigarra (her blind spot). New mechanic: guard `parry_confuse` (Depth Veil). Role: Warden (second). Tap the selected jar again to open the jar view.
+Open: Pharilux balance (first sharded run in tools/out/matrix.md), Homeland is "Unknown" in the lore bible but the sheet says The Drowned Expanse (kept the sheet).

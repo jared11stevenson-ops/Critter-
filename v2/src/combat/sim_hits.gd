@@ -353,6 +353,8 @@ static func _parry(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary, mo
 		_permission(sim, atk, dfn, move_id, false)      # "Who gave you permission?"
 	if int(dfn.T["parry_spoil"]) > 0 and not projectile:
 		atk.add_status("spoiled", int(R["spoil_frames"]))
+	if int(dfn.T["parry_confuse"]) > 0 and not projectile:
+		atk.add_status("confused", int(dfn.T["parry_confuse"]))     # Depth Veil (Pharilux): the parried attacker loses its bearings
 	var blast := float(dfn.T["parry_blast"])
 	if blast > 0.0 and not projectile:
 		sim.damage(atk, dfn, blast, "parry_blast")

@@ -1,0 +1,69 @@
+{
+ "id": "pharilux",
+ "name": "Pharilux",
+ "species": "Ghost prey-mantis (the Watcher Below)",
+ "archetype": "Threshold keeper, area control",
+ "palette": {
+  "main": "weathered teal",
+  "accent": "amber lantern",
+  "glow": "tide mist"
+ },
+ "stats": {
+  "vit": 6,
+  "sta": 6,
+  "poi": 5,
+  "spd": 5,
+  "rch": 8,
+  "dmg": 6
+ },
+ "moves": {
+  "light": [
+   "pharilux_hook1",
+   "pharilux_hook2",
+   "pharilux_chain_sweep"
+  ],
+  "heavy": "pharilux_anchor_drop",
+  "grab": "pharilux_chain_haul",
+  "dodge": "pharilux_tidal_slip",
+  "ability1": "pharilux_pressure",
+  "ability2": "pharilux_anchor_field",
+  "ability3": "pharilux_guiding_light",
+  "laststand": "pharilux_tidal_ascension",
+  "guard": "pharilux_depth_veil"
+ },
+ "tuning": {
+  "body_radius": 0.55,
+  "block_chip": 0.25,
+  "block_poise": 0.5,
+  "guard_drain": 0.6,
+  "parry_window": 9,
+  "parry_confuse": 120,
+  "marks_bonus": 1,
+  "dodge_chain": 1,
+  "damage_mult": 1.0
+ },
+ "ai": {
+  "style": "zoner",
+  "range": [
+   2.4,
+   4.0
+  ],
+  "ability1": {
+   "min": 0.0,
+   "max": 3.6,
+   "when": "close"
+  },
+  "ability2": {
+   "min": 1.5,
+   "max": 5.0,
+   "when": "any"
+  },
+  "ability3": {
+   "min": 3.0,
+   "max": 7.0,
+   "when": "far"
+  }
+ },
+ "powers": "pressure, guiding light, spectral tide, anchors and chains, foresight",
+ "role": "warden"
+}

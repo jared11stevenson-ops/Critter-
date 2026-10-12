@@ -43,7 +43,7 @@ func _ready() -> void:
 	cam.look_at(Vector3(0, 1.0, 0))
 	cam.current = true
 	var moves: Array = []
-	for cid in ["aruun", "cigarra", "bramvex", "scarlith", "mollusk", "zephyr", "nyxaris"]:
+	for cid in ["aruun", "cigarra", "bramvex", "scarlith", "mollusk", "zephyr", "nyxaris", "pharilux"]:
 		var d: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/moves/%s.json" % cid))
 		for mid in d["moves"].keys():
 			if AbilityVfx.cast(mid, _dummy_ctx(cid)) or d["moves"][mid].get("kind", "") in ["ability", "laststand"]:

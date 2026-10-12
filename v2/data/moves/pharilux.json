@@ -1,0 +1,525 @@
+{
+ "critter": "pharilux",
+ "moves": {
+  "pharilux_hook1": {
+   "name": "Claw Hook",
+   "kind": "light",
+   "tell_anim": "slash",
+   "startup": 12,
+   "active": 3,
+   "recovery": 11,
+   "stamina_cost": 7,
+   "damage": 10.0,
+   "poise_damage": 6,
+   "hitstun": 17,
+   "blockstun": 11,
+   "knockback": 0.4,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 2.9,
+    "arc": 50
+   },
+   "track": 6,
+   "lore_source": "lore:Watcher Below; antique claw-arm hooks in close",
+   "power": "anatomy",
+   "chain": "pharilux_hook2",
+   "cancel_from": 13,
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.7,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
+  },
+  "pharilux_hook2": {
+   "name": "Claw Hook II",
+   "kind": "light",
+   "tell_anim": "slash_back",
+   "startup": 12,
+   "active": 3,
+   "recovery": 11,
+   "stamina_cost": 7,
+   "damage": 10.0,
+   "poise_damage": 6,
+   "hitstun": 17,
+   "blockstun": 11,
+   "knockback": 0.4,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 3.0,
+    "arc": 50
+   },
+   "track": 6,
+   "lore_source": "lore:Watcher Below; second hook",
+   "power": "anatomy",
+   "chain": "pharilux_chain_sweep",
+   "cancel_from": 13,
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.8,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
+  },
+  "pharilux_chain_sweep": {
+   "name": "Chain Sweep",
+   "kind": "light",
+   "tell_anim": "slash",
+   "startup": 14,
+   "active": 4,
+   "recovery": 15,
+   "stamina_cost": 8,
+   "damage": 11.0,
+   "poise_damage": 8,
+   "hitstun": 20,
+   "blockstun": 12,
+   "knockback": 0.7,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 3.3,
+    "arc": 100
+   },
+   "track": 6,
+   "lore_source": "lore:chains and anchors hang from the keeper; a low sweep",
+   "power": "anatomy",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.9,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
+  },
+  "pharilux_anchor_drop": {
+   "name": "Anchor Drop",
+   "kind": "heavy",
+   "tell_anim": "overhead",
+   "startup": 32,
+   "active": 4,
+   "recovery": 26,
+   "stamina_cost": 20,
+   "damage": 20.0,
+   "poise_damage": 22,
+   "hitstun": 36,
+   "blockstun": 18,
+   "knockback": 1.0,
+   "hitstop": 9,
+   "hitbox": {
+    "reach": 3.0,
+    "arc": 50
+   },
+   "track": 10,
+   "lore_source": "lore:anchor and chain; a slow overhead that holds a target in place",
+   "power": "anatomy",
+   "feint": true,
+   "props": {
+    "guard_crush": true
+   },
+   "on_hit": {
+    "slow": 120
+   },
+   "effect_kind": "control",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.8,
+    "hold": 1,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_status",
+      "name": "slowed",
+      "min_ticks": 60
+     }
+    ]
+   }
+  },
+  "pharilux_chain_haul": {
+   "name": "Chain Haul",
+   "kind": "grab",
+   "tell_anim": "grab",
+   "startup": 15,
+   "active": 3,
+   "recovery": 26,
+   "stamina_cost": 12,
+   "track": 8,
+   "damage": 11.0,
+   "poise_damage": 9,
+   "hitstop": 6,
+   "grab": true,
+   "throw_dist": 2.6,
+   "throw_stun": 6,
+   "hitbox": {
+    "reach": 3.2,
+    "arc": 90
+   },
+   "lore_source": "lore:chains pull; hauls the target off its footing",
+   "power": "anatomy",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 100,
+    "dist": 3.0,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_moved",
+      "min": 1.2
+     },
+     {
+      "m": "enemy_stun",
+      "kind": "knockdown"
+     }
+    ]
+   }
+  },
+  "pharilux_tidal_slip": {
+   "name": "Tidal Slip",
+   "kind": "dodge",
+   "tell_anim": "leap",
+   "startup": 0,
+   "active": 6,
+   "recovery": 9,
+   "stamina_cost": 13.0,
+   "iframes": [
+    0,
+    6
+   ],
+   "motion": [
+    {
+     "at": 0,
+     "len": 6,
+     "dist": 3.4,
+     "dir": "input"
+    }
+   ],
+   "cancel_from": 8,
+   "chain_on": "always",
+   "lore_source": "lore:Tidal Ascension; slips along a thread of water",
+   "power": "supernatural",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 50,
+    "enemy": "attacker",
+    "dist": 1.8,
+    "dodge_tick": 6,
+    "dodge_dir": [
+     0,
+     1
+    ],
+    "measure": [
+     {
+      "m": "self_moved",
+      "min": 1.0
+     },
+     {
+      "m": "damage_prevented",
+      "min": 3
+     }
+    ]
+   }
+  },
+  "pharilux_pressure": {
+   "name": "Pressure",
+   "kind": "ability",
+   "tell_anim": "roar",
+   "startup": 18,
+   "active": 4,
+   "recovery": 22,
+   "stamina_cost": 12,
+   "cooldown": 330,
+   "track": 8,
+   "damage": 4.5,
+   "poise_damage": 10,
+   "hitstun": 22,
+   "blockstun": 8,
+   "knockback": 3.4,
+   "hitstop": 5,
+   "hitbox": {
+    "reach": 3.8,
+    "arc": 120
+   },
+   "props": {
+    "unparryable": true
+   },
+   "spawns": [
+    {
+     "at": 18,
+     "type": "gust"
+    }
+   ],
+   "lore_source": "lore:Pressure; water pressure shoves, crushes poise, ring-out",
+   "power": "supernatural",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 100,
+    "dist": 3.3,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_moved",
+      "min": 1.7
+     },
+     {
+      "m": "event",
+      "type": "gust"
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
+  },
+  "pharilux_anchor_field": {
+   "name": "Anchor Field",
+   "kind": "ability",
+   "tell_anim": "hook",
+   "startup": 16,
+   "active": 1,
+   "recovery": 20,
+   "stamina_cost": 12,
+   "cooldown": 480,
+   "spawns": [
+    {
+     "at": 16,
+     "type": "zone",
+     "place": "front",
+     "dist": 2.4,
+     "radius": 1.8,
+     "life": 300,
+     "affect": "enemy",
+     "tag": "anchor",
+     "max": 1,
+     "dps": 1.6,
+     "buff": {
+      "slow": 1
+     }
+    }
+   ],
+   "lore_source": "lore:Anchor Field; conjured anchors and chains slow and trap",
+   "power": "supernatural",
+   "effect_kind": "terrain",
+   "expected": {
+    "ticks": 170,
+    "zone_tag": "anchor",
+    "dist": 2.4,
+    "zone_after": 60,
+    "measure": [
+     {
+      "m": "entity",
+      "kind": "tag:anchor",
+      "count": 1
+     },
+     {
+      "m": "enemy_status",
+      "name": "slowed",
+      "min_ticks": 1
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
+  },
+  "pharilux_guiding_light": {
+   "name": "Guiding Light",
+   "kind": "ability",
+   "tell_anim": "charge",
+   "startup": 22,
+   "active": 6,
+   "recovery": 24,
+   "stamina_cost": 14,
+   "cooldown": 420,
+   "track": 10,
+   "damage": 5.0,
+   "poise_damage": 6,
+   "hitstun": 14,
+   "blockstun": 8,
+   "knockback": 0.2,
+   "hitstop": 4,
+   "hitbox": {
+    "reach": 7.5,
+    "arc": 16
+   },
+   "props": {
+    "unblockable": true
+   },
+   "on_hit": {
+    "status": {
+     "marked": 300
+    }
+   },
+   "lore_source": "lore:Guiding Light; the lighthouse beam reveals and marks the target",
+   "power": "supernatural",
+   "effect_kind": "status",
+   "expected": {
+    "ticks": 120,
+    "dist": 5.5,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_status",
+      "name": "marked",
+      "min_ticks": 120
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
+  },
+  "pharilux_tidal_ascension": {
+   "name": "Tidal Ascension",
+   "kind": "laststand",
+   "tell_anim": "leap",
+   "startup": 20,
+   "active": 6,
+   "recovery": 24,
+   "iframes": [
+    0,
+    30
+   ],
+   "damage": 9.0,
+   "poise_damage": 14,
+   "hitstun": 24,
+   "blockstun": 10,
+   "knockback": 3.6,
+   "hitstop": 6,
+   "hitbox": {
+    "reach": 3.2,
+    "arc": 360
+   },
+   "props": {
+    "unblockable": true
+   },
+   "spawns": [
+    {
+     "at": 22,
+     "type": "zone",
+     "place": "self",
+     "radius": 3.6,
+     "life": 420,
+     "dps": 3.6,
+     "affect": "enemy",
+     "tag": "tide",
+     "buff": {
+      "slow": 1
+     }
+    }
+   ],
+   "lore_source": "lore:Spectral Tide / Tidal Ascension; a column of water rises and the tide holds the ring",
+   "power": "supernatural",
+   "effect_kind": "terrain",
+   "expected": {
+    "ticks": 170,
+    "zone_tag": "tide",
+    "dist": 2.6,
+    "zone_after": 60,
+    "pre": {
+     "self_vit_ratio": 0.2
+    },
+    "measure": [
+     {
+      "m": "entity",
+      "kind": "tag:tide",
+      "count": 1
+     },
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 3.0
+     },
+     {
+      "m": "enemy_status",
+      "name": "slowed",
+      "min_ticks": 1
+     }
+    ]
+   }
+  },
+  "pharilux_depth_veil": {
+   "name": "Depth Veil",
+   "kind": "guard",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "lore:Depth Veil; a parry clouds the attacker's sense of direction",
+   "power": "supernatural",
+   "effect_kind": "defense",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 2.0,
+    "ticks": 60,
+    "enemy_critter": "aruun",
+    "guard_from": 13,
+    "measure": [
+     {
+      "m": "event",
+      "type": "parry"
+     },
+     {
+      "m": "enemy_status",
+      "name": "confused",
+      "min_ticks": 60
+     }
+    ]
+   }
+  }
+ }
+}

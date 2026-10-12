@@ -55,6 +55,14 @@
    "species": "nyxaris",
    "profile": "expert",
    "reward": 2.0
+  },
+  {
+   "id": "drowned_expanse",
+   "name": "The Drowned Expanse",
+   "blurb": "Flooded ruins, lighthouse stones and shorelines where land, sea and old histories meet.",
+   "species": "pharilux",
+   "profile": "expert",
+   "reward": 2.0
   }
  ],
  "names": {
@@ -127,6 +135,16 @@
    "Flurry",
    "Frond",
    "Pale"
+  ],
+  "pharilux": [
+   "Brine",
+   "Wick",
+   "Tern",
+   "Gantry",
+   "Kelp",
+   "Marl",
+   "Ebb",
+   "Sable"
   ]
  },
  "tournament": [

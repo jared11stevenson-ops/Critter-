@@ -6,7 +6,8 @@
   "scarlith",
   "mollusk",
   "zephyr",
-  "nyxaris"
+  "nyxaris",
+  "pharilux"
  ],
  "timeout_ticks": 7200,
  "input_buffer": 6,
@@ -122,6 +123,7 @@
   "reserve_max": 0.0,
   "waste_not": 0.0,
   "parry_spoil": 0,
+  "parry_confuse": 0,
   "loophole_window": 0,
   "marks_armor": 0,
   "cultivate_interval": 0,

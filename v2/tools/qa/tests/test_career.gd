@@ -65,5 +65,5 @@ func run() -> Array:
 	for sp in ["aruun", "cigarra", "bramvex", "scarlith", "mollusk", "zephyr", "nyxaris"]:
 		QaCheck.eq(fails, Career.chapters_for(sp).size(), 7, "%s has 7 chapters" % sp)
 		QaCheck.is_true(fails, Career.role_of(sp) != "Fighter", "%s has a role" % sp)
-	QaCheck.eq(fails, Career.regions().size(), 7, "seven expedition regions")
+	QaCheck.eq(fails, Career.regions().size(), 8, "eight expedition regions")
 	return fails

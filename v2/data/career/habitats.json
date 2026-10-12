@@ -270,6 +270,43 @@
     "effect": "monument",
     "amount": 0
    }
+  ],
+  "pharilux": [
+   {
+    "name": "Lamp rest",
+    "materials": 8,
+    "pop_req": 1,
+    "effect": "housing",
+    "amount": 4
+   },
+   {
+    "name": "Winch house",
+    "materials": 12,
+    "pop_req": 2,
+    "effect": "food",
+    "amount": 3
+   },
+   {
+    "name": "Tide steps",
+    "materials": 16,
+    "pop_req": 4,
+    "effect": "tribute",
+    "amount": 2
+   },
+   {
+    "name": "Kelp gallery",
+    "materials": 22,
+    "pop_req": 6,
+    "effect": "housing",
+    "amount": 6
+   },
+   {
+    "name": "Beacon tower",
+    "materials": 30,
+    "pop_req": 9,
+    "effect": "monument",
+    "amount": 0
+   }
   ]
  }
 }

@@ -4,7 +4,7 @@ extends RefCounted
 ## capture only counts after a successful extraction; tournaments risk death; the Champion Tournament leads to retire-or-defend.
 ## All state lives in GameSave.roster (RosterState); this class turns finished bouts into roster changes and reports for the UI.
 
-const ROLE_OF := {"aruun": "Breaker", "cigarra": "Reader", "bramvex": "Warden", "scarlith": "Brewer", "mollusk": "Anchor", "zephyr": "Drifter", "nyxaris": "Binder"}
+const ROLE_OF := {"aruun": "Breaker", "cigarra": "Reader", "bramvex": "Warden", "scarlith": "Brewer", "mollusk": "Anchor", "zephyr": "Drifter", "nyxaris": "Binder", "pharilux": "Warden"}
 const HEAL_PER_BOUT := 0.10
 const HEAL_COST := 30
 const ROLE_INFO := {
@@ -22,7 +22,8 @@ const HABITAT := {
 	"scarlith": "Rotting log, damp moss, a fungal basin and a small hoard of things other people threw away.",
 	"mollusk": "Warm wet loam, broad leaves and a puddle that never quite drains. Everything here is built to be repaired.",
 	"zephyr": "A cluster of blooming vines that open in turn, and just enough draft to keep the petals moving.",
-	"nyxaris": "Cold stone, a rime of frost and a thermal vent at the back that she hates, and uses."}
+	"nyxaris": "Cold stone, a rime of frost and a thermal vent at the back that she hates, and uses.",
+	"pharilux": "A strip of dark shoreline, a rusted anchor half sunk in the sand and one amber lamp that was already lit before anyone got here."}
 static var _data: Dictionary = {}
 static var _chapters: Dictionary = {}
 
@@ -248,7 +249,7 @@ static func begin_extraction(c: CritterInstance, species: String, region_id: Str
 	return {"kind": "extraction", "uid": c.uid, "opp_species": _pursuer_for(species), "region": region_id, "captive": species}
 
 static func _pursuer_for(species: String) -> String:
-	var order := ["aruun", "cigarra", "bramvex", "scarlith", "mollusk", "zephyr", "nyxaris"]
+	var order := ["aruun", "cigarra", "bramvex", "scarlith", "mollusk", "zephyr", "nyxaris", "pharilux"]
 	return order[(order.find(species) + 3) % order.size()]
 
 ## Completes a capture after a successful extraction. Returns the new critter (null if the Shelf is full).
@@ -270,7 +271,7 @@ static func next_rung(c: CritterInstance) -> Dictionary:
 	return l[clampi(c.tourney_wins, 0, l.size() - 1)]
 
 static func opponent_for_rung(rung: Dictionary, c: CritterInstance) -> String:
-	var order := ["aruun", "cigarra", "bramvex", "scarlith", "mollusk", "zephyr", "nyxaris"]
+	var order := ["aruun", "cigarra", "bramvex", "scarlith", "mollusk", "zephyr", "nyxaris", "pharilux"]
 	var i := (order.find(c.species) + 1 + c.tourney_wins * 2 + c.titles_defended) % order.size()
 	return order[i]
 

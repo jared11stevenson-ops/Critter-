@@ -22,6 +22,7 @@ const STUB := {
 	"mollusk": {"strike_light": [18, 4, 16], "strike_heavy": [38, 6, 26], "ability1": [24, 10, 24]},
 	"zephyr": {"strike_light": [9, 3, 9], "strike_heavy": [18, 4, 14], "ability1": [14, 14, 14]},
 	"nyxaris": {"strike_light": [14, 4, 14], "strike_heavy": [26, 5, 20], "grab": [12, 4, 18]},
+	"pharilux": {"strike_light": [12, 3, 11], "strike_heavy": [32, 4, 26], "ability1": [18, 4, 22]},
 }
 static var _cache := {}
 

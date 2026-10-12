@@ -155,6 +155,25 @@ static func cast(mid: String, c: Dictionary) -> bool:
 			FxPrims.ring(P, _y(pos, 0.05), 1.0, 22.0, Color(0.7, 0.9, 1.0, 0.9), 1.2, 0.04)
 			FxPrims.dome(P, _y(pos, 0.2), 3.0, Color(0.7, 0.9, 1.0), 1.4)
 			FxPrims.sparks(P, _y(pos, 6.0), Color(0.9, 0.97, 1.0), 60, 1.0, -2.0, 2.0, 0.12, 180.0, Vector3.DOWN)
+		# ---------------- Pharilux: pressure, light, tide
+		"pharilux_pressure":
+			for k in 3:
+				FxPrims.ring(P, _y(pos, 1.1) + dir * (1.2 + k * 1.3), 0.5 + k * 0.2, 2.6 - k * 0.3, Color(0.5, 0.9, 0.85, 0.8), 0.5 + k * 0.1, 0.12, true)
+			FxPrims.sparks(P, _y(pos, 1.0) + dir * 2.0, Color(0.6, 0.95, 0.9), 22, 7.0, 0.0, 0.7, 0.13, 30.0, dir)
+		"pharilux_anchor_field":
+			FxPrims.ring(P, _y(pos, 0.05) + dir * 2.4, 0.5, 3.6, Color(1.0, 0.72, 0.25, 0.9), 0.7, 0.09)
+			FxPrims.spikes(P, _y(pos, 0) + dir * 2.4, Color(0.55, 0.45, 0.35), 5, 1.4, 0.8, 0.7)
+			FxPrims.dome(P, _y(pos, 0.2) + dir * 2.4, 1.6, Color(0.5, 0.85, 0.85), 1.0)
+		"pharilux_guiding_light":
+			FxPrims.streak(P, _y(pos, 1.7), _y(pos, 1.4) + dir * 7.5, Color(1.0, 0.85, 0.35, 0.95), 0.5, 0.35)
+			FxPrims.streak(P, _y(pos, 1.7), _y(pos, 1.4) + dir * 7.5, Color(1.0, 0.95, 0.7, 0.9), 0.5, 0.15)
+			FxPrims.burst(P, _y(pos, 1.7), Color(1.0, 0.85, 0.35), 10, 2.0, 0.35, 0.12)
+			FxPrims.ring(P, _y(tp, 1.2), 0.3, 1.6, Color(1.0, 0.85, 0.35, 0.8), 0.5, 0.1, true)
+		"pharilux_tidal_ascension":
+			FxPrims.column(P, _y(pos, 0.0), Color(0.5, 0.9, 0.85), 7.0, 1.3, 0.9)
+			FxPrims.ring(P, _y(pos, 0.05), 1.0, 7.0, Color(0.5, 0.9, 0.85, 0.9), 0.9, 0.08)
+			FxPrims.dome(P, _y(pos, 0.2), 3.4, Color(0.4, 0.8, 0.8), 1.4)
+			FxPrims.sparks(P, _y(pos, 1.0), Color(0.8, 1.0, 0.95), 40, 3.0, 5.0, 1.2, 0.14, 180.0)
 		_:
 			return false
 	return true
@@ -188,6 +207,9 @@ static func hit(critter: String, c: Dictionary, dmg: float, heavy: bool) -> void
 		"zephyr":
 			FxPrims.slash(P, hp, dir, Color(1, 0.6, 0.9, 0.9), 1.3 * s, 0.16, -0.4)
 			FxPrims.sparks(P, hp, Color(1, 0.7, 0.9), 10, 4.0, 1.0, 0.6, 0.1)
+		"pharilux":
+			FxPrims.slash(P, hp, dir, Color(1.0, 0.8, 0.35, 0.9), 1.4 * s, 0.18, 0.3)
+			FxPrims.sparks(P, hp, Color(0.6, 0.95, 0.9), 10, 3.5, -2.0, 0.6, 0.12)
 		"nyxaris":
 			FxPrims.spikes(P, Vector3(hp.x, 0, hp.z), Color(0.8, 0.95, 1.0), 4, 0.8, 0.9, 0.4)
 			FxPrims.sparks(P, hp, Color(0.8, 0.95, 1.0), 12, 3.5, -3.0, 0.6, 0.12)

@@ -59,7 +59,8 @@
   "scarlith": {},
   "mollusk": {},
   "zephyr": {},
-  "nyxaris": {}
+  "nyxaris": {},
+  "pharilux": {}
  },
  "_todo": "Per-critter overrides and the seven personal trials are stubbed to the defaults; Lead/story to fill 'overrides' and set trial_complete via RosterState.complete_trial().",
  "species": {
@@ -90,6 +91,10 @@
   "nyxaris": {
    "title": "frost weaver",
    "rival": "mollusk"
+  },
+  "pharilux": {
+   "title": "ghost mantis",
+   "rival": "cigarra"
   }
  }
 }
