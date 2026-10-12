@@ -90,6 +90,10 @@ func start(config: BoutConfig) -> void:
 	hud.name = "Hud"
 	add_child(hud)
 	hud.setup(self)
+	var _audio := BoutAudio.new()
+	_audio.name = "BoutAudio"
+	add_child(_audio)
+	_audio.bind(self)
 	if player != null:
 		player.attach_touch(hud.touch)
 	_invert = FxCtl.make_invert_overlay()
