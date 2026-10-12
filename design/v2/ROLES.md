@@ -1,3 +1,5 @@
+> **CREATOR RULING (supersedes the numeric soft-counter cycle below):** there are exactly **two kinds of fights: Blood Bout and Practice**. Roles are **fighting and ability styles, not a rock-paper-scissors table**. No critter may be discouraged for being the player's favorite: there are **no hidden damage multipliers between roles** and every critter should sit near 50% against every other at equal skill. A player who masters one style can beat many opponents and can still lose to a style they have never practiced against: that is a *knowledge and skill* gap, not a stat gap. The cycle and the 54/46 cap below are kept only as *style notes* (what each style tends to struggle with if the player has not learned the answer). Balance work removes extreme pairs; it never builds counters in.
+
 # CRITTER v2 — Roles: how a fighter wins (Lead, 2026-10-11)
 
 **Creator brief:** every character has a role, but not tank/DPS/healer: new, inventive roles that give a real *motive* for choosing a fighter, without making favorites feel useless because a role counters them.

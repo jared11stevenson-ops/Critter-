@@ -164,7 +164,7 @@ static func scout(parent: Control, species: String, profile: String, place: Stri
 	v.add_child(UiStyle.label("SCOUTING: %s" % place.to_upper(), 30, UiStyle.RUST, 0))
 	v.add_child(UiStyle.label("A wild %s  (%s)" % [info["species"], info["role"]], 38, UiStyle.INK, 0))
 	_txt(v, "Wins by: %s" % info["wins"], 22).custom_minimum_size = Vector2(840, 0)
-	_txt(v, "Struggles against: %s" % info["weak"], 22).custom_minimum_size = Vector2(840, 0)
+	_txt(v, "Habit to watch for: %s" % info["weak"], 22).custom_minimum_size = Vector2(840, 0)
 	_txt(v, "Abilities: %s" % ", ".join(info["abilities"]), 22, UiStyle.TEAL).custom_minimum_size = Vector2(840, 0)
 	_txt(v, "Wild individuals fight to survive. Skill: %s. Your critter can die here. Choose how to approach:" % profile, 20, UiStyle.RUST).custom_minimum_size = Vector2(840, 0)
 	var msg := _txt(v, " ", 20, UiStyle.RUST)

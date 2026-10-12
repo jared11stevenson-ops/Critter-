@@ -105,8 +105,8 @@ func setup(screen_mode: String, initial: String) -> void:
 		_opts_box.add_child(ol)
 		_opts_box.add_child(UiStyle.segment_row("AI OPPONENT", [["novice", "Novice"], ["standard", "Standard"], ["expert", "Expert"]], profile, func(v): profile = v, 118, 0, true))
 		_opts_box.add_child(UiStyle.segment_row("ARENA", ARENAS, arena_id, func(v): arena_id = v, 96, 0, true))
-		_opts_box.add_child(UiStyle.segment_row("STAKES", [["real", "Blood bout"], ["train", "Training"]], "train" if training else "real", func(v): training = v == "train", 176, 0, true))
-		var hint := UiStyle.label("Blood bout: a finishing blow is permanent death. Training: nobody dies.", 17, UiStyle.PAPER_DK, 4)
+		_opts_box.add_child(UiStyle.segment_row("STAKES", [["real", "Blood bout"], ["train", "Practice"]], "train" if training else "real", func(v): training = v == "train", 176, 0, true))
+		var hint := UiStyle.label("Blood bout: a finishing blow is permanent death. Practice: nobody dies.", 17, UiStyle.PAPER_DK, 4)
 		hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		hint.custom_minimum_size = Vector2(300, 0)
 		_opts_box.add_child(hint)

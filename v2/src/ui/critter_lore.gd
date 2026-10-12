@@ -82,4 +82,4 @@ static func describe_result(res: Dictionary, name_of: Callable) -> Dictionary:
 		return {"title": "YIELDED", "sub": "%s lives. The bout is lost, and so is the purse." % my_name, "tone": "spare"}
 	if bool(res.get("killed", false)) and not training:
 		return {"title": "DEATH", "sub": epitaph(my_id), "tone": "death"}
-	return {"title": "DEFEAT", "sub": "%s is down, but training costs nothing." % my_name if training else "%s is down." % my_name, "tone": "defeat"}
+	return {"title": "DEFEAT", "sub": "%s is down, but practice costs nothing." % my_name if training else "%s is down." % my_name, "tone": "defeat"}

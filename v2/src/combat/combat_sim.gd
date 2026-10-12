@@ -134,7 +134,6 @@ func damage(target: Fighter, source: Fighter, amount: float, move_id: String, ch
 		return
 	if source != null:
 		_dealt[source.idx] += amount
-		amount *= float(R.get("role_pressure", {}).get(source.def.role + ">" + target.def.role, 1.0))
 	amount = Res.on_damage(self, target, source, amount)
 	if amount <= 0.0:
 		return

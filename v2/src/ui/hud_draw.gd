@@ -79,7 +79,7 @@ func _draw() -> void:
 			var k: float = p["t"] / 0.9
 			_ink.text(sp + Vector2(-100, -60.0 * k - 30), p["text"], 44 if int(p["size"]) >= 44 else 34, p["col"].lerp(Color(p["col"], 0.0), k * k), HORIZONTAL_ALIGNMENT_CENTER, 200)
 	if bout.cfg.training:
-		_ink.text(Vector2(m.x + 8, m.y + ph + 36), "TRAINING - nobody can die", 18, UiStyle.TEAL_LT)
+		_ink.text(Vector2(m.x + 8, m.y + ph + 36), "PRACTICE - nobody can die", 18, UiStyle.TEAL_LT)
 	_ink.flush()
 	_draw_banner()
 

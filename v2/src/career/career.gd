@@ -76,7 +76,7 @@ static func scout_info(species: String) -> Dictionary:
 
 ## Expedition approaches (the player chooses how to meet the wild critter). Stalk: study it first, it starts weakened (more so for patient roles).
 const APPROACHES := {
-	"stalk": {"name": "STALK", "cost": 5, "blurb": "Study it first. It starts weakened (Reader, Warden, Drifter, Binder study best). Costs 5 scrap of bait.", "fit": ["Reader", "Warden", "Drifter", "Binder"]},
+	"stalk": {"name": "STALK", "cost": 5, "blurb": "Study it first. It starts weakened. Costs 5 scrap of bait.", "fit": []},
 	"direct": {"name": "DIRECT", "cost": 0, "blurb": "Walk in and fight. Normal rewards.", "fit": []},
 	"provoke": {"name": "PROVOKE", "cost": 0, "blurb": "Wake it angry: it fights one skill level harder, and the haul is bigger.", "fit": []},
 }
@@ -90,11 +90,9 @@ static func apply_approach(r: RosterState, ctx: Dictionary, approach: String) ->
 	ctx["approach"] = approach
 	ctx["haul"] = 1.0
 	ctx["opp_vit"] = 1.0
-	var c := r.get_critter(str(ctx["uid"]))
 	match approach:
 		"stalk":
-			var fit: bool = c != null and (ap["fit"] as Array).has(role_of(c.species))
-			ctx["opp_vit"] = 0.7 if fit else 0.85
+			ctx["opp_vit"] = 0.8      # every critter can stalk: roles are fighting styles, never a handicap
 			ctx["haul"] = 0.8
 		"provoke":
 			ctx["profile"] = PROFILE_UP.get(str(ctx["profile"]), "expert")

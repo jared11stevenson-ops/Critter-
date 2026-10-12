@@ -18,3 +18,6 @@
 - Bond thresholds 5/15/30/60/100 and Contest scar rule (loss/yield/<15% vitality, cap 3): accepted as defaults; creator may change.
 - Per-critter story overrides and personal trials: to be filled when the Life Story content is written (hook: RosterState.complete_trial).
 - Reinstall wipes the deaths ledger: accepted for now; cloud save is a Tier 2 item.
+
+## 2026-10 Two fight kinds; roles are styles, not counters (creator)
+Only **Blood Bout** (lethal, counts) and **Practice** (nobody dies, nothing counts) exist as player-facing fights. Roles are fighting/ability styles; outcomes must come from skill. Removed the `role_pressure` damage table from the sim and the role bonus on Stalk. Contest tier remains in code only for old save/test compatibility and is not reachable from the UI. Balance target: every pairing near 50% at equal skill.

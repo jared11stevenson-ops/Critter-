@@ -197,7 +197,7 @@ func _on_phase(p: String) -> void:
 	var b: String = bout.fighter_name(1).to_upper()
 	match p:
 		"intro":
-			draw_ctl.show_banner("%s  vs  %s" % [a, b], "Training bout - nobody dies" if bout.cfg.training else "Blood bout - one life each", 2.0)
+			draw_ctl.show_banner("%s  vs  %s" % [a, b], "Practice - nobody dies" if bout.cfg.training else "Blood bout - one life each", 2.0)
 		"fight":
 			draw_ctl.show_banner("FIGHT!", "", 0.9)
 

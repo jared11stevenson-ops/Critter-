@@ -242,7 +242,7 @@ func _on_career_finished(res: Dictionary) -> void:
 	if kind in ["tutorial", "training"]:
 		var won := int(res.get("winner", -1)) == 0
 		var rep := {"headline": ("Well fought." if won else "Not yet."), "tone": "win" if won else "loss", "lines": [
-			"Training is safe: nothing is lost and nothing counts." if kind == "training" else "That was the tutorial. From here on every fight is real, and death is permanent.",
+			"Practice is safe: nothing is lost and nothing counts." if kind == "training" else "That was the tutorial. From here on every fight is real, and death is permanent.",
 			"Your Shelf is ready. Send Aruun on an expedition to capture a new critter, or enter a tournament."], "died": false}
 		var choices := [["shelf", "TO THE SHELF", UiStyle.GOLD], ["retry", "AGAIN", UiStyle.TEAL_LT]]
 		CareerPanels.result(host, rep, choices, func(id: String): _tutorial_choice(id, layer, uid))

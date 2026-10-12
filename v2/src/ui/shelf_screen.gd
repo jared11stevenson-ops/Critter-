@@ -77,7 +77,7 @@ func setup(r: RosterState, select_uid := "") -> void:
 	_btn_tourney = UiStyle.button("TOURNAMENT", 24, Vector2(200, 64), UiStyle.RUST)
 	_btn_tourney.pressed.connect(func(): if _uid() != "": tournament_pressed.emit(_uid()))
 	bar.add_child(_btn_tourney)
-	_btn_train = UiStyle.button("TRAIN", 24, Vector2(110, 64), UiStyle.TEAL_LT)
+	_btn_train = UiStyle.button("PRACTICE", 22, Vector2(110, 64), UiStyle.TEAL_LT)
 	_btn_train.pressed.connect(func(): if _uid() != "": training_pressed.emit(_uid()))
 	bar.add_child(_btn_train)
 	var b_jar := UiStyle.button("JAR", 24, Vector2(100, 64), UiStyle.TEAL)

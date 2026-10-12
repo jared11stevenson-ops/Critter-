@@ -1,6 +1,6 @@
 class_name StakesTier
 extends RefCounted
-## Stakes tiers (GDD 5.3). The int values are what CombatSim receives as `stakes`.
+## Stakes tiers. Player-facing there are only TWO fights: Blood Bout (BLOOD, lethal) and Practice (SPARRING, nobody dies). CONTEST is legacy (old saves/tests) and unreachable from the UI.
 const SPARRING := 0
 const CONTEST := 1
 const BLOOD := 2

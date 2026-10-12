@@ -73,7 +73,7 @@ func run() -> Array:
 	QaCheck.is_true(fails, Career.apply_approach(ar, ctx, "stalk") != "", "stalking costs bait the player may not have")
 	ar.economy.add("scrap", 20)
 	QaCheck.eq(fails, Career.apply_approach(ar, ctx, "stalk"), "", "stalk with scrap works")
-	QaCheck.is_true(fails, absf(float(ctx["opp_vit"]) - 0.7) < 0.001 and ar.economy.scrap == 15, "a Drifter studies best: prey at 70%, bait spent")
+	QaCheck.is_true(fails, absf(float(ctx["opp_vit"]) - 0.8) < 0.001 and ar.economy.scrap == 15, "stalking: prey at 80%, bait spent (same for every role)")
 	ctx["profile"] = "standard"
 	Career.apply_approach(ar, ctx, "provoke")
 	QaCheck.is_true(fails, ctx["profile"] == "expert" and float(ctx["haul"]) > 1.5, "provoke raises the AI and the haul")
