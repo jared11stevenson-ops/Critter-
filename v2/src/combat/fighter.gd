@@ -68,6 +68,7 @@ var charge := 0
 var slow_acc := 0.0         # Inertia Field time scaling accumulator
 var marks := 0              # Mollusk shell memory marks (survived bouts)
 var killer_idx := -1
+var wvel := Vector2.ZERO    # smoothed walk velocity (m/s)
 var borrow_prev := false
 var fungus_timer := 0
 
@@ -85,7 +86,7 @@ func in_startup() -> bool:
 	return move != null and af < move.startup
 
 func is_attacking() -> bool:
-	return move != null and stun == 0 and action in ["strike_light", "strike_heavy", "grab", "ability1", "ability2", "laststand"]
+	return move != null and stun == 0 and action in ["strike_light", "strike_heavy", "grab", "ability1", "ability2", "ability3", "laststand"]
 
 func invulnerable() -> bool:
 	if iframes > 0:
@@ -108,4 +109,5 @@ func actionable() -> bool:
 ## Outgoing damage multiplier: temporary (riposte, buffs) times the critter's tuned damage_mult.
 func out_mult() -> float:
 	var brew: float = 1.0 + (pressure / maxf(1.0, float(T["pressure_max"]))) * float(T["brew_bonus"])
-	return dmg_mult * float(T["damage_mult"]) * (float(T["rage_dmg"]) if raging else 1.0) * brew
+	var desperate: float = float(T["desperation_mult"]) if vit / max_vit < float(T["desperation_ratio"]) else 1.0
+	return dmg_mult * float(T["damage_mult"]) * (float(T["rage_dmg"]) if raging else 1.0) * brew * desperate

@@ -18,7 +18,7 @@
  "parry_action_frames": 8,
  "parry_iframes": 10,
  "parry_sta_refund": 14,
- "parry_hitstop": 9,
+ "parry_hitstop": 6,
  "riposte_frames": 60,
  "riposte_startup_mult": 0.5,
  "riposte_dmg_mult": 1.3,
@@ -49,8 +49,8 @@
  "clash_frames": 22,
  "clash_poise": 6,
  "clash_push": 0.8,
- "clash_hitstop": 8,
- "block_hitstop": 4,
+ "clash_hitstop": 6,
+ "block_hitstop": 3,
  "block_push_mult": 0.5,
  "crush_drain_mult": 2.0,
  "crush_dmg_mult": 0.5,
@@ -84,13 +84,13 @@
   },
   "walk_speed": {
    "stat": "spd",
-   "base": 1.4,
-   "per": 0.3
+   "base": 3.4,
+   "per": 0.32
   },
   "sta_regen": {
    "stat": "sta",
-   "base": 14.0,
-   "per": 1.5
+   "base": 18.0,
+   "per": 2.0
   },
   "poise_regen": {
    "stat": "poi",
@@ -128,7 +128,10 @@
   "guard_delay": 0.0,
   "intel_gain": 0.0,
   "brew_bonus": 0.0,
-  "marks_bonus": 0.0
+  "marks_bonus": 0.0,
+  "desperation_mult": 1.3,
+  "desperation_ratio": 0.35,
+  "parry_permission": 0
  },
  "tick_rate": 60,
  "input_deadzone": 0.2,
@@ -154,8 +157,8 @@
  "morrow_odds": 0.004,
  "morrow_range": 2.4,
  "plate_size": 30.0,
- "compel_frames": 72,
- "compel_poise_ref": 120.0,
+ "compel_frames": 60,
+ "compel_poise_ref": 200.0,
  "compel_max_resist": 0.75,
  "compel_edge_range": 3.5,
  "compel_stumble_speed": 3.4,
@@ -193,7 +196,7 @@
   "borrowed",
   "touched"
  ],
- "inertia_rate": 0.6,
+ "inertia_rate": 0.7,
  "owed_speed": 0.75,
  "owed_frames": 240,
  "mark_armor": 0.02,
@@ -225,5 +228,36 @@
   "owed",
   "spoiled"
  ],
- "random_dodge_arc": 70.0
+ "random_dodge_arc": 70.0,
+ "default_stakes": 2,
+ "walk_accel": 42.0,
+ "walk_decel": 70.0,
+ "moving_epsilon": 0.15,
+ "cancel_window": 8,
+ "confirm_cancel_delay": 2,
+ "hitstop_cap": 6,
+ "sudden_death_vit": 0.5,
+ "endurance_sta": 1.5,
+ "endurance_vit": 1.3,
+ "endurance_timeout": 2.0,
+ "ringout_knock": 1.5,
+ "hazard_default": {
+  "kind": "dps",
+  "shape": "circle",
+  "pos": [
+   0.0,
+   0.0
+  ],
+  "radius": 2.0,
+  "dps": 10.0
+ },
+ "role_cycle": [
+  "breaker",
+  "warden",
+  "drifter",
+  "brewer",
+  "anchor",
+  "binder",
+  "reader"
+ ]
 }

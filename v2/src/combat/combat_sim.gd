@@ -18,6 +18,12 @@ var ents: Array = []
 var tick := 0              # real ticks (including hit-stop)
 var frame := 0             # simulation frames (hit-stop frames excluded)
 var hitstop := 0
+var mods: Array = []       # active rule modifiers (apply_modifiers)
+var timeout_frames := 0
+var hazards_on := false
+var knock_scale := 1.0
+var fog := false
+var gauntlet := false
 var cracks: Array = []     # remaining cracked Thoughtstone (copied from the arena)
 var dt := 1.0 / 60.0       # seconds per tick (rules.tick_rate)
 var fx = Fx
@@ -30,13 +36,14 @@ var _pending: Array = []   # fighter indices whose vitality reached 0 this tick
 var _finisher := ""
 var _dealt := [0.0, 0.0]
 
-func _init(a: CritterDef, b: CritterDef, arena_def: ArenaDef, stakes_tier: int, seed_value: int) -> void:
+func _init(a: CritterDef, b: CritterDef, arena_def: ArenaDef, stakes_tier: int = -1, seed_value: int = 0) -> void:
 	R = CombatData.rules()
 	dt = 1.0 / float(R["tick_rate"])
 	arena = arena_def
 	cracks = arena_def.cracks.duplicate(true)
-	stakes = stakes_tier
+	stakes = stakes_tier if stakes_tier >= 0 else int(R["default_stakes"])      # default: Blood (lethal); 0/1 only for Training / Contest
 	rng.seed = seed_value
+	timeout_frames = int(R["timeout_ticks"])
 	var defs := [a, b]
 	for i in 2:
 		var f = FighterT.new()
@@ -64,6 +71,31 @@ func _setup_fighter(f: Fighter, i: int, d: CritterDef) -> void:
 	f.max_poise = float(f.T["max_poise"])
 	f.poise = f.max_poise
 	Res.setup(self, f)
+
+## Rule modifiers (ROLES.md): sudden_death, endurance, hazard, ringout, gauntlet, fog. Default: none. Call before the first step.
+func apply_modifiers(list: Array) -> void:
+	mods = list.duplicate()
+	for m in mods:
+		match str(m):
+			"sudden_death":
+				for f in fighters:
+					f.max_vit *= float(R["sudden_death_vit"])
+					f.vit = f.max_vit
+			"endurance":
+				for f in fighters:
+					f.max_sta *= float(R["endurance_sta"])
+					f.sta = f.max_sta
+					f.max_vit *= float(R["endurance_vit"])
+					f.vit = f.max_vit
+				timeout_frames = int(float(R["timeout_ticks"]) * float(R["endurance_timeout"]))
+			"hazard":
+				hazards_on = true
+			"ringout":
+				knock_scale = float(R["ringout_knock"])
+			"gauntlet":
+				gauntlet = true
+			"fog":
+				fog = true
 
 ## Mollusk's Shell Memory: each bout survived carves a mark (permanent small armor).
 func set_shell_marks(idx: int, marks: int) -> void:
@@ -138,6 +170,7 @@ func step(input_a: CombatInput, input_b: CombatInput) -> void:
 	_physics()
 	Hits.resolve_tick(self)
 	Fx.tick_world(self)
+	hitstop = mini(hitstop, int(R["hitstop_cap"]))
 	_check_end()
 
 func _physics() -> void:
@@ -147,7 +180,7 @@ func _physics() -> void:
 		if not f.alive:
 			continue
 		if f.forced != Vector2.ZERO:
-			var np: Vector2 = f.pos + f.forced
+			var np: Vector2 = f.pos + f.forced * knock_scale
 			f.forced *= decay
 			if f.forced.length() < float(R["forced_epsilon"]):
 				f.forced = Vector2.ZERO
@@ -200,7 +233,7 @@ func _check_end() -> void:
 			emit("ko", loser, _finisher, fighters[loser].pos, 0.0)
 		_finish(1 - loser, "ringout" if ring else "ko", stakes >= 2, loser)
 		return
-	if frame >= int(R["timeout_ticks"]):
+	if frame >= timeout_frames:
 		var ra: float = fighters[0].ratio()
 		var rb: float = fighters[1].ratio()
 		var w := -1
@@ -212,7 +245,7 @@ func _finish(winner: int, reason: String, killed: bool, loser: int) -> void:
 	_over = true
 	_result = {"winner": winner, "reason": reason, "killed": killed, "loser": loser, "ticks": tick,
 		"vitality_ratio": [fighters[0].ratio(), fighters[1].ratio()], "damage_dealt": _dealt.duplicate(),
-		"last_stand_used": [fighters[0].last_stand_used, fighters[1].last_stand_used], "finisher": _finisher, "injury": {}}
+		"last_stand_used": [fighters[0].last_stand_used, fighters[1].last_stand_used], "finisher": _finisher, "injury": {}, "modifiers": mods, "gauntlet": gauntlet, "carry": [fighters[0].ratio(), fighters[1].ratio()]}
 	if killed and loser >= 0:
 		fighters[loser].action = "ko"
 	if stakes == 1 and loser >= 0 and (reason == "ko" or reason == "ringout"):
@@ -234,13 +267,13 @@ func state() -> Dictionary:
 		fs.append({"pos": f.pos, "facing": f.facing, "vitality": f.vit, "vitality_max": f.max_vit, "stamina": f.sta,
 			"stamina_max": f.max_sta, "poise": f.poise, "poise_max": f.max_poise, "pressure": f.pressure, "rage": f.rage, "raging": f.raging, "plates": ceili(f.plate_pool / float(R["plate_size"])), "intel": f.intel, "reserve": f.reserve, "dots": f.dots.size(), "compelled": f.has("compelled"),
 			"action": act, "action_frame": f.af, "move_id": f.move.id if f.move != null else "",
-			"stun": f.stun, "tell_anim": f.move.tell_anim if f.move != null else "", "stored": f.stored, "debt": f.debt, "status": names, "cooldowns": f.cooldowns.duplicate(), "winded": f.winded,
+			"stun": f.stun, "velocity": f.wvel, "status_ticks": f.st.duplicate(), "dot_stacks": f.dots.duplicate(true), "tell_anim": (f.move.tell_anim if f.move != null and not fog else ""), "stored": f.stored, "debt": f.debt, "status": names, "cooldowns": f.cooldowns.duplicate(), "winded": f.winded,
 			"can_last_stand": (not f.last_stand_used) and f.alive and f.ratio() < float(R["last_stand_ratio"]),
 			"last_stand_used": f.last_stand_used, "alive": f.alive})
 	var es: Array = []
 	for e in ents:
-		es.append({"kind": e.kind, "owner": e.owner, "pos": e.pos, "radius": e.radius, "life": e.life, "tag": e.tag})
-	return {"tick": tick, "frame": frame, "hitstop": hitstop, "fighters": fs, "entities": es, "over": _over}
+		es.append({"kind": e.kind, "type": e.tag if e.tag != "" else e.kind, "owner": e.owner, "pos": e.pos, "radius": e.radius, "life": e.life, "remaining": e.life, "tag": e.tag, "move_id": e.move_id})
+	return {"modifiers": mods, "tick": tick, "frame": frame, "hitstop": hitstop, "fighters": fs, "entities": es, "over": _over}
 
 ## Stable hash of the full simulation state (determinism tests).
 func state_hash() -> int:

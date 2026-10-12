@@ -31,6 +31,9 @@ var _last_guard := false
 var _danger_cache := -1.0
 var charge_goal := 0
 
+static func _hint_key(slot: String) -> String:
+	return {"a1": "ability1", "a2": "ability2", "a3": "ability3"}.get(slot, "ability1")
+
 static func profile_names() -> Array:
 	return ["novice", "standard", "expert"]
 
@@ -66,8 +69,8 @@ func _move_of(me, kind: String) -> MoveDef:
 		"grab": return me.def.move(ids["grab"])
 		"a1": return me.def.move(ids["ability1"])
 		"a2": return me.def.move(ids["ability2"])
+		"a3": return me.def.move(ids["ability3"]) if ids.has("ability3") else null
 		"ls": return me.def.move(ids["laststand"])
-		"counter": return me.def.move(ids["counter"]) if ids.has("counter") else null
 	return null
 
 func _kind_of(m: MoveDef) -> String:
@@ -111,12 +114,8 @@ func _press(inp: CombatInput, key: String, away: Vector2 = Vector2.ZERO) -> void
 				inp.move = away
 		"a1": inp.ability1 = true
 		"a2": inp.ability2 = true
-		"ls":
-			inp.ability1 = true
-			inp.ability2 = true
-		"counter":
-			inp.grab = true
-			inp.guard = true
+		"a3": inp.ability3 = true
+		"ls": inp.last_stand = true
 
 # ---------------------------------------------------------------- main
 func decide(sim: CombatSim) -> CombatInput:
@@ -145,14 +144,14 @@ func decide(sim: CombatSim) -> CombatInput:
 			guard_from = -1
 			return _finish(inp, me)
 	# --- Rage (Aruun): enter when the bar is high and the fight is on, leave early when low on Vitality
-	if me.def.move_ids.has("rage") and me.stun == 0 and not (not me.last_stand_used and me.ratio() < sim.R["last_stand_ratio"]):
+	if me.def.move_ids.has("ability3") and me.def.move(str(me.def.move_ids["ability3"])).kind == "toggle_rage" and me.stun == 0:
 		var want_chord := false
 		if not me.raging and me.rage >= float(sim.R["rage_enter"]) + float(C["rage_margin"]) and gap < float(C["rage_range"]) and rng.randf() < float(P["rage"]):
 			want_chord = true
 		elif me.raging and (me.ratio() < float(C["rage_end_ratio"]) or gap > float(C["rage_idle_gap"]) * 2.0) and rng.randf() < float(C["rage_end_prob"]):
 			want_chord = true
 		if want_chord:
-			_press(inp, "ls")
+			_press(inp, "a3")
 			return _finish(inp, me)
 	# --- scheduled presses --------------------------------------------------
 	var pending_press := false
@@ -236,7 +235,7 @@ func _react(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float) -> vo
 	var impact: int = ft + rem
 	var is_grab: bool = h["grab"]
 	var heavy: bool = m.kind == "heavy" or m.kind == "ability" or m.kind == "laststand"
-	var w := {"parry": 0.0, "block": 0.0, "dodge": 0.0, "interrupt": 0.0, "ability": 0.0, "counter": 0.0}
+	var w := {"parry": 0.0, "block": 0.0, "dodge": 0.0, "interrupt": 0.0, "ability": 0.0}
 	if is_grab:
 		w["dodge"] = float(P["dodge_prob"]) * float(C["block_weight_dodge_grab"])
 		w["interrupt"] = float(P["interrupt_prob"]) * float(C["interrupt_grab_mult"])
@@ -259,15 +258,13 @@ func _react(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float) -> vo
 	if me.has("premonition") and not me.winded and me.sta >= float(C["dodge_min_sta"]) and not is_grab:
 		w["dodge"] = maxf(w["dodge"], float(P["dodge_prob"]) * float(C["premonition_dodge"]) * 1.6)   # dodge through the ghost
 	# defensive ability hint (stances)
-	for slot in ["a1", "a2"]:
-		var hint: Dictionary = me.def.ai_hints.get("ability1" if slot == "a1" else "ability2", {})
+	for slot in ["a1", "a2", "a3"]:
+		var hint: Dictionary = me.def.ai_hints.get(_hint_key(slot), {})
 		if hint.get("when", "") == "defensive" and _ready_for(me, slot):
 			var am := _move_of(me, slot)
 			var lead := int(am.stance.get("from", am.startup)) + int(C["stance_lead"]) if not am.stance.is_empty() else am.startup
 			if rem >= lead - int(C["stance_slack"]):
 				w["ability"] = float(P["ability"]) * 0.9
-	if _ready_for(me, "counter") and not is_grab and rem >= 6:
-		w["counter"] = float(P["ability"]) * float(C["counter_weight"])
 	# habit-informed anticipation raises parry/dodge for experts
 	var pick := _weighted(w)
 	if pick == "":
@@ -297,11 +294,9 @@ func _react(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float) -> vo
 			var mine := _move_of(me, "light")
 			if mine != null and mine.startup + 1 < rem and gap_ok(me, op, "light"):
 				sched.append([ft, "light"])
-		"counter":
-			sched.append([maxi(impact - 6, ft), "counter"])
 		"ability":
-			for slot in ["a1", "a2"]:
-				var hint2: Dictionary = me.def.ai_hints.get("ability1" if slot == "a1" else "ability2", {})
+			for slot in ["a1", "a2", "a3"]:
+				var hint2: Dictionary = me.def.ai_hints.get(_hint_key(slot), {})
 				if hint2.get("when", "") == "defensive" and _ready_for(me, slot):
 					var am2 := _move_of(me, slot)
 					var lead2 := int(am2.stance.get("from", am2.startup)) + int(C["stance_lead"]) if not am2.stance.is_empty() else am2.startup
@@ -392,6 +387,14 @@ func _neutral(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float, gua
 		if dir.dot(inward) < 0.0:
 			dir -= inward * dir.dot(inward)
 		dir += inward * (float(C["edge_base"]) + float(C["edge_gain"]) * w)
+	# steer around the enemy's traps and damaging zones (read the terrain)
+	for ze in sim.ents:
+		if ze.kind == "zone" and ze.owner != idx and ze.tag != "fungus" and (ze.once or ze.dps > 0.0 or not ze.buff.is_empty()):
+			var away: Vector2 = me.pos - ze.pos
+			var dz: float = away.length()
+			var near: float = ze.radius + me.radius + float(C["trap_margin"])
+			if dz < near and dz > 0.01 and ze.radius < float(C["trap_big_radius"]):
+				dir += away / dz * float(P["trap_awareness"]) * float(C["trap_push"]) * (1.0 - dz / near + 0.3)
 	if guarding:
 		dir *= float(C["guarding_move"])
 	inp.move = dir.limit_length(1.0)
@@ -420,8 +423,8 @@ func _neutral(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float, gua
 	if punish and opts.has("light") and vulnerable < int(C["punish_light_cutoff"]):
 		opts["light"] = float(C["punish_light_weight"])
 	# abilities
-	for slot in ["a1", "a2"]:
-		var hint: Dictionary = me.def.ai_hints.get("ability1" if slot == "a1" else "ability2", {})
+	for slot in ["a1", "a2", "a3"]:
+		var hint: Dictionary = me.def.ai_hints.get(_hint_key(slot), {})
 		if hint.is_empty() or str(hint.get("when", "")) == "defensive" or not _ready_for(me, slot):
 			continue
 		var d: float = dist
@@ -463,7 +466,7 @@ func _neutral(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float, gua
 		return
 	_press(inp, choice)
 	charge_goal = rng.randi_range(0, 40) if choice == "heavy" else 0
-	my_last = {"light": "light", "heavy": "heavy", "grab": "grab", "a1": "ability", "a2": "ability"}.get(choice, "light")
+	my_last = {"light": "light", "heavy": "heavy", "grab": "grab", "a1": "ability", "a2": "ability", "a3": "ability"}.get(choice, "light")
 	my_last_frame = sim.frame
 	chain_done = ""
 	feint_done = ""

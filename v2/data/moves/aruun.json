@@ -7,9 +7,9 @@
    "tell_anim": "chop",
    "startup": 16,
    "active": 4,
-   "recovery": 18,
+   "recovery": 14,
    "stamina_cost": 9,
-   "damage": 8.0,
+   "damage": 6.3,
    "poise_damage": 10,
    "hitstun": 24,
    "blockstun": 14,
@@ -22,7 +22,23 @@
    "track": 6,
    "lore_source": "canon:aruun_combo three-strike mace combo",
    "chain": "aruun_combo2",
-   "cancel_from": 20
+   "cancel_from": 20,
+   "power": "weapon:Morrow",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 1.96,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "aruun_combo2": {
    "name": "Morrow Combo 2",
@@ -30,9 +46,9 @@
    "tell_anim": "slash_back",
    "startup": 15,
    "active": 4,
-   "recovery": 18,
+   "recovery": 14,
    "stamina_cost": 9,
-   "damage": 9.0,
+   "damage": 7.1,
    "poise_damage": 11,
    "hitstun": 26,
    "blockstun": 14,
@@ -45,7 +61,23 @@
    "track": 6,
    "lore_source": "canon:aruun_combo three-strike mace combo",
    "chain": "aruun_combo3",
-   "cancel_from": 19
+   "cancel_from": 19,
+   "power": "weapon:Morrow",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.02,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "aruun_combo3": {
    "name": "Morrow Combo Finisher",
@@ -53,9 +85,9 @@
    "tell_anim": "overhead",
    "startup": 18,
    "active": 4,
-   "recovery": 30,
+   "recovery": 24,
    "stamina_cost": 12,
-   "damage": 12.0,
+   "damage": 9.4,
    "poise_damage": 16,
    "hitstun": 34,
    "blockstun": 14,
@@ -69,6 +101,26 @@
    "lore_source": "canon:aruun_combo the last swing knocks enemies back",
    "props": {
     "knockdown": false
+   },
+   "power": "weapon:Morrow",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.14,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_moved",
+      "min": 1.3
+     }
+    ]
    }
   },
   "aruun_overhead": {
@@ -77,11 +129,11 @@
    "tell_anim": "overhead",
    "startup": 36,
    "active": 5,
-   "recovery": 32,
+   "recovery": 28,
    "stamina_cost": 24,
    "feint": true,
    "track": 14,
-   "damage": 28.0,
+   "damage": 22.0,
    "poise_damage": 30,
    "hitstun": 42,
    "blockstun": 22,
@@ -95,7 +147,28 @@
     "guard_crush": true,
     "knockdown": true
    },
-   "lore_source": "lore:L424 Morrow transmits impact sensation"
+   "lore_source": "lore:L424 Morrow transmits impact sensation",
+   "power": "weapon:Morrow",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.26,
+    "hold": 1,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_stun",
+      "kind": "knockdown"
+     }
+    ]
+   }
   },
   "aruun_drag": {
    "name": "Morrow Drag",
@@ -103,10 +176,10 @@
    "tell_anim": "grab",
    "startup": 20,
    "active": 3,
-   "recovery": 28,
+   "recovery": 25,
    "stamina_cost": 14,
    "track": 8,
-   "damage": 14.0,
+   "damage": 11.0,
    "poise_damage": 12,
    "hitstop": 8,
    "grab": true,
@@ -116,7 +189,27 @@
     "reach": 2.8,
     "arc": 80
    },
-   "lore_source": "canon:gravity_pull concept, short pull-and-slam"
+   "lore_source": "canon:gravity_pull concept, short pull-and-slam",
+   "power": "weapon:Morrow",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.68,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_stun",
+      "kind": "knockdown"
+     }
+    ]
+   }
   },
   "aruun_dodge": {
    "name": "Heavy Roll",
@@ -124,8 +217,8 @@
    "tell_anim": "leap",
    "startup": 0,
    "active": 6,
-   "recovery": 16,
-   "stamina_cost": 24,
+   "recovery": 13,
+   "stamina_cost": 20.4,
    "iframes": [
     0,
     6
@@ -133,12 +226,34 @@
    "motion": [
     {
      "at": 0,
-     "len": 8,
-     "dist": 2.0,
+     "len": 6,
+     "dist": 3.0,
      "dir": "input"
     }
    ],
-   "lore_source": "lore:L424 Morrow redirects; body weight dodge"
+   "lore_source": "lore:L424 Morrow redirects; body weight dodge",
+   "power": "psionic",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 50,
+    "enemy": "attacker",
+    "dist": 1.8,
+    "dodge_tick": 6,
+    "dodge_dir": [
+     0,
+     1
+    ],
+    "measure": [
+     {
+      "m": "self_moved",
+      "min": 1.0
+     },
+     {
+      "m": "damage_prevented",
+      "min": 3
+     }
+    ]
+   }
   },
   "aruun_reaching_strike": {
    "name": "Reaching Strike",
@@ -146,11 +261,11 @@
    "tell_anim": "thrust",
    "startup": 30,
    "active": 4,
-   "recovery": 34,
+   "recovery": 31,
    "stamina_cost": 16,
    "cooldown": 360,
    "track": 10,
-   "damage": 24.0,
+   "damage": 18.9,
    "poise_damage": 22,
    "hitstun": 38,
    "blockstun": 18,
@@ -171,7 +286,33 @@
      "radius": 2.0
     }
    ],
-   "lore_source": "canon:reaching_strike cooldown 6s, shatters cracked Thoughtstone"
+   "lore_source": "canon:reaching_strike cooldown 6s, shatters cracked Thoughtstone",
+   "power": "psionic",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 3.76,
+    "pre": {
+     "cracks": true
+    },
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "event",
+      "type": "shatter"
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "aruun_gravity_pull": {
    "name": "Gravity Pull",
@@ -179,7 +320,7 @@
    "tell_anim": "hook",
    "startup": 22,
    "active": 22,
-   "recovery": 30,
+   "recovery": 27,
    "stamina_cost": 18,
    "cooldown": 600,
    "track": 10,
@@ -193,7 +334,7 @@
     {
      "at": 22,
      "len": 3,
-     "damage": 4.0,
+     "damage": 3.2,
      "hitstun": 24,
      "on_hit": {
       "pull_to": 1.0
@@ -202,7 +343,7 @@
     {
      "at": 40,
      "len": 3,
-     "damage": 26.0,
+     "damage": 20.4,
      "poise_damage": 24,
      "hitstun": 40,
      "knockback": 0.8,
@@ -217,7 +358,38 @@
      "hitstop": 12
     }
    ],
-   "lore_source": "canon:gravity_pull cooldown 10s, floats ahead, drags then slams"
+   "lore_source": "canon:gravity_pull cooldown 10s, floats ahead, drags then slams",
+   "power": "psionic",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 120,
+    "dist": 4.0,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_stun",
+      "kind": "knockdown"
+     },
+     {
+      "m": "enemy_moved",
+      "min": 1.0
+     },
+     {
+      "m": "enemy_moved",
+      "min": 1.0
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "aruun_morrow_first": {
    "name": "Morrow Moves First",
@@ -225,9 +397,9 @@
    "tell_anim": "slash_up",
    "startup": 8,
    "active": 3,
-   "recovery": 18,
+   "recovery": 14,
    "stamina_cost": 0,
-   "damage": 14.0,
+   "damage": 11.0,
    "poise_damage": 14,
    "hitstun": 24,
    "blockstun": 12,
@@ -238,7 +410,26 @@
     "arc": 150
    },
    "track": 8,
-   "lore_source": "lore:L426 sometimes it appears to move before he commands it"
+   "lore_source": "lore:L426 sometimes it appears to move before he commands it",
+   "power": "weapon:Morrow",
+   "effect_kind": "defense",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 1.8,
+    "ticks": 60,
+    "via": "guard",
+    "guard_from": 5,
+    "measure": [
+     {
+      "m": "event",
+      "type": "morrow_first"
+     },
+     {
+      "m": "hit",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "aruun_carry_the_bridge": {
    "name": "Carry the Bridge",
@@ -252,7 +443,7 @@
     0,
     100
    ],
-   "damage": 28.0,
+   "damage": 22.0,
    "poise_damage": 30,
    "hitstun": 40,
    "blockstun": 20,
@@ -268,16 +459,79 @@
     "store_ratio": 1.0,
     "stored_mult": 1.5
    },
-   "lore_source": "lore:Red Span carries part of a bridge, redistributes force"
+   "lore_source": "lore:Red Span carries part of a bridge, redistributes force",
+   "power": "weapon:Morrow",
+   "effect_kind": "defense",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 1.8,
+    "ticks": 190,
+    "pre": {
+     "self_vit_ratio": 0.2
+    },
+    "measure": [
+     {
+      "m": "field_up",
+      "name": "stored",
+      "min": 2
+     },
+     {
+      "m": "hit",
+      "min": 8
+     }
+    ]
+   }
   },
   "aruun_beetle_rage": {
    "name": "Beetle Rage",
-   "kind": "resource",
+   "kind": "toggle_rage",
    "tell_anim": "roar",
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "canon:beetle_rage cooldown 18s; lore:L439 deliberate overdrive, self-damage (Strain)"
+   "lore_source": "canon:beetle_rage cooldown 18s; lore:L439 deliberate overdrive, self-damage (Strain)",
+   "power": "psionic",
+   "effect_kind": "resource",
+   "expected": {
+    "dist": 4.0,
+    "ticks": 160,
+    "pre": {
+     "self_rage": 80
+    },
+    "measure": [
+     {
+      "m": "self_status",
+      "name": "raging",
+      "min_ticks": 1
+     },
+     {
+      "m": "self_vit_loss",
+      "min": 3
+     }
+    ]
+   }
+  },
+  "aruun_shell_brace": {
+   "name": "Shell Brace",
+   "kind": "guard",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "lore:shell fractures / Burden Architecture; plates absorb damage",
+   "effect_kind": "defense",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 1.8,
+    "ticks": 60,
+    "guard_from": 1,
+    "measure": [
+     {
+      "m": "damage_prevented",
+      "min": 3
+     }
+    ]
+   }
   }
  }
 }

@@ -116,6 +116,8 @@ static func _spawn(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, sp: Dicti
 					same.remove_at(0)
 			sim.ents.append(e)
 			sim.emit("zone", f.idx, m.id, e.pos, 0.0, {"radius": e.radius, "tag": e.tag})
+		"fungus":
+			Res.grow_fungus(sim, f)
 		"ripen_all":
 			Res.ripen_all(sim, o, f)
 			f.pressure = float(f.T["pressure_max"])
@@ -200,7 +202,10 @@ static func tick_world(sim: CombatSim) -> void:
 			if f.sta <= 0.0:
 				f.st.erase("wall")
 				f.winded = true
-	for hz in sim.arena.hazards:
+	var hz_list: Array = sim.arena.hazards if sim.hazards_on else []
+	if sim.hazards_on and hz_list.is_empty():
+		hz_list = [R["hazard_default"]]
+	for hz in hz_list:
 		var kind := str(hz.get("kind", "dps"))
 		for f in sim.fighters:
 			if not f.alive or not sim.arena.hazard_contains(hz, f.pos):

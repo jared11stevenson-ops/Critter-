@@ -3,7 +3,6 @@
  "name": "Nyxaris",
  "species": "Frostbloom silk-weaver",
  "archetype": "Grappler / binder",
- "weapon": "Cryogenic silk and venom fangs",
  "palette": {
   "main": "frost blue",
   "accent": "silk white",
@@ -23,21 +22,22 @@
    "nyxaris_silk_lash2"
   ],
   "heavy": "nyxaris_frost_lance",
-  "grab": "nyxaris_cocoon",
+  "grab": "nyxaris_silk_snare",
   "dodge": "nyxaris_silk_hop",
   "ability1": "nyxaris_boundary",
   "ability2": "nyxaris_venom_fang",
-  "counter": "nyxaris_permission",
   "laststand": "nyxaris_cold_archive",
   "resource": "nyxaris_silk_reserve",
-  "guard": "nyxaris_silk_screen"
+  "guard": "nyxaris_silk_screen",
+  "ability3": "nyxaris_cocoon"
  },
  "tuning": {
   "body_radius": 0.65,
   "block_chip": 0.12,
   "crush_resist": 0.3,
   "reserve_max": 100.0,
-  "damage_mult": 1.0
+  "damage_mult": 1.08,
+  "parry_permission": 1
  },
  "ai": {
   "style": "grappler",
@@ -47,13 +47,20 @@
   ],
   "ability1": {
    "min": 2.0,
-   "max": 6.0,
+   "max": 7.0,
    "when": "far"
   },
   "ability2": {
    "min": 0.0,
-   "max": 1.9,
+   "max": 2.0,
+   "when": "close"
+  },
+  "ability3": {
+   "min": 0.0,
+   "max": 2.6,
    "when": "close"
   }
- }
+ },
+ "powers": "cryogenic silk, venom",
+ "role": "binder"
 }

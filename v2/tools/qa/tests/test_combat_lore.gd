@@ -19,10 +19,11 @@ func _grab(i: CombatInput) -> void:
 
 func _press(slot: String) -> Callable:
 	return func(i: CombatInput) -> void:
-		if slot == "ability1" or slot == "laststand":
-			i.ability1 = true
-		if slot == "ability2" or slot == "laststand":
-			i.ability2 = true
+		match slot:
+			"ability1": i.ability1 = true
+			"ability2": i.ability2 = true
+			"ability3": i.ability3 = true
+			"laststand": i.last_stand = true
 
 func _hits_by(evs: Array, move_id: String, type: String = "hit") -> Array:
 	var out: Array = []
@@ -166,10 +167,10 @@ func _scarlith(fails: Array) -> void:
 	U.run(sim, 50, {1: _grab})
 	if not sim.fighters[0].has("haste") or sim.fighters[1].has("haste") or not sim.fighters[1].has("slowed"):
 		fails.append("scarlith barter: should steal a buff and penalise the enemy")
-	# Cultivate: fungus feeds and heals him, the enemy tramples it
+	# Cultivate (ability 3): plants fungus that feeds and heals him; the enemy tramples it
 	sim = U.make("scarlith", "mollusk", "ring", 1, 2)
 	U.face_off(sim, 6.0)
-	U.run(sim, 320)
+	U.run(sim, 40, {2: _press("ability3")})
 	var fungus := 0
 	for e in sim.ents:
 		if e.tag == "fungus":
@@ -273,24 +274,21 @@ func _zephyr(fails: Array) -> void:
 	var n: int = _hits_by(evs, "zephyr_flutter1").size() + _hits_by(evs, "zephyr_flutter2").size() + _hits_by(evs, "zephyr_flutter3").size()
 	if n < 3:
 		fails.append("zephyr flutter: three fast chained strikes expected (%d)" % n)
-	# Delivery crosses the arena; a Promise kept pays, a broken one costs stamina
+	# Promise (ability 3): a declared rush; keeping it pays, breaking it costs stamina
 	sim = U.make("zephyr", "mollusk", "ring", 1, 2)
 	U.face_off(sim, 5.0)
-	var x0: float = sim.fighters[0].pos.x
-	var s_before: float = sim.fighters[0].sta
-	evs = U.run(sim, 80, {1: func(i: CombatInput) -> void: i.strike_hold = true})
+	evs = U.run(sim, 80, {1: _press("ability3")})
 	if U.count(evs, "promise", 0) < 1:
-		fails.append("zephyr delivery: the Promise is declared at the tell")
-	var kept := _hits_by(evs, "zephyr_delivery")
-	if kept.is_empty():
-		fails.append("zephyr delivery: the rushing heavy should connect across the gap")
+		fails.append("zephyr promise: the Promise is declared at the tell")
+	if _hits_by(evs, "zephyr_promise_attack").is_empty():
+		fails.append("zephyr promise: the rushing attack should connect across the gap")
 	sim = U.make("zephyr", "mollusk", "ring", 1, 2)
-	sim.fighters[0].pos = Vector2(-7.0, 0.0)
-	sim.fighters[1].pos = Vector2(7.0, 3.0)
+	sim.fighters[0].pos = Vector2(-9.0, 0.0)
+	sim.fighters[1].pos = Vector2(9.0, 3.0)
 	var sta_a: float = sim.fighters[0].sta
-	U.run(sim, 90, {1: func(i: CombatInput) -> void: i.strike_hold = true})
-	if sim.fighters[0].sta > sim.fighters[0].max_sta - 10.0 and sim.fighters[0].sta >= sta_a:
-		fails.append("zephyr delivery: a broken Promise should cost stamina")
+	U.run(sim, 70, {1: _press("ability3")})
+	if sim.fighters[0].sta > sta_a - 20.0:
+		fails.append("zephyr promise: a broken Promise should cost stamina (%f -> %f)" % [sta_a, sim.fighters[0].sta])
 	# Loophole: a freshly raised guard slips through a light strike, not a heavy
 	sim = U.make("aruun", "zephyr", "ring", 1, 2)
 	U.face_off(sim, 2.2)
@@ -378,19 +376,13 @@ func _nyxaris(fails: Array) -> void:
 			venom += 1
 	if venom < 2 or venom > 5:
 		fails.append("nyxaris venom fang: ticking stacks up to five (%d)" % venom)
-	# "Who gave you permission?": guard + grab sets the counter-stance; a strike entering her space is punished
+	# "Who gave you permission?": her perfect guard punishes the attacker (stun + root)
 	sim = U.make("zephyr", "nyxaris", "ring", 1, 2)
 	U.face_off(sim, 2.0)
-	var perm := func(i: CombatInput, t: int) -> void:
-		i.guard = true
-		i.grab = t == 4
-	evs = U.run(sim, 40, {1: _tap}, {}, Callable(), perm)
-	var punished := false
-	for e in evs:
-		if e["type"] == "parry" and e.get("permission", false):
-			punished = true
-	if not punished or sim.fighters[0].vit >= sim.fighters[0].max_vit:
-		fails.append("nyxaris permission: should punish a strike that enters her space")
+	var pg := func(i: CombatInput, t: int) -> void: i.guard = t >= 5
+	evs = U.run(sim, 24, {1: _tap}, {}, Callable(), pg)
+	if U.count(evs, "parry", 1) < 1 or not sim.fighters[0].has("rooted"):
+		fails.append("nyxaris permission: a perfect guard should punish the attacker")
 	# Cold Archive: slowed enemy, silk is free
 	sim = U.make("nyxaris", "mollusk", "ring", 1, 2)
 	U.face_off(sim, 3.0)

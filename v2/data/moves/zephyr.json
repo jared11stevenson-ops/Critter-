@@ -7,9 +7,9 @@
    "tell_anim": "thrust",
    "startup": 10,
    "active": 3,
-   "recovery": 11,
+   "recovery": 9,
    "stamina_cost": 6,
-   "damage": 6.0,
+   "damage": 10.0,
    "poise_damage": 5,
    "hitstun": 16,
    "blockstun": 11,
@@ -22,7 +22,23 @@
    "track": 5,
    "lore_source": "lore:Motion; very fast strikes from hover",
    "chain": "zephyr_flutter2",
-   "cancel_from": 12
+   "cancel_from": 12,
+   "power": "anatomy",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.56,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "zephyr_flutter2": {
    "name": "Flutter Strike II",
@@ -30,9 +46,9 @@
    "tell_anim": "thrust",
    "startup": 10,
    "active": 3,
-   "recovery": 11,
+   "recovery": 9,
    "stamina_cost": 6,
-   "damage": 6.0,
+   "damage": 10.0,
    "poise_damage": 5,
    "hitstun": 16,
    "blockstun": 11,
@@ -45,7 +61,23 @@
    "track": 5,
    "lore_source": "lore:Motion; very fast strikes from hover",
    "chain": "zephyr_flutter3",
-   "cancel_from": 12
+   "cancel_from": 12,
+   "power": "anatomy",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.62,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "zephyr_flutter3": {
    "name": "Flutter Side-Step",
@@ -53,9 +85,9 @@
    "tell_anim": "slash_back",
    "startup": 11,
    "active": 3,
-   "recovery": 16,
+   "recovery": 13,
    "stamina_cost": 6,
-   "damage": 7.0,
+   "damage": 11.6,
    "poise_damage": 6,
    "hitstun": 18,
    "blockstun": 11,
@@ -74,7 +106,23 @@
      "dist": 1.4,
      "dir": "side"
     }
-   ]
+   ],
+   "power": "anatomy",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.62,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "zephyr_delivery": {
    "name": "Delivery",
@@ -82,11 +130,11 @@
    "tell_anim": "charge",
    "startup": 26,
    "active": 8,
-   "recovery": 26,
+   "recovery": 23,
    "stamina_cost": 16,
    "feint": true,
    "track": 10,
-   "damage": 18.0,
+   "damage": 29.9,
    "poise_damage": 12,
    "hitstun": 30,
    "blockstun": 16,
@@ -104,12 +152,24 @@
      "dir": "fwd"
     }
    ],
-   "promise": {
-    "bonus": 1.35,
-    "refund": 18,
-    "penalty": 16
-   },
-   "lore_source": "lore:courier, crossing spaces quickly; a declared Promise (Promise Law)"
+   "lore_source": "lore:courier, crossing spaces quickly; a declared Promise (Promise Law)",
+   "power": "anatomy",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.08,
+    "hold": 1,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "zephyr_catch": {
    "name": "Catch",
@@ -117,10 +177,10 @@
    "tell_anim": "grab",
    "startup": 14,
    "active": 3,
-   "recovery": 28,
+   "recovery": 25,
    "stamina_cost": 12,
    "track": 6,
-   "damage": 9.0,
+   "damage": 14.9,
    "poise_damage": 8,
    "hitstop": 6,
    "grab": true,
@@ -138,7 +198,31 @@
      "dir": "fwd"
     }
    ],
-   "lore_source": "lore:seizes in mid-air and releases for a ring-out"
+   "lore_source": "lore:seizes in mid-air and releases for a ring-out",
+   "power": "anatomy",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 100,
+    "dist": 1.96,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_moved",
+      "min": 1.8
+     },
+     {
+      "m": "enemy_stun",
+      "kind": "knockdown"
+     }
+    ]
+   }
   },
   "zephyr_air_dodge": {
    "name": "Air Dodge",
@@ -146,8 +230,8 @@
    "tell_anim": "leap",
    "startup": 0,
    "active": 6,
-   "recovery": 10,
-   "stamina_cost": 14,
+   "recovery": 7,
+   "stamina_cost": 11.9,
    "iframes": [
     0,
     6
@@ -155,14 +239,36 @@
    "motion": [
     {
      "at": 0,
-     "len": 7,
-     "dist": 2.8,
+     "len": 6,
+     "dist": 4.2,
      "dir": "input"
     }
    ],
    "lore_source": "lore:hummingbird-hawk-moth hover; crossing spaces is joy",
    "cancel_from": 8,
-   "chain_on": "always"
+   "chain_on": "always",
+   "power": "anatomy",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 50,
+    "enemy": "attacker",
+    "dist": 1.8,
+    "dodge_tick": 6,
+    "dodge_dir": [
+     0,
+     1
+    ],
+    "measure": [
+     {
+      "m": "self_moved",
+      "min": 1.0
+     },
+     {
+      "m": "damage_prevented",
+      "min": 3
+     }
+    ]
+   }
   },
   "zephyr_gust": {
    "name": "Gust",
@@ -170,11 +276,11 @@
    "tell_anim": "roar",
    "startup": 16,
    "active": 4,
-   "recovery": 24,
+   "recovery": 22,
    "stamina_cost": 12,
    "cooldown": 360,
    "track": 8,
-   "damage": 2.0,
+   "damage": 3.3,
    "poise_damage": 6,
    "hitstun": 20,
    "blockstun": 8,
@@ -193,7 +299,34 @@
      "type": "gust"
     }
    ],
-   "lore_source": "lore:Atmospheric Disturbance; knocks back, pushes projectiles, ring-out"
+   "lore_source": "lore:Atmospheric Disturbance; knocks back, pushes projectiles, ring-out",
+   "power": "supernatural",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 100,
+    "dist": 3.16,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_moved",
+      "min": 1.7
+     },
+     {
+      "m": "event",
+      "type": "gust"
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "zephyr_pollen": {
    "name": "Pollen",
@@ -201,7 +334,7 @@
    "tell_anim": "roar",
    "startup": 16,
    "active": 1,
-   "recovery": 22,
+   "recovery": 20,
    "stamina_cost": 12,
    "cooldown": 420,
    "spawns": [
@@ -221,7 +354,35 @@
      }
     }
    ],
-   "lore_source": "lore:Pollination; a cloud marks the enemy (slow, bonus damage from Zephyr)"
+   "lore_source": "lore:Pollination; a cloud marks the enemy (slow, bonus damage from Zephyr)",
+   "power": "supernatural",
+   "effect_kind": "terrain",
+   "expected": {
+    "ticks": 170,
+    "zone_tag": "pollen",
+    "dist": 8.0,
+    "zone_after": 60,
+    "measure": [
+     {
+      "m": "entity",
+      "kind": "tag:pollen",
+      "count": 1
+     },
+     {
+      "m": "enemy_status",
+      "name": "slowed",
+      "min_ticks": 1
+     },
+     {
+      "m": "enemy_status",
+      "name": "marked",
+      "min_ticks": 60
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "zephyr_a_promise_kept": {
    "name": "A Promise Kept",
@@ -234,7 +395,7 @@
     0,
     108
    ],
-   "damage": 8.0,
+   "damage": 13.3,
    "poise_damage": 6,
    "hitstun": 14,
    "blockstun": 8,
@@ -292,25 +453,108 @@
      "nocollide": true
     }
    ],
-   "lore_source": "lore:promises are sacred; a declared sequence nothing can interrupt or dodge"
+   "lore_source": "lore:promises are sacred; a declared sequence nothing can interrupt or dodge",
+   "power": "supernatural",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.08,
+    "pre": {
+     "self_vit_ratio": 0.2
+    },
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "zephyr_loophole": {
    "name": "Loophole",
-   "kind": "resource",
+   "kind": "guard",
    "tell_anim": "stance",
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "lore:loves loopholes; a freshly raised guard slips through a strike"
+   "lore_source": "lore:loves loopholes; a freshly raised guard slips through a strike",
+   "power": "anatomy",
+   "effect_kind": "defense",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 1.8,
+    "ticks": 60,
+    "guard_from": 8,
+    "measure": [
+     {
+      "m": "event",
+      "type": "dodge"
+     },
+     {
+      "m": "damage_prevented",
+      "min": 3
+     }
+    ]
+   }
   },
-  "zephyr_promise": {
+  "zephyr_promise_attack": {
    "name": "Promise",
-   "kind": "resource",
-   "tell_anim": "stance",
-   "startup": 0,
-   "active": 1,
-   "recovery": 0,
-   "lore_source": "lore:Promise Law, wording matters; follow through for bonus, break it and pay"
+   "kind": "ability",
+   "tell_anim": "charge",
+   "startup": 26,
+   "active": 8,
+   "recovery": 23,
+   "stamina_cost": 16,
+   "feint": true,
+   "track": 10,
+   "damage": 29.9,
+   "poise_damage": 12,
+   "hitstun": 30,
+   "blockstun": 16,
+   "knockback": 1.0,
+   "hitstop": 7,
+   "hitbox": {
+    "reach": 1.8,
+    "arc": 100
+   },
+   "motion": [
+    {
+     "at": 22,
+     "len": 12,
+     "dist": 6.0,
+     "dir": "fwd"
+    }
+   ],
+   "promise": {
+    "bonus": 1.4,
+    "refund": 20,
+    "penalty": 18
+   },
+   "lore_source": "lore:Promise Law; a declared attack, follow through for bonus",
+   "power": "anatomy",
+   "cooldown": 420,
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.08,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   }
  }
 }

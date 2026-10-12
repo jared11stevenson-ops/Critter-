@@ -7,9 +7,9 @@
    "tell_anim": "punch",
    "startup": 15,
    "active": 3,
-   "recovery": 18,
+   "recovery": 14,
    "stamina_cost": 9,
-   "damage": 11.0,
+   "damage": 10.0,
    "poise_damage": 10,
    "hitstun": 22,
    "blockstun": 11,
@@ -22,7 +22,23 @@
    "track": 5,
    "lore_source": "lore:silk can be bridges, traps...; whip-like lashes",
    "chain": "nyxaris_silk_lash2",
-   "cancel_from": 18
+   "cancel_from": 18,
+   "power": "anatomy",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.2,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "nyxaris_silk_lash2": {
    "name": "Silk Lash II",
@@ -30,9 +46,9 @@
    "tell_anim": "slash_back",
    "startup": 15,
    "active": 3,
-   "recovery": 22,
+   "recovery": 18,
    "stamina_cost": 9,
-   "damage": 12.0,
+   "damage": 10.9,
    "poise_damage": 10,
    "hitstun": 24,
    "blockstun": 11,
@@ -43,7 +59,23 @@
     "arc": 80
    },
    "track": 5,
-   "lore_source": "lore:silk can be bridges, traps...; whip-like lashes"
+   "lore_source": "lore:silk can be bridges, traps...; whip-like lashes",
+   "power": "anatomy",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.26,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "nyxaris_frost_lance": {
    "name": "Frost Lance",
@@ -51,11 +83,11 @@
    "tell_anim": "thrust",
    "startup": 32,
    "active": 4,
-   "recovery": 30,
+   "recovery": 26,
    "stamina_cost": 20,
    "feint": true,
    "track": 12,
-   "damage": 24.0,
+   "damage": 21.8,
    "poise_damage": 22,
    "hitstun": 38,
    "blockstun": 18,
@@ -71,19 +103,41 @@
    "on_hit": {
     "slow": 120
    },
-   "lore_source": "lore:unusually cold-reactive silk; slow lance that chills on hit"
+   "lore_source": "lore:unusually cold-reactive silk; slow lance that chills on hit",
+   "power": "anatomy",
+   "effect_kind": "control",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.56,
+    "hold": 1,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_status",
+      "name": "slowed",
+      "min_ticks": 60
+     }
+    ]
+   }
   },
   "nyxaris_cocoon": {
    "name": "Cocoon",
-   "kind": "grab",
+   "kind": "ability",
    "tell_anim": "grab",
    "startup": 14,
    "active": 4,
-   "recovery": 26,
+   "recovery": 23,
    "stamina_cost": 12,
    "reserve_cost": 15,
    "track": 8,
-   "damage": 18.0,
+   "damage": 16.4,
    "poise_damage": 14,
    "hitstop": 9,
    "grab": true,
@@ -97,7 +151,45 @@
    "on_hit": {
     "root": 30
    },
-   "lore_source": "lore:silk as trap; command grab that wraps and drags the target"
+   "lore_source": "lore:silk as trap; command grab that wraps and drags the target",
+   "power": "anatomy",
+   "cooldown": 420,
+   "effect_kind": "control",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.44,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_moved",
+      "min": 1.7
+     },
+     {
+      "m": "enemy_stun",
+      "kind": "knockdown"
+     },
+     {
+      "m": "enemy_status",
+      "name": "rooted",
+      "min_ticks": 15
+     },
+     {
+      "m": "cooldown"
+     },
+     {
+      "m": "field_down",
+      "name": "reserve",
+      "min": 10.5
+     }
+    ]
+   }
   },
   "nyxaris_silk_hop": {
    "name": "Silk Hop",
@@ -105,8 +197,8 @@
    "tell_anim": "leap",
    "startup": 0,
    "active": 6,
-   "recovery": 16,
-   "stamina_cost": 22,
+   "recovery": 13,
+   "stamina_cost": 18.7,
    "iframes": [
     0,
     6
@@ -114,12 +206,34 @@
    "motion": [
     {
      "at": 0,
-     "len": 8,
-     "dist": 2.0,
+     "len": 6,
+     "dist": 3.0,
      "dir": "input"
     }
    ],
-   "lore_source": "lore:patient weaver; silk-line hop"
+   "lore_source": "lore:patient weaver; silk-line hop",
+   "power": "anatomy",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 50,
+    "enemy": "attacker",
+    "dist": 1.8,
+    "dodge_tick": 6,
+    "dodge_dir": [
+     0,
+     1
+    ],
+    "measure": [
+     {
+      "m": "self_moved",
+      "min": 1.0
+     },
+     {
+      "m": "damage_prevented",
+      "min": 3
+     }
+    ]
+   }
   },
   "nyxaris_boundary": {
    "name": "Boundary",
@@ -127,7 +241,7 @@
    "tell_anim": "hook",
    "startup": 16,
    "active": 1,
-   "recovery": 22,
+   "recovery": 20,
    "stamina_cost": 10,
    "reserve_cost": 35,
    "cooldown": 540,
@@ -145,7 +259,7 @@
      "tag": "boundary",
      "max": 5,
      "on_enter": {
-      "damage": 4.0,
+      "damage": 3.9,
       "root": 50,
       "slow": 120,
       "poise": 6
@@ -164,7 +278,7 @@
      "tag": "boundary",
      "max": 5,
      "on_enter": {
-      "damage": 4.0,
+      "damage": 3.9,
       "root": 50,
       "slow": 120,
       "poise": 6
@@ -183,7 +297,7 @@
      "tag": "boundary",
      "max": 5,
      "on_enter": {
-      "damage": 4.0,
+      "damage": 3.9,
       "root": 50,
       "slow": 120,
       "poise": 6
@@ -202,7 +316,7 @@
      "tag": "boundary",
      "max": 5,
      "on_enter": {
-      "damage": 4.0,
+      "damage": 3.9,
       "root": 50,
       "slow": 120,
       "poise": 6
@@ -221,14 +335,122 @@
      "tag": "boundary",
      "max": 5,
      "on_enter": {
-      "damage": 4.0,
+      "damage": 3.9,
       "root": 50,
       "slow": 120,
       "poise": 6
      }
     }
    ],
-   "lore_source": "lore:patient until a boundary is crossed; territorial markers"
+   "lore_source": "lore:patient until a boundary is crossed; territorial markers",
+   "power": "anatomy",
+   "effect_kind": "terrain",
+   "expected": {
+    "ticks": 170,
+    "zone_tag": "boundary",
+    "dist": 8.0,
+    "zone_after": 60,
+    "measure": [
+     {
+      "m": "entity",
+      "kind": "tag:boundary",
+      "count": 5
+     },
+     {
+      "m": "event",
+      "type": "trap"
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 1.9
+     },
+     {
+      "m": "enemy_status",
+      "name": "rooted",
+      "min_ticks": 25
+     },
+     {
+      "m": "entity",
+      "kind": "tag:boundary",
+      "count": 5
+     },
+     {
+      "m": "event",
+      "type": "trap"
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 1.9
+     },
+     {
+      "m": "enemy_status",
+      "name": "rooted",
+      "min_ticks": 25
+     },
+     {
+      "m": "entity",
+      "kind": "tag:boundary",
+      "count": 5
+     },
+     {
+      "m": "event",
+      "type": "trap"
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 1.9
+     },
+     {
+      "m": "enemy_status",
+      "name": "rooted",
+      "min_ticks": 25
+     },
+     {
+      "m": "entity",
+      "kind": "tag:boundary",
+      "count": 5
+     },
+     {
+      "m": "event",
+      "type": "trap"
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 1.9
+     },
+     {
+      "m": "enemy_status",
+      "name": "rooted",
+      "min_ticks": 25
+     },
+     {
+      "m": "entity",
+      "kind": "tag:boundary",
+      "count": 5
+     },
+     {
+      "m": "event",
+      "type": "trap"
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 1.9
+     },
+     {
+      "m": "enemy_status",
+      "name": "rooted",
+      "min_ticks": 25
+     },
+     {
+      "m": "cooldown"
+     },
+     {
+      "m": "field_down",
+      "name": "reserve",
+      "min": 24.5
+     }
+    ]
+   }
   },
   "nyxaris_venom_fang": {
    "name": "Venom Fang",
@@ -236,12 +458,12 @@
    "tell_anim": "thrust",
    "startup": 14,
    "active": 3,
-   "recovery": 22,
+   "recovery": 20,
    "stamina_cost": 10,
    "reserve_cost": 10,
    "cooldown": 120,
    "track": 6,
-   "damage": 3.0,
+   "damage": 2.7,
    "poise_damage": 4,
    "hitstun": 18,
    "blockstun": 10,
@@ -254,28 +476,39 @@
     "dot": {
      "name": "venom",
      "life": 300,
-     "dps": 1.8,
+     "dps": 1.83,
      "max": 5
     }
    },
-   "lore_source": "lore:Venom; poison damage-over-time with a visible ticking stack"
-  },
-  "nyxaris_permission": {
-   "name": "Who Gave You Permission?",
-   "kind": "ability",
-   "tell_anim": "stance",
-   "startup": 4,
-   "active": 36,
-   "recovery": 16,
-   "stamina_cost": 8,
-   "reserve_cost": 15,
-   "cooldown": 480,
-   "stance": {
-    "status": "permission",
-    "from": 4,
-    "frames": 36
-   },
-   "lore_source": "lore quote: Nyxaris v. Helix, 'Who gave you permission?'"
+   "lore_source": "lore:Venom; poison damage-over-time with a visible ticking stack",
+   "power": "biology:venom",
+   "effect_kind": "status",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.08,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_dots",
+      "count": 1
+     },
+     {
+      "m": "cooldown"
+     },
+     {
+      "m": "field_down",
+      "name": "reserve",
+      "min": 7.0
+     }
+    ]
+   }
   },
   "nyxaris_cold_archive": {
    "name": "Cold Archive",
@@ -295,7 +528,7 @@
      "place": "self",
      "radius": 50,
      "life": 420,
-     "dps": 4.0,
+     "dps": 3.9,
      "affect": "both",
      "tag": "archive",
      "buff": {
@@ -304,7 +537,39 @@
      }
     }
    ],
-   "lore_source": "lore:Bk XIV Cold Archive, frozen silk preserving testimony"
+   "lore_source": "lore:Bk XIV Cold Archive, frozen silk preserving testimony",
+   "power": "anatomy",
+   "effect_kind": "terrain",
+   "expected": {
+    "ticks": 170,
+    "zone_tag": "archive",
+    "dist": 3.0,
+    "zone_after": 60,
+    "pre": {
+     "self_vit_ratio": 0.2
+    },
+    "measure": [
+     {
+      "m": "entity",
+      "kind": "tag:archive",
+      "count": 1
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 3.9
+     },
+     {
+      "m": "enemy_status",
+      "name": "slowed",
+      "min_ticks": 1
+     },
+     {
+      "m": "self_status",
+      "name": "archive",
+      "min_ticks": 1
+     }
+    ]
+   }
   },
   "nyxaris_silk_reserve": {
    "name": "Silk Reserve",
@@ -313,16 +578,100 @@
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "lore:Bk III s12 cannot endlessly generate cryogenic silk without replenishing minerals"
+   "lore_source": "lore:Bk III s12 cannot endlessly generate cryogenic silk without replenishing minerals",
+   "power": "anatomy",
+   "effect_kind": "resource",
+   "expected": {
+    "dist": 7.0,
+    "via": "ability1",
+    "ticks": 60,
+    "measure": [
+     {
+      "m": "field_down",
+      "name": "reserve",
+      "min": 20
+     }
+    ]
+   }
   },
   "nyxaris_silk_screen": {
    "name": "Silk Screen",
-   "kind": "resource",
+   "kind": "guard",
    "tell_anim": "stance",
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "lore:silk as insulation; woven barrier block"
+   "lore_source": "lore:silk as insulation; woven barrier block",
+   "power": "anatomy",
+   "effect_kind": "defense",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 2.0,
+    "ticks": 60,
+    "enemy_critter": "aruun",
+    "guard_from": 13,
+    "measure": [
+     {
+      "m": "event",
+      "type": "parry"
+     },
+     {
+      "m": "enemy_status",
+      "name": "rooted",
+      "min_ticks": 25
+     }
+    ]
+   }
+  },
+  "nyxaris_silk_snare": {
+   "name": "Silk Snare",
+   "kind": "grab",
+   "tell_anim": "grab",
+   "startup": 16,
+   "active": 3,
+   "recovery": 26,
+   "stamina_cost": 12,
+   "track": 8,
+   "damage": 10.0,
+   "poise_damage": 10,
+   "hitstop": 6,
+   "grab": true,
+   "throw_dist": 2.4,
+   "throw_stun": 6,
+   "hitbox": {
+    "reach": 2.0,
+    "arc": 100
+   },
+   "lore_source": "lore:silk as trap; short silk grab",
+   "reserve_cost": 6,
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.2,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_moved",
+      "min": 1.2
+     },
+     {
+      "m": "enemy_stun",
+      "kind": "knockdown"
+     },
+     {
+      "m": "field_down",
+      "name": "reserve",
+      "min": 4.2
+     }
+    ]
+   }
   }
  }
 }

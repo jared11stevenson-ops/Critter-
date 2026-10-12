@@ -212,21 +212,23 @@ func _poise(fails: Array) -> void:
 		fails.append("poise: should regenerate")
 
 func _buffer(fails: Array) -> void:
-	# Cigarra light1 (whiff, far away): total 23 frames, idle at tick 24. Dodge pressed 4 ticks earlier is buffered.
-	var sim := U.make("zephyr", "aruun")
-	U.face_off(sim, 8.0)
-	var evs := U.run(sim, 30, {1: _tap, 21: _dodge})
+	# Aruun heavy whiffs (no cancel windows): a dodge pressed a few frames before it ends is buffered and starts on the first free tick.
+	var sim := U.make("aruun", "mollusk")
+	U.face_off(sim, 9.0)
+	var total: int = sim.fighters[0].def.move("aruun_overhead").total
+	var hold := func(i: CombatInput) -> void: i.strike_hold = true
+	var evs := U.run(sim, total + 10, {1: hold, total - 3: _dodge})
 	var dodge_tell := false
 	for e in evs:
-		if e["type"] == "tell" and e["move_id"] == "zephyr_air_dodge":
+		if e["type"] == "tell" and e["move_id"] == "aruun_dodge":
 			dodge_tell = true
-			if e["tick"] != 25:
-				fails.append("buffer: buffered dodge should start on tick 25, got %d" % e["tick"])
+			if e["tick"] != total + 1:
+				fails.append("buffer: buffered dodge should start on tick %d, got %d" % [total + 1, e["tick"]])
 	if not dodge_tell:
 		fails.append("buffer: input pressed 4 frames early should execute")
-	sim = U.make("zephyr", "aruun")
-	U.face_off(sim, 8.0)
-	evs = U.run(sim, 30, {1: _tap, 17: _dodge})
+	sim = U.make("aruun", "mollusk")
+	U.face_off(sim, 9.0)
+	evs = U.run(sim, total + 10, {1: hold, total - 8: _dodge})
 	for e in evs:
-		if e["type"] == "tell" and e["move_id"] == "zephyr_air_dodge":
+		if e["type"] == "tell" and e["move_id"] == "aruun_dodge":
 			fails.append("buffer: input older than 6 frames must expire")

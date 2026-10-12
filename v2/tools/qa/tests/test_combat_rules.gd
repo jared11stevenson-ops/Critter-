@@ -68,8 +68,8 @@ func _data(fails: Array) -> void:
 
 func _nyxaris_throw_sim(stakes: int) -> CombatSim:
 	var sim := U.make("nyxaris", "cigarra", "ring", stakes, 3)
-	sim.fighters[0].pos = Vector2(5.2, 0.0)
-	sim.fighters[1].pos = Vector2(6.3, 0.0)
+	sim.fighters[0].pos = Vector2(8.4, 0.0)
+	sim.fighters[1].pos = Vector2(9.5, 0.0)
 	U.run(sim, 90, {1: _grab})
 	return sim
 
@@ -91,8 +91,8 @@ func _ringout_and_stakes(fails: Array) -> void:
 			fails.append("stakes %d: no injury expected" % stakes)
 	# wall edge: no ring-out
 	var sim := U.make("nyxaris", "cigarra", "pit", 2, 3)
-	sim.fighters[0].pos = Vector2(4.2, 0.0)
-	sim.fighters[1].pos = Vector2(5.3, 0.0)
+	sim.fighters[0].pos = Vector2(6.2, 0.0)
+	sim.fighters[1].pos = Vector2(7.3, 0.0)
 	U.run(sim, 90, {1: _grab})
 	if sim.is_over() and sim.result()["reason"] == "ringout":
 		fails.append("ringout: wall edge must not ring out")
@@ -123,8 +123,7 @@ func _yield(fails: Array) -> void:
 
 func _last_stand(fails: Array) -> void:
 	var both := func(i: CombatInput) -> void:
-		i.ability1 = true
-		i.ability2 = true
+		i.last_stand = true
 	var sim := U.make("zephyr", "aruun", "ring", 1, 5)
 	U.face_off(sim, 3.0)
 	var evs := U.run(sim, 20, {2: both})
@@ -175,6 +174,7 @@ func _chain_and_hitstop(fails: Array) -> void:
 
 func _hazard(fails: Array) -> void:
 	var sim := U.make("mollusk", "mollusk", "pit", 1, 5)
+	sim.apply_modifiers(["hazard"])
 	sim.fighters[0].pos = Vector2(0.0, 0.0)
 	sim.fighters[1].pos = Vector2(4.0, 0.0)
 	U.run(sim, 120)

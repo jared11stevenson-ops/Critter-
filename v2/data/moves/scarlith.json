@@ -7,9 +7,9 @@
    "tell_anim": "punch",
    "startup": 13,
    "active": 3,
-   "recovery": 15,
+   "recovery": 12,
    "stamina_cost": 7,
-   "damage": 7.0,
+   "damage": 3.4,
    "poise_damage": 7,
    "hitstun": 20,
    "blockstun": 11,
@@ -28,12 +28,32 @@
     "dot": {
      "name": "culture",
      "life": 420,
-     "dps": 0.6,
-     "grow": 1.0,
-     "burst": 10.0,
+     "dps": 1.0,
+     "grow": 1.4,
+     "burst": 14.0,
      "ripe": 300,
      "max": 6
     }
+   },
+   "power": "biology",
+   "effect_kind": "status",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.32,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_dots",
+      "count": 1
+     }
+    ]
    }
   },
   "scarlith_culture_jab2": {
@@ -42,9 +62,9 @@
    "tell_anim": "slash_back",
    "startup": 12,
    "active": 3,
-   "recovery": 20,
+   "recovery": 16,
    "stamina_cost": 7,
-   "damage": 7.0,
+   "damage": 3.4,
    "poise_damage": 7,
    "hitstun": 22,
    "blockstun": 11,
@@ -61,12 +81,32 @@
     "dot": {
      "name": "culture",
      "life": 420,
-     "dps": 0.6,
-     "grow": 1.0,
-     "burst": 10.0,
+     "dps": 1.0,
+     "grow": 1.4,
+     "burst": 14.0,
      "ripe": 300,
      "max": 6
     }
+   },
+   "power": "biology",
+   "effect_kind": "status",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.32,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_dots",
+      "count": 1
+     }
+    ]
    }
   },
   "scarlith_aged_smash": {
@@ -75,11 +115,11 @@
    "tell_anim": "overhead",
    "startup": 26,
    "active": 4,
-   "recovery": 30,
+   "recovery": 26,
    "stamina_cost": 18,
    "feint": true,
    "track": 10,
-   "damage": 20.0,
+   "damage": 9.7,
    "poise_damage": 18,
    "pressure_gain": 16,
    "hitstun": 36,
@@ -91,9 +131,26 @@
     "arc": 90
    },
    "props": {
-    "culture_scale": 0.3
+    "culture_scale": 0.25
    },
-   "lore_source": "lore:Bk VIII age can create value; damage scales with Cultures on the target"
+   "lore_source": "lore:Bk VIII age can create value; damage scales with Cultures on the target",
+   "power": "biology",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.44,
+    "hold": 1,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "scarlith_barter": {
    "name": "Barter",
@@ -101,10 +158,10 @@
    "tell_anim": "grab",
    "startup": 17,
    "active": 3,
-   "recovery": 28,
+   "recovery": 25,
    "stamina_cost": 12,
    "track": 8,
-   "damage": 8.0,
+   "damage": 3.9,
    "poise_damage": 8,
    "hitstop": 6,
    "grab": true,
@@ -117,7 +174,37 @@
    "on_hit": {
     "steal": true
    },
-   "lore_source": "lore:Undermarket broker; snatch and swap a buff for a penalty"
+   "lore_source": "lore:Undermarket broker; snatch and swap a buff for a penalty",
+   "power": "biology",
+   "effect_kind": "control",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.2,
+    "pre": {
+     "enemy_status": {
+      "haste": 400
+     }
+    },
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_stun",
+      "kind": "knockdown"
+     },
+     {
+      "m": "self_status",
+      "name": "haste",
+      "min_ticks": 100
+     }
+    ]
+   }
   },
   "scarlith_hop_clear": {
    "name": "Hop Clear",
@@ -125,8 +212,8 @@
    "tell_anim": "leap",
    "startup": 0,
    "active": 6,
-   "recovery": 14,
-   "stamina_cost": 18,
+   "recovery": 11,
+   "stamina_cost": 15.3,
    "iframes": [
     0,
     6
@@ -134,12 +221,34 @@
    "motion": [
     {
      "at": 0,
-     "len": 8,
-     "dist": 2.2,
+     "len": 6,
+     "dist": 3.3,
      "dir": "input"
     }
    ],
-   "lore_source": "lore:everything has value; nimble broker"
+   "lore_source": "lore:everything has value; nimble broker",
+   "power": "biology",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 50,
+    "enemy": "attacker",
+    "dist": 1.8,
+    "dodge_tick": 6,
+    "dodge_dir": [
+     0,
+     1
+    ],
+    "measure": [
+     {
+      "m": "self_moved",
+      "min": 1.0
+     },
+     {
+      "m": "damage_prevented",
+      "min": 3
+     }
+    ]
+   }
   },
   "scarlith_ferment": {
    "name": "Ferment",
@@ -147,11 +256,11 @@
    "tell_anim": "hook",
    "startup": 20,
    "active": 3,
-   "recovery": 26,
+   "recovery": 23,
    "stamina_cost": 12,
    "cooldown": 420,
    "track": 8,
-   "damage": 2.0,
+   "damage": 1.0,
    "poise_damage": 4,
    "hitstun": 20,
    "blockstun": 8,
@@ -165,14 +274,40 @@
     "dot": {
      "name": "culture",
      "life": 420,
-     "dps": 0.6,
-     "grow": 1.0,
-     "burst": 10.0,
+     "dps": 1.0,
+     "grow": 1.4,
+     "burst": 14.0,
      "ripe": 300,
      "max": 6
     }
    },
-   "lore_source": "lore:Fermentation; Culture stacks ripen over time and burst"
+   "lore_source": "lore:Fermentation; Culture stacks ripen over time and burst",
+   "power": "biology",
+   "effect_kind": "status",
+   "expected": {
+    "ticks": 100,
+    "dist": 3.52,
+    "pre": {
+     "enemy_cultures": 2
+    },
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_dots",
+      "count": 1
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "scarlith_decompose": {
    "name": "Decompose",
@@ -180,11 +315,11 @@
    "tell_anim": "roar",
    "startup": 22,
    "active": 3,
-   "recovery": 26,
+   "recovery": 23,
    "stamina_cost": 12,
    "cooldown": 480,
    "track": 8,
-   "damage": 4.0,
+   "damage": 1.9,
    "poise_damage": 6,
    "hitstun": 18,
    "blockstun": 8,
@@ -198,7 +333,31 @@
      "rotted": 300
     }
    },
-   "lore_source": "lore:Decomposition; rots armor and guard"
+   "lore_source": "lore:Decomposition; rots armor and guard",
+   "power": "biology",
+   "effect_kind": "status",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.8,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_status",
+      "name": "rotted",
+      "min_ticks": 150
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "scarlith_aged_to_perfection": {
    "name": "Aged to Perfection",
@@ -213,25 +372,99 @@
      "type": "ripen_all"
     }
    ],
-   "lore_source": "lore:age creates value; instantly ripens every Culture"
+   "lore_source": "lore:age creates value; instantly ripens every Culture",
+   "power": "biology",
+   "effect_kind": "status",
+   "expected": {
+    "ticks": 70,
+    "dist": 3.0,
+    "pre": {
+     "enemy_cultures": 3,
+     "self_vit_ratio": 0.2
+    },
+    "measure": [
+     {
+      "m": "enemy_vit_drop",
+      "min": 15
+     }
+    ]
+   }
   },
   "scarlith_cultivate": {
    "name": "Cultivate",
-   "kind": "resource",
-   "tell_anim": "stance",
-   "startup": 0,
+   "kind": "ability",
+   "tell_anim": "hook",
+   "startup": 12,
    "active": 1,
-   "recovery": 0,
-   "lore_source": "lore:Cultivation; fungus patches feed Brew and heal him"
+   "recovery": 16,
+   "stamina_cost": 8,
+   "cooldown": 360,
+   "spawns": [
+    {
+     "at": 12,
+     "type": "fungus"
+    }
+   ],
+   "lore_source": "lore:Cultivation; grows fungus patches that feed Brew and heal him",
+   "effect_kind": "terrain",
+   "expected": {
+    "ticks": 100,
+    "dist": 6.0,
+    "zone_tag": "fungus",
+    "zone_after": 40,
+    "zone_target": "self",
+    "pre": {
+     "self_vit_ratio": 0.5
+    },
+    "measure": [
+     {
+      "m": "entity",
+      "kind": "tag:fungus",
+      "count": 1
+     },
+     {
+      "m": "self_vit_gain",
+      "min": 1.0
+     },
+     {
+      "m": "field_up",
+      "name": "pressure",
+      "min": 1.0
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "scarlith_rind_guard": {
    "name": "Rind Guard",
-   "kind": "resource",
+   "kind": "guard",
    "tell_anim": "stance",
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "lore:cheese flavor; a parry spoils the attacker's next move"
+   "lore_source": "lore:cheese flavor; a parry spoils the attacker's next move",
+   "power": "biology",
+   "effect_kind": "defense",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 2.0,
+    "ticks": 60,
+    "enemy_critter": "aruun",
+    "guard_from": 13,
+    "measure": [
+     {
+      "m": "event",
+      "type": "parry"
+     },
+     {
+      "m": "enemy_status",
+      "name": "spoiled",
+      "min_ticks": 60
+     }
+    ]
+   }
   },
   "scarlith_waste_not": {
    "name": "Waste Not",
@@ -240,7 +473,24 @@
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "lore:waste can become food; damage taken becomes Brew"
+   "lore_source": "lore:waste can become food; damage taken becomes Brew",
+   "power": "biology",
+   "effect_kind": "resource",
+   "expected": {
+    "dist": 3.0,
+    "ticks": 20,
+    "damage_self_at": 20,
+    "base_off": {
+     "waste_not": 0.0
+    },
+    "measure": [
+     {
+      "m": "field_up",
+      "name": "pressure",
+      "min": 5
+     }
+    ]
+   }
   }
  }
 }

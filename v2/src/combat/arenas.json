@@ -1,6 +1,90 @@
 {
-  "ring":   {"shape": "circle", "radius": 8.0, "edge": "drop"},
-  "hall":   {"shape": "rect", "half": [8.0, 5.0], "sides": {"n": "wall", "s": "wall", "e": "drop", "w": "drop"}},
-  "pit":    {"shape": "circle", "radius": 6.0, "edge": "wall", "hazards": [{"kind": "dps", "shape": "circle", "pos": [0.0, 0.0], "radius": 1.0, "dps": 6.0}]},
-  "bridge": {"shape": "rect", "half": [9.0, 2.2], "sides": {"n": "drop", "s": "drop", "e": "wall", "w": "wall"}, "spawns": [[-3.5, 0.0], [3.5, 0.0]]}
+ "ring": {
+  "shape": "circle",
+  "radius": 11.2,
+  "edge": "drop",
+  "spawns": [
+   [
+    -4.2,
+    0.0
+   ],
+   [
+    4.2,
+    0.0
+   ]
+  ]
+ },
+ "hall": {
+  "shape": "rect",
+  "half": [
+   11.2,
+   7.0
+  ],
+  "sides": {
+   "n": "wall",
+   "s": "wall",
+   "e": "drop",
+   "w": "drop"
+  },
+  "spawns": [
+   [
+    -4.2,
+    0.0
+   ],
+   [
+    4.2,
+    0.0
+   ]
+  ]
+ },
+ "pit": {
+  "shape": "circle",
+  "radius": 8.4,
+  "edge": "wall",
+  "hazards": [
+   {
+    "kind": "dps",
+    "shape": "circle",
+    "pos": [
+     0.0,
+     0.0
+    ],
+    "radius": 1.0,
+    "dps": 6.0
+   }
+  ],
+  "spawns": [
+   [
+    -4.2,
+    0.0
+   ],
+   [
+    4.2,
+    0.0
+   ]
+  ]
+ },
+ "bridge": {
+  "shape": "rect",
+  "half": [
+   12.6,
+   3.1
+  ],
+  "sides": {
+   "n": "drop",
+   "s": "drop",
+   "e": "wall",
+   "w": "wall"
+  },
+  "spawns": [
+   [
+    -4.9,
+    0.0
+   ],
+   [
+    4.9,
+    0.0
+   ]
+  ]
+ }
 }

@@ -3,7 +3,6 @@
  "name": "Zephyr",
  "species": "Hummingbird hawk-moth fairy",
  "archetype": "Aerial skirmisher",
- "weapon": "Light needle-lance and wings",
  "palette": {
   "main": "moth brown",
   "accent": "pollen gold",
@@ -30,7 +29,7 @@
   "ability2": "zephyr_pollen",
   "laststand": "zephyr_a_promise_kept",
   "guard": "zephyr_loophole",
-  "mechanic": "zephyr_promise"
+  "ability3": "zephyr_promise_attack"
  },
  "tuning": {
   "body_radius": 0.4,
@@ -41,7 +40,7 @@
   "guard_move_mult": 0.7,
   "loophole_window": 5,
   "marks_bonus": 1,
-  "damage_mult": 1.0
+  "damage_mult": 0.69
  },
  "ai": {
   "style": "skirmisher",
@@ -51,13 +50,20 @@
   ],
   "ability1": {
    "min": 0.0,
-   "max": 3.2,
+   "max": 3.4,
    "when": "close"
   },
   "ability2": {
    "min": 1.5,
-   "max": 4.0,
+   "max": 4.4,
    "when": "any"
+  },
+  "ability3": {
+   "min": 2.0,
+   "max": 7.0,
+   "when": "far"
   }
- }
+ },
+ "powers": "flight, atmospheric disturbance, pollination, promise law",
+ "role": "drifter"
 }

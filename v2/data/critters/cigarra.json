@@ -3,7 +3,6 @@
  "name": "Cigarra",
  "species": "Brazilian treehopper",
  "archetype": "Counter duelist",
- "weapon": "Crown spheres and charms",
  "palette": {
   "main": "leaf green",
   "accent": "crown black",
@@ -24,13 +23,15 @@
    "cigarra_bad_thought3"
   ],
   "heavy": "cigarra_crown_barrage",
-  "grab": "cigarra_puppet_thought",
+  "grab": "cigarra_cloak_snatch",
   "dodge": "cigarra_grasshopper_thought",
   "ability1": "cigarra_premonition",
   "ability2": "cigarra_false_memory",
   "laststand": "cigarra_future_touched",
   "counter_effect": "cigarra_brain_skip",
-  "resource": "cigarra_future_noise"
+  "resource": "cigarra_future_noise",
+  "ability3": "cigarra_puppet_thought",
+  "guard": "cigarra_cloak_fold"
  },
  "tuning": {
   "body_radius": 0.4,
@@ -40,7 +41,7 @@
   "guard_drain": 0.6,
   "pressure_decay": 6.0,
   "pressure_max": 100.0,
-  "damage_mult": 1.0
+  "damage_mult": 1.373
  },
  "ai": {
   "style": "duelist",
@@ -50,13 +51,20 @@
   ],
   "ability1": {
    "min": 0.0,
-   "max": 6.0,
+   "max": 8.0,
    "when": "any"
   },
   "ability2": {
-   "min": 1.5,
-   "max": 6.0,
+   "min": 2.0,
+   "max": 8.0,
+   "when": "any"
+  },
+  "ability3": {
+   "min": 0.0,
+   "max": 3.4,
    "when": "any"
   }
- }
+ },
+ "powers": "treehopper crown spheres, premonition, mind control",
+ "role": "reader"
 }

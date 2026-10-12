@@ -7,16 +7,16 @@
    "tell_anim": "thrust",
    "startup": 14,
    "active": 3,
-   "recovery": 16,
+   "recovery": 13,
    "stamina_cost": 8,
-   "damage": 10.0,
+   "damage": 6.0,
    "poise_damage": 6,
    "hitstun": 20,
    "blockstun": 11,
    "knockback": 0.3,
    "hitstop": 4,
    "hitbox": {
-    "reach": 3.0,
+    "reach": 2.8,
     "arc": 40
    },
    "track": 5,
@@ -27,9 +27,29 @@
     "dot": {
      "name": "bleed",
      "life": 150,
-     "dps": 2.0,
+     "dps": 2.08,
      "max": 1
     }
+   },
+   "power": "weapon:Diplomacy",
+   "effect_kind": "status",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.68,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_dots",
+      "count": 1
+     }
+    ]
    }
   },
   "bramvex_diplomacy2": {
@@ -38,16 +58,16 @@
    "tell_anim": "thrust",
    "startup": 13,
    "active": 3,
-   "recovery": 20,
+   "recovery": 16,
    "stamina_cost": 8,
-   "damage": 10.0,
+   "damage": 6.0,
    "poise_damage": 6,
    "hitstun": 20,
    "blockstun": 11,
    "knockback": 0.5,
    "hitstop": 4,
    "hitbox": {
-    "reach": 3.1,
+    "reach": 2.8,
     "arc": 40
    },
    "track": 5,
@@ -56,9 +76,29 @@
     "dot": {
      "name": "bleed",
      "life": 150,
-     "dps": 2.0,
+     "dps": 2.08,
      "max": 1
     }
+   },
+   "power": "weapon:Diplomacy",
+   "effect_kind": "status",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.68,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_dots",
+      "count": 1
+     }
+    ]
    }
   },
   "bramvex_final_offer": {
@@ -67,18 +107,18 @@
    "tell_anim": "overhead",
    "startup": 30,
    "active": 4,
-   "recovery": 30,
+   "recovery": 26,
    "stamina_cost": 20,
    "feint": true,
    "track": 10,
-   "damage": 28.0,
+   "damage": 16.9,
    "poise_damage": 16,
    "hitstun": 34,
    "blockstun": 18,
    "knockback": 1.0,
    "hitstop": 8,
    "hitbox": {
-    "reach": 3.6,
+    "reach": 3.3,
     "arc": 50
    },
    "props": {
@@ -88,22 +128,43 @@
     "dot": {
      "name": "bleed",
      "life": 150,
-     "dps": 2.0,
+     "dps": 2.08,
      "max": 1
     }
    },
-   "lore_source": "lore:L810 nickname Diplomacy; slow overhead guard-crush"
+   "lore_source": "lore:L810 nickname Diplomacy; slow overhead guard-crush",
+   "power": "weapon:Diplomacy",
+   "effect_kind": "status",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.98,
+    "hold": 1,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_dots",
+      "count": 1
+     }
+    ]
+   }
   },
   "bramvex_detain": {
    "name": "Detain",
-   "kind": "grab",
+   "kind": "ability",
    "tell_anim": "grab",
    "startup": 18,
    "active": 3,
-   "recovery": 30,
+   "recovery": 27,
    "stamina_cost": 12,
    "track": 8,
-   "damage": 14.0,
+   "damage": 8.4,
    "poise_damage": 8,
    "hitstop": 6,
    "grab": true,
@@ -116,7 +177,36 @@
    "on_hit": {
     "root": 30
    },
-   "lore_source": "lore:restrains and frees detainees; thorn-lock hold"
+   "lore_source": "lore:restrains and frees detainees; thorn-lock hold",
+   "power": "anatomy",
+   "cooldown": 420,
+   "effect_kind": "control",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.32,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_stun",
+      "kind": "knockdown"
+     },
+     {
+      "m": "enemy_status",
+      "name": "rooted",
+      "min_ticks": 15
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "bramvex_cigarra_hole": {
    "name": "Cigarra Hole",
@@ -124,8 +214,8 @@
    "tell_anim": "leap",
    "startup": 0,
    "active": 6,
-   "recovery": 12,
-   "stamina_cost": 18,
+   "recovery": 9,
+   "stamina_cost": 15.3,
    "iframes": [
     0,
     6
@@ -133,14 +223,36 @@
    "motion": [
     {
      "at": 0,
-     "len": 7,
-     "dist": 2.6,
+     "len": 6,
+     "dist": 3.9,
      "dir": "random"
     }
    ],
    "lore_source": "lore:Bk XIV Cigarra Holes: deliberate blank spaces in plans",
    "cancel_from": 8,
-   "chain_on": "always"
+   "chain_on": "always",
+   "power": "biology",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 50,
+    "enemy": "attacker",
+    "dist": 1.8,
+    "dodge_tick": 6,
+    "dodge_dir": [
+     0,
+     1
+    ],
+    "measure": [
+     {
+      "m": "self_moved",
+      "min": 1.0
+     },
+     {
+      "m": "damage_prevented",
+      "min": 3
+     }
+    ]
+   }
   },
   "bramvex_ghost": {
    "name": "Ghost",
@@ -148,7 +260,7 @@
    "tell_anim": "stance",
    "startup": 6,
    "active": 1,
-   "recovery": 14,
+   "recovery": 13,
    "stamina_cost": 10,
    "cooldown": 480,
    "stance": {
@@ -156,7 +268,23 @@
     "from": 6,
     "frames": 150
    },
-   "lore_source": "lore:Camouflage / Sensory Adaptation; next hit is an ambush crit"
+   "lore_source": "lore:Camouflage / Sensory Adaptation; next hit is an ambush crit",
+   "power": "biology",
+   "effect_kind": "status",
+   "expected": {
+    "dist": 3.0,
+    "ticks": 40,
+    "measure": [
+     {
+      "m": "self_status",
+      "name": "camo",
+      "min_ticks": 100
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "bramvex_ground_prep": {
    "name": "Ground Prep",
@@ -164,7 +292,7 @@
    "tell_anim": "hook",
    "startup": 14,
    "active": 1,
-   "recovery": 16,
+   "recovery": 14,
    "stamina_cost": 12,
    "cooldown": 360,
    "spawns": [
@@ -223,7 +351,74 @@
      }
     }
    ],
-   "lore_source": "lore:Tactical Terrain Use; thorn lines and chokepoints"
+   "lore_source": "lore:Tactical Terrain Use; thorn lines and chokepoints",
+   "power": "biology",
+   "effect_kind": "terrain",
+   "expected": {
+    "ticks": 170,
+    "zone_tag": "thorn",
+    "dist": 8.0,
+    "zone_after": 60,
+    "measure": [
+     {
+      "m": "entity",
+      "kind": "tag:thorn",
+      "count": 3
+     },
+     {
+      "m": "event",
+      "type": "trap"
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 3.0
+     },
+     {
+      "m": "enemy_status",
+      "name": "rooted",
+      "min_ticks": 15
+     },
+     {
+      "m": "entity",
+      "kind": "tag:thorn",
+      "count": 3
+     },
+     {
+      "m": "event",
+      "type": "trap"
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 3.0
+     },
+     {
+      "m": "enemy_status",
+      "name": "rooted",
+      "min_ticks": 15
+     },
+     {
+      "m": "entity",
+      "kind": "tag:thorn",
+      "count": 3
+     },
+     {
+      "m": "event",
+      "type": "trap"
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 3.0
+     },
+     {
+      "m": "enemy_status",
+      "name": "rooted",
+      "min_ticks": 15
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "bramvex_day_20": {
    "name": "Day 20",
@@ -241,7 +436,7 @@
     0,
     80
    ],
-   "damage": 6.0,
+   "damage": 3.6,
    "poise_damage": 6,
    "hitstun": 16,
    "blockstun": 8,
@@ -270,7 +465,26 @@
      "gap": 0.5
     }
    ],
-   "lore_source": "lore:escape on Day 20; plans built from observation"
+   "lore_source": "lore:escape on Day 20; plans built from observation",
+   "power": "biology",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 3.04,
+    "pre": {
+     "self_vit_ratio": 0.2
+    },
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "bramvex_observation": {
    "name": "Observation (Intel)",
@@ -279,16 +493,97 @@
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "lore:nineteen days of observation; reads improve over the bout"
+   "lore_source": "lore:nineteen days of observation; reads improve over the bout",
+   "power": "biology",
+   "effect_kind": "resource",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 1.8,
+    "ticks": 40,
+    "base_off": {
+     "intel_gain": 0.0
+    },
+    "measure": [
+     {
+      "m": "field_up",
+      "name": "intel",
+      "min": 0.02
+     }
+    ]
+   }
   },
   "bramvex_stand_firm": {
    "name": "Stand Firm",
-   "kind": "resource",
+   "kind": "guard",
    "tell_anim": "stance",
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "lore:sergeant, field equipment; perfect guard grants Intel"
+   "lore_source": "lore:sergeant, field equipment; perfect guard grants Intel",
+   "power": "biology",
+   "effect_kind": "defense",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 2.0,
+    "ticks": 60,
+    "enemy_critter": "aruun",
+    "guard_from": 13,
+    "measure": [
+     {
+      "m": "event",
+      "type": "parry"
+     },
+     {
+      "m": "field_up",
+      "name": "intel",
+      "min": 0.1
+     }
+    ]
+   }
+  },
+  "bramvex_haft_shove": {
+   "name": "Haft Shove",
+   "kind": "grab",
+   "tell_anim": "grab",
+   "startup": 18,
+   "active": 3,
+   "recovery": 26,
+   "stamina_cost": 12,
+   "track": 8,
+   "damage": 10.0,
+   "poise_damage": 8,
+   "hitstop": 6,
+   "grab": true,
+   "throw_dist": 1.8,
+   "throw_stun": 6,
+   "hitbox": {
+    "reach": 2.2,
+    "arc": 90
+   },
+   "lore_source": "lore:sergeant's thorned haft; shove-throw",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.32,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_moved",
+      "min": 0.9
+     },
+     {
+      "m": "enemy_stun",
+      "kind": "knockdown"
+     }
+    ]
+   }
   }
  }
 }
