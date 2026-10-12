@@ -46,6 +46,11 @@ static func chapter_hints() -> Array:
 static func regions() -> Array:
 	return data()["regions"]
 
+static func arena_for(ctx: Dictionary) -> String:
+	if str(ctx.get("kind", "")) in ["expedition", "extraction"]:
+		return str(region(str(ctx.get("region", ""))).get("arena", "ring"))
+	return "ring"
+
 static func region(id: String) -> Dictionary:
 	for r in regions():
 		if r["id"] == id:
@@ -91,6 +96,72 @@ const APPROACHES := {
 }
 const PROFILE_UP := {"novice": "standard", "standard": "expert", "expert": "expert"}
 
+# ------------------------------------------------------------------ exploration (3 stops before the wild critter)
+static var _nodes: Dictionary = {}
+
+static func node_data() -> Dictionary:
+	if _nodes.is_empty():
+		_nodes = JSON.parse_string(FileAccess.get_file_as_string("res://data/career/expedition_nodes.json"))
+	return _nodes
+
+## Three distinct stops for a region, chosen by `rng`. Each: {id, title, text, choices:[{id,label,hint}]}.
+static func explore_nodes(region_id: String, rng: RandomNumberGenerator) -> Array:
+	var reg := region(region_id)
+	var tpl: Array = (node_data()["templates"] as Array).duplicate()
+	var place: String = str(node_data()["flavor"].get(region_id, "the wild"))
+	var out: Array = []
+	for _i in 3:
+		var t: Dictionary = (tpl.pop_at(rng.randi() % tpl.size()) as Dictionary).duplicate(true)
+		var txt: String = str(t["text"])
+		t["text"] = (txt % ([species_name(str(reg.get("species", ""))).to_lower(), place] if txt.count("%s") == 2 else place.capitalize())) if txt.contains("%s") else txt
+		out.append(t)
+	return out
+
+## Resolves one choice. Updates ctx {studied, skip} and the critter's Vitality; returns the result line.
+## Same odds for every critter: roles are styles, never a handicap.
+static func explore_resolve(r: RosterState, ctx: Dictionary, choice: String, rng: RandomNumberGenerator) -> String:
+	var c := r.get_critter(str(ctx["uid"]))
+	var line := ""
+	match choice:
+		"study":
+			ctx["studied"] = int(ctx.get("studied", 0)) + 1
+			line = "You learn how it moves. The wild critter will start weaker."
+		"forage":
+			var sc := rng.randi_range(4, 9)
+			var mt := rng.randi_range(1, 3)
+			r.economy.add("scrap", sc)
+			if c != null:
+				r.habitat(c.species).materials += mt
+			line = "Found %d scrap and %d jar materials." % [sc, mt]
+			if rng.randf() < 0.2 and c != null:
+				c.vitality = maxf(0.05, c.vitality - 0.05)
+				line += " A scrape on the way costs a little Vitality."
+		"rest":
+			if c != null:
+				c.vitality = minf(1.0, c.vitality + 0.12)
+			line = "%s recovers some Vitality." % (c.name if c != null else "Your critter")
+		"push":
+			var sc2 := rng.randi_range(10, 18)
+			var mt2 := rng.randi_range(3, 5)
+			r.economy.add("scrap", sc2)
+			if c != null:
+				r.habitat(c.species).materials += mt2
+			line = "A rich haul: %d scrap and %d jar materials." % [sc2, mt2]
+			if rng.randf() < 0.4 and c != null:
+				c.vitality = maxf(0.05, c.vitality - 0.14)
+				line += " But it cost %s dearly." % c.name
+		"shortcut":
+			ctx["skip"] = int(ctx.get("skip", 0)) + 1
+			line = "You take the ridge and skip the next stop."
+			if rng.randf() < 0.25 and c != null:
+				c.vitality = maxf(0.05, c.vitality - 0.06)
+				line += " The climb scrapes %s." % c.name
+	return line
+
+## Opponent Vitality after studying: each study lowers it 7% (max 3 stops).
+static func studied_vit(ctx: Dictionary) -> float:
+	return 1.0 - 0.07 * float(mini(3, int(ctx.get("studied", 0))))
+
 ## Applies an approach to an expedition ctx: {approach, opp_vit, profile, haul}. Returns "" or why it cannot be used.
 static func apply_approach(r: RosterState, ctx: Dictionary, approach: String) -> String:
 	var ap: Dictionary = APPROACHES[approach]
@@ -98,10 +169,10 @@ static func apply_approach(r: RosterState, ctx: Dictionary, approach: String) ->
 		return "Not enough scrap for bait."
 	ctx["approach"] = approach
 	ctx["haul"] = 1.0
-	ctx["opp_vit"] = 1.0
+	ctx["opp_vit"] = studied_vit(ctx)
 	match approach:
 		"stalk":
-			ctx["opp_vit"] = 0.8      # every critter can stalk: roles are fighting styles, never a handicap
+			ctx["opp_vit"] = 0.8 * studied_vit(ctx)      # every critter can stalk: roles are fighting styles, never a handicap
 			ctx["haul"] = 0.8
 		"provoke":
 			ctx["profile"] = PROFILE_UP.get(str(ctx["profile"]), "expert")

@@ -63,3 +63,9 @@ AI resets to neutral after exchanges (breath), retreat speed = advance speed, bl
 
 ## v0.10.0 — Free lock-on, Pharilux ring-out identity
 LOCK/FREE toggle (button, Tab/E): unlocked = move and face with the stick, aim assist within 4 m when the stick is idle; AI always locked. Riposte damage 1.3 -> 1.1. Pharilux: shove/haul/tide tuned for ring-outs (45% of his bouts end by ring-out). Matrix (30/pair): overall 41.9-56.7%, last tuning pass not re-measured. Open: Pharilux timeouts 15% (long zoning bouts), camera in free mode (still frames both fighters), HUD hint for LOCK, re-measure balance.
+
+## v0.11.0 — Habitats v2 + Expeditions v2 (creator-ordered)
+Creator rulings applied: bouts start locked, the AI may drop and regain lock-on during its breathers (re-locks when you attack); Practice uses only critters you own (picker on the shelf; Duel Lab lists owned critters only).
+Habitat v2: WATCH view (founding monarch, retired adults, family by generation with roles/ages, recent events), family roles (builders cut structure cost up to 30%, foragers add food, storytellers boost festivals), festivals every 30 days, LINK passages between jars (max 3, 60/120/180 scrap; linked jars share surplus food and earn tribute), founder death recorded (succession is PROVISIONAL: eldest descendant is shown as regent; creator has not decided).
+Expedition v2: three stops before the wild critter (study / forage / rest / push / shortcut, same odds for every critter), each study lowers the wild critter's starting Vitality 7% (max 3); then the Stalk/Direct/Provoke choice; regions pick their arena (bridge / ring / hall / pit).
+Open: persuasion/observe-to-capture outcomes, expedition arena hazards beyond the arena shape, structure art per species, succession rule, balance re-measure after AI free-lock, Pharilux long bouts.

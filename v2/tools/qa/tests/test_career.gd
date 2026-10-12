@@ -80,4 +80,25 @@ func run() -> Array:
 	var sc0 := ar.economy.scrap
 	var rr := Career.resolve(ar, {"kind": "expedition", "uid": drifter.uid, "opp_species": "nyxaris", "region": "frostbloom", "haul": 1.7}, _res(0))
 	QaCheck.is_true(fails, ar.economy.scrap > sc0 and ar.habitat("zephyr").materials > 0 and bool(rr["capture_offer"]), "an expedition win pays scrap and jar materials")
+	# exploration
+	var er := RosterState.new()
+	var ex := er.seal("aruun", "Aruun")
+	var rg := RandomNumberGenerator.new()
+	rg.seed = 5
+	var nodes := Career.explore_nodes("frostbloom", rg)
+	QaCheck.eq(fails, nodes.size(), 3, "three stops per trip")
+	QaCheck.is_true(fails, nodes[0]["id"] != nodes[1]["id"] and nodes[1]["id"] != nodes[2]["id"], "stops are distinct")
+	var ectx := {"uid": ex.uid}
+	var sc_before := er.economy.scrap
+	Career.explore_resolve(er, ectx, "study", rg)
+	Career.explore_resolve(er, ectx, "study", rg)
+	QaCheck.is_true(fails, absf(Career.studied_vit(ectx) - 0.86) < 0.001, "two studies: wild critter at 86%")
+	Career.explore_resolve(er, ectx, "forage", rg)
+	QaCheck.is_true(fails, er.economy.scrap > sc_before and er.habitat("aruun").materials > 0, "foraging pays scrap and jar materials")
+	ex.vitality = 0.5
+	Career.explore_resolve(er, ectx, "rest", rg)
+	QaCheck.is_true(fails, ex.vitality > 0.6, "rest heals")
+	ectx["kind"] = "expedition"
+	ectx["region"] = "velvet_warrens"
+	QaCheck.eq(fails, Career.arena_for(ectx), "pit", "regions pick their arena")
 	return fails

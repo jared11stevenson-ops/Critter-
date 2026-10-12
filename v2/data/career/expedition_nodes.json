@@ -1,0 +1,110 @@
+{
+ "_doc": "Exploration nodes for an expedition (3 per trip). Choices resolve in Career.explore_resolve; the same for every critter (roles are styles, never a handicap). kinds: forage (scrap+materials, small risk), study (the wild critter starts weaker), rest (heal), push (risky, bigger haul), shortcut (skip a node).",
+ "templates": [
+  {
+   "id": "tracks",
+   "title": "Fresh tracks",
+   "text": "You find %s tracks crossing %s. Follow them, or look for supplies first?",
+   "choices": [
+    {
+     "id": "study",
+     "label": "Study the tracks",
+     "hint": "The wild critter will start weaker"
+    },
+    {
+     "id": "forage",
+     "label": "Gather supplies",
+     "hint": "Scrap and jar materials"
+    }
+   ]
+  },
+  {
+   "id": "ruin",
+   "title": "An old structure",
+   "text": "Something was built here long ago, in %s. There may be materials, and something may still live in it.",
+   "choices": [
+    {
+     "id": "forage",
+     "label": "Search it",
+     "hint": "Materials, some risk"
+    },
+    {
+     "id": "push",
+     "label": "Break in",
+     "hint": "Bigger haul, bigger risk"
+    },
+    {
+     "id": "rest",
+     "label": "Rest in its shelter",
+     "hint": "Recover Vitality"
+    }
+   ]
+  },
+  {
+   "id": "water",
+   "title": "A quiet place",
+   "text": "The ground levels out and the noise drops. Your critter could rest here, or you could scout ahead.",
+   "choices": [
+    {
+     "id": "rest",
+     "label": "Rest",
+     "hint": "Recover Vitality"
+    },
+    {
+     "id": "study",
+     "label": "Scout ahead",
+     "hint": "The wild critter will start weaker"
+    },
+    {
+     "id": "shortcut",
+     "label": "Take the ridge",
+     "hint": "Skip the next stop, small risk"
+    }
+   ]
+  },
+  {
+   "id": "hazard",
+   "title": "The terrain turns",
+   "text": "%s shifts under your critter's feet. You can pick a safe line or cut straight through.",
+   "choices": [
+    {
+     "id": "study",
+     "label": "Pick a safe line",
+     "hint": "Learn how the ground moves"
+    },
+    {
+     "id": "push",
+     "label": "Cut through",
+     "hint": "Bigger haul, bigger risk"
+    }
+   ]
+  },
+  {
+   "id": "nest",
+   "title": "Signs of a home",
+   "text": "Scraps, markings, a worn path: this species lives close by. You can take what it left, or watch it.",
+   "choices": [
+    {
+     "id": "forage",
+     "label": "Take the scraps",
+     "hint": "Scrap and jar materials"
+    },
+    {
+     "id": "study",
+     "label": "Watch from cover",
+     "hint": "The wild critter will start weaker"
+    }
+   ]
+  }
+ ],
+ "flavor": {
+  "red_reaches": "the plateau",
+  "canopy_fold": "the branches",
+  "thornmarch": "the thorn lines",
+  "velvet_warrens": "the rot-soft ground",
+  "rainward": "the flooded track",
+  "briarwild": "the flowering vines",
+  "frostbloom": "the ice",
+  "drowned_expanse": "the tide line"
+ }
+}

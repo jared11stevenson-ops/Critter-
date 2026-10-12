@@ -393,3 +393,46 @@ static func link_panel(parent: Control, species: String, on_done: Callable) -> v
 	var close := UiStyle.button("CLOSE", 24, Vector2(200, 60), UiStyle.PAPER_DK)
 	close.pressed.connect(func(): _close(v))
 	v.add_child(close)
+
+
+## Exploration: three stops on the way to the wild critter. Same odds for every critter.
+static func explore(parent: Control, place: String, nodes: Array, ctx: Dictionary, rng: RandomNumberGenerator, on_done: Callable, index := 0) -> void:
+	if index >= nodes.size():
+		on_done.call()
+		return
+	var node: Dictionary = nodes[index]
+	var v := _panel(parent, 860)
+	v.add_child(UiStyle.label("%s: STOP %d OF %d" % [place.to_upper(), index + 1, nodes.size()], 28, UiStyle.RUST, 0))
+	v.add_child(UiStyle.label(str(node["title"]), 38, UiStyle.INK, 0))
+	_txt(v, str(node["text"]), 22).custom_minimum_size = Vector2(800, 0)
+	var res := _txt(v, " ", 20, UiStyle.TEAL)
+	res.custom_minimum_size = Vector2(800, 0)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	v.add_child(row)
+	var next_btn := UiStyle.button("CONTINUE", 26, Vector2(240, 66), UiStyle.GOLD)
+	next_btn.visible = false
+	for ch in node["choices"]:
+		var col := VBoxContainer.new()
+		row.add_child(col)
+		var b := UiStyle.button(str(ch["label"]), 22, Vector2(250, 66), UiStyle.TEAL_LT)
+		var cid: String = str(ch["id"])
+		b.pressed.connect(func():
+			res.text = Career.explore_resolve(Career.roster(), ctx, cid, rng)
+			for o in row.get_children():
+				for bb in o.get_children():
+					if bb is Button:
+						(bb as Button).disabled = true
+			next_btn.visible = true)
+		col.add_child(b)
+		_txt(col, str(ch["hint"]), 17, Color(0.3, 0.25, 0.25)).custom_minimum_size = Vector2(250, 0)
+	v.add_child(next_btn)
+	next_btn.pressed.connect(func():
+		_close(v)
+		var skip := int(ctx.get("skip", 0)) > 0
+		if skip:
+			ctx["skip"] = int(ctx["skip"]) - 1
+		explore(parent, place, nodes, ctx, rng, on_done, index + (2 if skip else 1)))
+	var back := UiStyle.button("TURN BACK", 22, Vector2(200, 56), UiStyle.PAPER_DK)
+	back.pressed.connect(func(): _close(v))
+	v.add_child(back)
