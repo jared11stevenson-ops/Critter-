@@ -4,7 +4,7 @@ class_name TouchControls extends Control
 ## safe-area aware, multi-touch. Reads ScreenTouch / ScreenDrag only (the project emulates touch from the mouse on desktop).
 ## PlayerInput polls the public levels and listens to `pressed`. The HUD pushes cooldowns and the Last Stand state in.
 
-signal pressed(id: String)           # grab dodge a1 a2 ls yield
+signal pressed(id: String)           # grab dodge a1 a2 a3 ls yield
 signal pause_pressed
 
 const HOLD_GUARD_SEC := 0.24
@@ -21,9 +21,10 @@ var guard_down := false
 var heavy_down := false
 var dodge_dir := Vector2.ZERO
 var can_ls := false
-var cooldowns := {"ab1": 0.0, "ab2": 0.0}           # remaining ratio 0..1
-var ab_names := {"ab1": "", "ab2": ""}
-var ab_colors := {"ab1": UiStyle.TEAL_LT, "ab2": UiStyle.GOLD}
+var cooldowns := {"ab1": 0.0, "ab2": 0.0, "ab3": 0.0}           # remaining ratio 0..1
+var ab_names := {"ab1": "", "ab2": "", "ab3": ""}
+var ab_colors := {"ab1": UiStyle.TEAL_LT, "ab2": UiStyle.GOLD, "ab3": UiStyle.PAPER}
+var ab_known := false                               # HUD set the names: ability buttons without a move are hidden
 var yield_progress := 0.0
 var blocker: Callable = Callable()                  # (Vector2) -> bool: true where a menu / prompt sits on top (touches there are not gameplay)
 
@@ -73,11 +74,14 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT or what == NOTIFICATION_VISIBILITY_CHANGED:
 		release_all()
 
+func _hidden(id: String) -> bool:
+	return (id == "ls" and not can_ls) or (ab_known and id.begins_with("ab") and str(ab_names.get(id, "")) == "")
+
 func _hit_button(p: Vector2) -> String:
 	var best := ""
 	var best_d := 1e9
 	for id in _btns:
-		if id == "ls" and not can_ls:
+		if _hidden(id):
 			continue
 		var b: Dictionary = _btns[id]
 		var d := p.distance_to(b["center"])
@@ -106,12 +110,22 @@ func _down(idx: int, p: Vector2) -> void:
 	if id != "":
 		_fingers[idx] = {"role": "button", "id": id, "t": _t, "pos": p, "origin": p}
 		match id:
-			"strike": strike_down = true
-			"guard": guard_down = true
+			"strike":
+				if guard_down:
+					pressed.emit("grab")          # Guard + Strike together = universal throw
+					_fingers[idx]["role"] = "button"
+				else:
+					strike_down = true
+			"guard":
+				guard_down = true
+				if strike_down:
+					strike_down = false
+					pressed.emit("grab")
 			"heavy": heavy_down = true
 			"pause": pass
 			"ab1": pressed.emit("a1")
 			"ab2": pressed.emit("a2")
+			"ab3": pressed.emit("a3")
 			_: pressed.emit(id)
 		_pressed_ids[id] = true
 	elif _stick_finger < 0 and TouchLayout.stick_zone(size, _margins, left_handed).has_point(p):
@@ -135,7 +149,7 @@ func _drag(idx: int, p: Vector2) -> void:
 	match f["role"]:
 		"stick":
 			var v := (p - _stick_origin) / TouchLayout.STICK_R
-			if v.length() < 0.12:
+			if v.length() < 0.06:
 				v = Vector2.ZERO
 			stick = v.limit_length(1.0)
 			var over := (p - _stick_origin).length() - TouchLayout.STICK_R * 1.4     # floating: the base follows a thumb that runs far
@@ -146,7 +160,7 @@ func _drag(idx: int, p: Vector2) -> void:
 			if not f["done"] and dv.length() >= SWIPE_MIN and _t - float(f["t"]) <= SWIPE_MAX_SEC:
 				f["done"] = true
 				dodge_dir = dv.normalized()
-				pressed.emit("dodge")
+				pressed.emit("grab" if dodge_dir.y < -0.8 else "dodge")        # forward swipe = grab, any other swipe = dodge
 	queue_redraw()
 
 func _up(idx: int) -> void:
@@ -206,8 +220,7 @@ func _col_for(id: String) -> Color:
 		"guard": return UiStyle.TEAL_LT
 		"dodge": return UiStyle.GREEN
 		"grab": return Color(0.86, 0.45, 0.30)
-		"ab1": return ab_colors["ab1"]
-		"ab2": return ab_colors["ab2"]
+		"ab1", "ab2", "ab3": return ab_colors[id]
 		"ls": return Color(0.95, 0.35, 0.30)
 	return UiStyle.PAPER
 
@@ -224,10 +237,10 @@ func _draw() -> void:
 	_ink.disc(knob, 40.0, Color(0.95, 0.88, 0.72, 0.85 if active else 0.35))
 	if layout == "B":
 		var gz := TouchLayout.gesture_zone(size, left_handed)
-		_ink.text(Vector2(gz.position.x + gz.size.x * 0.5 - 200, size.y * 0.30), "tap strike   swipe dodge   hold guard", 18, Color(0.95, 0.88, 0.72, 0.5), HORIZONTAL_ALIGNMENT_CENTER, 400)
+		_ink.text(Vector2(gz.position.x + gz.size.x * 0.5 - 200, size.y * 0.30), "tap strike  hold guard  swipe dodge  swipe up grab", 18, Color(0.95, 0.88, 0.72, 0.5), HORIZONTAL_ALIGNMENT_CENTER, 400)
 	var washes: Array = []
 	for id in _btns:
-		if id == "ls" and not can_ls:
+		if _hidden(id):
 			continue
 		_draw_button(id, _btns[id], washes)
 	for w in washes:
@@ -260,7 +273,7 @@ func _draw_button(id: String, b: Dictionary, washes: Array) -> void:
 		washes.append([c, rr - 1.0, cd])
 	var label := str(b["label"])
 	var fsize := 18
-	if id in ["ab1", "ab2"]:
+	if id in ["ab1", "ab2", "ab3"]:
 		var nm := str(ab_names.get(id, ""))
 		label = nm if nm != "" else label
 		fsize = 18

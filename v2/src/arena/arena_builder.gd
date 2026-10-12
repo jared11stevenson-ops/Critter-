@@ -50,7 +50,7 @@ static func build(parent: Node3D, adef: ArenaDef, shadows := false) -> Dictionar
 	parent.add_child(set_kit.build(mat))
 	out["set_tris"] = set_kit.tris
 	var far_kit := MeshKit.new()
-	_backdrop(far_kit)
+	_backdrop(far_kit, maxf(1.0, (adef.radius if adef.shape == "circle" else maxf(adef.half.x, adef.half.y)) / 7.0))
 	var far := far_kit.build(mat)
 	parent.add_child(far)
 	out["far_tris"] = far_kit.tris
@@ -74,11 +74,15 @@ static func _platform(k: MeshKit, a: ArenaDef) -> void:
 		for i in 8:                                                               # spokes
 			var ang := TAU * float(i) / 8.0
 			k.box(Vector3(cos(ang) * r * 0.46, 0.012, sin(ang) * r * 0.46), Vector3(r * 0.32, 0.01, 0.14), STONE_DK, -rad_to_deg(ang))
-		for dm in [2.0, 4.0]:                                                     # distance-to-edge markers (2 m / 4 m)
+		for dm in ([2.0, 4.0, 6.0, 8.0] if r > 9.0 else [2.0, 4.0]):                                                     # distance-to-edge markers (2 m / 4 m)
 			k.ring_band(Vector3(0, 0.012, 0), r - dm - 0.05, r - dm + 0.05, 56, STONE_DK)
 		k.cyl(Vector3(0, -0.7, 0), r, r, 0.7, 56, STONE_DK, false)
 		k.cyl(Vector3(0, -12.0, 0), r * 0.35, r, 11.3, 28, TEAL_DK, false)
 		_circle_edges(k, a)
+		for i in 14:                                                              # broken pillar crown just outside the rim
+			var pa := TAU * (float(i) + 0.5) / 14.0
+			var ph := 2.2 + 2.6 * absf(sin(float(i) * 2.1))
+			k.cyl(Vector3(cos(pa) * (r + 4.2), -1.0, sin(pa) * (r + 4.2)), 0.9, 0.7, ph + 1.0, 7, STONE_LT.darkened(0.1))
 	else:
 		var hx := a.half.x
 		var hz := a.half.y
@@ -147,9 +151,10 @@ static func _hazard(k: MeshKit, hz: Dictionary) -> void:
 static func _far(c: Color, d: float) -> Color:
 	return c.darkened(0.12).lerp(TEAL_DK, 0.25).lerp(FOG, clampf(d / 420.0, 0.0, 0.3))
 
-static func _backdrop(k: MeshKit) -> void:
+static func _backdrop(k: MeshKit, f := 1.0) -> void:
+	## f = arena radius / 7: the colossal set scales with the ring so a bigger arena still sits in a bigger world.
 	# hero landmark: a broken colossal arch behind the +x side
-	k.xf = Transform3D(Basis(Vector3.UP, deg_to_rad(90.0)), Vector3(78, -6, -6))
+	k.xf = Transform3D(Basis(Vector3.UP, deg_to_rad(90.0)).scaled(Vector3.ONE * f), Vector3(78, -6, -6) * f)
 	var ar := 30.0
 	k.cyl(Vector3(-ar, 0, 0), 8.0, 7.0, 34.0, 10, _far(RUST, 78))
 	k.cyl(Vector3(ar, 0, 0), 8.0, 6.0, 18.0, 10, _far(RUST, 78))                  # right pillar snapped off
@@ -159,21 +164,21 @@ static func _backdrop(k: MeshKit) -> void:
 	k.box(Vector3(ar + 20, 1, -10), Vector3(7, 3, 6), _far(STONE_DK, 78), -30, 8, 0)
 	k.xf = Transform3D.IDENTITY
 	# hollow robed statue, west-north
-	k.xf = Transform3D(Basis(Vector3.UP, deg_to_rad(-20.0)), Vector3(-70, -8, 52))
+	k.xf = Transform3D(Basis(Vector3.UP, deg_to_rad(-20.0)).scaled(Vector3.ONE * f), Vector3(-70, -8, 52) * f)
 	k.cyl(Vector3(0, 0, 0), 15.0, 6.0, 52.0, 10, _far(BONE.darkened(0.2), 120))
 	k.box(Vector3(0, 46, 0), Vector3(30, 7, 12), _far(BONE.darkened(0.2), 120))
 	k.blob(Vector3(0, 62, 0), Vector3(7.5, 9, 7.5), _far(BONE.darkened(0.1), 120), 8, 6)
 	k.box(Vector3(-18, 36, 3), Vector3(6, 24, 6), _far(BONE.darkened(0.25), 120), 0, 0, 14)
 	k.xf = Transform3D.IDENTITY
 	# broken bridge on the far left
-	k.xf = Transform3D(Basis(Vector3.UP, deg_to_rad(35.0)), Vector3(-24, 0, -84))
+	k.xf = Transform3D(Basis(Vector3.UP, deg_to_rad(35.0)).scaled(Vector3.ONE * f), Vector3(-24, 0, -84) * f)
 	for i in 3:
 		k.cyl(Vector3(-40 + 26 * i, -12, 0), 5.0, 4.0, 52.0 - 4.0 * i, 8, _far(STONE_DK, 115))
 	k.box(Vector3(-22, 36, 0), Vector3(60, 3.0, 10), _far(STONE, 115))
 	k.box(Vector3(36, 33, 0), Vector3(26, 3.0, 10), _far(STONE, 115), 0, 0, -6)
 	k.xf = Transform3D.IDENTITY
 	# cathedral-sized spiral shell, south-east
-	k.xf = Transform3D(Basis(Vector3.UP, deg_to_rad(200.0)), Vector3(52, -4, 74))
+	k.xf = Transform3D(Basis(Vector3.UP, deg_to_rad(200.0)).scaled(Vector3.ONE * f), Vector3(52, -4, 74) * f)
 	for i in 5:
 		var s := 22.0 - 3.6 * float(i)
 		k.blob(Vector3(0, 14 + 6 * i, 0) + Vector3(cos(i * 1.2), 0, sin(i * 1.2)) * 2.0, Vector3(s, s * 0.8, s), _far(BONE.lerp(RUST, 0.25), 125), 10, 6)
@@ -181,12 +186,12 @@ static func _backdrop(k: MeshKit) -> void:
 	# distant spires + floating islands ring
 	for i in 22:
 		var ang := TAU * float(i) / 22.0 + 0.2
-		var dist := 150.0 + 40.0 * sin(float(i) * 2.3)
+		var dist := (150.0 + 40.0 * sin(float(i) * 2.3)) * f
 		var h := 40.0 + 55.0 * absf(sin(float(i) * 1.7))
 		k.cyl(Vector3(cos(ang) * dist, -10, sin(ang) * dist), 14.0 + 6.0 * sin(float(i)), 2.0, h, 7, _far(STONE_DK.lerp(TEAL_DK, 0.4), dist))
 	for i in 14:
 		var ang2 := TAU * float(i) / 14.0 + 0.5
-		var d2 := 55.0 + 30.0 * absf(sin(float(i) * 3.1))
+		var d2 := (55.0 + 30.0 * absf(sin(float(i) * 3.1))) * f
 		var p := Vector3(cos(ang2) * d2, 14.0 + 22.0 * absf(sin(float(i) * 1.3)), sin(ang2) * d2)
 		k.blob(p, Vector3(5.0, 2.2, 5.0), _far(STONE, d2), 7, 4)
 		k.cyl(p + Vector3(0, -6.0, 0), 0.5, 3.8, 6.0, 6, _far(STONE_DK, d2), false)

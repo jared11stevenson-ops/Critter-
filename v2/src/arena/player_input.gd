@@ -48,9 +48,9 @@ func frame_update(_delta: float) -> void:
 		s = InputActions.move_vector()
 		strike = Input.is_action_pressed("strike")
 		guard = Input.is_action_pressed("guard")
-		for a in ["grab", "dodge", "ability1", "ability2", "yield"]:
+		for a in ["grab", "dodge", "ability1", "ability2", "ability3", "last_stand", "yield"]:
 			if Input.is_action_just_pressed(a):
-				_latch[{"ability1": "a1", "ability2": "a2"}.get(a, a)] = true
+				_latch[{"ability1": "a1", "ability2": "a2", "ability3": "a3", "last_stand": "ls"}.get(a, a)] = true
 	if touch != null:
 		if touch.stick.length() > s.length():
 			s = touch.stick
@@ -61,7 +61,10 @@ func frame_update(_delta: float) -> void:
 	guard_level = guard
 	strike_level = strike
 	if strike and not _strike_prev:
-		_sp = true
+		if guard:
+			_latch["grab"] = true      # Guard + Strike together = grab
+		else:
+			_sp = true
 	if _strike_prev and not strike:
 		_sr = true
 	_strike_prev = strike
@@ -103,12 +106,19 @@ func tick(_sim: CombatSim, _idx: int) -> CombatInput:
 		o.move = _steer
 	o.ability1 = _take("a1")
 	o.ability2 = _take("a2")
+	if "ability3" in o:
+		o.set("ability3", _take("a3"))
+	else:
+		_take("a3")
 	if _take("ls"):
 		_ls_left = LS_TICKS
 	if _ls_left > 0:
 		_ls_left -= 1
-		o.ability1 = true
-		o.ability2 = true
+		if "last_stand" in o:
+			o.set("last_stand", true)
+		else:
+			o.ability1 = true
+			o.ability2 = true
 	o.yield_pressed = _take("yield")
 	return o
 
