@@ -125,10 +125,6 @@ static func apply_hit(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary,
 			sim.emit("dodge", dfn.idx, move_id, dfn.pos, 0.0, {"attacker": atk.idx})
 		return 2
 	var front := facing_ok(sim, dfn, src)
-	# "Who gave you permission?": a strike entering the counter-stance's space is punished.
-	if dfn.has("permission") and front and not is_grab and not projectile:
-		_permission(sim, atk, dfn, move_id)
-		return 1
 	# Shield Wall: frontal invulnerability (command grabs bypass it).
 	if dfn.has("wall") and front and not (is_grab and h["command"]):
 		_wall_absorb(sim, atk, dfn, h, move_id)
@@ -257,7 +253,7 @@ static func kdir_to(dfn: Fighter, atk: Fighter, kdir: Vector2) -> Vector2:
 static func atk_kind_is_melee(h: Dictionary) -> bool:
 	return not h.get("ranged", false)
 
-static func _permission(sim: CombatSim, atk: Fighter, dfn: Fighter, move_id: String) -> void:
+static func _permission(sim: CombatSim, atk: Fighter, dfn: Fighter, move_id: String, announce: bool = true) -> void:
 	var R: Dictionary = sim.R
 	_interrupt(atk)
 	atk.action = "stagger"
@@ -267,7 +263,8 @@ static func _permission(sim: CombatSim, atk: Fighter, dfn: Fighter, move_id: Str
 	dfn.st.erase("permission")
 	sim.damage(atk, dfn, float(R["permission_damage"]) * dfn.out_mult(), "permission")
 	sim.hitstop = maxi(sim.hitstop, int(R["parry_hitstop"]))
-	sim.emit("parry", dfn.idx, move_id, dfn.pos, 0.0, {"attacker": atk.idx, "permission": true, "hitstop": R["parry_hitstop"]})
+	if announce:
+		sim.emit("parry", dfn.idx, move_id, dfn.pos, 0.0, {"attacker": atk.idx, "permission": true, "hitstop": R["parry_hitstop"]})
 
 static func _interrupt(f: Fighter) -> void:
 	Actions.release_store(f, CombatData.rules())
@@ -352,6 +349,8 @@ static func _parry(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary, mo
 		dfn.add_status("riposte", int(R["riposte_frames"]))
 	if float(dfn.T["intel_gain"]) > 0.0:
 		dfn.intel = minf(1.0, dfn.intel + float(R["intel_per_parry"]))
+	if int(dfn.T["parry_permission"]) > 0 and not projectile:
+		_permission(sim, atk, dfn, move_id, false)      # "Who gave you permission?"
 	if int(dfn.T["parry_spoil"]) > 0 and not projectile:
 		atk.add_status("spoiled", int(R["spoil_frames"]))
 	var blast := float(dfn.T["parry_blast"])

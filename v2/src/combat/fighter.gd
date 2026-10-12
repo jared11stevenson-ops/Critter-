@@ -68,6 +68,7 @@ var charge := 0
 var slow_acc := 0.0         # Inertia Field time scaling accumulator
 var marks := 0              # Mollusk shell memory marks (survived bouts)
 var killer_idx := -1
+var wvel := Vector2.ZERO    # smoothed walk velocity (m/s)
 var borrow_prev := false
 var fungus_timer := 0
 
@@ -85,7 +86,7 @@ func in_startup() -> bool:
 	return move != null and af < move.startup
 
 func is_attacking() -> bool:
-	return move != null and stun == 0 and action in ["strike_light", "strike_heavy", "grab", "ability1", "ability2", "laststand"]
+	return move != null and stun == 0 and action in ["strike_light", "strike_heavy", "grab", "ability1", "ability2", "ability3", "laststand"]
 
 func invulnerable() -> bool:
 	if iframes > 0:

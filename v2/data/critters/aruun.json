@@ -29,7 +29,8 @@
   "ability2": "aruun_gravity_pull",
   "laststand": "aruun_carry_the_bridge",
   "auto_counter": "aruun_morrow_first",
-  "rage": "aruun_beetle_rage"
+  "ability3": "aruun_beetle_rage",
+  "guard": "aruun_shell_brace"
  },
  "tuning": {
   "body_radius": 0.65,
@@ -47,15 +48,16 @@
   ],
   "ability1": {
    "min": 2.2,
-   "max": 4.6,
+   "max": 6.0,
    "when": "far"
   },
   "ability2": {
    "min": 2.0,
-   "max": 5.0,
+   "max": 6.5,
    "when": "far"
   }
  },
  "weapon": "Morrow (psionically bonded mace)",
- "powers": "psionic bond with Morrow, giraffe-beetle body, Rage"
+ "powers": "psionic bond with Morrow, giraffe-beetle body, Rage",
+ "role": "breaker"
 }

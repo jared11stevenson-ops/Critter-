@@ -2,43 +2,40 @@ extends RefCounted
 ## Input ingestion, input buffer, action state machine and voluntary movement.
 ## Static helpers operating on a CombatSim; holds no state (avoids reference cycles).
 const Res = preload("res://src/combat/sim_res.gd")
-const KIND_PRIO := {"ls": 0, "dodge": 1, "counter": 2, "grab": 2, "heavy": 3, "light": 4, "a1": 5, "a2": 6}
+const KIND_PRIO := {"ls": 0, "dodge": 1, "grab": 2, "heavy": 3, "light": 4, "a1": 5, "a2": 6, "a3": 7}
 const Fighter = preload("res://src/combat/fighter.gd")
 
 static func ingest(sim: CombatSim, f: Fighter, inp: CombatInput) -> void:
 	var p: Dictionary = f.prev
 	var kind := ""
 	var best := 99
+	# universal Grab = Guard + Strike together (or the explicit grab flag)
+	var tap_edge: bool = inp.strike_tap and not p.get("tap", false)
+	var grab_in: bool = inp.grab or (inp.guard and inp.strike_tap)
 	var pairs := [
-		["light", inp.strike_tap, "tap"], ["heavy", inp.strike_hold, "hold"], ["grab", inp.grab, "grab"],
-		["dodge", inp.dodge, "dodge"], ["a1", inp.ability1, "a1"], ["a2", inp.ability2, "a2"]]
-	var ls_combo := inp.ability1 and inp.ability2
-	var chord_new: bool = ls_combo and (not p.get("a1", false) or not p.get("a2", false))
-	var rage_chord := false
-	if chord_new:
-		if _ls_ready(sim, f):
-			kind = "ls"
-			best = 0
-		elif float(f.T["rage_max"]) > 0.0:
-			rage_chord = true           # Rage toggle (Aruun): ability1 + ability2 when Last Stand is not available
-			Res.toggle_rage(sim, f)
-	if rage_chord:
-		pairs[4][1] = false
-		pairs[5][1] = false
+		["light", inp.strike_tap and not inp.guard, "tap"], ["heavy", inp.strike_hold, "hold"], ["grab", grab_in, "grab"],
+		["dodge", inp.dodge, "dodge"], ["a1", inp.ability1, "a1"], ["a2", inp.ability2, "a2"], ["a3", inp.ability3, "a3"]]
+	if inp.guard and tap_edge:
+		p["grab"] = false                 # the chord is a fresh grab press
+	if inp.last_stand and not p.get("ls", false) and _ls_ready(sim, f):
+		kind = "ls"
+		best = 0
+	elif inp.ability3 and not p.get("a3", false) and f.def.move_ids.has("ability3") and f.def.move(str(f.def.move_ids["ability3"])).kind == "toggle_rage":
+		Res.toggle_rage(sim, f)           # Beetle Rage: an activatable overdrive (toggle, no animation)
+		pairs[6][1] = false
 	for pr in pairs:
 		var edge: bool = pr[1] and not p.get(pr[2], false)
-		if edge and KIND_PRIO[pr[0]] < best and not (ls_combo and kind == "ls"):
+		if edge and KIND_PRIO[pr[0]] < best:
 			kind = pr[0]
 			best = KIND_PRIO[pr[0]]
-	if inp.guard and inp.grab and not p.get("grab", false) and f.def.move_ids.has("counter") and kind != "ls":
-		kind = "counter"                # guard + grab: counter-stance (Nyxaris)
-		best = 0
 	p["tap"] = inp.strike_tap
 	p["hold"] = inp.strike_hold
-	p["grab"] = inp.grab
+	p["grab"] = grab_in
 	p["dodge"] = inp.dodge
 	p["a1"] = inp.ability1
 	p["a2"] = inp.ability2
+	p["a3"] = inp.ability3
+	p["ls"] = inp.last_stand
 	f.hold_level = inp.strike_hold
 	f.guard_rise = inp.guard and not f.prev_guard
 	if f.guard_rise:
@@ -70,8 +67,8 @@ static func move_for(f: Fighter, kind: String) -> MoveDef:
 			return f.def.move(ids["ability2"])
 		"ls":
 			return f.def.move(ids["laststand"])
-		"counter":
-			return f.def.move(ids["counter"])
+		"a3":
+			return f.def.move(ids["ability3"]) if ids.has("ability3") else null
 	return null
 
 static func can_start(sim: CombatSim, f: Fighter, m: MoveDef) -> bool:
@@ -99,7 +96,7 @@ static func action_name(f: Fighter, m: MoveDef, kind: String) -> String:
 		"a1": return "ability1"
 		"a2": return "ability2"
 		"ls": return "laststand"
-		"counter": return "ability2"
+		"a3": return "ability3"
 	return "strike_light"
 
 static func start_move(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, kind: String) -> void:
@@ -377,6 +374,21 @@ static func _decide(sim: CombatSim, f: Fighter, o: Fighter) -> void:
 					if kind == "dodge":
 						f.dodge_chain_left = left - 1
 					return
+	# Cancel windows: lights cancel into dodge / guard late in recovery (whiff) or right after the hit (hit-confirm)
+	if f.move != null and f.move.kind == "light" and f.stun == 0:
+		var open_from: int = f.move.total - int(R["cancel_window"])
+		if f.contact:
+			open_from = mini(open_from, f.move.startup + f.move.active + int(R["confirm_cancel_delay"]))
+		if f.af >= open_from:
+			if f.buf_kind == "dodge":
+				var dm: MoveDef = move_for(f, "dodge")
+				if can_start(sim, f, dm):
+					start_move(sim, f, o, dm, "dodge")
+					return
+			elif f.guard_rise and f.guard_lag == 0:
+				end_move(sim, f)
+				f.action = "guard"
+				return
 	if not f.actionable():
 		return
 	if try_buffered(sim, f, o):
@@ -392,31 +404,31 @@ static func _decide(sim: CombatSim, f: Fighter, o: Fighter) -> void:
 		f.guard_lag = int(R["guard_lag"])
 
 static func _walk(sim: CombatSim, f: Fighter) -> void:
-	f.moving = false
-	if f.has("rooted") or not f.alive:
-		return
+	var R: Dictionary = sim.R
+	var target := Vector2.ZERO
 	var mult := 0.0
-	if f.stun > 0:
-		return
-	if f.move == null:
-		mult = 1.0
-		if f.action == "guard":
-			mult = float(f.T["guard_move_mult"])
-	else:
-		var m: MoveDef = f.move
-		if m.move_mult > 0.0 and (f.af < m.startup or f.af >= m.startup + m.active):
-			mult = m.move_mult
+	if f.alive and f.stun == 0 and not f.has("rooted"):
+		if f.move == null:
+			mult = 1.0
+			if f.action == "guard":
+				mult = float(f.T["guard_move_mult"])
 		else:
-			return
-	var dir: Vector2 = -f.move_in if f.has("confused") else f.move_in
-	var dz: float = float(sim.R["walk_deadzone"])
-	if dir.length_squared() < dz * dz:
-		return
-	var sp: float = float(f.T["walk_speed"]) * sim.dt * mult * f.slow_mult * f.haste_mult
-	if f.winded:
-		sp *= float(sim.R["winded_move_mult"])
-	if dir.dot(f.facing) < float(sim.R["retreat_dot"]):
-		sp *= float(sim.R["retreat_mult"])
-	f.pos += dir * sp
-	f.moving = true
-	f.pos = sim.arena.clamp_inside(f.pos, float(sim.R["lip_margin"]))
+			var m: MoveDef = f.move
+			if m.move_mult > 0.0 and (f.af < m.startup or f.af >= m.startup + m.active):
+				mult = m.move_mult
+	if mult > 0.0:
+		var dir: Vector2 = -f.move_in if f.has("confused") else f.move_in
+		var dz: float = float(R["walk_deadzone"])
+		if dir.length_squared() >= dz * dz:
+			var sp: float = float(f.T["walk_speed"]) * mult * f.slow_mult * f.haste_mult
+			if f.winded:
+				sp *= float(R["winded_move_mult"])
+			if dir.dot(f.facing) < float(R["retreat_dot"]):
+				sp *= float(R["retreat_mult"])
+			target = dir * sp
+	# acceleration / deceleration curve
+	var rate: float = float(R["walk_accel"]) if target != Vector2.ZERO else float(R["walk_decel"])
+	f.wvel = f.wvel.move_toward(target, rate * sim.dt)
+	f.moving = f.wvel.length() > float(R["moving_epsilon"])
+	if f.wvel != Vector2.ZERO:
+		f.pos = sim.arena.clamp_inside(f.pos + f.wvel * sim.dt, float(R["lip_margin"]))

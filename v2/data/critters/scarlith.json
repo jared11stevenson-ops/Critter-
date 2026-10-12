@@ -27,9 +27,9 @@
   "ability1": "scarlith_ferment",
   "ability2": "scarlith_decompose",
   "laststand": "scarlith_aged_to_perfection",
-  "resource": "scarlith_cultivate",
   "guard": "scarlith_rind_guard",
-  "passive": "scarlith_waste_not"
+  "passive": "scarlith_waste_not",
+  "ability3": "scarlith_cultivate"
  },
  "tuning": {
   "body_radius": 0.5,
@@ -39,7 +39,7 @@
   "block_poise": 0.4,
   "parry_spoil": 1,
   "waste_not": 0.5,
-  "cultivate_interval": 300,
+  "cultivate_interval": 0,
   "brew_bonus": 0.3,
   "damage_mult": 1.029
  },
@@ -51,14 +51,20 @@
   ],
   "ability1": {
    "min": 1.5,
-   "max": 4.2,
+   "max": 4.4,
    "when": "any"
   },
   "ability2": {
    "min": 1.5,
-   "max": 3.0,
+   "max": 3.2,
+   "when": "any"
+  },
+  "ability3": {
+   "min": 0.0,
+   "max": 12.0,
    "when": "any"
   }
  },
- "powers": "fermentation, decomposition, cultivation"
+ "powers": "fermentation, decomposition, cultivation",
+ "role": "brewer"
 }

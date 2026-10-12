@@ -7,7 +7,7 @@
    "tell_anim": "punch",
    "startup": 13,
    "active": 3,
-   "recovery": 15,
+   "recovery": 12,
    "stamina_cost": 7,
    "damage": 3.4,
    "poise_damage": 7,
@@ -43,7 +43,7 @@
    "tell_anim": "slash_back",
    "startup": 12,
    "active": 3,
-   "recovery": 20,
+   "recovery": 16,
    "stamina_cost": 7,
    "damage": 3.4,
    "poise_damage": 7,
@@ -77,7 +77,7 @@
    "tell_anim": "overhead",
    "startup": 26,
    "active": 4,
-   "recovery": 30,
+   "recovery": 26,
    "stamina_cost": 18,
    "feint": true,
    "track": 10,
@@ -104,7 +104,7 @@
    "tell_anim": "grab",
    "startup": 17,
    "active": 3,
-   "recovery": 28,
+   "recovery": 25,
    "stamina_cost": 12,
    "track": 8,
    "damage": 3.9,
@@ -129,8 +129,8 @@
    "tell_anim": "leap",
    "startup": 0,
    "active": 6,
-   "recovery": 14,
-   "stamina_cost": 18,
+   "recovery": 11,
+   "stamina_cost": 15.3,
    "iframes": [
     0,
     6
@@ -138,8 +138,8 @@
    "motion": [
     {
      "at": 0,
-     "len": 8,
-     "dist": 2.2,
+     "len": 6,
+     "dist": 3.3,
      "dir": "input"
     }
    ],
@@ -152,7 +152,7 @@
    "tell_anim": "hook",
    "startup": 20,
    "active": 3,
-   "recovery": 26,
+   "recovery": 23,
    "stamina_cost": 12,
    "cooldown": 420,
    "track": 8,
@@ -186,7 +186,7 @@
    "tell_anim": "roar",
    "startup": 22,
    "active": 3,
-   "recovery": 26,
+   "recovery": 23,
    "stamina_cost": 12,
    "cooldown": 480,
    "track": 8,
@@ -225,17 +225,24 @@
   },
   "scarlith_cultivate": {
    "name": "Cultivate",
-   "kind": "resource",
-   "tell_anim": "stance",
-   "startup": 0,
+   "kind": "ability",
+   "tell_anim": "hook",
+   "startup": 12,
    "active": 1,
-   "recovery": 0,
-   "lore_source": "lore:Cultivation; fungus patches feed Brew and heal him",
-   "power": "biology"
+   "recovery": 16,
+   "stamina_cost": 8,
+   "cooldown": 360,
+   "spawns": [
+    {
+     "at": 12,
+     "type": "fungus"
+    }
+   ],
+   "lore_source": "lore:Cultivation; grows fungus patches that feed Brew and heal him"
   },
   "scarlith_rind_guard": {
    "name": "Rind Guard",
-   "kind": "resource",
+   "kind": "guard",
    "tell_anim": "stance",
    "startup": 0,
    "active": 1,

@@ -4,7 +4,8 @@ class_name CombatInput extends RefCounted
 ##  move         world-plane stick (x, y = world z), length <= 1
 ##  strike_tap   light strike (pulse)         strike_hold  heavy strike (raise when the hold threshold elapses)
 ##  guard        LEVEL, hold to guard          grab / dodge / ability1 / ability2  presses
-##  ability1 + ability2 pressed together = Last Stand (only below the Last Stand threshold, once per bout)
+##  ability1/2/3 are the three main abilities; last_stand is its own flag (works only while state.can_last_stand)
+##  grab: universal Grab = Guard + Strike pressed together (UI sets `grab`; the sim also treats guard held + strike_tap as a grab)
 ##  yield_pressed ends the bout (loser lives)
 var move := Vector2.ZERO
 var strike_tap := false
@@ -14,6 +15,8 @@ var grab := false
 var dodge := false
 var ability1 := false
 var ability2 := false
+var ability3 := false
+var last_stand := false
 var yield_pressed := false
 
 func clear() -> void:
@@ -25,4 +28,6 @@ func clear() -> void:
 	dodge = false
 	ability1 = false
 	ability2 = false
+	ability3 = false
+	last_stand = false
 	yield_pressed = false

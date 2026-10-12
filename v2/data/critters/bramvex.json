@@ -22,13 +22,13 @@
    "bramvex_diplomacy2"
   ],
   "heavy": "bramvex_final_offer",
-  "grab": "bramvex_detain",
+  "grab": "bramvex_haft_shove",
   "dodge": "bramvex_cigarra_hole",
   "ability1": "bramvex_ghost",
   "ability2": "bramvex_ground_prep",
   "laststand": "bramvex_day_20",
-  "resource": "bramvex_observation",
-  "guard": "bramvex_stand_firm"
+  "guard": "bramvex_stand_firm",
+  "ability3": "bramvex_detain"
  },
  "tuning": {
   "body_radius": 0.5,
@@ -48,15 +48,21 @@
   ],
   "ability1": {
    "min": 2.0,
-   "max": 9.0,
+   "max": 12.0,
    "when": "far"
   },
   "ability2": {
    "min": 1.5,
-   "max": 9.0,
+   "max": 12.0,
    "when": "any"
+  },
+  "ability3": {
+   "min": 0.0,
+   "max": 2.3,
+   "when": "close"
   }
  },
  "weapon": "Diplomacy (huge thorned weapon)",
- "powers": "camouflage, terrain tactics, thorned Diplomacy"
+ "powers": "camouflage, terrain tactics, thorned Diplomacy",
+ "role": "warden"
 }

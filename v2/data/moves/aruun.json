@@ -7,7 +7,7 @@
    "tell_anim": "chop",
    "startup": 16,
    "active": 4,
-   "recovery": 18,
+   "recovery": 14,
    "stamina_cost": 9,
    "damage": 6.3,
    "poise_damage": 10,
@@ -31,7 +31,7 @@
    "tell_anim": "slash_back",
    "startup": 15,
    "active": 4,
-   "recovery": 18,
+   "recovery": 14,
    "stamina_cost": 9,
    "damage": 7.1,
    "poise_damage": 11,
@@ -55,7 +55,7 @@
    "tell_anim": "overhead",
    "startup": 18,
    "active": 4,
-   "recovery": 30,
+   "recovery": 24,
    "stamina_cost": 12,
    "damage": 9.4,
    "poise_damage": 16,
@@ -80,7 +80,7 @@
    "tell_anim": "overhead",
    "startup": 36,
    "active": 5,
-   "recovery": 32,
+   "recovery": 28,
    "stamina_cost": 24,
    "feint": true,
    "track": 14,
@@ -107,7 +107,7 @@
    "tell_anim": "grab",
    "startup": 20,
    "active": 3,
-   "recovery": 28,
+   "recovery": 25,
    "stamina_cost": 14,
    "track": 8,
    "damage": 11.0,
@@ -129,8 +129,8 @@
    "tell_anim": "leap",
    "startup": 0,
    "active": 6,
-   "recovery": 16,
-   "stamina_cost": 24,
+   "recovery": 13,
+   "stamina_cost": 20.4,
    "iframes": [
     0,
     6
@@ -138,8 +138,8 @@
    "motion": [
     {
      "at": 0,
-     "len": 8,
-     "dist": 2.0,
+     "len": 6,
+     "dist": 3.0,
      "dir": "input"
     }
    ],
@@ -152,7 +152,7 @@
    "tell_anim": "thrust",
    "startup": 30,
    "active": 4,
-   "recovery": 34,
+   "recovery": 31,
    "stamina_cost": 16,
    "cooldown": 360,
    "track": 10,
@@ -186,7 +186,7 @@
    "tell_anim": "hook",
    "startup": 22,
    "active": 22,
-   "recovery": 30,
+   "recovery": 27,
    "stamina_cost": 18,
    "cooldown": 600,
    "track": 10,
@@ -233,7 +233,7 @@
    "tell_anim": "slash_up",
    "startup": 8,
    "active": 3,
-   "recovery": 18,
+   "recovery": 14,
    "stamina_cost": 0,
    "damage": 11.0,
    "poise_damage": 14,
@@ -282,13 +282,22 @@
   },
   "aruun_beetle_rage": {
    "name": "Beetle Rage",
-   "kind": "resource",
+   "kind": "toggle_rage",
    "tell_anim": "roar",
    "startup": 0,
    "active": 1,
    "recovery": 0,
    "lore_source": "canon:beetle_rage cooldown 18s; lore:L439 deliberate overdrive, self-damage (Strain)",
    "power": "psionic"
+  },
+  "aruun_shell_brace": {
+   "name": "Shell Brace",
+   "kind": "guard",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "lore:shell fractures / Burden Architecture; plates absorb damage"
   }
  }
 }

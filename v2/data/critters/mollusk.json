@@ -22,13 +22,14 @@
    "mollusk_shell_shove2"
   ],
   "heavy": "mollusk_gathering_blow",
-  "grab": "mollusk_lift",
+  "grab": "mollusk_shell_bash",
   "dodge": "mollusk_shell_slide",
   "ability1": "mollusk_inertia_field",
   "ability2": "mollusk_borrowed_seconds",
   "laststand": "mollusk_everything_arrives",
   "guard": "mollusk_hold",
-  "passive": "mollusk_shell_memory"
+  "passive": "mollusk_shell_memory",
+  "ability3": "mollusk_lift"
  },
  "tuning": {
   "body_radius": 0.55,
@@ -49,14 +50,20 @@
   ],
   "ability1": {
    "min": 0.0,
-   "max": 2.6,
+   "max": 3.0,
    "when": "close"
   },
   "ability2": {
    "min": 0.0,
-   "max": 9.0,
+   "max": 12.0,
    "when": "any"
+  },
+  "ability3": {
+   "min": 0.0,
+   "max": 1.8,
+   "when": "close"
   }
  },
- "powers": "temporal inertia, memory shell"
+ "powers": "temporal inertia, memory shell",
+ "role": "anchor"
 }

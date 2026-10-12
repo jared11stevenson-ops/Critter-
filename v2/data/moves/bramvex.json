@@ -7,7 +7,7 @@
    "tell_anim": "thrust",
    "startup": 14,
    "active": 3,
-   "recovery": 16,
+   "recovery": 13,
    "stamina_cost": 8,
    "damage": 6.0,
    "poise_damage": 6,
@@ -39,7 +39,7 @@
    "tell_anim": "thrust",
    "startup": 13,
    "active": 3,
-   "recovery": 20,
+   "recovery": 16,
    "stamina_cost": 8,
    "damage": 6.0,
    "poise_damage": 6,
@@ -69,7 +69,7 @@
    "tell_anim": "overhead",
    "startup": 30,
    "active": 4,
-   "recovery": 30,
+   "recovery": 26,
    "stamina_cost": 20,
    "feint": true,
    "track": 10,
@@ -99,11 +99,11 @@
   },
   "bramvex_detain": {
    "name": "Detain",
-   "kind": "grab",
+   "kind": "ability",
    "tell_anim": "grab",
    "startup": 18,
    "active": 3,
-   "recovery": 30,
+   "recovery": 27,
    "stamina_cost": 12,
    "track": 8,
    "damage": 8.4,
@@ -120,7 +120,8 @@
     "root": 30
    },
    "lore_source": "lore:restrains and frees detainees; thorn-lock hold",
-   "power": "anatomy"
+   "power": "anatomy",
+   "cooldown": 420
   },
   "bramvex_cigarra_hole": {
    "name": "Cigarra Hole",
@@ -128,8 +129,8 @@
    "tell_anim": "leap",
    "startup": 0,
    "active": 6,
-   "recovery": 12,
-   "stamina_cost": 18,
+   "recovery": 9,
+   "stamina_cost": 15.3,
    "iframes": [
     0,
     6
@@ -137,8 +138,8 @@
    "motion": [
     {
      "at": 0,
-     "len": 7,
-     "dist": 2.6,
+     "len": 6,
+     "dist": 3.9,
      "dir": "random"
     }
    ],
@@ -153,7 +154,7 @@
    "tell_anim": "stance",
    "startup": 6,
    "active": 1,
-   "recovery": 14,
+   "recovery": 13,
    "stamina_cost": 10,
    "cooldown": 480,
    "stance": {
@@ -170,7 +171,7 @@
    "tell_anim": "hook",
    "startup": 14,
    "active": 1,
-   "recovery": 16,
+   "recovery": 14,
    "stamina_cost": 12,
    "cooldown": 360,
    "spawns": [
@@ -292,13 +293,34 @@
   },
   "bramvex_stand_firm": {
    "name": "Stand Firm",
-   "kind": "resource",
+   "kind": "guard",
    "tell_anim": "stance",
    "startup": 0,
    "active": 1,
    "recovery": 0,
    "lore_source": "lore:sergeant, field equipment; perfect guard grants Intel",
    "power": "biology"
+  },
+  "bramvex_haft_shove": {
+   "name": "Haft Shove",
+   "kind": "grab",
+   "tell_anim": "grab",
+   "startup": 18,
+   "active": 3,
+   "recovery": 26,
+   "stamina_cost": 12,
+   "track": 8,
+   "damage": 10.0,
+   "poise_damage": 8,
+   "hitstop": 6,
+   "grab": true,
+   "throw_dist": 1.8,
+   "throw_stun": 6,
+   "hitbox": {
+    "reach": 2.2,
+    "arc": 90
+   },
+   "lore_source": "lore:sergeant's thorned haft; shove-throw"
   }
  }
 }

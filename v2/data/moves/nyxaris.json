@@ -7,7 +7,7 @@
    "tell_anim": "punch",
    "startup": 15,
    "active": 3,
-   "recovery": 18,
+   "recovery": 14,
    "stamina_cost": 9,
    "damage": 10.0,
    "poise_damage": 10,
@@ -31,7 +31,7 @@
    "tell_anim": "slash_back",
    "startup": 15,
    "active": 3,
-   "recovery": 22,
+   "recovery": 18,
    "stamina_cost": 9,
    "damage": 10.9,
    "poise_damage": 10,
@@ -53,7 +53,7 @@
    "tell_anim": "thrust",
    "startup": 32,
    "active": 4,
-   "recovery": 30,
+   "recovery": 26,
    "stamina_cost": 20,
    "feint": true,
    "track": 12,
@@ -78,11 +78,11 @@
   },
   "nyxaris_cocoon": {
    "name": "Cocoon",
-   "kind": "grab",
+   "kind": "ability",
    "tell_anim": "grab",
    "startup": 14,
    "active": 4,
-   "recovery": 26,
+   "recovery": 23,
    "stamina_cost": 12,
    "reserve_cost": 15,
    "track": 8,
@@ -101,7 +101,8 @@
     "root": 30
    },
    "lore_source": "lore:silk as trap; command grab that wraps and drags the target",
-   "power": "anatomy"
+   "power": "anatomy",
+   "cooldown": 420
   },
   "nyxaris_silk_hop": {
    "name": "Silk Hop",
@@ -109,8 +110,8 @@
    "tell_anim": "leap",
    "startup": 0,
    "active": 6,
-   "recovery": 16,
-   "stamina_cost": 22,
+   "recovery": 13,
+   "stamina_cost": 18.7,
    "iframes": [
     0,
     6
@@ -118,8 +119,8 @@
    "motion": [
     {
      "at": 0,
-     "len": 8,
-     "dist": 2.0,
+     "len": 6,
+     "dist": 3.0,
      "dir": "input"
     }
    ],
@@ -132,7 +133,7 @@
    "tell_anim": "hook",
    "startup": 16,
    "active": 1,
-   "recovery": 22,
+   "recovery": 20,
    "stamina_cost": 10,
    "reserve_cost": 35,
    "cooldown": 540,
@@ -242,7 +243,7 @@
    "tell_anim": "thrust",
    "startup": 14,
    "active": 3,
-   "recovery": 22,
+   "recovery": 20,
    "stamina_cost": 10,
    "reserve_cost": 10,
    "cooldown": 120,
@@ -266,24 +267,6 @@
    },
    "lore_source": "lore:Venom; poison damage-over-time with a visible ticking stack",
    "power": "biology:venom"
-  },
-  "nyxaris_permission": {
-   "name": "Who Gave You Permission?",
-   "kind": "ability",
-   "tell_anim": "stance",
-   "startup": 4,
-   "active": 36,
-   "recovery": 16,
-   "stamina_cost": 8,
-   "reserve_cost": 15,
-   "cooldown": 480,
-   "stance": {
-    "status": "permission",
-    "from": 4,
-    "frames": 36
-   },
-   "lore_source": "lore quote: Nyxaris v. Helix, 'Who gave you permission?'",
-   "power": "anatomy"
   },
   "nyxaris_cold_archive": {
    "name": "Cold Archive",
@@ -327,13 +310,35 @@
   },
   "nyxaris_silk_screen": {
    "name": "Silk Screen",
-   "kind": "resource",
+   "kind": "guard",
    "tell_anim": "stance",
    "startup": 0,
    "active": 1,
    "recovery": 0,
    "lore_source": "lore:silk as insulation; woven barrier block",
    "power": "anatomy"
+  },
+  "nyxaris_silk_snare": {
+   "name": "Silk Snare",
+   "kind": "grab",
+   "tell_anim": "grab",
+   "startup": 16,
+   "active": 3,
+   "recovery": 26,
+   "stamina_cost": 12,
+   "track": 8,
+   "damage": 10.0,
+   "poise_damage": 10,
+   "hitstop": 6,
+   "grab": true,
+   "throw_dist": 2.4,
+   "throw_stun": 6,
+   "hitbox": {
+    "reach": 2.0,
+    "arc": 100
+   },
+   "lore_source": "lore:silk as trap; short silk grab",
+   "reserve_cost": 6
   }
  }
 }

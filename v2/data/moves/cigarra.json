@@ -7,7 +7,7 @@
    "tell_anim": "punch",
    "startup": 10,
    "active": 3,
-   "recovery": 10,
+   "recovery": 8,
    "stamina_cost": 5,
    "damage": 10.3,
    "poise_damage": 5,
@@ -31,7 +31,7 @@
    "tell_anim": "slash_back",
    "startup": 10,
    "active": 3,
-   "recovery": 10,
+   "recovery": 8,
    "stamina_cost": 5,
    "damage": 10.3,
    "poise_damage": 5,
@@ -55,7 +55,7 @@
    "tell_anim": "slash_up",
    "startup": 12,
    "active": 3,
-   "recovery": 18,
+   "recovery": 14,
    "stamina_cost": 7,
    "damage": 14.2,
    "poise_damage": 8,
@@ -77,7 +77,7 @@
    "tell_anim": "spin",
    "startup": 28,
    "active": 1,
-   "recovery": 30,
+   "recovery": 26,
    "stamina_cost": 18,
    "feint": true,
    "track": 12,
@@ -108,11 +108,11 @@
   },
   "cigarra_puppet_thought": {
    "name": "Puppet Thought",
-   "kind": "grab",
+   "kind": "ability",
    "tell_anim": "roar",
    "startup": 26,
    "active": 3,
-   "recovery": 34,
+   "recovery": 31,
    "stamina_cost": 14,
    "track": 6,
    "damage": 6.5,
@@ -139,8 +139,8 @@
    "tell_anim": "leap",
    "startup": 0,
    "active": 6,
-   "recovery": 12,
-   "stamina_cost": 16,
+   "recovery": 9,
+   "stamina_cost": 13.6,
    "iframes": [
     0,
     6
@@ -148,8 +148,8 @@
    "motion": [
     {
      "at": 0,
-     "len": 12,
-     "dist": 4.2,
+     "len": 10,
+     "dist": 6.3,
      "dir": "input"
     }
    ],
@@ -172,7 +172,7 @@
    "tell_anim": "stance",
    "startup": 6,
    "active": 150,
-   "recovery": 14,
+   "recovery": 13,
    "stamina_cost": 10,
    "cooldown": 720,
    "pressure_on_use": 22,
@@ -190,7 +190,7 @@
    "tell_anim": "roar",
    "startup": 20,
    "active": 1,
-   "recovery": 22,
+   "recovery": 20,
    "stamina_cost": 14,
    "cooldown": 840,
    "pressure_on_use": 22,
@@ -233,6 +233,36 @@
    "recovery": 0,
    "lore_source": "lore:L330 she experiences noise; competing outcome-images",
    "power": "psionic"
+  },
+  "cigarra_cloak_snatch": {
+   "name": "Cloak Snatch",
+   "kind": "grab",
+   "tell_anim": "grab",
+   "startup": 16,
+   "active": 3,
+   "recovery": 26,
+   "stamina_cost": 12,
+   "track": 8,
+   "damage": 8.0,
+   "poise_damage": 8,
+   "hitstop": 6,
+   "grab": true,
+   "throw_dist": 1.6,
+   "throw_stun": 6,
+   "hitbox": {
+    "reach": 2.2,
+    "arc": 90
+   },
+   "lore_source": "lore:translucent treehopper-wing cloak; wing snare"
+  },
+  "cigarra_cloak_fold": {
+   "name": "Cloak Fold",
+   "kind": "guard",
+   "tell_anim": "stance",
+   "startup": 0,
+   "active": 1,
+   "recovery": 0,
+   "lore_source": "lore:translucent wing cloak guard; she sees it coming (longest parry window)"
   }
  }
 }

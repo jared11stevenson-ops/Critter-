@@ -138,6 +138,7 @@ func step(input_a: CombatInput, input_b: CombatInput) -> void:
 	_physics()
 	Hits.resolve_tick(self)
 	Fx.tick_world(self)
+	hitstop = mini(hitstop, int(R["hitstop_cap"]))
 	_check_end()
 
 func _physics() -> void:
@@ -234,12 +235,12 @@ func state() -> Dictionary:
 		fs.append({"pos": f.pos, "facing": f.facing, "vitality": f.vit, "vitality_max": f.max_vit, "stamina": f.sta,
 			"stamina_max": f.max_sta, "poise": f.poise, "poise_max": f.max_poise, "pressure": f.pressure, "rage": f.rage, "raging": f.raging, "plates": ceili(f.plate_pool / float(R["plate_size"])), "intel": f.intel, "reserve": f.reserve, "dots": f.dots.size(), "compelled": f.has("compelled"),
 			"action": act, "action_frame": f.af, "move_id": f.move.id if f.move != null else "",
-			"stun": f.stun, "tell_anim": f.move.tell_anim if f.move != null else "", "stored": f.stored, "debt": f.debt, "status": names, "cooldowns": f.cooldowns.duplicate(), "winded": f.winded,
+			"stun": f.stun, "velocity": f.wvel, "status_ticks": f.st.duplicate(), "dot_stacks": f.dots.duplicate(true), "tell_anim": f.move.tell_anim if f.move != null else "", "stored": f.stored, "debt": f.debt, "status": names, "cooldowns": f.cooldowns.duplicate(), "winded": f.winded,
 			"can_last_stand": (not f.last_stand_used) and f.alive and f.ratio() < float(R["last_stand_ratio"]),
 			"last_stand_used": f.last_stand_used, "alive": f.alive})
 	var es: Array = []
 	for e in ents:
-		es.append({"kind": e.kind, "owner": e.owner, "pos": e.pos, "radius": e.radius, "life": e.life, "tag": e.tag})
+		es.append({"kind": e.kind, "type": e.tag if e.tag != "" else e.kind, "owner": e.owner, "pos": e.pos, "radius": e.radius, "life": e.life, "remaining": e.life, "tag": e.tag, "move_id": e.move_id})
 	return {"tick": tick, "frame": frame, "hitstop": hitstop, "fighters": fs, "entities": es, "over": _over}
 
 ## Stable hash of the full simulation state (determinism tests).

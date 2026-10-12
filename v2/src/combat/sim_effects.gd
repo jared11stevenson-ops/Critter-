@@ -116,6 +116,8 @@ static func _spawn(sim: CombatSim, f: Fighter, o: Fighter, m: MoveDef, sp: Dicti
 					same.remove_at(0)
 			sim.ents.append(e)
 			sim.emit("zone", f.idx, m.id, e.pos, 0.0, {"radius": e.radius, "tag": e.tag})
+		"fungus":
+			Res.grow_fungus(sim, f)
 		"ripen_all":
 			Res.ripen_all(sim, o, f)
 			f.pressure = float(f.T["pressure_max"])

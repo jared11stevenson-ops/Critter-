@@ -7,7 +7,7 @@
    "tell_anim": "punch",
    "startup": 16,
    "active": 3,
-   "recovery": 18,
+   "recovery": 14,
    "stamina_cost": 8,
    "damage": 28.8,
    "poise_damage": 14,
@@ -31,7 +31,7 @@
    "tell_anim": "slash_back",
    "startup": 15,
    "active": 3,
-   "recovery": 22,
+   "recovery": 18,
    "stamina_cost": 8,
    "damage": 28.8,
    "poise_damage": 14,
@@ -53,7 +53,7 @@
    "tell_anim": "charge",
    "startup": 36,
    "active": 4,
-   "recovery": 32,
+   "recovery": 28,
    "stamina_cost": 18,
    "feint": true,
    "track": 14,
@@ -77,11 +77,11 @@
   },
   "mollusk_lift": {
    "name": "Lift",
-   "kind": "grab",
+   "kind": "ability",
    "tell_anim": "grab",
    "startup": 18,
    "active": 3,
-   "recovery": 26,
+   "recovery": 23,
    "stamina_cost": 12,
    "track": 8,
    "damage": 43.2,
@@ -95,7 +95,8 @@
     "arc": 110
    },
    "lore_source": "lore:love of forklifts; hoist and set down",
-   "power": "anatomy:shell"
+   "power": "anatomy:shell",
+   "cooldown": 420
   },
   "mollusk_shell_slide": {
    "name": "Shell Slide",
@@ -103,8 +104,8 @@
    "tell_anim": "leap",
    "startup": 0,
    "active": 6,
-   "recovery": 16,
-   "stamina_cost": 22,
+   "recovery": 13,
+   "stamina_cost": 18.7,
    "iframes": [
     0,
     6
@@ -112,8 +113,8 @@
    "motion": [
     {
      "at": 0,
-     "len": 8,
-     "dist": 1.8,
+     "len": 6,
+     "dist": 2.7,
      "dir": "input"
     }
    ],
@@ -126,7 +127,7 @@
    "tell_anim": "stance",
    "startup": 14,
    "active": 1,
-   "recovery": 20,
+   "recovery": 18,
    "stamina_cost": 14,
    "cooldown": 480,
    "spawns": [
@@ -153,7 +154,7 @@
    "tell_anim": "stance",
    "startup": 6,
    "active": 1,
-   "recovery": 16,
+   "recovery": 14,
    "stamina_cost": 10,
    "cooldown": 900,
    "stance": {
@@ -198,7 +199,7 @@
   },
   "mollusk_hold": {
    "name": "Hold",
-   "kind": "resource",
+   "kind": "guard",
    "tell_anim": "stance",
    "startup": 0,
    "active": 1,
@@ -215,6 +216,27 @@
    "recovery": 0,
    "lore_source": "lore:shell records journeys; each bout survived adds a carved mark",
    "power": "anatomy:shell"
+  },
+  "mollusk_shell_bash": {
+   "name": "Shell Bash",
+   "kind": "grab",
+   "tell_anim": "grab",
+   "startup": 18,
+   "active": 3,
+   "recovery": 26,
+   "stamina_cost": 12,
+   "track": 8,
+   "damage": 6.0,
+   "poise_damage": 26,
+   "hitstop": 6,
+   "grab": true,
+   "throw_dist": 0.9,
+   "throw_stun": 10,
+   "hitbox": {
+    "reach": 1.4,
+    "arc": 110
+   },
+   "lore_source": "lore:shell; stagger-focused bash"
   }
  }
 }

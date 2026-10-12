@@ -18,7 +18,7 @@
  "parry_action_frames": 8,
  "parry_iframes": 10,
  "parry_sta_refund": 14,
- "parry_hitstop": 9,
+ "parry_hitstop": 6,
  "riposte_frames": 60,
  "riposte_startup_mult": 0.5,
  "riposte_dmg_mult": 1.3,
@@ -49,8 +49,8 @@
  "clash_frames": 22,
  "clash_poise": 6,
  "clash_push": 0.8,
- "clash_hitstop": 8,
- "block_hitstop": 4,
+ "clash_hitstop": 6,
+ "block_hitstop": 3,
  "block_push_mult": 0.5,
  "crush_drain_mult": 2.0,
  "crush_dmg_mult": 0.5,
@@ -84,13 +84,13 @@
   },
   "walk_speed": {
    "stat": "spd",
-   "base": 1.4,
-   "per": 0.3
+   "base": 2.4,
+   "per": 0.51
   },
   "sta_regen": {
    "stat": "sta",
-   "base": 14.0,
-   "per": 1.5
+   "base": 18.0,
+   "per": 2.0
   },
   "poise_regen": {
    "stat": "poi",
@@ -130,7 +130,8 @@
   "brew_bonus": 0.0,
   "marks_bonus": 0.0,
   "desperation_mult": 1.3,
-  "desperation_ratio": 0.35
+  "desperation_ratio": 0.35,
+  "parry_permission": 0
  },
  "tick_rate": 60,
  "input_deadzone": 0.2,
@@ -228,5 +229,11 @@
   "spoiled"
  ],
  "random_dodge_arc": 70.0,
- "default_stakes": 2
+ "default_stakes": 2,
+ "walk_accel": 42.0,
+ "walk_decel": 70.0,
+ "moving_epsilon": 0.15,
+ "cancel_window": 8,
+ "confirm_cancel_delay": 2,
+ "hitstop_cap": 6
 }
