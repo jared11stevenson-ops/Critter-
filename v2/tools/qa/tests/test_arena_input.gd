@@ -72,12 +72,12 @@ func run() -> Array:
 	QaCheck.is_true(fails, o4.dodge and o4.grab and o4.ability1 and o4.ability2, "latched presses delivered")
 	var o5 := p.tick(sim, 0)
 	QaCheck.is_true(fails, not (o5.dodge or o5.grab or o5.ability1 or o5.ability2), "presses consumed once")
-	# --- Last Stand: both ability buttons for two ticks
+	# --- Last Stand: the last_stand flag (or both ability buttons on an older sim) for two ticks
 	p.press("ls")
 	var ls := 0
 	for i in 4:
 		var o := p.tick(sim, 0)
-		if o.ability1 and o.ability2:
+		if bool(o.get("last_stand")) or (o.ability1 and o.ability2):
 			ls += 1
 	QaCheck.eq(fails, ls, PlayerInput.LS_TICKS, "last stand chord lasts LS_TICKS")
 	p.press("yield")
