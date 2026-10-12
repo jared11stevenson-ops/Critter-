@@ -57,3 +57,6 @@ Open: persuade/observe outcomes that change capture odds, region exploration, to
 
 ## v0.9.0 — Counterplay + skill stars
 Two fight kinds only (Blood Bout, Practice); no role multipliers. Parry now cleanses statuses/DoT/compulsion; Tenacity halves repeated slow/root/confuse within 4 s; 1-3 skill stars per critter (display only). Matrix (30 bouts/pair): overall 46.7-54.3%. Open: Pharilux 25% vs expert AI and Bramvex 71% novice vs 36% expert (AI behaviour, not stats); counterplay gap audit per COUNTERPLAY.md; Pharilux model polish.
+
+## v0.9.1 — Space to move
+AI resets to neutral after exchanges (breath), retreat speed = advance speed, block push 0.8, tools/sim/spacing.gd measures spacing (mean gap 3.6 -> 4.1, far share 10% -> 22%, bouts ~+11 s). Matrix: 43.1-55.2% overall. Open: Pharilux bouts are long (83 s, 10% timeouts), ring-outs up to 25% for Aruun; needs playtest feel; player-side movement (dodge/dash options) not changed yet.
