@@ -58,6 +58,15 @@ static func ladder() -> Array:
 static func species_name(species: String) -> String:
 	return species.capitalize()
 
+## Skill stars: how much thinking a critter's kit asks of the player (1 simple .. 3 demanding). Never a strength rating.
+static func stars_of(species: String) -> int:
+	var d := CombatData.critter(species)
+	return d.difficulty if d != null else 1
+
+static func stars_text(species: String) -> String:
+	var n := stars_of(species)
+	return "%s%s  Skill %d" % ["★".repeat(n), "☆".repeat(3 - n), n]
+
 static func role_of(species: String) -> String:
 	return ROLE_OF.get(species, "Fighter")
 

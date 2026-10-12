@@ -66,5 +66,6 @@
   }
  },
  "powers": "treehopper crown spheres, premonition, mind control",
- "role": "reader"
+ "role": "reader",
+ "difficulty": 3
 }

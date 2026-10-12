@@ -65,5 +65,6 @@
   }
  },
  "powers": "flight, atmospheric disturbance, pollination, promise law",
- "role": "drifter"
+ "role": "drifter",
+ "difficulty": 2
 }

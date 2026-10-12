@@ -64,5 +64,6 @@
  },
  "weapon": "Diplomacy (huge thorned weapon)",
  "powers": "camouflage, terrain tactics, thorned Diplomacy",
- "role": "warden"
+ "role": "warden",
+ "difficulty": 3
 }

@@ -65,5 +65,6 @@
   }
  },
  "powers": "pressure, guiding light, spectral tide, anchors and chains, foresight",
- "role": "warden"
+ "role": "warden",
+ "difficulty": 2
 }

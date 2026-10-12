@@ -137,7 +137,7 @@ func _select(id: String) -> void:
 		(_cards[k] as CritterCard).button_pressed = (k == id)
 	var d := CombatData.critter(id)
 	_name.text = d.display_name.to_upper()
-	_species.text = "%s  -  %s" % [d.species, d.archetype]
+	_species.text = "%s  -  %s     %s" % [d.species, d.archetype, Career.stars_text(id)]
 	_line.text = CritterLore.line(id)
 	for c in _stats_box.get_children():
 		c.queue_free()

@@ -347,6 +347,11 @@ static func _parry(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary, mo
 	dfn.sta = minf(dfn.max_sta, dfn.sta + float(R["parry_sta_refund"]))
 	if not projectile:
 		dfn.add_status("riposte", int(R["riposte_frames"]))
+	var afflicted: bool = not dfn.dots.is_empty() or not dfn.compel.is_empty()
+	for sk in R["cleanse_statuses"]:
+		afflicted = afflicted or dfn.has(str(sk))
+	if afflicted:
+		Res.cleanse(sim, dfn)    # a perfect parry is every critter's answer to status effects and mind control
 	if float(dfn.T["intel_gain"]) > 0.0:
 		dfn.intel = minf(1.0, dfn.intel + float(R["intel_per_parry"]))
 	if int(dfn.T["parry_permission"]) > 0 and not projectile:

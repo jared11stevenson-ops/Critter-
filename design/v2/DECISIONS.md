@@ -21,3 +21,6 @@
 
 ## 2026-10 Two fight kinds; roles are styles, not counters (creator)
 Only **Blood Bout** (lethal, counts) and **Practice** (nobody dies, nothing counts) exist as player-facing fights. Roles are fighting/ability styles; outcomes must come from skill. Removed the `role_pressure` damage table from the sim and the role bonus on Stalk. Contest tier remains in code only for old save/test compatibility and is not reachable from the UI. Balance target: every pairing near 50% at equal skill.
+
+## 2026-10 Counterplay is allowed, as skill (creator)
+Counters are fine when they are performed answers (parry/guard, status answers, cleanse moments), with equal opportunity on both sides; no stat multipliers between styles. Status kits must be rewarded without making counter-less critters lose automatically (Tenacity, parry cleanse). Critters get a 1-3 skill star rating for kit complexity that never reflects power. See design/v2/COUNTERPLAY.md.

@@ -66,5 +66,6 @@
   }
  },
  "powers": "fermentation, decomposition, cultivation",
- "role": "brewer"
+ "role": "brewer",
+ "difficulty": 2
 }

@@ -151,7 +151,7 @@ func _build_detail() -> void:
 		return
 	var title := UiStyle.label(c.name, 38, UiStyle.INK, 0)
 	_detail.add_child(title)
-	var tag := "%s  |  %s" % [Career.species_name(c.species), Career.role_of(c.species)]
+	var tag := "%s  |  %s  |  %s" % [Career.species_name(c.species), Career.role_of(c.species), Career.stars_text(c.species)]
 	if c.founder:
 		tag += "  |  FOUNDER"
 	if c.champion:

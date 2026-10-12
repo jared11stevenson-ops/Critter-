@@ -78,7 +78,19 @@ func ratio() -> float:
 func has(s: String) -> bool:
 	return st.get(s, 0) > 0
 
+## Tenacity: a real application (> 6 frames) of a control effect starts a short window in which the same effect lands at half length,
+## so a status-heavy kit is rewarded for its first hit but can never chain-lock a critter that has no answer to it.
+const TENACITY_STATUSES := ["slowed", "rooted", "confused"]
+const TENACITY_FRAMES := 240
+const TENACITY_MULT := 0.5
+var tenacity: Dictionary = {}       # status -> frames left of the diminishing window
+
 func add_status(s: String, frames: int) -> void:
+	if frames > 6 and TENACITY_STATUSES.has(s):
+		if tenacity.get(s, 0) > 0:
+			frames = maxi(6, int(float(frames) * TENACITY_MULT))
+		else:
+			tenacity[s] = frames + TENACITY_FRAMES
 	if frames > st.get(s, 0):
 		st[s] = frames
 

@@ -13,6 +13,7 @@ var tuning: Dictionary = {}         # per-critter overrides of derived values
 var ai_hints: Dictionary = {}       # ability usage hints for the AI
 var abilities: Array = []           # [ability1, ability2, ability3] move ids
 var last_stand := ""
+var difficulty := 1                 # 1..3 stars: how much thinking the kit asks for. NEVER a strength rating.
 var role := ""                      # breaker reader warden brewer anchor drifter binder (design/v2/ROLES.md)
 var raw: Dictionary = {}
 
@@ -29,6 +30,7 @@ static func from_dict(d: Dictionary) -> CritterDef:
 	c.tuning = d.get("tuning", {})
 	c.ai_hints = d.get("ai", {})
 	c.role = str(d.get("role", ""))
+	c.difficulty = clampi(int(d.get("difficulty", 1)), 1, 3)
 	c.abilities = [str(c.move_ids.get("ability1", "")), str(c.move_ids.get("ability2", "")), str(c.move_ids.get("ability3", ""))]
 	c.last_stand = str(c.move_ids.get("laststand", ""))
 	return c

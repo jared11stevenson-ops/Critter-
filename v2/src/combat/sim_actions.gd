@@ -231,6 +231,10 @@ static func tick_fighter(sim: CombatSim, f: Fighter, o: Fighter) -> void:
 		f.st[k] -= 1
 		if f.st[k] <= 0:
 			f.st.erase(k)
+	for k in f.tenacity.keys():
+		f.tenacity[k] -= 1
+		if f.tenacity[k] <= 0:
+			f.tenacity.erase(k)
 	if f.has("slowed"):
 		f.slow_mult = float(f.T["slow_value"])
 	if f.has("haste"):

@@ -62,5 +62,6 @@
   }
  },
  "powers": "cryogenic silk, venom",
- "role": "binder"
+ "role": "binder",
+ "difficulty": 2
 }

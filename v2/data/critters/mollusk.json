@@ -65,5 +65,6 @@
   }
  },
  "powers": "temporal inertia, memory shell",
- "role": "anchor"
+ "role": "anchor",
+ "difficulty": 3
 }

@@ -59,5 +59,6 @@
  },
  "weapon": "Morrow (psionically bonded mace)",
  "powers": "psionic bond with Morrow, giraffe-beetle body, Rage",
- "role": "breaker"
+ "role": "breaker",
+ "difficulty": 1
 }
