@@ -23,7 +23,22 @@
    "lore_source": "lore:body and shell; deliberate heavy body strikes",
    "chain": "mollusk_shell_shove2",
    "cancel_from": 18,
-   "power": "anatomy:shell"
+   "power": "anatomy:shell",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.2,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "mollusk_shell_shove2": {
    "name": "Slow Shell Shove II",
@@ -45,7 +60,22 @@
    },
    "track": 5,
    "lore_source": "lore:body and shell; deliberate heavy body strikes",
-   "power": "anatomy:shell"
+   "power": "anatomy:shell",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.26,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "mollusk_gathering_blow": {
    "name": "Gathering Blow",
@@ -73,7 +103,23 @@
     "charge_gain": 1.6
    },
    "lore_source": "lore:inertia accumulates; the heavy keeps growing while held",
-   "power": "anatomy:shell"
+   "power": "anatomy:shell",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.32,
+    "hold": 1,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "mollusk_lift": {
    "name": "Lift",
@@ -96,7 +142,29 @@
    },
    "lore_source": "lore:love of forklifts; hoist and set down",
    "power": "anatomy:shell",
-   "cooldown": 420
+   "cooldown": 420,
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 1.84,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_stun",
+      "kind": "knockdown"
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "mollusk_shell_slide": {
    "name": "Shell Slide",
@@ -119,7 +187,28 @@
     }
    ],
    "lore_source": "lore:slow heavy body; shell slide",
-   "power": "anatomy:shell"
+   "power": "anatomy:shell",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 50,
+    "enemy": "attacker",
+    "dist": 1.8,
+    "dodge_tick": 6,
+    "dodge_dir": [
+     0,
+     1
+    ],
+    "measure": [
+     {
+      "m": "self_moved",
+      "min": 1.0
+     },
+     {
+      "m": "damage_prevented",
+      "min": 3
+     }
+    ]
+   }
   },
   "mollusk_inertia_field": {
    "name": "Inertia Field",
@@ -146,7 +235,29 @@
     }
    ],
    "lore_source": "lore:L525 resistance to change; actions lengthen, impacts stay incomplete",
-   "power": "supernatural"
+   "power": "supernatural",
+   "effect_kind": "terrain",
+   "expected": {
+    "ticks": 170,
+    "zone_tag": "inertia",
+    "dist": 4.0,
+    "zone_after": 60,
+    "measure": [
+     {
+      "m": "entity",
+      "kind": "tag:inertia",
+      "count": 1
+     },
+     {
+      "m": "enemy_status",
+      "name": "inertia",
+      "min_ticks": 1
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "mollusk_borrowed_seconds": {
    "name": "Borrowed Seconds",
@@ -163,7 +274,27 @@
     "frames": 240
    },
    "lore_source": "lore:Bk XIV every second he creates is a debt",
-   "power": "supernatural"
+   "power": "supernatural",
+   "effect_kind": "status",
+   "expected": {
+    "dist": 6.0,
+    "ticks": 330,
+    "measure": [
+     {
+      "m": "self_status",
+      "name": "borrowed",
+      "min_ticks": 180
+     },
+     {
+      "m": "self_status",
+      "name": "owed",
+      "min_ticks": 100
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "mollusk_everything_arrives": {
    "name": "Everything Arrives at Once",
@@ -195,7 +326,27 @@
     "release_debt": true
    },
    "lore_source": "lore:delayed effects eventually resolve; releases every held impact",
-   "power": "supernatural"
+   "power": "supernatural",
+   "effect_kind": "defense",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 1.8,
+    "ticks": 190,
+    "pre": {
+     "self_vit_ratio": 0.2
+    },
+    "measure": [
+     {
+      "m": "field_up",
+      "name": "stored",
+      "min": 2
+     },
+     {
+      "m": "hit",
+      "min": 8
+     }
+    ]
+   }
   },
   "mollusk_hold": {
    "name": "Hold",
@@ -205,7 +356,26 @@
    "active": 1,
    "recovery": 0,
    "lore_source": "lore:L525 an impact can remain incomplete; blocked force is delayed, not erased",
-   "power": "anatomy:shell"
+   "power": "anatomy:shell",
+   "effect_kind": "defense",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 1.8,
+    "ticks": 90,
+    "enemy_move": "heavy",
+    "guard_from": 1,
+    "measure": [
+     {
+      "m": "damage_prevented",
+      "min": 3
+     },
+     {
+      "m": "field_up",
+      "name": "debt",
+      "min": 0.3
+     }
+    ]
+   }
   },
   "mollusk_shell_memory": {
    "name": "Shell Memory",
@@ -215,7 +385,25 @@
    "active": 1,
    "recovery": 0,
    "lore_source": "lore:shell records journeys; each bout survived adds a carved mark",
-   "power": "anatomy:shell"
+   "power": "anatomy:shell",
+   "effect_kind": "defense",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 1.8,
+    "ticks": 60,
+    "pre": {
+     "marks": 8
+    },
+    "base_off": {
+     "marks_armor": 0
+    },
+    "measure": [
+     {
+      "m": "damage_prevented",
+      "min": 0.3
+     }
+    ]
+   }
   },
   "mollusk_shell_bash": {
    "name": "Shell Bash",
@@ -236,7 +424,26 @@
     "reach": 1.4,
     "arc": 110
    },
-   "lore_source": "lore:shell; stagger-focused bash"
+   "lore_source": "lore:shell; stagger-focused bash",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 1.84,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_stun",
+      "kind": "knockdown"
+     }
+    ]
+   }
   }
  }
 }

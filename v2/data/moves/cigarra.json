@@ -23,7 +23,22 @@
    "lore_source": "canon:bad_thought flicks a crown sphere, distorted psychic object",
    "chain": "cigarra_bad_thought2",
    "cancel_from": 11,
-   "power": "anatomy:crown spheres"
+   "power": "anatomy:crown spheres",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.56,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "cigarra_bad_thought2": {
    "name": "Bad Thought II",
@@ -47,7 +62,22 @@
    "lore_source": "canon:bad_thought flicks a crown sphere, distorted psychic object",
    "chain": "cigarra_bad_thought3",
    "cancel_from": 11,
-   "power": "anatomy:crown spheres"
+   "power": "anatomy:crown spheres",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.56,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "cigarra_bad_thought3": {
    "name": "Bad Thought III",
@@ -69,7 +99,22 @@
    },
    "track": 5,
    "lore_source": "canon:bad_thought flicks a crown sphere, distorted psychic object",
-   "power": "anatomy:crown spheres"
+   "power": "anatomy:crown spheres",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.56,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "cigarra_crown_barrage": {
    "name": "Crown Barrage",
@@ -104,7 +149,27 @@
     }
    ],
    "lore_source": "lore:branching black-sphere crown volley",
-   "power": "anatomy:crown spheres"
+   "power": "anatomy:crown spheres",
+   "effect_kind": "special",
+   "expected": {
+    "ticks": 140,
+    "dist": 4.0,
+    "measure": [
+     {
+      "m": "entity",
+      "kind": "proj",
+      "count": 5
+     },
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "cigarra_puppet_thought": {
    "name": "Puppet Thought",
@@ -131,7 +196,29 @@
    },
    "lore_source": "creator direction + lore:Psychic Interference; crown spheres flare",
    "power": "anatomy:crown spheres",
-   "cooldown": 360
+   "cooldown": 360,
+   "effect_kind": "control",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.8,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "event",
+      "type": "compel"
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "cigarra_grasshopper_thought": {
    "name": "Grasshopper Thought",
@@ -154,7 +241,28 @@
     }
    ],
    "lore_source": "canon:grasshopper_thought crouch then launch, cloak steers",
-   "power": "psionic"
+   "power": "psionic",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 50,
+    "enemy": "attacker",
+    "dist": 1.8,
+    "dodge_tick": 6,
+    "dodge_dir": [
+     0,
+     1
+    ],
+    "measure": [
+     {
+      "m": "self_moved",
+      "min": 1.0
+     },
+     {
+      "m": "damage_prevented",
+      "min": 3
+     }
+    ]
+   }
   },
   "cigarra_brain_skip": {
    "name": "Brain Skip",
@@ -164,7 +272,35 @@
    "active": 1,
    "recovery": 0,
    "lore_source": "canon:brain_skip cooldown 9s, counter when dodging through a Premonition ghost",
-   "power": "psionic"
+   "power": "psionic",
+   "effect_kind": "control",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 1.6,
+    "ticks": 60,
+    "via": "dodge",
+    "dodge_tick": 13,
+    "dodge_dir": [
+     1,
+     0
+    ],
+    "enemy_critter": "aruun",
+    "pre_with": {
+     "self_status": {
+      "premonition": 300
+     }
+    },
+    "measure": [
+     {
+      "m": "event",
+      "type": "brain_skip"
+     },
+     {
+      "m": "enemy_stun",
+      "kind": "skipped"
+     }
+    ]
+   }
   },
   "cigarra_premonition": {
    "name": "Premonition",
@@ -182,7 +318,34 @@
     "frames": 150
    },
    "lore_source": "canon:premonition cooldown 12s, future ghosts, dodge through one to counter",
-   "power": "psionic"
+   "power": "psionic",
+   "effect_kind": "status",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 2.0,
+    "ticks": 70,
+    "enemy_critter": "aruun",
+    "enemy_tick": 20,
+    "measure": [
+     {
+      "m": "self_status",
+      "name": "premonition",
+      "min_ticks": 100
+     },
+     {
+      "m": "event",
+      "type": "ghost"
+     },
+     {
+      "m": "field_up",
+      "name": "pressure",
+      "min": 15
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "cigarra_false_memory": {
    "name": "False Memory",
@@ -202,7 +365,36 @@
     }
    ],
    "lore_source": "canon:false_memory cooldown 14s, hallucination decoy the enemy attacks",
-   "power": "psionic"
+   "power": "psionic",
+   "effect_kind": "control",
+   "expected": {
+    "ticks": 120,
+    "dist": 4.0,
+    "measure": [
+     {
+      "m": "enemy_status",
+      "name": "compelled",
+      "min_ticks": 40
+     },
+     {
+      "m": "entity",
+      "kind": "decoy",
+      "count": 1
+     },
+     {
+      "m": "event",
+      "type": "compel"
+     },
+     {
+      "m": "cooldown"
+     },
+     {
+      "m": "field_up",
+      "name": "pressure",
+      "min": 15.4
+     }
+    ]
+   }
   },
   "cigarra_future_touched": {
    "name": "A Future Touched",
@@ -222,7 +414,37 @@
     "frames": 240
    },
    "lore_source": "lore:Bk XIV a future seen is a future touched; ends in Future-Noise overload",
-   "power": "psionic"
+   "power": "psionic",
+   "effect_kind": "defense",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 2.0,
+    "ticks": 150,
+    "enemy_tick": 45,
+    "pre": {
+     "self_vit_ratio": 0.2
+    },
+    "measure": [
+     {
+      "m": "self_status",
+      "name": "touched",
+      "min_ticks": 150
+     },
+     {
+      "m": "event",
+      "type": "brain_skip"
+     },
+     {
+      "m": "damage_prevented",
+      "min": 2
+     },
+     {
+      "m": "field_up",
+      "name": "pressure",
+      "min": 60
+     }
+    ]
+   }
   },
   "cigarra_future_noise": {
    "name": "Future-Noise",
@@ -232,7 +454,20 @@
    "active": 1,
    "recovery": 0,
    "lore_source": "lore:L330 she experiences noise; competing outcome-images",
-   "power": "psionic"
+   "power": "psionic",
+   "effect_kind": "resource",
+   "expected": {
+    "dist": 3.0,
+    "via": "ability1",
+    "ticks": 40,
+    "measure": [
+     {
+      "m": "field_up",
+      "name": "pressure",
+      "min": 15
+     }
+    ]
+   }
   },
   "cigarra_cloak_snatch": {
    "name": "Cloak Snatch",
@@ -253,7 +488,30 @@
     "reach": 2.2,
     "arc": 90
    },
-   "lore_source": "lore:translucent treehopper-wing cloak; wing snare"
+   "lore_source": "lore:translucent treehopper-wing cloak; wing snare",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.32,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_moved",
+      "min": 0.8
+     },
+     {
+      "m": "enemy_stun",
+      "kind": "knockdown"
+     }
+    ]
+   }
   },
   "cigarra_cloak_fold": {
    "name": "Cloak Fold",
@@ -262,7 +520,25 @@
    "startup": 0,
    "active": 1,
    "recovery": 0,
-   "lore_source": "lore:translucent wing cloak guard; she sees it coming (longest parry window)"
+   "lore_source": "lore:translucent wing cloak guard; she sees it coming (longest parry window)",
+   "effect_kind": "defense",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 2.0,
+    "ticks": 60,
+    "enemy_critter": "aruun",
+    "guard_from": 5,
+    "measure": [
+     {
+      "m": "event",
+      "type": "parry"
+     },
+     {
+      "m": "damage_prevented",
+      "min": 3
+     }
+    ]
+   }
   }
  }
 }

@@ -35,7 +35,26 @@
      "max": 6
     }
    },
-   "power": "biology"
+   "power": "biology",
+   "effect_kind": "status",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.32,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_dots",
+      "count": 1
+     }
+    ]
+   }
   },
   "scarlith_culture_jab2": {
    "name": "Culture Jab II",
@@ -69,7 +88,26 @@
      "max": 6
     }
    },
-   "power": "biology"
+   "power": "biology",
+   "effect_kind": "status",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.32,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_dots",
+      "count": 1
+     }
+    ]
+   }
   },
   "scarlith_aged_smash": {
    "name": "Aged Smash",
@@ -96,7 +134,23 @@
     "culture_scale": 0.25
    },
    "lore_source": "lore:Bk VIII age can create value; damage scales with Cultures on the target",
-   "power": "biology"
+   "power": "biology",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.44,
+    "hold": 1,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "scarlith_barter": {
    "name": "Barter",
@@ -121,7 +175,36 @@
     "steal": true
    },
    "lore_source": "lore:Undermarket broker; snatch and swap a buff for a penalty",
-   "power": "biology"
+   "power": "biology",
+   "effect_kind": "control",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.2,
+    "pre": {
+     "enemy_status": {
+      "haste": 400
+     }
+    },
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_stun",
+      "kind": "knockdown"
+     },
+     {
+      "m": "self_status",
+      "name": "haste",
+      "min_ticks": 100
+     }
+    ]
+   }
   },
   "scarlith_hop_clear": {
    "name": "Hop Clear",
@@ -144,7 +227,28 @@
     }
    ],
    "lore_source": "lore:everything has value; nimble broker",
-   "power": "biology"
+   "power": "biology",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 50,
+    "enemy": "attacker",
+    "dist": 1.8,
+    "dodge_tick": 6,
+    "dodge_dir": [
+     0,
+     1
+    ],
+    "measure": [
+     {
+      "m": "self_moved",
+      "min": 1.0
+     },
+     {
+      "m": "damage_prevented",
+      "min": 3
+     }
+    ]
+   }
   },
   "scarlith_ferment": {
    "name": "Ferment",
@@ -178,7 +282,32 @@
     }
    },
    "lore_source": "lore:Fermentation; Culture stacks ripen over time and burst",
-   "power": "biology"
+   "power": "biology",
+   "effect_kind": "status",
+   "expected": {
+    "ticks": 100,
+    "dist": 3.52,
+    "pre": {
+     "enemy_cultures": 2
+    },
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_dots",
+      "count": 1
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "scarlith_decompose": {
    "name": "Decompose",
@@ -205,7 +334,30 @@
     }
    },
    "lore_source": "lore:Decomposition; rots armor and guard",
-   "power": "biology"
+   "power": "biology",
+   "effect_kind": "status",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.8,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_status",
+      "name": "rotted",
+      "min_ticks": 150
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "scarlith_aged_to_perfection": {
    "name": "Aged to Perfection",
@@ -221,7 +373,22 @@
     }
    ],
    "lore_source": "lore:age creates value; instantly ripens every Culture",
-   "power": "biology"
+   "power": "biology",
+   "effect_kind": "status",
+   "expected": {
+    "ticks": 70,
+    "dist": 3.0,
+    "pre": {
+     "enemy_cultures": 3,
+     "self_vit_ratio": 0.2
+    },
+    "measure": [
+     {
+      "m": "enemy_vit_drop",
+      "min": 15
+     }
+    ]
+   }
   },
   "scarlith_cultivate": {
    "name": "Cultivate",
@@ -238,7 +405,37 @@
      "type": "fungus"
     }
    ],
-   "lore_source": "lore:Cultivation; grows fungus patches that feed Brew and heal him"
+   "lore_source": "lore:Cultivation; grows fungus patches that feed Brew and heal him",
+   "effect_kind": "terrain",
+   "expected": {
+    "ticks": 100,
+    "dist": 6.0,
+    "zone_tag": "fungus",
+    "zone_after": 40,
+    "zone_target": "self",
+    "pre": {
+     "self_vit_ratio": 0.5
+    },
+    "measure": [
+     {
+      "m": "entity",
+      "kind": "tag:fungus",
+      "count": 1
+     },
+     {
+      "m": "self_vit_gain",
+      "min": 1.0
+     },
+     {
+      "m": "field_up",
+      "name": "pressure",
+      "min": 1.0
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "scarlith_rind_guard": {
    "name": "Rind Guard",
@@ -248,7 +445,26 @@
    "active": 1,
    "recovery": 0,
    "lore_source": "lore:cheese flavor; a parry spoils the attacker's next move",
-   "power": "biology"
+   "power": "biology",
+   "effect_kind": "defense",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 2.0,
+    "ticks": 60,
+    "enemy_critter": "aruun",
+    "guard_from": 13,
+    "measure": [
+     {
+      "m": "event",
+      "type": "parry"
+     },
+     {
+      "m": "enemy_status",
+      "name": "spoiled",
+      "min_ticks": 60
+     }
+    ]
+   }
   },
   "scarlith_waste_not": {
    "name": "Waste Not",
@@ -258,7 +474,23 @@
    "active": 1,
    "recovery": 0,
    "lore_source": "lore:waste can become food; damage taken becomes Brew",
-   "power": "biology"
+   "power": "biology",
+   "effect_kind": "resource",
+   "expected": {
+    "dist": 3.0,
+    "ticks": 20,
+    "damage_self_at": 20,
+    "base_off": {
+     "waste_not": 0.0
+    },
+    "measure": [
+     {
+      "m": "field_up",
+      "name": "pressure",
+      "min": 5
+     }
+    ]
+   }
   }
  }
 }

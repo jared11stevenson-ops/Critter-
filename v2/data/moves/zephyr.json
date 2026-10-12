@@ -23,7 +23,22 @@
    "lore_source": "lore:Motion; very fast strikes from hover",
    "chain": "zephyr_flutter2",
    "cancel_from": 12,
-   "power": "anatomy"
+   "power": "anatomy",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.56,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "zephyr_flutter2": {
    "name": "Flutter Strike II",
@@ -47,7 +62,22 @@
    "lore_source": "lore:Motion; very fast strikes from hover",
    "chain": "zephyr_flutter3",
    "cancel_from": 12,
-   "power": "anatomy"
+   "power": "anatomy",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.62,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "zephyr_flutter3": {
    "name": "Flutter Side-Step",
@@ -77,7 +107,22 @@
      "dir": "side"
     }
    ],
-   "power": "anatomy"
+   "power": "anatomy",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.62,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "zephyr_delivery": {
    "name": "Delivery",
@@ -108,7 +153,23 @@
     }
    ],
    "lore_source": "lore:courier, crossing spaces quickly; a declared Promise (Promise Law)",
-   "power": "anatomy"
+   "power": "anatomy",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.08,
+    "hold": 1,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "zephyr_catch": {
    "name": "Catch",
@@ -138,7 +199,30 @@
     }
    ],
    "lore_source": "lore:seizes in mid-air and releases for a ring-out",
-   "power": "anatomy"
+   "power": "anatomy",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 100,
+    "dist": 1.96,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_moved",
+      "min": 1.8
+     },
+     {
+      "m": "enemy_stun",
+      "kind": "knockdown"
+     }
+    ]
+   }
   },
   "zephyr_air_dodge": {
    "name": "Air Dodge",
@@ -163,7 +247,28 @@
    "lore_source": "lore:hummingbird-hawk-moth hover; crossing spaces is joy",
    "cancel_from": 8,
    "chain_on": "always",
-   "power": "anatomy"
+   "power": "anatomy",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 50,
+    "enemy": "attacker",
+    "dist": 1.8,
+    "dodge_tick": 6,
+    "dodge_dir": [
+     0,
+     1
+    ],
+    "measure": [
+     {
+      "m": "self_moved",
+      "min": 1.0
+     },
+     {
+      "m": "damage_prevented",
+      "min": 3
+     }
+    ]
+   }
   },
   "zephyr_gust": {
    "name": "Gust",
@@ -195,7 +300,33 @@
     }
    ],
    "lore_source": "lore:Atmospheric Disturbance; knocks back, pushes projectiles, ring-out",
-   "power": "supernatural"
+   "power": "supernatural",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 100,
+    "dist": 3.16,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_moved",
+      "min": 1.7
+     },
+     {
+      "m": "event",
+      "type": "gust"
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "zephyr_pollen": {
    "name": "Pollen",
@@ -224,7 +355,34 @@
     }
    ],
    "lore_source": "lore:Pollination; a cloud marks the enemy (slow, bonus damage from Zephyr)",
-   "power": "supernatural"
+   "power": "supernatural",
+   "effect_kind": "terrain",
+   "expected": {
+    "ticks": 170,
+    "zone_tag": "pollen",
+    "dist": 8.0,
+    "zone_after": 60,
+    "measure": [
+     {
+      "m": "entity",
+      "kind": "tag:pollen",
+      "count": 1
+     },
+     {
+      "m": "enemy_status",
+      "name": "slowed",
+      "min_ticks": 1
+     },
+     {
+      "m": "enemy_status",
+      "name": "marked",
+      "min_ticks": 60
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "zephyr_a_promise_kept": {
    "name": "A Promise Kept",
@@ -296,7 +454,25 @@
     }
    ],
    "lore_source": "lore:promises are sacred; a declared sequence nothing can interrupt or dodge",
-   "power": "supernatural"
+   "power": "supernatural",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.08,
+    "pre": {
+     "self_vit_ratio": 0.2
+    },
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "zephyr_loophole": {
    "name": "Loophole",
@@ -306,7 +482,24 @@
    "active": 1,
    "recovery": 0,
    "lore_source": "lore:loves loopholes; a freshly raised guard slips through a strike",
-   "power": "anatomy"
+   "power": "anatomy",
+   "effect_kind": "defense",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 1.8,
+    "ticks": 60,
+    "guard_from": 8,
+    "measure": [
+     {
+      "m": "event",
+      "type": "dodge"
+     },
+     {
+      "m": "damage_prevented",
+      "min": 3
+     }
+    ]
+   }
   },
   "zephyr_promise_attack": {
    "name": "Promise",
@@ -343,7 +536,25 @@
    },
    "lore_source": "lore:Promise Law; a declared attack, follow through for bonus",
    "power": "anatomy",
-   "cooldown": 420
+   "cooldown": 420,
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.08,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   }
  }
 }

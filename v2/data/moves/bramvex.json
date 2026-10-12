@@ -31,7 +31,26 @@
      "max": 1
     }
    },
-   "power": "weapon:Diplomacy"
+   "power": "weapon:Diplomacy",
+   "effect_kind": "status",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.68,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_dots",
+      "count": 1
+     }
+    ]
+   }
   },
   "bramvex_diplomacy2": {
    "name": "Diplomacy Swing II",
@@ -61,7 +80,26 @@
      "max": 1
     }
    },
-   "power": "weapon:Diplomacy"
+   "power": "weapon:Diplomacy",
+   "effect_kind": "status",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.68,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_dots",
+      "count": 1
+     }
+    ]
+   }
   },
   "bramvex_final_offer": {
    "name": "Diplomacy, Final Offer",
@@ -95,7 +133,27 @@
     }
    },
    "lore_source": "lore:L810 nickname Diplomacy; slow overhead guard-crush",
-   "power": "weapon:Diplomacy"
+   "power": "weapon:Diplomacy",
+   "effect_kind": "status",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.98,
+    "hold": 1,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_dots",
+      "count": 1
+     }
+    ]
+   }
   },
   "bramvex_detain": {
    "name": "Detain",
@@ -121,7 +179,34 @@
    },
    "lore_source": "lore:restrains and frees detainees; thorn-lock hold",
    "power": "anatomy",
-   "cooldown": 420
+   "cooldown": 420,
+   "effect_kind": "control",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.32,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_stun",
+      "kind": "knockdown"
+     },
+     {
+      "m": "enemy_status",
+      "name": "rooted",
+      "min_ticks": 15
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "bramvex_cigarra_hole": {
    "name": "Cigarra Hole",
@@ -146,7 +231,28 @@
    "lore_source": "lore:Bk XIV Cigarra Holes: deliberate blank spaces in plans",
    "cancel_from": 8,
    "chain_on": "always",
-   "power": "biology"
+   "power": "biology",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 50,
+    "enemy": "attacker",
+    "dist": 1.8,
+    "dodge_tick": 6,
+    "dodge_dir": [
+     0,
+     1
+    ],
+    "measure": [
+     {
+      "m": "self_moved",
+      "min": 1.0
+     },
+     {
+      "m": "damage_prevented",
+      "min": 3
+     }
+    ]
+   }
   },
   "bramvex_ghost": {
    "name": "Ghost",
@@ -163,7 +269,22 @@
     "frames": 150
    },
    "lore_source": "lore:Camouflage / Sensory Adaptation; next hit is an ambush crit",
-   "power": "biology"
+   "power": "biology",
+   "effect_kind": "status",
+   "expected": {
+    "dist": 3.0,
+    "ticks": 40,
+    "measure": [
+     {
+      "m": "self_status",
+      "name": "camo",
+      "min_ticks": 100
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "bramvex_ground_prep": {
    "name": "Ground Prep",
@@ -231,7 +352,73 @@
     }
    ],
    "lore_source": "lore:Tactical Terrain Use; thorn lines and chokepoints",
-   "power": "biology"
+   "power": "biology",
+   "effect_kind": "terrain",
+   "expected": {
+    "ticks": 170,
+    "zone_tag": "thorn",
+    "dist": 8.0,
+    "zone_after": 60,
+    "measure": [
+     {
+      "m": "entity",
+      "kind": "tag:thorn",
+      "count": 3
+     },
+     {
+      "m": "event",
+      "type": "trap"
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 3.0
+     },
+     {
+      "m": "enemy_status",
+      "name": "rooted",
+      "min_ticks": 15
+     },
+     {
+      "m": "entity",
+      "kind": "tag:thorn",
+      "count": 3
+     },
+     {
+      "m": "event",
+      "type": "trap"
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 3.0
+     },
+     {
+      "m": "enemy_status",
+      "name": "rooted",
+      "min_ticks": 15
+     },
+     {
+      "m": "entity",
+      "kind": "tag:thorn",
+      "count": 3
+     },
+     {
+      "m": "event",
+      "type": "trap"
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 3.0
+     },
+     {
+      "m": "enemy_status",
+      "name": "rooted",
+      "min_ticks": 15
+     },
+     {
+      "m": "cooldown"
+     }
+    ]
+   }
   },
   "bramvex_day_20": {
    "name": "Day 20",
@@ -279,7 +466,25 @@
     }
    ],
    "lore_source": "lore:escape on Day 20; plans built from observation",
-   "power": "biology"
+   "power": "biology",
+   "effect_kind": "physical",
+   "expected": {
+    "ticks": 100,
+    "dist": 3.04,
+    "pre": {
+     "self_vit_ratio": 0.2
+    },
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     }
+    ]
+   }
   },
   "bramvex_observation": {
    "name": "Observation (Intel)",
@@ -289,7 +494,23 @@
    "active": 1,
    "recovery": 0,
    "lore_source": "lore:nineteen days of observation; reads improve over the bout",
-   "power": "biology"
+   "power": "biology",
+   "effect_kind": "resource",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 1.8,
+    "ticks": 40,
+    "base_off": {
+     "intel_gain": 0.0
+    },
+    "measure": [
+     {
+      "m": "field_up",
+      "name": "intel",
+      "min": 0.02
+     }
+    ]
+   }
   },
   "bramvex_stand_firm": {
    "name": "Stand Firm",
@@ -299,7 +520,26 @@
    "active": 1,
    "recovery": 0,
    "lore_source": "lore:sergeant, field equipment; perfect guard grants Intel",
-   "power": "biology"
+   "power": "biology",
+   "effect_kind": "defense",
+   "expected": {
+    "enemy": "attacker",
+    "dist": 2.0,
+    "ticks": 60,
+    "enemy_critter": "aruun",
+    "guard_from": 13,
+    "measure": [
+     {
+      "m": "event",
+      "type": "parry"
+     },
+     {
+      "m": "field_up",
+      "name": "intel",
+      "min": 0.1
+     }
+    ]
+   }
   },
   "bramvex_haft_shove": {
    "name": "Haft Shove",
@@ -320,7 +560,30 @@
     "reach": 2.2,
     "arc": 90
    },
-   "lore_source": "lore:sergeant's thorned haft; shove-throw"
+   "lore_source": "lore:sergeant's thorned haft; shove-throw",
+   "effect_kind": "displacement",
+   "expected": {
+    "ticks": 100,
+    "dist": 2.32,
+    "measure": [
+     {
+      "m": "hit",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_vit_drop",
+      "min": 0.5
+     },
+     {
+      "m": "enemy_moved",
+      "min": 0.9
+     },
+     {
+      "m": "enemy_stun",
+      "kind": "knockdown"
+     }
+    ]
+   }
   }
  }
 }
