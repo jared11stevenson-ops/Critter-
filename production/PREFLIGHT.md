@@ -60,3 +60,6 @@ Two fight kinds only (Blood Bout, Practice); no role multipliers. Parry now clea
 
 ## v0.9.1 — Space to move
 AI resets to neutral after exchanges (breath), retreat speed = advance speed, block push 0.8, tools/sim/spacing.gd measures spacing (mean gap 3.6 -> 4.1, far share 10% -> 22%, bouts ~+11 s). Matrix: 43.1-55.2% overall. Open: Pharilux bouts are long (83 s, 10% timeouts), ring-outs up to 25% for Aruun; needs playtest feel; player-side movement (dodge/dash options) not changed yet.
+
+## v0.10.0 — Free lock-on, Pharilux ring-out identity
+LOCK/FREE toggle (button, Tab/E): unlocked = move and face with the stick, aim assist within 4 m when the stick is idle; AI always locked. Riposte damage 1.3 -> 1.1. Pharilux: shove/haul/tide tuned for ring-outs (45% of his bouts end by ring-out). Matrix (30/pair): overall 41.9-56.7%, last tuning pass not re-measured. Open: Pharilux timeouts 15% (long zoning bouts), camera in free mode (still frames both fighters), HUD hint for LOCK, re-measure balance.

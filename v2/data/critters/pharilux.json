@@ -40,13 +40,13 @@
   "parry_confuse": 120,
   "marks_bonus": 1,
   "dodge_chain": 1,
-  "damage_mult": 0.5
+  "damage_mult": 0.475
  },
  "ai": {
   "style": "zoner",
   "range": [
-   2.4,
-   4.0
+   2.0,
+   3.4
   ],
   "ability1": {
    "min": 0.0,
