@@ -24,3 +24,12 @@ Open before adding more:
 3. **Arena integration of statuses/zones** (HUD chips with real remaining time, real-radius zones) not done.
 4. **Phone test** of v0.3.x controls (6 buttons, layout A/B).
 5. Backdrop lookdev, audio, display font.
+
+## Update v0.4.0 (Lead, 2026-10-12): juice pass
+Landed: 64 procedural sound effects (one distinct sound per ability, v2/audio/sfx, generator tools/gen/gen_sfx.py) via BoutAudio; 36 ability/basic icons (v2/art/icons, gen_icons.py) on the buttons; per-ability cast VFX with a pop-up ability glyph (AbilityVfx + FxPrims), per-critter hit styles, REAL zones/projectiles/traps/ghosts/decoys rendered from sim.state() entities at their real radius and life, status auras from real status ticks (BoutVfx); VFX lab (v2/src/fx/vfx_lab.tscn) renders every ability; coverage test (every ability has icon + sound + VFX recipe).
+Open before adding more:
+1. **Perf:** bout draw calls avg 100 / max 140 (was 87/103), under the 150 flagship budget but above the 110 mid-range one; add an effects-quality setting (Low: cap live effects at ~40, no entity decor, fewer particles).
+2. **Phone test** of feel/audio/VFX (volume mix, effect size, readability while moving fast).
+3. **Hit-time and projectile VFX** only partly verified in renders (cast effects verified in the lab; hit styles and entity visuals verified by code, not every case by eye).
+4. Balance matrix and role-pair targets still to finish; music still empty (slots reserved).
+5. Realism ladder R2 for characters, backdrop lookdev, display font.

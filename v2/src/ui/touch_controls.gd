@@ -24,6 +24,8 @@ var can_ls := false
 var cooldowns := {"ab1": 0.0, "ab2": 0.0, "ab3": 0.0}           # remaining ratio 0..1
 var ab_names := {"ab1": "", "ab2": "", "ab3": ""}
 var ab_colors := {"ab1": UiStyle.TEAL_LT, "ab2": UiStyle.GOLD, "ab3": UiStyle.PAPER}
+var ab_icons: Dictionary = {}                       # button id -> Texture2D (ability icons from res://art/icons)
+var basic_icons: Dictionary = {}                    # strike/heavy/guard/dodge/grab/ls -> Texture2D
 var ab_known := false                               # HUD set the names: ability buttons without a move are hidden
 var yield_progress := 0.0
 var blocker: Callable = Callable()                  # (Vector2) -> bool: true where a menu / prompt sits on top (touches there are not gameplay)
@@ -273,6 +275,10 @@ func _draw_button(id: String, b: Dictionary, washes: Array) -> void:
 		washes.append([c, rr - 1.0, cd])
 	var label := str(b["label"])
 	var fsize := 18
+	var icon: Texture2D = ab_icons.get(id, basic_icons.get(id, null))
+	if icon != null:
+		var isz := (rr - 3.0) * 2.0
+		draw_texture_rect(icon, Rect2(c - Vector2(isz, isz) * 0.5, Vector2(isz, isz)), false, Color(1, 1, 1, 0.78 if down else 1.0))
 	if id in ["ab1", "ab2", "ab3"]:
 		var nm := str(ab_names.get(id, ""))
 		label = nm if nm != "" else label
@@ -285,6 +291,11 @@ func _draw_button(id: String, b: Dictionary, washes: Array) -> void:
 	if lines.size() > 2:
 		lines = PackedStringArray([lines[0], " ".join(lines.slice(1))])
 	var y0 := c.y + float(fsize) * 0.33 - float(lines.size() - 1) * float(fsize) * 0.55
+	if icon != null:
+		# with an icon the name sits small along the bottom edge so it never hides the emblem
+		fsize = 14
+		lines = PackedStringArray([label.replace(" ", "\n")]) if false else PackedStringArray([label])
+		y0 = c.y + rr * 0.62
 	for i in lines.size():
 		_ink.text(Vector2(c.x - rr, y0 + float(i) * float(fsize) * 1.1), lines[i], fsize, UiStyle.PAPER, HORIZONTAL_ALIGNMENT_CENTER, rr * 2.0, 7)
 

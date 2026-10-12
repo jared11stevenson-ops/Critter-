@@ -70,7 +70,7 @@ func _on_event(ev: Dictionary) -> void:
 	var kind := str(ev.get("kind", ""))
 	match t:
 		"tell":
-			if has_sound(mid) and (kind == "ability" or kind == "laststand" or kind == "dodge"):
+			if has_sound(mid):
 				play(mid, 0.0, 1.0, 0.03)
 			elif _ability_sound(mid) != "" and kind != "light":
 				play(_ability_sound(mid), -2.0)

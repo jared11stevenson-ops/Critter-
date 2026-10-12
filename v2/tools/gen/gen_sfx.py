@@ -144,6 +144,7 @@ S["mollusk_shove"]=mix(impact(75,0.3,1.4,0.5),whoosh(0.2,200,1500,0.5))
 S["zephyr_gust"]=mix(whoosh(0.7,250,3500,1.2),bp(noise(0.7),600,1200)*np.sin(np.linspace(0,3*np.pi,int(SR*0.7)))**2*0.5)
 S["zephyr_pollen"]=mix(hp(noise(0.5),3000)*env(int(SR*0.5),0.02,0.3,0.3,0.2)*0.5,*[np.pad(chime(f,0.3,0.15)*0.3,(int(SR*i*0.06),0)) for i,f in enumerate([2093,2637,3136,2349])])
 S["zephyr_promise"]=mix(chime(988,0.9,0.5),np.pad(chime(1319,1.0,0.55),(int(SR*0.18),0)))
+S["zephyr_promise_attack"]=S["zephyr_promise"]
 S["zephyr_a_promise_kept"]=mix(*[np.pad(chime(1175+i*120,0.35,0.12)*0.55,(int(SR*i*0.09),0)) for i in range(8)],whoosh(0.8,800,6000,0.4))
 S["zephyr_flutter"]=mix(whoosh(0.09,2500,9000,0.6),chime(2400,0.05,0.02)*0.3)
 # ---- Nyxaris
