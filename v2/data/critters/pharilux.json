@@ -40,7 +40,7 @@
   "parry_confuse": 120,
   "marks_bonus": 1,
   "dodge_chain": 1,
-  "damage_mult": 0.72
+  "damage_mult": 0.52
  },
  "ai": {
   "style": "zoner",
