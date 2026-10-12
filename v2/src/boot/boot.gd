@@ -80,9 +80,21 @@ func go_title() -> void:
 	t.training_pressed.connect(func(): training = true; go_select())
 	screen = t
 
+## Practice only offers critters you own (living on your shelf); with no career yet that is the tutorial critter.
+func owned_species() -> Array:
+	var out: Array = []
+	if Career.has_save() and GameSave.roster != null:
+		for c in GameSave.roster.rack.living():
+			if not out.has(c.species):
+				out.append(c.species)
+	if out.is_empty():
+		out.append("aruun")
+	return out
+
 func go_select() -> void:
 	_clear()
 	var s := SelectScreen.new()
+	s.owned = owned_species()
 	add_child(s)
 	s.setup("player", player_id)
 	s.back_pressed.connect(go_title)
@@ -92,6 +104,7 @@ func go_select() -> void:
 func go_opponent() -> void:
 	_clear()
 	var s := SelectScreen.new()
+	s.owned = owned_species()
 	s.profile = profile
 	s.arena_id = arena_id
 	s.training = training
@@ -139,6 +152,7 @@ func _debug_shelf() -> void:
 	match str(_args.get("panel", "")):
 		"jar": CareerPanels.jar(screen, a)
 		"jar2": CareerPanels.jar(screen, ch)
+		"watch": CareerPanels.watch(screen, "mollusk")
 		"scout": CareerPanels.scout(screen, "nyxaris", "expert", "Frostbloom", func(_a: String) -> String: return "")
 		"wall": CareerPanels.wall(screen, r)
 		"expedition": CareerPanels.expedition(screen, r, func(_a, _b): pass)
@@ -181,8 +195,9 @@ func _retire(sh: ShelfScreen, uid: String) -> void:
 	sh.refresh(uid)
 
 func _launch_training(uid: String) -> void:
-	career_ctx = {"kind": "training", "uid": uid, "opp_species": "mollusk", "profile": "standard"}
-	go_career_bout(true)
+	CareerPanels.practice(screen, owned_species(), func(opp: String, profile_id: String):
+		career_ctx = {"kind": "training", "uid": uid, "opp_species": opp, "profile": profile_id}
+		go_career_bout(true))
 
 func _launch_expedition(region_id: String, uid: String) -> void:
 	var reg := Career.region(region_id)

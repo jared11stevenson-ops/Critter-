@@ -50,4 +50,26 @@ func run() -> Array:
 	# every species has a full ladder
 	for sp in Career.data()["names"]:
 		QaCheck.eq(fails, Habitat.ladder(sp).size(), 5, "%s has a 5-step ladder" % sp)
+	# v2: roles, ages, lineage, links, founder death
+	var h3 := Habitat.new()
+	h3.species = "aruun"
+	h3.founder_name = "Aruun"
+	for i in 6:
+		h3.descendants.append({"id": i, "name": "K%d" % i, "gen": 1, "born": 0, "role": "builder" if i < 3 else "forager"})
+	h3.day = 100
+	QaCheck.is_true(fails, h3.role_count("builder") == 3 and absf(h3.build_discount() - 0.15) < 0.001, "builders discount structures")
+	QaCheck.eq(fails, h3.life_stage(h3.descendants[0]), "elder", "age 100 days is an elder")
+	QaCheck.is_true(fails, h3.lineage_lines().size() == 2, "lineage lists the monarch and the generation")
+	var r3 := RosterState.new()
+	var ar := r3.seal("aruun", "Aruun")
+	r3.seal("zephyr", "Whisk")
+	r3.economy.scrap = 500
+	QaCheck.eq(fails, r3.link_jars("aruun", "zephyr"), "", "two jars can be linked")
+	QaCheck.is_true(fails, r3.habitat("zephyr").links.has("aruun") and r3.habitat("aruun").links.has("zephyr"), "links are two-way")
+	QaCheck.is_true(fails, r3.link_jars("aruun", "zephyr") != "", "no double link")
+	r3.kill(ar.uid, "test")
+	QaCheck.is_true(fails, r3.habitat("aruun").monarch_fallen, "the founder's death is recorded in the jar")
+	var r4 := RosterState.new()
+	r4.load_dict(r3.to_dict())
+	QaCheck.is_true(fails, r4.habitat("aruun").monarch_fallen and r4.habitat("aruun").links.has("zephyr"), "v2 fields survive save/load")
 	return fails

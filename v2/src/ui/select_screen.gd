@@ -14,6 +14,7 @@ var selected := ""
 var profile := "standard"
 var arena_id := "ring"
 var training := false
+var owned: Array = []                # when set, only these critters can be picked (Practice uses the critters you have)
 var _cards: Dictionary = {}
 var _preview: RigPreview
 var _name: Label
@@ -26,7 +27,7 @@ var _opts_box: VBoxContainer
 
 func setup(screen_mode: String, initial: String) -> void:
 	mode = screen_mode
-	selected = initial
+	selected = initial if owned.is_empty() or owned.has(initial) else str(owned[0])
 	theme = UiStyle.theme()
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var bg := ColorRect.new()
@@ -118,7 +119,7 @@ func setup(screen_mode: String, initial: String) -> void:
 	cards.add_theme_constant_override("separation", 8)
 	cards.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	foot.add_child(cards)
-	for id in CombatData.critter_ids():
+	for id in (owned if not owned.is_empty() else CombatData.critter_ids()):
 		var pal: Dictionary = RigPalette.of(str(id))
 		var c := CritterCard.new()
 		c.setup(str(id), pal["main"], pal["glow"])

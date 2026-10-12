@@ -267,12 +267,129 @@ static func _habitat_block(box: VBoxContainer, species: String) -> void:
 	row.add_theme_constant_override("separation", 10)
 	box.add_child(row)
 	for spec in [["COLLECT", "collect", UiStyle.GOLD], ["FEED (%d)" % int(Habitat.cfg()["feed_cost_scrap"]), "feed", UiStyle.GREEN],
-			["SUPPLY (%d)" % int(Habitat.cfg()["supply_cost_scrap"]), "supply", UiStyle.TEAL], ["EXPAND (%d)" % int(Habitat.cfg()["expand_cost_scrap"]), "expand", UiStyle.TEAL]]:
-		var b := UiStyle.button(spec[0], 20, Vector2(200, 56), spec[2])
+			["SUPPLY (%d)" % int(Habitat.cfg()["supply_cost_scrap"]), "supply", UiStyle.TEAL], ["EXPAND (%d)" % int(Habitat.cfg()["expand_cost_scrap"]), "expand", UiStyle.TEAL],
+			["WATCH", "watch", UiStyle.PAPER_DK], ["LINK (%d)" % h.link_cost(), "link", UiStyle.PAPER_DK]]:
+		var b := UiStyle.button(spec[0], 20, Vector2(140, 56), spec[2])
 		var kind: String = spec[1]
 		b.pressed.connect(func():
+			if kind == "watch":
+				watch(box.get_parent().get_parent() as Control, species)
+				return
+			if kind == "link":
+				link_panel(box.get_parent().get_parent() as Control, species, func(): _habitat_block(box, species))
+				return
 			var res := Career.habitat_action(species, kind)
 			_habitat_block(box, species)
 			if res != "":
 				_txt(box, res, 18, UiStyle.RUST))
 		row.add_child(b)
+
+
+## Practice: nobody dies, nothing counts. Pick a sparring partner from the critters you own and how hard it plays.
+static func practice(parent: Control, owned: Array, on_go: Callable) -> void:
+	var v := _panel(parent, 760)
+	v.add_child(UiStyle.label("PRACTICE", 38, UiStyle.INK, 0))
+	_txt(v, "Nobody dies and nothing counts. Spar against any critter you own.", 20, UiStyle.TEAL)
+	var chosen := {"opp": str(owned[0]), "profile": "standard"}
+	var og := HFlowContainer.new()
+	og.add_theme_constant_override("h_separation", 6)
+	og.add_theme_constant_override("v_separation", 6)
+	v.add_child(og)
+	for sp in owned:
+		var b := Button.new()
+		b.toggle_mode = true
+		b.text = "%s  %s" % [Career.species_name(str(sp)), "★".repeat(Career.stars_of(str(sp)))]
+		b.add_theme_font_size_override("font_size", 20)
+		b.button_pressed = (sp == chosen["opp"])
+		var spid: String = str(sp)
+		b.pressed.connect(func():
+			chosen["opp"] = spid
+			for o in og.get_children():
+				(o as Button).button_pressed = (o == b))
+		og.add_child(b)
+	var pg := HBoxContainer.new()
+	pg.add_theme_constant_override("separation", 6)
+	v.add_child(pg)
+	for pid in ["novice", "standard", "expert"]:
+		var pb := Button.new()
+		pb.toggle_mode = true
+		pb.text = pid.capitalize()
+		pb.add_theme_font_size_override("font_size", 20)
+		pb.button_pressed = (pid == "standard")
+		var pp: String = pid
+		pb.pressed.connect(func():
+			chosen["profile"] = pp
+			for o in pg.get_children():
+				(o as Button).button_pressed = (o == pb))
+		pg.add_child(pb)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	v.add_child(row)
+	var go := UiStyle.button("SPAR", 28, Vector2(220, 68), UiStyle.TEAL_LT)
+	go.pressed.connect(func(): _close(v); on_go.call(chosen["opp"], chosen["profile"]))
+	row.add_child(go)
+	var back := UiStyle.button("CANCEL", 24, Vector2(200, 68), UiStyle.PAPER_DK)
+	back.pressed.connect(func(): _close(v))
+	row.add_child(back)
+
+
+## Observe a jar: the monarch, the family by generation with roles and ages, and what happened lately.
+static func watch(parent: Control, species: String) -> void:
+	var r := Career.roster()
+	var h := r.habitat(species)
+	var v := _panel(parent, 940)
+	v.add_child(UiStyle.label("WATCHING THE %s JAR" % Career.species_name(species).to_upper(), 32, UiStyle.INK, 0))
+	var adults := r.retired_adults(species)
+	var crown := h.founder_name if h.founder_name != "" else "no founder yet"
+	var head := "Founding monarch: %s%s" % [crown, "  (fallen; the record remains)" if h.monarch_fallen else ""]
+	_txt(v, head, 22, UiStyle.RUST).custom_minimum_size = Vector2(880, 0)
+	if h.monarch_fallen and not h.regent().is_empty():
+		_txt(v, "Regent (the eldest keeps the jar for now): %s" % h.regent()["name"], 20, UiStyle.TEAL).custom_minimum_size = Vector2(880, 0)
+	for a in adults:
+		_txt(v, "Retired: %s%s" % [a.name, "  (champion)" if a.champion else ""], 20).custom_minimum_size = Vector2(880, 0)
+	if h.descendants.is_empty():
+		_txt(v, "No family yet.", 20, Color(0.35, 0.3, 0.3)).custom_minimum_size = Vector2(880, 0)
+	for line in h.lineage_lines():
+		_txt(v, str(line), 19).custom_minimum_size = Vector2(880, 0)
+	var roles := "Builders %d (-%d%% structure cost)  |  Foragers %d (+%d food/day)  |  Storytellers %d  |  Festivals held %d" % [
+		h.role_count("builder"), int(h.build_discount() * 100.0), h.role_count("forager"), h.role_count("forager") / 2, h.role_count("storyteller"), h.festivals]
+	_txt(v, roles, 18, UiStyle.TEAL).custom_minimum_size = Vector2(880, 0)
+	if not h.links.is_empty():
+		_txt(v, "Passages to: %s" % ", ".join(h.links.map(func(s): return Career.species_name(str(s)))), 18, UiStyle.TEAL).custom_minimum_size = Vector2(880, 0)
+	var recent := h.log.slice(maxi(0, h.log.size() - 5))
+	for l in recent:
+		_txt(v, str(l), 17, Color(0.35, 0.3, 0.3)).custom_minimum_size = Vector2(880, 0)
+	var close := UiStyle.button("CLOSE", 24, Vector2(200, 60), UiStyle.GOLD)
+	close.pressed.connect(func(): _close(v))
+	v.add_child(close)
+
+
+## Open a passage to another jar on the shelf (resource exchange; the jars stay peaceful).
+static func link_panel(parent: Control, species: String, on_done: Callable) -> void:
+	var r := Career.roster()
+	var h := r.habitat(species)
+	var v := _panel(parent, 760)
+	v.add_child(UiStyle.label("OPEN A PASSAGE", 34, UiStyle.INK, 0))
+	_txt(v, "Linked jars share surplus food and every passage earns a little tribute. Cost %d scrap. Up to 3 passages." % h.link_cost(), 20, UiStyle.TEAL)
+	var msg := _txt(v, " ", 20, UiStyle.RUST)
+	var fl := HFlowContainer.new()
+	fl.add_theme_constant_override("h_separation", 6)
+	v.add_child(fl)
+	for sp in r.habitats:
+		if sp == species:
+			continue
+		var b := UiStyle.button("%s%s" % [Career.species_name(str(sp)), " (linked)" if h.links.has(sp) else ""], 20, Vector2(220, 56), UiStyle.TEAL_LT)
+		var other: String = str(sp)
+		b.disabled = h.links.has(sp)
+		b.pressed.connect(func():
+			var why := r.link_jars(species, other)
+			Career._autosave("link")
+			if why == "":
+				_close(v)
+				on_done.call()
+			else:
+				msg.text = why)
+		fl.add_child(b)
+	var close := UiStyle.button("CLOSE", 24, Vector2(200, 60), UiStyle.PAPER_DK)
+	close.pressed.connect(func(): _close(v))
+	v.add_child(close)

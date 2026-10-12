@@ -22,6 +22,7 @@ var strafe := 1.0
 var strafe_cd := 0
 var breath := 0                # after an exchange the AI resets to neutral: steps back and re-reads before engaging again
 var _was_busy := false
+var ai_free := false           # this breather is spent unlocked (backing off facing its heading); it re-locks the moment you attack
 var my_last := "idle"
 var my_last_frame := -999
 var last_opp_sig := ""
@@ -134,6 +135,7 @@ func decide(sim: CombatSim) -> CombatInput:
 	var busy: bool = me.move != null or me.stun > 0
 	if _was_busy and not busy and op.stun == 0 and rng.randf() < float(C["breath_prob"]):
 		breath = rng.randi_range(int(C["breath_min"]), int(C["breath_max"]))
+		ai_free = rng.randf() < float(C["breath_free_prob"])
 	_was_busy = busy
 	var gap: float = me.pos.distance_to(op.pos) - me.radius - op.radius
 	# --- yield / last stand ----------------------------------------------
@@ -379,6 +381,7 @@ func _neutral(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float, gua
 		breath -= 1
 		var back: Vector2 = -to * float(C["breath_back"]) + perp * strafe * float(C["breath_side"])
 		inp.move = back.limit_length(1.0)
+		inp.lock = not ai_free or (op.move != null and op.is_attacking()) or dist < 2.2
 		return
 	breath = 0
 	# --- movement

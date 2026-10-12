@@ -73,6 +73,30 @@ func retired_adults(species: String) -> Array:
 	return out
 
 
+## Opens a passage between two jars (both ways). Returns "" or a reason.
+func link_jars(a: String, b: String) -> String:
+	if not habitats.has(a) or not habitats.has(b):
+		return "Both jars need a critter."
+	var why: String = (habitats[a] as Habitat).add_link(b, economy)
+	if why == "":
+		var hb: Habitat = habitats[b]
+		if not hb.links.has(a):
+			hb.links.append(a)
+	return why
+
+
+## Linked jars even out their food a little each tick of habitat time.
+func _share_food() -> void:
+	for sp in habitats:
+		var h: Habitat = habitats[sp]
+		for o in h.links:
+			if habitats.has(o):
+				var ho: Habitat = habitats[o]
+				if h.food > ho.food + 6:
+					h.food -= 2
+					ho.food += 2
+
+
 ## Let every jar's critters live on while the player was away (call on load / opening the shelf).
 func tick_habitats() -> Dictionary:
 	var report := {}
@@ -81,6 +105,8 @@ func tick_habitats() -> Dictionary:
 		var before := h.descendants.size()
 		var built := h.structures.size()
 		var days := h.catch_up(_now(), retired_adults(sp))
+		for _i in days:
+			_share_food()
 		if days > 0:
 			report[sp] = {"days": days, "born": maxi(0, h.descendants.size() - before), "built": h.structures.size() - built}
 	return report
@@ -128,6 +154,10 @@ func kill(uid: String, cause: String) -> Dictionary:
 	c.relic = "relic_" + c.species
 	c.last_move = "lastmove_" + c.species
 	c.epitaph = Epitaph.generate(c, rules.species_title(c.species))
+	if c.founder and habitats.has(c.species):
+		var fh: Habitat = habitats[c.species]
+		fh.monarch_fallen = true
+		fh._note("The founding monarch %s has fallen. The record remains." % c.name)
 	var rec := _fallen_record(c)
 	_add_to_wall(rec)
 	critter_died.emit(rec)

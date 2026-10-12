@@ -158,6 +158,7 @@
   "breath_min": 18,
   "breath_max": 42,
   "breath_back": 0.7,
-  "breath_side": 0.5
+  "breath_side": 0.5,
+  "breath_free_prob": 0.5
  }
 }
