@@ -1,0 +1,275 @@
+{
+ "day_seconds": 600,
+ "max_catchup_days": 48,
+ "base_capacity": 4,
+ "expand_cost_scrap": 40,
+ "expand_gain": 4,
+ "feed_cost_scrap": 10,
+ "feed_gain": 20,
+ "supply_cost_scrap": 15,
+ "supply_gain": 10,
+ "tribute_cap": 200,
+ "birth_chance": 0.35,
+ "max_capacity": 40,
+ "species": {
+  "aruun": [
+   {
+    "name": "Rope span",
+    "materials": 8,
+    "pop_req": 1,
+    "effect": "housing",
+    "amount": 4
+   },
+   {
+    "name": "Stone cairn",
+    "materials": 12,
+    "pop_req": 2,
+    "effect": "food",
+    "amount": 3
+   },
+   {
+    "name": "Vine trellis",
+    "materials": 16,
+    "pop_req": 4,
+    "effect": "tribute",
+    "amount": 2
+   },
+   {
+    "name": "Ochre hall",
+    "materials": 22,
+    "pop_req": 6,
+    "effect": "housing",
+    "amount": 6
+   },
+   {
+    "name": "Founders' stone",
+    "materials": 30,
+    "pop_req": 9,
+    "effect": "monument",
+    "amount": 0
+   }
+  ],
+  "cigarra": [
+   {
+    "name": "Hanging nest",
+    "materials": 8,
+    "pop_req": 1,
+    "effect": "housing",
+    "amount": 4
+   },
+   {
+    "name": "Branch bridge",
+    "materials": 12,
+    "pop_req": 2,
+    "effect": "food",
+    "amount": 3
+   },
+   {
+    "name": "Leaf canopy",
+    "materials": 16,
+    "pop_req": 4,
+    "effect": "tribute",
+    "amount": 2
+   },
+   {
+    "name": "Light well",
+    "materials": 22,
+    "pop_req": 6,
+    "effect": "housing",
+    "amount": 6
+   },
+   {
+    "name": "Singing tower",
+    "materials": 30,
+    "pop_req": 9,
+    "effect": "monument",
+    "amount": 0
+   }
+  ],
+  "bramvex": [
+   {
+    "name": "Thorn palisade",
+    "materials": 8,
+    "pop_req": 1,
+    "effect": "housing",
+    "amount": 4
+   },
+   {
+    "name": "Watch ruin",
+    "materials": 12,
+    "pop_req": 2,
+    "effect": "food",
+    "amount": 3
+   },
+   {
+    "name": "Cleared yard",
+    "materials": 16,
+    "pop_req": 4,
+    "effect": "tribute",
+    "amount": 2
+   },
+   {
+    "name": "Bone post",
+    "materials": 22,
+    "pop_req": 6,
+    "effect": "housing",
+    "amount": 6
+   },
+   {
+    "name": "Hunters' hall",
+    "materials": 30,
+    "pop_req": 9,
+    "effect": "monument",
+    "amount": 0
+   }
+  ],
+  "scarlith": [
+   {
+    "name": "Log den",
+    "materials": 8,
+    "pop_req": 1,
+    "effect": "housing",
+    "amount": 4
+   },
+   {
+    "name": "Fungus bed",
+    "materials": 12,
+    "pop_req": 2,
+    "effect": "food",
+    "amount": 3
+   },
+   {
+    "name": "Scrap hoard",
+    "materials": 16,
+    "pop_req": 4,
+    "effect": "tribute",
+    "amount": 2
+   },
+   {
+    "name": "Spore garden",
+    "materials": 22,
+    "pop_req": 6,
+    "effect": "housing",
+    "amount": 6
+   },
+   {
+    "name": "Hollow court",
+    "materials": 30,
+    "pop_req": 9,
+    "effect": "monument",
+    "amount": 0
+   }
+  ],
+  "mollusk": [
+   {
+    "name": "Mud lodge",
+    "materials": 8,
+    "pop_req": 1,
+    "effect": "housing",
+    "amount": 4
+   },
+   {
+    "name": "Repair bench",
+    "materials": 12,
+    "pop_req": 2,
+    "effect": "food",
+    "amount": 3
+   },
+   {
+    "name": "Leaf roof",
+    "materials": 16,
+    "pop_req": 4,
+    "effect": "tribute",
+    "amount": 2
+   },
+   {
+    "name": "Water channel",
+    "materials": 22,
+    "pop_req": 6,
+    "effect": "housing",
+    "amount": 6
+   },
+   {
+    "name": "Mending hall",
+    "materials": 30,
+    "pop_req": 9,
+    "effect": "monument",
+    "amount": 0
+   }
+  ],
+  "zephyr": [
+   {
+    "name": "Petal nest",
+    "materials": 8,
+    "pop_req": 1,
+    "effect": "housing",
+    "amount": 4
+   },
+   {
+    "name": "Bloom ring",
+    "materials": 12,
+    "pop_req": 2,
+    "effect": "food",
+    "amount": 3
+   },
+   {
+    "name": "Draft chime",
+    "materials": 16,
+    "pop_req": 4,
+    "effect": "tribute",
+    "amount": 2
+   },
+   {
+    "name": "Nectar pool",
+    "materials": 22,
+    "pop_req": 6,
+    "effect": "housing",
+    "amount": 6
+   },
+   {
+    "name": "Dance garden",
+    "materials": 30,
+    "pop_req": 9,
+    "effect": "monument",
+    "amount": 0
+   }
+  ],
+  "nyxaris": [
+   {
+    "name": "Frost cell",
+    "materials": 8,
+    "pop_req": 1,
+    "effect": "housing",
+    "amount": 4
+   },
+   {
+    "name": "Vent shelter",
+    "materials": 12,
+    "pop_req": 2,
+    "effect": "food",
+    "amount": 3
+   },
+   {
+    "name": "Silk loom",
+    "materials": 16,
+    "pop_req": 4,
+    "effect": "tribute",
+    "amount": 2
+   },
+   {
+    "name": "Ice gallery",
+    "materials": 22,
+    "pop_req": 6,
+    "effect": "housing",
+    "amount": 6
+   },
+   {
+    "name": "Cold archive",
+    "materials": 30,
+    "pop_req": 9,
+    "effect": "monument",
+    "amount": 0
+   }
+  ]
+ }
+}

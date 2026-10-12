@@ -131,9 +131,14 @@ func _debug_shelf() -> void:
 	var d := r.seal("zephyr", "Whisk")
 	r.kill(d.uid, "a tournament bout against Aruun")
 	r.economy.scrap = 140
+	var hm := r.habitat("mollusk")
+	hm.materials = 25
+	for i in 45:
+		hm.step_day(r.retired_adults("mollusk"))
 	go_shelf(a.uid)
 	match str(_args.get("panel", "")):
 		"jar": CareerPanels.jar(screen, a)
+		"jar2": CareerPanels.jar(screen, ch)
 		"scout": CareerPanels.scout(screen, "nyxaris", "expert", "Frostbloom", func(): pass)
 		"wall": CareerPanels.wall(screen, r)
 		"expedition": CareerPanels.expedition(screen, r, func(_a, _b): pass)
@@ -142,6 +147,7 @@ func _debug_shelf() -> void:
 
 func go_play() -> void:
 	if Career.has_save() and GameSave.continue_game():
+		Career.roster().tick_habitats()
 		go_shelf("", Career.settle_abandoned(Career.roster()))
 	else:
 		go_new_career()

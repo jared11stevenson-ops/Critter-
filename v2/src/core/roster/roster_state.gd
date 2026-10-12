@@ -16,6 +16,7 @@ var legacy := {"relics": [], "moves": []}  # relics: [{id, from_uid, from_name}]
 var next_uid := 1
 var pending: Dictionary = {}                # a committed career bout in progress {kind, uid, captive?}: abandoning it counts as a loss
 var species_seen: Array = []                # every species ever sealed (the first of each is its founding monarch)
+var habitats: Dictionary = {}                  # species -> Habitat (one jar per species)
 var profile_id := ""
 var session_count := 0
 var care_points := CareModel.CARE_POINTS
@@ -46,9 +47,43 @@ func seal(species: String, name: String = "") -> CritterInstance:
 	if not species_seen.has(species):
 		species_seen.append(species)
 		c.founder = true
+	var h := habitat(species)
+	if c.founder:
+		h.founder_name = c.name
 	_unlock_new(c)
 	critter_sealed.emit(c.uid)
 	return c
+
+
+## The species' jar (created on first sealing).
+func habitat(species: String) -> Habitat:
+	if not habitats.has(species):
+		var h := Habitat.new()
+		h.species = species
+		h.last_real = _now()
+		habitats[species] = h
+	return habitats[species]
+
+
+func retired_adults(species: String) -> Array:
+	var out: Array = []
+	for c in rack.living():
+		if c.species == species and c.retired:
+			out.append(c)
+	return out
+
+
+## Let every jar's critters live on while the player was away (call on load / opening the shelf).
+func tick_habitats() -> Dictionary:
+	var report := {}
+	for sp in habitats:
+		var h: Habitat = habitats[sp]
+		var before := h.descendants.size()
+		var built := h.structures.size()
+		var days := h.catch_up(_now(), retired_adults(sp))
+		if days > 0:
+			report[sp] = {"days": days, "born": maxi(0, h.descendants.size() - before), "built": h.structures.size() - built}
+	return report
 
 
 func get_critter(uid: String) -> CritterInstance:
@@ -194,11 +229,22 @@ func stat_modifiers(uid: String) -> Dictionary:
 func to_dict() -> Dictionary:
 	return {
 		"profile_id": profile_id, "next_uid": next_uid, "session_count": session_count, "care_points": care_points,
-		"species_seen": species_seen.duplicate(), "pending": pending.duplicate(true), "rack": rack.to_array(), "wall": wall.duplicate(true), "economy": economy.to_dict(), "legacy": legacy.duplicate(true),
+		"species_seen": species_seen.duplicate(), "pending": pending.duplicate(true), "rack": rack.to_array(), "wall": wall.duplicate(true), "economy": economy.to_dict(), "habitats": _habitats_array(), "legacy": legacy.duplicate(true),
 	}
 
 
+func _habitats_array() -> Array:
+	var a: Array = []
+	for sp in habitats:
+		a.append((habitats[sp] as Habitat).to_dict())
+	return a
+
+
 func load_dict(d: Dictionary) -> void:
+	habitats = {}
+	for hd in d.get("habitats", []):
+		var hh := Habitat.from_dict(hd)
+		habitats[hh.species] = hh
 	profile_id = str(d.get("profile_id", ""))
 	next_uid = maxi(1, int(d.get("next_uid", 1)))
 	session_count = int(d.get("session_count", 0))
@@ -217,6 +263,8 @@ func load_dict(d: Dictionary) -> void:
 	economy.load_dict(d.get("economy", {}))
 	var lg: Dictionary = d.get("legacy", {})
 	legacy = {"relics": (lg.get("relics", []) as Array).duplicate(true), "moves": (lg.get("moves", []) as Array).duplicate(true)}
+	for c in rack.living():
+		habitat(c.species)   # older saves: every species on the shelf has a jar
 	# a living critter can never also be on the Wall
 	for rec in wall:
 		rack.remove(str(rec.get("uid", "")))

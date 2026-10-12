@@ -42,3 +42,7 @@ Open before adding more:
 3. **Balance:** matrix not final; role-pair targets unverified; wild/tournament opponent difficulty is a first guess (profiles novice..expert).
 4. **UI polish:** shelf screen verified at 1280x720 only (check 20:9 and tall phones), result panels use the shared theme, no audio on menus.
 5. **Chapter prose** is a lore-faithful placeholder for the creator to rewrite.
+
+## v0.7.0 — Habitat Jars (slice 1)
+Done: per-species `Habitat` (data/career/habitats.json, 5-step ladder per species), saved in RosterState; jars advance in real time (1 habitat day per 10 min, max 48 days catch-up on load); only retired critters breed; descendants are peaceful family, not fighters; critters build the next structure on their own once the player supplies materials; player allocates scrap (feed / supply / expand) and collects settlement tribute; Jar panel shows stage, family, food, built structures, latest log line. Test: test_habitat.gd.
+Open: structure names are placeholders (not lore); no visuals of structures inside the jar yet; cross-jar links (shelf network); observation (watch family lives); founder succession; breeding between species stays deferred; tune food/tribute numbers after playtest.

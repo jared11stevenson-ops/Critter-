@@ -217,7 +217,47 @@ static func jar(parent: Control, c: CritterInstance) -> void:
 	_txt(right, str(Career.HABITAT.get(c.species, "")), 20).custom_minimum_size = Vector2(440, 0)
 	_txt(right, "Habitat: peaceful. Nothing fights or dies inside a jar.", 18, UiStyle.TEAL).custom_minimum_size = Vector2(440, 0)
 	_txt(right, "Vitality %d%%  |  Bouts survived %d  |  Scars %d" % [int(round(c.vitality * 100.0)), c.bouts_survived, c.scars.size()], 20).custom_minimum_size = Vector2(440, 0)
-	_txt(right, "Retired critters will one day raise families here and build their own settlement from the resources you provide.", 18, Color(0.35, 0.3, 0.3)).custom_minimum_size = Vector2(440, 0)
 	var close := UiStyle.button("CLOSE", 26, Vector2(200, 66), UiStyle.GOLD)
 	close.pressed.connect(func(): _close(v))
 	right.add_child(close)
+	var hab := VBoxContainer.new()
+	hab.add_theme_constant_override("separation", 6)
+	v.add_child(hab)
+	_habitat_block(hab, c.species)
+
+
+## Habitat Jar status + allocation: the player only feeds, supplies and expands; the critters breed and build.
+static func _habitat_block(box: VBoxContainer, species: String) -> void:
+	for ch in box.get_children():
+		ch.queue_free()
+	var r := Career.roster()
+	var h := r.habitat(species)
+	var adults := r.retired_adults(species).size()
+	var sep := HSeparator.new()
+	box.add_child(sep)
+	_txt(box, "HABITAT  |  %s  |  Day %d  |  Family %d / %d  |  Generations %d" % [h.stage_name(adults), h.day, h.descendants.size() + adults, h.capacity(), h.generations], 22, UiStyle.RUST).custom_minimum_size = Vector2(900, 0)
+	var nx := h.next_structure()
+	var built := ", ".join(h.structures.map(func(i): return Habitat.ladder(species)[i]["name"])) if not h.structures.is_empty() else "nothing yet"
+	_txt(box, "Food %d (+%d/day)  |  Materials %d  |  Built: %s" % [h.food, h.food_rate(), h.materials, built], 20).custom_minimum_size = Vector2(900, 0)
+	if not nx.is_empty():
+		var why := "" if adults + h.descendants.size() >= int(nx["pop_req"]) else "  (needs a family of %d)" % int(nx["pop_req"])
+		_txt(box, "They will build next: %s (%d materials)%s" % [nx["name"], int(nx["materials"]), why], 20, UiStyle.TEAL).custom_minimum_size = Vector2(900, 0)
+	if adults == 0 and h.descendants.is_empty():
+		_txt(box, "No family yet: only a retired critter of this species can start one. Win the Champion Tournament and retire.", 18, Color(0.35, 0.3, 0.3)).custom_minimum_size = Vector2(900, 0)
+	if not h.log.is_empty():
+		_txt(box, h.log[h.log.size() - 1], 18, Color(0.35, 0.3, 0.3)).custom_minimum_size = Vector2(900, 0)
+	var msg := _txt(box, "Scrap %d  |  Settlement tribute waiting: %d" % [r.economy.scrap, h.tribute], 20)
+	msg.custom_minimum_size = Vector2(900, 0)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	box.add_child(row)
+	for spec in [["COLLECT", "collect", UiStyle.GOLD], ["FEED (%d)" % int(Habitat.cfg()["feed_cost_scrap"]), "feed", UiStyle.GREEN],
+			["SUPPLY (%d)" % int(Habitat.cfg()["supply_cost_scrap"]), "supply", UiStyle.TEAL], ["EXPAND (%d)" % int(Habitat.cfg()["expand_cost_scrap"]), "expand", UiStyle.TEAL]]:
+		var b := UiStyle.button(spec[0], 20, Vector2(200, 56), spec[2])
+		var kind: String = spec[1]
+		b.pressed.connect(func():
+			var res := Career.habitat_action(species, kind)
+			_habitat_block(box, species)
+			if res != "":
+				_txt(box, res, 18, UiStyle.RUST))
+		row.add_child(b)

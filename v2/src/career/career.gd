@@ -302,3 +302,17 @@ static func retire(r: RosterState, uid: String) -> bool:
 	c.vitality = 1.0
 	_autosave("retire")
 	return true
+
+
+## Player allocation to a species' jar: kind collect|feed|supply|expand. Returns "" or a short reason / result line.
+static func habitat_action(species: String, kind: String) -> String:
+	var r := roster()
+	var h := r.habitat(species)
+	var res := ""
+	match kind:
+		"collect": h.collect(r.economy)
+		"feed": res = h.feed(r.economy)
+		"supply": res = h.supply(r.economy)
+		"expand": res = h.expand(r.economy)
+	_autosave("habitat")
+	return res
