@@ -153,6 +153,11 @@
   "ls_idle_range": 4.5,
   "trap_margin": 0.9,
   "trap_big_radius": 6.0,
-  "trap_push": 2.2
+  "trap_push": 2.2,
+  "breath_prob": 0.45,
+  "breath_min": 18,
+  "breath_max": 42,
+  "breath_back": 0.7,
+  "breath_side": 0.5
  }
 }

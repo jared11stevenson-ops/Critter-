@@ -20,6 +20,8 @@ var guard_to := -1
 var think_cd := 0
 var strafe := 1.0
 var strafe_cd := 0
+var breath := 0                # after an exchange the AI resets to neutral: steps back and re-reads before engaging again
+var _was_busy := false
 var my_last := "idle"
 var my_last_frame := -999
 var last_opp_sig := ""
@@ -129,6 +131,10 @@ func decide(sim: CombatSim) -> CombatInput:
 		return inp
 	var ft: int = sim.frame + 1
 	_observe(sim, me, op)
+	var busy: bool = me.move != null or me.stun > 0
+	if _was_busy and not busy and op.stun == 0 and rng.randf() < float(C["breath_prob"]):
+		breath = rng.randi_range(int(C["breath_min"]), int(C["breath_max"]))
+	_was_busy = busy
 	var gap: float = me.pos.distance_to(op.pos) - me.radius - op.radius
 	# --- yield / last stand ----------------------------------------------
 	if allow_yield and P["yield_ratio"] > 0.0 and me.ratio() < P["yield_ratio"] and op.ratio() > float(C["yield_opp_ratio"]) \
@@ -339,6 +345,9 @@ func _weighted(w: Dictionary) -> String:
 	return ""
 
 # ---------------------------------------------------------------- neutral / offense
+func low_sta_check(me) -> bool:
+	return me.winded
+
 func _neutral(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float, guarding: bool) -> void:
 	var dist: float = me.pos.distance_to(op.pos)
 	var to: Vector2 = (op.pos - me.pos).normalized()
@@ -366,6 +375,12 @@ func _neutral(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float, gua
 		rmin = maxf(me.radius + op.radius + float(C["close_gap"]), my_l - float(C["close_back"]))
 		rmax = my_l - float(C["band_edge"])
 	var ob := _seen()
+	if breath > 0 and not low_sta_check(me) and op.stun == 0:
+		breath -= 1
+		var back: Vector2 = -to * float(C["breath_back"]) + perp * strafe * float(C["breath_side"])
+		inp.move = back.limit_length(1.0)
+		return
+	breath = 0
 	# --- movement
 	var dir := Vector2.ZERO
 	var low_sta: bool = me.sta < me.max_sta * float(C["low_sta_ratio"]) and rng.randf() < float(P["stamina_care"])
