@@ -160,22 +160,35 @@ static func result(parent: Control, rep: Dictionary, choices: Array, on_choice: 
 ## Scouting card before a fight. on_fight(), RETREAT closes (no cost).
 static func scout(parent: Control, species: String, profile: String, place: String, on_fight: Callable) -> void:
 	var info := Career.scout_info(species)
-	var v := _panel(parent, 780)
+	var v := _panel(parent, 900)
 	v.add_child(UiStyle.label("SCOUTING: %s" % place.to_upper(), 30, UiStyle.RUST, 0))
 	v.add_child(UiStyle.label("A wild %s  (%s)" % [info["species"], info["role"]], 38, UiStyle.INK, 0))
-	_txt(v, "Wins by: %s" % info["wins"], 22)
-	_txt(v, "Struggles against: %s" % info["weak"], 22)
-	_txt(v, "Abilities: %s" % ", ".join(info["abilities"]), 22, UiStyle.TEAL)
-	_txt(v, "Wild individuals fight to survive. Skill: %s. Your critter can die here." % profile, 20, UiStyle.RUST)
+	_txt(v, "Wins by: %s" % info["wins"], 22).custom_minimum_size = Vector2(840, 0)
+	_txt(v, "Struggles against: %s" % info["weak"], 22).custom_minimum_size = Vector2(840, 0)
+	_txt(v, "Abilities: %s" % ", ".join(info["abilities"]), 22, UiStyle.TEAL).custom_minimum_size = Vector2(840, 0)
+	_txt(v, "Wild individuals fight to survive. Skill: %s. Your critter can die here. Choose how to approach:" % profile, 20, UiStyle.RUST).custom_minimum_size = Vector2(840, 0)
+	var msg := _txt(v, " ", 20, UiStyle.RUST)
+	msg.custom_minimum_size = Vector2(840, 0)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)
 	v.add_child(row)
-	var go := UiStyle.button("FIGHT", 28, Vector2(220, 70), UiStyle.RUST)
-	go.pressed.connect(func(): _close(v); on_fight.call())
-	row.add_child(go)
-	var back := UiStyle.button("RETREAT", 26, Vector2(220, 70), UiStyle.PAPER_DK)
+	for id in ["stalk", "direct", "provoke"]:
+		var col := VBoxContainer.new()
+		col.add_theme_constant_override("separation", 4)
+		row.add_child(col)
+		var b := UiStyle.button(str(Career.APPROACHES[id]["name"]), 26, Vector2(260, 66), UiStyle.RUST if id == "direct" else UiStyle.GOLD)
+		var ap: String = id
+		b.pressed.connect(func():
+			var why: String = on_fight.call(ap)
+			if why == "":
+				_close(v)
+			else:
+				msg.text = why)
+		col.add_child(b)
+		_txt(col, str(Career.APPROACHES[id]["blurb"]), 17, Color(0.3, 0.25, 0.25)).custom_minimum_size = Vector2(260, 0)
+	var back := UiStyle.button("RETREAT", 24, Vector2(200, 60), UiStyle.PAPER_DK)
 	back.pressed.connect(func(): _close(v))
-	row.add_child(back)
+	v.add_child(back)
 
 static func confirm(parent: Control, head: String, text: String, yes_label: String, on_yes: Callable) -> void:
 	var v := _panel(parent, 700)

@@ -66,4 +66,18 @@ func run() -> Array:
 		QaCheck.eq(fails, Career.chapters_for(sp).size(), 7, "%s has 7 chapters" % sp)
 		QaCheck.is_true(fails, Career.role_of(sp) != "Fighter", "%s has a role" % sp)
 	QaCheck.eq(fails, Career.regions().size(), 8, "eight expedition regions")
+	# expedition approaches
+	var ar := RosterState.new()
+	var drifter := ar.seal("zephyr", "Whisk")
+	var ctx := {"kind": "expedition", "uid": drifter.uid, "region": "frostbloom", "opp_species": "nyxaris", "profile": "standard"}
+	QaCheck.is_true(fails, Career.apply_approach(ar, ctx, "stalk") != "", "stalking costs bait the player may not have")
+	ar.economy.add("scrap", 20)
+	QaCheck.eq(fails, Career.apply_approach(ar, ctx, "stalk"), "", "stalk with scrap works")
+	QaCheck.is_true(fails, absf(float(ctx["opp_vit"]) - 0.7) < 0.001 and ar.economy.scrap == 15, "a Drifter studies best: prey at 70%, bait spent")
+	ctx["profile"] = "standard"
+	Career.apply_approach(ar, ctx, "provoke")
+	QaCheck.is_true(fails, ctx["profile"] == "expert" and float(ctx["haul"]) > 1.5, "provoke raises the AI and the haul")
+	var sc0 := ar.economy.scrap
+	var rr := Career.resolve(ar, {"kind": "expedition", "uid": drifter.uid, "opp_species": "nyxaris", "region": "frostbloom", "haul": 1.7}, _res(0))
+	QaCheck.is_true(fails, ar.economy.scrap > sc0 and ar.habitat("zephyr").materials > 0 and bool(rr["capture_offer"]), "an expedition win pays scrap and jar materials")
 	return fails

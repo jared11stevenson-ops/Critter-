@@ -139,7 +139,7 @@ func _debug_shelf() -> void:
 	match str(_args.get("panel", "")):
 		"jar": CareerPanels.jar(screen, a)
 		"jar2": CareerPanels.jar(screen, ch)
-		"scout": CareerPanels.scout(screen, "nyxaris", "expert", "Frostbloom", func(): pass)
+		"scout": CareerPanels.scout(screen, "nyxaris", "expert", "Frostbloom", func(_a: String) -> String: return "")
 		"wall": CareerPanels.wall(screen, r)
 		"expedition": CareerPanels.expedition(screen, r, func(_a, _b): pass)
 		"tournament": CareerPanels.tournament(screen, r, a.uid, func(_u): pass, func(_u): pass)
@@ -187,7 +187,11 @@ func _launch_training(uid: String) -> void:
 func _launch_expedition(region_id: String, uid: String) -> void:
 	var reg := Career.region(region_id)
 	career_ctx = {"kind": "expedition", "uid": uid, "region": region_id, "opp_species": str(reg["species"]), "profile": str(reg["profile"])}
-	CareerPanels.scout(screen, str(reg["species"]), str(reg["profile"]), str(reg["name"]), func(): go_career_bout(false))
+	CareerPanels.scout(screen, str(reg["species"]), str(reg["profile"]), str(reg["name"]), func(ap: String) -> String:
+		var why := Career.apply_approach(Career.roster(), career_ctx, ap)
+		if why == "":
+			go_career_bout(false)
+		return why)
 
 func _launch_tournament(uid: String) -> void:
 	var c := Career.roster().get_critter(uid)
@@ -203,7 +207,7 @@ func go_career_bout(training_flag: bool) -> void:
 		return
 	if str(career_ctx["kind"]) in ["expedition", "extraction", "tournament"]:
 		Career.commit(Career.roster(), career_ctx)
-	var cfg := Career.make_config(c, str(career_ctx["opp_species"]), str(career_ctx["profile"]), 1.0, training_flag or str(career_ctx["kind"]) in ["tutorial", "training"], arena_id)
+	var cfg := Career.make_config(c, str(career_ctx["opp_species"]), str(career_ctx["profile"]), float(career_ctx.get("opp_vit", 1.0)), training_flag or str(career_ctx["kind"]) in ["tutorial", "training"], arena_id)
 	if str(career_ctx["kind"]) == "extraction":
 		cfg.b_vit = 0.8
 	cfg.intro = not _args.has("nointro")

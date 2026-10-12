@@ -50,3 +50,7 @@ Open: structure names are placeholders (not lore); no visuals of structures insi
 ## v0.7.1 — Pharilux (8th playable)
 Added from the approved concept sheet + lore bible entry 28: data/critters/pharilux.json, data/moves/pharilux.json (11 moves, all pass the Move Effect Gate), rig design (procedural placeholder until the Blender model), palette, VFX recipes (4 abilities + hit style), SFX (4), icons (4), region The Drowned Expanse, 7 lore chapters, jar ladder, rival = Cigarra (her blind spot). New mechanic: guard `parry_confuse` (Depth Veil). Role: Warden (second). Tap the selected jar again to open the jar view.
 Open: Pharilux balance (first sharded run in tools/out/matrix.md), Homeland is "Unknown" in the lore bible but the sheet says The Drowned Expanse (kept the sheet).
+
+## v0.8.0 — Expedition depth slice 1
+Scout panel now has three approaches: STALK (5 scrap of bait; prey starts at 70% Vitality for Reader/Warden/Drifter/Binder, 85% for others; haul x0.8), DIRECT, PROVOKE (AI one skill level up; haul x1.7). Expedition wins now pay scrap + habitat materials for the sender's jar (feeds the Habitat Jars loop). Tests in test_career.gd. Jar view draws built structures and family. Balance round: all 8 critters 46.7-51.7% overall (30 bouts per pair, extremes remain).
+Open: persuade/observe outcomes that change capture odds, region exploration, tournament rule modifiers, Pharilux model polish.

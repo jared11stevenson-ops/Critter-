@@ -74,6 +74,33 @@ static func scout_info(species: String) -> Dictionary:
 				names.append(m.name)
 	return {"role": role, "wins": info[0], "weak": info[1], "abilities": names, "species": species_name(species)}
 
+## Expedition approaches (the player chooses how to meet the wild critter). Stalk: study it first, it starts weakened (more so for patient roles).
+const APPROACHES := {
+	"stalk": {"name": "STALK", "cost": 5, "blurb": "Study it first. It starts weakened (Reader, Warden, Drifter, Binder study best). Costs 5 scrap of bait.", "fit": ["Reader", "Warden", "Drifter", "Binder"]},
+	"direct": {"name": "DIRECT", "cost": 0, "blurb": "Walk in and fight. Normal rewards.", "fit": []},
+	"provoke": {"name": "PROVOKE", "cost": 0, "blurb": "Wake it angry: it fights one skill level harder, and the haul is bigger.", "fit": []},
+}
+const PROFILE_UP := {"novice": "standard", "standard": "expert", "expert": "expert"}
+
+## Applies an approach to an expedition ctx: {approach, opp_vit, profile, haul}. Returns "" or why it cannot be used.
+static func apply_approach(r: RosterState, ctx: Dictionary, approach: String) -> String:
+	var ap: Dictionary = APPROACHES[approach]
+	if int(ap["cost"]) > 0 and not r.economy.spend({"scrap": int(ap["cost"])}):
+		return "Not enough scrap for bait."
+	ctx["approach"] = approach
+	ctx["haul"] = 1.0
+	ctx["opp_vit"] = 1.0
+	var c := r.get_critter(str(ctx["uid"]))
+	match approach:
+		"stalk":
+			var fit: bool = c != null and (ap["fit"] as Array).has(role_of(c.species))
+			ctx["opp_vit"] = 0.7 if fit else 0.85
+			ctx["haul"] = 0.8
+		"provoke":
+			ctx["profile"] = PROFILE_UP.get(str(ctx["profile"]), "expert")
+			ctx["haul"] = 1.7
+	return ""
+
 static func random_name(species: String, roster: RosterState) -> String:
 	var pool: Array = data()["names"].get(species, [species.capitalize()])
 	var taken := {}
@@ -197,6 +224,13 @@ static func resolve(r: RosterState, ctx: Dictionary, res: Dictionary) -> Diction
 			_tournament_win(r, c, ctx, rep)
 		elif kind == "expedition":
 			rep["capture_offer"] = true
+			var haul := float(ctx.get("haul", 1.0))
+			var reg: Dictionary = region(str(ctx.get("region", "")))
+			var scrap := int(round(12.0 * float(reg.get("reward", 1.0)) * haul))
+			var mats := int(round(3.0 * float(reg.get("reward", 1.0)) * haul))
+			r.economy.add("scrap", scrap)
+			r.habitat(c.species).materials += mats
+			rep["lines"].append("Haul: +%d scrap, +%d habitat materials for the %s jar." % [scrap, mats, species_name(c.species)])
 			rep["lines"].append("The wild %s is broken. Seal it in a jar, or finish it?" % species_name(str(ctx["opp_species"])))
 		elif kind == "extraction":
 			rep["lines"].append("You break through and reach the Gate.")
