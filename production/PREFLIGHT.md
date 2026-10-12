@@ -15,3 +15,12 @@ Updated: 2026-10-11, before Sprint 1 (nothing of v2 is built yet; this is the fo
 | 9 | Decide stakes rules, bonded-character rules, roster/team format (DECISIONS.md) | Avoid late redesign | S | High |
 
 Legacy (v1) items parked in `archive/v0.15.0-before-restart`: dialogue lag fix (WorldFreeze), perf reporter, QA harness, Ledger. We port them only when v2 needs them.
+
+## Update 2026-10-12 (v0.3.1)
+Landed: three abilities + Last Stand input, faster movement with cancel windows, bigger arenas, Move Effect Gate (81/81 moves have a measured effect: v2/tools/out/move_audit.md), roles + rule modifiers in the sim, six-button layout, scaled ring.
+Open before adding more:
+1. **Balance:** overall win rates 42.8-55.3% (target 45-55); some matchups beyond 40/60 (noise at ~28 bouts per cell is about +-9%); role-pair soft-counter targets (<=54/46, expert >=46%) NOT yet verified. A full run takes ~8 min single-core; use sharding (shard=K/4) for 4x. Last nudge: nyxaris x1.07, aruun x0.97, scarlith x0.98, zephyr x0.98.
+2. **Per-ability VFX** (art agent task, not done) and animation fluidity.
+3. **Arena integration of statuses/zones** (HUD chips with real remaining time, real-radius zones) not done.
+4. **Phone test** of v0.3.x controls (6 buttons, layout A/B).
+5. Backdrop lookdev, audio, display font.
