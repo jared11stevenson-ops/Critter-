@@ -5,7 +5,7 @@ const U = preload("res://src/combat/sim_test_util.gd")
 func run() -> Array:
 	var fails: Array = []
 	for id in CombatData.critter_ids():
-		for slot in ["ability1", "ability2", "laststand"]:
+		for slot in ["ability1", "ability2", "ability3", "laststand"]:
 			_generic(fails, id, slot)
 	_aruun(fails)
 	_cigarra(fails)
@@ -13,10 +13,11 @@ func run() -> Array:
 
 func _press(slot: String) -> Callable:
 	return func(i: CombatInput) -> void:
-		if slot == "ability1" or slot == "laststand":
-			i.ability1 = true
-		if slot == "ability2" or slot == "laststand":
-			i.ability2 = true
+		match slot:
+			"ability1": i.ability1 = true
+			"ability2": i.ability2 = true
+			"ability3": i.ability3 = true
+			"laststand": i.last_stand = true
 
 func _generic(fails: Array, id: String, slot: String) -> void:
 	var foe := "nyxaris" if id != "nyxaris" else "mollusk"
@@ -26,6 +27,8 @@ func _generic(fails: Array, id: String, slot: String) -> void:
 		sim.fighters[0].vit = sim.fighters[0].max_vit * 0.2
 	sim.fighters[0].pressure = 80.0
 	var want: String = sim.fighters[0].def.move_ids[slot]
+	if sim.fighters[0].def.move(want).kind == "toggle_rage":
+		return
 	var evs := U.run(sim, 260, {2: _press(slot)})
 	var seen := false
 	for e in evs:
@@ -78,8 +81,7 @@ func _aruun(fails: Array) -> void:
 	if sim.fighters[0].rage <= 0.0:
 		fails.append("aruun rage: should build as he trades hits")
 	var chord := func(i: CombatInput) -> void:
-		i.ability1 = true
-		i.ability2 = true
+		i.ability3 = true
 	sim = U.make("aruun", "mollusk", "ring", 1, 2)
 	U.face_off(sim, 6.0)
 	sim.fighters[0].rage = 80.0
@@ -158,7 +160,7 @@ func _cigarra(fails: Array) -> void:
 	sim = U.make("cigarra", "mollusk", "ring", 1, 2)
 	U.face_off(sim, 2.4)
 	var hg := func(i: CombatInput, t: int) -> void: i.guard = true
-	evs = U.run(sim, 70, {2: func(i: CombatInput) -> void: i.grab = true}, {}, Callable(), hg)
+	evs = U.run(sim, 70, {2: _press("ability3")}, {}, Callable(), hg)
 	var comp := U.first(evs, "compel", 1)
 	if comp.is_empty() or comp["mode"] != "drop_guard":
 		fails.append("cigarra puppet thought: should beat guard and drop it (%s)" % str(comp.get("mode", "none")))
@@ -166,7 +168,7 @@ func _cigarra(fails: Array) -> void:
 	sim = U.make("cigarra", "cigarra", "ring", 2, 2)
 	sim.fighters[0].pos = Vector2(5.4, 0.0)
 	sim.fighters[1].pos = Vector2(7.0, 0.0)
-	evs = U.run(sim, 160, {2: func(i: CombatInput) -> void: i.grab = true})
+	evs = U.run(sim, 160, {2: _press("ability3")})
 	if sim.is_over():
 		if sim.result()["reason"] != "ringout":
 			fails.append("cigarra puppet thought: stumble near the edge should end in ring-out")
@@ -178,7 +180,7 @@ func _cigarra(fails: Array) -> void:
 	for tid in ["cigarra", "aruun"]:
 		var s2 := U.make("cigarra", tid, "ring", 1, 2)
 		U.face_off(s2, 2.4)
-		var e2 := U.run(s2, 70, {2: func(i: CombatInput) -> void: i.grab = true})
+		var e2 := U.run(s2, 70, {2: _press("ability3")})
 		var c2 := U.first(e2, "compel", 1)
 		if tid == "cigarra":
 			long_f = int(c2.get("frames", 0))
@@ -189,7 +191,7 @@ func _cigarra(fails: Array) -> void:
 	# readable tell and interruptible: a hit on her during the startup stops it
 	sim = U.make("cigarra", "aruun", "ring", 1, 2)
 	U.face_off(sim, 1.8)
-	evs = U.run(sim, 60, {1: func(i: CombatInput) -> void: i.grab = true}, {1: _tap})
+	evs = U.run(sim, 60, {1: _press("ability3")}, {1: _tap})
 	if U.count(evs, "compel") != 0 or U.count(evs, "hit", 0) < 1:
 		fails.append("cigarra puppet thought: hitting her during the flare must interrupt it")
 	var tell := U.first(evs, "tell", 0)
@@ -198,7 +200,7 @@ func _cigarra(fails: Array) -> void:
 	# a well-timed dodge evades it
 	sim = U.make("cigarra", "aruun", "ring", 1, 2)
 	U.face_off(sim, 2.6)
-	evs = U.run(sim, 60, {2: func(i: CombatInput) -> void: i.grab = true}, {16: func(i: CombatInput) -> void: i.dodge = true})
+	evs = U.run(sim, 60, {2: _press("ability3")}, {16: func(i: CombatInput) -> void: i.dodge = true})
 	if U.count(evs, "compel") != 0:
 		fails.append("cigarra puppet thought: dodging should evade it")
 	# Premonition ghosts + Brain Skip

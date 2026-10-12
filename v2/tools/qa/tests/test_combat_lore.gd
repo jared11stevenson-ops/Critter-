@@ -19,10 +19,11 @@ func _grab(i: CombatInput) -> void:
 
 func _press(slot: String) -> Callable:
 	return func(i: CombatInput) -> void:
-		if slot == "ability1" or slot == "laststand":
-			i.ability1 = true
-		if slot == "ability2" or slot == "laststand":
-			i.ability2 = true
+		match slot:
+			"ability1": i.ability1 = true
+			"ability2": i.ability2 = true
+			"ability3": i.ability3 = true
+			"laststand": i.last_stand = true
 
 func _hits_by(evs: Array, move_id: String, type: String = "hit") -> Array:
 	var out: Array = []
