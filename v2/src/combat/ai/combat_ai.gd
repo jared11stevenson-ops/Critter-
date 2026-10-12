@@ -387,6 +387,14 @@ func _neutral(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float, gua
 		if dir.dot(inward) < 0.0:
 			dir -= inward * dir.dot(inward)
 		dir += inward * (float(C["edge_base"]) + float(C["edge_gain"]) * w)
+	# steer around the enemy's traps and damaging zones (read the terrain)
+	for ze in sim.ents:
+		if ze.kind == "zone" and ze.owner != idx and ze.tag != "fungus" and (ze.once or ze.dps > 0.0 or not ze.buff.is_empty()):
+			var away: Vector2 = me.pos - ze.pos
+			var dz: float = away.length()
+			var near: float = ze.radius + me.radius + float(C["trap_margin"])
+			if dz < near and dz > 0.01 and ze.radius < float(C["trap_big_radius"]):
+				dir += away / dz * float(P["trap_awareness"]) * float(C["trap_push"]) * (1.0 - dz / near + 0.3)
 	if guarding:
 		dir *= float(C["guarding_move"])
 	inp.move = dir.limit_length(1.0)

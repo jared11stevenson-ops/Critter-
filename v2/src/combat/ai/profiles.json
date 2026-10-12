@@ -20,7 +20,8 @@
   "yield_ratio": 0.0,
   "last_stand": 0.5,
   "edge_margin": 0.2,
-  "rage": 0.02
+  "rage": 0.02,
+  "trap_awareness": 0.5
  },
  "standard": {
   "reaction": 12,
@@ -43,7 +44,8 @@
   "yield_ratio": 0.1,
   "last_stand": 0.8,
   "edge_margin": 0.6,
-  "rage": 0.05
+  "rage": 0.05,
+  "trap_awareness": 0.85
  },
  "expert": {
   "reaction": 10,
@@ -66,7 +68,8 @@
   "yield_ratio": 0.12,
   "last_stand": 0.95,
   "edge_margin": 1.0,
-  "rage": 0.1
+  "rage": 0.1,
+  "trap_awareness": 1.0
  },
  "common": {
   "band_close": 1.0,
@@ -147,6 +150,9 @@
   "volley_lead": 6,
   "premonition_dodge": 0.8,
   "counter_weight": 0.7,
-  "ls_idle_range": 4.5
+  "ls_idle_range": 4.5,
+  "trap_margin": 0.9,
+  "trap_big_radius": 6.0,
+  "trap_push": 2.2
  }
 }

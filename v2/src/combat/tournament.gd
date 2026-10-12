@@ -127,7 +127,7 @@ static func role_markdown(data: Dictionary) -> String:
 				tag = " >"
 				if rate_ab < 0.51 or rate_ab > 0.54:
 					bad.append("%s>%s %.1f%% (want 51-54)" % [ra, rb, rate_ab * 100.0])
-			elif not dis:
+			elif not dis and i < j:
 				if rate_ab < 0.46 or rate_ab > 0.54:
 					bad.append("%s~%s %.1f%% (want 46-54)" % [ra, rb, rate_ab * 100.0])
 			row += " %.1f%%%s |" % [rate_ab * 100.0, tag]

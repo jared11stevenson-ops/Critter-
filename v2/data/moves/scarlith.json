@@ -28,9 +28,9 @@
     "dot": {
      "name": "culture",
      "life": 420,
-     "dps": 0.63,
-     "grow": 0.9,
-     "burst": 9.0,
+     "dps": 1.0,
+     "grow": 1.4,
+     "burst": 14.0,
      "ripe": 300,
      "max": 6
     }
@@ -81,9 +81,9 @@
     "dot": {
      "name": "culture",
      "life": 420,
-     "dps": 0.63,
-     "grow": 0.9,
-     "burst": 9.0,
+     "dps": 1.0,
+     "grow": 1.4,
+     "burst": 14.0,
      "ripe": 300,
      "max": 6
     }
@@ -274,9 +274,9 @@
     "dot": {
      "name": "culture",
      "life": 420,
-     "dps": 0.63,
-     "grow": 0.9,
-     "burst": 9.0,
+     "dps": 1.0,
+     "grow": 1.4,
+     "burst": 14.0,
      "ripe": 300,
      "max": 6
     }

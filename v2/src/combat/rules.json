@@ -84,8 +84,8 @@
   },
   "walk_speed": {
    "stat": "spd",
-   "base": 2.4,
-   "per": 0.51
+   "base": 3.4,
+   "per": 0.32
   },
   "sta_regen": {
    "stat": "sta",
