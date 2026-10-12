@@ -3,27 +3,29 @@
 Bouts: 1470 (about 200 per ordered matchup, split over profiles novice/standard/expert, both seats), seed base 1, default stakes (Blood, lethal), arena ring.
 Cell = win rate of ROW critter against COLUMN critter. Targets: overall 45-55%, no matchup beyond 40/60.
 
-| row \ col | aruun | cigarra | bramvex | scarlith | mollusk | zephyr | nyxaris | **overall** |
-|---|---|---|---|---|---|---|---|---|
-| **aruun** | - | 47% | 88% ! | 32% ! | 47% | 53% | 45% | **51.9%** |
-| **cigarra** | 53% | - | 68% ! | 48% | 35% ! | 63% ! | 47% | **52.5%** |
-| **bramvex** | 12% ! | 32% ! | - | 82% ! | 53% | 78% ! | 30% ! | **47.8%** |
-| **scarlith** | 68% ! | 52% | 18% ! | - | 65% ! | 45% | 48% | **49.4%** |
-| **mollusk** | 53% | 65% ! | 47% | 35% ! | - | 25% ! | 52% | **46.1%** |
-| **zephyr** | 47% | 37% ! | 22% ! | 55% | 75% ! | - | 49% | **47.4%** |
-| **nyxaris** | 55% | 53% | 70% ! | 52% | 48% | 51% | - | **54.9%** |
+| row \ col | aruun | cigarra | bramvex | scarlith | mollusk | zephyr | nyxaris | pharilux | **overall** |
+|---|---|---|---|---|---|---|---|---|---|
+| **aruun** | - | 47% | 88% ! | 32% ! | 47% | 53% | 45% | 50% | **51.7%** |
+| **cigarra** | 53% | - | 68% ! | 48% | 35% ! | 63% ! | 47% | 50% | **52.1%** |
+| **bramvex** | 12% ! | 32% ! | - | 82% ! | 53% | 78% ! | 30% ! | 50% | **48.1%** |
+| **scarlith** | 68% ! | 52% | 18% ! | - | 65% ! | 45% | 48% | 50% | **49.5%** |
+| **mollusk** | 53% | 65% ! | 47% | 35% ! | - | 25% ! | 52% | 50% | **46.7%** |
+| **zephyr** | 47% | 37% ! | 22% ! | 55% | 75% ! | - | 49% | 50% | **47.7%** |
+| **nyxaris** | 55% | 53% | 70% ! | 52% | 48% | 51% | - | 50% | **54.2%** |
+| **pharilux** | 50% | 50% | 50% | 50% | 50% | 50% | 50% | - | **50.0%** |
 
 ## Overall by AI profile
 
 | critter | novice | standard | expert |
 |---|---|---|---|
-| aruun | 43.3% | 52.5% | 60.0% |
-| cigarra | 46.7% | 59.2% | 51.7% |
-| bramvex | 72.5% | 35.0% | 35.8% |
-| scarlith | 65.8% | 43.3% | 39.2% |
-| mollusk | 35.8% | 45.8% | 56.7% |
-| zephyr | 42.5% | 50.4% | 49.2% |
-| nyxaris | 43.3% | 63.8% | 57.5% |
+| aruun | 44.3% | 52.1% | 58.6% |
+| cigarra | 47.1% | 57.9% | 51.4% |
+| bramvex | 69.3% | 37.1% | 37.9% |
+| scarlith | 63.6% | 44.3% | 40.7% |
+| mollusk | 37.9% | 46.4% | 55.7% |
+| zephyr | 43.6% | 50.4% | 49.3% |
+| nyxaris | 44.3% | 61.8% | 56.4% |
+| pharilux | 50.0% | 50.0% | 50.0% |
 
 ## Bout stats (row critter seated first)
 
@@ -45,26 +47,26 @@ Matchups beyond 40/60: aruun vs scarlith = 32%, cigarra vs mollusk = 35%, bramve
 
 | role (critter) | breaker | warden | drifter | brewer | anchor | binder | reader |
 |---|---|---|---|---|---|---|---|
-| **breaker** (aruun) | - | 88.3% > | 53.3% | 31.7% | 46.7% | 45.0% | 46.7% |
-| **warden** (bramvex) | 11.7% | - | 78.3% > | 81.7% | 53.3% | 30.0% | 31.7% |
-| **drifter** (zephyr) | 46.7% | 21.7% | - | 55.0% > | 75.0% | 49.2% | 36.7% |
-| **brewer** (scarlith) | 68.3% | 18.3% | 45.0% | - | 65.0% > | 48.3% | 51.7% |
-| **anchor** (mollusk) | 53.3% | 46.7% | 25.0% | 35.0% | - | 51.7% > | 65.0% |
-| **binder** (nyxaris) | 55.0% | 70.0% | 50.8% | 51.7% | 48.3% | - | 53.3% > |
-| **reader** (cigarra) | 53.3% > | 68.3% | 63.3% | 48.3% | 35.0% | 46.7% | - |
+| **breaker** (aruun) | - | 50.0% > | 53.3% | 31.7% | 46.7% | 45.0% | 46.7% |
+| **warden** (pharilux) | 50.0% | - | 50.0% > | 50.0% | 50.0% | 50.0% | 50.0% |
+| **drifter** (zephyr) | 46.7% | 50.0% | - | 55.0% > | 75.0% | 49.2% | 36.7% |
+| **brewer** (scarlith) | 68.3% | 50.0% | 45.0% | - | 65.0% > | 48.3% | 51.7% |
+| **anchor** (mollusk) | 53.3% | 50.0% | 25.0% | 35.0% | - | 51.7% > | 65.0% |
+| **binder** (nyxaris) | 55.0% | 50.0% | 50.8% | 51.7% | 48.3% | - | 53.3% > |
+| **reader** (cigarra) | 53.3% > | 50.0% | 63.3% | 48.3% | 35.0% | 46.7% | - |
 
 `>` = the row role has the soft-counter advantage. Cycle: breaker > warden > drifter > brewer > anchor > binder > reader > breaker.
 
 | disadvantaged role vs its counter | all AI levels | expert AI only |
 |---|---|---|
-| warden vs breaker | 11.7% | 10.0% |
-| drifter vs warden | 21.7% | 20.0% |
+| warden vs breaker | 50.0% | 50.0% |
+| drifter vs warden | 50.0% | 50.0% |
 | brewer vs drifter | 45.0% | 35.0% |
 | anchor vs brewer | 35.0% | 45.0% |
 | binder vs anchor | 48.3% | 45.0% |
 | reader vs binder | 46.7% | 55.0% |
 | breaker vs reader | 46.7% | 55.0% |
 
-Out of role-pair targets: breaker>warden 88.3% (want 51-54), breaker~brewer 31.7% (want 46-54), breaker~binder 45.0% (want 46-54), warden>drifter 78.3% (want 51-54), warden~brewer 81.7% (want 46-54), warden~binder 30.0% (want 46-54), warden~reader 31.7% (want 46-54), drifter>brewer 55.0% (want 51-54), drifter~anchor 75.0% (want 46-54), drifter~reader 36.7% (want 46-54), brewer>anchor 65.0% (want 51-54), anchor~reader 65.0% (want 46-54)
-Disadvantaged below 46% at expert: warden vs breaker expert 10.0%, drifter vs warden expert 20.0%, brewer vs drifter expert 35.0%, anchor vs brewer expert 45.0%, binder vs anchor expert 45.0%
+Out of role-pair targets: breaker>warden 50.0% (want 51-54), breaker~brewer 31.7% (want 46-54), breaker~binder 45.0% (want 46-54), warden>drifter 50.0% (want 51-54), drifter>brewer 55.0% (want 51-54), drifter~anchor 75.0% (want 46-54), drifter~reader 36.7% (want 46-54), brewer>anchor 65.0% (want 51-54), anchor~reader 65.0% (want 46-54)
+Disadvantaged below 46% at expert: brewer vs drifter expert 35.0%, anchor vs brewer expert 45.0%, binder vs anchor expert 45.0%
 
