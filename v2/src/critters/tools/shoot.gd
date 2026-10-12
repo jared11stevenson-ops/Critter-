@@ -45,6 +45,7 @@ func _init() -> void:
 		"perf": await _perf(ids)
 		"ortho": await _ortho(ids, out)
 		"states": await _states(ids, out)
+		"portrait": await _portrait(ids, out)
 	quit()
 
 func _spawn(id: String) -> Node3D:
@@ -326,4 +327,30 @@ func _states(ids, out: String) -> void:
 			await _save("%s/%s_state_%d_%s.png" % [out, id, i, st_def[0]])
 			i += 1
 			_step(rig, "idle", 0, 90)
+		rig.free()
+
+
+## Character icons: a head-and-shoulders bust on a flat tinted backdrop (the sheet tool crops it round and rings it).
+const PORTRAIT_DIST := {"aruun": 4.1, "cigarra": 3.6, "bramvex": 3.6, "scarlith": 4.2, "mollusk": 4.4, "zephyr": 3.2, "nyxaris": 4.4, "pharilux": 5.2}
+const PORTRAIT_LIFT := {"aruun": 0.35, "cigarra": 0.1, "bramvex": 0.1, "scarlith": 0.3, "mollusk": 0.1, "zephyr": 0.1, "nyxaris": 0.3, "pharilux": 0.6}
+func _portrait(ids, out: String) -> void:
+	vp.size = Vector2i(256, 256)
+	no_shadow = true
+	st["ground"].visible = false
+	for id in ids:
+		var pal: Dictionary = Pal.get_pal(id)
+		var bg: Color = (pal["main"] as Color).darkened(0.55).lerp(Color(0.1, 0.1, 0.12), 0.35)
+		st["env"].background_mode = Environment.BG_COLOR
+		st["env"].background_color = bg
+		var rig := _spawn(id)
+		rig.three_quarter = 32.0
+		_step(rig, "idle", 0, 4)
+		var hp: Vector3 = rig.socket("head").global_position + Vector3(0, float(PORTRAIT_LIFT.get(id, 0.2)), 0)
+		var cam: Camera3D = st["cam"]
+		cam.fov = 28.0
+		var d: float = float(PORTRAIT_DIST.get(id, 4.0))
+		cam.look_at_from_position(hp + Vector3(d * 0.92, 0.12 * d, d * 0.38), hp)
+		var sun: DirectionalLight3D = st["sun"]
+		sun.rotation_degrees = Vector3(-22, 67, 0)
+		await _save("%s/%s_portrait.png" % [out, id])
 		rig.free()

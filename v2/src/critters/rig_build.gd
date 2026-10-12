@@ -35,6 +35,18 @@ func set_face(center: Vector3, radii: Vector3, params: Dictionary, half_lon: flo
 	face = {"e": e, "center": center, "radii": radii, "half_lon": half_lon, "half_lat": half_lat,
 			"lat_center": lat_center, "params": params}
 
+## Shrinks/grows the head about the neck pivot (face patch and head sockets follow).
+func scale_head(k: float) -> void:
+	if not parts.has("head") or is_equal_approx(k, 1.0):
+		return
+	(parts["head"]["mb"] as Prim).scale_all(Vector3.ONE * k)
+	if not face.is_empty():
+		face["center"] = (face["center"] as Vector3) * k
+		face["radii"] = (face["radii"] as Vector3) * k
+	for sn in sockets:
+		if str(sockets[sn]["part"]) == "head":
+			sockets[sn]["pos"] = (sockets[sn]["pos"] as Vector3) * k
+
 ## Build MeshInstance3D per part under `rig_root`; returns {nodes, rest, tris, material, face_mat, face_node}
 func assemble(rig_root: Node3D) -> Dictionary:
 	var mat := Toon.character(pal["glow"], pal["ink"])

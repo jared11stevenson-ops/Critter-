@@ -33,9 +33,13 @@ func _draw() -> void:
 		draw_arc(c, r - 3.0, 0, TAU, 28, Color(1, 1, 1, 0.14), 2.0, true)
 		draw_string(UiStyle.font(), Vector2(0, c.y + 6.0), str(slot + 1), HORIZONTAL_ALIGNMENT_CENTER, size.x, 16, Color(1, 1, 1, 0.2))
 	else:
-		draw_circle(c, r - 6.0, _col.darkened(0.45) if critter.retired else _col.darkened(0.15))
-		draw_circle(c + Vector2(-r * 0.25, -r * 0.3), r * 0.28, Color(1, 1, 1, 0.18))
-		draw_string(UiStyle.font(), c + Vector2(-r, 10.0), critter.species.substr(0, 1).to_upper(), HORIZONTAL_ALIGNMENT_CENTER, r * 2.0, 30, Color(0.1, 0.07, 0.07))
+		var pt := Portraits.tex(critter.species)
+		if pt != null:
+			draw_texture_rect(pt, Rect2(c - Vector2(r, r) * 1.06, Vector2(r, r) * 2.12), false, Color(1, 1, 1, 0.55 if critter.retired else 1.0))
+		else:
+			draw_circle(c, r - 6.0, _col.darkened(0.45) if critter.retired else _col.darkened(0.15))
+			draw_circle(c + Vector2(-r * 0.25, -r * 0.3), r * 0.28, Color(1, 1, 1, 0.18))
+			draw_string(UiStyle.font(), c + Vector2(-r, 10.0), critter.species.substr(0, 1).to_upper(), HORIZONTAL_ALIGNMENT_CENTER, r * 2.0, 30, Color(0.1, 0.07, 0.07))
 		var vcol := UiStyle.GREEN if critter.vitality > 0.5 else (UiStyle.GOLD if critter.vitality > 0.25 else UiStyle.RUST)
 		draw_arc(c, r - 1.0, -PI * 0.5, -PI * 0.5 + TAU * critter.vitality, 28, vcol, 5.0, true)
 		if critter.founder:

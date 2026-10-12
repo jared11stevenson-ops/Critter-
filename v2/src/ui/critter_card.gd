@@ -20,8 +20,12 @@ func setup(id: String, main_col: Color, glow_col: Color) -> void:
 
 func _draw() -> void:
 	var c := Vector2(size.x * 0.5, 44)
-	draw_circle(c, 38, UiStyle.INK)
-	draw_circle(c, 34, pal_main)
-	draw_arc(c, 34, 0, TAU, 28, pal_glow, 4.0, true)
-	UiStyle.draw_text(self, c + Vector2(-30, 14), disp_name.substr(0, 1).to_upper(), 40, UiStyle.PAPER, HORIZONTAL_ALIGNMENT_CENTER, 60)
+	var pt := Portraits.tex(critter_id)
+	if pt != null:
+		draw_texture_rect(pt, Rect2(c - Vector2(46, 46), Vector2(92, 92)), false)
+	else:
+		draw_circle(c, 38, UiStyle.INK)
+		draw_circle(c, 34, pal_main)
+		draw_arc(c, 34, 0, TAU, 28, pal_glow, 4.0, true)
+		UiStyle.draw_text(self, c + Vector2(-30, 14), disp_name.substr(0, 1).to_upper(), 40, UiStyle.PAPER, HORIZONTAL_ALIGNMENT_CENTER, 60)
 	UiStyle.draw_text(self, Vector2(0, size.y - 12), disp_name.to_upper(), 19, UiStyle.GOLD if button_pressed else UiStyle.PAPER, HORIZONTAL_ALIGNMENT_CENTER, size.x)

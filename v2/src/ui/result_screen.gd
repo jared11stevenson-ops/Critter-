@@ -35,7 +35,12 @@ func show_result(res: Dictionary) -> void:
 		var my := CombatData.critter(str(res["a_id"]) if pi == 0 else str(res["b_id"]))
 		var nm := UiStyle.label(my.display_name.to_upper() + (" - " + my.species if my.species != "" else ""), 30, UiStyle.PAPER)
 		nm.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		v.add_child(nm)
+		var nrow := HBoxContainer.new()
+		nrow.alignment = BoxContainer.ALIGNMENT_CENTER
+		nrow.add_theme_constant_override("separation", 12)
+		nrow.add_child(Portraits.rect(str(res["a_id"]) if pi == 0 else str(res["b_id"]), 72))
+		nrow.add_child(nm)
+		v.add_child(nrow)
 	var sub := UiStyle.label(str(d["sub"]), 28, UiStyle.PAPER, 6)
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	sub.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

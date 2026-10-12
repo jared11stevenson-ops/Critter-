@@ -71,6 +71,7 @@ static func expedition(parent: Control, r: RosterState, on_go: Callable) -> void
 		b.toggle_mode = true
 		b.text = "%s  %d%%" % [c.name, int(round(c.vitality * 100.0))]
 		b.add_theme_font_size_override("font_size", 19)
+		Portraits.on_button(b, c.species, 40)
 		var cu: String = c.uid
 		b.pressed.connect(func():
 			chosen["uid"] = cu
@@ -102,7 +103,12 @@ static func tournament(parent: Control, r: RosterState, uid: String, on_enter: C
 	else:
 		_txt(v, "%s enters: %s. Win to climb the ladder. Every fight is to the death for both of you." % [c.name, rung["rank"]], 22)
 	var opp := Career.opponent_for_rung(rung, c)
-	_txt(v, "Opponent: %s (%s)   AI skill: %s   Prize: %d scrap" % [Career.species_name(opp), Career.role_of(opp), str(rung["profile"]), int(rung["scrap"])], 20, UiStyle.TEAL)
+	var orow := HBoxContainer.new()
+	orow.add_theme_constant_override("separation", 10)
+	orow.add_child(Portraits.rect(opp, 64))
+	var otxt := _txt(orow, "Opponent: %s (%s)   AI skill: %s   Prize: %d scrap" % [Career.species_name(opp), Career.role_of(opp), str(rung["profile"]), int(rung["scrap"])], 20, UiStyle.TEAL)
+	otxt.custom_minimum_size = Vector2(640, 0)
+	v.add_child(orow)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)
 	v.add_child(row)
@@ -131,7 +137,14 @@ static func wall(parent: Control, r: RosterState) -> void:
 	for i in range(r.wall.size() - 1, -1, -1):
 		var rec: Dictionary = r.wall[i]
 		var n := (rec.get("chapters_unlocked", []) as Array).size()
-		_txt(inner, "%s the %s  -  %d bouts survived, %d/7 chapters read.  %s" % [rec["name"], Career.species_name(str(rec["species"])), int(rec["bouts_survived"]), n, str(rec.get("cause", ""))], 21)
+		var wr := HBoxContainer.new()
+		wr.add_theme_constant_override("separation", 10)
+		var wp := Portraits.rect(str(rec["species"]), 46)
+		wp.modulate = Color(0.7, 0.7, 0.7)
+		wr.add_child(wp)
+		inner.add_child(wr)
+		var wl := _txt(wr, "%s the %s  -  %d bouts survived, %d/7 chapters read.  %s" % [rec["name"], Career.species_name(str(rec["species"])), int(rec["bouts_survived"]), n, str(rec.get("cause", ""))], 21)
+		wl.custom_minimum_size = Vector2(780, 0)
 		_txt(inner, "  \"%s\"" % str(rec.get("epitaph", "")), 18, UiStyle.RUST)
 		for k in range(n + 1, 8):
 			_txt(inner, "    chapter %d: [redacted]  - never read" % k, 16, Color(0.4, 0.35, 0.35))
@@ -162,7 +175,11 @@ static func scout(parent: Control, species: String, profile: String, place: Stri
 	var info := Career.scout_info(species)
 	var v := _panel(parent, 900)
 	v.add_child(UiStyle.label("SCOUTING: %s" % place.to_upper(), 30, UiStyle.RUST, 0))
-	v.add_child(UiStyle.label("A wild %s  (%s)  %s" % [info["species"], info["role"], Career.stars_text(species)], 36, UiStyle.INK, 0))
+	var srow := HBoxContainer.new()
+	srow.add_theme_constant_override("separation", 12)
+	srow.add_child(Portraits.rect(species, 84))
+	srow.add_child(UiStyle.label("A wild %s  (%s)  %s" % [info["species"], info["role"], Career.stars_text(species)], 36, UiStyle.INK, 0))
+	v.add_child(srow)
 	_txt(v, "Wins by: %s" % info["wins"], 22).custom_minimum_size = Vector2(840, 0)
 	_txt(v, "Habit to watch for: %s" % info["weak"], 22).custom_minimum_size = Vector2(840, 0)
 	_txt(v, "Abilities: %s" % ", ".join(info["abilities"]), 22, UiStyle.TEAL).custom_minimum_size = Vector2(840, 0)
@@ -227,7 +244,11 @@ static func jar(parent: Control, c: CritterInstance) -> void:
 	var right := VBoxContainer.new()
 	right.add_theme_constant_override("separation", 6)
 	row.add_child(right)
-	right.add_child(UiStyle.label(c.name, 40, UiStyle.INK, 0))
+	var nrow := HBoxContainer.new()
+	nrow.add_theme_constant_override("separation", 10)
+	nrow.add_child(Portraits.rect(c.species, 64))
+	nrow.add_child(UiStyle.label(c.name, 40, UiStyle.INK, 0))
+	right.add_child(nrow)
 	_txt(right, "%s  |  %s  |  %s%s" % [Career.species_name(c.species), Career.role_of(c.species), Career.stars_text(c.species), "  |  FOUNDER (first of its kind on Earth)" if c.founder else ""], 20, UiStyle.RUST).custom_minimum_size = Vector2(440, 0)
 	_txt(right, str(Career.HABITAT.get(c.species, "")), 20).custom_minimum_size = Vector2(440, 0)
 	_txt(right, "Habitat: peaceful. Nothing fights or dies inside a jar.", 18, UiStyle.TEAL).custom_minimum_size = Vector2(440, 0)
@@ -300,6 +321,7 @@ static func practice(parent: Control, owned: Array, on_go: Callable) -> void:
 		b.toggle_mode = true
 		b.text = "%s  %s" % [Career.species_name(str(sp)), "★".repeat(Career.stars_of(str(sp)))]
 		b.add_theme_font_size_override("font_size", 20)
+		Portraits.on_button(b, str(sp), 40)
 		b.button_pressed = (sp == chosen["opp"])
 		var spid: String = str(sp)
 		b.pressed.connect(func():
@@ -338,7 +360,11 @@ static func watch(parent: Control, species: String) -> void:
 	var r := Career.roster()
 	var h := r.habitat(species)
 	var v := _panel(parent, 940)
-	v.add_child(UiStyle.label("WATCHING THE %s JAR" % Career.species_name(species).to_upper(), 32, UiStyle.INK, 0))
+	var wrow := HBoxContainer.new()
+	wrow.add_theme_constant_override("separation", 12)
+	wrow.add_child(Portraits.rect(species, 64))
+	wrow.add_child(UiStyle.label("WATCHING THE %s JAR" % Career.species_name(species).to_upper(), 32, UiStyle.INK, 0))
+	v.add_child(wrow)
 	var adults := r.retired_adults(species)
 	var crown := h.founder_name if h.founder_name != "" else "no founder yet"
 	var head := "Founding monarch: %s%s" % [crown, "  (fallen; the record remains)" if h.monarch_fallen else ""]

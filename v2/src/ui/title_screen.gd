@@ -71,6 +71,14 @@ func _build_ui() -> void:
 	tag.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	tag.position.y = maxf(m.y, 14) + 206
 	add_child(tag)
+	var cast := HBoxContainer.new()
+	cast.add_theme_constant_override("separation", 14)
+	cast.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
+	cast.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	cast.position.y = maxf(m.y, 14) + 262
+	for cid in ["aruun", "cigarra", "bramvex", "scarlith", "mollusk", "zephyr", "nyxaris", "pharilux"]:
+		cast.add_child(Portraits.rect(cid, 84))
+	add_child(cast)
 	var col := VBoxContainer.new()
 	col.add_theme_constant_override("separation", 12)
 	col.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)

@@ -149,8 +149,11 @@ func _build_detail() -> void:
 		_detail.add_child(l)
 		_detail.add_child(UiStyle.label("Capture critters on expeditions to fill the Shelf.", 20, UiStyle.INK, 0))
 		return
-	var title := UiStyle.label(c.name, 38, UiStyle.INK, 0)
-	_detail.add_child(title)
+	var title_row := HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 10)
+	title_row.add_child(Portraits.rect(c.species, 76))
+	title_row.add_child(UiStyle.label(c.name, 38, UiStyle.INK, 0))
+	_detail.add_child(title_row)
 	var tag := "%s  |  %s  |  %s" % [Career.species_name(c.species), Career.role_of(c.species), Career.stars_text(c.species)]
 	if c.founder:
 		tag += "  |  FOUNDER"

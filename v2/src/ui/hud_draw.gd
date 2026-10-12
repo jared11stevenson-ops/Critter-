@@ -104,10 +104,15 @@ func _draw_panel(i: int, f: Dictionary, r: Rect2, mirror: bool) -> void:
 	# portrait: palette disc with the critter's initial
 	var pr := 40.0
 	var pc := Vector2(r.end.x - pr - 12 if mirror else r.position.x + pr + 12, r.position.y + r.size.y * 0.5)
-	_ink.disc(pc, pr + 4, UiStyle.INK)
-	_ink.disc(pc, pr, pal_main)
-	_ink.ring(pc, pr - 5, Color(1, 1, 1, 0.25))
-	_ink.text(pc + Vector2(-pr, 14), id.substr(0, 1).to_upper(), 44, UiStyle.PAPER, HORIZONTAL_ALIGNMENT_CENTER, pr * 2.0)
+	var ptex := Portraits.tex(id)
+	if ptex != null:
+		var ps := (pr + 6.0) * 2.0
+		draw_texture_rect(ptex, Rect2(pc - Vector2(ps, ps) * 0.5, Vector2(ps, ps)), false)
+	else:
+		_ink.disc(pc, pr + 4, UiStyle.INK)
+		_ink.disc(pc, pr, pal_main)
+		_ink.ring(pc, pr - 5, Color(1, 1, 1, 0.25))
+		_ink.text(pc + Vector2(-pr, 14), id.substr(0, 1).to_upper(), 44, UiStyle.PAPER, HORIZONTAL_ALIGNMENT_CENTER, pr * 2.0)
 	var bx := r.position.x + 12 if mirror else r.position.x + pr * 2 + 26
 	var bw := r.size.x - pr * 2 - 38
 	var def: CritterDef = bout.sim.fighters[i].def

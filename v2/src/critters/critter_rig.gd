@@ -17,6 +17,7 @@ const DetachCtl := preload("res://src/critters/detach_ctl.gd")
 const GhostFx := preload("res://src/critters/ghost_fx.gd")
 const RigEvents := preload("res://src/critters/rig_events.gd")
 
+const Proportions := preload("res://src/critters/proportions.gd")
 const DESIGN_PATH := "res://src/critters/designs/%s.gd"
 
 ## ---- presentation constants (NOT gameplay numbers) ----
@@ -94,6 +95,8 @@ func setup(critter_id_in: String) -> void:
 	var b := Rb.new()
 	b.pal = palette
 	design.build(b)
+	var prop := Proportions.of(critter_id)
+	b.scale_head(float(prop["head_k"]))
 	cfg = b.cfg
 	var res := b.assemble(_body)
 	_nodes = res["nodes"]
@@ -104,9 +107,10 @@ func setup(critter_id_in: String) -> void:
 	_mat = res["mat"]
 	tri_count = res["tris"]
 	bounds = res["bounds"]
-	var sc := float(cfg.get("scale", 1.0))   # presentation scale (silhouette variety); gameplay reach lives in data
-	_pivot.scale = Vector3.ONE * sc
-	bounds = AABB(bounds.position * sc, bounds.size * sc)
+	var sc := float(cfg.get("scale", 1.0)) * float(prop["size"])   # presentation scale (silhouette variety); gameplay reach lives in data
+	var st := float(prop["stretch"])
+	_pivot.scale = Vector3(sc, sc * st, sc)
+	bounds = AABB(bounds.position * Vector3(sc, sc * st, sc), bounds.size * Vector3(sc, sc * st, sc))
 	for n in _nodes:
 		if str(n).begins_with("sock_"):
 			_sockets[str(n).substr(5)] = _nodes[n]
