@@ -40,7 +40,7 @@
   "guard_move_mult": 0.6,
   "guard_delay": 0.7,
   "marks_armor": 1,
-  "damage_mult": 0.942
+  "damage_mult": 1.017
  },
  "ai": {
   "style": "tank",

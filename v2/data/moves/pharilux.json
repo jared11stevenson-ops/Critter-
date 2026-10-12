@@ -179,7 +179,7 @@
    "poise_damage": 9,
    "hitstop": 6,
    "grab": true,
-   "throw_dist": 5.0,
+   "throw_dist": 4.2,
    "throw_stun": 6,
    "hitbox": {
     "reach": 3.2,
@@ -265,13 +265,13 @@
    "active": 4,
    "recovery": 22,
    "stamina_cost": 12,
-   "cooldown": 330,
+   "cooldown": 420,
    "track": 8,
    "damage": 3.0,
    "poise_damage": 10,
    "hitstun": 22,
    "blockstun": 8,
-   "knockback": 5.4,
+   "knockback": 4.6,
    "hitstop": 5,
    "hitbox": {
     "reach": 4.2,
@@ -435,7 +435,7 @@
    "poise_damage": 14,
    "hitstun": 24,
    "blockstun": 10,
-   "knockback": 5.2,
+   "knockback": 4.4,
    "hitstop": 6,
    "hitbox": {
     "reach": 3.2,
