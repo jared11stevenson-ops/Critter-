@@ -38,7 +38,7 @@
   "parry_window": 10,
   "intel_gain": 1.0,
   "dodge_chain": 1,
-  "damage_mult": 0.844
+  "damage_mult": 0.777
  },
  "ai": {
   "style": "zoner",
