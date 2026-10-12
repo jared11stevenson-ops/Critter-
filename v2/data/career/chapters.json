@@ -1,0 +1,224 @@
+{
+ "_doc": "Life Story chapters per critter (7 each), written from the Master Lore Bible. Chapter 1 unlocks on sealing; the rest by survival (data/story/chapter_rules.json). Placeholder prose: the creator will rewrite.",
+ "hints": [
+  "Sealed in a jar",
+  "Survive 3 bouts",
+  "Survive 8 bouts and reach Bond 3",
+  "Survive a near-death bout (under 10% Vitality)",
+  "Survive 20 bouts",
+  "Defeat a rival-species fighter",
+  "Survive 40 bouts and complete its personal trial"
+ ],
+ "chapters": {
+  "aruun": [
+   {
+    "title": "Sealed",
+    "text": "The jar is smaller than any bridge Aruun ever crossed. He counts its walls twice, then taps Morrow against the glass to see whether it will hold. It holds. He is not sure that is good news."
+   },
+   {
+    "title": "Apprentice of Spans",
+    "text": "In the Red Reaches, strength means the burden you can carry without handing it to someone weaker. Aruun was a Spanwright's apprentice: gifted, impatient, and certain that monuments mattered more than the quiet work of keeping them standing."
+   },
+   {
+    "title": "Beneath the Old Bridge",
+    "text": "Deep under an ancient bridge he found Thoughtstone that hummed when he thought. It shaped itself into a mace to be carried. He named it Morrow, and he has never once called it his property."
+   },
+   {
+    "title": "Eleven Minutes",
+    "text": "When sabotage broke Red Span with thousands crossing, Aruun anchored Morrow and pushed the load through his own body. For eleven minutes he carried part of a bridge. Thousands lived. Hundreds did not, and his shell has never fully healed."
+   },
+   {
+    "title": "Rage Has a Price",
+    "text": "Rage is not fury. It is switching off the limits that keep his body in one piece. The more desperate the moment, the more of himself he is willing to spend, and lately he has begun to count how much is left."
+   },
+   {
+    "title": "Probable Impact",
+    "text": "Cigarra saw where his blow would land and stood there anyway. 'Probable Impact,' she said. 'Rude. Wonderful.' To beat her he must stop announcing himself, because strength you can see coming is only a promise."
+   },
+   {
+    "title": "Further Than You Think",
+    "text": "He finally understands his teacher: a good structure lets people forget the danger it holds back. He starts drawing a bridge that bends and breaks in pieces so the people on it survive. He calls it the Morrow Span, and for the first time he is building something meant to be forgotten."
+   }
+  ],
+  "cigarra": [
+   {
+    "title": "Sealed",
+    "text": "Cigarra counts the futures inside the jar. There are three: a lid that stays shut, a lid that opens, and one she cannot see at all. She decides to be curious about the third."
+   },
+   {
+    "title": "The Listening House",
+    "text": "In the Canopy Fold a path that existed yesterday may be gone tomorrow, so her people value interpretation over certainty. Listeners study tremors, weather and small cruelties. Cigarra was the one who stopped listening and started seeing."
+   },
+   {
+    "title": "Contradictions",
+    "text": "At first the elders thought she was lying. Then her predictions contradicted one another, so they decided she was lying badly. Someone finally noticed that every contradictory event had been possible."
+   },
+   {
+    "title": "I Know What You Are Doing",
+    "text": "She let the humans call her a specimen for months while she learned their words, their routines and their lies. Then she wrote one sentence where they would find it: I KNOW WHAT YOU ARE DOING. They have been arguing about it ever since."
+   },
+   {
+    "title": "Weather Made of Choices",
+    "text": "A forest has a few futures. A city has millions, all pulling at once. She learned to cover some crown spheres, to hold objects that mean something, and to ask strangers for small arbitrary choices, anything to narrow the noise."
+   },
+   {
+    "title": "A Future Seen Is a Future Touched",
+    "text": "Against a fighter who restrains her options, she learns what she fears most: a prediction can cause itself. Now she hunts for places where possibility behaves wrongly, and she rarely says what she sees."
+   },
+   {
+    "title": "The Blank Spaces",
+    "text": "Some people and some places produce almost no readable probability. She decides the blank spaces are not failures of her gift. They are doors, and she cannot stand an unanswered door."
+   }
+  ],
+  "bramvex": [
+   {
+    "title": "Sealed",
+    "text": "Day 1. Jar: glass, one seam on the lid. Guards: none visible. He starts a list."
+   },
+   {
+    "title": "Thornmarch",
+    "text": "In Thornmarch, to be visible is to be vulnerable, and camouflage is an ecology before it is a tactic. Bramvex is not a legend. He is a sergeant, and his job is the small questions: who has eaten, which route is safe, where the retreat is."
+   },
+   {
+    "title": "Diplomacy",
+    "text": "His thorned weapon earned the nickname Diplomacy from his unit. The joke has outlived the people who first told it. He has never explained it, and he does not plan to."
+   },
+   {
+    "title": "Nineteen Days",
+    "text": "After capture he spent nineteen days doing nothing anyone noticed: mapping doors, cameras, shift changes and which technician hummed. He also counted seventeen other intelligent prisoners the humans had not admitted existed."
+   },
+   {
+    "title": "Day 20",
+    "text": "On Day 20 he walked out. Then he went back and freed all seventeen, and instead of running he occupied an unfinished wing. His demands were practical: food, medicine, translators, privacy, an end to experiments on the sentient. Six days later most of them quietly became policy."
+   },
+   {
+    "title": "The Reason Good Soldiers Get Home",
+    "text": "He took Aruun for a glory fighter, until he watched him shield an evacuation with his own body. 'You are not a good soldier,' he said. 'You are the reason good soldiers get home.' Beating him in the ring still matters. Respect is not the same as letting him win."
+   },
+   {
+    "title": "What Freedom Looks Like",
+    "text": "Getting people out was the easy part. The seventeen disagree about everything: home, asylum, revenge, quiet. He leaves deliberate blank spaces in every plan now so someone else can improvise into them. He calls them Cigarra Holes, and regrets naming them."
+   }
+  ],
+  "scarlith": [
+   {
+    "title": "Sealed",
+    "text": "The jar is clean, quiet and worth about nine dollars. He is insulted by the estimate and begins composing a counteroffer."
+   },
+   {
+    "title": "Where Others See Ruin",
+    "text": "The Velvet Warrens grow in rotting forests, abandoned nests and fungal basins, the places other cultures label ruined. His people see decomposition as transition. Nothing is worthless just because its first use ended."
+   },
+   {
+    "title": "Aged to Taste",
+    "text": "He learned early that time can add value: a wheel that sours, a spore that matures, a debt that ripens. Controlled decay preserves, and waste becomes food. He is the only mite in the Warrens who keeps a ledger for smells."
+   },
+   {
+    "title": "Earth Throws Away Everything",
+    "text": "He saw Earth's waste streams and was horrified, then delighted. Humanity discards absurd quantities of useful material. He became one of the Undermarket's most capable brokers, sometimes trading harmless goods around stupid rules and sometimes crossing lines."
+   },
+   {
+    "title": "Captivity Is Bad for Business",
+    "text": "He once exposed a trafficking ring, and his reason was commercial: involuntary captives are bad for long-term trade. His morals make complete sense to him and infuriate everyone else."
+   },
+   {
+    "title": "Abandoned by Whom?",
+    "text": "Zephyr keeps beating him by refusing to treat anything as merchandise. 'Finding abandoned value,' Zephyr says, 'is different from declaring something abandoned because its owner has no power.' He hates that it sticks."
+   },
+   {
+    "title": "Value Without Ownership",
+    "text": "Wealth taught him the problem his culture trained him to exploit: now other people circle his discards. He begins to ask which things should never be sold, and he does not announce the answer."
+   }
+  ],
+  "mollusk": [
+   {
+    "title": "Sealed",
+    "text": "He examines the jar, finds it structurally sound, and quietly asks whether it has ever been inspected. Then he settles into his shell to wait. He is very good at waiting."
+   },
+   {
+    "title": "A Shell That Remembers",
+    "text": "Rainward is a storm continent where floods redraw the map, so its people build for movement and repair. Mollusk's shell grows in layers, and his people carve the old growth with journeys and obligations. It is body, home and autobiography at once."
+   },
+   {
+    "title": "Resistance to Change",
+    "text": "He does not stop time. He makes things reluctant to change: a falling object falls slowly, a fracture spreads unwillingly, an impact stays unfinished. Nothing is erased. It all resolves eventually, and he has never said otherwise."
+   },
+   {
+    "title": "Borrowed Seconds",
+    "text": "Every second he creates is a debt. He teaches rescue crews the rule he lives by: move someone, brace something, choose. Do not admire the miracle. Use it."
+   },
+   {
+    "title": "Forklifts",
+    "text": "Disaster crews understood his value at once. He can hold a collapsing structure in an unfinished state while people walk out. His love of forklifts remains inexplicable and unquestioned."
+   },
+   {
+    "title": "Weight and Seasoning",
+    "text": "A pirate mite who treats time as a seasoning keeps beating him with a ripening debt. Mollusk respects the argument and rejects the conclusion: delay is only useful if you use the delay."
+   },
+   {
+    "title": "The Last Mark",
+    "text": "Every collapse he could not fully prevent gets a mark on his shell. He has run out of old growth to carve. A new layer grows over them, and he finally understands that it is not erasing them. It is carrying them."
+   }
+  ],
+  "zephyr": [
+   {
+    "title": "Sealed",
+    "text": "Technically it is not detention if the lid is not locked. Zephyr checks the lid, finds it locked, and starts a list of definitions."
+   },
+   {
+    "title": "Where Routes Bloom",
+    "text": "The Briarwild is a flowering ecosystem where paths exist only while certain plants bloom, so its people trust agreements more than borders. A spoken promise is contract, reputation and identity at once, and wording matters."
+   },
+   {
+    "title": "Loopholes and Vows",
+    "text": "Zephyr loves loopholes and despises broken vows. Outsiders call that trickery. To Zephyr it is the only consistent position: a rule is a game, a promise is not."
+   },
+   {
+    "title": "Cooperative Non-Detained Entity",
+    "text": "On Earth every attempt to detain Zephyr failed, and Zephyr kept coming back anyway. Bureaucracy finally gave up and wrote COOPERATIVE NON-DETAINED ENTITY. Someone later changed it to CONSULTANT. Nobody admits who."
+   },
+   {
+    "title": "The Promise Network",
+    "text": "Crossing space quickly is both a talent and a joy. Zephyr began carrying messages between people who could never have spoken on their homeworld, and accidentally became a piece of globalization."
+   },
+   {
+    "title": "Holes on Purpose",
+    "text": "A sergeant keeps building ground that catches fliers: thorns, funnels, patient preparation. Worse, he leaves gaps on purpose. Zephyr loves loopholes, but cannot tell whether this one is a loophole or a trap."
+   },
+   {
+    "title": "A Promise Kept",
+    "text": "Of all the promises Zephyr has made, one was the hardest: to bring someone home who did not want to go. The wording mattered. It was kept exactly, and it cost something."
+   }
+  ],
+  "nyxaris": [
+   {
+    "title": "Sealed",
+    "text": "She does not struggle. She spins one thread across the lid, tests its tension, and lets it speak for her."
+   },
+   {
+    "title": "Heat and Cold Share a Landscape",
+    "text": "Frostbloom is where glaciers meet geothermal vents: ice around boiling channels, enormous flowers around thermal pockets. Life survives through precise boundaries, and her people do not separate engineering from art."
+   },
+   {
+    "title": "Silk Is Writing",
+    "text": "A bridge, a trap, a nursery, a record, a border: her silk is all of them at once. Pattern communicates authorship, and a skilled silksmith can name the weaver by tension alone."
+   },
+   {
+    "title": "Who Gave You Permission?",
+    "text": "Researchers prized her as a specimen before they understood her work. Her silk entered materials research, and Helix Industries sold commercial copies. She asked the obvious question. Who gave you permission?"
+   },
+   {
+    "title": "Nyxaris v. Helix",
+    "text": "The case grew bigger than money. She showed that her silk's tension, knots and crystal growth encode authorship, warning and family history. Humans had been looking at writing and calling it material."
+   },
+   {
+    "title": "The Patient Snail",
+    "text": "Her restraints keep failing against a snail whose answer to every pull is a longer pause. She respects it. Both of them make boundaries, and neither will cross the other's by force."
+   },
+   {
+    "title": "The Cold Archive",
+    "text": "She begins building a structure of living frozen silk that preserves the testimony of displaced peoples in patterns that cannot be separated from the structure. It is not a monument. It is a memory that cannot be edited."
+   }
+  ]
+ }
+}

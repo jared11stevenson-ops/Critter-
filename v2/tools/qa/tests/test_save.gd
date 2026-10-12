@@ -23,8 +23,8 @@ func run() -> Array:
 	var sys := SaveSystem.new(DIR)
 	sys.min_autosave_interval_ms = 0
 	var st := sys.new_game("a")
-	var h := st.seal("haldor", "Hal")
-	var z := st.seal("zell", "Zee")
+	var h := st.seal("aruun", "Hal")
+	var z := st.seal("zephyr", "Zee")
 	st.economy.add("scrap", 42)
 	# --- round trip + atomic + backup ---
 	QaCheck.is_true(fails, sys.save("a", st)["ok"], "first save")
@@ -49,7 +49,7 @@ func run() -> Array:
 	sys.save("a", st)
 	# --- death commits immediately: no explicit save call ---
 	sys.bind(st, "a")
-	var bo := BoutOutcome.make(h.uid, StakesTier.BLOOD, "killed", "kragg", 0.0, 0.0)
+	var bo := BoutOutcome.make(h.uid, StakesTier.BLOOD, "killed", "nyxaris", 0.0, 0.0)
 	bo.cause = "a bad read"
 	st.apply_bout(bo)
 	QaCheck.is_true(fails, sys.ledger.has(st.profile_id, h.uid), "ledger has the death")
@@ -82,7 +82,7 @@ func run() -> Array:
 	QaCheck.is_true(fails, stale.rack.get_by_uid(h.uid) == null, "save() strips a resurrected critter")
 	QaCheck.is_true(fails, SaveSystem.new(DIR).load_slot("a")["state"].is_fallen(h.uid), "disk still says dead")
 	# uid never reused after merge
-	var nu: CritterInstance = stale.seal("sessa")
+	var nu: CritterInstance = stale.seal("cigarra")
 	QaCheck.is_true(fails, nu.uid != h.uid and nu.uid != z.uid, "fresh uid after merge")
 	# --- ledger robustness: torn line, tampering, other profile ---
 	var led := sys.ledger
@@ -103,7 +103,7 @@ func run() -> Array:
 	QaCheck.eq(fails, led.entries(st.profile_id).size(), 2, "mirror ledger covers main loss")
 	# --- migrations ---
 	var v1 := {"version": 1, "profile": "pv1", "next_id": 3, "money": {"scrap": 7, "amber": 2, "rep": 5},
-		"critters": [{"uid": "c0001", "species": "sessa", "name": "S", "bouts": 4, "hp": 0.5}], "fallen": [{"uid": "c0002", "species": "weft", "name": "W"}]}
+		"critters": [{"uid": "c0001", "species": "cigarra", "name": "S", "bouts": 4, "hp": 0.5}], "fallen": [{"uid": "c0002", "species": "bramvex", "name": "W"}]}
 	var m := SaveMigrations.migrate(v1)
 	QaCheck.is_true(fails, m["ok"], "v1 migrates")
 	QaCheck.eq(fails, m["data"]["version"], SaveMigrations.CURRENT, "migrated to current")
@@ -139,8 +139,8 @@ func run() -> Array:
 	QaCheck.is_true(fails, not d.autosave("care"), "autosave deferred inside the interval")
 	QaCheck.is_true(fails, d.flush(), "flush writes deferred state")
 	QaCheck.eq(fails, SaveSystem.new(DIR).load_slot("deb")["state"].economy.scrap, 5, "flush persisted")
-	ds.seal("marro")
-	var mr := ds.seal("kragg")
+	ds.seal("mollusk")
+	var mr := ds.seal("nyxaris")
 	ds.kill(mr.uid, "test")    # death bypasses the debounce
 	QaCheck.is_true(fails, SaveSystem.new(DIR).load_slot("deb")["state"].is_fallen(mr.uid), "death ignores debounce")
 	QaCheck.eq(fails, SaveSystem.new(DIR).load_slot("nope")["ok"], false, "missing slot")

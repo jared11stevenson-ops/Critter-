@@ -14,19 +14,19 @@ func run() -> Array:
 	var s := _state()
 	var died_records: Array = []
 	s.critter_died.connect(func(r): died_records.append(r))
-	var c := s.seal("kragg", "Big K")
+	var c := s.seal("nyxaris", "Big K")
 	c.add_moment("Won a Blood Bout against a stag", 50.0)
 	# --- killed in Contest/Sparring is downgraded: only Blood Bouts kill ---
-	var r := s.apply_bout(BoutOutcome.make(c.uid, StakesTier.CONTEST, "killed", "haldor", 0.2, 0.2))
+	var r := s.apply_bout(BoutOutcome.make(c.uid, StakesTier.CONTEST, "killed", "aruun", 0.2, 0.2))
 	QaCheck.is_true(fails, not r["died"], "contest cannot kill")
 	QaCheck.is_true(fails, c.alive and c.vitality > 0.0, "survivor has vitality")
 	QaCheck.eq(fails, r["outcome"], "loss", "downgraded to loss")
-	r = s.apply_bout(BoutOutcome.make(c.uid, StakesTier.SPARRING, "killed", "haldor", 0.2, 0.2))
+	r = s.apply_bout(BoutOutcome.make(c.uid, StakesTier.SPARRING, "killed", "aruun", 0.2, 0.2))
 	QaCheck.is_true(fails, not r["died"], "sparring cannot kill")
 	# --- Blood Bout kill ---
 	for i in 4:
 		s.apply_bout(BoutOutcome.make(c.uid, StakesTier.CONTEST, "win", "toad"))
-	var bo := BoutOutcome.make(c.uid, StakesTier.BLOOD, "killed", "haldor", 0.0, 0.0)
+	var bo := BoutOutcome.make(c.uid, StakesTier.BLOOD, "killed", "aruun", 0.0, 0.0)
 	bo.cause = "Haldor's Quarry Maul"
 	var before_scrap := s.economy.scrap
 	r = s.apply_bout(bo)
@@ -39,14 +39,14 @@ func run() -> Array:
 	QaCheck.eq(fails, s.economy.scrap, before_scrap, "no reward for the dead")
 	var rec: Dictionary = s.wall[0]
 	QaCheck.eq(fails, rec["cause"], "Haldor's Quarry Maul", "cause recorded")
-	QaCheck.eq(fails, rec["relic"], "relic_kragg", "relic granted")
-	QaCheck.eq(fails, rec["last_move"], "lastmove_kragg", "last move granted")
+	QaCheck.eq(fails, rec["relic"], "relic_nyxaris", "relic granted")
+	QaCheck.eq(fails, rec["last_move"], "lastmove_nyxaris", "last move granted")
 	QaCheck.eq(fails, s.legacy["relics"].size(), 1, "legacy relic")
-	QaCheck.eq(fails, s.legacy["moves"][0]["from_species"], "kragg", "legacy last move")
+	QaCheck.eq(fails, s.legacy["moves"][0]["from_species"], "nyxaris", "legacy last move")
 	QaCheck.eq(fails, rec["died_at"], 5000, "died timestamp")
 	var ep: String = rec["epitaph"]
 	QaCheck.is_true(fails, ep.find("Big K") >= 0, "epitaph names it")
-	QaCheck.is_true(fails, ep.find("stag beetle") >= 0, "epitaph species")
+	QaCheck.is_true(fails, ep.find("frost weaver") >= 0, "epitaph species")
 	QaCheck.is_true(fails, ep.find("2 of 7") >= 0 or ep.find("chapters") >= 0, "epitaph chapters read")
 	QaCheck.is_true(fails, ep.find("Won a Blood Bout") >= 0, "epitaph best moment")
 	QaCheck.is_true(fails, ep.find("Quarry Maul") >= 0, "epitaph cause")
@@ -63,11 +63,11 @@ func run() -> Array:
 	s_b.load_dict(d)
 	QaCheck.eq(fails, s_b.rack.count(), 0, "wall wins over a stale rack entry")
 	# uid is never reused
-	var nxt := s.seal("zell")
+	var nxt := s.seal("zephyr")
 	QaCheck.is_true(fails, nxt.uid != c.uid, "uid not reused")
 	# --- yield / injuries / rewards ---
 	var s2 := _state()
-	var y := s2.seal("sessa")
+	var y := s2.seal("cigarra")
 	var rep := s2.apply_bout(BoutOutcome.make(y.uid, StakesTier.BLOOD, "yield", "toad", 0.12, 0.12))
 	QaCheck.eq(fails, rep["reward"], {}, "yield forfeits reward")
 	QaCheck.eq(fails, y.bouts_survived, 1, "yield counts as survived")

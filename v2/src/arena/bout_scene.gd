@@ -36,6 +36,7 @@ var scale_hold := 0.0
 var player_idx := 0                  # which fighter the HUD / touch controls belong to (-1 = spectating)
 var stats := {"ticks": 0, "frames": 0, "max_ticks_frame": 0, "events": 0}
 var low_vit_offered := false
+var min_ratio: Array = [1.0, 1.0]       # lowest Vitality ratio each fighter reached (near-death check for the career)
 var on_tick: Callable = Callable()      # optional (sim) -> void after every tick (tests, replays)
 
 var _acc := 0.0
@@ -59,6 +60,8 @@ func start(config: BoutConfig) -> void:
 	var da := CombatData.critter(cfg.a_id)
 	var db := CombatData.critter(cfg.b_id)
 	sim = CombatSim.new(da, db, arena_def, cfg.stakes(), cfg.seed_value)
+	sim.fighters[0].vit = maxf(1.0, sim.fighters[0].max_vit * clampf(cfg.a_vit, 0.01, 1.0))
+	sim.fighters[1].vit = maxf(1.0, sim.fighters[1].max_vit * clampf(cfg.b_vit, 0.01, 1.0))
 	if cfg.timeout_ticks > 0:
 		sim.R = sim.R.duplicate()
 		sim.R["timeout_ticks"] = cfg.timeout_ticks
@@ -317,6 +320,9 @@ func _flash_invert() -> void:
 
 ## The 'Yield or fight on' beat: the first time the human's Vitality drops under the Last Stand line, the world slows and the HUD asks.
 func _check_moment(st: Dictionary) -> void:
+	for i in 2:
+		var fi: Dictionary = st["fighters"][i]
+		min_ratio[i] = minf(float(min_ratio[i]), float(fi["vitality"]) / maxf(1.0, float(fi["vitality_max"])))
 	if low_vit_offered or player_idx < 0 or phase != "fight":
 		return
 	var f: Dictionary = st["fighters"][player_idx]
@@ -333,6 +339,7 @@ func _begin_outro() -> void:
 	_result["player_idx"] = player_idx
 	_result["training"] = cfg.training
 	_result["stats"] = stats.duplicate()
+	_result["min_ratio"] = min_ratio.duplicate()
 	_result["profile"] = cfg.profile_b if player_idx == 0 else cfg.profile_a
 	var loser := int(_result.get("loser", -1))
 	if loser >= 0:

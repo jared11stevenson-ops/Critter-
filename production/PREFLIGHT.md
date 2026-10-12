@@ -33,3 +33,12 @@ Open before adding more:
 3. **Hit-time and projectile VFX** only partly verified in renders (cast effects verified in the lab; hit styles and entity visuals verified by code, not every case by eye).
 4. Balance matrix and role-pair targets still to finish; music still empty (slots reserved).
 5. Realism ladder R2 for characters, backdrop lookdev, display font.
+
+## Update v0.5.0 (Lead, 2026-10-12): the career loop (first real game around the duel)
+Landed (law-compliant, see design/v2/CREATOR_GDD.md): PLAY now starts a CAREER: Aruun is the tutorial critter (founder of the giraffe-beetle jar) with timed control tips in a safe training bout, then the SHELF (60 jars, Vitality rings, founder crown, champion/retired marks, per-critter record, LIFE STORY with 7 chapters each: unlocked ones readable, locked ones shown as redactions with their unlock condition; 49 chapters written from the lore), EXPEDITION (pick a homeland region + the critter you RISK -> wild bout to the death -> win = choose SEAL or FINISH -> SEAL requires an EXTRACTION bout; success captures a new critter, first of its species becomes the founder; failure loses the captive), TOURNAMENT (5-rung ladder, every fight lethal, Champion Tournament, then RETIRE or DEFEND), HEAL (30 scrap), WALL OF THE FALLEN (epitaph, chapters read, redacted chapters never read). Permadeath is committed immediately (deaths ledger). Vitality carries over between bouts; time passes (+10% heal for the others each bout). Rack capacity 60. Roster model: founder/retired/champion/ladder fields, species_seen. New test test_career.gd (27 test files green).
+Open before adding more:
+1. **Not yet built:** Habitat Jar diorama / autonomous civilization, breeding/retired families (deferred by creator), expedition exploration beyond one encounter, per-region ecology.
+2. **Expedition rules v0:** one wild encounter + one extraction bout (the creator's loop wants exploration/observation/persuasion options); closing the app mid-expedition currently has no penalty (needs a committed-expedition record to stop save-scumming).
+3. **Balance:** matrix not final; role-pair targets unverified; wild/tournament opponent difficulty is a first guess (profiles novice..expert).
+4. **UI polish:** shelf screen verified at 1280x720 only (check 20:9 and tall phones), result panels use the shared theme, no audio on menus.
+5. **Chapter prose** is a lore-faithful placeholder for the creator to rewrite.

@@ -18,11 +18,14 @@ func run() -> Array:
 	var s := _state()
 	# --- rack ---
 	var cs: Array = []
-	for sp in ["haldor", "sessa", "weft", "cinder", "marro", "zell", "kragg"]:
+	for sp in ["aruun", "cigarra", "bramvex", "scarlith", "mollusk", "zephyr", "nyxaris"]:
 		cs.append(s.seal(sp))
-	QaCheck.eq(fails, s.rack.count(), 7, "seven jars")
-	QaCheck.is_true(fails, s.rack.is_full(), "rack full")
-	QaCheck.is_true(fails, s.seal("haldor") == null, "8th seal refused")
+	QaCheck.eq(fails, s.rack.count(), 7, "seven jars used")
+	QaCheck.is_true(fails, not s.rack.is_full(), "the Shelf (60) is not full")
+	while not s.rack.is_full():
+		s.seal("aruun")
+	QaCheck.is_true(fails, s.seal("aruun") == null, "61st seal refused")
+	QaCheck.eq(fails, s.rack.count(), 60, "sixty jars")
 	QaCheck.eq(fails, s.rack.slot_of(cs[3].uid), 3, "stable slots")
 	for c in cs:
 		QaCheck.eq(fails, c.chapters_unlocked, [1], "chapter 1 on seal: " + c.species)
@@ -44,7 +47,7 @@ func run() -> Array:
 	# ch3 needs the bond: a critter at 8 bouts but bond < 3 must not unlock
 	var lone := CritterInstance.new()
 	lone.uid = "x"
-	lone.species = "haldor"
+	lone.species = "aruun"
 	lone.bouts_survived = 8
 	lone.bond_points = 10
 	QaCheck.is_true(fails, not s.rules.chapter_met(lone, 3), "ch3 blocked at bond 2")
@@ -68,11 +71,11 @@ func run() -> Array:
 	QaCheck.is_true(fails, h.has_chapter(5), "ch5 at 20")
 	# --- ch6: win vs rival species (Haldor <-> Kragg) ---
 	QaCheck.is_true(fails, not h.has_chapter(6), "no ch6 yet")
-	_bout(s, h, StakesTier.CONTEST, "loss", "kragg")
+	_bout(s, h, StakesTier.CONTEST, "loss", "cigarra")
 	QaCheck.is_true(fails, not h.has_chapter(6), "losing to rival does not unlock")
-	_bout(s, h, StakesTier.SPARRING, "win", "kragg")
+	_bout(s, h, StakesTier.SPARRING, "win", "cigarra")
 	QaCheck.is_true(fails, not h.has_chapter(6), "sparring win vs rival does not unlock")
-	_bout(s, h, StakesTier.CONTEST, "win", "kragg")
+	_bout(s, h, StakesTier.CONTEST, "win", "cigarra")
 	QaCheck.eq(fails, h.wins_vs_rival, 1, "rival win counted")
 	QaCheck.is_true(fails, h.has_chapter(6), "ch6 on rival win")
 	# --- ch7: 40 bouts + personal trial ---
@@ -87,20 +90,20 @@ func run() -> Array:
 	s.complete_trial(k.uid)
 	QaCheck.is_true(fails, not k.has_chapter(7), "trial alone is not enough")
 	# --- rivals table: every pairing ---
-	var pairs := {"haldor": "kragg", "sessa": "zell", "weft": "marro", "cinder": "mudge", "marro": "weft", "zell": "sessa", "kragg": "haldor"}
+	var pairs := {"aruun": "cigarra", "cigarra": "nyxaris", "bramvex": "aruun", "scarlith": "zephyr", "mollusk": "scarlith", "zephyr": "bramvex", "nyxaris": "mollusk"}
 	for sp in pairs:
 		QaCheck.eq(fails, s.rules.rival_of(sp), pairs[sp], "rival of " + sp)
 	# --- per-critter override replaces a chapter's rule ---
 	var rules := StoryRules.from_dict({
 		"chapters": 7, "default": {"1": [{"type": "sealed"}], "2": [{"type": "bouts_survived", "min": 3}]},
-		"overrides": {"sessa": {"2": [{"type": "bouts_survived", "min": 1}]}}, "species": {}})
+		"overrides": {"cigarra": {"2": [{"type": "bouts_survived", "min": 1}]}}, "species": {}})
 	var a := CritterInstance.new()
 	a.uid = "a"
-	a.species = "sessa"
+	a.species = "cigarra"
 	a.bouts_survived = 1
 	var b := CritterInstance.new()
 	b.uid = "b"
-	b.species = "haldor"
+	b.species = "aruun"
 	b.bouts_survived = 1
 	QaCheck.eq(fails, rules.evaluate(a), [1, 2], "override unlocks earlier")
 	QaCheck.eq(fails, rules.evaluate(b), [1], "default unaffected")
@@ -108,7 +111,7 @@ func run() -> Array:
 	QaCheck.eq(fails, rules.evaluate(a), [], "idempotent")
 	# --- sparring gives no progression, only bond ---
 	var s2 := _state()
-	var sp1 := s2.seal("weft")
+	var sp1 := s2.seal("bramvex")
 	for i in 5:
 		_bout(s2, sp1, StakesTier.SPARRING, "win", "toad")
 	QaCheck.eq(fails, sp1.bouts_survived, 0, "sparring does not count")

@@ -11,9 +11,16 @@ var training := false             # Training: stakes 0, nobody dies, nothing cou
 var seed_value := 1
 var intro := true                 # camera sweep + READY/FIGHT before the first tick
 var layout := "A"                 # touch layout A (buttons) or B (gestures)
+var a_vit := 1.0                  # starting Vitality ratio (career: carried over between bouts)
+var b_vit := 1.0
+var a_name := ""                  # display names (career individuals); "" = species name
+var b_name := ""
+var stakes_override := -1         # -1 = default (training 0, otherwise Blood 2)
 var timeout_ticks := 0            # 0 = rules default; the smoke test lowers it
 
 func stakes() -> int:
+	if stakes_override >= 0:
+		return stakes_override
 	return 0 if training else 2   # 2 = Blood Bout: every real fight risks permanent death (CREATOR_GDD section 1, 14.8)
 
 func describe() -> String:

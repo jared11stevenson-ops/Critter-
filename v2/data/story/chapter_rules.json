@@ -1,33 +1,95 @@
 {
-	"version": 1,
-	"_doc": "Life Story chapter unlock rules (GDD 7). A chapter unlocks when ALL of its conditions hold. Condition types: sealed, bouts_survived{min}, bond{min}, near_death{min}, wins_vs_rival{min}, trial_complete. 'overrides' replace a whole chapter rule for one species (per-critter variation).",
-	"chapters": 7,
-	"default": {
-		"1": [{"type": "sealed"}],
-		"2": [{"type": "bouts_survived", "min": 3}],
-		"3": [{"type": "bouts_survived", "min": 8}, {"type": "bond", "min": 3}],
-		"4": [{"type": "near_death", "min": 1}],
-		"5": [{"type": "bouts_survived", "min": 20}],
-		"6": [{"type": "wins_vs_rival", "min": 1}],
-		"7": [{"type": "bouts_survived", "min": 40}, {"type": "trial_complete"}]
-	},
-	"overrides": {
-		"haldor": {},
-		"sessa": {},
-		"weft": {},
-		"cinder": {},
-		"marro": {},
-		"zell": {},
-		"kragg": {}
-	},
-	"_todo": "Per-critter overrides and the seven personal trials are stubbed to the defaults; Lead/story to fill 'overrides' and set trial_complete via RosterState.complete_trial().",
-	"species": {
-		"haldor": {"title": "rhinoceros beetle", "rival": "kragg"},
-		"sessa": {"title": "praying mantis", "rival": "zell"},
-		"weft": {"title": "orb-weaver", "rival": "marro"},
-		"cinder": {"title": "bombardier beetle", "rival": "mudge"},
-		"marro": {"title": "army ant", "rival": "weft"},
-		"zell": {"title": "dragonfly", "rival": "sessa"},
-		"kragg": {"title": "stag beetle", "rival": "haldor"}
-	}
+ "version": 1,
+ "_doc": "Life Story chapter unlock rules (GDD 7). A chapter unlocks when ALL of its conditions hold. Condition types: sealed, bouts_survived{min}, bond{min}, near_death{min}, wins_vs_rival{min}, trial_complete. 'overrides' replace a whole chapter rule for one species (per-critter variation).",
+ "chapters": 7,
+ "default": {
+  "1": [
+   {
+    "type": "sealed"
+   }
+  ],
+  "2": [
+   {
+    "type": "bouts_survived",
+    "min": 3
+   }
+  ],
+  "3": [
+   {
+    "type": "bouts_survived",
+    "min": 8
+   },
+   {
+    "type": "bond",
+    "min": 3
+   }
+  ],
+  "4": [
+   {
+    "type": "near_death",
+    "min": 1
+   }
+  ],
+  "5": [
+   {
+    "type": "bouts_survived",
+    "min": 20
+   }
+  ],
+  "6": [
+   {
+    "type": "wins_vs_rival",
+    "min": 1
+   }
+  ],
+  "7": [
+   {
+    "type": "bouts_survived",
+    "min": 40
+   },
+   {
+    "type": "trial_complete"
+   }
+  ]
+ },
+ "overrides": {
+  "aruun": {},
+  "cigarra": {},
+  "bramvex": {},
+  "scarlith": {},
+  "mollusk": {},
+  "zephyr": {},
+  "nyxaris": {}
+ },
+ "_todo": "Per-critter overrides and the seven personal trials are stubbed to the defaults; Lead/story to fill 'overrides' and set trial_complete via RosterState.complete_trial().",
+ "species": {
+  "aruun": {
+   "title": "giraffe beetle",
+   "rival": "cigarra"
+  },
+  "cigarra": {
+   "title": "treehopper",
+   "rival": "nyxaris"
+  },
+  "bramvex": {
+   "title": "stick insect",
+   "rival": "aruun"
+  },
+  "scarlith": {
+   "title": "velvet mite",
+   "rival": "zephyr"
+  },
+  "mollusk": {
+   "title": "giant snail",
+   "rival": "scarlith"
+  },
+  "zephyr": {
+   "title": "hawk-moth",
+   "rival": "bramvex"
+  },
+  "nyxaris": {
+   "title": "frost weaver",
+   "rival": "mollusk"
+  }
+ }
 }

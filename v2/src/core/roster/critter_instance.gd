@@ -19,6 +19,11 @@ var scars: Array = []              # [{id, tier, at_bout}]
 var chapters_unlocked: Array = []  # sorted ints 1..7
 var moments: Array = []            # best moments: [{text, score}], kept top 5
 var alive := true
+var founder := false       # first of its species ever sealed: founding King/Queen of that species' jar
+var retired := false       # retired after the Champion Tournament: peaceful life, no more fights
+var champion := false
+var tourney_wins := 0      # wins on the current tournament ladder (0..4)
+var titles_defended := 0
 var born_at := 0                   # unix seconds
 var sealed_at := 0
 var died_at := 0
@@ -56,7 +61,7 @@ func to_dict() -> Dictionary:
 		"uid": uid, "species": species, "name": name, "vitality": vitality, "stress": stress, "hunger": hunger, "mess": mess,
 		"bond_points": bond_points, "bouts_survived": bouts_survived, "near_death_count": near_death_count,
 		"wins_vs_rival": wins_vs_rival, "trial_complete": trial_complete, "scars": scars.duplicate(true),
-		"chapters_unlocked": chapters_unlocked.duplicate(), "moments": moments.duplicate(true), "alive": alive,
+		"chapters_unlocked": chapters_unlocked.duplicate(), "moments": moments.duplicate(true), "alive": alive, "founder": founder, "retired": retired, "champion": champion, "tourney_wins": tourney_wins, "titles_defended": titles_defended,
 		"born_at": born_at, "sealed_at": sealed_at, "died_at": died_at, "cause_of_death": cause_of_death,
 		"epitaph": epitaph, "last_move": last_move, "relic": relic,
 	}
@@ -83,6 +88,11 @@ static func from_dict(d: Dictionary) -> CritterInstance:
 	c.chapters_unlocked.sort()
 	c.moments = (d.get("moments", []) as Array).duplicate(true)
 	c.alive = bool(d.get("alive", true))
+	c.founder = bool(d.get("founder", false))
+	c.retired = bool(d.get("retired", false))
+	c.champion = bool(d.get("champion", false))
+	c.tourney_wins = maxi(0, int(d.get("tourney_wins", 0)))
+	c.titles_defended = maxi(0, int(d.get("titles_defended", 0)))
 	c.born_at = int(d.get("born_at", 0))
 	c.sealed_at = int(d.get("sealed_at", 0))
 	c.died_at = int(d.get("died_at", 0))

@@ -1,0 +1,160 @@
+{
+ "regions": [
+  {
+   "id": "red_reaches",
+   "name": "Red Reaches",
+   "blurb": "Plateaus, mineral desert and fracture valleys held together by bridges.",
+   "species": "aruun",
+   "profile": "novice",
+   "reward": 1.0
+  },
+  {
+   "id": "canopy_fold",
+   "name": "Canopy Fold",
+   "blurb": "A vertical forest where routes change with the weather.",
+   "species": "cigarra",
+   "profile": "novice",
+   "reward": 1.0
+  },
+  {
+   "id": "thornmarch",
+   "name": "Thornmarch",
+   "blurb": "Thorn forests, elevated ruins and a long memory of war.",
+   "species": "bramvex",
+   "profile": "standard",
+   "reward": 1.3
+  },
+  {
+   "id": "velvet_warrens",
+   "name": "Velvet Warrens",
+   "blurb": "Rotting forests and fungal basins where nothing is wasted.",
+   "species": "scarlith",
+   "profile": "standard",
+   "reward": 1.3
+  },
+  {
+   "id": "rainward",
+   "name": "Rainward",
+   "blurb": "A storm continent where floods redraw the map.",
+   "species": "mollusk",
+   "profile": "standard",
+   "reward": 1.5
+  },
+  {
+   "id": "briarwild",
+   "name": "Briarwild",
+   "blurb": "A flowering ecosystem where agreements matter more than borders.",
+   "species": "zephyr",
+   "profile": "expert",
+   "reward": 1.8
+  },
+  {
+   "id": "frostbloom",
+   "name": "Frostbloom",
+   "blurb": "Glaciers over geothermal vents, with flowers growing out of the ice.",
+   "species": "nyxaris",
+   "profile": "expert",
+   "reward": 2.0
+  }
+ ],
+ "names": {
+  "aruun": [
+   "Tamsin",
+   "Orrik",
+   "Beck",
+   "Dunmar",
+   "Halle",
+   "Pike",
+   "Rusk",
+   "Vell"
+  ],
+  "cigarra": [
+   "Fennel",
+   "Pip",
+   "Sorrel",
+   "Wren",
+   "Juniper",
+   "Tansy",
+   "Lark",
+   "Moss"
+  ],
+  "bramvex": [
+   "Corporal Ash",
+   "Brindle",
+   "Sedge",
+   "Rook",
+   "Thistle",
+   "Quill",
+   "Bracken",
+   "Flint"
+  ],
+  "scarlith": [
+   "Gouda",
+   "Brie",
+   "Rind",
+   "Pickle",
+   "Truffle",
+   "Marrow",
+   "Crumb",
+   "Velvet"
+  ],
+  "mollusk": [
+   "Pebble",
+   "Drift",
+   "Barnaby",
+   "Mossback",
+   "Tidewell",
+   "Loam",
+   "Dewdrop",
+   "Hobb"
+  ],
+  "zephyr": [
+   "Whisk",
+   "Nectar",
+   "Flit",
+   "Gossamer",
+   "Tuft",
+   "Sprig",
+   "Zinnia",
+   "Wisp"
+  ],
+  "nyxaris": [
+   "Rime",
+   "Hoarfrost",
+   "Sleet",
+   "Glac\u00e9",
+   "Icicle",
+   "Flurry",
+   "Frond",
+   "Pale"
+  ]
+ },
+ "tournament": [
+  {
+   "rank": "Qualifier",
+   "profile": "novice",
+   "scrap": 30
+  },
+  {
+   "rank": "Bronze",
+   "profile": "standard",
+   "scrap": 50
+  },
+  {
+   "rank": "Silver",
+   "profile": "standard",
+   "scrap": 80
+  },
+  {
+   "rank": "Gold",
+   "profile": "expert",
+   "scrap": 120
+  },
+  {
+   "rank": "Champion Tournament",
+   "profile": "expert",
+   "scrap": 300,
+   "amber": 3
+  }
+ ]
+}

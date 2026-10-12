@@ -3,7 +3,7 @@ extends RefCounted
 ## The Rack: up to 7 jar slots (GDD 4). Slots hold living CritterInstance or null. Slot indices are stable
 ## (removing a critter leaves its jar empty) so the Rack screen layout does not jump.
 
-const CAPACITY := 7
+const CAPACITY := 60   # the Habitat Shelf holds up to 60 critters (creator, Addendum 1)
 
 var slots: Array = []
 

@@ -46,6 +46,8 @@ func _ready() -> void:
 			get_tree().create_timer(0.8).timeout.connect(_fake_result)
 		return
 	match str(_args.get("screen", "title")):
+		"shelf": _debug_shelf()
+		"career": go_play()
 		"select": go_select()
 		"opponent": go_opponent()
 		"bout": go_bout()
@@ -72,7 +74,7 @@ func go_title() -> void:
 	var t := TitleScreen.new()
 	add_child(t)
 	t.setup(int(_args.get("seed", 0)))
-	t.play_pressed.connect(func(): training = false; go_select())
+	t.play_pressed.connect(go_play)
 	t.training_pressed.connect(func(): training = true; go_select())
 	screen = t
 
@@ -104,6 +106,152 @@ func go_opponent() -> void:
 		UiPrefs.set_pref("arena", arena_id)
 		go_bout())
 	screen = s
+
+# ------------------------------------------------------------------ career (the real game loop; see design/v2/CREATOR_GDD.md)
+var career_ctx: Dictionary = {}
+var career_layer: CanvasLayer
+var tips: TutorialTips
+
+## QA only: a populated career (screenshots): --screen=shelf
+func _debug_shelf() -> void:
+	var r := GameSave.start_new("qa")
+	var a := r.seal("aruun", "Aruun")
+	a.bouts_survived = 9
+	a.bond_points = 40
+	a.chapters_unlocked = [1, 2, 3]
+	a.vitality = 0.8
+	for sp in ["cigarra", "bramvex", "scarlith", "mollusk", "zephyr", "nyxaris", "aruun", "cigarra"]:
+		var c := r.seal(sp, Career.random_name(sp, r))
+		c.vitality = randf_range(0.3, 1.0)
+	var ch := r.seal("mollusk", "Pebble")
+	ch.champion = true
+	ch.retired = true
+	var d := r.seal("zephyr", "Whisk")
+	r.kill(d.uid, "a tournament bout against Aruun")
+	r.economy.scrap = 140
+	go_shelf(a.uid)
+
+func go_play() -> void:
+	if Career.has_save() and GameSave.continue_game():
+		go_shelf()
+	else:
+		Career.start_new()
+		var r := Career.roster()
+		var c: CritterInstance = r.rack.living()[0]
+		career_ctx = {"kind": "tutorial", "uid": c.uid, "opp_species": "mollusk", "profile": "novice"}
+		go_career_bout(true)
+
+func go_shelf(select_uid := "") -> void:
+	_clear()
+	if tips != null:
+		tips.queue_free()
+		tips = null
+	var sh := ShelfScreen.new()
+	add_child(sh)
+	sh.setup(Career.roster(), select_uid)
+	sh.title_pressed.connect(go_title)
+	sh.wall_pressed.connect(func(): CareerPanels.wall(sh, Career.roster()))
+	sh.expedition_pressed.connect(func(): CareerPanels.expedition(sh, Career.roster(), _launch_expedition))
+	sh.tournament_pressed.connect(func(uid: String): CareerPanels.tournament(sh, Career.roster(), uid, _launch_tournament, func(u: String): _retire(sh, u)))
+	sh.training_pressed.connect(_launch_training)
+	screen = sh
+
+func _retire(sh: ShelfScreen, uid: String) -> void:
+	Career.retire(Career.roster(), uid)
+	sh.refresh(uid)
+
+func _launch_training(uid: String) -> void:
+	career_ctx = {"kind": "training", "uid": uid, "opp_species": "mollusk", "profile": "standard"}
+	go_career_bout(true)
+
+func _launch_expedition(region_id: String, uid: String) -> void:
+	var reg := Career.region(region_id)
+	career_ctx = {"kind": "expedition", "uid": uid, "region": region_id, "opp_species": str(reg["species"]), "profile": str(reg["profile"])}
+	go_career_bout(false)
+
+func _launch_tournament(uid: String) -> void:
+	var c := Career.roster().get_critter(uid)
+	var rung := Career.next_rung(c)
+	career_ctx = {"kind": "tournament", "uid": uid, "rung": c.tourney_wins, "opp_species": Career.opponent_for_rung(rung, c), "profile": str(rung["profile"])}
+	go_career_bout(false)
+
+func go_career_bout(training_flag: bool) -> void:
+	_clear()
+	var c := Career.roster().get_critter(str(career_ctx["uid"]))
+	if c == null:
+		go_shelf()
+		return
+	var cfg := Career.make_config(c, str(career_ctx["opp_species"]), str(career_ctx["profile"]), 1.0, training_flag or str(career_ctx["kind"]) in ["tutorial", "training"], arena_id)
+	if str(career_ctx["kind"]) == "extraction":
+		cfg.b_vit = 0.8
+	cfg.intro = not _args.has("nointro")
+	cfg.human_a = not _args.has("spectate")
+	var b := BoutScene.new()
+	add_child(b)
+	b.start(cfg)
+	b.hud.quit_requested.connect(go_shelf)
+	b.finished.connect(_on_career_finished)
+	bout = b
+	if str(career_ctx["kind"]) == "tutorial":
+		tips = TutorialTips.new()
+		add_child(tips)
+
+func _on_career_finished(res: Dictionary) -> void:
+	if tips != null:
+		tips.queue_free()
+		tips = null
+	if bout != null:
+		bout.hud.touch.release_all()
+		bout.hud.visible = false
+	var kind := str(career_ctx["kind"])
+	var layer := CanvasLayer.new()
+	layer.layer = 30
+	add_child(layer)
+	var host := Control.new()
+	host.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	host.theme = UiStyle.theme()
+	layer.add_child(host)
+	career_layer = layer
+	var uid := str(career_ctx["uid"])
+	if kind in ["tutorial", "training"]:
+		var won := int(res.get("winner", -1)) == 0
+		var rep := {"headline": ("Well fought." if won else "Not yet."), "tone": "win" if won else "loss", "lines": [
+			"Training is safe: nothing is lost and nothing counts." if kind == "training" else "That was the tutorial. From here on every fight is real, and death is permanent.",
+			"Your Shelf is ready. Send Aruun on an expedition to capture a new critter, or enter a tournament."], "died": false}
+		var choices := [["shelf", "TO THE SHELF", UiStyle.GOLD], ["retry", "AGAIN", UiStyle.TEAL_LT]]
+		CareerPanels.result(host, rep, choices, func(id: String): _tutorial_choice(id, layer, uid))
+		return
+	var rep := Career.resolve(Career.roster(), career_ctx, res)
+	var choices: Array = []
+	if bool(rep["died"]):
+		choices = [["shelf", "TO THE SHELF", UiStyle.GOLD]]
+	elif bool(rep["capture_offer"]):
+		choices = [["seal", "SEAL IT", UiStyle.GREEN], ["finish", "FINISH IT", UiStyle.RUST]]
+	elif bool(rep.get("champion", false)):
+		choices = [["shelf", "TO THE SHELF", UiStyle.GOLD]]
+	else:
+		choices = [["shelf", "CONTINUE", UiStyle.GOLD]]
+	CareerPanels.result(host, rep, choices, func(id: String): _career_choice(id, layer, uid))
+
+func _tutorial_choice(id: String, layer: CanvasLayer, uid: String) -> void:
+	layer.queue_free()
+	if id == "retry":
+		go_career_bout(true)
+	else:
+		go_shelf(uid)
+
+func _career_choice(id: String, layer: CanvasLayer, uid: String) -> void:
+	layer.queue_free()
+	if id == "seal":
+		var c := Career.roster().get_critter(uid)
+		career_ctx = Career.begin_extraction(c, str(career_ctx["opp_species"]), str(career_ctx.get("region", "")))
+		career_ctx["profile"] = "standard"
+		go_career_bout(false)
+	elif id == "finish":
+		Career.finish_wild(Career.roster())
+		go_shelf(uid)
+	else:
+		go_shelf(uid)
 
 func make_config() -> BoutConfig:
 	var cfg := BoutConfig.new()
