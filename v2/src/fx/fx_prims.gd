@@ -4,6 +4,7 @@ extends RefCounted
 ## and frees itself. Cheap on Compatibility: one draw per piece, no shaders beyond StandardMaterial3D, concurrent pieces are capped by BoutVfx.
 
 static var _cres: ArrayMesh
+static var density := 1.0   # particle amount multiplier from the quality setting (Low 0.45, Medium 0.75, High 1.0)
 const K := 1.9            # global boldness: widths, particle sizes, ring thickness (the bout camera is far, thin effects vanish)
 
 static func mat(col: Color, additive := false) -> StandardMaterial3D:
@@ -131,7 +132,7 @@ static func sparks(parent: Node3D, pos: Vector3, col: Color, n := 14, speed := 4
 	q.size = Vector2(size * K, size * K)
 	q.material = _billboard_mat(col)
 	p.mesh = q
-	p.amount = int(float(n) * 1.3)
+	p.amount = maxi(2, int(float(n) * 1.3 * density))
 	p.lifetime = life
 	p.one_shot = true
 	p.explosiveness = 1.0
@@ -159,7 +160,7 @@ static func emitter(parent: Node3D, pos: Vector3, col: Color, n := 18, life := 0
 	q.size = Vector2(size, size)
 	q.material = _billboard_mat(col)
 	p.mesh = q
-	p.amount = n
+	p.amount = maxi(2, int(float(n) * density))
 	p.lifetime = life
 	p.emission_shape = CPUParticles3D.EMISSION_SHAPE_SPHERE
 	p.emission_sphere_radius = radius

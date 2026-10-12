@@ -7,6 +7,22 @@ extends RefCounted
 const ROLE_OF := {"aruun": "Breaker", "cigarra": "Reader", "bramvex": "Warden", "scarlith": "Brewer", "mollusk": "Anchor", "zephyr": "Drifter", "nyxaris": "Binder"}
 const HEAL_PER_BOUT := 0.10
 const HEAL_COST := 30
+const ROLE_INFO := {
+	"Breaker": ["Force: shatters guards and poise, punishes whiffs", "patient, evasive play that drains Rage"],
+	"Reader": ["Information: sees attacks early, bends the enemy's choices", "restraint and unreadable pressure"],
+	"Warden": ["Territory: traps and terrain funnel the enemy", "open fast fights with nothing to hold"],
+	"Brewer": ["Time: damage and pressure ripen as the fight goes on", "short sudden fights, being kited early"],
+	"Anchor": ["Tempo: delays and stores damage, picks when it lands", "burst that pays the debt all at once"],
+	"Drifter": ["Initiative: chooses when and where the fight happens", "traps and territory that catch mobility"],
+	"Binder": ["Restriction: removes your options with silk and cold", "fast pressure that drains her silk"]}
+const HABITAT := {
+	"aruun": "Red ochre soil, a tiny span of stone and rope, and one stubborn vine that keeps trying to climb the glass.",
+	"cigarra": "A thin branch tower, hanging leaves and a hollow where the light moves around all day.",
+	"bramvex": "Dry thorn scrub, a few elevated ruins and a patch of ground with no good hiding places. He rearranged it twice.",
+	"scarlith": "Rotting log, damp moss, a fungal basin and a small hoard of things other people threw away.",
+	"mollusk": "Warm wet loam, broad leaves and a puddle that never quite drains. Everything here is built to be repaired.",
+	"zephyr": "A cluster of blooming vines that open in turn, and just enough draft to keep the petals moving.",
+	"nyxaris": "Cold stone, a rime of frost and a thermal vent at the back that she hates, and uses."}
 static var _data: Dictionary = {}
 static var _chapters: Dictionary = {}
 
@@ -43,6 +59,19 @@ static func species_name(species: String) -> String:
 
 static func role_of(species: String) -> String:
 	return ROLE_OF.get(species, "Fighter")
+
+## Scouting card for an expedition/tournament opponent: role, how it wins, what beats it, its three abilities.
+static func scout_info(species: String) -> Dictionary:
+	var role := role_of(species)
+	var info: Array = ROLE_INFO.get(role, ["", ""])
+	var d := CombatData.critter(species)
+	var names: Array = []
+	if d != null:
+		for id in Hud.ability_ids(d):
+			var m: MoveDef = d.move(str(id)) if str(id) != "" else null
+			if m != null:
+				names.append(m.name)
+	return {"role": role, "wins": info[0], "weak": info[1], "abilities": names, "species": species_name(species)}
 
 static func random_name(species: String, roster: RosterState) -> String:
 	var pool: Array = data()["names"].get(species, [species.capitalize()])
@@ -103,6 +132,30 @@ static func make_config(c: CritterInstance, opp_species: String, profile: String
 ## kinds: "tutorial" | "expedition" | "extraction" | "tournament"
 ## ctx: {kind, uid, opp_species, region?, rank?} ; res: the BoutScene result dictionary.
 ## Returns a report for the UI: {headline, tone, lines:[], died, record, capture_offer, chapters:[{n,title}], continue_to}
+## Commits a real (lethal) career bout: if the app is closed mid-fight the bout counts as abandoned (see settle_abandoned).
+static func commit(r: RosterState, ctx: Dictionary) -> void:
+	r.pending = {"kind": str(ctx["kind"]), "uid": str(ctx["uid"]), "captive": str(ctx.get("captive", ""))}
+	_autosave("commit")
+
+## On load: an unfinished committed bout is a loss: the critter limps home at 20% Vitality (it cannot be used to dodge death).
+static func settle_abandoned(r: RosterState) -> String:
+	if r.pending.is_empty():
+		return ""
+	var p := r.pending
+	r.pending = {}
+	var c := r.get_critter(str(p.get("uid", "")))
+	var msg := "You left a fight unfinished."
+	if c != null:
+		c.vitality = minf(c.vitality, 0.2)
+		c.stress = clampf(c.stress + 15.0, 0.0, 100.0)
+		if str(p.get("kind", "")) == "tournament":
+			c.tourney_wins = 0
+		msg = "%s limped home from an abandoned %s at 20%% Vitality." % [c.name, str(p.get("kind", "fight"))]
+	if str(p.get("kind", "")) == "extraction":
+		msg += " The captive escaped."
+	_autosave("abandoned")
+	return msg
+
 static func resolve(r: RosterState, ctx: Dictionary, res: Dictionary) -> Dictionary:
 	var kind := str(ctx["kind"])
 	var uid := str(ctx["uid"])
@@ -111,6 +164,7 @@ static func resolve(r: RosterState, ctx: Dictionary, res: Dictionary) -> Diction
 	if c == null:
 		rep["headline"] = "That critter is gone."
 		return rep
+	r.pending = {}
 	var winner := int(res.get("winner", -1))
 	var won := winner == 0
 	rep["won"] = won

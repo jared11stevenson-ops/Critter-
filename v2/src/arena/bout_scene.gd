@@ -252,6 +252,10 @@ func _sync(dt: float, alpha: float) -> void:
 		sh.position = Vector3(pos.x, 0.015, pos.y)
 		sh.visible = y > -0.5
 
+func fighter_name(i: int) -> String:
+	var n: String = cfg.a_name if i == 0 else cfg.b_name
+	return n if n != "" else sim.fighters[i].def.display_name
+
 # ------------------------------------------------------------------ sim events -> presentation
 func _on_event(ev: Dictionary, st: Dictionary) -> void:
 	var idx := int(ev.get("fighter", 0))

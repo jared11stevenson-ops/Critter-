@@ -259,5 +259,21 @@
   "anchor",
   "binder",
   "reader"
- ]
+ ],
+ "role_pressure": {
+  "breaker>warden": 1.08,
+  "warden>breaker": 0.93,
+  "warden>drifter": 1.08,
+  "drifter>warden": 0.93,
+  "drifter>brewer": 1.08,
+  "brewer>drifter": 0.93,
+  "brewer>anchor": 1.08,
+  "anchor>brewer": 0.93,
+  "anchor>binder": 1.08,
+  "binder>anchor": 0.93,
+  "binder>reader": 1.08,
+  "reader>binder": 0.93,
+  "reader>breaker": 1.08,
+  "breaker>reader": 0.93
+ }
 }

@@ -4,6 +4,7 @@ class_name TitleScreen extends Control
 
 signal play_pressed
 signal training_pressed
+signal new_career_pressed
 
 var _vpc: SubViewportContainer
 var _cam: Camera3D
@@ -80,16 +81,20 @@ func _build_ui() -> void:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 16)
 	col.add_child(row)
-	var play := UiStyle.button("PLAY", 48, Vector2(300, 108))
+	var play := UiStyle.button("CONTINUE" if Career.has_save() else "PLAY", 44, Vector2(300, 108))
 	play.pressed.connect(func(): play_pressed.emit())
 	row.add_child(play)
-	var tr := UiStyle.button("TRAINING", 34, Vector2(250, 108), UiStyle.TEAL)
+	var tr := UiStyle.button("DUEL LAB", 30, Vector2(220, 108), UiStyle.TEAL)
 	tr.pressed.connect(func(): training_pressed.emit())
 	row.add_child(tr)
-	var st := UiStyle.button("SETTINGS", 34, Vector2(250, 108), UiStyle.PAPER_DK)
+	if Career.has_save():
+		var nc := UiStyle.button("NEW CAREER", 28, Vector2(230, 108), UiStyle.RUST)
+		nc.pressed.connect(func(): new_career_pressed.emit())
+		row.add_child(nc)
+	var st := UiStyle.button("SETTINGS", 34, Vector2(220, 108), UiStyle.PAPER_DK)
 	st.pressed.connect(func(): add_child(SettingsPanel.new()))
 	row.add_child(st)
-	var ver := UiStyle.label("v%s  prototype - first playable duel" % str(ProjectSettings.get_setting("application/config/version", "?")), 18, UiStyle.PAPER_DK, 5)
+	var ver := UiStyle.label("v%s  playtest build" % str(ProjectSettings.get_setting("application/config/version", "?")), 18, UiStyle.PAPER_DK, 5)
 	ver.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
 	ver.grow_horizontal = Control.GROW_DIRECTION_BEGIN
 	ver.grow_vertical = Control.GROW_DIRECTION_BEGIN

@@ -193,8 +193,8 @@ func refresh(dt: float) -> void:
 	ls_hint.modulate.a = 0.6 + 0.4 * sin(Time.get_ticks_msec() * 0.012)
 
 func _on_phase(p: String) -> void:
-	var a: String = bout.sim.fighters[0].def.display_name.to_upper()
-	var b: String = bout.sim.fighters[1].def.display_name.to_upper()
+	var a: String = bout.fighter_name(0).to_upper()
+	var b: String = bout.fighter_name(1).to_upper()
 	match p:
 		"intro":
 			draw_ctl.show_banner("%s  vs  %s" % [a, b], "Training bout - nobody dies" if bout.cfg.training else "Blood bout - one life each", 2.0)
@@ -225,7 +225,7 @@ func _on_event(ev: Dictionary) -> void:
 		"grab":
 			draw_ctl.add_pop("GRABBED", wp, Color(0.85, 0.45, 0.3), 34)
 		"laststand":
-			draw_ctl.show_banner("LAST STAND", bout.sim.fighters[idx].def.display_name, 1.3)
+			draw_ctl.show_banner("LAST STAND", bout.fighter_name(idx), 1.3)
 		"ringout":
 			draw_ctl.show_banner("RING OUT!", "", 2.0)
 		"ko":

@@ -4,7 +4,8 @@ extends Node3D
 ## (projectiles, traps, zones, ghosts, decoys at their real radius/life) and active statuses on both fighters.
 ## Nothing here changes gameplay; everything is driven by sim.state() / sim events. Attach with `BoutVfx.new()` + `bind(bout)`.
 
-const MAX_LIVE := 90
+var max_live := 90
+var _low := false
 var bout: Node
 var _ents: Array[Dictionary] = []            # slot -> {sig, node, last}
 var _aura: Array[Dictionary] = [{}, {}]      # per fighter: status -> Node3D
@@ -19,6 +20,10 @@ const STATUS_COLORS := {
 
 func bind(b: Node) -> void:
 	bout = b
+	var q := int(Settings.get_value("quality"))
+	max_live = [32, 60, 90][clampi(q, 0, 2)]
+	_low = q == 0
+	FxPrims.density = [0.45, 0.75, 1.0][clampi(q, 0, 2)]
 	name = "BoutVfx"
 	b.add_child(self)
 	b.fight_event.connect(_on_event)
@@ -53,7 +58,7 @@ func _icon(mid: String) -> Texture2D:
 	return t
 
 func _on_event(ev: Dictionary) -> void:
-	if _live() > MAX_LIVE:
+	if _live() > max_live:
 		return
 	var idx := int(ev.get("fighter", 0))
 	var t := str(ev.get("type", ""))
@@ -248,8 +253,9 @@ func _build_entity(e: Dictionary) -> Node3D:
 				"boundary", "archive":
 					_decor(root, Color(0.85, 0.96, 1.0), r, 6, 1.0, true)
 				"pollen":
-					var em := FxPrims.emitter(root, Vector3(0, 0.8, 0), Color(1, 0.55, 0.85, 0.8), 20, 1.2, 0.12, 0.3, r * 0.8)
-					em.name = "Emit"
+					if not _low:
+						var em := FxPrims.emitter(root, Vector3(0, 0.8, 0), Color(1, 0.55, 0.85, 0.8), 20, 1.2, 0.12, 0.3, r * 0.8)
+						em.name = "Emit"
 				"inertia":
 					var dm := MeshInstance3D.new()
 					var sph := SphereMesh.new()

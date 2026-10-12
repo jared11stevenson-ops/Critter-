@@ -14,6 +14,7 @@ var economy: Economy
 var rules: StoryRules
 var legacy := {"relics": [], "moves": []}  # relics: [{id, from_uid, from_name}], moves: [{move_id, from_species, from_name}]
 var next_uid := 1
+var pending: Dictionary = {}                # a committed career bout in progress {kind, uid, captive?}: abandoning it counts as a loss
 var species_seen: Array = []                # every species ever sealed (the first of each is its founding monarch)
 var profile_id := ""
 var session_count := 0
@@ -193,7 +194,7 @@ func stat_modifiers(uid: String) -> Dictionary:
 func to_dict() -> Dictionary:
 	return {
 		"profile_id": profile_id, "next_uid": next_uid, "session_count": session_count, "care_points": care_points,
-		"species_seen": species_seen.duplicate(), "rack": rack.to_array(), "wall": wall.duplicate(true), "economy": economy.to_dict(), "legacy": legacy.duplicate(true),
+		"species_seen": species_seen.duplicate(), "pending": pending.duplicate(true), "rack": rack.to_array(), "wall": wall.duplicate(true), "economy": economy.to_dict(), "legacy": legacy.duplicate(true),
 	}
 
 
@@ -203,6 +204,7 @@ func load_dict(d: Dictionary) -> void:
 	session_count = int(d.get("session_count", 0))
 	care_points = clampi(int(d.get("care_points", CareModel.CARE_POINTS)), 0, CareModel.CARE_POINTS)
 	rack = Rack.from_array(d.get("rack", []))
+	pending = (d.get("pending", {}) as Dictionary).duplicate(true)
 	species_seen = []
 	for sp in d.get("species_seen", []):
 		species_seen.append(str(sp))

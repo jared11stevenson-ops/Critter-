@@ -113,7 +113,7 @@ func _draw_panel(i: int, f: Dictionary, r: Rect2, mirror: bool) -> void:
 	var def: CritterDef = bout.sim.fighters[i].def
 	var tag := "YOU" if i == bout.player_idx else ("AI " + (bout.cfg.profile_a if i == 0 else bout.cfg.profile_b))
 	var name_al := HORIZONTAL_ALIGNMENT_RIGHT if mirror else HORIZONTAL_ALIGNMENT_LEFT
-	_ink.text(Vector2(bx, r.position.y + 30), def.display_name.to_upper(), 26, UiStyle.PAPER, name_al, bw)
+	_ink.text(Vector2(bx, r.position.y + 30), bout.fighter_name(i).to_upper(), 26, UiStyle.PAPER, name_al, bw)
 	var tag_w := 150.0
 	_ink.text(Vector2(bx + (0.0 if mirror else bw - tag_w), r.position.y + 30), tag, 18, UiStyle.GOLD if i == bout.player_idx else UiStyle.TEAL_LT, HORIZONTAL_ALIGNMENT_LEFT if mirror else HORIZONTAL_ALIGNMENT_RIGHT, tag_w)
 	var vr := float(f["vitality"]) / maxf(1.0, float(f["vitality_max"]))
