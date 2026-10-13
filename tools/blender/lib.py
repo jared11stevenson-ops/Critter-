@@ -73,7 +73,7 @@ class Part:
 
     def _paint(self, verts, color):
         sl = self.hscol if self._h else self.scol
-        sp_val = self._spec if self._spec > 0 else (0.4 if (self._h and not getattr(self, '_ribbon', False)) else 0.0)
+        sp_val = 0.0 if self._soft > 0 else self._spec if self._spec > 0 else (0.4 if (self._h and not getattr(self, '_ribbon', False)) else 0.0)
         for v in verts:
             for l in v.link_loops:
                 l[self._c()] = color
@@ -381,3 +381,57 @@ def bake(parts, ao_rays=24, ao_dist=0.55, ao_strength=0.4, curv_gain=0.9, seed=1
         if "Col" in ca:
             ca.active_color = ca["Col"]
             ca.render_color_index = list(ca.keys()).index("Col") if hasattr(ca, "keys") else 0
+
+
+# ----------------------------------------------------------------------------------------------- creature helpers (v0.15 "toy-quality" kit)
+def _unit(v):
+    n = math.sqrt(sum(x * x for x in v))
+    return tuple(x / n for x in v) if n else (0, 1, 0)
+
+
+def eye(p, c, r, iris, white="f4f0e8", pupil="120a0c", look=(1.0, 0.0, 0.0), glow=0.0, lid=None):
+    """A glossy cartoon-quality eye on the surface at c: eyeball, iris, pupil, two specular catch-lights (emissive) and an optional lid.
+    look = outward facing direction of the eye (game axes)."""
+    lk = _unit(look)
+    # thin axis of the iris discs points along `look`: pick a dominant axis for the radii, rotate by yaw for in-between directions
+    yaw = math.degrees(math.atan2(-lk[2], lk[0]))
+    rot = (0, yaw, 0)
+    p.hard().blob(c, (r, r, r), hexc(white), rot=rot, seg=10, ring=8)
+    ic = (c[0] + lk[0] * r * 0.62, c[1] + lk[1] * r * 0.62, c[2] + lk[2] * r * 0.62)
+    p.hard().blob(ic, (r * 0.42, r * 0.7, r * 0.7), hexc(iris, glow), rot=rot, seg=10, ring=8)
+    pc = (c[0] + lk[0] * r * 0.8, c[1] + lk[1] * r * 0.8, c[2] + lk[2] * r * 0.8)
+    p.hard().blob(pc, (r * 0.3, r * 0.45, r * 0.45), hexc(pupil), rot=rot, seg=8, ring=6)
+    up = (0.0, 1.0, 0.0)
+    for k, (dy, dz, rr_) in enumerate(((0.4, 0.22, 0.2), (-0.2, -0.3, 0.1))):
+        hc = (c[0] + lk[0] * r * 0.95, c[1] + r * dy, c[2] + r * dz * (1 if lk[2] >= 0 else -1) * (0.3 if abs(lk[2]) < 0.5 else 1.0) + lk[2] * 0.0)
+        p.hard().blob(hc, (r * rr_, r * rr_, r * rr_), hexc("ffffff", 1.0), seg=6, ring=4)
+    if lid is not None:
+        p.hard().blob((c[0], c[1] + r * 0.55, c[2]), (r * 1.08, r * 0.55, r * 1.08), hexc(lid), rot=rot, seg=10, ring=6)
+
+
+def fur(p, c, r, color, n=120, ln=0.12, flow=(-0.4, -0.7, 0.0), seed=1, width=0.05, spread=(1.0, 1.0, 1.0), skip_below=None):
+    """Curved fur tufts scattered over an ellipsoid (centre c, radii r), leaning along `flow` (gravity / growth direction)."""
+    import random
+    rr = random.Random(seed)
+    fl = _unit(flow)
+    made = 0
+    tries = 0
+    while made < n and tries < n * 6:
+        tries += 1
+        a = rr.uniform(0, math.tau)
+        y = rr.uniform(-1, 1)
+        s = math.sqrt(max(0.0, 1 - y * y))
+        d = (math.cos(a) * s * spread[0], y * spread[1], math.sin(a) * s * spread[2])
+        if skip_below is not None and d[1] < skip_below:
+            continue
+        base = (c[0] + d[0] * r[0], c[1] + d[1] * r[1], c[2] + d[2] * r[2])
+        n_ = _unit((d[0] / max(r[0], 1e-3), d[1] / max(r[1], 1e-3), d[2] / max(r[2], 1e-3)))
+        dirn = _unit((n_[0] * 0.8 + fl[0] * 0.7, n_[1] * 0.8 + fl[1] * 0.7, n_[2] * 0.8 + fl[2] * 0.7))
+        L = ln * rr.uniform(0.7, 1.3)
+        mid = (base[0] + dirn[0] * L * 0.5 + n_[0] * L * 0.15, base[1] + dirn[1] * L * 0.5 + n_[1] * L * 0.15, base[2] + dirn[2] * L * 0.5 + n_[2] * L * 0.15)
+        tip = (base[0] + dirn[0] * L + fl[0] * L * 0.25, base[1] + dirn[1] * L + fl[1] * L * 0.25, base[2] + dirn[2] * L + fl[2] * L * 0.25)
+        shade = rr.uniform(0.9, 1.12)
+        col = (min(1.0, color[0] * shade), min(1.0, color[1] * shade), min(1.0, color[2] * shade), color[3])
+        p.hard().mat(0.0, 1.0).tube([base, mid, tip], (width, 0.0), col, sides=3)
+        made += 1
+    p.mat(0.0, 0.0)
