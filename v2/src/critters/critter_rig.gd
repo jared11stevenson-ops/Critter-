@@ -17,7 +17,6 @@ const DetachCtl := preload("res://src/critters/detach_ctl.gd")
 const GhostFx := preload("res://src/critters/ghost_fx.gd")
 const RigEvents := preload("res://src/critters/rig_events.gd")
 
-const Proportions := preload("res://src/critters/proportions.gd")
 const DESIGN_PATH := "res://src/critters/designs/%s.gd"
 
 ## ---- presentation constants (NOT gameplay numbers) ----
@@ -83,13 +82,6 @@ var _hit_dir := 1.0
 var _action_frame := 0
 var _timing := Vector3i(1, 1, 1)
 
-## High quality: the critter's parts cast real shadows onto the arena (the blob shadow stays as the contact shadow).
-func enable_shadows() -> void:
-	for n in _nodes:
-		var mi = _nodes[n]
-		if mi is MeshInstance3D and (mi as MeshInstance3D).name != "face":
-			(mi as MeshInstance3D).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-
 func setup(critter_id_in: String) -> void:
 	critter_id = critter_id_in
 	for c in get_children():
@@ -102,9 +94,6 @@ func setup(critter_id_in: String) -> void:
 	var b := Rb.new()
 	b.pal = palette
 	design.build(b)
-	var has_model := b.use_glb(critter_id)          # a Blender-authored model replaces the procedural parts and is authored at final proportions
-	var prop := {"size": 1.0, "stretch": 1.0, "head_k": 1.0} if has_model else Proportions.of(critter_id)
-	b.scale_head(float(prop["head_k"]))
 	cfg = b.cfg
 	var res := b.assemble(_body)
 	_nodes = res["nodes"]
@@ -115,10 +104,9 @@ func setup(critter_id_in: String) -> void:
 	_mat = res["mat"]
 	tri_count = res["tris"]
 	bounds = res["bounds"]
-	var sc := float(cfg.get("scale", 1.0)) * float(prop["size"])   # presentation scale (silhouette variety); gameplay reach lives in data
-	var st := float(prop["stretch"])
-	_pivot.scale = Vector3(sc, sc * st, sc)
-	bounds = AABB(bounds.position * Vector3(sc, sc * st, sc), bounds.size * Vector3(sc, sc * st, sc))
+	var sc := float(cfg.get("scale", 1.0))   # presentation scale (silhouette variety); gameplay reach lives in data
+	_pivot.scale = Vector3.ONE * sc
+	bounds = AABB(bounds.position * sc, bounds.size * sc)
 	for n in _nodes:
 		if str(n).begins_with("sock_"):
 			_sockets[str(n).substr(5)] = _nodes[n]
