@@ -9,7 +9,7 @@ const Pal := preload("res://src/critters/palettes.gd")
 const PoseLib := preload("res://src/critters/pose_lib.gd")
 const FxCtl := preload("res://src/critters/fx_ctrl.gd")
 const MAX_DRAWS := 20
-const MAX_TRIS := 16000   # raised from 6000 (creator: best possible graphics; a Galaxy S25 handles this easily, draw calls are the real limit)
+const MAX_TRIS := 32000   # raised from 6000 (creator: best possible graphics; a Galaxy S25 handles this easily, draw calls are the real limit)
 const SOCKETS := ["weapon_tip", "hand", "head", "ground"]
 var report: Array = []   # per-critter numbers, read by sheet tooling
 

@@ -74,6 +74,8 @@ func start(config: BoutConfig) -> void:
 		var rig := CritterRig.new()
 		holder.add_child(rig)
 		rig.setup(cfg.a_id if i == 0 else cfg.b_id)
+		if Settings.shadows_enabled():
+			rig.enable_shadows()
 		holders.append(holder)
 		rigs.append(rig)
 		var sh := Stage.blob_shadow(self, 0.95)

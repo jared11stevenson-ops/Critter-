@@ -142,6 +142,7 @@ parts["extra"] = e.finish(voxel=0.0, smooth_passes=0, target_tris=500)
 
 total = sum(lib.tris(o) for o in parts.values())
 print("TRIS", {k: lib.tris(o) for k, o in parts.items()}, "total", total)
+lib.bake(parts)
 lib.export(os.path.join(OUT, "pharilux.glb"))
 meta = {"sockets": dict(sock, head=["head", 0.3, 0.3, 0.0]), "face": {"center": [0.3, 0.3, 0.0], "radii": [0.24, 0.26, 0.26], "half_lon": 0.9, "half_lat": 0.6, "lat_center": 0.0, "e": 0.9}}
 json.dump(meta, open(os.path.join(OUT, "pharilux.json"), "w"), indent=1)

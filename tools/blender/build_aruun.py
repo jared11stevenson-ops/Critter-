@@ -9,7 +9,7 @@ from lib import hexc, Part
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "..", "v2", "art", "models")
 CHAR = hexc("2c262b"); CHAR2 = hexc("3a3238"); RED = hexc("b02a22"); RED2 = hexc("d4402a"); CREAM = hexc("d8bf94"); OLIVE = hexc("6f7240")
-OLIVE2 = hexc("8a8a50"); BROWN = hexc("5a3a2a"); GOLD = hexc("c9a24a"); GLOW = hexc("e03018", 0.75); TAN = hexc("a88a5a"); DEEP = hexc("1c181c")
+OLIVE2 = hexc("8a8a50"); BROWN = hexc("5a3a2a"); GOLD = hexc("a98438"); GLOW = hexc("e03018", 0.75); TAN = hexc("a88a5a"); DEEP = hexc("1c181c")
 EYE = hexc("e8502a", 0.8)
 
 lib.reset()
@@ -41,16 +41,19 @@ def leg(name, z, x0):
     p.tube([ankle, (x0 + 0.2, 0.08, z + 0.03 * s), toe], (0.085, 0.05), CHAR2, sides=8)           # foot
     p.blob(knee, (0.17, 0.17, 0.17), CHAR, seg=12, ring=8)
     # armour: red knee cap, shin plate, thigh plate
-    p.hard().blob((knee[0] + 0.09, knee[1] + 0.02, knee[2] + 0.04 * s), (0.17, 0.2, 0.15), RED, seg=12, ring=8)
-    p.hard().blob((x0 + 0.19, 0.92, z + 0.07 * s), (0.1, 0.26, 0.14), RED, rot=(0, 0, -14), seg=10, ring=8)
-    p.hard().blob((x0 + 0.1, 0.48, z + 0.05 * s), (0.07, 0.24, 0.1), RED2, rot=(0, 0, 8), seg=10, ring=8)
+    p.hard().plate((knee[0] + 0.1, knee[1] + 0.02, knee[2] + 0.04 * s), (0.3, 0.34, 0.2), RED, trim=GOLD, e=0.5, rivet=GOLD)   # knee cop
+    p.hard().cone((knee[0] + 0.22, knee[1] + 0.02, knee[2] + 0.04 * s), (knee[0] + 0.42, knee[1] + 0.06, knee[2] + 0.04 * s), 0.05, 0.0, CREAM, sides=5)  # knee spike
+    p.hard().plate((x0 + 0.2, 0.95, z + 0.08 * s), (0.2, 0.5, 0.2), RED, trim=DEEP, rot=(0, 0, -14), e=0.5, rivet=GOLD)         # thigh plate
+    p.hard().plate((x0 + 0.11, 0.48, z + 0.06 * s), (0.15, 0.46, 0.16), RED2, trim=DEEP, rot=(0, 0, 8), e=0.5)                  # greave
+    for k in range(4):   # overlapping scale lames down the shin
+        p.hard().blob((x0 + 0.06 + 0.012 * k, 0.62 - 0.1 * k, z + 0.1 * s), (0.09, 0.05, 0.09), CHAR2, e=0.6, seg=8, ring=5)
     for k in range(3):  # cream wraps
         p.hard().ring((x0 + 0.08 + 0.02 * k, 0.58 - 0.11 * k, z + 0.02 * s), 0.095, 0.022, CREAM, rot=(90, 0, 8), seg=10, tseg=4)
     for dz in (-0.05, 0.0, 0.05):   # claws
         p.hard().cone((toe[0], 0.05, toe[2] + dz), (toe[0] + 0.2, 0.01, toe[2] + dz * 1.8), 0.04, 0.0, CREAM, sides=5)
     p.hard().cone((ankle[0] - 0.03, 0.2, ankle[2]), (ankle[0] - 0.22, 0.12, ankle[2]), 0.04, 0.0, CREAM, sides=5)
     spots(p, (x0 + 0.19, 0.92, z + 0.07 * s), (0.1, 0.26, 0.14), 4, DEEP, 0.04, seed=3 if s > 0 else 5)
-    o = p.finish(voxel=0.045, smooth_passes=2, target_tris=580)
+    o = p.finish(voxel=0.04, smooth_passes=2, target_tris=700)
     parts[name] = o
 
 
@@ -63,8 +66,11 @@ t.blob((0.0, 1.22, 0), (0.34, 0.24, 0.32), CHAR)                                
 t.tube([(0.0, 1.25, 0), (0.04, 1.6, 0), (0.1, 1.85, 0)], (0.27, 0.3), CHAR, sides=12)  # waist
 t.blob((0.1, 2.0, 0), (0.38, 0.35, 0.44), CHAR2)                                    # chest
 t.tube([(0.1, 2.12, 0), (0.17, 2.4, 0), (0.26, 2.72, 0), (0.38, 3.0, 0), (0.5, 3.22, 0)], (0.15, 0.08), CHAR, sides=10)   # long neck
-t.hard().blob((0.3, 2.0, 0), (0.24, 0.3, 0.34), RED, seg=12, ring=8)                 # carapace breastplate
-t.hard().blob((0.5, 1.96, 0), (0.1, 0.3, 0.16), CREAM, seg=10, ring=8)              # sternum
+for k in range(4):   # segmented carapace bands
+    t.hard().plate((0.32 + 0.01 * k, 2.2 - 0.16 * k, 0), (0.34 - 0.02 * k, 0.17, 0.7 - 0.06 * k), RED if k % 2 == 0 else RED2, trim=DEEP, e=0.5, rivet=GOLD if k == 0 else None)
+t.hard().plate((0.52, 1.98, 0), (0.18, 0.5, 0.3), CREAM, trim=GOLD, e=0.5, rivet=GOLD)   # sternum plate
+for k in range(3):
+    t.hard().tube([(0.62, 2.12 - 0.12 * k, -0.1), (0.64, 2.12 - 0.12 * k, 0.1)], 0.012, DEEP, sides=3)  # engraved lines
 for k in range(4):
     t.hard().tube([(0.38, 2.2 - 0.14 * k, -0.34), (0.5, 2.2 - 0.14 * k, 0.0), (0.38, 2.2 - 0.14 * k, 0.34)], 0.028, BROWN, sides=5)   # rib bands
 for k, y in enumerate((2.3, 2.5, 2.7, 2.9, 3.08)):     # truss rings along the neck
@@ -78,7 +84,7 @@ t.hard().blob((0.12, 1.1, -0.3), (0.08, 0.16, 0.07), TAN)
 for dz in (-0.2, -0.08, 0.08, 0.2):   # loincloth tatters
     t.hard().tube([(0.2, 1.2, dz), (0.3, 0.9, dz * 1.2), (0.28, 0.62, dz * 1.3)], (0.07, 0.03), OLIVE if dz > 0 else OLIVE2, sides=4)
 spots(t, (0.3, 2.0, 0), (0.24, 0.3, 0.34), 6, DEEP, 0.045, seed=9)
-parts["torso"] = t.finish(voxel=0.05, smooth_passes=2, target_tris=1450)
+parts["torso"] = t.finish(voxel=0.04, smooth_passes=2, target_tris=2400)
 
 # ---------------------------------------------------------------------------------------------- head
 hp = (0.5, 2.86, 0)
@@ -108,11 +114,14 @@ def arm(name, z):
     p.tube([sh, (0.08, 1.85, z + 0.1 * s), (0.12, 1.6, z + 0.12 * s)], (0.155, 0.12), CHAR, sides=10)             # upper arm
     p.tube([(0.12, 1.6, z + 0.12 * s), (0.2, 1.4, z + 0.11 * s), (0.28, 1.2, z + 0.08 * s)], (0.125, 0.09), CHAR2, sides=10)     # forearm
     p.blob((0.3, 1.14, z + 0.08 * s), (0.13, 0.12, 0.12), CHAR2)                                                  # hand
-    p.hard().blob((0.06, 2.26, z + 0.1 * s), (0.3, 0.17, 0.27), RED, rot=(0, 0, 0), seg=14, ring=10)
-    p.hard().blob((0.0, 2.16, z + 0.16 * s), (0.2, 0.16, 0.2), RED2, seg=10, ring=8)                              # wing-case pauldron
+    p.hard().plate((0.06, 2.3, z + 0.1 * s), (0.62, 0.26, 0.54), RED, trim=GOLD, e=0.55, rivet=GOLD)           # wing-case pauldron
+    p.hard().plate((0.02, 2.17, z + 0.16 * s), (0.5, 0.2, 0.46), RED2, trim=DEEP, e=0.55)                      # second lamella
+    p.hard().plate((-0.02, 2.06, z + 0.2 * s), (0.4, 0.16, 0.38), RED, trim=DEEP, e=0.55)                     # third lamella
+    p.hard().cone((0.08, 2.46, z + 0.1 * s), (0.1, 2.72, z + 0.1 * s), 0.05, 0.0, CREAM, sides=5)               # shoulder spike                              # wing-case pauldron
     spots(p, (0.06, 2.26, z + 0.1 * s), (0.3, 0.17, 0.27), 5, DEEP, 0.06, seed=21 if s > 0 else 22)
-    p.hard().blob((0.14, 1.66, z + 0.13 * s), (0.15, 0.17, 0.14), RED, seg=10, ring=8)                            # elbow plate
-    p.hard().blob((0.24, 1.32, z + 0.1 * s), (0.13, 0.22, 0.14), RED2, rot=(0, 0, 12), seg=10, ring=8)           # bracer
+    p.hard().plate((0.15, 1.66, z + 0.14 * s), (0.28, 0.3, 0.26), RED, trim=GOLD, e=0.5, rivet=GOLD)              # elbow plate
+    p.hard().plate((0.25, 1.32, z + 0.11 * s), (0.24, 0.42, 0.26), RED2, trim=GOLD, rot=(0, 0, 12), e=0.5, rivet=GOLD)   # bracer
+    p.hard().tube([(0.2, 1.42, z + 0.25 * s), (0.3, 1.2, z + 0.25 * s)], 0.018, DEEP, sides=4)
     for k in range(3):
         p.hard().ring((0.15 + 0.02 * k, 1.5 - 0.1 * k, z + 0.12 * s), 0.12, 0.026, CREAM, rot=(90, 0, 10), seg=10, tseg=4)
     for dz in (-0.06, 0.0, 0.06):
@@ -174,5 +183,6 @@ sock = {
 meta = {"sockets": sock, "face": {"center": [0.02, 0.09, 0.0], "radii": [0.27, 0.2, 0.21], "half_lon": 1.0, "half_lat": 0.7, "lat_center": 0.1, "e": 0.9}}
 total = sum(lib.tris(o) for o in parts.values())
 print("TRIS", {k: lib.tris(o) for k, o in parts.items()}, "total", total)
+lib.bake(parts)
 lib.export(os.path.join(OUT, "aruun.glb"))
 json.dump(meta, open(os.path.join(OUT, "aruun.json"), "w"), indent=1)

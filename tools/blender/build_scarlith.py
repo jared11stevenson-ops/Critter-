@@ -131,5 +131,6 @@ parts["extra"] = e.finish(voxel=0.05, smooth_passes=2, target_tris=800)
 
 total = sum(lib.tris(o) for o in parts.values())
 print("TRIS", {k: lib.tris(o) for k, o in parts.items()}, "total", total)
+lib.bake(parts)
 lib.export(os.path.join(OUT, "scarlith.glb"))
 json.dump({}, open(os.path.join(OUT, "scarlith.json"), "w"))

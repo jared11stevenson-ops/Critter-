@@ -28,7 +28,7 @@ static func build(parent: Node3D, adef: ArenaDef, shadows := false) -> Dictionar
 	e.background_mode = Environment.BG_SKY
 	e.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	e.ambient_light_color = Color(0.38, 0.62, 0.70)
-	e.ambient_light_energy = 0.75
+	e.ambient_light_energy = 0.9 if shadows else 0.75
 	e.fog_enabled = true
 	e.fog_light_color = FOG
 	e.fog_density = 0.0065
@@ -37,7 +37,7 @@ static func build(parent: Node3D, adef: ArenaDef, shadows := false) -> Dictionar
 	parent.add_child(env)
 	var sun := DirectionalLight3D.new()
 	sun.light_color = Color(1.0, 0.84, 0.62)
-	sun.light_energy = 0.95
+	sun.light_energy = 0.7 if shadows else 0.95      # with real shadows the floor takes the full sun: keep it from blowing out
 	sun.rotation_degrees = Vector3(-26, 215, 0)     # low sun from the far side: rim light on the fighters, long shade
 	sun.shadow_enabled = shadows
 	sun.directional_shadow_max_distance = 28.0

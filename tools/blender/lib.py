@@ -44,6 +44,10 @@ class Part:
         self.col = self.bm.loops.layers.color.new("Col")
         self.hbm = bmesh.new()                     # geometry that must NOT be voxel-unioned (armour plates, horns, blades, gems)
         self.hcol = self.hbm.loops.layers.color.new("Col")
+        self.scol = self.bm.loops.layers.color.new("Spec")     # r = specular/metal mask (0 matte .. 1 glossy), g = fur/fabric softness
+        self.hscol = self.hbm.loops.layers.color.new("Spec")
+        self._spec = 0.0
+        self._soft = 0.0
         self._h = False
         self.obj = None
 
@@ -61,10 +65,19 @@ class Part:
         return self
 
     # -- helpers
+    def mat(self, spec=0.0, soft=0.0):
+        """Material of the primitives added next: spec = glossy/metal highlight, soft = fur/cloth (no hard highlight)."""
+        self._spec = spec
+        self._soft = soft
+        return self
+
     def _paint(self, verts, color):
+        sl = self.hscol if self._h else self.scol
+        sp_val = self._spec if self._spec > 0 else (0.4 if (self._h and not getattr(self, '_ribbon', False)) else 0.0)
         for v in verts:
             for l in v.link_loops:
                 l[self._c()] = color
+                l[sl] = (sp_val, self._soft, 0.0, 1.0)
 
     def _xf(self, bm_verts, center, rot, scale):
         m = Matrix.Translation(V(*center)) @ Euler(tuple(math.radians(a) for a in rot), "XYZ").to_matrix().to_4x4() @ Matrix.Diagonal((scale[0], scale[1], scale[2], 1.0))
@@ -84,18 +97,39 @@ class Part:
             ring = max(4, int(ring * (0.75 if big else 0.55)))
         res = bmesh.ops.create_uvsphere(self._b(), u_segments=seg, v_segments=ring, radius=1.0)
         vs = res["verts"]
-        if e != 1.0:  # superellipsoid-ish squarer shape
+        if e != 1.0:  # superellipsoid: e < 1 gives rounded-box plates, e > 1 pinches toward a diamond
             for v in vs:
                 p = v.co.copy()
                 for i in range(3):
-                    p[i] = math.copysign(abs(p[i]) ** (1.0 / e) if p[i] != 0 else 0.0, p[i]) if False else p[i]
+                    a = abs(p[i])
+                    p[i] = math.copysign(a ** e, p[i]) if a > 0 else 0.0
+                v.co = p
         m = Matrix.Translation(self.v(c)) @ self._rot_game(rot).to_matrix().to_4x4() @ Matrix.Diagonal((r[0], r[2], r[1], 1.0))
         bmesh.ops.transform(self._b(), matrix=m, verts=vs)
         self._paint(vs, color)
         return vs
 
+    def plate(self, c, size, color, trim=None, rot=(0, 0, 0), e=0.45, rivet=None, seg=10, ring=8):
+        """A rounded-box armour plate with an optional darker/contrasting trim backing and rivets (rivet = colour). size = (x, y, z) full extents."""
+        r = (size[0] / 2, size[1] / 2, size[2] / 2)
+        if trim is not None:
+            self.blob(c, (r[0] * 1.07, r[1] * 1.07, r[2] * 0.45), trim, rot=rot, seg=seg, ring=ring, e=e)
+        vs = self.blob(c, r, color, rot=rot, seg=seg, ring=ring, e=e)
+        if rivet is not None:
+            was = self._h
+            self._h = True
+            for sx in (-0.72, 0.72):
+                for sy in (-0.72, 0.72):
+                    off = Vector((sx * r[0], sy * r[1], r[2] * 0.85))
+                    q = (Euler(tuple(math.radians(a) for a in rot), "XYZ").to_matrix() @ off) if False else off
+                    pos = (c[0] + sx * r[0] * math.cos(math.radians(rot[2])), c[1] + sy * r[1], c[2] + r[2] * 0.9)
+                    self.blob(pos, (0.018, 0.018, 0.012), rivet, seg=6, ring=4)
+            self._h = was
+        return vs
+
     def tube(self, pts, radii, color, sides=8, caps=True, taper_pow=1.0, wide=None):
         """Smooth swept tube through game-space points; radii = r or (r0, r1) or list per point."""
+        self._ribbon = wide is not None
         n = len(pts)
         if self._h:
             rm = max(radii) if isinstance(radii, (list, tuple)) and not isinstance(radii[0], (list, tuple)) else (radii if isinstance(radii, (int, float)) else 0.1)
@@ -145,6 +179,7 @@ class Part:
                     pass
         bmesh.ops.recalc_face_normals(self._b(), faces=list(self._b().faces))
         self._paint(allv, color)
+        self._ribbon = False
         return allv
 
     def box(self, c, size, color, rot=(0, 0, 0), bevel=0.0):
@@ -269,3 +304,80 @@ def export(path):
     bpy.ops.export_scene.gltf(filepath=path, export_format="GLB", use_selection=True, export_yup=True, export_apply=False,
                               export_vertex_color="ACTIVE", export_all_vertex_colors=False, export_active_vertex_color_when_no_material=True,
                               export_materials="NONE", export_cameras=False, export_lights=False)
+
+
+# ----------------------------------------------------------------------------------------------- finishing pass (the "2026" bake)
+def bake(parts, ao_rays=24, ao_dist=0.55, ao_strength=0.4, curv_gain=0.9, seed=1):
+    """Bakes ambient occlusion (the WHOLE critter occludes itself: arms shade the torso, cloaks shade the legs) into the vertex colours and writes a
+    detail UV layer per mesh: u = specular mask, v = convex-edge highlight (curvature), so the toon shader can add sheen on armour and rim wear on edges."""
+    import random
+    from mathutils.bvhtree import BVHTree
+    rnd = random.Random(seed)
+    verts_w, polys = [], []
+    for o in parts.values():
+        base = len(verts_w)
+        mw = o.matrix_world
+        verts_w.extend(mw @ v.co for v in o.data.vertices)
+        for p in o.data.polygons:
+            polys.append(tuple(base + i for i in p.vertices))
+    tree = BVHTree.FromPolygons(verts_w, polys, epsilon=0.0001)
+    dirs = []
+    for _ in range(ao_rays):
+        while True:
+            d = Vector((rnd.uniform(-1, 1), rnd.uniform(-1, 1), rnd.uniform(-1, 1)))
+            if 0.01 < d.length <= 1.0:
+                dirs.append(d.normalized())
+                break
+    for name, o in parts.items():
+        me = o.data
+        bm = bmesh.new()
+        bm.from_mesh(me)
+        bm.verts.ensure_lookup_table()
+        col = bm.loops.layers.color.get("Col")
+        spl = bm.loops.layers.color.get("Spec")
+        uvl = bm.loops.layers.uv.get("detail") or bm.loops.layers.uv.new("detail")
+        mw = o.matrix_world
+        nmw = mw.to_3x3()
+        ao = {}
+        curv = {}
+        for v in bm.verts:
+            n = (nmw @ v.normal).normalized()
+            p = mw @ v.co + n * 0.01
+            hit = 0
+            tot = 0
+            for d in dirs:
+                if d.dot(n) < 0:
+                    d = -d
+                # cosine-ish weighting toward the normal
+                dd = (d + n * 0.6).normalized()
+                tot += 1
+                h = tree.ray_cast(p, dd, ao_dist)
+                if h[0] is not None:
+                    hit += 1
+            ao[v.index] = 1.0 - hit / max(tot, 1)
+            c = 0.0
+            ne = 0
+            for e in v.link_edges:
+                o2 = e.other_vert(v)
+                vec = o2.co - v.co
+                L = vec.length
+                if L > 1e-6:
+                    c += -(vec.dot(v.normal)) / L
+                    ne += 1
+            curv[v.index] = (c / ne) if ne else 0.0
+        for f in bm.faces:
+            for l in f.loops:
+                vi = l.vert.index
+                a = ao[vi]
+                k = (1.0 - ao_strength) + ao_strength * a
+                cc = l[col]
+                l[col] = (cc[0] * k, cc[1] * k, cc[2] * k, cc[3])
+                sp = l[spl]
+                edge = max(0.0, min(1.0, curv[vi] * curv_gain))
+                l[uvl].uv = (sp[0], edge)
+        bm.to_mesh(me)
+        bm.free()
+        ca = me.color_attributes
+        if "Col" in ca:
+            ca.active_color = ca["Col"]
+            ca.render_color_index = list(ca.keys()).index("Col") if hasattr(ca, "keys") else 0

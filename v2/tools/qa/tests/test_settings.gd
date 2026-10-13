@@ -7,7 +7,7 @@ func run() -> Array:
 	var fails: Array = []
 	var s = SettingsScript.new()
 	s.path = TMP
-	QaCheck.eq(fails, s.get_value("quality"), 1, "default quality")
+	QaCheck.eq(fails, s.get_value("quality"), 2, "default quality (High)")
 	QaCheck.is_true(fails, s.set_value("quality", 2), "set quality")
 	QaCheck.eq(fails, s.quality_name(), "High", "quality name")
 	s.set_value("quality", 99)

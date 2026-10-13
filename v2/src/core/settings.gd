@@ -8,7 +8,7 @@ const QUALITY_NAMES := ["Low", "Medium", "High"]
 const FPS_CAPS := [30, 60, 90, 120]
 
 const DEFAULTS := {
-	"quality": 1,               # 0 Low, 1 Medium, 2 High
+	"quality": 2,               # 0 Low, 1 Medium, 2 High
 	"fps_cap": 60,              # one of FPS_CAPS
 	"left_handed": false,       # mirrors touch layout
 	"assist_wide_parry": false, # wider parry window (non-Blood tiers only)

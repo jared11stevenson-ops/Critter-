@@ -123,6 +123,7 @@ parts["extra"] = e.finish(voxel=0.0, smooth_passes=0, target_tris=900)
 
 total = sum(lib.tris(o) for o in parts.values())
 print("TRIS", {k: lib.tris(o) for k, o in parts.items()}, "total", total)
+lib.bake(parts)
 lib.export(os.path.join(OUT, "cigarra.glb"))
 tw_local = [(tw[0] - hp[0]) * HS, (tw[1] - hp[1]) * HS, tw[2] * HS]
 meta = {"sockets": {"head": ["head", 0.04 * HS, 0.17 * HS, 0.0], "crown": ["head", tw_local[0], tw_local[1], 0.0],

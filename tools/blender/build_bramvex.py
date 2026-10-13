@@ -141,5 +141,6 @@ parts["extra"] = e.finish(voxel=0.0, smooth_passes=0, target_tris=500)
 
 total = sum(lib.tris(o) for o in parts.values())
 print("TRIS", {k: lib.tris(o) for k, o in parts.items()}, "total", total)
+lib.bake(parts)
 lib.export(os.path.join(OUT, "bramvex.glb"))
 json.dump({}, open(os.path.join(OUT, "bramvex.json"), "w"))

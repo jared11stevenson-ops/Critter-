@@ -114,5 +114,6 @@ parts["extra"] = e.finish(voxel=0.05, smooth_passes=2, target_tris=1500)
 
 total = sum(lib.tris(o) for o in parts.values())
 print("TRIS", {k: lib.tris(o) for k, o in parts.items()}, "total", total)
+lib.bake(parts)
 lib.export(os.path.join(OUT, "mollusk.glb"))
 json.dump({}, open(os.path.join(OUT, "mollusk.json"), "w"))

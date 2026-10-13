@@ -125,6 +125,7 @@ parts["extra"] = e.finish(voxel=0.0, smooth_passes=0, target_tris=600)
 
 total = sum(lib.tris(o) for o in parts.values())
 print("TRIS", {k: lib.tris(o) for k, o in parts.items()}, "total", total)
+lib.bake(parts)
 lib.export(os.path.join(OUT, "zephyr.glb"))
 meta = {"sockets": dict(sock, head=["head", 0.08, 0.15, 0.0]), "face": {"center": [0.1, 0.14, 0.0], "radii": [0.23, 0.21, 0.19], "half_lon": 1.0, "half_lat": 0.7, "lat_center": 0.0, "e": 0.9}}
 json.dump(meta, open(os.path.join(OUT, "zephyr.json"), "w"), indent=1)
