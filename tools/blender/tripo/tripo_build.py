@@ -37,7 +37,30 @@ def cigarra_part(c, el):
         return "leg_f" if y < 0 else "leg_b"
     return "torso"
 
+
+def mollusk_part(c, el):
+    """Mollusk (pre-scale, feet z=0, forward +x, right hand = -y): head+stalks on top, the great shell on his back (extra), mace/lantern at his right hand (weapon),
+    arms outside the robe, legs under the robe, the rest (incl. the snail foot slab) is torso."""
+    x, y, z = c
+    if z >= 0.70 and x > -0.30 and (abs(y) < 0.17 or z >= 0.80):
+        return "head"
+    if y < -0.22 and z < 0.45 and x > -0.10:
+        return "weapon"
+    if x < -0.05 and z > 0.18:
+        return "extra"
+    if abs(y) > 0.13 and 0.30 < z < 0.74 and x > -0.10:
+        return "arm_f" if y < 0 else "arm_b"
+    if z < 0.38 and x > -0.05:
+        return "leg_f" if y < 0 else "leg_b"
+    return "torso"
+
 CONFIGS = {
+    "mollusk": dict(src="/tmp/cu/mo/plain.glb", rot_z=0.0, scale=3.4, x0=-0.05, y0=0.02, tex_size=4096, part=mollusk_part, min_faces=0,
+                    pivots={"torso": (0.0, 0.0, 0.35), "head": (0.05, 0.0, 0.74), "arm_f": (0.0, -0.20, 0.66), "arm_b": (0.0, 0.22, 0.66),
+                            "leg_f": (0.0, -0.10, 0.36), "leg_b": (0.0, 0.10, 0.36), "weapon": (0.02, -0.30, 0.30), "extra": (-0.12, 0.0, 0.50)},
+                    targets={"torso": 4200, "head": 4600, "arm_f": 1900, "arm_b": 1900, "leg_f": 2200, "leg_b": 2200, "weapon": 2200, "extra": 3800},
+                    sockets={"head": ("head", (0.1, 0.0, 0.1)), "hand": ("arm_f", (0.05, -0.08, -0.35)), "weapon_base": ("weapon", (0.0, 0.0, 0.2)), "weapon_tip": ("weapon", (0.1, -0.1, -0.2))},
+                    meta={"textured": True, "face_off": True, "swarm_off": True, "tex_gain": 1.1}),
     "cigarra": dict(src="/tmp/cu/ci/cig_plain.glb", rot_z=90.0, scale=3.3, x0=0.0, y0=0.0,
                     part=cigarra_part, min_faces=0,
                     pivots={"torso": (0.0, 0.0, 0.50), "head": (0.0, 0.0, 0.68), "arm_f": (0.0, -0.15, 0.66), "arm_b": (0.0, 0.15, 0.66),
@@ -130,10 +153,10 @@ if DEBUG:
 srcmat = me.materials[0]
 tex = None
 for n in srcmat.node_tree.nodes:
-    if n.type == "TEX_IMAGE" and n.image and "BaseColor" in n.image.name:
+    if n.type == "TEX_IMAGE" and n.image and ("BaseColor" in n.image.name or n.image.name.startswith("Color")):
         tex = n.image
 print("colour texture", tex.name if tex else None, tex.size[:] if tex else None)
-tex.scale(2048, 2048)
+tex.scale(C.get("tex_size", 2048), C.get("tex_size", 2048))
 mat = bpy.data.materials.new(CID + "_tex"); mat.use_nodes = True
 nt = mat.node_tree; bsdf = nt.nodes["Principled BSDF"]
 ti = nt.nodes.new("ShaderNodeTexImage"); ti.image = tex; nt.links.new(ti.outputs["Color"], bsdf.inputs["Base Color"]); bsdf.inputs["Roughness"].default_value = 0.9
