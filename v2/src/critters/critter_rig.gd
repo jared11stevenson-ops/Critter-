@@ -95,7 +95,8 @@ func setup(critter_id_in: String) -> void:
 	var b := Rb.new()
 	b.pal = palette
 	design.build(b)
-	var prop := Proportions.of(critter_id)
+	var has_model := b.use_glb(critter_id)          # a Blender-authored model replaces the procedural parts and is authored at final proportions
+	var prop := {"size": 1.0, "stretch": 1.0, "head_k": 1.0} if has_model else Proportions.of(critter_id)
 	b.scale_head(float(prop["head_k"]))
 	cfg = b.cfg
 	var res := b.assemble(_body)

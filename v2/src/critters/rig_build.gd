@@ -19,6 +19,8 @@ var swarm: Dictionary = {}      # {mb: Prim (ONE body), rest: [Vector3], parent:
 var quality := 1.0              # tri-budget knob, see Prim.quality
 var glass: Array = []           # part names rendered with the transparent glass material (no outline)
 var cfg: Dictionary = {}        # design config (styles, poses, timings stub, ...)
+var glb_meshes: Dictionary = {} # part name -> Mesh authored in Blender (res://art/models/<id>.glb); replaces the procedural geometry of that part
+var glb_used := false
 
 func part(name: String, pos: Vector3, parent: String = "-") -> Prim:
 	var p: String = DEFAULT_PARENT[name] if parent == "-" else parent
@@ -34,6 +36,46 @@ func set_face(center: Vector3, radii: Vector3, params: Dictionary, half_lon: flo
 		lat_center: float = -0.05, e: float = 1.0) -> void:
 	face = {"e": e, "center": center, "radii": radii, "half_lon": half_lon, "half_lat": half_lat,
 			"lat_center": lat_center, "params": params}
+
+## Replaces procedural part geometry with the Blender model res://art/models/<id>.glb (+ <id>.json: face patch, sockets, cfg overrides).
+## Node origins in the glb are the joint pivots (body space). Returns false when there is no model.
+func use_glb(id: String) -> bool:
+	var path := "res://art/models/%s.glb" % id
+	if not ResourceLoader.exists(path):
+		return false
+	var ps = load(path)
+	if ps == null:
+		return false
+	var root: Node = (ps as PackedScene).instantiate()
+	for ch in root.get_children():
+		if ch is MeshInstance3D and PART_NAMES.has(str(ch.name)):
+			var pn := str(ch.name)
+			glb_meshes[pn] = (ch as MeshInstance3D).mesh
+			if parts.has(pn):
+				parts[pn]["pos"] = (ch as Node3D).position
+				parts[pn]["mb"] = Prim.new()
+			else:
+				parts[pn] = {"mb": Prim.new(), "pos": (ch as Node3D).position, "parent": DEFAULT_PARENT[pn]}
+	root.queue_free()
+	var jp := "res://art/models/%s.json" % id
+	if FileAccess.file_exists(jp):
+		var meta: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(jp))
+		for sn in meta.get("sockets", {}):
+			var sd: Array = meta["sockets"][sn]
+			sockets[sn] = {"part": str(sd[0]), "pos": Vector3(sd[1], sd[2], sd[3])}
+		if meta.has("face") and not face.is_empty():
+			var fd: Dictionary = meta["face"]
+			face["center"] = Vector3(fd["center"][0], fd["center"][1], fd["center"][2])
+			face["radii"] = Vector3(fd["radii"][0], fd["radii"][1], fd["radii"][2])
+			for k in ["half_lon", "half_lat", "lat_center", "e"]:
+				if fd.has(k):
+					face[k] = float(fd[k])
+		elif meta.has("face_off"):
+			face = {}
+		for k in meta.get("cfg", {}):
+			cfg[k] = meta["cfg"][k]
+	glb_used = not glb_meshes.is_empty()
+	return glb_used
 
 ## Shrinks/grows the head about the neck pivot (face patch and head sockets follow).
 func scale_head(k: float) -> void:
@@ -64,8 +106,13 @@ func assemble(rig_root: Node3D) -> Dictionary:
 		var mi := MeshInstance3D.new()
 		mi.name = n
 		var mb: Prim = d["mb"]
-		mi.mesh = mb.build()
-		tris += mb.tris()
+		if glb_meshes.has(n):
+			mi.mesh = glb_meshes[n]
+			for si in mi.mesh.get_surface_count():
+				tris += (mi.mesh.surface_get_arrays(si)[Mesh.ARRAY_INDEX] as PackedInt32Array).size() / 3
+		else:
+			mi.mesh = mb.build()
+			tris += mb.tris()
 		mi.material_override = Toon.glass(pal["glow"]) if glass.has(n) else mat
 		mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		mi.extra_cull_margin = 2.0
@@ -86,6 +133,17 @@ func assemble(rig_root: Node3D) -> Dictionary:
 	var first := true
 	for n in parts:
 		var d2: Dictionary = parts[n]
+		if glb_meshes.has(n):
+			var ab: AABB = (glb_meshes[n] as Mesh).get_aabb()
+			var corners := [ab.position, ab.end]
+			for cv in corners:
+				var wp2: Vector3 = (cv as Vector3) + (d2["pos"] as Vector3)
+				if first:
+					bb = AABB(wp2, Vector3.ZERO)
+					first = false
+				else:
+					bb = bb.expand(wp2)
+			continue
 		for v in (d2["mb"] as Prim).verts:
 			var wp: Vector3 = v + (d2["pos"] as Vector3)
 			if first:
