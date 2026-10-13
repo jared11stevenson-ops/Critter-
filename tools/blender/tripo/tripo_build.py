@@ -54,7 +54,26 @@ def mollusk_part(c, el):
         return "leg_f" if y < 0 else "leg_b"
     return "torso"
 
+def bramvex_part(c, info):
+    """Bramvex (rotated so he faces +x; right hand = -y; feet z=0, height ~0.98). Crouching hero pose: only head, club, and the wing+lantern pole move; arms, legs and cloak stay in the torso."""
+    x, y, z = c
+    if info["zmax"] < 0.045:
+        return "drop"                                   # the generator's ground slab
+    if z >= 0.66 and abs(y) < 0.2:
+        return "head"
+    if y > 0.22 and z > 0.33:
+        return "extra"                                  # the spread bat wing and the lantern pole (his left)
+    if (x > 0.17 and z < 0.45) or (y < -0.22 and z < 0.35):
+        return "weapon"                                 # the spiked club resting forward-right
+    return "torso"
+
 CONFIGS = {
+    "bramvex": dict(src="/tmp/cu/br/plain.glb", rot_z=-90.0, scale=3.4, x0=0.0, y0=0.0, tex_size=4096, part=bramvex_part, min_faces=0,
+                    pivots={"torso": (0.0, 0.0, 0.40), "head": (0.03, 0.0, 0.66), "arm_f": (0.0, -0.15, 0.58), "arm_b": (0.0, 0.15, 0.58),
+                            "leg_f": (0.0, -0.08, 0.36), "leg_b": (0.0, 0.08, 0.36), "weapon": (0.12, -0.15, 0.30), "extra": (-0.05, 0.1, 0.55)},
+                    targets={"torso": 9500, "head": 4600, "arm_f": -1, "arm_b": -1, "leg_f": -1, "leg_b": -1, "weapon": 3600, "extra": 3800},
+                    sockets={"head": ("head", (0.08, 0.0, 0.08)), "hand": ("weapon", (0.0, 0.0, 0.1)), "weapon_base": ("weapon", (0.0, 0.0, 0.1)), "weapon_tip": ("weapon", (0.35, 0.0, -0.1))},
+                    meta={"textured": True, "face_off": True, "swarm_off": True, "tex_gain": 1.3}),
     "mollusk": dict(src="/tmp/cu/mo/plain.glb", rot_z=0.0, scale=3.4, x0=-0.05, y0=0.02, tex_size=4096, part=mollusk_part, min_faces=0,
                     pivots={"torso": (0.0, 0.0, 0.35), "head": (0.05, 0.0, 0.74), "arm_f": (0.0, -0.20, 0.66), "arm_b": (0.0, 0.22, 0.66),
                             "leg_f": (0.0, -0.10, 0.36), "leg_b": (0.0, 0.10, 0.36), "weapon": (0.02, -0.30, 0.30), "extra": (-0.12, 0.0, 0.50)},
@@ -103,7 +122,11 @@ for comp in isl:
         cs += f.calc_center_median()
     cents.append(cs / len(comp))
 mi = {n: i for i, n in enumerate(NAMES)}
-prim = [mi[C["part"]((cs.x, cs.y, cs.z), len(comp))] for comp, cs in zip(isl, cents)]
+def _isl_info(comp):
+    zs = [v.co.z for f in comp for v in f.verts]
+    return {"n": len(comp), "zmax": max(zs), "zmin": min(zs)}
+infos = [_isl_info(comp) for comp in isl]
+prim = [mi.get(C["part"]((cs.x, cs.y, cs.z), inf), -1) for comp, cs, inf in zip(isl, cents, infos)]   # "drop" -> -1 (island removed, e.g. the generator's ground slab)
 # arms are mirror images in this A-pose: islands near the mirrored LEFT-arm islands (y > 0) that were swallowed by the trousers/torso become the RIGHT arm
 if CID == "cigarra":
     left = [cents[k] for k in range(len(cents)) if prim[k] == mi["arm_b"]]
@@ -117,20 +140,20 @@ grid = {}
 G = 0.012
 for k, cs in enumerate(cents):
     grid.setdefault((int(cs.x // G), int(cs.y // G), int(cs.z // G)), []).append(k)
-mask_isl = [1 << p for p in prim]
+mask_isl = [(1 << p) if p >= 0 else 0 for p in prim]
 for k, cs in enumerate(cents):
     gx, gy, gz = int(cs.x // G), int(cs.y // G), int(cs.z // G)
     for dx in (-1, 0, 1):
         for dy in (-1, 0, 1):
             for dz in (-1, 0, 1):
                 for j in grid.get((gx + dx, gy + dy, gz + dz), ()):
-                    if prim[j] != prim[k] and (cents[j] - cs).length < G:
+                    if prim[k] >= 0 and prim[j] >= 0 and prim[j] != prim[k] and (cents[j] - cs).length < G:
                         mask_isl[j] |= 1 << prim[k]
 mask = bytearray(len(bm.faces))
 for comp, m, p in zip(isl, mask_isl, prim):
     for f in comp:
         mask[f.index] = m
-        f.material_index = 1 + p
+        f.material_index = 1 + max(p, 0)
 print("faces per part", {n: sum(len(c) for c, m in zip(isl, mask_isl) if m >> mi[n] & 1) for n in NAMES}, "islands", len(isl))
 if DEBUG:
     bm.to_mesh(me)
@@ -164,7 +187,12 @@ def to_game(p):
     return Vector(((p[0] - C["x0"]) * S, (p[1] - C["y0"]) * S, p[2] * S))
 objs = []
 for i, name in enumerate(NAMES):
-    if C["targets"].get(name, 0) <= 0:
+    if C["targets"].get(name, 0) == 0:
+        continue
+    if C["targets"].get(name, 0) < 0:      # unused rig part: a degenerate speck so the procedural placeholder is replaced by nothing visible
+        pv = to_game(C["pivots"][name])
+        m3 = bpy.data.meshes.new(name); m3.from_pydata([(0, 0, 0), (0.001, 0, 0), (0, 0.001, 0)], [], [(0, 1, 2)]); m3.materials.append(mat)
+        ob3 = bpy.data.objects.new(name, m3); bpy.context.scene.collection.objects.link(ob3); ob3.location = pv
         continue
     b2 = bmesh.new(); b2.from_mesh(me); b2.faces.ensure_lookup_table()
     drop = [f for f in b2.faces if not (mask[f.index] >> i) & 1]

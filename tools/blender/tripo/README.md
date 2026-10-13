@@ -13,3 +13,6 @@ Config lives in CONFIGS["cigarra"] (rotation to the lib frame, scale, pivots, pa
 
 ## Mollusk (v0.21)
 Source: tools/source_art/mollusk_tripo.glb (single figure, faces +x already, shell on his back = `extra`, mace/lantern = `weapon`). 4096 px texture (tex_size in CONFIGS). Decode with gltf-transform to /tmp/cu/mo/plain.glb, then `python3 tools/blender/tripo/tripo_build.py mollusk [debug]`.
+
+## Bramvex (v0.22)
+Source: tools/source_art/bramvex_tripo.glb (crouching hero pose; faces +y in the file, rotated -90 deg to +x; the file includes a ground slab that is dropped). His crouch overlaps arms/legs/cloak/club, so only four parts move: head, weapon (club), extra (bat wing + lantern pole); arms and legs are kept in the torso and the four unused rig parts are 1-triangle specks (targets = -1). `python3 tools/blender/tripo/tripo_build.py bramvex [debug]`.
