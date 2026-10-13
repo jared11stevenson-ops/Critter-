@@ -2,16 +2,19 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://xg0o43kxpuyf"
-path="res://.godot/imported/bout_1280x720_t040.png-706ce0d066a91089c249fbeb646f5964.ctex"
+uid="uid://bca6xbcr6ywtt"
+path="res://.godot/imported/pharilux_Color_f2d3d54b-6fda-45c2-bd0d-3c3b09425c5d.jpg-70ba9d39445fa123376d4b058db8f72d.ctex"
 metadata={
 "vram_texture": false
+}
+generator_parameters={
+"md5": "05a1a13980a8a7c3d8e14f54e5eab721"
 }
 
 [deps]
 
-source_file="res://tools/qa/shots/bout_1280x720_t040.png"
-dest_files=["res://.godot/imported/bout_1280x720_t040.png-706ce0d066a91089c249fbeb646f5964.ctex"]
+source_file="res://art/models/pharilux_Color_f2d3d54b-6fda-45c2-bd0d-3c3b09425c5d.jpg"
+dest_files=["res://.godot/imported/pharilux_Color_f2d3d54b-6fda-45c2-bd0d-3c3b09425c5d.jpg-70ba9d39445fa123376d4b058db8f72d.ctex"]
 
 [params]
 
@@ -23,7 +26,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

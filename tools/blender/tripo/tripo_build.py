@@ -68,30 +68,29 @@ def bramvex_part(c, info):
     return "torso"
 
 def pharilux_part(c, info):
-    """DRAFT (unmeasured until the creator's model exists). Pharilux: ghost mantis in a brass diver suit; lantern helmet + antennae = head, wings = extra, chain/anchor = weapon.
-    Landmarks below are guesses for a standing pose (rotated to face +x, feet z=0, height ~1): re-measure with `debug` before trusting them."""
+    """Pharilux (rotated +90 so he faces +x; right = -y; feet z=0, lantern tip ~0.98). Mantis in a brass diver helmet with a lantern tower; wings and cloak behind; chains at his sides."""
     x, y, z = c
     if info["zmax"] < 0.045:
         return "drop"
-    if z >= 0.72 and abs(y) < 0.2:
-        return "head"
-    if x < -0.06 and z > 0.35:
-        return "extra"
-    if y < -0.22 and z < 0.40:
-        return "weapon"
-    if abs(y) > 0.14 and 0.35 < z < 0.7:
-        return "arm_f" if y < 0 else "arm_b"
-    if z < 0.40:
+    if z >= 0.62 and abs(y) < 0.22 and x > -0.20:
+        return "head"                                   # insect head + helmet + lantern tower
+    if x < -0.06 and 0.14 < z < 0.80:
+        return "extra"                                  # wings and the cloak behind him
+    if abs(y) > 0.24 and z < 0.62:
+        return "weapon"                                 # the hanging chains / anchor at his sides
+    if abs(y) > 0.13 and 0.30 < z < 0.66:
+        return "arm_f" if y < 0 else "arm_b"            # scythe arms
+    if z < 0.34:
         return "leg_f" if y < 0 else "leg_b"
     return "torso"
 
 CONFIGS = {
-    "pharilux": dict(src="/tmp/cu/ph/plain.glb", rot_z=0.0, scale=3.6, x0=0.0, y0=0.0, tex_size=4096, part=pharilux_part, min_faces=0,
+    "pharilux": dict(src="/tmp/cu/ph/plain.glb", rot_z=90.0, scale=3.6, x0=0.0, y0=0.0, tex_size=4096, part=pharilux_part, min_faces=0,
                     pivots={"torso": (0.0, 0.0, 0.42), "head": (0.05, 0.0, 0.72), "arm_f": (0.0, -0.16, 0.66), "arm_b": (0.0, 0.16, 0.66),
                             "leg_f": (0.0, -0.08, 0.42), "leg_b": (0.0, 0.08, 0.42), "weapon": (0.05, -0.25, 0.35), "extra": (-0.08, 0.0, 0.62)},
-                    targets={"torso": 4200, "head": 8000, "arm_f": 1900, "arm_b": 1900, "leg_f": 2300, "leg_b": 2300, "weapon": 2400, "extra": 3200},
+                    targets={"torso": 3600, "head": 8200, "arm_f": 1700, "arm_b": 1700, "leg_f": 2000, "leg_b": 2000, "weapon": 2000, "extra": 2600}, bake_normals=True,
                     sockets={"head": ("head", (0.1, 0.0, 0.1)), "hand": ("arm_f", (0.05, 0.0, -0.3)), "weapon_base": ("weapon", (0.0, 0.0, 0.2)), "weapon_tip": ("weapon", (0.1, 0.0, -0.2))},
-                    meta={"textured": True, "face_off": True, "swarm_off": True, "tex_gain": 1.0}),
+                    meta={"textured": True, "face_off": True, "swarm_off": True, "tex_gain": 1.0, "tex_soft": 0.7, "outline_px": 1.3, "normal_map": True}),
     "bramvex": dict(src="/tmp/cu/br/plain.glb", rot_z=-90.0, scale=3.4, x0=0.0, y0=0.0, tex_size=4096, part=bramvex_part, min_faces=0,
                     pivots={"torso": (0.0, 0.0, 0.40), "head": (0.03, 0.0, 0.66), "arm_f": (0.0, -0.15, 0.58), "arm_b": (0.0, 0.15, 0.58),
                             "leg_f": (0.0, -0.08, 0.36), "leg_b": (0.0, 0.08, 0.36), "weapon": (0.12, -0.15, 0.30), "extra": (-0.05, 0.1, 0.55)},
@@ -210,6 +209,7 @@ ti = nt.nodes.new("ShaderNodeTexImage"); ti.image = tex; nt.links.new(ti.outputs
 def to_game(p):
     return Vector(((p[0] - C["x0"]) * S, (p[1] - C["y0"]) * S, p[2] * S))
 objs = []
+pairs = []
 for i, name in enumerate(NAMES):
     if C["targets"].get(name, 0) == 0:
         continue
@@ -233,15 +233,42 @@ for i, name in enumerate(NAMES):
     bpy.context.view_layer.objects.active = ob; ob.select_set(True)
     bpy.ops.mesh.customdata_custom_splitnormals_clear(); bpy.ops.object.shade_smooth()
     t0 = sum(len(p.vertices) - 2 for p in m2.polygons)
+    if C.get("bake_normals"):
+        hi_me = m2.copy(); hi = bpy.data.objects.new(name + "_hi", hi_me); bpy.context.scene.collection.objects.link(hi); hi.location = pv
+        bpy.context.view_layer.objects.active = hi; hi.select_set(True); bpy.ops.object.shade_smooth(); hi.select_set(False)
+        bpy.context.view_layer.objects.active = ob
+        pairs.append((hi, ob))
     mod = ob.modifiers.new("d", "DECIMATE"); mod.decimate_type = "COLLAPSE"; mod.ratio = min(1.0, C["targets"][name] / max(t0, 1)); mod.use_collapse_triangulate = True
     bpy.ops.object.modifier_apply(modifier="d"); ob.select_set(False)
     objs.append(ob)
     print(name, "tris", t0, "->", sum(len(p.vertices) - 2 for p in ob.data.polygons))
 bpy.data.objects.remove(src)
+nrm_img = None
+if pairs:
+    # high -> low tangent-space normal bake: every part's full-resolution mesh paints its detail into ONE normal atlas that shares the colour UV layout
+    N = C.get("nrm_size", 4096)
+    nrm_img = bpy.data.images.new(CID + "_normal", N, N, alpha=False)
+    nrm_img.generated_color = (0.5, 0.5, 1.0, 1.0)
+    nrm_img.colorspace_settings.name = "Non-Color"
+    bm_ = bpy.data.materials.new("bake"); bm_.use_nodes = True
+    tn = bm_.node_tree.nodes.new("ShaderNodeTexImage"); tn.image = nrm_img; bm_.node_tree.nodes.active = tn
+    sc_ = bpy.context.scene
+    sc_.render.engine = "CYCLES"; sc_.cycles.device = "CPU"; sc_.cycles.samples = 1
+    for hi, lo in pairs:
+        lo.data.materials.clear(); lo.data.materials.append(bm_)
+        bpy.ops.object.select_all(action="DESELECT"); hi.select_set(True); lo.select_set(True); bpy.context.view_layer.objects.active = lo
+        bpy.ops.object.bake(type="NORMAL", use_selected_to_active=True, cage_extrusion=0.03, max_ray_distance=0.08, normal_space="TANGENT", margin=10, use_clear=False)
+        print("baked", lo.name)
+    for hi, lo in pairs:
+        bpy.data.objects.remove(hi)
+        lo.data.materials.clear(); lo.data.materials.append(mat)
+    nn = mat.node_tree.nodes.new("ShaderNodeTexImage"); nn.image = nrm_img
+    nm = mat.node_tree.nodes.new("ShaderNodeNormalMap")
+    mat.node_tree.links.new(nn.outputs["Color"], nm.inputs["Color"]); mat.node_tree.links.new(nm.outputs["Normal"], bsdf.inputs["Normal"])
 os.makedirs(OUT, exist_ok=True)
 bpy.ops.object.select_all(action="SELECT")
 bpy.ops.export_scene.gltf(filepath=os.path.join(OUT, CID + ".glb"), export_format="GLB", use_selection=True, export_yup=True, export_apply=False,
-                          export_materials="EXPORT", export_image_format="JPEG", export_jpeg_quality=86, export_cameras=False, export_lights=False)
+                          export_materials="EXPORT", export_image_format="JPEG", export_jpeg_quality=90, export_tangents=bool(pairs), export_cameras=False, export_lights=False)
 meta = dict(C["meta"])
 meta["sockets"] = {k: [part] + [round(c, 4) for c in off] for k, (part, off) in C["sockets"].items()}
 json.dump(meta, open(os.path.join(OUT, CID + ".json"), "w"), indent=1)

@@ -1,0 +1,35 @@
+{
+ "textured": true,
+ "face_off": true,
+ "swarm_off": true,
+ "tex_gain": 1.0,
+ "tex_soft": 0.7,
+ "outline_px": 1.3,
+ "normal_map": true,
+ "sockets": {
+  "head": [
+   "head",
+   0.1,
+   0.0,
+   0.1
+  ],
+  "hand": [
+   "arm_f",
+   0.05,
+   0.0,
+   -0.3
+  ],
+  "weapon_base": [
+   "weapon",
+   0.0,
+   0.0,
+   0.2
+  ],
+  "weapon_tip": [
+   "weapon",
+   0.1,
+   0.0,
+   -0.2
+  ]
+ }
+}

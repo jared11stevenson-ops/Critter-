@@ -22,6 +22,9 @@ var cfg: Dictionary = {}        # design config (styles, poses, timings stub, ..
 var glb_meshes: Dictionary = {} # part name -> Mesh authored in Blender (res://art/models/<id>.glb); replaces the procedural geometry of that part
 var glb_used := false
 var glb_gain := 1.35               # texture brightness for generated models (sidecar "tex_gain")
+var glb_nrm: Texture2D = null      # baked tangent-space normal atlas of a generated model (keeps the fine detail the low-poly parts lost)
+var glb_soft := 0.0                # 0 = classic cel bands, 1 = soft wrap lighting so painted detail stays readable
+var glb_outline := -1.0            # outline width override in px (thinner ink keeps faces readable); <0 = default
 var glb_tex: Texture2D = null   # albedo texture of a generated (textured) model; the toon shader samples it instead of vertex colour
 
 func part(name: String, pos: Vector3, parent: String = "-") -> Prim:
@@ -57,6 +60,8 @@ func use_glb(id: String) -> bool:
 				var gm = (ch as MeshInstance3D).mesh.surface_get_material(0)
 				if gm is BaseMaterial3D and (gm as BaseMaterial3D).albedo_texture != null:
 					glb_tex = (gm as BaseMaterial3D).albedo_texture
+				if gm is BaseMaterial3D and (gm as BaseMaterial3D).normal_enabled and (gm as BaseMaterial3D).normal_texture != null:
+					glb_nrm = (gm as BaseMaterial3D).normal_texture
 			if parts.has(pn):
 				parts[pn]["pos"] = (ch as Node3D).position
 				parts[pn]["mb"] = Prim.new()
@@ -78,6 +83,10 @@ func use_glb(id: String) -> bool:
 					face[k] = float(fd[k])
 		elif meta.has("face_off"):
 			face = {}
+		if meta.has("tex_soft"):
+			glb_soft = float(meta["tex_soft"])
+		if meta.has("outline_px"):
+			glb_outline = float(meta["outline_px"])
 		if meta.has("tex_gain"):
 			glb_gain = float(meta["tex_gain"])
 		if bool(meta.get("textured", false)):
@@ -118,6 +127,12 @@ func assemble(rig_root: Node3D) -> Dictionary:
 		mat.set_shader_parameter("albedo_tex", glb_tex)
 		mat.set_shader_parameter("use_tex", 1.0)
 		mat.set_shader_parameter("tex_gain", glb_gain)
+		mat.set_shader_parameter("tex_soft", glb_soft)
+		if glb_nrm != null:
+			mat.set_shader_parameter("normal_tex", glb_nrm)
+			mat.set_shader_parameter("use_nrm", 1.0)
+		if glb_outline > 0.0 and mat.next_pass is ShaderMaterial:
+			(mat.next_pass as ShaderMaterial).set_shader_parameter("px_width", glb_outline)
 	var nodes := {}
 	var rest := {}
 	var tris := 0

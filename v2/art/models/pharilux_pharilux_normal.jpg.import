@@ -2,16 +2,19 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dibe5wb4f8u84"
-path="res://.godot/imported/bout_1280x720_t010.png-819c1ed1f5875a4ca8198d8e6452ffed.ctex"
+uid="uid://ck1tg8wx12rcr"
+path="res://.godot/imported/pharilux_pharilux_normal.jpg-60d9fc53024c8b4efc0835a2dfa3d3bf.ctex"
 metadata={
 "vram_texture": false
+}
+generator_parameters={
+"md5": "24b2f7c25ffb9276b1f6b67174a2c26e"
 }
 
 [deps]
 
-source_file="res://tools/qa/shots/bout_1280x720_t010.png"
-dest_files=["res://.godot/imported/bout_1280x720_t010.png-819c1ed1f5875a4ca8198d8e6452ffed.ctex"]
+source_file="res://art/models/pharilux_pharilux_normal.jpg"
+dest_files=["res://.godot/imported/pharilux_pharilux_normal.jpg-60d9fc53024c8b4efc0835a2dfa3d3bf.ctex"]
 
 [params]
 
@@ -23,7 +26,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
