@@ -5,14 +5,13 @@ Run: python3 tools/blender/build_zephyr.py -> v2/art/models/zephyr.glb + zephyr.
 import json, math, os, sys, random
 sys.path.insert(0, os.path.dirname(__file__))
 import lib
-from lib import hexc, Part, eye, fur, brow, mouth, pauldron, bracer, rivets
+from lib import hexc, Part
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "..", "v2", "art", "models")
 OLV = hexc("7a6a3e"); OLV2 = hexc("5e6a34"); BURG = hexc("7a2a3a"); BURG2 = hexc("a03a4a"); PINK = hexc("e86a9a"); MAG = hexc("d63a9c"); CREAM = hexc("ecd9b0")
 GOLD = hexc("ffd24a", 0.6); LEAF = hexc("6a7a3a"); DARKB = hexc("2a1a1c"); BEAK = hexc("a8845a"); WOOD = hexc("5a3e26"); VIAL = hexc("ff5aa8", 1.0)
 WING = hexc("c86a7a"); WING2 = hexc("8a8a4a"); SPOT = hexc("f0d8c0")
 lib.reset()
-lib.CHUNK = 1.3; lib.EYE_SCALE = 1.25; lib.MISMATCH = True
 parts = {}
 rr = random.Random(5)
 
@@ -29,7 +28,6 @@ def leg(name, z, x0):
     p.hard().tube([(x0 + 0.06, 0.07, z), (x0 - 0.12, 0.03, z)], (0.025, 0.0), DARKB, sides=4)
     for k in range(5):   # leg feathers
         p.hard().tube([(x0 + 0.05, 1.12 - 0.07 * k, z + 0.05 * s), (x0 - 0.1, 0.95 - 0.12 * k, z + 0.1 * s)], (0.04, 0.0), BURG2 if k % 2 == 0 else OLV2, sides=4)
-    bracer(p, (knee[0] - 0.02, knee[1] - 0.1, z), (hock[0] + 0.02, hock[1] + 0.12, z), 0.065, hexc("e8c050"), hexc("c0305a"))
     parts[name] = p.finish(voxel=0.035, smooth_passes=2, target_tris=520)
 
 leg("leg_f", 0.14, 0.1)
@@ -54,20 +52,16 @@ for k in range(5):    # flower garland
     a = k * 1.26
     t.hard().blob((0.1 + 0.12 * math.cos(a), 2.0, 0.3 * math.sin(a)), (0.05, 0.03, 0.05), PINK if k % 2 == 0 else MAG, seg=6, ring=4)
 t.tube([(0.1, 2.0, 0), (0.14, 2.14, 0)], 0.07, OLV, sides=7)                                  # neck
-t.hard().tube([(0.14, 1.95, -0.14), (0.22, 1.65, 0.0), (0.12, 1.35, 0.14)], 0.03, BURG, sides=5)   # vial bandolier
-for k, y in enumerate((1.8, 1.62, 1.46)):
-    t.hard().blob((0.24 - 0.01 * k, y, 0.02 * (k - 1)), (0.04, 0.07, 0.04), VIAL, seg=6, ring=5)
 parts["torso"] = t.finish(voxel=0.04, smooth_passes=2, target_tris=1200)
 
 # ---- head: bird skull with a long curved proboscis, crest of leaf feathers, flower crown, feathered antennae with nectar drops
 hp = (0.14, 2.2, 0)
-h = Part("head", hp, sc=1.3)
-h.blob((0.24, 2.34, 0), (0.26, 0.24, 0.22), OLV)                                                # skull
+h = Part("head", hp)
+h.blob((0.24, 2.34, 0), (0.22, 0.2, 0.18), OLV)                                                # skull
 h.tube([(0.36, 2.3, 0), (0.7, 2.22, 0), (1.05, 2.1, 0), (1.25, 1.95, 0)], (0.1, 0.01), BEAK, sides=7)    # proboscis
 h.hard().tube([(0.4, 2.36, 0), (0.75, 2.3, 0), (1.0, 2.18, 0)], (0.05, 0.01), BURG, sides=5)
 for s in (-1, 1):
-    brow(h, (0.4, 2.56, 0.15 * s), 0.18, 0.06, "5a1030", th=0.035, look=(1, 0, 0.3 * s))
-    eye(h, (0.36, 2.4, 0.15 * s), 0.115, "d83a8a", white="fff4e8", look=(1, 0, 0.3 * s), glow=0.5)
+    h.hard().blob((0.34, 2.38, 0.14 * s), (0.07, 0.08, 0.05), DARKB, seg=7, ring=5)             # eye sockets
     ant = [(0.2, 2.5, 0.08 * s), (0.1, 2.85, 0.2 * s), (0.18, 3.1, 0.34 * s), (0.3, 3.0, 0.42 * s)]
     h.hard().tube(ant, (0.02, 0.01), WOOD, sides=4)
     h.hard().tube([ant[3], (0.3, 2.82, 0.43 * s)], (0.012, 0.0), WOOD, sides=3)
@@ -101,8 +95,6 @@ def arm(name, z):
         sock["weapon_tip"] = ["arm_f", round(a2[0] - sh[0], 4), round(a2[1] - sh[1], 4), round(a2[2] - sh[2], 4)]
         sock["weapon_base"] = ["arm_f", round(hand[0] - sh[0], 4), round(hand[1] - sh[1], 4), round(hand[2] - sh[2], 4)]
         sock["hand"] = ["arm_f", round(hand[0] - sh[0], 4), round(hand[1] - sh[1], 4), round(hand[2] - sh[2], 4)]
-    pauldron(p, (sh[0] + 0.02, sh[1] + 0.02, z + 0.03 * s), 0.1, hexc("c0305a"), hexc("ffd84a"), spikes=2, sd=s)
-    bracer(p, (el[0], el[1] - 0.05, el[2]), (hand[0] - 0.02, hand[1] + 0.18, hand[2]), 0.065, hexc("e8c050"), hexc("c0305a"))
     parts[name] = p.finish(voxel=0.03, smooth_passes=2, target_tris=520)
 
 sock = {}
@@ -135,5 +127,5 @@ total = sum(lib.tris(o) for o in parts.values())
 print("TRIS", {k: lib.tris(o) for k, o in parts.items()}, "total", total)
 lib.bake(parts)
 lib.export(os.path.join(OUT, "zephyr.glb"))
-meta = {"sockets": dict(sock, head=["head", 0.08, 0.15, 0.0]), "face_off": True}
+meta = {"sockets": dict(sock, head=["head", 0.08, 0.15, 0.0]), "face": {"center": [0.1, 0.14, 0.0], "radii": [0.23, 0.21, 0.19], "half_lon": 1.0, "half_lat": 0.7, "lat_center": 0.0, "e": 0.9}}
 json.dump(meta, open(os.path.join(OUT, "zephyr.json"), "w"), indent=1)

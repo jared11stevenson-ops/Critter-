@@ -10,6 +10,8 @@ OUT = os.path.join(os.path.dirname(__file__), "..", "..", "art", "portraits")
 os.makedirs(OUT, exist_ok=True)
 S = 192; K = 4
 for cid, hexcol in SIG.items():
+    if not os.path.exists(os.path.join(SRC, f"{cid}_portrait.png")):
+        continue
     im = Image.open(os.path.join(SRC, f"{cid}_portrait.png")).convert("RGBA").resize((S * K, S * K), Image.LANCZOS)
     mask = Image.new("L", (S * K, S * K), 0)
     ImageDraw.Draw(mask).ellipse([10 * K, 10 * K, (S - 10) * K, (S - 10) * K], fill=255)

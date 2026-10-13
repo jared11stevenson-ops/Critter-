@@ -331,8 +331,8 @@ func _states(ids, out: String) -> void:
 
 
 ## Character icons: a head-and-shoulders bust on a flat tinted backdrop (the sheet tool crops it round and rings it).
-const PORTRAIT_DIST := {"aruun": 3.3, "cigarra": 3.3, "bramvex": 3.0, "scarlith": 4.2, "mollusk": 4.4, "zephyr": 3.2, "nyxaris": 4.4, "pharilux": 5.2}
-const PORTRAIT_LIFT := {"aruun": -0.15, "cigarra": -0.12, "bramvex": 0.0, "scarlith": 0.3, "mollusk": 0.1, "zephyr": 0.1, "nyxaris": 0.3, "pharilux": 0.6}
+const PORTRAIT_DIST := {"aruun": 4.6, "cigarra": 3.3, "bramvex": 3.0, "scarlith": 4.2, "mollusk": 4.4, "zephyr": 3.2, "nyxaris": 4.4, "pharilux": 5.2}
+const PORTRAIT_LIFT := {"aruun": 0.3, "cigarra": -0.12, "bramvex": 0.0, "scarlith": 0.3, "mollusk": 0.1, "zephyr": 0.1, "nyxaris": 0.3, "pharilux": 0.6}
 func _portrait(ids, out: String) -> void:
 	vp.size = Vector2i(256, 256)
 	no_shadow = true
@@ -349,7 +349,8 @@ func _portrait(ids, out: String) -> void:
 		var cam: Camera3D = st["cam"]
 		cam.fov = 28.0
 		var d: float = float(PORTRAIT_DIST.get(id, 4.0))
-		cam.look_at_from_position(hp + Vector3(d * 0.92, 0.12 * d, d * 0.38), hp)
+		var zf: float = 0.95 if id == "aruun" else 0.38
+		cam.look_at_from_position(hp + Vector3(d * 0.92 * (0.75 if id == "aruun" else 1.0), 0.12 * d, d * zf), hp)
 		var sun: DirectionalLight3D = st["sun"]
 		sun.rotation_degrees = Vector3(-22, 67, 0)
 		await _save("%s/%s_portrait.png" % [out, id])

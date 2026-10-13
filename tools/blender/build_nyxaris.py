@@ -5,13 +5,12 @@ translucent silk train. Layout matches the procedural design. Run: python3 tools
 import json, math, os, sys, random
 sys.path.insert(0, os.path.dirname(__file__))
 import lib
-from lib import hexc, Part, eye, fur, brow, mouth, pauldron, bracer, rivets
+from lib import hexc, Part
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "..", "v2", "art", "models")
 IND = hexc("2a2650"); IND2 = hexc("3a3466"); PLUM = hexc("4a2d6a"); PINK = hexc("ee4fa8", 0.8); ROSE = hexc("f08cc0"); ICE = hexc("7fd2ea", 0.4); CRYS = hexc("a8d8f0")
 SILK = hexc("e8eaf2"); FUR = hexc("dcd8e4"); GOLDC = hexc("f4d24a", 0.8); DARK = hexc("14102a")
 lib.reset()
-lib.CHUNK = 1.3; lib.EYE_SCALE = 1.25; lib.MISMATCH = True
 parts = {}
 rr = random.Random(9)
 
@@ -65,7 +64,7 @@ parts["torso"] = t.finish(voxel=0.05, smooth_passes=2, target_tris=1700)
 
 # head: furred cream face, venom fangs, big pink eyes (face shader) + small eyes, crystal crest and pink crest horns
 hp = (0.45, 2.25, 0)
-h = Part("head", hp, sc=1.2)
+h = Part("head", hp)
 h.blob((0.55, 2.35, 0), (0.4, 0.34, 0.4), FUR)
 for k in range(14):
     a = k * 2.4
@@ -73,14 +72,11 @@ for k in range(14):
     c = (0.55 + d[0] * 0.4, 2.35 + d[1] * 0.34, d[2] * 0.4)
     h.hard().tube([c, (c[0] + d[0] * 0.14, c[1] + d[1] * 0.12, c[2] + d[2] * 0.14)], (0.05, 0.0), SILK, sides=4)
 for s in (-1, 1):
-    brow(h, (0.93, 2.6, 0.17 * s), 0.24, 0.07, "2a1a4a", th=0.045, look=(1, 0, 0.3 * s))
-    eye(h, (0.88, 2.42, 0.17 * s), 0.14, "e0306a", white="fff0f6", look=(1, 0, 0.3 * s), glow=0.6)
     h.hard().tube([(0.83, 2.13, 0.14 * s), (0.97, 1.87, 0.2 * s), (0.93, 1.6, 0.12 * s)], (0.07, 0.0), CRYS, sides=5)       # venom fangs
     h.hard().blob((0.87, 2.15, 0.22 * s), (0.1, 0.1, 0.1), IND)                                                                  # chelicerae
     h.hard().blob((0.81, 2.59, 0.1 * s), (0.045, 0.045, 0.045), PINK, seg=6, ring=4)
     h.hard().blob((0.75, 2.7, 0.2 * s), (0.04, 0.04, 0.04), PINK, seg=6, ring=4)
     h.hard().tube([(0.45, 2.65, 0.15 * s), (0.35, 3.1, 0.3 * s), (0.5, 3.45, 0.38 * s)], (0.05, 0.015), PINK, sides=5)           # crest horns
-mouth(h, (0.93, 2.22, 0), 0.2, 0.05, "2a1a4a", teeth=2, tooth="ffffff", fang=True)
 h.hard().tube([(0.55, 2.65, 0), (0.45, 3.05, 0), (0.4, 3.4, 0)], ((0.0, 0.03), (0.1, 0.03), (0.0, 0.02)), CRYS, wide=(0, 0, 1), sides=4)   # crystal crest
 parts["head"] = h.finish(voxel=0.035, smooth_passes=2, target_tris=1000)
 
@@ -104,8 +100,6 @@ def arm(name, z):
         sock["weapon_tip"] = ["arm_f", round(a2[0] - sh[0], 4), round(a2[1] - sh[1], 4), round(a2[2] - sh[2], 4)]
         sock["weapon_base"] = ["arm_f", round(hand[0] - sh[0], 4), round(hand[1] - sh[1], 4), round(hand[2] - sh[2], 4)]
         sock["hand"] = sock["weapon_base"]
-    pauldron(p, (sh[0] + 0.02, sh[1] + 0.02, z + 0.04 * s), 0.14, hexc("5a3a9a"), hexc("d8e0f0"), spikes=3, sd=s)
-    bracer(p, (el[0], el[1] - 0.04, el[2]), (hand[0] - 0.04, hand[1] + 0.2, hand[2]), 0.085, hexc("d8e0f0"), hexc("e0306a"))
     parts[name] = p.finish(voxel=0.04, smooth_passes=2, target_tris=620)
 
 arm("arm_f", 0.4)
@@ -131,4 +125,4 @@ total = sum(lib.tris(o) for o in parts.values())
 print("TRIS", {k: lib.tris(o) for k, o in parts.items()}, "total", total)
 lib.bake(parts)
 lib.export(os.path.join(OUT, "nyxaris.glb"))
-json.dump({"sockets": sock, "face_off": True}, open(os.path.join(OUT, "nyxaris.json"), "w"), indent=1)
+json.dump({"sockets": sock}, open(os.path.join(OUT, "nyxaris.json"), "w"), indent=1)
