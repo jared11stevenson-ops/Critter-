@@ -82,6 +82,13 @@ var _hit_dir := 1.0
 var _action_frame := 0
 var _timing := Vector3i(1, 1, 1)
 
+## High quality: the critter's parts cast real shadows onto the arena (the blob shadow stays as the contact shadow).
+func enable_shadows() -> void:
+	for n in _nodes:
+		var mi = _nodes[n]
+		if mi is MeshInstance3D and (mi as MeshInstance3D).name != "face":
+			(mi as MeshInstance3D).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+
 func setup(critter_id_in: String) -> void:
 	critter_id = critter_id_in
 	for c in get_children():
@@ -94,6 +101,7 @@ func setup(critter_id_in: String) -> void:
 	var b := Rb.new()
 	b.pal = palette
 	design.build(b)
+	b.use_glb(critter_id)          # a Blender-authored / generated model replaces the procedural parts of that critter (only Aruun for now)
 	cfg = b.cfg
 	var res := b.assemble(_body)
 	_nodes = res["nodes"]

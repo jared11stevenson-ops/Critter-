@@ -19,12 +19,16 @@ uniform float crack_level = 0.0;                              // 0..3 shell-plat
 uniform vec3 crack_col = vec3(1.0, 0.35, 0.15);
 uniform float silhouette : hint_range(0.0, 1.0) = 0.0;     // flat black (silhouette gate / lookdev)
 
+uniform sampler2D albedo_tex : source_color, filter_linear_mipmap, repeat_disable;   // generated (Tripo) models are textured: UV0 samples this
+uniform float use_tex : hint_range(0.0, 1.0) = 0.0;
+varying vec2 v_uv;
 varying vec3 v_col;
 varying float v_glow;
 
 void vertex() {
 	v_col = COLOR.rgb;   // palette values are authored for the final (display) space; shading is multiplicative
-	v_glow = COLOR.a;
+	v_glow = use_tex > 0.5 ? 0.0 : COLOR.a;
+	v_uv = UV;
 }
 
 // Crack geometry is authored with vertex alpha 0.01 / 0.02 / 0.03 = tier 1 / 2 / 3 (see Prim crack tubes); ordinary glow is >= 0.1.
@@ -35,7 +39,7 @@ float crack_tier(float a) {
 void fragment() {
 	float tier = crack_tier(v_glow);
 	if (tier > crack_level + 0.5) { discard; }
-	vec3 base = v_col;
+	vec3 base = use_tex > 0.5 ? clamp(texture(albedo_tex, v_uv).rgb * 1.35, 0.0, 1.0) : v_col;
 	// Cel shading is computed in light(); here we only set albedo, rim and emission.
 	ALBEDO = base;
 	float rim = pow(1.0 - clamp(dot(normalize(NORMAL), normalize(VIEW)), 0.0, 1.0), rim_power);
