@@ -72,6 +72,14 @@ func use_glb(id: String) -> bool:
 					face[k] = float(fd[k])
 		elif meta.has("face_off"):
 			face = {}
+		if meta.has("swarm_rest") and not swarm.is_empty():
+			var rest: Array = []
+			for r in meta["swarm_rest"]:
+				rest.append(Vector3(r[0], r[1], r[2]))
+			swarm["rest"] = rest
+			cfg["swarm_rest"] = rest
+			var sp: Array = meta["swarm_pos"]
+			swarm["pos"] = Vector3(sp[0], sp[1], sp[2])
 		for k in meta.get("cfg", {}):
 			cfg[k] = meta["cfg"][k]
 	glb_used = not glb_meshes.is_empty()

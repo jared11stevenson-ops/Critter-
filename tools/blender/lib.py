@@ -35,8 +35,9 @@ def reset():
 class Part:
     """One rigid part. Primitives are added in body space; finish() makes the mesh object with its origin at the pivot."""
 
-    def __init__(self, name, pivot=(0, 0, 0), dy=0.0):
+    def __init__(self, name, pivot=(0, 0, 0), dy=0.0, sc=1.0):
         self.name = name
+        self.sc = sc                              # uniform scale of the finished part about its pivot (e.g. a smaller head)
         self.dy = dy                              # whole part shifted up by dy (stretch the body without re-typing coordinates)
         self.pivot = V(pivot[0], pivot[1] + dy, pivot[2])
         self.bm = bmesh.new()
@@ -77,6 +78,10 @@ class Part:
 
     # -- primitives
     def blob(self, c, r, color, rot=(0, 0, 0), seg=14, ring=10, e=1.0):
+        if self._h:   # hard geometry is exempt from decimation: build it light
+            big = max(r) > 0.2
+            seg = max(6, int(seg * (0.75 if big else 0.55)))
+            ring = max(4, int(ring * (0.75 if big else 0.55)))
         res = bmesh.ops.create_uvsphere(self._b(), u_segments=seg, v_segments=ring, radius=1.0)
         vs = res["verts"]
         if e != 1.0:  # superellipsoid-ish squarer shape
@@ -89,9 +94,14 @@ class Part:
         self._paint(vs, color)
         return vs
 
-    def tube(self, pts, radii, color, sides=8, caps=True, taper_pow=1.0):
+    def tube(self, pts, radii, color, sides=8, caps=True, taper_pow=1.0, wide=None):
         """Smooth swept tube through game-space points; radii = r or (r0, r1) or list per point."""
         n = len(pts)
+        if self._h:
+            rm = max(radii) if isinstance(radii, (list, tuple)) and not isinstance(radii[0], (list, tuple)) else (radii if isinstance(radii, (int, float)) else 0.1)
+            if isinstance(rm, (list, tuple)):
+                rm = max(rm)
+            sides = 4 if rm <= 0.045 else (5 if rm <= 0.09 else min(sides, 7))
         if isinstance(radii, (int, float)):
             radii = [radii] * n
         elif len(radii) == 2 and n != 2:
@@ -104,8 +114,13 @@ class Part:
             ref = Vector((0, 0, 1)) if abs(t.z) < 0.9 else Vector((1, 0, 0))
             if prev_n is not None:
                 ref = prev_n
-            a = t.cross(ref).normalized()
-            b = t.cross(a).normalized()
+            if wide is not None:      # ribbon: the first radius runs along `wide` (game axes), the second is the thickness
+                w = V(*wide)
+                a = (w - t * w.dot(t)).normalized()
+                b = t.cross(a).normalized()
+            else:
+                a = t.cross(ref).normalized()
+                b = t.cross(a).normalized()
             prev_n = a
             ring = []
             rr = radii[i]
@@ -148,6 +163,9 @@ class Part:
         return self.tube([base, tip], (r0, r1), color, sides=sides)
 
     def ring(self, c, big, small, color, rot=(0, 0, 0), seg=16, tseg=6):
+        if self._h:
+            seg = max(8, int(seg * 0.7))
+            tseg = max(3, int(tseg * 0.6))
         vs = []
         verts = []
         for i in range(seg):
@@ -156,9 +174,9 @@ class Part:
             for j in range(tseg):
                 b = 2 * math.pi * j / tseg
                 x = (big + small * math.cos(b)) * math.cos(a)
-                y = (big + small * math.cos(b)) * math.sin(a)
-                z = small * math.sin(b)
-                row.append(self._b().verts.new(Vector((x, y, z))))
+                zb = (big + small * math.cos(b)) * math.sin(a)      # ring plane = game XY (axis = game Z, like Prim.ring)
+                yb = small * math.sin(b)
+                row.append(self._b().verts.new(Vector((x, yb, zb))))
             verts.append(row)
         for i in range(seg):
             for j in range(tseg):
@@ -190,15 +208,22 @@ class Part:
             mesh.remesh_voxel_size = voxel
             mesh.remesh_voxel_adaptivity = 0.0
             bpy.ops.object.voxel_remesh()
+        hard_tris = sum(len(p.vertices) - 2 for p in hmesh.polygons)
+        if target_tris:
+            org_target = max(250, target_tris - hard_tris)
+            tri = sum(len(p.vertices) - 2 for p in mesh.polygons)
+            if tri > org_target:
+                dm = obj.modifiers.new("dec", "DECIMATE")
+                dm.ratio = org_target / tri
+                bpy.ops.object.modifier_apply(modifier=dm.name)
+        if smooth_passes and len(mesh.polygons):
+            m = obj.modifiers.new("smooth", "SMOOTH")
+            m.iterations = smooth_passes
+            m.factor = 0.6
+            bpy.ops.object.modifier_apply(modifier=m.name)
         if len(hmesh.polygons):
             hobj = bpy.data.objects.new(self.name + "_h", hmesh)
             bpy.context.scene.collection.objects.link(hobj)
-            if smooth_passes:
-                hm = hobj.modifiers.new("hs", "SMOOTH")
-                hm.iterations = max(1, smooth_passes // 2)
-                hm.factor = 0.4
-                bpy.context.view_layer.objects.active = hobj
-                bpy.ops.object.modifier_apply(modifier=hm.name)
             bpy.context.view_layer.objects.active = obj
             for o in bpy.context.selected_objects:
                 o.select_set(False)
@@ -211,18 +236,9 @@ class Part:
         obj.name = self.name
         # origin to the joint pivot
         mesh.transform(Matrix.Translation(-self.pivot))
+        if self.sc != 1.0:
+            mesh.transform(Matrix.Scale(self.sc, 4))
         obj.location = self.pivot
-        if smooth_passes:
-            m = obj.modifiers.new("smooth", "SMOOTH")
-            m.iterations = smooth_passes
-            m.factor = 0.6
-            bpy.ops.object.modifier_apply(modifier=m.name)
-        if target_tris and len(mesh.polygons) * 2 > target_tris:
-            tri = sum(len(p.vertices) - 2 for p in mesh.polygons)
-            if tri > target_tris:
-                dm = obj.modifiers.new("dec", "DECIMATE")
-                dm.ratio = target_tris / tri
-                bpy.ops.object.modifier_apply(modifier=dm.name)
         # triangulate for a predictable count
         tm = obj.modifiers.new("tri", "TRIANGULATE")
         bpy.ops.object.modifier_apply(modifier=tm.name)
