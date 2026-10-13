@@ -67,7 +67,31 @@ def bramvex_part(c, info):
         return "weapon"                                 # the spiked club resting forward-right
     return "torso"
 
+def pharilux_part(c, info):
+    """DRAFT (unmeasured until the creator's model exists). Pharilux: ghost mantis in a brass diver suit; lantern helmet + antennae = head, wings = extra, chain/anchor = weapon.
+    Landmarks below are guesses for a standing pose (rotated to face +x, feet z=0, height ~1): re-measure with `debug` before trusting them."""
+    x, y, z = c
+    if info["zmax"] < 0.045:
+        return "drop"
+    if z >= 0.72 and abs(y) < 0.2:
+        return "head"
+    if x < -0.06 and z > 0.35:
+        return "extra"
+    if y < -0.22 and z < 0.40:
+        return "weapon"
+    if abs(y) > 0.14 and 0.35 < z < 0.7:
+        return "arm_f" if y < 0 else "arm_b"
+    if z < 0.40:
+        return "leg_f" if y < 0 else "leg_b"
+    return "torso"
+
 CONFIGS = {
+    "pharilux": dict(src="/tmp/cu/ph/plain.glb", rot_z=0.0, scale=3.6, x0=0.0, y0=0.0, tex_size=4096, part=pharilux_part, min_faces=0,
+                    pivots={"torso": (0.0, 0.0, 0.42), "head": (0.05, 0.0, 0.72), "arm_f": (0.0, -0.16, 0.66), "arm_b": (0.0, 0.16, 0.66),
+                            "leg_f": (0.0, -0.08, 0.42), "leg_b": (0.0, 0.08, 0.42), "weapon": (0.05, -0.25, 0.35), "extra": (-0.08, 0.0, 0.62)},
+                    targets={"torso": 4200, "head": 8000, "arm_f": 1900, "arm_b": 1900, "leg_f": 2300, "leg_b": 2300, "weapon": 2400, "extra": 3200},
+                    sockets={"head": ("head", (0.1, 0.0, 0.1)), "hand": ("arm_f", (0.05, 0.0, -0.3)), "weapon_base": ("weapon", (0.0, 0.0, 0.2)), "weapon_tip": ("weapon", (0.1, 0.0, -0.2))},
+                    meta={"textured": True, "face_off": True, "swarm_off": True, "tex_gain": 1.0}),
     "bramvex": dict(src="/tmp/cu/br/plain.glb", rot_z=-90.0, scale=3.4, x0=0.0, y0=0.0, tex_size=4096, part=bramvex_part, min_faces=0,
                     pivots={"torso": (0.0, 0.0, 0.40), "head": (0.03, 0.0, 0.66), "arm_f": (0.0, -0.15, 0.58), "arm_b": (0.0, 0.15, 0.58),
                             "leg_f": (0.0, -0.08, 0.36), "leg_b": (0.0, 0.08, 0.36), "weapon": (0.12, -0.15, 0.30), "extra": (-0.05, 0.1, 0.55)},

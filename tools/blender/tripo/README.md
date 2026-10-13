@@ -16,3 +16,15 @@ Source: tools/source_art/mollusk_tripo.glb (single figure, faces +x already, she
 
 ## Bramvex (v0.22)
 Source: tools/source_art/bramvex_tripo.glb (crouching hero pose; faces +y in the file, rotated -90 deg to +x; the file includes a ground slab that is dropped). His crouch overlaps arms/legs/cloak/club, so only four parts move: head, weapon (club), extra (bat wing + lantern pole); arms and legs are kept in the torso and the four unused rig parts are 1-triangle specks (targets = -1). `python3 tools/blender/tripo/tripo_build.py bramvex [debug]`.
+
+## KNOWN ISSUE (open, parked by the creator): generated models lose face/detail in-game (Cigarra, Bramvex; Mollusk less so)
+Creator report v0.20/v0.22: Cigarra's and Bramvex's faces and fine details are blurred/unreadable in the bout view; asks for at least 4K-level crispness. To fix LATER (ranked, cheapest first):
+1. **Use the normal map.** Tripo ships NormalGL (4096) but the pipeline drops it (the new material keeps only base colour) and toon.gdshader ignores normals' fine detail (3 cel bands flatten it). Keep the normal texture through export, sample it in the shader (needs tangents) and let the cel bands see it.
+2. **Proper high->low bake.** Cycles "selected to active" normal (+AO) bake from each part's high-poly mesh (200k-1M tris) onto its decimated mesh (same UVs). Real detail on 4-5k triangles.
+3. **Spend triangles where the eye looks:** head 4.6k tris is too few for a face; give the head 8-12k and shrink the body/cloak; or split the face into its own island with its own budget.
+4. **Texture:** use 4096 for every model (Cigarra is still 2048); skip the extra `tex_gain` wash (it flattens contrast) and thin the toon outline for textured models (px_width) so it stops eating detail.
+5. **Camera:** bouts show the figure small; add face close-ups (intro stare-down, result screen) so the detail is seen.
+Verify with a 1280x720 bout shot AND a phone-size (e.g. 720x360 crop) check of the face.
+
+## Pharilux (prepared, not built: waiting for the creator's model)
+Feed Tripo the STANDING front view (tools/source_art/for_3d/pharilux_turn_front.png), not the big hero crop (the hero is a seated/crouched pose: like Bramvex it would force a static body). If it still comes out crouched expect Bramvex-style parts (head / weapon / extra). Reminders: drop the ground slab (info["zmax"]), unused parts = -1 targets, give the head a bigger triangle budget, 4096 texture, tex_gain ~1.0, decode with `npx @gltf-transform/cli copy`. Draft rules are in `pharilux_part` / CONFIGS["pharilux"] in tripo_build.py (landmarks to be measured once the model exists: lantern helmet+antennae = head, wings = extra, chains/anchor = weapon).
