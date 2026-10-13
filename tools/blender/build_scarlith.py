@@ -5,7 +5,7 @@ Layout matches the procedural design pivots. Run: python3 tools/blender/build_sc
 import json, math, os, sys, random
 sys.path.insert(0, os.path.dirname(__file__))
 import lib
-from lib import hexc, Part
+from lib import hexc, Part, eye, fur
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "..", "v2", "art", "models")
 RED = hexc("b01c2c"); RED2 = hexc("c42a3a"); DRED = hexc("7e1522"); GOLD = hexc("e3b04a"); WINE = hexc("4f1a36"); BLACK = hexc("171012"); WOOD = hexc("7a4a2a")
@@ -66,12 +66,15 @@ hp = (0.75, 1.55, 0)
 h = Part("head", hp)
 h.blob((0.8, 1.65, 0), (0.55, 0.45, 0.52), RED2)
 h.blob((1.25, 1.4, 0), (0.14, 0.1, 0.2), DRED, rot=(0, 0, -10))
+eye(h, (1.16, 1.78, -0.25), 0.15, "e3b04a", white="fff4d8", look=(1, 0, -0.2), glow=0.3)
+eye(h, (1.16, 1.78, 0.25), 0.15, "e3b04a", white="fff4d8", look=(1, 0, 0.2), glow=0.3)
+h.hard().ring((1.2, 1.78, -0.25), 0.17, 0.03, GOLD, rot=(0, 90, 0), seg=14, tseg=4)
 h.hard().blob((1.35, 1.35, 0.06), (0.025, 0.04, 0.02), GOLD)                                  # gold tooth
 fuzz(h, (0.8, 1.65, 0), (0.55, 0.45, 0.52), 22, 0.1, RED2, seed=5)
 h.hard().blob((0.75, 2.05, 0), (0.42, 0.28, 0.42), BLACK)                                      # tricorn crown
-h.hard().blob((0.75, 1.95, 0), (0.88, 0.06, 0.84), BLACK, rot=(0, 0, 3))                       # brim
+h.hard().blob((0.75, 1.95, 0), (0.7, 0.05, 0.66), BLACK, rot=(0, 0, 3))                       # brim
 for s in (-1, 1):
-    h.hard().blob((0.75, 2.12, 0.62 * s), (0.2, 0.06, 0.16), BLACK, rot=(0, 0, 25 * s))
+    h.hard().blob((0.75, 2.08, 0.5 * s), (0.16, 0.05, 0.13), BLACK, rot=(0, 0, 25 * s))
 h.hard().ring((0.75, 2.05, 0.0), 0.44, 0.04, WINE, rot=(90, 0, 0), seg=16, tseg=4)
 h.hard().ring((0.75, 2.07, 0.45), 0.11, 0.025, GOLD, seg=12, tseg=4)
 h.hard().tube([(1.05, 1.75, 0.3), (1.15, 1.6, 0.0), (1.05, 1.75, -0.3)], 0.02, BLACK, sides=4)  # eyepatch strap
@@ -133,4 +136,4 @@ total = sum(lib.tris(o) for o in parts.values())
 print("TRIS", {k: lib.tris(o) for k, o in parts.items()}, "total", total)
 lib.bake(parts)
 lib.export(os.path.join(OUT, "scarlith.glb"))
-json.dump({}, open(os.path.join(OUT, "scarlith.json"), "w"))
+json.dump({"face_off": True}, open(os.path.join(OUT, "scarlith.json"), "w"))

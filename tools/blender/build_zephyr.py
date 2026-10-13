@@ -5,7 +5,7 @@ Run: python3 tools/blender/build_zephyr.py -> v2/art/models/zephyr.glb + zephyr.
 import json, math, os, sys, random
 sys.path.insert(0, os.path.dirname(__file__))
 import lib
-from lib import hexc, Part
+from lib import hexc, Part, eye, fur
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "..", "v2", "art", "models")
 OLV = hexc("7a6a3e"); OLV2 = hexc("5e6a34"); BURG = hexc("7a2a3a"); BURG2 = hexc("a03a4a"); PINK = hexc("e86a9a"); MAG = hexc("d63a9c"); CREAM = hexc("ecd9b0")
@@ -57,11 +57,11 @@ parts["torso"] = t.finish(voxel=0.04, smooth_passes=2, target_tris=1200)
 # ---- head: bird skull with a long curved proboscis, crest of leaf feathers, flower crown, feathered antennae with nectar drops
 hp = (0.14, 2.2, 0)
 h = Part("head", hp)
-h.blob((0.24, 2.34, 0), (0.22, 0.2, 0.18), OLV)                                                # skull
+h.blob((0.24, 2.34, 0), (0.26, 0.24, 0.22), OLV)                                                # skull
 h.tube([(0.36, 2.3, 0), (0.7, 2.22, 0), (1.05, 2.1, 0), (1.25, 1.95, 0)], (0.1, 0.01), BEAK, sides=7)    # proboscis
 h.hard().tube([(0.4, 2.36, 0), (0.75, 2.3, 0), (1.0, 2.18, 0)], (0.05, 0.01), BURG, sides=5)
 for s in (-1, 1):
-    h.hard().blob((0.34, 2.38, 0.14 * s), (0.07, 0.08, 0.05), DARKB, seg=7, ring=5)             # eye sockets
+    eye(h, (0.36, 2.4, 0.15 * s), 0.115, "d83a8a", white="fff4e8", look=(1, 0, 0.3 * s), glow=0.5)
     ant = [(0.2, 2.5, 0.08 * s), (0.1, 2.85, 0.2 * s), (0.18, 3.1, 0.34 * s), (0.3, 3.0, 0.42 * s)]
     h.hard().tube(ant, (0.02, 0.01), WOOD, sides=4)
     h.hard().tube([ant[3], (0.3, 2.82, 0.43 * s)], (0.012, 0.0), WOOD, sides=3)
@@ -127,5 +127,5 @@ total = sum(lib.tris(o) for o in parts.values())
 print("TRIS", {k: lib.tris(o) for k, o in parts.items()}, "total", total)
 lib.bake(parts)
 lib.export(os.path.join(OUT, "zephyr.glb"))
-meta = {"sockets": dict(sock, head=["head", 0.08, 0.15, 0.0]), "face": {"center": [0.1, 0.14, 0.0], "radii": [0.23, 0.21, 0.19], "half_lon": 1.0, "half_lat": 0.7, "lat_center": 0.0, "e": 0.9}}
+meta = {"sockets": dict(sock, head=["head", 0.08, 0.15, 0.0]), "face_off": True}
 json.dump(meta, open(os.path.join(OUT, "zephyr.json"), "w"), indent=1)

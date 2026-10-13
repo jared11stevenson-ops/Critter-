@@ -5,7 +5,7 @@ translucent silk train. Layout matches the procedural design. Run: python3 tools
 import json, math, os, sys, random
 sys.path.insert(0, os.path.dirname(__file__))
 import lib
-from lib import hexc, Part
+from lib import hexc, Part, eye, fur
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "..", "v2", "art", "models")
 IND = hexc("2a2650"); IND2 = hexc("3a3466"); PLUM = hexc("4a2d6a"); PINK = hexc("ee4fa8", 0.8); ROSE = hexc("f08cc0"); ICE = hexc("7fd2ea", 0.4); CRYS = hexc("a8d8f0")
@@ -72,6 +72,7 @@ for k in range(14):
     c = (0.55 + d[0] * 0.4, 2.35 + d[1] * 0.34, d[2] * 0.4)
     h.hard().tube([c, (c[0] + d[0] * 0.14, c[1] + d[1] * 0.12, c[2] + d[2] * 0.14)], (0.05, 0.0), SILK, sides=4)
 for s in (-1, 1):
+    eye(h, (0.88, 2.42, 0.17 * s), 0.14, "e0306a", white="fff0f6", look=(1, 0, 0.3 * s), glow=0.6)
     h.hard().tube([(0.83, 2.13, 0.14 * s), (0.97, 1.87, 0.2 * s), (0.93, 1.6, 0.12 * s)], (0.07, 0.0), CRYS, sides=5)       # venom fangs
     h.hard().blob((0.87, 2.15, 0.22 * s), (0.1, 0.1, 0.1), IND)                                                                  # chelicerae
     h.hard().blob((0.81, 2.59, 0.1 * s), (0.045, 0.045, 0.045), PINK, seg=6, ring=4)
@@ -125,4 +126,4 @@ total = sum(lib.tris(o) for o in parts.values())
 print("TRIS", {k: lib.tris(o) for k, o in parts.items()}, "total", total)
 lib.bake(parts)
 lib.export(os.path.join(OUT, "nyxaris.glb"))
-json.dump({"sockets": sock}, open(os.path.join(OUT, "nyxaris.json"), "w"), indent=1)
+json.dump({"sockets": sock, "face_off": True}, open(os.path.join(OUT, "nyxaris.json"), "w"), indent=1)

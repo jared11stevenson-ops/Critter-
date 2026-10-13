@@ -5,7 +5,7 @@ Layout matches the procedural design. Run: python3 tools/blender/build_mollusk.p
 import json, math, os, sys, random
 sys.path.insert(0, os.path.dirname(__file__))
 import lib
-from lib import hexc, Part
+from lib import hexc, Part, eye, fur
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "..", "v2", "art", "models")
 BODY = hexc("d7b48a"); BODY2 = hexc("c39a6e"); PALE = hexc("e9d3a6"); AMBER = hexc("94623a"); BROWN = hexc("4a2616"); CREAM = hexc("e8d3a2"); DARK = hexc("3a2a22")
@@ -52,8 +52,7 @@ h.blob((0.64, 1.55, 0), (0.16, 0.09, 0.18), PALE, rot=(0, 0, -10))
 for s in (-1, 1):
     st = [(0.45, 2.05, 0.1 * s), (0.5, 2.45, 0.16 * s), (0.58, 2.85, 0.2 * s), (0.64, 3.15, 0.22 * s)]
     h.tube(st, (0.075, 0.055), BODY, sides=7)
-    h.blob((0.66, 3.21, 0.22 * s), (0.14, 0.14, 0.14), EYEW)
-    h.hard().blob((0.77, 3.19, 0.22 * s), (0.06, 0.07, 0.07), EYEB, seg=6, ring=4)
+    eye(h, (0.68, 3.2, 0.22 * s), 0.17, "5a3a1a", white="fff6e0", look=(1, 0, 0.1 * s), glow=0.0)
     h.hard().blob((0.67, 3.28, 0.22 * s), (0.16, 0.07, 0.16), BODY2, rot=(0, 0, -12))          # tired lid
 for k in range(6):   # leaves + hibiscus on the crown
     a = k / 6 * math.tau
@@ -116,4 +115,4 @@ total = sum(lib.tris(o) for o in parts.values())
 print("TRIS", {k: lib.tris(o) for k, o in parts.items()}, "total", total)
 lib.bake(parts)
 lib.export(os.path.join(OUT, "mollusk.glb"))
-json.dump({}, open(os.path.join(OUT, "mollusk.json"), "w"))
+json.dump({"face_off": True}, open(os.path.join(OUT, "mollusk.json"), "w"))

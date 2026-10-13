@@ -5,7 +5,7 @@ Layout matches the procedural design. Run: python3 tools/blender/build_pharilux.
 import json, math, os, sys, random
 sys.path.insert(0, os.path.dirname(__file__))
 import lib
-from lib import hexc, Part
+from lib import hexc, Part, eye, fur
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "..", "v2", "art", "models")
 TEAL = hexc("4a7f86"); TEAL2 = hexc("3a6a72"); RUST = hexc("8a4a28"); RUST2 = hexc("a8602e"); BRASS = hexc("a9803a"); AMBER = hexc("ffb83a", 1.0); IRON = hexc("2c3234")
@@ -80,6 +80,7 @@ h.blob((0.62, 2.45, 0), (0.2, 0.26, 0.2), TEAL)                                 
 h.blob((0.72, 2.79, 0), (0.36, 0.34, 0.34), BRASS)                                             # helmet dome
 h.hard().ring((0.72, 2.63, 0), 0.36, 0.05, RUST, rot=(0, 90, 0), seg=14, tseg=4)
 h.hard().blob((0.92, 2.75, 0), (0.24, 0.26, 0.26), AMBER, seg=10, ring=7)                      # lantern lens
+eye(h, (1.0, 2.75, 0), 0.15, "3adcc0", white="fff2c8", look=(1, 0, 0), glow=0.8)
 h.hard().ring((1.0, 2.75, 0), 0.2, 0.035, BRASS, rot=(0, 0, 0), seg=10, tseg=4)
 h.hard().tube([(0.67, 3.07, 0), (0.67, 3.25, 0)], (0.09, 0.05), BRASS, sides=6)
 h.hard().blob((0.67, 3.31, 0), (0.11, 0.05, 0.11), RUST, seg=6, ring=4)
@@ -144,5 +145,5 @@ total = sum(lib.tris(o) for o in parts.values())
 print("TRIS", {k: lib.tris(o) for k, o in parts.items()}, "total", total)
 lib.bake(parts)
 lib.export(os.path.join(OUT, "pharilux.glb"))
-meta = {"sockets": dict(sock, head=["head", 0.3, 0.3, 0.0]), "face": {"center": [0.3, 0.3, 0.0], "radii": [0.24, 0.26, 0.26], "half_lon": 0.9, "half_lat": 0.6, "lat_center": 0.0, "e": 0.9}}
+meta = {"sockets": dict(sock, head=["head", 0.3, 0.3, 0.0]), "face_off": True}
 json.dump(meta, open(os.path.join(OUT, "pharilux.json"), "w"), indent=1)
