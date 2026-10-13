@@ -28,6 +28,21 @@ static func from_dict(d: Dictionary) -> ArenaDef:
 		a.spawns = [Vector2(d["spawns"][0][0], d["spawns"][0][1]), Vector2(d["spawns"][1][0], d["spawns"][1][1])]
 	return a
 
+## A copy of this arena with the given hazard zones (the shared cached arena is never mutated): used by the Hazard Ring rule modifier.
+func with_hazards(list: Array) -> ArenaDef:
+	var a := ArenaDef.new()
+	a.id = id
+	a.shape = shape
+	a.radius = radius
+	a.half = half
+	a.edge = edge
+	a.walls = walls
+	a.sides = sides
+	a.hazards = list.duplicate(true)
+	a.spawns = spawns
+	a.cracks = cracks.duplicate(true)
+	return a
+
 static func make_circle(r: float, edge_type: String = "drop") -> ArenaDef:
 	var a := ArenaDef.new()
 	a.shape = "circle"

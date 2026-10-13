@@ -59,7 +59,10 @@ func start(config: BoutConfig) -> void:
 		arena_def = CombatData.arena("ring")
 	var da := CombatData.critter(cfg.a_id)
 	var db := CombatData.critter(cfg.b_id)
+	if cfg.mods.has("hazard") and arena_def.hazards.is_empty():
+		arena_def = arena_def.with_hazards([CombatData.rules()["hazard_default"]])   # the zone is part of the arena, so the floor shows it
 	sim = CombatSim.new(da, db, arena_def, cfg.stakes(), cfg.seed_value)
+	sim.apply_modifiers(cfg.mods)
 	sim.fighters[0].vit = maxf(1.0, sim.fighters[0].max_vit * clampf(cfg.a_vit, 0.01, 1.0))
 	sim.fighters[1].vit = maxf(1.0, sim.fighters[1].max_vit * clampf(cfg.b_vit, 0.01, 1.0))
 	if cfg.timeout_ticks > 0:

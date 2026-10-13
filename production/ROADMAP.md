@@ -21,10 +21,10 @@ Working loop: tutorial (Aruun) -> shelf (60 jars) -> expeditions (stalk/direct/p
 **C. AI per-skill-level quality** adapt AI "styles" (zoner, brute, trickster) so every kit is handled well at novice/standard/expert (fixes Bramvex/Pharilux swings).
 **D. Habitat v2** observe mode (watch the family: names, small events, birthdays), generations and lineage tree, founder monarch crown and succession rule, cross-jar passage (shelf network), real structure art per species.
 **E. Expedition v2** exploration nodes (path choices), observe/persuade outcomes that change capture odds, wild critter behaviours visible before the fight, region hazards as arena modifiers.
-**F. Tournament v2** rule modifiers (Sudden Death, Endurance, Hazard ring, Ring-out rules), named rivals who remember you, crowd reactions, Champion Tournament presentation, defend-the-title loop.
-**G. Onboarding and clarity** teach LOCK, jar-tap, stars, approaches in the shelf and first expeditions; a "move list" screen per critter.
+**F. Tournament v2** rule modifiers (DONE v0.19: Sudden Death, Endurance, Hazard ring, Ring-out per rung; defences cycle harder rules), named rivals who remember you, crowd reactions, Champion Tournament presentation.
+**G. Onboarding and clarity** (DONE v0.19: one-time tips for shelf/stars, approaches, LOCK + parry, tournament rules; MOVES card in every jar).
 **H. Presentation** music hooks, Pharilux/others model upgrade when Blender models arrive, camera polish in FREE mode, low-end performance budget run.
-**I. Records and progression** achievements, hall of champions, lineage and wall of the fallen browser, daily jar tribute.
+**I. Records and progression** (Hall of Records DONE v0.19) achievements, lineage browser, daily jar tribute.
 
 ## Principles (creator law, restated)
 Two fights only (Blood Bout, Practice). Roles are styles; counters are skill answers, never hidden multipliers. Stars never mean power. Every critter equally strong in different ways. Pre-Flight list before new scope.

@@ -109,6 +109,12 @@ static func tournament(parent: Control, r: RosterState, uid: String, on_enter: C
 	var otxt := _txt(orow, "Opponent: %s (%s)   AI skill: %s   Prize: %d scrap" % [Career.species_name(opp), Career.role_of(opp), str(rung["profile"]), int(rung["scrap"])], 20, UiStyle.TEAL)
 	otxt.custom_minimum_size = Vector2(640, 0)
 	v.add_child(orow)
+	var rmods: Array = Career.rung_mods(rung, c)
+	if not rmods.is_empty():
+		var rl := PackedStringArray()
+		for m in rmods:
+			rl.append("%s: %s" % [BoutConfig.rule_name(str(m)), BoutConfig.rule_line(str(m))])
+		_txt(v, "Rule of this bout (same for both fighters): " + "  ".join(rl), 20, UiStyle.RUST)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)
 	v.add_child(row)
@@ -122,6 +128,46 @@ static func tournament(parent: Control, r: RosterState, uid: String, on_enter: C
 	var cancel := UiStyle.button("BACK", 24, Vector2(150, 66), UiStyle.PAPER_DK)
 	cancel.pressed.connect(func(): _close(v))
 	row.add_child(cancel)
+
+## Hall of Records: champions and retirees, titles, discoveries and losses at a glance (the other side of the Wall of the Fallen).
+static func hall(parent: Control, r: RosterState) -> void:
+	var v := _panel(parent, 900)
+	v.add_child(UiStyle.label("HALL OF RECORDS", 38, UiStyle.INK, 0))
+	var living: Array = r.rack.living()
+	var titles := 0
+	var bouts := 0
+	for c in living:
+		titles += (c as CritterInstance).titles_defended
+		bouts += (c as CritterInstance).bouts_survived
+	_txt(v, "Species discovered %d / 8   |   On your shelf %d   |   Fallen %d   |   Bouts survived %d   |   Titles defended %d" % [r.species_seen.size(), living.size(), r.wall.size(), bouts, titles], 20, UiStyle.RUST)
+	var sc := ScrollContainer.new()
+	sc.custom_minimum_size = Vector2(860, 300)
+	var inner := VBoxContainer.new()
+	sc.add_child(inner)
+	v.add_child(sc)
+	var any := false
+	for c in living:
+		var ci := c as CritterInstance
+		if not (ci.champion or ci.retired):
+			continue
+		any = true
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 10)
+		row.add_child(Portraits.rect(ci.species, 46))
+		var tag := "Champion (reigning)" if ci.champion else "Retired Champion"
+		_txt(row, "%s the %s  -  %s, %d titles defended, %d bouts survived%s" % [ci.name, Career.species_name(ci.species), tag, ci.titles_defended, ci.bouts_survived, ", founder of its kind" if ci.founder else ""], 21).custom_minimum_size = Vector2(780, 0)
+		inner.add_child(row)
+	if not any:
+		_txt(inner, "No champions yet. Climb the ladder (Qualifier, Bronze, Silver, Gold) and win the Champion Tournament.", 20, Color(0.35, 0.3, 0.3))
+	var missing: Array = []
+	for sp in ["aruun", "cigarra", "bramvex", "scarlith", "mollusk", "zephyr", "nyxaris", "pharilux"]:
+		if not r.species_seen.has(sp):
+			missing.append(Career.species_name(sp))
+	if not missing.is_empty():
+		_txt(v, "Not yet discovered: " + ", ".join(missing), 18, UiStyle.TEAL)
+	var close := UiStyle.button("CLOSE", 24, Vector2(180, 60), UiStyle.GOLD)
+	close.pressed.connect(func(): _close(v))
+	v.add_child(close)
 
 ## Wall of the Fallen
 static func wall(parent: Control, r: RosterState) -> void:
@@ -229,6 +275,26 @@ static func notice(parent: Control, head: String, text: String) -> void:
 	ok.pressed.connect(func(): _close(v))
 	v.add_child(ok)
 
+## Move list of a species: its role, how it tends to win, what beats it (as a skill answer, never a stat), and its three abilities.
+static func move_card(parent: Control, species: String) -> void:
+	var info := Career.scout_info(species)
+	var v := _panel(parent, 700)
+	var hr := HBoxContainer.new()
+	hr.add_theme_constant_override("separation", 10)
+	hr.add_child(Portraits.rect(species, 56))
+	hr.add_child(UiStyle.label("%s  MOVES" % str(info["species"]).to_upper(), 34, UiStyle.INK, 0))
+	v.add_child(hr)
+	_txt(v, "%s  |  %s" % [str(info["role"]), Career.stars_text(species)], 22, UiStyle.RUST)
+	_txt(v, "Wins by: %s" % str(info["wins"]), 20)
+	_txt(v, "Troubled by: %s" % str(info["weak"]), 20)
+	var ab: Array = info["abilities"]
+	for i in ab.size():
+		_txt(v, "%d.  %s" % [i + 1, str(ab[i])], 24, UiStyle.TEAL)
+	_txt(v, "Every critter also has Strike, Heavy, Guard (parry), Dodge, Grab and a Last Stand.", 18, Color(0.35, 0.3, 0.3))
+	var ok := UiStyle.button("OK", 26, Vector2(200, 66), UiStyle.GOLD)
+	ok.pressed.connect(func(): _close(v))
+	v.add_child(ok)
+
 ## The Habitat Jar: the critter living in its glass jar with its species' habitat. Peaceful: no fighting happens here.
 static func jar(parent: Control, c: CritterInstance) -> void:
 	var v := _panel(parent, 940)
@@ -253,6 +319,9 @@ static func jar(parent: Control, c: CritterInstance) -> void:
 	_txt(right, str(Career.HABITAT.get(c.species, "")), 20).custom_minimum_size = Vector2(440, 0)
 	_txt(right, "Habitat: peaceful. Nothing fights or dies inside a jar.", 18, UiStyle.TEAL).custom_minimum_size = Vector2(440, 0)
 	_txt(right, "Vitality %d%%  |  Bouts survived %d  |  Scars %d" % [int(round(c.vitality * 100.0)), c.bouts_survived, c.scars.size()], 20).custom_minimum_size = Vector2(440, 0)
+	var moves := UiStyle.button("MOVES", 24, Vector2(200, 60), UiStyle.TEAL_LT)
+	moves.pressed.connect(func(): move_card(v.get_meta("shade") as Control, c.species))
+	right.add_child(moves)
 	var close := UiStyle.button("CLOSE", 26, Vector2(200, 66), UiStyle.GOLD)
 	close.pressed.connect(func(): _close(v))
 	right.add_child(close)

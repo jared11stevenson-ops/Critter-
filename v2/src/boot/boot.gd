@@ -159,6 +159,8 @@ func _debug_shelf() -> void:
 			CareerPanels.explore(screen, "Frostbloom", Career.explore_nodes("frostbloom", erng), {"uid": a.uid}, erng, func(): pass)
 		"scout": CareerPanels.scout(screen, "nyxaris", "expert", "Frostbloom", func(_a: String) -> String: return "")
 		"wall": CareerPanels.wall(screen, r)
+		"hall": CareerPanels.hall(screen, r)
+		"moves": CareerPanels.move_card(screen, "pharilux")
 		"expedition": CareerPanels.expedition(screen, r, func(_a, _b): pass)
 		"tournament": CareerPanels.tournament(screen, r, a.uid, func(_u): pass, func(_u): pass)
 		"chapter": screen._read(a, 3)
@@ -188,11 +190,17 @@ func go_shelf(select_uid := "", notice := "") -> void:
 	sh.title_pressed.connect(go_title)
 	sh.wall_pressed.connect(func(): CareerPanels.wall(sh, Career.roster()))
 	sh.expedition_pressed.connect(func(): CareerPanels.expedition(sh, Career.roster(), _launch_expedition))
-	sh.tournament_pressed.connect(func(uid: String): CareerPanels.tournament(sh, Career.roster(), uid, _launch_tournament, func(u: String): _retire(sh, u)))
+	sh.tournament_pressed.connect(func(uid: String):
+		CareerPanels.tournament(sh, Career.roster(), uid, _launch_tournament, func(u: String): _retire(sh, u))
+		var cc := Career.roster().get_critter(uid)
+		if cc != null and not Career.rung_mods(Career.next_rung(cc), cc).is_empty():
+			Tips.once(sh, "rules"))
 	sh.training_pressed.connect(_launch_training)
 	screen = sh
 	if notice != "":
 		CareerPanels.notice(sh, "WHILE YOU WERE AWAY", notice)
+	else:
+		Tips.once(sh, "shelf")
 
 func _retire(sh: ShelfScreen, uid: String) -> void:
 	Career.retire(Career.roster(), uid)
@@ -215,12 +223,13 @@ func _launch_expedition(region_id: String, uid: String) -> void:
 			var why := Career.apply_approach(Career.roster(), career_ctx, ap)
 			if why == "":
 				go_career_bout(false)
-			return why))
+			return why)
+		Tips.once(screen, "approaches"))
 
 func _launch_tournament(uid: String) -> void:
 	var c := Career.roster().get_critter(uid)
 	var rung := Career.next_rung(c)
-	career_ctx = {"kind": "tournament", "uid": uid, "rung": c.tourney_wins, "opp_species": Career.opponent_for_rung(rung, c), "profile": str(rung["profile"])}
+	career_ctx = {"kind": "tournament", "uid": uid, "rung": c.tourney_wins, "opp_species": Career.opponent_for_rung(rung, c), "profile": str(rung["profile"]), "mods": Career.rung_mods(rung, c)}
 	go_career_bout(false)
 
 func go_career_bout(training_flag: bool) -> void:
@@ -236,6 +245,7 @@ func go_career_bout(training_flag: bool) -> void:
 		cfg.b_vit = 0.8
 	cfg.intro = not _args.has("nointro")
 	cfg.human_a = not _args.has("spectate")
+	cfg.mods = (career_ctx.get("mods", []) as Array).duplicate()
 	var b := BoutScene.new()
 	add_child(b)
 	b.start(cfg)
@@ -270,6 +280,8 @@ func _on_career_finished(res: Dictionary) -> void:
 			"Your Shelf is ready. Send Aruun on an expedition to capture a new critter, or enter a tournament."], "died": false}
 		var choices := [["shelf", "TO THE SHELF", UiStyle.GOLD], ["retry", "AGAIN", UiStyle.TEAL_LT]]
 		CareerPanels.result(host, rep, choices, func(id: String): _tutorial_choice(id, layer, uid))
+		if kind == "tutorial":
+			Tips.once(host, "controls")
 		return
 	var rep := Career.resolve(Career.roster(), career_ctx, res)
 	var choices: Array = []

@@ -60,6 +60,13 @@ static func region(id: String) -> Dictionary:
 static func ladder() -> Array:
 	return data()["tournament"]
 
+## Rule modifiers of a ladder rung. A defending Champion cycles through harder rule sets each defence. Same rules for both fighters, always.
+const DEFENCE_RULES := [["sudden_death"], ["hazard"], ["ringout"], ["endurance"], ["hazard", "ringout"]]
+static func rung_mods(rung: Dictionary, c: CritterInstance) -> Array:
+	if c != null and c.champion:
+		return (DEFENCE_RULES[c.titles_defended % DEFENCE_RULES.size()] as Array).duplicate()
+	return (rung.get("mods", []) as Array).duplicate()
+
 static func species_name(species: String) -> String:
 	return species.capitalize()
 

@@ -3,7 +3,7 @@ class_name UiPrefs extends RefCounted
 ## Separate from core Settings on purpose (core is the Platform Engineer's); see arena/NEEDS.md to fold these in later.
 
 const PATH := "user://v2_ui_prefs.json"
-const DEFAULTS := {"layout": "A", "touch": "auto", "profile": "standard", "player": "aruun", "opponent": "cigarra", "arena": "ring", "training": false}
+const DEFAULTS := {"layout": "A", "touch": "auto", "profile": "standard", "player": "aruun", "opponent": "cigarra", "arena": "ring", "training": false, "tips_seen": ""}
 static var data: Dictionary = {}
 static var path_override := ""
 static var _loaded := false

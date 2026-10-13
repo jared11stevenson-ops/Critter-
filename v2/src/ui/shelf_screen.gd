@@ -64,35 +64,38 @@ func setup(r: RosterState, select_uid := "") -> void:
 	dp.clip_contents = true
 	dp.add_theme_stylebox_override("panel", UiStyle.box(UiStyle.PAPER, UiStyle.INK, 16, 4))
 	_detail = VBoxContainer.new()
-	_detail.add_theme_constant_override("separation", 3)
+	_detail.add_theme_constant_override("separation", 2)
 	_detail.custom_minimum_size = Vector2(360, 0)
 	dp.add_child(_detail)
 	mid.add_child(dp)
 	var bar := HBoxContainer.new()
-	bar.add_theme_constant_override("separation", 10)
+	bar.add_theme_constant_override("separation", 8)
 	col.add_child(bar)
-	var b_exp := UiStyle.button("EXPEDITION", 24, Vector2(200, 64), UiStyle.GOLD)
+	var b_exp := UiStyle.button("EXPEDITION", 22, Vector2(180, 64), UiStyle.GOLD)
 	b_exp.pressed.connect(func(): expedition_pressed.emit())
 	bar.add_child(b_exp)
-	_btn_tourney = UiStyle.button("TOURNAMENT", 24, Vector2(200, 64), UiStyle.RUST)
+	_btn_tourney = UiStyle.button("TOURNAMENT", 22, Vector2(190, 64), UiStyle.RUST)
 	_btn_tourney.pressed.connect(func(): if _uid() != "": tournament_pressed.emit(_uid()))
 	bar.add_child(_btn_tourney)
-	_btn_train = UiStyle.button("PRACTICE", 22, Vector2(110, 64), UiStyle.TEAL_LT)
+	_btn_train = UiStyle.button("PRACTICE", 20, Vector2(120, 64), UiStyle.TEAL_LT)
 	_btn_train.pressed.connect(func(): if _uid() != "": training_pressed.emit(_uid()))
 	bar.add_child(_btn_train)
-	var b_jar := UiStyle.button("JAR", 24, Vector2(100, 64), UiStyle.TEAL)
+	var b_jar := UiStyle.button("JAR", 22, Vector2(80, 64), UiStyle.TEAL)
 	b_jar.pressed.connect(func(): if _uid() != "": CareerPanels.jar(self, roster.get_critter(_uid())))
 	bar.add_child(b_jar)
-	_btn_heal = UiStyle.button("HEAL (%d)" % Career.HEAL_COST, 22, Vector2(150, 64), UiStyle.GREEN)
+	_btn_heal = UiStyle.button("HEAL (%d)" % Career.HEAL_COST, 20, Vector2(140, 64), UiStyle.GREEN)
 	_btn_heal.pressed.connect(_heal)
 	bar.add_child(_btn_heal)
-	var b_wall := UiStyle.button("WALL", 24, Vector2(100, 64), UiStyle.PAPER_DK)
+	var b_hall := UiStyle.button("HALL", 20, Vector2(86, 64), UiStyle.PAPER_DK)
+	b_hall.pressed.connect(func(): CareerPanels.hall(self, roster))
+	bar.add_child(b_hall)
+	var b_wall := UiStyle.button("WALL", 20, Vector2(86, 64), UiStyle.PAPER_DK)
 	b_wall.pressed.connect(func(): wall_pressed.emit())
 	bar.add_child(b_wall)
 	var sp := Control.new()
 	sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	bar.add_child(sp)
-	var b_t := UiStyle.button("TITLE", 22, Vector2(100, 64), UiStyle.PAPER_DK)
+	var b_t := UiStyle.button("TITLE", 20, Vector2(86, 64), UiStyle.PAPER_DK)
 	b_t.pressed.connect(func(): title_pressed.emit())
 	bar.add_child(b_t)
 	refresh(select_uid)
@@ -151,7 +154,7 @@ func _build_detail() -> void:
 		return
 	var title_row := HBoxContainer.new()
 	title_row.add_theme_constant_override("separation", 10)
-	title_row.add_child(Portraits.rect(c.species, 76))
+	title_row.add_child(Portraits.rect(c.species, 64))
 	title_row.add_child(UiStyle.label(c.name, 38, UiStyle.INK, 0))
 	_detail.add_child(title_row)
 	var tag := "%s  |  %s  |  %s" % [Career.species_name(c.species), Career.role_of(c.species), Career.stars_text(c.species)]
@@ -161,7 +164,10 @@ func _build_detail() -> void:
 		tag += "  |  CHAMPION"
 	if c.retired:
 		tag += "  |  RETIRED"
-	_detail.add_child(UiStyle.label(tag, 20, UiStyle.RUST, 0))
+	var tag_l := UiStyle.label(tag, 20, UiStyle.RUST, 0)
+	tag_l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART       # a long tag must wrap, never widen the panel past the screen
+	tag_l.custom_minimum_size = Vector2(300, 0)
+	_detail.add_child(tag_l)
 	var th: Array = roster.rules.bond_thresholds if "bond_thresholds" in roster.rules else [5, 15, 30, 60, 100]
 	_detail.add_child(UiStyle.label("Vitality %d%%  Bouts %d  Bond %d  Scars %d" % [int(round(c.vitality * 100.0)), c.bouts_survived, c.bond_level(th), c.scars.size()], 20, UiStyle.INK, 0))
 	var rung := ""
@@ -175,7 +181,7 @@ func _build_detail() -> void:
 		var unlocked := c.has_chapter(n + 1)
 		var b := Button.new()
 		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		b.custom_minimum_size = Vector2(0, 36)
+		b.custom_minimum_size = Vector2(0, 30)
 		b.clip_text = true
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		b.add_theme_font_size_override("font_size", 17)

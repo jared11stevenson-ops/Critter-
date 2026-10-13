@@ -41,6 +41,11 @@ func setup(b: BoutScene) -> void:
 	ls_hint.position.y -= 70
 	ls_hint.visible = false
 	root.add_child(ls_hint)
+	if b.cfg != null and not b.cfg.mods.is_empty():
+		var chip := UiStyle.label(b.cfg.rule_chip(), 24, UiStyle.RUST)    # the rule of this bout stays visible
+		chip.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
+		chip.position.y = 78
+		root.add_child(chip)
 	b.fight_event.connect(_on_event)
 	b.phase_changed.connect(_on_phase)
 	_tune_touch()

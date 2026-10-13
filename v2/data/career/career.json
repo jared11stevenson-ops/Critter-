@@ -159,28 +159,41 @@
   {
    "rank": "Qualifier",
    "profile": "novice",
-   "scrap": 30
+   "scrap": 30,
+   "mods": []
   },
   {
    "rank": "Bronze",
    "profile": "standard",
-   "scrap": 50
+   "scrap": 50,
+   "mods": [
+    "ringout"
+   ]
   },
   {
    "rank": "Silver",
    "profile": "standard",
-   "scrap": 80
+   "scrap": 80,
+   "mods": [
+    "hazard"
+   ]
   },
   {
    "rank": "Gold",
    "profile": "expert",
-   "scrap": 120
+   "scrap": 120,
+   "mods": [
+    "sudden_death"
+   ]
   },
   {
    "rank": "Champion Tournament",
    "profile": "expert",
    "scrap": 300,
-   "amber": 3
+   "amber": 3,
+   "mods": [
+    "endurance"
+   ]
   }
  ]
 }

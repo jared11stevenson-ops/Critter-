@@ -39,6 +39,8 @@ func _ready() -> void:
 	cfg.seed_value = int(args.get("seed", 7))
 	cfg.intro = args.has("intro")
 	cfg.training = args.has("training")
+	if args.has("mods"):
+		cfg.mods = str(args["mods"]).split(",")
 	UiPrefs.set_pref("layout", str(args.get("layout", "A")), false)
 	if args.has("touch"):
 		UiPrefs.set_pref("touch", "on", false)

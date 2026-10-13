@@ -320,7 +320,7 @@ static func _block(sim: CombatSim, atk: Fighter, dfn: Fighter, h: Dictionary, mo
 	else:
 		dfn.stun = maxi(1, int(h["blockstun"]))
 		dfn.stun_kind = "block"
-		var k := float(h["knock"]) * float(R["block_push_mult"])
+		var k := float(h["knock"]) * float(R["block_push_mult"]) * (1.0 - float(dfn.T["guard_anchor"]))   # a planted guard (Mollusk) is hard to push
 		if k > 0.0:
 			dfn.forced = kdir_to(dfn, atk, kdir) * k * (1.0 - float(R["knock_decay"]))
 	sim.emit("block", dfn.idx, move_id, dfn.pos, cd, {"attacker": atk.idx, "broke": broke, "hitstop": hs})
