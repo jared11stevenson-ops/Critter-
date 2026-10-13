@@ -21,6 +21,7 @@ uniform float silhouette : hint_range(0.0, 1.0) = 0.0;     // flat black (silhou
 
 uniform sampler2D albedo_tex : source_color, filter_linear_mipmap, repeat_disable;   // generated (Tripo) models are textured: UV0 samples this
 uniform float use_tex : hint_range(0.0, 1.0) = 0.0;
+uniform float tex_gain : hint_range(0.5, 2.5) = 1.35;
 varying vec2 v_uv;
 varying vec3 v_col;
 varying float v_glow;
@@ -39,7 +40,7 @@ float crack_tier(float a) {
 void fragment() {
 	float tier = crack_tier(v_glow);
 	if (tier > crack_level + 0.5) { discard; }
-	vec3 base = use_tex > 0.5 ? clamp(texture(albedo_tex, v_uv).rgb * 1.35, 0.0, 1.0) : v_col;
+	vec3 base = use_tex > 0.5 ? clamp(texture(albedo_tex, v_uv).rgb * tex_gain, 0.0, 1.0) : v_col;
 	// Cel shading is computed in light(); here we only set albedo, rim and emission.
 	ALBEDO = base;
 	float rim = pow(1.0 - clamp(dot(normalize(NORMAL), normalize(VIEW)), 0.0, 1.0), rim_power);

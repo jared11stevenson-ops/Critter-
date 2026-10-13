@@ -6,3 +6,7 @@ Pipeline used for Aruun (v0.18):
 4. `python3 stage2_build.py`  -> weld, decimate each part to its budget, scale, pivot, 2048 JPEG texture, export v2/art/models/aruun.glb + .json
 The rig loads the model via RigBuilder.use_glb and the toon shader samples UV0 (use_tex). Landmarks/pole line in stage1 were measured off this one model.
 For a new critter feed Tripo ONE clean character image (not a sheet) so the crop step is not needed.
+
+## Cigarra (v0.20)
+Source: tools/source_art/cigarra_tripo.glb (single clean figure, A-pose, faces -y). `npx @gltf-transform/cli copy` it to /tmp/cu/ci/cig_plain.glb, then `python3 tools/blender/tripo/tripo_build.py cigarra [debug]`.
+Config lives in CONFIGS["cigarra"] (rotation to the lib frame, scale, pivots, partition rules incl. a capsule for her right arm, sockets). Her crown spheres stay in the head mesh (sidecar swarm_off: no procedural swarm); wings are the `extra` part; no weapon part.

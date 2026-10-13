@@ -21,6 +21,7 @@ var glass: Array = []           # part names rendered with the transparent glass
 var cfg: Dictionary = {}        # design config (styles, poses, timings stub, ...)
 var glb_meshes: Dictionary = {} # part name -> Mesh authored in Blender (res://art/models/<id>.glb); replaces the procedural geometry of that part
 var glb_used := false
+var glb_gain := 1.35               # texture brightness for generated models (sidecar "tex_gain")
 var glb_tex: Texture2D = null   # albedo texture of a generated (textured) model; the toon shader samples it instead of vertex colour
 
 func part(name: String, pos: Vector3, parent: String = "-") -> Prim:
@@ -77,7 +78,15 @@ func use_glb(id: String) -> bool:
 					face[k] = float(fd[k])
 		elif meta.has("face_off"):
 			face = {}
-		if meta.has("swarm_rest") and not swarm.is_empty():
+		if meta.has("tex_gain"):
+			glb_gain = float(meta["tex_gain"])
+		if bool(meta.get("textured", false)):
+			glass = []                       # a textured model carries its own wings/cloth: no transparent glass override
+		if bool(meta.get("swarm_off", false)):
+			swarm = {}                       # the model carries its own (static) crown spheres: no procedural swarm
+			cfg.erase("swarm_rest")
+			cfg.erase("swarm_act")
+		elif meta.has("swarm_rest") and not swarm.is_empty():
 			var rest: Array = []
 			for r in meta["swarm_rest"]:
 				rest.append(Vector3(r[0], r[1], r[2]))
@@ -108,6 +117,7 @@ func assemble(rig_root: Node3D) -> Dictionary:
 	if glb_tex != null:
 		mat.set_shader_parameter("albedo_tex", glb_tex)
 		mat.set_shader_parameter("use_tex", 1.0)
+		mat.set_shader_parameter("tex_gain", glb_gain)
 	var nodes := {}
 	var rest := {}
 	var tris := 0
