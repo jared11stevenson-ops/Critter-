@@ -26,6 +26,12 @@ def hexc(h, a=0.0):
     return (enc(r), enc(g), enc(b), a)
 
 
+CHUNK = 1.0        # >1 fattens short tapered tubes (claws, fingers, toes, tusks) for a chunkier cartoon read
+EYE_SCALE = 1.0    # global eye size multiplier
+MISMATCH = False   # alternate big / tiny pupils between paired eyes
+_eye_n = [0]
+
+
 def reset():
     bpy.ops.wm.read_factory_settings(use_empty=True)
     for c in list(bpy.data.collections):
@@ -131,6 +137,10 @@ class Part:
         """Smooth swept tube through game-space points; radii = r or (r0, r1) or list per point."""
         self._ribbon = wide is not None
         n = len(pts)
+        if CHUNK != 1.0 and wide is None and isinstance(radii, (list, tuple)) and len(radii) == 2 and not isinstance(radii[0], (list, tuple)) and radii[1] <= 0.02 and radii[0] <= 0.09:
+            ln = sum(math.dist(pts[i], pts[i + 1]) for i in range(n - 1))
+            if ln < 0.45:
+                radii = (radii[0] * CHUNK, radii[1])
         if self._h:
             rm = max(radii) if isinstance(radii, (list, tuple)) and not isinstance(radii[0], (list, tuple)) else (radii if isinstance(radii, (int, float)) else 0.1)
             if isinstance(rm, (list, tuple)):
@@ -307,7 +317,7 @@ def export(path):
 
 
 # ----------------------------------------------------------------------------------------------- finishing pass (the "2026" bake)
-def bake(parts, ao_rays=24, ao_dist=0.55, ao_strength=0.4, curv_gain=0.9, seed=1):
+def bake(parts, ao_rays=24, ao_dist=0.55, ao_strength=0.4, curv_gain=0.9, seed=1, grad=(0.82, 1.1), warm=0.05, wear=0.2):
     """Bakes ambient occlusion (the WHOLE critter occludes itself: arms shade the torso, cloaks shade the legs) into the vertex colours and writes a
     detail UV layer per mesh: u = specular mask, v = convex-edge highlight (curvature), so the toon shader can add sheen on armour and rim wear on edges."""
     import random
@@ -321,6 +331,8 @@ def bake(parts, ao_rays=24, ao_dist=0.55, ao_strength=0.4, curv_gain=0.9, seed=1
         for p in o.data.polygons:
             polys.append(tuple(base + i for i in p.vertices))
     tree = BVHTree.FromPolygons(verts_w, polys, epsilon=0.0001)
+    ys = [v.y for v in verts_w] or [0.0, 1.0]
+    y0, y1 = min(ys), max(ys)
     dirs = []
     for _ in range(ao_rays):
         while True:
@@ -371,7 +383,16 @@ def bake(parts, ao_rays=24, ao_dist=0.55, ao_strength=0.4, curv_gain=0.9, seed=1
                 a = ao[vi]
                 k = (1.0 - ao_strength) + ao_strength * a
                 cc = l[col]
-                l[col] = (cc[0] * k, cc[1] * k, cc[2] * k, cc[3])
+                wp = mw @ l.vert.co
+                if cc[3] < 0.05:   # not a glow part: vertical value gradient (dark feet / light crown), warm top, scuff stains
+                    t = (wp.y - y0) / max(y1 - y0, 1e-3)
+                    k *= grad[0] + (grad[1] - grad[0]) * t
+                    nz = math.sin(wp.x * 9.1 + wp.z * 4.3) * math.sin(wp.y * 7.7 + wp.x * 3.1) * math.sin(wp.z * 8.3 + wp.y * 2.9)
+                    if nz > 0.55:
+                        k *= 1.0 - wear * min(1.0, (nz - 0.55) * 4)
+                    l[col] = (min(1.0, cc[0] * k + warm * t), min(1.0, cc[1] * k + warm * 0.5 * t), cc[2] * k, cc[3])
+                else:
+                    l[col] = (cc[0] * k, cc[1] * k, cc[2] * k, cc[3])
                 sp = l[spl]
                 edge = max(0.0, min(1.0, curv[vi] * curv_gain))
                 l[uvl].uv = (sp[0], edge)
@@ -392,6 +413,12 @@ def _unit(v):
 def eye(p, c, r, iris, white="f4f0e8", pupil="120a0c", look=(1.0, 0.0, 0.0), glow=0.0, lid=None, ps=1.0, ring_c=None):
     """A glossy cartoon-quality eye on the surface at c: eyeball, iris, pupil, two specular catch-lights (emissive) and an optional lid.
     look = outward facing direction of the eye (game axes)."""
+    r = r * EYE_SCALE
+    if MISMATCH and ps == 1.0:
+        ps = 1.25 if _eye_n[0] % 2 == 0 else 0.6
+        _eye_n[0] += 1
+    if MISMATCH and ring_c is None:
+        ring_c = "17141a"
     lk = _unit(look)
     # thin axis of the iris discs points along `look`: pick a dominant axis for the radii, rotate by yaw for in-between directions
     yaw = math.degrees(math.atan2(-lk[2], lk[0]))

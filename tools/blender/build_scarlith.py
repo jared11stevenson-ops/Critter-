@@ -11,6 +11,7 @@ OUT = os.path.join(os.path.dirname(__file__), "..", "..", "v2", "art", "models")
 RED = hexc("b01c2c"); RED2 = hexc("c42a3a"); DRED = hexc("7e1522"); GOLD = hexc("e3b04a"); WINE = hexc("4f1a36"); BLACK = hexc("171012"); WOOD = hexc("7a4a2a")
 RIND = hexc("d98a3a"); CHEESE = hexc("e8c25a"); CHEESE2 = hexc("f2d98a"); HOLE = hexc("a8782a"); IRON = hexc("4a4852"); GLOWC = hexc("ffc24a", 1.0); GREEN = hexc("4a7a3a")
 lib.reset()
+lib.CHUNK = 1.3; lib.EYE_SCALE = 1.2; lib.MISMATCH = True
 parts = {}
 rnd = random.Random(11)
 
@@ -59,11 +60,14 @@ for k in range(6):
     z = -0.45 + k * 0.18
     t.hard().blob((0.74, 0.22 - 0.05 * (k % 2), z), (0.05, 0.28, 0.07), RIND if k % 2 == 0 else GOLD)
 fuzz(t, (0, 1.0, 0), (0.85, 0.7, 0.8), 18, 0.12, RED, seed=3)
+t.hard().tube([(0.55, 1.62, -0.55), (0.9, 1.1, 0.0), (0.55, 0.62, 0.55)], 0.05, BLACK, sides=5)   # bandolier
+t.hard().blob((0.9, 1.1, 0.0), (0.04, 0.09, 0.09), GOLD)
+t.hard().ring((0.93, 1.1, 0.0), 0.08, 0.016, GOLD, rot=(0, 90, 0), seg=10, tseg=3)
 parts["torso"] = t.finish(voxel=0.05, smooth_passes=2, target_tris=1100)
 
 # ---- head: big fuzzy red head, gold-ringed eyes (face shader), eyepatch, gold tooth, black tricorn with a gold wheel
 hp = (0.75, 1.55, 0)
-h = Part("head", hp)
+h = Part("head", hp, sc=1.2)
 h.blob((0.8, 1.65, 0), (0.55, 0.45, 0.52), RED2)
 h.blob((1.25, 1.4, 0), (0.14, 0.1, 0.2), DRED, rot=(0, 0, -10))
 eye(h, (1.16, 1.78, -0.25), 0.15, "e3b04a", white="fff4d8", look=(1, 0, -0.2), glow=0.3)

@@ -12,6 +12,7 @@ BODY = hexc("d7b48a"); BODY2 = hexc("c39a6e"); PALE = hexc("e9d3a6"); AMBER = he
 ORANGE = hexc("e0702a"); RED = hexc("a8342a"); OLIVE = hexc("6f7a3a"); MOSS = hexc("56743a"); LEAF = hexc("3f7a3a"); FLOWER = hexc("e2503a"); ROCK = hexc("6a645a")
 STEEL = hexc("8b929b"); GLOWC = hexc("d8e060", 1.0); EYEW = hexc("f6efe0"); EYEB = hexc("140c0a")
 lib.reset()
+lib.CHUNK = 1.3; lib.EYE_SCALE = 1.25; lib.MISMATCH = True
 parts = {}
 rr = random.Random(4)
 
@@ -42,11 +43,14 @@ t.hard().blob((0.55, 0.95, 0.25), (0.07, 0.1, 0.06), GLOWC)
 for k in range(7):    # hanging tatters / beads
     z = -0.4 + k * 0.13
     t.hard().blob((0.55, 0.62 - 0.04 * (k % 2), z), (0.05, 0.24, 0.06), RED if k % 2 == 0 else OLIVE)
+t.hard().tube([(0.45, 1.5, -0.4), (0.58, 1.0, 0.0), (0.4, 0.6, 0.4)], 0.06, hexc("6a4020"), sides=6)   # bandolier
+t.hard().ring((0.6, 1.02, 0.0), 0.12, 0.025, hexc("d8b048"), rot=(0, 90, 0), seg=12, tseg=4)               # shell-spiral emblem
+t.hard().ring((0.6, 1.02, 0.0), 0.06, 0.02, hexc("d8b048"), rot=(0, 90, 0), seg=10, tseg=3)
 parts["torso"] = t.finish(voxel=0.05, smooth_passes=2, target_tris=1500)
 
 # head: gentle peaked head, long stalk eyes with tired lids; plants growing on the crown
 hp = (0.4, 1.75, 0)
-h = Part("head", hp)
+h = Part("head", hp, sc=1.25)
 h.blob((0.5, 1.85, 0), (0.36, 0.34, 0.32), BODY)
 h.blob((0.64, 1.55, 0), (0.16, 0.09, 0.18), PALE, rot=(0, 0, -10))
 for s in (-1, 1):

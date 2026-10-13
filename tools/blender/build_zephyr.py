@@ -12,6 +12,7 @@ OLV = hexc("7a6a3e"); OLV2 = hexc("5e6a34"); BURG = hexc("7a2a3a"); BURG2 = hexc
 GOLD = hexc("ffd24a", 0.6); LEAF = hexc("6a7a3a"); DARKB = hexc("2a1a1c"); BEAK = hexc("a8845a"); WOOD = hexc("5a3e26"); VIAL = hexc("ff5aa8", 1.0)
 WING = hexc("c86a7a"); WING2 = hexc("8a8a4a"); SPOT = hexc("f0d8c0")
 lib.reset()
+lib.CHUNK = 1.3; lib.EYE_SCALE = 1.25; lib.MISMATCH = True
 parts = {}
 rr = random.Random(5)
 
@@ -53,11 +54,14 @@ for k in range(5):    # flower garland
     a = k * 1.26
     t.hard().blob((0.1 + 0.12 * math.cos(a), 2.0, 0.3 * math.sin(a)), (0.05, 0.03, 0.05), PINK if k % 2 == 0 else MAG, seg=6, ring=4)
 t.tube([(0.1, 2.0, 0), (0.14, 2.14, 0)], 0.07, OLV, sides=7)                                  # neck
+t.hard().tube([(0.14, 1.95, -0.14), (0.22, 1.65, 0.0), (0.12, 1.35, 0.14)], 0.03, BURG, sides=5)   # vial bandolier
+for k, y in enumerate((1.8, 1.62, 1.46)):
+    t.hard().blob((0.24 - 0.01 * k, y, 0.02 * (k - 1)), (0.04, 0.07, 0.04), VIAL, seg=6, ring=5)
 parts["torso"] = t.finish(voxel=0.04, smooth_passes=2, target_tris=1200)
 
 # ---- head: bird skull with a long curved proboscis, crest of leaf feathers, flower crown, feathered antennae with nectar drops
 hp = (0.14, 2.2, 0)
-h = Part("head", hp)
+h = Part("head", hp, sc=1.3)
 h.blob((0.24, 2.34, 0), (0.26, 0.24, 0.22), OLV)                                                # skull
 h.tube([(0.36, 2.3, 0), (0.7, 2.22, 0), (1.05, 2.1, 0), (1.25, 1.95, 0)], (0.1, 0.01), BEAK, sides=7)    # proboscis
 h.hard().tube([(0.4, 2.36, 0), (0.75, 2.3, 0), (1.0, 2.18, 0)], (0.05, 0.01), BURG, sides=5)

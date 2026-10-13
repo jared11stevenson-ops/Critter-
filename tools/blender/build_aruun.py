@@ -24,12 +24,13 @@ def leg(name, z, x0):
     p.tube([knee, (x0 + 0.1, 0.5, z), ank], (0.17, 0.095), CHAR2, sides=12)
     p.tube([ank, (x0 + 0.2, 0.1, z + 0.03 * s), toe], (0.11, 0.07), CHAR3, sides=10)
     p.blob(knee, (0.2, 0.2, 0.2), CHAR)
+    p.blob((x0 + 0.2, 0.1, z + 0.03 * s), (0.3, 0.12, 0.22), CHAR3)                      # fat foot pad
     p.hard().blob((knee[0] + 0.12, knee[1] + 0.02, knee[2] + 0.04 * s), (0.2, 0.22, 0.19), RED, e=0.8, seg=12, ring=9)         # knee cop
     p.hard().blob((x0 + 0.2, 0.98, z + 0.1 * s), (0.14, 0.34, 0.2), RED, rot=(0, 0, -14), e=0.8, seg=12, ring=9)             # thigh guard
     p.hard().blob((x0 + 0.12, 0.5, z + 0.07 * s), (0.1, 0.3, 0.14), RED2, rot=(0, 0, 8), e=0.8, seg=10, ring=8)               # greave
     p.hard().ring((x0 + 0.04, 0.36, z), 0.12, 0.03, BONE, rot=(90, 0, 0), seg=10, tseg=4)
     for dz in (-0.07, 0.0, 0.07):
-        p.hard().tube([(toe[0], 0.06, toe[2] + dz), (toe[0] + 0.2, 0.02, toe[2] + dz * 1.7)], (0.045, 0.0), CREAM, sides=4)
+        p.hard().tube([(toe[0], 0.07, toe[2] + dz * 1.3), (toe[0] + 0.26, 0.03, toe[2] + dz * 2.0)], (0.075, 0.01), CREAM, sides=5)
     p.hard().tube([(ank[0] - 0.03, 0.22, ank[2]), (ank[0] - 0.22, 0.13, ank[2])], (0.05, 0.0), CREAM, sides=4)
     parts[name] = p.finish(voxel=0.04, smooth_passes=3, target_tris=900)
 
@@ -44,6 +45,14 @@ t.blob((0.1, 2.02, 0), (0.46, 0.4, 0.52), CHAR2)                                
 t.tube([(0.1, 2.15, 0), (0.17, 2.45, 0), (0.26, 2.78, 0), (0.38, 3.05, 0), (0.5, 3.25, 0)], (0.19, 0.11), CHAR, sides=12)   # long strong neck
 t.hard().blob((0.34, 2.0, 0), (0.3, 0.34, 0.42), CHAR3, e=0.8)                              # chest plate base
 t.hard().blob((0.5, 2.02, 0), (0.12, 0.27, 0.22), RED, e=0.8, seg=12, ring=9)               # red sternum plate
+for sg in (-1, 1):
+    t.hard().blob((0.52, 2.06, 0.22 * sg), (0.1, 0.2, 0.2), RED2, e=0.8, seg=12, ring=9)                        # pec plates
+    t.hard().ring((0.58, 2.06, 0.22 * sg), 0.17, 0.025, GOLD, rot=(0, 90, 0), seg=14, tseg=4)
+t.hard().blob((0.63, 2.04, 0), (0.03, 0.1, 0.1), GOLD, e=0.8)                                              # beetle emblem
+t.hard().ring((0.66, 2.04, 0), 0.07, 0.018, BLACK, rot=(0, 90, 0), seg=10, tseg=3)
+t.hard().tube([(0.36, 2.52, -0.3), (0.5, 1.9, 0.0), (0.3, 1.42, 0.3)], 0.055, BROWN, sides=6)               # bandolier
+t.hard().blob((0.48, 1.9, 0.0), (0.05, 0.08, 0.08), GOLD)
+t.hard().blob((0.0, 1.22, -0.37), (0.14, 0.18, 0.1), BROWN, e=0.8, seg=8, ring=6)                           # belt pouch
 for k, y in enumerate((2.3, 2.52, 2.74, 2.96)):                                             # bone truss rings on the neck
     f = (y - 2.15) / 1.1
     t.hard().ring((0.1 + 0.4 * f, y, 0), 0.14 - 0.05 * f, 0.03, BONE if k % 2 == 0 else CREAM2, rot=(90, 0, 0), seg=12, tseg=4)
@@ -58,17 +67,22 @@ parts["torso"] = t.finish(voxel=0.04, smooth_passes=3, target_tris=2300)
 
 # ------------------------------------------------------------------------------------------------ head: broad beetle head, big warm eyes, forked rhino horn
 hp = (0.5, 2.86, 0)
-HS = 1.3
+HS = 1.6
 h = Part("head", hp, dy=0.54, sc=HS)
 h.blob((0.54, 2.92, 0), (0.3, 0.23, 0.26), CHAR2)                                           # skull
 h.blob((0.8, 2.84, 0), (0.28, 0.17, 0.2), CHAR)                                              # broad snout
 h.hard().blob((0.92, 2.78, 0), (0.2, 0.1, 0.17), CHAR3, e=0.8)                               # muzzle plate
 h.hard().blob((0.62, 3.1, 0), (0.28, 0.1, 0.24), RED, e=0.8, seg=12, ring=8)                 # red brow shield
-eye(h, (0.72, 2.97, 0.17), 0.1, "ffb83a", look=(1.0, 0.0, 0.45), glow=0.7)
-eye(h, (0.72, 2.97, -0.17), 0.1, "ffb83a", look=(1.0, 0.0, -0.45), glow=0.7)
+eye(h, (0.72, 2.97, 0.18), 0.14, "ffb83a", look=(1.0, 0.0, 0.45), glow=0.7, ps=1.15, lid="45414f", ring_c="17141a")      # big wide pupil
+eye(h, (0.72, 2.97, -0.18), 0.125, "ffb83a", look=(1.0, 0.0, -0.45), glow=0.7, ps=0.6, lid="45414f", ring_c="17141a")   # tiny pupil: mismatched, goofy
 for sg in (-1, 1):
-    brow(h, (0.78, 3.12, 0.17 * sg), 0.2, 0.07, "17141a", th=0.05, look=(1, 0, 0.45 * sg))
-mouth(h, (1.0, 2.66, 0), 0.26, -0.03, "17141a", teeth=0)
+    h.hard().blob((0.72, 3.07, 0.2 * sg), (0.12, 0.05, 0.14), CHAR3, e=0.8, seg=8, ring=6)                  # brow ridge
+    h.hard().blob((0.7, 2.8, 0.27 * sg), (0.08, 0.06, 0.07), hexc("e8806a"), seg=8, ring=6)                  # cheek pad
+    h.hard().blob((0.58, 2.8, 0.3 * sg), (0.2, 0.17, 0.08), RED, rot=(0, 20 * sg, 0), e=0.8, seg=10, ring=7)  # cheek guard
+    h.hard().blob((1.1, 2.83, 0.06 * sg), (0.025, 0.03, 0.025), BLACK, seg=6, ring=4)                         # nostril
+for sg in (-1, 1):
+    brow(h, (0.78, 3.14, 0.18 * sg), 0.26, 0.09 if sg > 0 else -0.04, "17141a", th=0.065, look=(1, 0, 0.45 * sg))   # one angry, one raised
+mouth(h, (0.99, 2.64, 0), 0.34, 0.07, "17141a", th=0.04, teeth=5, tooth="fff4dc", tongue="e0506a")
 for s in (-1, 1):
     h.hard().tube([(0.98, 2.74, 0.09 * s), (1.18, 2.62, 0.13 * s)], (0.055, 0.0), CREAM, sides=5)       # tusks
     h.hard().tube([(0.56, 3.12, 0.16 * s), (0.5, 3.3, 0.26 * s), (0.58, 3.42, 0.32 * s)], (0.06, 0.012), RED2, sides=6)   # short brow horns
@@ -93,9 +107,9 @@ def arm(name, z):
     p.hard().blob((0.14, 1.66, z + 0.15 * s), (0.19, 0.2, 0.18), RED, e=0.8, seg=10, ring=8)         # elbow
     p.hard().blob((0.24, 1.34, z + 0.11 * s), (0.15, 0.2, 0.17), RED2, rot=(0, 0, 12), e=0.8, seg=12, ring=9)   # bracer
     p.hard().ring((0.17, 1.52, z + 0.12 * s), 0.14, 0.03, BONE, rot=(90, 0, 10), seg=10, tseg=4)
-    p.blob(hand, (0.17, 0.17, 0.16), CHAR2)                                                         # fist
+    p.blob(hand, (0.24, 0.23, 0.22), CHAR2)                                                         # fist
     for dz in (-0.07, 0.0, 0.07):
-        p.hard().tube([(0.4, 1.1, z + 0.08 * s + dz), (0.52, 1.0, z + 0.08 * s + dz * 1.5)], (0.045, 0.0), CREAM, sides=4)
+        p.hard().tube([(0.42, 1.1, z + 0.08 * s + dz * 1.3), (0.58, 0.98, z + 0.08 * s + dz * 1.9)], (0.07, 0.01), CREAM, sides=5)
     bracer(p, (el[0] + 0.02, el[1] - 0.08, el[2]), (hand[0] - 0.02, hand[1] + 0.26, hand[2]), 0.15, DRED, GOLD)
     pauldron(p, (sh[0] + 0.02, sh[1] + 0.02, z + 0.04 * s), 0.27, RED2, GOLD, spikes=3, sd=s)
     parts[name] = p.finish(voxel=0.038, smooth_passes=3, target_tris=1200)
@@ -109,7 +123,11 @@ w = Part("weapon", wp, dy=0.2)
 d = (0.78, -0.3, 0.0); dl = math.hypot(d[0], d[1]); d = (d[0] / dl, d[1] / dl, 0.0)
 def at(f, off=(0, 0, 0)):
     return (wp[0] + d[0] * f + off[0], wp[1] + d[1] * f + off[1], wp[2] + off[2])
-w.hard().tube([at(-0.35), at(0.6), at(1.4)], (0.075, 0.06), BROWN, sides=8)
+w.hard().tube([at(-0.35), at(0.6), at(1.4)], (0.1, 0.085), BROWN, sides=8)
+w.hard().blob(at(-0.4), (0.13, 0.13, 0.13), GOLD)                                                   # pommel
+w.hard().blob(at(1.35), (0.16, 0.16, 0.16), GOLD)                                                   # collar
+for k in range(3):
+    w.hard().blob(at(0.2 + k * 0.4, (0, 0.0, 0)), (0.025, 0.12, 0.12), GLOWC, rot=(0, 0, -20), seg=6, ring=6)   # rune bands
 for k in range(4):
     w.hard().ring(at(0.25 + k * 0.3), 0.085, 0.02, GOLD, rot=(0, 73, 0), seg=8, tseg=3)
 mc = at(1.7)

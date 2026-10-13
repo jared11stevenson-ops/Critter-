@@ -11,6 +11,7 @@ OUT = os.path.join(os.path.dirname(__file__), "..", "..", "v2", "art", "models")
 TEAL = hexc("4a7f86"); TEAL2 = hexc("3a6a72"); RUST = hexc("8a4a28"); RUST2 = hexc("a8602e"); BRASS = hexc("a9803a"); AMBER = hexc("ffb83a", 1.0); IRON = hexc("2c3234")
 MIST = hexc("cdd6b8"); MEM = hexc("c4cf94"); MEM2 = hexc("8fb89a"); BARN = hexc("cdd1b8"); DARK = hexc("1f2a2c"); LAMP = hexc("ffb83a", 0.9)
 lib.reset()
+lib.CHUNK = 1.3; lib.EYE_SCALE = 1.2; lib.MISMATCH = True
 parts = {}
 rr = random.Random(12)
 
@@ -72,11 +73,13 @@ for k in range(8):   # tattered mantle hanging from the shoulders (a cloak of me
     z = (k - 3.5) * 0.11
     ln = 1.5 + 0.35 * ((k * 3) % 4)
     t.hard().tube([(0.25, 2.3, z), (-0.15, 1.6, z * 1.4), (-0.3, 0.9, z * 1.8), (-0.3, 2.3 - ln, z * 2.0)], ((0.0, 0.01), (0.07, 0.01), (0.1, 0.01), (0.0, 0.01)), MEM2 if k % 2 == 0 else MEM, wide=(0, 0, 1), sides=4)
+t.hard().tube([(0.3, 2.4, -0.25), (0.42, 1.9, 0.0), (0.25, 1.5, 0.25)], 0.025, IRON, sides=4)   # chain bandolier
+lantern(t, (0.44, 1.8, 0.0), 0.08)
 parts["torso"] = t.finish(voxel=0.045, smooth_passes=2, target_tris=1400)
 
 # ---- head: small insect skull inside a big brass lantern helmet, amber lens, chimney cap, chain-hung antenna arcs
 hp = (0.62, 2.45, 0)
-h = Part("head", hp)
+h = Part("head", hp, sc=1.12)
 h.blob((0.62, 2.45, 0), (0.2, 0.26, 0.2), TEAL)                                               # skull
 h.blob((0.72, 2.79, 0), (0.36, 0.34, 0.34), BRASS)                                             # helmet dome
 h.hard().ring((0.72, 2.63, 0), 0.36, 0.05, RUST, rot=(0, 90, 0), seg=14, tseg=4)

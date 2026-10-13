@@ -11,6 +11,7 @@ OUT = os.path.join(os.path.dirname(__file__), "..", "..", "v2", "art", "models")
 BARK = hexc("7a5e40"); BARK2 = hexc("8e7050"); TAN = hexc("d8c496"); OLIVE = hexc("6e7a40"); OLIVE2 = hexc("56622e"); WOOD = hexc("604628"); THORN = hexc("a67e44")
 BRASS = hexc("d0a850"); RED = hexc("c0382c"); AMBER = hexc("ffb040", 1.0); WING = hexc("b4bc86"); WING2 = hexc("98a06a"); DARK = hexc("2a1e16"); BLACK = hexc("140e0c")
 lib.reset()
+lib.CHUNK = 1.3; lib.EYE_SCALE = 1.25; lib.MISMATCH = True
 parts = {}
 
 def thorns(p, pts, n, ln, color, rad=0.03, side=(0, 0, 1)):
@@ -54,10 +55,16 @@ t.hard().tube([(0.15, 2.58, 0.24), (0.3, 2.1, 0.0), (0.15, 1.72, -0.24)], 0.045,
 t.hard().tube([(0.15, 2.58, -0.24), (0.3, 2.05, 0.0), (0.15, 1.72, 0.24)], 0.045, WOOD, sides=5)
 t.hard().tube([(0.2, 1.9, -0.22), (0.3, 1.5, -0.26), (0.26, 1.1, -0.28)], ((0.08, 0.014), (0.08, 0.014), (0.01, 0.01)), RED, wide=(0, 0, 1), sides=4)  # sash scrap
 thorns(t, [(-0.22, 1.7, 0), (-0.22, 2.1, 0), (-0.16, 2.5, 0)], 8, 0.24, THORN, 0.045, side=(-1, 0.6, 0))
+t.hard().blob((0.3, 2.3, 0), (0.1, 0.28, 0.26), OLIVE2, e=0.8, seg=12, ring=9)               # chest plate
+t.hard().ring((0.4, 2.3, 0), 0.12, 0.022, BRASS, rot=(0, 90, 0), seg=12, tseg=4)
+t.hard().blob((0.42, 2.3, 0), (0.025, 0.07, 0.07), RED, e=0.8)                                    # red rank badge
+for k in range(3):
+    t.hard().tube([(0.4, 2.55 - 0.08 * k, -0.12), (0.42, 2.5 - 0.08 * k, 0.0), (0.4, 2.55 - 0.08 * k, 0.12)], 0.016, BRASS, sides=4)   # chevrons
+t.hard().ring((0.1, 2.66, 0), 0.2, 0.045, BRASS, rot=(90, 0, 0), seg=14, tseg=4)                  # gorget
 parts["torso"] = t.finish(voxel=0.04, smooth_passes=3, target_tris=1500)
 
 hp = (0.12, 2.65, 0)
-HS = 1.3
+HS = 1.6
 h = Part("head", hp, sc=HS)
 h.blob((0.25, 2.72, 0), (0.32, 0.27, 0.25), BARK2)
 h.blob((0.52, 2.58, 0), (0.24, 0.14, 0.17), TAN, rot=(0, 0, -15))

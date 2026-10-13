@@ -11,6 +11,7 @@ OUT = os.path.join(os.path.dirname(__file__), "..", "..", "v2", "art", "models")
 IND = hexc("2a2650"); IND2 = hexc("3a3466"); PLUM = hexc("4a2d6a"); PINK = hexc("ee4fa8", 0.8); ROSE = hexc("f08cc0"); ICE = hexc("7fd2ea", 0.4); CRYS = hexc("a8d8f0")
 SILK = hexc("e8eaf2"); FUR = hexc("dcd8e4"); GOLDC = hexc("f4d24a", 0.8); DARK = hexc("14102a")
 lib.reset()
+lib.CHUNK = 1.3; lib.EYE_SCALE = 1.25; lib.MISMATCH = True
 parts = {}
 rr = random.Random(9)
 
@@ -64,7 +65,7 @@ parts["torso"] = t.finish(voxel=0.05, smooth_passes=2, target_tris=1700)
 
 # head: furred cream face, venom fangs, big pink eyes (face shader) + small eyes, crystal crest and pink crest horns
 hp = (0.45, 2.25, 0)
-h = Part("head", hp)
+h = Part("head", hp, sc=1.2)
 h.blob((0.55, 2.35, 0), (0.4, 0.34, 0.4), FUR)
 for k in range(14):
     a = k * 2.4
