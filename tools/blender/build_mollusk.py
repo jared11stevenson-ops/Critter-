@@ -5,7 +5,7 @@ Layout matches the procedural design. Run: python3 tools/blender/build_mollusk.p
 import json, math, os, sys, random
 sys.path.insert(0, os.path.dirname(__file__))
 import lib
-from lib import hexc, Part, eye, fur
+from lib import hexc, Part, eye, fur, brow, mouth, pauldron, bracer, rivets
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "..", "v2", "art", "models")
 BODY = hexc("d7b48a"); BODY2 = hexc("c39a6e"); PALE = hexc("e9d3a6"); AMBER = hexc("94623a"); BROWN = hexc("4a2616"); CREAM = hexc("e8d3a2"); DARK = hexc("3a2a22")
@@ -52,8 +52,10 @@ h.blob((0.64, 1.55, 0), (0.16, 0.09, 0.18), PALE, rot=(0, 0, -10))
 for s in (-1, 1):
     st = [(0.45, 2.05, 0.1 * s), (0.5, 2.45, 0.16 * s), (0.58, 2.85, 0.2 * s), (0.64, 3.15, 0.22 * s)]
     h.tube(st, (0.075, 0.055), BODY, sides=7)
+    brow(h, (0.7, 3.42, 0.22 * s), 0.26, -0.06, "3a2410", th=0.05, look=(1, 0, 0))
     eye(h, (0.68, 3.2, 0.22 * s), 0.17, "5a3a1a", white="fff6e0", look=(1, 0, 0.1 * s), glow=0.0)
     h.hard().blob((0.67, 3.28, 0.22 * s), (0.16, 0.07, 0.16), BODY2, rot=(0, 0, -12))          # tired lid
+mouth(h, (0.85, 1.72, 0), 0.3, -0.05, "2a1a10", teeth=0)
 for k in range(6):   # leaves + hibiscus on the crown
     a = k / 6 * math.tau
     h.hard().tube([(0.4, 2.12, 0), (0.4 + 0.12 * math.cos(a), 2.3, 0.12 * math.sin(a)), (0.4 + 0.3 * math.cos(a), 2.4, 0.3 * math.sin(a))], ((0.05, 0.01), (0.08, 0.01), (0.0, 0.01)), LEAF, wide=(0, 1, 0), sides=4)
@@ -78,6 +80,7 @@ def arm(name, z):
         for q in range(4):
             a = q * 1.57
             p.hard().tube([(mc[0] + 0.3 * math.cos(a), mc[1] + 0.1, mc[2] + 0.3 * math.sin(a)), (mc[0] + 0.5 * math.cos(a), mc[1] + 0.2, mc[2] + 0.5 * math.sin(a))], (0.09, 0.0), hexc("55504a"), sides=5)
+    bracer(p, (el[0] + 0.02, el[1] - 0.05, el[2]), (hand[0] - 0.02, hand[1] + 0.25, hand[2]), 0.21, hexc("8a5a30"), hexc("d8b048"))
     parts[name] = p.finish(voxel=0.05, smooth_passes=2, target_tris=800 if s > 0 else 520)
 
 arm("arm_f", 0.62)

@@ -5,7 +5,7 @@ Pivots/sockets match the rig. Run: python3 tools/blender/build_cigarra.py -> v2/
 import json, math, os, sys, random
 sys.path.insert(0, os.path.dirname(__file__))
 import lib
-from lib import hexc, Part, eye, fur
+from lib import hexc, Part, eye, fur, brow, mouth, pauldron, bracer, rivets
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "..", "v2", "art", "models")
 PURPLE = hexc("4a3a68"); PURPLE2 = hexc("362a50"); PURPLE3 = hexc("66548a"); LIME = hexc("b4d640"); LIME2 = hexc("d4ec62"); SKIN = hexc("eebb92")
@@ -52,6 +52,9 @@ h = Part("head", hp, dy=0.34, sc=HS)
 h.blob((0.12, 2.1, 0), (0.24, 0.26, 0.23), SKIN)                                                              # big head
 eye(h, (0.28, 2.12, 0.1), 0.095, "e8e060", white="fffbe8", look=(1, 0, 0.35), glow=0.4)
 eye(h, (0.28, 2.12, -0.1), 0.095, "e8e060", white="fffbe8", look=(1, 0, -0.35), glow=0.4)
+for sg in (-1, 1):
+    brow(h, (0.3, 2.26, 0.1 * sg), 0.14, 0.04, "3a2a5a", th=0.028, look=(1, 0, 0.35 * sg))
+mouth(h, (0.34, 1.97, 0), 0.14, 0.04, "5a2030", look=(1, 0, 0))
 h.hard().blob((0.34, 2.0, 0.0), (0.03, 0.025, 0.05), hexc("c8705a"), seg=6, ring=4)                           # tiny nose/mouth
 h.hard().blob((0.28, 2.02, 0.17), (0.04, 0.03, 0.05), BLUSH, seg=6, ring=4)
 h.hard().blob((0.28, 2.02, -0.17), (0.04, 0.03, 0.05), BLUSH, seg=6, ring=4)

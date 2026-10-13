@@ -5,7 +5,7 @@ Layout matches the procedural design pivots. Run: python3 tools/blender/build_sc
 import json, math, os, sys, random
 sys.path.insert(0, os.path.dirname(__file__))
 import lib
-from lib import hexc, Part, eye, fur
+from lib import hexc, Part, eye, fur, brow, mouth, pauldron, bracer, rivets
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "..", "v2", "art", "models")
 RED = hexc("b01c2c"); RED2 = hexc("c42a3a"); DRED = hexc("7e1522"); GOLD = hexc("e3b04a"); WINE = hexc("4f1a36"); BLACK = hexc("171012"); WOOD = hexc("7a4a2a")
@@ -68,6 +68,9 @@ h.blob((0.8, 1.65, 0), (0.55, 0.45, 0.52), RED2)
 h.blob((1.25, 1.4, 0), (0.14, 0.1, 0.2), DRED, rot=(0, 0, -10))
 eye(h, (1.16, 1.78, -0.25), 0.15, "e3b04a", white="fff4d8", look=(1, 0, -0.2), glow=0.3)
 eye(h, (1.16, 1.78, 0.25), 0.15, "e3b04a", white="fff4d8", look=(1, 0, 0.2), glow=0.3)
+for sg in (-1, 1):
+    brow(h, (1.2, 1.99, 0.25 * sg), 0.3, 0.09, "171012", th=0.06, look=(1, 0, 0.2 * sg))
+mouth(h, (1.3, 1.5, 0), 0.5, 0.12, "171012", teeth=4, tooth="fff0c0")
 h.hard().ring((1.2, 1.78, -0.25), 0.17, 0.03, GOLD, rot=(0, 90, 0), seg=14, tseg=4)
 h.hard().blob((1.35, 1.35, 0.06), (0.025, 0.04, 0.02), GOLD)                                  # gold tooth
 fuzz(h, (0.8, 1.65, 0), (0.55, 0.45, 0.52), 22, 0.1, RED2, seed=5)
@@ -102,6 +105,7 @@ def arm(name, z):
             p.hard().ring(at(k), 0.08, 0.025, GOLD, rot=(0, 0, 25), seg=8, tseg=4)
         tip = at(2.4)
         p.hard().tube([tip, (tip[0] + 0.2, tip[1] + 0.25, tip[2]), (tip[0] + 0.45, tip[1] + 0.2, tip[2]), (tip[0] + 0.5, tip[1] - 0.05, tip[2])], ((0.14, 0.03), (0.16, 0.03), (0.12, 0.03), (0.0, 0.01)), IRON, wide=(-0.5, 0.5, 0), sides=4)
+    pauldron(p, (sh[0] + 0.02, sh[1] + 0.04, z), 0.2, hexc("4f1a36"), hexc("e3b04a"), spikes=3, sd=s)
     parts[name] = p.finish(voxel=0.04, smooth_passes=2, target_tris=700 if s > 0 else 480)
 
 arm("arm_f", 0.82)

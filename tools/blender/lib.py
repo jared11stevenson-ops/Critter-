@@ -389,7 +389,7 @@ def _unit(v):
     return tuple(x / n for x in v) if n else (0, 1, 0)
 
 
-def eye(p, c, r, iris, white="f4f0e8", pupil="120a0c", look=(1.0, 0.0, 0.0), glow=0.0, lid=None):
+def eye(p, c, r, iris, white="f4f0e8", pupil="120a0c", look=(1.0, 0.0, 0.0), glow=0.0, lid=None, ps=1.0, ring_c=None):
     """A glossy cartoon-quality eye on the surface at c: eyeball, iris, pupil, two specular catch-lights (emissive) and an optional lid.
     look = outward facing direction of the eye (game axes)."""
     lk = _unit(look)
@@ -400,7 +400,9 @@ def eye(p, c, r, iris, white="f4f0e8", pupil="120a0c", look=(1.0, 0.0, 0.0), glo
     ic = (c[0] + lk[0] * r * 0.62, c[1] + lk[1] * r * 0.62, c[2] + lk[2] * r * 0.62)
     p.hard().blob(ic, (r * 0.42, r * 0.7, r * 0.7), hexc(iris, glow), rot=rot, seg=10, ring=8)
     pc = (c[0] + lk[0] * r * 0.8, c[1] + lk[1] * r * 0.8, c[2] + lk[2] * r * 0.8)
-    p.hard().blob(pc, (r * 0.3, r * 0.45, r * 0.45), hexc(pupil), rot=rot, seg=8, ring=6)
+    p.hard().blob(pc, (r * 0.3, r * 0.45 * ps, r * 0.45 * ps), hexc(pupil), rot=rot, seg=8, ring=6)
+    if ring_c:   # thick coloured eye-rim (gold / black lash line)
+        p.hard().ring((c[0] + lk[0] * r * 0.15, c[1], c[2] + lk[2] * r * 0.15), r * 1.02, r * 0.16, hexc(ring_c), rot=(0, yaw + 90, 0), seg=14, tseg=4)
     up = (0.0, 1.0, 0.0)
     for k, (dy, dz, rr_) in enumerate(((0.4, 0.22, 0.2), (-0.2, -0.3, 0.1))):
         hc = (c[0] + lk[0] * r * 0.95, c[1] + r * dy, c[2] + r * dz * (1 if lk[2] >= 0 else -1) * (0.3 if abs(lk[2]) < 0.5 else 1.0) + lk[2] * 0.0)
@@ -435,3 +437,68 @@ def fur(p, c, r, color, n=120, ln=0.12, flow=(-0.4, -0.7, 0.0), seed=1, width=0.
         p.hard().mat(0.0, 1.0).tube([base, mid, tip], (width, 0.0), col, sides=3)
         made += 1
     p.mat(0.0, 0.0)
+
+
+def _c(x):
+    return hexc(x) if isinstance(x, str) else x
+
+
+def _lat(look):
+    lk = _unit(look)
+    return (-lk[2], 0.0, lk[0])    # horizontal axis across the face (game axes)
+
+
+def brow(p, c, w, tilt, color, th=0.045, look=(1, 0, 0), arch=0.02):
+    """Thick cartoon eyebrow centred on c, width w, tilt = rise (+) of the OUTER end relative to the inner end (angry = negative, worried = positive).
+    side is decided by the sign of c.z along the lateral axis; call once per eye."""
+    lat = _lat(look)
+    side = 1.0 if (c[2] * lat[2] + c[0] * lat[0] * 0.0) >= 0 else -1.0
+    a = (c[0] - lat[0] * w * 0.5 * side, c[1] - tilt * 0.5, c[2] - lat[2] * w * 0.5 * side)   # inner end
+    b = (c[0] + lat[0] * w * 0.5 * side, c[1] + tilt * 0.5, c[2] + lat[2] * w * 0.5 * side)       # outer end
+    m = ((a[0] + b[0]) / 2 + look[0] * 0.015, (a[1] + b[1]) / 2 + arch, (a[2] + b[2]) / 2 + look[2] * 0.015)
+    p.hard().tube([a, m, b], ((th * 0.5, th), (th, th), (th, th * 0.4)), _c(color), sides=5)
+
+
+def mouth(p, c, w, curve, color="1a0e10", look=(1, 0, 0), th=0.03, teeth=0, tooth="fff6e0", tongue=None, fang=False):
+    """Cartoon mouth line centred on c, width w, curve>0 = smile (ends rise), <0 = frown. Optional row of teeth and a tongue blob."""
+    lat = _lat(look)
+    n = 7
+    pts = []
+    for i in range(n):
+        t = i / (n - 1) * 2 - 1
+        y = c[1] + curve * (t * t - 0.5) * 1.0 * (1 if curve >= 0 else 1)
+        pts.append((c[0] + lat[0] * w * 0.5 * t + look[0] * 0.02 * (1 - t * t), y, c[2] + lat[2] * w * 0.5 * t + look[2] * 0.02 * (1 - t * t)))
+    p.hard().tube(pts, th, _c(color), sides=4)
+    for k in range(teeth):
+        t = (k + 0.5) / teeth * 1.2 - 0.6
+        y = c[1] + curve * (t * t - 0.5) - th
+        pos = (c[0] + lat[0] * w * 0.5 * t + look[0] * 0.03, y, c[2] + lat[2] * w * 0.5 * t + look[2] * 0.03)
+        p.hard().blob(pos, (w * 0.05, w * (0.09 if fang else 0.065), w * 0.05), _c(tooth), seg=6, ring=4)
+    if tongue:
+        p.hard().blob((c[0] + look[0] * 0.03, c[1] - w * 0.08, c[2] + look[2] * 0.03), (w * 0.12, w * 0.07, w * 0.14), _c(tongue), seg=6, ring=4)
+
+
+def rivets(p, pts, r=0.02, color="e8c050"):
+    for q in pts:
+        p.hard().blob(q, (r, r, r), hexc(color, 0.3), seg=6, ring=4)
+
+
+def pauldron(p, c, r, color, trim, spikes=0, sd=1.0):
+    """Layered shoulder armour: a domed plate, a rim band and an optional row of spikes."""
+    p.hard().blob(c, (r, r * 0.7, r * 1.05), _c(color), e=0.75, seg=12, ring=8)
+    p.hard().blob((c[0], c[1] - r * 0.55, c[2]), (r * 1.05, r * 0.28, r * 1.1), _c(trim), e=0.7, seg=12, ring=6)
+    for k in range(spikes):
+        a = (k - (spikes - 1) / 2) * 0.55
+        q = (c[0] + math.sin(a) * r * 0.5, c[1] + r * 0.6, c[2] + math.cos(a) * r * 0.2 * sd)
+        p.hard().tube([q, (q[0], q[1] + r * 0.55, q[2])], (r * 0.2, 0.0), _c(trim), sides=4)
+    rivets(p, [(c[0] + r * 0.4, c[1] + r * 0.45, c[2] + r * 0.5 * sd), (c[0] - r * 0.4, c[1] + r * 0.45, c[2] + r * 0.5 * sd)], r * 0.12)
+
+
+def bracer(p, a, b, r, color, trim, rivet=True):
+    """Armoured sleeve / greave on a roughly vertical limb segment a->b: tapered plate tube with trim rings and rivets."""
+    p.hard().tube([a, b], (r, r * 0.88), _c(color), sides=10)
+    for q, rr in ((a, r * 1.06), (b, r * 0.95)):
+        p.hard().ring(q, rr, r * 0.16, _c(trim), rot=(90, 0, 0), seg=14, tseg=4)
+    if rivet:
+        mid = ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2)
+        rivets(p, [(mid[0] + r * 0.95, mid[1] + 0.03, mid[2]), (mid[0] + r * 0.95, mid[1] - 0.05, mid[2])], r * 0.14)

@@ -27,6 +27,9 @@ uniform float edge_strength : hint_range(0.0, 2.0) = 0.3;  // convex edges catch
 uniform float bump_amount : hint_range(0.0, 1.5) = 0.35;   // object-space noise bump on the normal: skin / fur / chitin irregularity
 uniform float mid_edge : hint_range(0.0, 1.0) = 0.12;       // third (soft shadow-core) band
 uniform vec3 tint_shadow = vec3(0.50, 0.46, 0.66);          // hue-shifted shadow colour (cool violet), multiplies the albedo
+uniform float saturation : hint_range(0.5, 2.0) = 1.18;   // richer cartoon colour
+uniform vec3 hi_tint = vec3(1.0, 0.86, 0.62);              // warm key-light colour added in the lit band
+uniform float hi_strength : hint_range(0.0, 1.0) = 0.14;
 varying vec3 v_obj;
 varying vec2 v_det;
 
@@ -71,6 +74,8 @@ void fragment() {
 		NORMAL = normalize(NORMAL + (mat3(VIEW_MATRIX) * mat3(MODEL_MATRIX) * g) * bump_amount * (1.0 - v_det.x * 0.7));
 	}
 	vec3 base = v_col;
+	float lum = dot(base, vec3(0.299, 0.587, 0.114));
+	base = clamp(mix(vec3(lum), base, saturation), 0.0, 1.0);
 	// grain: three octaves of object-space noise break up flat colour (skin, cloth, chitin) without textures
 	float gn = vnoise(v_obj * detail_scale) * 0.55 + vnoise(v_obj * detail_scale * 2.7 + 5.0) * 0.3 + vnoise(v_obj * detail_scale * 7.0 + 11.0) * 0.15;
 	base *= 1.0 + (gn - 0.5) * 2.0 * detail_amount * (1.0 - v_det.x * 0.6);
@@ -102,7 +107,7 @@ void light() {
 	float lit = smoothstep(band_edge - band_soft, band_edge + band_soft, ndl);
 	float core = smoothstep(mid_edge - band_soft, mid_edge + band_soft, ndl);   // a second step: the terminator gets a soft mid tone
 	// lit band adds the (golden) sun; the shadow band is only the cool floor added in fragment()
-	DIFFUSE_LIGHT += LIGHT_COLOR * (lit * lit_gain + core * lit_gain * 0.22);
+	DIFFUSE_LIGHT += LIGHT_COLOR * (lit * lit_gain + core * lit_gain * 0.22) + hi_tint * lit * hi_strength * ATTENUATION;
 	// stylised specular: a hard-edged highlight on glossy parts (baked mask), none on fur / cloth
 	vec3 hv = normalize(LIGHT + VIEW);
 	float sp = pow(max(dot(NORMAL, hv), 0.0), spec_power);

@@ -5,7 +5,7 @@ Layout matches the procedural design. Run: python3 tools/blender/build_pharilux.
 import json, math, os, sys, random
 sys.path.insert(0, os.path.dirname(__file__))
 import lib
-from lib import hexc, Part, eye, fur
+from lib import hexc, Part, eye, fur, brow, mouth, pauldron, bracer, rivets
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "..", "v2", "art", "models")
 TEAL = hexc("4a7f86"); TEAL2 = hexc("3a6a72"); RUST = hexc("8a4a28"); RUST2 = hexc("a8602e"); BRASS = hexc("a9803a"); AMBER = hexc("ffb83a", 1.0); IRON = hexc("2c3234")
@@ -47,6 +47,7 @@ def leg(name, z, x0):
         p.hard().tube([(x0 - 0.02, 0.06, z + dz * 0.5), (x0 + 0.3, 0.04, z + dz * 1.8)], (0.04, 0.0), RUST2, sides=4)
     p.hard().tube([(x0 - 0.02, 0.06, z), (x0 - 0.26, 0.04, z)], (0.035, 0.0), RUST2, sides=4)
     barnacles(p, knee, 0.1, 3)
+    bracer(p, (knee[0] - 0.02, knee[1] - 0.1, z), (hock[0] + 0.02, hock[1] + 0.12, z), 0.085, hexc("d8a040"), hexc("8a4a20"))
     parts[name] = p.finish(voxel=0.04, smooth_passes=2, target_tris=620)
 
 leg("leg_f", 0.2, 0.12)
@@ -81,6 +82,7 @@ h.blob((0.72, 2.79, 0), (0.36, 0.34, 0.34), BRASS)                              
 h.hard().ring((0.72, 2.63, 0), 0.36, 0.05, RUST, rot=(0, 90, 0), seg=14, tseg=4)
 h.hard().blob((0.92, 2.75, 0), (0.24, 0.26, 0.26), AMBER, seg=10, ring=7)                      # lantern lens
 eye(h, (1.0, 2.75, 0), 0.15, "3adcc0", white="fff2c8", look=(1, 0, 0), glow=0.8)
+brow(h, (1.1, 2.98, 0.0), 0.34, 0.0, "d8a040", th=0.06, look=(1, 0, 0), arch=0.06)
 h.hard().ring((1.0, 2.75, 0), 0.2, 0.035, BRASS, rot=(0, 0, 0), seg=10, tseg=4)
 h.hard().tube([(0.67, 3.07, 0), (0.67, 3.25, 0)], (0.09, 0.05), BRASS, sides=6)
 h.hard().blob((0.67, 3.31, 0), (0.11, 0.05, 0.11), RUST, seg=6, ring=4)
@@ -117,6 +119,8 @@ def arm(name, z):
         sock["weapon_tip"] = ["arm_f", round(tip[0] - sh[0], 4), round(tip[1] - sh[1], 4), round(tip[2] - sh[2], 4)]
         sock["weapon_base"] = ["arm_f", round(el[0] - sh[0], 4), round(el[1] - sh[1], 4), round(el[2] - sh[2], 4)]
         sock["hand"] = sock["weapon_base"]
+    pauldron(p, (sh[0], sh[1] + 0.02, z + 0.03 * s), 0.17, hexc("d8a040"), hexc("8a4a20"), spikes=3, sd=s)
+    bracer(p, (el[0], el[1] + 0.2, el[2]), (el[0] + 0.02, el[1] - 0.05, el[2]), 0.11, hexc("d8a040"), hexc("8a4a20"))
     parts[name] = p.finish(voxel=0.04, smooth_passes=2, target_tris=800)
 
 arm("arm_f", 0.4)

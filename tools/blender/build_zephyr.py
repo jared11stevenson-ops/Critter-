@@ -5,7 +5,7 @@ Run: python3 tools/blender/build_zephyr.py -> v2/art/models/zephyr.glb + zephyr.
 import json, math, os, sys, random
 sys.path.insert(0, os.path.dirname(__file__))
 import lib
-from lib import hexc, Part, eye, fur
+from lib import hexc, Part, eye, fur, brow, mouth, pauldron, bracer, rivets
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "..", "v2", "art", "models")
 OLV = hexc("7a6a3e"); OLV2 = hexc("5e6a34"); BURG = hexc("7a2a3a"); BURG2 = hexc("a03a4a"); PINK = hexc("e86a9a"); MAG = hexc("d63a9c"); CREAM = hexc("ecd9b0")
@@ -28,6 +28,7 @@ def leg(name, z, x0):
     p.hard().tube([(x0 + 0.06, 0.07, z), (x0 - 0.12, 0.03, z)], (0.025, 0.0), DARKB, sides=4)
     for k in range(5):   # leg feathers
         p.hard().tube([(x0 + 0.05, 1.12 - 0.07 * k, z + 0.05 * s), (x0 - 0.1, 0.95 - 0.12 * k, z + 0.1 * s)], (0.04, 0.0), BURG2 if k % 2 == 0 else OLV2, sides=4)
+    bracer(p, (knee[0] - 0.02, knee[1] - 0.1, z), (hock[0] + 0.02, hock[1] + 0.12, z), 0.065, hexc("e8c050"), hexc("c0305a"))
     parts[name] = p.finish(voxel=0.035, smooth_passes=2, target_tris=520)
 
 leg("leg_f", 0.14, 0.1)
@@ -61,6 +62,7 @@ h.blob((0.24, 2.34, 0), (0.26, 0.24, 0.22), OLV)                                
 h.tube([(0.36, 2.3, 0), (0.7, 2.22, 0), (1.05, 2.1, 0), (1.25, 1.95, 0)], (0.1, 0.01), BEAK, sides=7)    # proboscis
 h.hard().tube([(0.4, 2.36, 0), (0.75, 2.3, 0), (1.0, 2.18, 0)], (0.05, 0.01), BURG, sides=5)
 for s in (-1, 1):
+    brow(h, (0.4, 2.56, 0.15 * s), 0.18, 0.06, "5a1030", th=0.035, look=(1, 0, 0.3 * s))
     eye(h, (0.36, 2.4, 0.15 * s), 0.115, "d83a8a", white="fff4e8", look=(1, 0, 0.3 * s), glow=0.5)
     ant = [(0.2, 2.5, 0.08 * s), (0.1, 2.85, 0.2 * s), (0.18, 3.1, 0.34 * s), (0.3, 3.0, 0.42 * s)]
     h.hard().tube(ant, (0.02, 0.01), WOOD, sides=4)
@@ -95,6 +97,8 @@ def arm(name, z):
         sock["weapon_tip"] = ["arm_f", round(a2[0] - sh[0], 4), round(a2[1] - sh[1], 4), round(a2[2] - sh[2], 4)]
         sock["weapon_base"] = ["arm_f", round(hand[0] - sh[0], 4), round(hand[1] - sh[1], 4), round(hand[2] - sh[2], 4)]
         sock["hand"] = ["arm_f", round(hand[0] - sh[0], 4), round(hand[1] - sh[1], 4), round(hand[2] - sh[2], 4)]
+    pauldron(p, (sh[0] + 0.02, sh[1] + 0.02, z + 0.03 * s), 0.1, hexc("c0305a"), hexc("ffd84a"), spikes=2, sd=s)
+    bracer(p, (el[0], el[1] - 0.05, el[2]), (hand[0] - 0.02, hand[1] + 0.18, hand[2]), 0.065, hexc("e8c050"), hexc("c0305a"))
     parts[name] = p.finish(voxel=0.03, smooth_passes=2, target_tris=520)
 
 sock = {}

@@ -6,7 +6,7 @@ Pivots/sockets match the rig. Run: python3 tools/blender/build_aruun.py -> v2/ar
 import json, math, os, sys, random
 sys.path.insert(0, os.path.dirname(__file__))
 import lib
-from lib import hexc, Part, eye, fur
+from lib import hexc, Part, eye, fur, brow, mouth, pauldron, bracer, rivets
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "..", "v2", "art", "models")
 CHAR = hexc("34303c"); CHAR2 = hexc("45414f"); CHAR3 = hexc("26232d"); RED = hexc("b8302a"); RED2 = hexc("e24a30"); DRED = hexc("8c1c1c"); CREAM = hexc("e8d6ad"); CREAM2 = hexc("cdb78a")
@@ -66,6 +66,9 @@ h.hard().blob((0.92, 2.78, 0), (0.2, 0.1, 0.17), CHAR3, e=0.8)                  
 h.hard().blob((0.62, 3.1, 0), (0.28, 0.1, 0.24), RED, e=0.8, seg=12, ring=8)                 # red brow shield
 eye(h, (0.72, 2.97, 0.17), 0.1, "ffb83a", look=(1.0, 0.0, 0.45), glow=0.7)
 eye(h, (0.72, 2.97, -0.17), 0.1, "ffb83a", look=(1.0, 0.0, -0.45), glow=0.7)
+for sg in (-1, 1):
+    brow(h, (0.78, 3.12, 0.17 * sg), 0.2, 0.07, "17141a", th=0.05, look=(1, 0, 0.45 * sg))
+mouth(h, (1.0, 2.66, 0), 0.26, -0.03, "17141a", teeth=0)
 for s in (-1, 1):
     h.hard().tube([(0.98, 2.74, 0.09 * s), (1.18, 2.62, 0.13 * s)], (0.055, 0.0), CREAM, sides=5)       # tusks
     h.hard().tube([(0.56, 3.12, 0.16 * s), (0.5, 3.3, 0.26 * s), (0.58, 3.42, 0.32 * s)], (0.06, 0.012), RED2, sides=6)   # short brow horns
@@ -93,6 +96,8 @@ def arm(name, z):
     p.blob(hand, (0.17, 0.17, 0.16), CHAR2)                                                         # fist
     for dz in (-0.07, 0.0, 0.07):
         p.hard().tube([(0.4, 1.1, z + 0.08 * s + dz), (0.52, 1.0, z + 0.08 * s + dz * 1.5)], (0.045, 0.0), CREAM, sides=4)
+    bracer(p, (el[0] + 0.02, el[1] - 0.08, el[2]), (hand[0] - 0.02, hand[1] + 0.26, hand[2]), 0.15, DRED, GOLD)
+    pauldron(p, (sh[0] + 0.02, sh[1] + 0.02, z + 0.04 * s), 0.27, RED2, GOLD, spikes=3, sd=s)
     parts[name] = p.finish(voxel=0.038, smooth_passes=3, target_tris=1200)
 
 arm("arm_f", 0.58)
