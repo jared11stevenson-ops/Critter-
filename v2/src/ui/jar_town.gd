@@ -579,6 +579,9 @@ static func demo_state(r: RosterState) -> void:
 		c.retired = true
 	for sp in Habitat.TOWN_ORDER:
 		var h := r.habitat(sp)
-		h.materials = 18 if sp != "aruun" else 14
+		if sp == "aruun":
+			h.materials = 40                                       # Aruun starts empty with supplies waiting: the build loop is visible
+			continue
+		h.materials = 18
 		for i in 20:
 			h.step_day(r.retired_adults(sp))
