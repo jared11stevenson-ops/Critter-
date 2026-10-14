@@ -1,5 +1,7 @@
 # CRITTER: Road to the First Beta
 
+> Priority order set by the creator on 2026-10-14: 1 Combat (this plan), 2 Jars, 3 Expeditions (may be cut), 4 everything else.
+
 Written at v0.29.0 (2026-10-14). Companion to `ROADMAP.md` (brainstorm backlog) and `design/v2/CREATOR_GDD.md` (law). Every task is tagged **[C]** needs the creator, **[L]** Lead can do alone, **[A]** needs new art from the creator's Tripo/ChatGPT pipeline. Effort: **S** < 1 session, **M** 1-2, **L** 3+. Because creator usage is limited, milestones are ordered so that each one ends in a build worth playing and the list can be cut at any line.
 
 ## 0. What "first beta" means
