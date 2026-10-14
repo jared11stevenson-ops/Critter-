@@ -53,9 +53,9 @@ Auto-rig assumes a standing humanoid/quadruped body plan with limbs attached to 
 6. Author 6 clips (idle, walk, stalk, light, guard, hurt) pinned to the move frames, review as a contact sheet.
 
 ## 6. Open questions for the creator
-1. Keep the near-seated crouch as the base stance, or stand him a little taller for combat readability (recommended: slightly taller, still hunched)?
+1. DECIDED (creator): slightly taller, still hunched; the seated crouch is kept only for stalk / Branchline.
 2. DECIDED (creator): the club is always ONE-handed (right hand). The left hand is the Command Hand, see section 7.
-3. Wings: functional (flare for dodge/charge) or display only?
+3. DECIDED (creator): wings are functional: flare for dodge, charge (Bat Sweep), heavy counterweight and guard shield. Any gameplay effect (e.g. dodge distance) must be a skill-based, costed choice, not a hidden multiplier.
 
 ## 7. The Command Hand (left hand, decided 2026-10-14: club stays one-handed)
 Lore anchors: he is a *sergeant*; "They don't shout. They set the line."; "Silence sets the standard."; his powers are camouflage, terrain and marking targets; the sheet shows hand-over-chest, thorn bandolier, wall cling and a thorned forearm. So the free hand is **the hand of orders and terrain**, never a second weapon. Every use is a visible, readable gesture that also helps the player read his intent.
