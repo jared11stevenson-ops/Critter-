@@ -35,11 +35,11 @@ Rules: leg and arm chains use TwoBoneIK3D (feet planted, hands onto the weapon);
 - **Dodge:** a *fold*: collapses into a thin rod (stick posture), slides sideways, wings snap closed; he reads as a branch moving. Short, low, quiet.
 - **Guard (Thorn Guard):** plants club upright in front, wings spread behind like a shield, head tucked. Slow hold, small recoil flinch.
 - **Light strike:** a short jab with the club butt from the hip (reach 9: long thrusting spear-like pokes), thorns first; body leans only slightly; recovers by pulling the weapon straight back.
-- **Heavy strike:** two-handed overhead/club slam with the wings flared for counterweight; long wind-up (Elden-Ring-style commitment), a visible thorn flash on impact.
+- **Heavy strike:** one-handed overhead club slam; the free hand and the wings swing back as counterweight; long wind-up (Elden-Ring-style commitment), a visible thorn flash on impact.
 - **Grab:** hooks with the thorned forearm and drags (insect raptorial grab), not a human clinch.
 - **Hurt:** quick stiff whip-back (thin body, little mass), thorns shudder; stagger = knees buckle, club drops to the ground; knockdown = folds like a dropped stick bundle; get-up uses the club as a crutch.
 - **Win / lose:** wins by planting the club and giving a quiet two-finger salute; loses by sitting down against the club with the lantern dimming.
-- **Ability poses:** Branchline (becomes a branch: freeze with limbs crossed, thorns erect), Thorn Salvo (pivots, club braced across the shoulder, thorn burst), Bat Sweep (wings spread, charges low, wing edges lead), Sergeant's Mark (raises the lantern pole, sigil above), Impale the Ground (two-hand overhead drive into the floor).
+- **Ability poses:** Branchline (becomes a branch: freeze with limbs crossed, thorns erect), Thorn Salvo (pivots, club braced across the shoulder, thorn burst), Bat Sweep (wings spread, charges low, wing edges lead), Sergeant's Mark (raises the lantern pole, sigil above), Impale the Ground (one-handed overhead drive, free palm slaps the ground as the thorns erupt).
 
 ## 4. Why Tripo auto-rig fails on him (and the answer)
 Auto-rig assumes a standing humanoid/quadruped body plan with limbs attached to a single torso, and clean silhouettes. Bramvex has a crouched stance, cloak fused to legs, wing/pole as extra limb-like spars, and a weapon taller than himself. Answer: skeleton above, **built by hand to the anatomy**, weights from **part ownership** (limb segments rigid-ish, cloak by height gradient), props on separate bones. Do not feed the whole mesh to an auto weighter.
@@ -54,5 +54,27 @@ Auto-rig assumes a standing humanoid/quadruped body plan with limbs attached to 
 
 ## 6. Open questions for the creator
 1. Keep the near-seated crouch as the base stance, or stand him a little taller for combat readability (recommended: slightly taller, still hunched)?
-2. Is the club always two-handed, or can it rest one-handed in idle (sheet shows both)?
+2. DECIDED (creator): the club is always ONE-handed (right hand). The left hand is the Command Hand, see section 7.
 3. Wings: functional (flare for dodge/charge) or display only?
+
+## 7. The Command Hand (left hand, decided 2026-10-14: club stays one-handed)
+Lore anchors: he is a *sergeant*; "They don't shout. They set the line."; "Silence sets the standard."; his powers are camouflage, terrain and marking targets; the sheet shows hand-over-chest, thorn bandolier, wall cling and a thorned forearm. So the free hand is **the hand of orders and terrain**, never a second weapon. Every use is a visible, readable gesture that also helps the player read his intent.
+
+| Situation | Left-hand action | Why it fits |
+|---|---|---|
+| Idle | Rests on the belt pouch, two fingers tap the strap; sometimes holds up a flat hand ("hold") when the opponent moves | disciplined, always counting supplies |
+| Walk / stalk | Fingers spread low, feeling the air and ground; in stalk the hand touches the floor every other step (third point of contact, insect creep) | camouflage, terrain sense |
+| Guard (Thorn Guard) | Flat palm raised: the "halt" signal; wings spread as shield | "Hold the Line" |
+| Light strike | Free hand pulls back as a counterweight while the club jabs, then points along the line of the thrust (aiming like a spear fighter) | reach/zoner reads |
+| Heavy strike | Free hand and wings swing back, then snap forward as the club comes down | counterbalance for a one-handed slam |
+| Grab | The hand is the grab: the thorned forearm hooks (raptorial) and drags | insect anatomy, short fast grab, club stays ready |
+| Dodge | Hand trails the cloak and flicks it across as a screen, body folds to a rod | camouflage |
+| Thorn Salvo (ability) | Draws thorns from the bandolier / forearm and flicks a fan of them while the club braces on the shoulder | ranged pressure, thorns embed in the terrain |
+| Sergeant's Mark (ability) | Raised closed fist, then points: command sigil appears over the target (lantern pole flares behind him) | the order, given silently |
+| Branchline (ability) | Hand grips the nearest branch/wall and he merges into it (thorns erect) | terrain tactician |
+| Bat Sweep (ability) | Hand braces on the floor as he charges low with wings leading | four-point scramble |
+| Impale the Ground (ultimate) | One-handed club drive; palm slaps the ground as the thorn forest erupts | zone control |
+| Hurt / stagger | Hand clutches the ribs; on knockdown it catches the ground | a thin body that takes hits |
+| Win / lose | Win: a two-finger salute with the free hand. Lose: the hand covers the lantern | quiet, restrained |
+
+Rig consequences: the club bone is parented to the right hand only (no left grip); the left arm gets its own TwoBoneIK3D target so it can reach the floor, wall, bandolier and target direction; finger bones on the left hand are individual (point, fist, flat palm, spread) rather than one curl bone; a bandolier of thorns (props) on the chest hides/reveals thorns during Thorn Salvo. Gameplay note (for the combat pass, nothing changed in data yet): the grab is a natural short-range off-hand move and Thorn Salvo is the ranged use; neither needs new balance levers unless the creator wants one.
