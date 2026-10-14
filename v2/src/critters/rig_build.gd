@@ -128,7 +128,7 @@ func assemble(rig_root: Node3D) -> Dictionary:
 		mat.set_shader_parameter("use_tex", 1.0)
 		mat.set_shader_parameter("tex_gain", glb_gain)
 		mat.set_shader_parameter("tex_soft", glb_soft)
-		if glb_nrm != null:
+		if glb_nrm != null and int(Settings.get_value("quality")) >= 1:       # Low quality skips the normal map (one less texture fetch per pixel)
 			mat.set_shader_parameter("normal_tex", glb_nrm)
 			mat.set_shader_parameter("use_nrm", 1.0)
 		if glb_outline > 0.0 and mat.next_pass is ShaderMaterial:

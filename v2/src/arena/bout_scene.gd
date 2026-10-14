@@ -12,7 +12,7 @@ const Stage := preload("res://src/critters/stage.gd")
 const FxCtl := preload("res://src/critters/fx_ctrl.gd")
 const TICK := 1.0 / 60.0
 const MAX_FRAME := 0.1
-const INTRO_SEC := 2.2
+const INTRO_SEC := 2.4
 const OUTRO_SEC := 2.6
 const HEAVY_KINDS := ["heavy", "ability", "laststand", "grab"]
 const PLAYER_TQ := 12.0
@@ -181,6 +181,8 @@ func _process(delta: float) -> void:
 	_sync(rig_dt, alpha)
 	if player != null:
 		player.set_view(cam.right2(), cam.forward2())
+	if cam.intro > 0.0 and rigs.size() > 1 and rigs[1].has_method("socket") and rigs[1].socket("head") != null:
+		cam.face_target = rigs[1].socket("head").global_position
 	cam.update(delta, _w(0), _w(1))
 	entities.show_entities(sim.state()["entities"], delta)
 	hud.refresh(delta)

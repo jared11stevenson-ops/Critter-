@@ -40,4 +40,14 @@ func run() -> Array:
 	if not Tips.seen("rules") or Tips.seen("controls"):
 		fails.append("tips: seen-list parsing broken")
 	UiPrefs.data["tips_seen"] = ""
+	# v0.28 polish: named opponents are stable and non-empty for every species; music tracks exist; music volume is a real setting
+	for sp in ["aruun", "cigarra", "bramvex", "scarlith", "mollusk", "zephyr", "nyxaris", "pharilux"]:
+		var n1 := Career.opponent_name(sp, 3)
+		if n1 == "" or n1 != Career.opponent_name(sp, 3):
+			fails.append("names: %s needs a stable, non-empty opponent name" % sp)
+	for tr in ["res://audio/music/menu.wav", "res://audio/music/bout.wav"]:
+		if not ResourceLoader.exists(tr):
+			fails.append("music: missing %s" % tr)
+	if not Settings.DEFAULTS.has("music_volume"):
+		fails.append("settings: music_volume missing")
 	return fails

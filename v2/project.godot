@@ -21,6 +21,7 @@ Settings="*res://src/core/settings.gd"
 InputActions="*res://src/core/input_actions.gd"
 Perf="*res://src/core/perf.gd"
 GameSave="*res://src/core/save_service.gd"
+Music="*res://src/core/music.gd"
 
 [display]
 

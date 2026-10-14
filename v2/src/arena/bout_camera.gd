@@ -15,6 +15,8 @@ var focus := Vector3(0, LOOK_HEIGHT, 0)
 var dist := 8.0
 var side := 1.0                   # +1 right shoulder
 var intro := 0.0                  # 1 -> 0 during the intro sweep
+const INTRO_LEN := 2.4            # seconds: stare-down on the opponent's face, then the sweep back to the fight
+var face_target: Variant = null   # Vector3: world position of the opponent's head (set by BoutScene during the intro)
 var outro_yaw := 0.0
 var outro_focus: Variant = null   # Vector3 override (winner / fallen)
 var outro_blend := 0.0
@@ -76,7 +78,10 @@ func update(dt: float, pa: Vector3, pb: Vector3) -> void:
 		want_dist = lerpf(want_dist, 5.2, outro_blend)
 	dist = want_dist if _snap else lerpf(dist, want_dist, 1.0 - exp(-3.2 * dt))
 	_snap = false
-	intro = maxf(0.0, intro - dt / 1.7)
+	intro = maxf(0.0, intro - dt / INTRO_LEN)
+	var fb := 0.0
+	if face_target != null and intro > 0.0:
+		fb = smoothstep(0.52, 0.72, intro)                       # close-up on the face for the first moments of the intro
 	var ease_i := intro * intro
 	var cy := yaw + deg_to_rad(SHOULDER_DEG) * side + outro_yaw + ease_i * 1.4 * side
 	var d := dist + ease_i * 7.0
@@ -97,9 +102,17 @@ func update(dt: float, pa: Vector3, pb: Vector3) -> void:
 		off = global_transform.basis.x * (_sh_dir.x * s) + global_transform.basis.y * (_sh_dir.y * s)
 		_sh_amp *= exp(-14.0 * dt)
 	_punch = maxf(0.0, _punch - dt * 5.0)
+	var look_at_pt := focus
+	var fov_k := 0.0
+	if fb > 0.0:
+		var F: Vector3 = face_target
+		var ad := Vector3(axis.x, 0, axis.z).normalized()
+		pos = pos.lerp(F - ad * 2.8 + Vector3(0, 0.25, 0), fb)
+		look_at_pt = focus.lerp(F, fb)
+		fov_k = fb
 	global_position = pos + off
-	look_at(focus + off * 0.5, Vector3.UP)
-	fov = FOV_V - _punch * 3.0
+	look_at(look_at_pt + off * 0.5, Vector3.UP)
+	fov = FOV_V - _punch * 3.0 - fov_k * 14.0
 
 ## Smallest distance that keeps both fighters inside the frame for the current aspect.
 func fit_distance(pa: Vector3, pb: Vector3, sep: float) -> float:

@@ -16,6 +16,7 @@ const DEFAULTS := {
 	"reduce_flashing": false,   # no screen flashes / impact-frame strobes
 	"perf_overlay": false,
 	"master_volume": 1.0,
+	"music_volume": 0.5,
 }
 
 var path := "user://v2_settings.json"
@@ -56,7 +57,7 @@ func _sanitize(key: String, v: Variant) -> Variant:
 			if typeof(v) in [TYPE_INT, TYPE_FLOAT] and int(v) in FPS_CAPS:
 				return int(v)
 			return null
-		"master_volume":
+		"master_volume", "music_volume":
 			if typeof(v) in [TYPE_INT, TYPE_FLOAT]:
 				return clampf(float(v), 0.0, 1.0)
 			return null

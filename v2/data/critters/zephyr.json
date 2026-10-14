@@ -40,7 +40,7 @@
   "guard_move_mult": 0.7,
   "loophole_window": 5,
   "marks_bonus": 1,
-  "damage_mult": 0.666
+  "damage_mult": 0.646
  },
  "ai": {
   "style": "skirmisher",

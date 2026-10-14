@@ -71,6 +71,7 @@ func _clear() -> void:
 	Perf.context = "menu"
 
 func go_title() -> void:
+	Music.play("menu")
 	_clear()
 	var t := TitleScreen.new()
 	add_child(t)
@@ -180,6 +181,7 @@ func go_new_career() -> void:
 	go_career_bout(true)
 
 func go_shelf(select_uid := "", notice := "") -> void:
+	Music.play("menu")
 	_clear()
 	if tips != null:
 		tips.queue_free()
@@ -233,6 +235,7 @@ func _launch_tournament(uid: String) -> void:
 	go_career_bout(false)
 
 func go_career_bout(training_flag: bool) -> void:
+	Music.play("bout")
 	_clear()
 	var c := Career.roster().get_critter(str(career_ctx["uid"]))
 	if c == null:
@@ -246,6 +249,8 @@ func go_career_bout(training_flag: bool) -> void:
 	cfg.intro = not _args.has("nointro")
 	cfg.human_a = not _args.has("spectate")
 	cfg.mods = (career_ctx.get("mods", []) as Array).duplicate()
+	if str(career_ctx["kind"]) in ["expedition", "extraction", "tournament"]:
+		cfg.b_name = Career.opponent_name(str(career_ctx["opp_species"]), int(career_ctx.get("rung", c.bouts_survived)) + c.titles_defended * 7)
 	var b := BoutScene.new()
 	add_child(b)
 	b.start(cfg)
@@ -328,6 +333,7 @@ func make_config() -> BoutConfig:
 	return cfg
 
 func go_bout() -> void:
+	Music.play("bout")
 	_clear()
 	var b := BoutScene.new()
 	add_child(b)

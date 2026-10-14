@@ -67,6 +67,16 @@ static func rung_mods(rung: Dictionary, c: CritterInstance) -> Array:
 		return (DEFENCE_RULES[c.titles_defended % DEFENCE_RULES.size()] as Array).duplicate()
 	return (rung.get("mods", []) as Array).duplicate()
 
+## A stable personal name for an opponent (so a fighter is somebody, not just a species). Deterministic per (species, salt).
+static var _names: Dictionary = {}
+static func opponent_name(species: String, salt: int) -> String:
+	if _names.is_empty():
+		_names = JSON.parse_string(FileAccess.get_file_as_string("res://data/career/names.json"))
+	var pool: Array = _names.get(species, [])
+	if pool.is_empty():
+		return ""
+	return str(pool[absi(hash("%s:%d" % [species, salt])) % pool.size()])
+
 static func species_name(species: String) -> String:
 	return species.capitalize()
 
