@@ -131,7 +131,36 @@ def scarlith_part(c, info):
         return "leg_f" if y < 0 else "leg_b"
     return "torso"
 
+ARUUN_POLE = ((0.045, -0.175, 0.238), (-0.12, 0.005, 0.393))      # measured off the sheet-shaped source: where the mace handle runs behind his shoulder (feet-shifted frame)
+
+def aruun_part(c, info):
+    """Aruun (cropped from the Tripo sheet mesh; faces +x; right = -y; centre y=-0.08; feet shifted to z=0). Same rules as the old stage1 script, z + 0.158."""
+    x, y, z = c
+    dy = y + 0.08
+    a = ARUUN_POLE[0]; b = ARUUN_POLE[1]
+    ab = [b[i] - a[i] for i in range(3)]; L = math.sqrt(sum(v * v for v in ab)); d = [v / L for v in ab]
+    v = [c[i] - a[i] for i in range(3)]; t = sum(v[i] * d[i] for i in range(3))
+    if -0.02 < t < L + 0.03 and math.sqrt(max(0.0, sum(q * q for q in v) - t * t)) < 0.03:
+        return "weapon"                                 # the mace handle that continues behind the shoulder
+    if y < -0.205:
+        return "weapon"                                 # the mace head and shaft out to his right
+    if z >= 0.470 and abs(dy) < 0.13:
+        return "head"
+    if (z > 0.308 and x < 0.005) or (0.158 < z <= 0.308 and x < 0.025):
+        return "extra"                                  # shell / cloak behind him
+    if abs(dy) > 0.07 and z > 0.193:
+        return "arm_f" if dy < 0 else "arm_b"
+    if z < 0.293:
+        return "leg_f" if dy < 0 else "leg_b"
+    return "torso"
+
 CONFIGS = {
+    "aruun": dict(src="/tmp/cu/tr/aruun_crop.glb", rot_z=0.0, scale=7.0, x0=0.06, y0=-0.08, zfloor=-0.158, tex_size=4096, part=aruun_part, min_faces=0, bake_normals=True,
+                  pivots={"torso": (0.06, -0.08, 0.308), "head": (0.08, -0.08, 0.468), "arm_f": (0.06, -0.165, 0.443), "arm_b": (0.06, 0.005, 0.443),
+                          "leg_f": (0.06, -0.12, 0.293), "leg_b": (0.06, -0.04, 0.293), "weapon": (0.045, -0.175, 0.238), "extra": (0.0, -0.08, 0.438)},
+                  targets={"torso": 3600, "head": 7600, "arm_f": 1900, "arm_b": 1900, "leg_f": 2200, "leg_b": 2200, "weapon": 2200, "extra": 2800},
+                  sockets={"head": ("head", (0.1, 0.0, 0.05)), "hand": ("arm_f", (0.05, -0.02, -0.2)), "weapon_base": ("weapon", (0.0, 0.0, 0.1)), "weapon_tip": ("weapon", (0.162, -0.336 + 0.175, -0.081 - 0.08))},
+                  meta={"textured": True, "face_off": True, "swarm_off": True, "tex_gain": 1.0, "outline_px": 1.3, "normal_map": True}),
     "scarlith": dict(src="/tmp/cu/sc/plain.glb", rot_z=0.0, scale=3.3, x0=-0.05, y0=0.0, tex_size=4096, part=scarlith_part, min_faces=0, bake_normals=True,
                     pivots={"torso": (0.0, 0.0, 0.32), "head": (0.12, 0.0, 0.52), "arm_f": (0.1, -0.2, 0.48), "arm_b": (0.1, 0.2, 0.48),
                             "leg_f": (0.0, -0.2, 0.25), "leg_b": (0.0, 0.2, 0.25), "weapon": (0.15, -0.3, 0.25), "extra": (-0.15, 0.0, 0.5)},
@@ -156,20 +185,20 @@ CONFIGS = {
                     targets={"torso": 3600, "head": 8200, "arm_f": 1700, "arm_b": 1700, "leg_f": 2000, "leg_b": 2000, "weapon": 2000, "extra": 2600}, bake_normals=True,
                     sockets={"head": ("head", (0.1, 0.0, 0.1)), "hand": ("arm_f", (0.05, 0.0, -0.3)), "weapon_base": ("weapon", (0.0, 0.0, 0.2)), "weapon_tip": ("weapon", (0.1, 0.0, -0.2))},
                     meta={"textured": True, "face_off": True, "swarm_off": True, "tex_gain": 1.0, "tex_soft": 0.7, "outline_px": 1.3, "normal_map": True}),
-    "bramvex": dict(src="/tmp/cu/br/plain.glb", rot_z=-90.0, scale=3.4, x0=0.0, y0=0.0, tex_size=4096, part=bramvex_part, min_faces=0,
+    "bramvex": dict(src="/tmp/cu/br/plain.glb", rot_z=-90.0, scale=3.4, x0=0.0, y0=0.0, tex_size=4096, part=bramvex_part, min_faces=0, bake_normals=True,
                     pivots={"torso": (0.0, 0.0, 0.40), "head": (0.03, 0.0, 0.66), "arm_f": (0.0, -0.15, 0.58), "arm_b": (0.0, 0.15, 0.58),
                             "leg_f": (0.0, -0.08, 0.36), "leg_b": (0.0, 0.08, 0.36), "weapon": (0.12, -0.15, 0.30), "extra": (-0.05, 0.1, 0.55)},
                     targets={"torso": 9500, "head": 4600, "arm_f": -1, "arm_b": -1, "leg_f": -1, "leg_b": -1, "weapon": 3600, "extra": 3800},
                     sockets={"head": ("head", (0.08, 0.0, 0.08)), "hand": ("weapon", (0.0, 0.0, 0.1)), "weapon_base": ("weapon", (0.0, 0.0, 0.1)), "weapon_tip": ("weapon", (0.35, 0.0, -0.1))},
                     meta={"textured": True, "face_off": True, "swarm_off": True, "tex_gain": 1.3}),
-    "mollusk": dict(src="/tmp/cu/mo/plain.glb", rot_z=0.0, scale=3.4, x0=-0.05, y0=0.02, tex_size=4096, part=mollusk_part, min_faces=0,
+    "mollusk": dict(src="/tmp/cu/mo/plain.glb", rot_z=0.0, scale=3.4, x0=-0.05, y0=0.02, tex_size=4096, part=mollusk_part, min_faces=0, bake_normals=True,
                     pivots={"torso": (0.0, 0.0, 0.35), "head": (0.05, 0.0, 0.74), "arm_f": (0.0, -0.20, 0.66), "arm_b": (0.0, 0.22, 0.66),
                             "leg_f": (0.0, -0.10, 0.36), "leg_b": (0.0, 0.10, 0.36), "weapon": (0.02, -0.30, 0.30), "extra": (-0.12, 0.0, 0.50)},
                     targets={"torso": 4200, "head": 4600, "arm_f": 1900, "arm_b": 1900, "leg_f": 2200, "leg_b": 2200, "weapon": 2200, "extra": 3800},
                     sockets={"head": ("head", (0.1, 0.0, 0.1)), "hand": ("arm_f", (0.05, -0.08, -0.35)), "weapon_base": ("weapon", (0.0, 0.0, 0.2)), "weapon_tip": ("weapon", (0.1, -0.1, -0.2))},
                     meta={"textured": True, "face_off": True, "swarm_off": True, "tex_gain": 1.1}),
     "cigarra": dict(src="/tmp/cu/ci/cig_plain.glb", rot_z=90.0, scale=3.3, x0=0.0, y0=0.0,
-                    part=cigarra_part, min_faces=0,
+                    part=cigarra_part, min_faces=0, tex_size=4096, bake_normals=True,
                     pivots={"torso": (0.0, 0.0, 0.50), "head": (0.0, 0.0, 0.68), "arm_f": (0.0, -0.15, 0.66), "arm_b": (0.0, 0.15, 0.66),
                             "leg_f": (0.0, -0.07, 0.50), "leg_b": (0.0, 0.07, 0.50), "weapon": (0.0, -0.2, 0.3), "extra": (-0.06, 0.0, 0.68)},
                     targets={"torso": 4200, "head": 5200, "arm_f": 2400, "arm_b": 2400, "leg_f": 3000, "leg_b": 3000, "weapon": 0, "extra": 3200},
@@ -187,7 +216,7 @@ me = src.data
 for v in me.vertices:
     v.co = (rotm @ (src.matrix_world @ v.co))
 src.matrix_world = Matrix.Identity(4)
-zmin = min(v.co.z for v in me.vertices)
+zmin = C.get("zfloor", min(v.co.z for v in me.vertices))
 for v in me.vertices:
     v.co.z -= zmin
 bm = bmesh.new(); bm.from_mesh(me); bm.faces.ensure_lookup_table()
