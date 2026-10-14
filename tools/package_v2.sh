@@ -6,5 +6,5 @@ OUTDIR=${1:-/home/user/critter_builds}
 mkdir -p "$OUTDIR"
 NAME="CRITTER2_v$VER"
 rm -f "$OUTDIR/$NAME.zip"
-zip -q -r "$OUTDIR/$NAME.zip" . -x ".godot/*" "*.import.tmp" "tools/out/*" "*/__pycache__/*" "*.pyc" "tools/qa/shots/*"
+zip -q -r "$OUTDIR/$NAME.zip" . -x ".godot/*" "*.import.tmp" "tools/out/*" "*/__pycache__/*" "*.pyc" "tools/qa/shots/*" "art/models/*.jpg" "art/models/*.jpg.import"   # textures are embedded in the .glb; Godot re-extracts them on import (saves ~12 MB)
 ls -la "$OUTDIR/$NAME.zip"
