@@ -179,7 +179,7 @@
    "poise_damage": 9,
    "hitstop": 6,
    "grab": true,
-   "throw_dist": 3.2,
+   "throw_dist": 2.6,
    "throw_stun": 6,
    "hitbox": {
     "reach": 3.2,

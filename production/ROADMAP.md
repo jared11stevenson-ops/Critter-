@@ -33,3 +33,6 @@ Two fights only (Blood Bout, Practice). Roles are styles; counters are skill ans
 1. Default lock state in a bout: locked (now) or free?
 2. Should Practice allow any critter vs any critter, or only your own jars?
 3. Priority order of D (habitat), E (expeditions), F (tournaments) after the feel pass.
+
+## v0.29.0 gameplay pass
+Combo counter, WINDED callout, bigger pops for big hits and fan-out of simultaneous pops, low-vitality red frame, clock pulse in the last 10s, CPU tag, haptics (+setting), wide-parry assist wired (Practice/Contest only) and exposed in Settings, auto-pause when the app loses focus, Settings from the pause menu, rule line on the pause menu, result screen: accurate bout note, 0.8s button lock, coach tip; AI trailing fighters press late in the bout; Pharilux Chain Haul throw 3.2 -> 2.6, Nyxaris damage x1.22. Pair checks (20/profile): Nyxaris v Cigarra 25 -> 40%, Mollusk v Pharilux 23 -> 35%. Still open: Cigarra v Mollusk ~23%, Scarlith v Bramvex ~25%.
