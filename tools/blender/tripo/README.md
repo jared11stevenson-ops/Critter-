@@ -34,3 +34,6 @@ Feed Tripo the STANDING front view (tools/source_art/for_3d/pharilux_turn_front.
 
 ## Nyxaris (v0.24) - built with the detail fixes (bake_normals)
 Source: tools/source_art/nyxaris_tripo.glb (faces +x already; crab-spider). Parts: head = face + antenna arcs/bulbs + front crystal crest (8k tris), front feathery pincers = arm_f/arm_b, side legs split by side, rear abdomen + rear crystals = extra (sways), thorax = torso; no weapon (targets -1; sockets point at arm_f). `python3 tools/blender/tripo/tripo_build.py nyxaris [debug]` (needs /tmp/cu/nx/plain.glb from gltf-transform).
+
+## Zephyr (v0.25) - built with the detail fixes (bake_normals)
+Source: tools/source_art/zephyr_tripo.glb (standing, faces +x). Head = beak + flower crown + antenna twig (z>=0.80), moth wings + back cloak = extra, arms by side, legs by side, no weapon. He hovers in-game (rig cfg), so the feet float above the shadow. Known: a few dark holes on the back cloak where faces fell between parts.

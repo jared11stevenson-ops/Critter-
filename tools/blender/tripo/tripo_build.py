@@ -99,7 +99,28 @@ def nyxaris_part(c, info):
         return "leg_f" if y < 0 else "leg_b"
     return "torso"
 
+def zephyr_part(c, info):
+    """Zephyr (faces +x already; right = -y; feet z=0, height ~0.98). Hummingbird-headed fairy: head + beak + flower crown + antenna twig = head, moth wings and back cloak = extra, arms at the sides, legs by side."""
+    x, y, z = c
+    if info["zmax"] < 0.045:
+        return "drop"
+    if z >= 0.80 or (x > 0.05 and z >= 0.70 and abs(y) < 0.10):
+        return "head"
+    if x < -0.02 and 0.10 < z < 0.80:
+        return "extra"
+    if abs(y) > 0.12 and 0.40 < z < 0.80:
+        return "arm_f" if y < 0 else "arm_b"
+    if z < 0.40:
+        return "leg_f" if y < 0 else "leg_b"
+    return "torso"
+
 CONFIGS = {
+    "zephyr": dict(src="/tmp/cu/zp/plain.glb", rot_z=0.0, scale=3.2, x0=0.0, y0=0.0, tex_size=4096, part=zephyr_part, min_faces=0, bake_normals=True,
+                    pivots={"torso": (0.0, 0.0, 0.52), "head": (0.0, 0.0, 0.80), "arm_f": (0.0, -0.13, 0.76), "arm_b": (0.0, 0.13, 0.76),
+                            "leg_f": (0.0, -0.07, 0.50), "leg_b": (0.0, 0.07, 0.50), "weapon": (0.1, -0.2, 0.45), "extra": (-0.05, 0.0, 0.75)},
+                    targets={"torso": 3600, "head": 7600, "arm_f": 2000, "arm_b": 2000, "leg_f": 2400, "leg_b": 2400, "weapon": -1, "extra": 3000},
+                    sockets={"head": ("head", (0.1, 0.0, 0.05)), "hand": ("arm_f", (0.05, 0.0, -0.3)), "weapon_base": ("arm_f", (0.05, 0.0, -0.3)), "weapon_tip": ("arm_f", (0.2, 0.0, -0.3))},
+                    meta={"textured": True, "face_off": True, "swarm_off": True, "tex_gain": 1.0, "outline_px": 1.3, "normal_map": True}),
     "nyxaris": dict(src="/tmp/cu/nx/plain.glb", rot_z=0.0, scale=3.0, x0=0.0, y0=0.0, tex_size=4096, part=nyxaris_part, min_faces=0, bake_normals=True,
                     pivots={"torso": (0.0, 0.0, 0.40), "head": (0.30, 0.0, 0.58), "arm_f": (0.20, -0.12, 0.42), "arm_b": (0.20, 0.12, 0.42),
                             "leg_f": (0.0, -0.15, 0.32), "leg_b": (0.0, 0.15, 0.32), "weapon": (0.3, 0.0, 0.4), "extra": (-0.12, 0.0, 0.45)},
