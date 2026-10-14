@@ -2,7 +2,9 @@
  "textured": true,
  "face_off": true,
  "swarm_off": true,
- "tex_gain": 1.3,
+ "tex_gain": 1.0,
+ "outline_px": 1.3,
+ "normal_map": true,
  "sockets": {
   "head": [
    "head",

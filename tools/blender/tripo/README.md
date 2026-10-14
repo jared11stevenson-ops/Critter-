@@ -40,3 +40,6 @@ Source: tools/source_art/zephyr_tripo.glb (standing, faces +x). Head = beak + fl
 
 ## Scarlith (v0.26) - built with the detail fixes; LAST of the eight
 Source: tools/source_art/scarlith_tripo.glb (faces +x). Head = tricorn + face + hat lantern (x>0.02, 0.50<=z<0.80), cheese carapace + rope + treasure chest = extra, hooked polearm = weapon, arms/legs split by side, coat/body = torso. All eight critters are now generated models; Aruun, Cigarra, Bramvex and Mollusk predate bake_normals and still need the retrofit (see KNOWN ISSUE above).
+
+## Retrofit done (v0.27): Aruun, Cigarra, Mollusk, Bramvex rebuilt with bake_normals
+All eight critters now use the high->low normal bake, 4096 textures, 7.6-8.2k triangle heads, tex_gain 1.0, outline_px 1.3. Aruun now has a CONFIGS entry (aruun_part, source /tmp/cu/tr/aruun_crop.glb from stage0_crop.py); the old stage1/2 scripts are kept for reference. Memory note: run at most TWO builds at once (a 1M-triangle torso bake killed a third parallel run).
