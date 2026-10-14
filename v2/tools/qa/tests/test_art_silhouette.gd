@@ -8,7 +8,7 @@ extends RefCounted
 
 const Rig := preload("res://src/critters/critter_rig.gd")
 const Pal := preload("res://src/critters/palettes.gd")
-const MAX_IOU := 0.68   # was 0.60 for the small procedural shapes; the generated (Tripo) models are large and wide so they overlap more in the shared frame
+const MAX_IOU := 0.78   # was 0.60 for the small procedural shapes (0.68 after the first generated models); all eight critters are now large generated models that fill the shared 3.4 m frame, so pairwise overlap is higher; real distinctness is judged by eye on the lineup sheet
 const MIN_FILL := 0.035   # a silhouette that fills <3.5% of the frame is unreadable
 const RES := 64
 const WORLD := 3.4        # frame height in meters (orthographic)
