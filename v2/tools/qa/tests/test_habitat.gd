@@ -72,4 +72,27 @@ func run() -> Array:
 	var r4 := RosterState.new()
 	r4.load_dict(r3.to_dict())
 	QaCheck.is_true(fails, r4.habitat("aruun").monarch_fallen and r4.habitat("aruun").links.has("zephyr"), "v2 fields survive save/load")
+	# the shared Jar: districts, build_step, free passages between neighbours
+	var rj := RosterState.new()
+	var ca := rj.seal("aruun", "A1")
+	ca.retired = true
+	var cc := rj.seal("cigarra", "C1")
+	cc.retired = true
+	rj.seal("mollusk", "M1")
+	var claimed := rj.unify_town()
+	if claimed.size() != 3:
+		fails.append("town: 3 claimed districts expected, got %d" % claimed.size())
+	if not rj.habitat("aruun").links.has("cigarra") or not rj.habitat("cigarra").links.has("aruun"):
+		fails.append("town: aruun and cigarra are neighbours and must be linked")
+	if rj.habitat("mollusk").links.size() != 0:
+		fails.append("town: mollusk has no claimed neighbour (zephyr/scarlith unclaimed)")
+	var ha := rj.habitat("aruun")
+	ha.materials = 0
+	if ha.can_build(rj.retired_adults("aruun")) or ha.build_step(rj.retired_adults("aruun")) != "":
+		fails.append("town: cannot build without materials")
+	ha.materials = 40
+	if not ha.can_build(rj.retired_adults("aruun")):
+		fails.append("town: one retired adult and 40 materials must allow the first structure")
+	if ha.build_step(rj.retired_adults("aruun")) != "Rope span" or ha.structures.size() != 1:
+		fails.append("town: build_step must raise the Rope span")
 	return fails

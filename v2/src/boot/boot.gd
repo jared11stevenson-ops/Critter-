@@ -152,6 +152,9 @@ func _debug_shelf() -> void:
 	go_shelf(a.uid)
 	match str(_args.get("panel", "")):
 		"jar": CareerPanels.jar(screen, a)
+		"town":
+			JarTown.demo_state(r)
+			JarTown.open(screen, r, "aruun")
 		"jar2": CareerPanels.jar(screen, ch)
 		"watch": CareerPanels.watch(screen, "mollusk")
 		"explore":

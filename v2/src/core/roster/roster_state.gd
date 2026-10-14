@@ -65,6 +65,24 @@ func habitat(species: String) -> Habitat:
 	return habitats[species]
 
 
+## One big Jar: every claimed species (a living critter of it on the shelf) is a district; neighbours trade through free passages.
+func unify_town() -> Array:
+	var claimed: Array = []
+	for sp in Habitat.TOWN_ORDER:
+		for c in rack.living():
+			if c.species == sp:
+				claimed.append(sp)
+				break
+	for sp in claimed:
+		var h := habitat(sp)
+		h.links.clear()
+		var i := Habitat.TOWN_ORDER.find(sp)
+		for j in [i - 1, i + 1]:
+			if j >= 0 and j < Habitat.TOWN_ORDER.size() and claimed.has(Habitat.TOWN_ORDER[j]):
+				h.links.append(Habitat.TOWN_ORDER[j])
+	return claimed
+
+
 func retired_adults(species: String) -> Array:
 	var out: Array = []
 	for c in rack.living():

@@ -172,13 +172,7 @@ func step_day(adults: Array) -> void:
 		next_id += 1
 		food -= 1
 		_note("%s was born (generation %d), a %s." % [nm, gen, role])
-	# autonomous construction
-	var nx := next_structure()
-	var cost: int = int(round(float(nx.get("materials", 0)) * (1.0 - build_discount()))) if not nx.is_empty() else 0
-	if not nx.is_empty() and materials >= cost and n >= int(nx["pop_req"]):
-		materials -= cost
-		structures.append(structures.size())
-		_note("The critters built the %s." % nx["name"])
+	build_step(adults, n)                                           # autonomous construction
 	# tribute: a living settlement earns a little scrap
 	var t := structures.size() + descendants.size() / 3
 	for i in structures:
@@ -191,6 +185,37 @@ func step_day(adults: Array) -> void:
 		t += 8 + 4 * role_count("storyteller")
 		_note("Festival %d: the family feasted and told the old stories." % festivals)
 	tribute = mini(int(cfg()["tribute_cap"]), tribute + t)
+
+
+## The shared Jar (one big jar, all eight species side by side). Neighbouring claimed districts trade.
+const TOWN_ORDER := ["aruun", "cigarra", "bramvex", "scarlith", "mollusk", "zephyr", "nyxaris", "pharilux"]
+
+func population(adults: Array) -> int:
+	return adults.size() + descendants.size()
+
+
+func build_cost() -> int:
+	var nx := next_structure()
+	return int(round(float(nx.get("materials", 0)) * (1.0 - build_discount()))) if not nx.is_empty() else 0
+
+
+func can_build(adults: Array) -> bool:
+	var nx := next_structure()
+	return not nx.is_empty() and materials >= build_cost() and population(adults) >= int(nx["pop_req"])
+
+
+## The critters raise the next structure when materials and villagers allow. n = population (computed from adults when omitted).
+## Returns the structure name built, or "".
+func build_step(adults: Array, n := -1) -> String:
+	if n < 0:
+		n = population(adults)
+	var nx := next_structure()
+	if nx.is_empty() or materials < build_cost() or n < int(nx["pop_req"]):
+		return ""
+	materials -= build_cost()
+	structures.append(structures.size())
+	_note("The critters built the %s." % nx["name"])
+	return str(nx["name"])
 
 
 func _name_for(rng: RandomNumberGenerator, gen: int) -> String:

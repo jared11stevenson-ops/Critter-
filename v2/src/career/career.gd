@@ -444,5 +444,6 @@ static func habitat_action(species: String, kind: String) -> String:
 		"feed": res = h.feed(r.economy)
 		"supply": res = h.supply(r.economy)
 		"expand": res = h.expand(r.economy)
+		"build": h.build_step(r.retired_adults(species))
 	_autosave("habitat")
 	return res

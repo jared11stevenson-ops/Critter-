@@ -24,3 +24,6 @@ Only **Blood Bout** (lethal, counts) and **Practice** (nobody dies, nothing coun
 
 ## 2026-10 Counterplay is allowed, as skill (creator)
 Counters are fine when they are performed answers (parry/guard, status answers, cleanse moments), with equal opportunity on both sides; no stat multipliers between styles. Status kits must be rewarded without making counter-less critters lose automatically (Tenacity, parry cleanse). Critters get a 1-3 skill star rating for kit complexity that never reflects power. See design/v2/COUNTERPLAY.md.
+
+## 2026-10-14 (creator): ONE shared Jar
+Habitat Jars are presented as ONE large jar in which all eight species live and build together, each in its own district with its own five unique structures (data/career/habitats.json). A district is claimed by having a living critter of that species on the shelf; neighbouring claimed districts trade through free passages. Materials still come from fights and expeditions; the player supplies, feeds, expands and collects; the villagers raise the structures themselves, visibly. GENERATIONS / lineage are ON HOLD (not shown in the new view; the underlying birth/descendant code is untouched). The shelf of 60 individual jars (critters) stays; tapping the selected jar opens the Jar. Supersedes the "separate jar per species" reading of CREATOR_GDD s7/s11 for presentation.

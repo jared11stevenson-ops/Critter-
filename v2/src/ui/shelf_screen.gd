@@ -81,7 +81,7 @@ func setup(r: RosterState, select_uid := "") -> void:
 	_btn_train.pressed.connect(func(): if _uid() != "": training_pressed.emit(_uid()))
 	bar.add_child(_btn_train)
 	var b_jar := UiStyle.button("JAR", 22, Vector2(80, 64), UiStyle.TEAL)
-	b_jar.pressed.connect(func(): if _uid() != "": CareerPanels.jar(self, roster.get_critter(_uid())))
+	b_jar.pressed.connect(func(): _open_jar())
 	bar.add_child(b_jar)
 	_btn_heal = UiStyle.button("HEAL (%d)" % Career.HEAL_COST, 20, Vector2(140, 64), UiStyle.GREEN)
 	_btn_heal.pressed.connect(_heal)
@@ -126,9 +126,16 @@ func refresh(select_uid := "") -> void:
 ## Tap a jar to select it; tap the selected jar again to look inside (the species, its habitat and family).
 func _slot_pressed(i: int) -> void:
 	if i == _sel and _uid() != "":
-		CareerPanels.jar(self, roster.get_critter(_uid()))
+		_open_jar()
 	else:
 		_select(i)
+
+## The Jar: one big shared habitat town (tap the selected jar). DETAILS inside opens the single-critter card.
+func _open_jar() -> void:
+	var c := roster.get_critter(_uid())
+	var town := JarTown.open(self, roster, c.species)
+	town.details_requested.connect(func(_sp: String): CareerPanels.jar(self, c))
+	town.closed.connect(func(): refresh(c.uid))
 
 func _select(i: int) -> void:
 	_sel = i
