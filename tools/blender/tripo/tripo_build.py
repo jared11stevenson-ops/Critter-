@@ -114,7 +114,30 @@ def zephyr_part(c, info):
         return "leg_f" if y < 0 else "leg_b"
     return "torso"
 
+def scarlith_part(c, info):
+    """Scarlith (faces +x; right = -y; feet z=0, height ~0.88). Pirate mite: tricorn + face (+ lantern at the hat) = head, cheese carapace + chest on his back = extra, grapple-hook polearm = weapon, furry arms and the eight legs split by side, coat/body = torso."""
+    x, y, z = c
+    if info["zmax"] < 0.045:
+        return "drop"
+    if x > 0.02 and 0.50 <= z < 0.80 and abs(y) < 0.30:
+        return "head"
+    if x < 0.02 and z > 0.30:
+        return "extra"                                  # the big cheese carapace, rope and treasure chest
+    if y < -0.20 and z < 0.55 and x > -0.1:
+        return "weapon"                                 # the hooked polearm held in his right hand
+    if abs(y) > 0.14 and 0.20 < z < 0.52:
+        return "arm_f" if y < 0 else "arm_b"
+    if z < 0.22:
+        return "leg_f" if y < 0 else "leg_b"
+    return "torso"
+
 CONFIGS = {
+    "scarlith": dict(src="/tmp/cu/sc/plain.glb", rot_z=0.0, scale=3.3, x0=-0.05, y0=0.0, tex_size=4096, part=scarlith_part, min_faces=0, bake_normals=True,
+                    pivots={"torso": (0.0, 0.0, 0.32), "head": (0.12, 0.0, 0.52), "arm_f": (0.1, -0.2, 0.48), "arm_b": (0.1, 0.2, 0.48),
+                            "leg_f": (0.0, -0.2, 0.25), "leg_b": (0.0, 0.2, 0.25), "weapon": (0.15, -0.3, 0.25), "extra": (-0.15, 0.0, 0.5)},
+                    targets={"torso": 3600, "head": 7400, "arm_f": 1800, "arm_b": 1800, "leg_f": 2400, "leg_b": 2400, "weapon": 2000, "extra": 3200},
+                    sockets={"head": ("head", (0.15, 0.0, 0.0)), "hand": ("arm_f", (0.05, 0.0, -0.2)), "weapon_base": ("weapon", (0.0, 0.0, 0.25)), "weapon_tip": ("weapon", (0.1, -0.2, -0.15))},
+                    meta={"textured": True, "face_off": True, "swarm_off": True, "tex_gain": 1.0, "outline_px": 1.3, "normal_map": True}),
     "zephyr": dict(src="/tmp/cu/zp/plain.glb", rot_z=0.0, scale=3.2, x0=0.0, y0=0.0, tex_size=4096, part=zephyr_part, min_faces=0, bake_normals=True,
                     pivots={"torso": (0.0, 0.0, 0.52), "head": (0.0, 0.0, 0.80), "arm_f": (0.0, -0.13, 0.76), "arm_b": (0.0, 0.13, 0.76),
                             "leg_f": (0.0, -0.07, 0.50), "leg_b": (0.0, 0.07, 0.50), "weapon": (0.1, -0.2, 0.45), "extra": (-0.05, 0.0, 0.75)},

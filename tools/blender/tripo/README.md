@@ -37,3 +37,6 @@ Source: tools/source_art/nyxaris_tripo.glb (faces +x already; crab-spider). Part
 
 ## Zephyr (v0.25) - built with the detail fixes (bake_normals)
 Source: tools/source_art/zephyr_tripo.glb (standing, faces +x). Head = beak + flower crown + antenna twig (z>=0.80), moth wings + back cloak = extra, arms by side, legs by side, no weapon. He hovers in-game (rig cfg), so the feet float above the shadow. Known: a few dark holes on the back cloak where faces fell between parts.
+
+## Scarlith (v0.26) - built with the detail fixes; LAST of the eight
+Source: tools/source_art/scarlith_tripo.glb (faces +x). Head = tricorn + face + hat lantern (x>0.02, 0.50<=z<0.80), cheese carapace + rope + treasure chest = extra, hooked polearm = weapon, arms/legs split by side, coat/body = torso. All eight critters are now generated models; Aruun, Cigarra, Bramvex and Mollusk predate bake_normals and still need the retrofit (see KNOWN ISSUE above).
