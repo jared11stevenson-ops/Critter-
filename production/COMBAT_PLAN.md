@@ -39,6 +39,8 @@ Creator brief (2026-10-14): combat is the core. Fix animations, study each critt
 
 Spike acceptance (Aruun only): same face/armour detail as the current build at 4 angles, no stretching in 6 test poses, <= 50k triangles incl. outline, <= 60 bones, 60 fps on S25.
 
+**Creator finding (2026-10-14): Tripo auto-rig does not get odd body plans like Bramvex right.** So S2 and S3 are dropped as the main route. Decision: **S1 for every critter** (bespoke skeleton per anatomy sheet, my own weights, details protected). Tripo auto-rig is only an optional reference/base-motion source for body plans it handles, never the skeleton of record. No Tripo credits are needed for the Aruun spike.
+
 ### 3.3 Animation authoring approach
 1. **Per-critter anatomy sheet** (one page each): body plan, joint list with ranges, center of mass, gait pattern (Aruun bipedal giraffe-beetle, Cigarra, Mollusk, etc.), personality adjectives that drive timing (heavy/light, snappy/lingering, twitchy/deliberate). I draft from the lore and sheets; the creator corrects in one pass.
 2. **Shared locomotion/action skeleton grammar** so the AnimationTree is the same shape for all critters: locomotion blend space (idle, walk, run, strafe L/R, backpedal), action layer (strikes, abilities, grabs), reaction layer (hurt, stagger, knockdown, get-up), emote layer (win, lose, taunt). Clip content is per critter.
