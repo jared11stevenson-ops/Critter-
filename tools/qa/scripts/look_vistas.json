@@ -1,5 +1,0 @@
-[
- {"t":0.5,"call":"Terrain.qa_vista","args":[30,4,22, 80,-4,-2, 60]},
- {"t":2.5,"call":"Terrain.qa_vista","args":[100,5,24, 130,-3,-4, 62]},
- {"t":4.5,"call":"Terrain.qa_vista","args":[170,8,30, 205,-6,2, 64]}
-]

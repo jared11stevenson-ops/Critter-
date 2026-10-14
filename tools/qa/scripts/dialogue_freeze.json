@@ -1,4 +1,0 @@
-[
- {"t":0.3,"call":"GameState.set_flag","args":["briefed",true]},
- {"t":4.0,"call":"scene.qa_spot","args":["lab"]}
-]
