@@ -94,6 +94,11 @@ func start(config: BoutConfig) -> void:
 	cam.reach = (arena_def.radius if arena_def.shape == "circle" else maxf(arena_def.half.x, arena_def.half.y)) * 1.45 + 3.0
 	cam.intro = 1.0 if cfg.intro else 0.0
 	_make_providers()
+	var bonus := Settings.parry_window_bonus_frames(cfg.stakes())
+	if bonus > 0 and player_idx >= 0:                                  # assist: wider parry for the human, Practice / Contest only
+		var pt: Dictionary = sim.fighters[player_idx].T.duplicate()
+		pt["parry_window"] = int(pt["parry_window"]) + bonus
+		sim.fighters[player_idx].T = pt
 	hud = Hud.new()
 	hud.name = "Hud"
 	add_child(hud)

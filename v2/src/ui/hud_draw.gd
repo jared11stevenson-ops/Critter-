@@ -22,6 +22,7 @@ var banner_sub := ""
 var banner_t := 0.0
 var banner_life := 1.0
 var _t := 0.0
+var _pop_n := 0
 var _ink: Ink
 var _ink_b: Ink
 
@@ -39,7 +40,8 @@ func show_banner(text: String, sub := "", seconds := 1.2) -> void:
 	banner_life = seconds
 
 func add_pop(text: String, world: Vector3, color: Color, size := 34) -> void:
-	pops.append({"text": text, "pos": world, "t": 0.0, "col": color, "size": size})
+	_pop_n += 1
+	pops.append({"text": text, "pos": world, "t": 0.0, "col": color, "size": size, "dx": float((_pop_n * 53) % 7 - 3) * 22.0})   # fan out so simultaneous pops stay readable
 
 func refresh(dt: float) -> void:
 	_t += dt
@@ -77,7 +79,15 @@ func _draw() -> void:
 		var sp := _project(p["pos"])
 		if sp.x > -9000:
 			var k: float = p["t"] / 0.9
-			_ink.text(sp + Vector2(-100, -60.0 * k - 30), p["text"], 44 if int(p["size"]) >= 44 else 34, p["col"].lerp(Color(p["col"], 0.0), k * k), HORIZONTAL_ALIGNMENT_CENTER, 200)
+			_ink.text(sp + Vector2(-100 + float(p["dx"]), -60.0 * k - 30), p["text"], 44 if int(p["size"]) >= 44 else 34, p["col"].lerp(Color(p["col"], 0.0), k * k), HORIZONTAL_ALIGNMENT_CENTER, 200)
+	var pi := bout.player_idx
+	if pi >= 0 and st["fighters"][pi]["alive"]:                        # low-vitality warning: pulsing red frame
+		var pf: Dictionary = st["fighters"][pi]
+		if float(pf["vitality"]) / maxf(1.0, float(pf["vitality_max"])) < float(bout.sim.R["last_stand_ratio"]):
+			var a := 0.16 + 0.12 * sin(_t * 9.0)
+			var e := 14.0
+			for er in [Rect2(0, 0, size.x, e), Rect2(0, size.y - e, size.x, e), Rect2(0, 0, e, size.y), Rect2(size.x - e, 0, e, size.y)]:
+				draw_rect(er, Color(0.85, 0.12, 0.1, a))
 	if bout.cfg.training:
 		_ink.text(Vector2(m.x + 8, m.y + ph + 36), "PRACTICE - nobody can die", 18, UiStyle.TEAL_LT)
 	_ink.flush()
@@ -94,7 +104,10 @@ func _draw_clock(st: Dictionary, top_center: Vector2) -> void:
 	var txt := "%d:%02d" % [left / 60, left % 60]
 	var r := Rect2(top_center + Vector2(-56, 4), Vector2(112, 46))
 	_ink.panel(r, UiStyle.NIGHT, UiStyle.INK, 4.0)
-	_ink.text(r.position + Vector2(0, 35), txt, 34, UiStyle.PAPER if left > 20 else UiStyle.RUST, HORIZONTAL_ALIGNMENT_CENTER, r.size.x)
+	var tc: Color = UiStyle.PAPER if left > 20 else UiStyle.RUST
+	if left <= 10:
+		tc = tc.lerp(UiStyle.GOLD, 0.5 + 0.5 * sin(_t * 10.0))         # the clock is running out
+	_ink.text(r.position + Vector2(0, 35), txt, 34, tc, HORIZONTAL_ALIGNMENT_CENTER, r.size.x)
 
 func _draw_panel(i: int, f: Dictionary, r: Rect2, mirror: bool) -> void:
 	var id: String = bout.cfg.a_id if i == 0 else bout.cfg.b_id
@@ -116,7 +129,7 @@ func _draw_panel(i: int, f: Dictionary, r: Rect2, mirror: bool) -> void:
 	var bx := r.position.x + 12 if mirror else r.position.x + pr * 2 + 26
 	var bw := r.size.x - pr * 2 - 38
 	var def: CritterDef = bout.sim.fighters[i].def
-	var tag := "YOU" if i == bout.player_idx else ("AI " + (bout.cfg.profile_a if i == 0 else bout.cfg.profile_b))
+	var tag := "YOU" if i == bout.player_idx else ("CPU " + str(bout.cfg.profile_a if i == 0 else bout.cfg.profile_b).to_upper())
 	var name_al := HORIZONTAL_ALIGNMENT_RIGHT if mirror else HORIZONTAL_ALIGNMENT_LEFT
 	_ink.text(Vector2(bx, r.position.y + 30), bout.fighter_name(i).to_upper(), 26, UiStyle.PAPER, name_al, bw)
 	var tag_w := 150.0

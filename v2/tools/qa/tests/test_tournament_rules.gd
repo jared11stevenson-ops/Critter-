@@ -50,4 +50,13 @@ func run() -> Array:
 			fails.append("music: missing %s" % tr)
 	if not Settings.DEFAULTS.has("music_volume"):
 		fails.append("settings: music_volume missing")
+	# v0.29 gameplay pass
+	if ResultScreen.coach_tip({"player_idx": 0, "damage_dealt": [10, 80], "reason": "ko"}, "death") == "":
+		fails.append("coach: a lopsided loss must get a tip")
+	if ResultScreen.coach_tip({"player_idx": 0, "damage_dealt": [80, 10], "reason": "ko"}, "win") != "":
+		fails.append("coach: no tip after a win")
+	if "edge" not in ResultScreen.coach_tip({"player_idx": 0, "damage_dealt": [10, 10], "reason": "ringout"}, "defeat"):
+		fails.append("coach: ring-out tip")
+	if not bool(Settings.DEFAULTS["haptics"]):
+		fails.append("settings: haptics default on")
 	return fails

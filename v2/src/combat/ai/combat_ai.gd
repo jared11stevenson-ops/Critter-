@@ -420,7 +420,10 @@ func _neutral(sim: CombatSim, me, op, inp: CombatInput, ft: int, gap: float, gua
 	if think_cd > 0 or guarding:
 		return
 	think_cd = rng.randi_range(int(P["think_min"]), int(P["think_max"]))
-	if rng.randf() > float(P["aggression"]) + (float(C["stagger_aggr_bonus"]) if ob["a"] in ["stagger", "knockdown", "hit"] else 0.0):
+	var urgency := 0.0                                                 # a trailing fighter must press the attack as the clock runs out (no turtling to a loss)
+	if sim.timeout_frames - sim.frame < 1800 and me.ratio() <= op.ratio():
+		urgency = 0.25
+	if rng.randf() > float(P["aggression"]) + urgency + (float(C["stagger_aggr_bonus"]) if ob["a"] in ["stagger", "knockdown", "hit"] else 0.0):
 		if rng.randf() < float(C["idle_guard_prob"]):
 			guard_from = ft
 			guard_to = ft + rng.randi_range(int(C["idle_guard_min"]), int(C["idle_guard_max"]))

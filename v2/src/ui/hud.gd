@@ -13,6 +13,10 @@ var yield_chip: Button
 var pause_panel: PanelContainer
 var ls_hint: Label
 var _yield_panel_t := 0.0
+var _root: Control
+var _combo := [0, 0]
+var _combo_frame := [-999, -999]
+var _was_winded := [false, false]
 
 func _ready() -> void:
 	layer = 10
@@ -24,6 +28,7 @@ func setup(b: BoutScene) -> void:
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.theme = UiStyle.theme()
+	_root = root
 	add_child(root)
 	draw_ctl = HudDraw.new()
 	root.add_child(draw_ctl)
@@ -135,7 +140,11 @@ func _build_pause(root: Control) -> void:
 	var l := UiStyle.label("PAUSED", 56, UiStyle.GOLD)
 	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	v.add_child(l)
+	var rl := UiStyle.label(bout.cfg.rule_chip() if not bout.cfg.mods.is_empty() else ("Practice - nobody dies" if bout.cfg.training else "Blood Bout - one life each"), 22, UiStyle.PAPER_DK, 5)
+	rl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	v.add_child(rl)
 	for spec in [["Resume", func(): _toggle_pause()],
+			["Settings", func(): _open_settings()],
 			["Performance report", func(): Perf.open_report()],
 			["Yield the bout", func(): _toggle_pause(); _do_yield()],
 			["Quit to menu", func(): get_tree().paused = false; quit_requested.emit()]]:
@@ -143,6 +152,20 @@ func _build_pause(root: Control) -> void:
 		b.pressed.connect(spec[1])
 		v.add_child(b)
 	root.add_child(pause_panel)
+
+func _open_settings() -> void:
+	var sp := SettingsPanel.new()
+	sp.z_index = 50
+	_root.add_child(sp)
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and bout != null and bout.player_idx >= 0 and bout.phase == "fight" \
+			and not get_tree().paused:
+		_toggle_pause()                                                # leaving the app mid-bout must never cost a life
+
+func _buzz(ms: int) -> void:
+	if bool(Settings.get_value("haptics")) and UiPrefs.touch_enabled():
+		Input.vibrate_handheld(ms)
 
 func _touch_blocked(p: Vector2) -> bool:
 	if pause_panel.visible:
@@ -193,6 +216,11 @@ func refresh(dt: float) -> void:
 			var m: MoveDef = d.move(aids[i]) if aids[i] != "" else null
 			var left := float(f["cooldowns"].get(m.id, 0)) if m != null else 0.0
 			touch.cooldowns[k[0]] = clampf(left / maxf(1.0, float(m.cooldown)), 0.0, 1.0) if (m != null and m.cooldown > 0) else 0.0
+	for i in 2:                                                        # callout when a fighter runs out of breath: that is the opening to punish
+		var w: bool = bool(bout.fighter_state(i)["winded"])
+		if w and not _was_winded[i]:
+			draw_ctl.add_pop("WINDED!", bout.chest(i, 1.9), UiStyle.GOLD, 34)
+		_was_winded[i] = w
 	yield_chip.visible = show_chip
 	ls_hint.visible = can_ls and not touch.visible
 	ls_hint.modulate.a = 0.6 + 0.4 * sin(Time.get_ticks_msec() * 0.012)
@@ -213,13 +241,23 @@ func _on_event(ev: Dictionary) -> void:
 	match str(ev["type"]):
 		"hit":
 			var dmg := int(round(float(ev.get("damage", 0.0))))
+			var att := int(ev.get("attacker", 1 - idx))
+			var fr: int = bout.sim.frame
+			_combo[att] = (_combo[att] + 1) if fr - int(_combo_frame[att]) <= int(bout.sim.R["combo_window"]) else 1
+			_combo_frame[att] = fr
+			if int(_combo[att]) >= 2:
+				draw_ctl.add_pop("%d HITS" % int(_combo[att]), wp + Vector3(0, 0.95, 0), UiStyle.GOLD if att == bout.player_idx else UiStyle.RUST, 34)
+			if idx == bout.player_idx:
+				_buzz(clampi(20 + dmg * 2, 25, 90))
 			if bool(ev.get("counter", false)):
 				draw_ctl.add_pop("COUNTER!", wp + Vector3(0, 0.5, 0), UiStyle.GOLD, 40)
-			draw_ctl.add_pop(str(dmg), wp, UiStyle.GOLD if foe else UiStyle.RUST, 36)
+			draw_ctl.add_pop(str(dmg), wp, UiStyle.GOLD if foe else UiStyle.RUST, 44 if dmg >= 22 else 34)   # big hits read bigger
 		"block":
 			draw_ctl.add_pop("GUARD BREAK!" if ev.get("broke", false) else "BLOCK", wp, UiStyle.TEAL_LT, 30)
 		"parry":
 			draw_ctl.add_pop("PARRY!", wp, UiStyle.GREEN, 46)
+			if idx == bout.player_idx:
+				_buzz(45)
 		"stagger":
 			draw_ctl.add_pop("STAGGER!", wp, UiStyle.RUST, 38)
 		"dodge":
@@ -235,5 +273,6 @@ func _on_event(ev: Dictionary) -> void:
 			draw_ctl.show_banner("RING OUT!", "", 2.0)
 		"ko":
 			draw_ctl.show_banner("K.O.", "", 2.0)
+			_buzz(220)
 		"yield":
 			draw_ctl.show_banner("YIELDED", "", 2.0)

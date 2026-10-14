@@ -56,10 +56,17 @@ func show_result(res: Dictionary) -> void:
 	stats.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	v.add_child(stats)
 	if not bool(res.get("training", false)):
-		var note := UiStyle.label("Prototype: nothing from this bout is saved. Persistent death and records arrive with the roster milestone.", 17, UiStyle.TEAL_LT, 4)
+		var note := UiStyle.label("Blood Bout: the result is final and recorded in your Hall of Records." if tone != "spare" else "Yielded: your critter lives, the bout is lost.", 17, UiStyle.TEAL_LT, 4)
 		note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		v.add_child(note)
+	var tip := coach_tip(res, tone)
+	if tip != "":
+		var tl := UiStyle.label("TIP: " + tip, 22, UiStyle.GOLD, 5)
+		tl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		tl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		tl.custom_minimum_size = Vector2(820, 0)
+		v.add_child(tl)
 	var row := HBoxContainer.new()
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
 	row.add_theme_constant_override("separation", 18)
@@ -76,3 +83,28 @@ func show_result(res: Dictionary) -> void:
 	box.modulate.a = 0.0
 	var tw := create_tween()
 	tw.tween_property(box, "modulate:a", 1.0, 0.35)
+	for b in [b1, b2, b3]:                                             # a button-mashing finish must not skip the result
+		b.disabled = true
+	get_tree().create_timer(0.8).timeout.connect(func():
+		for b in [b1, b2, b3]:
+			if is_instance_valid(b):
+				b.disabled = false)
+
+## One piece of advice after a bout the human did not win, chosen from how it went. "" when there is nothing useful to say.
+static func coach_tip(res: Dictionary, tone: String) -> String:
+	var pi := int(res.get("player_idx", 0))
+	if pi < 0 or tone == "win":
+		return ""
+	var dd: Array = res.get("damage_dealt", [0, 0])
+	var mine := float(dd[pi])
+	var theirs := float(dd[1 - pi])
+	var reason := str(res.get("reason", ""))
+	if reason == "ringout":
+		return "Keep your back off the edge: sidestep along the ring and dodge out of the corners."
+	if reason == "timeout":
+		return "The clock favours whoever is ahead: land the first clean hit, then guard and make them come to you."
+	if theirs > 0.0 and mine < theirs * 0.35:
+		return "Hold GUARD just before their hit lands to PARRY: it staggers them and opens a riposte."
+	if mine >= theirs * 0.8:
+		return "Close fight. Save a dodge for the unblockable red tells and finish with your abilities."
+	return "Watch the ! tell over their head: BLOCK on gold, DODGE on red."

@@ -38,6 +38,8 @@ func _ready() -> void:
 	var mk := "0" if mv < 0.05 else ("1" if mv < 0.4 else ("2" if mv < 0.65 else "3"))
 	v.add_child(UiStyle.segment_row("MUSIC", [["0", "Off"], ["1", "Low"], ["2", "Medium"], ["3", "High"]], mk, func(k): Settings.set_value("music_volume", [0.0, 0.25, 0.5, 0.8][int(k)]); Settings.save(); Music.refresh(), 130, 190))
 	v.add_child(UiStyle.segment_row("SOUND", [["h", "Half"], ["f", "Full"]], "f" if float(Settings.get_value("master_volume")) > 0.75 else "h", func(k): Settings.set_value("master_volume", 1.0 if k == "f" else 0.5); Settings.save(); Music.refresh(), 190, 190))
+	v.add_child(UiStyle.segment_row("HAPTICS", [["on", "On"], ["off", "Off"]], "on" if Settings.get_value("haptics") else "off", func(k): Settings.set_value("haptics", k == "on"); Settings.save(), 190, 190))
+	v.add_child(UiStyle.segment_row("PARRY ASSIST", [["off", "Off"], ["on", "Wider (Practice)"]], "on" if Settings.get_value("assist_wide_parry") else "off", func(k): Settings.set_value("assist_wide_parry", k == "on"); Settings.save(), 190, 270))
 	v.add_child(UiStyle.segment_row("FPS CAP", [["30", "30"], ["60", "60"], ["90", "90"], ["120", "120"]], str(Settings.get_value("fps_cap")), func(k): Settings.set_value("fps_cap", int(k)); Settings.apply(); Settings.save(), 130, 190))
 	v.add_child(UiStyle.segment_row("FLASHING", [["f", "Normal"], ["r", "Reduced"]], "r" if Settings.get_value("reduce_flashing") else "f", func(k): Settings.set_value("reduce_flashing", k == "r"); Settings.save(), 190, 190))
 	v.add_child(UiStyle.segment_row("PERF HUD", [["off", "Off"], ["on", "On"]], "on" if Settings.get_value("perf_overlay") else "off", func(k): Perf.set_overlay(k == "on"); Settings.save(), 190, 190))

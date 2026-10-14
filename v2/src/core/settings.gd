@@ -15,6 +15,7 @@ const DEFAULTS := {
 	"assist_slow_tells": false, # slower tells (non-Blood tiers only)
 	"reduce_flashing": false,   # no screen flashes / impact-frame strobes
 	"perf_overlay": false,
+	"haptics": true,            # phone vibration on being hit / parrying / KO
 	"master_volume": 1.0,
 	"music_volume": 0.5,
 }
