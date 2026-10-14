@@ -331,8 +331,8 @@ func _states(ids, out: String) -> void:
 
 
 ## Character icons: a head-and-shoulders bust on a flat tinted backdrop (the sheet tool crops it round and rings it).
-const PORTRAIT_DIST := {"aruun": 3.4, "cigarra": 2.7, "bramvex": 3.4, "scarlith": 4.2, "mollusk": 3.9, "zephyr": 3.2, "nyxaris": 4.4, "pharilux": 3.3}
-const PORTRAIT_LIFT := {"aruun": 0.2, "cigarra": 0.1, "bramvex": 0.0, "scarlith": 0.3, "mollusk": 0.05, "zephyr": 0.1, "nyxaris": 0.3, "pharilux": -0.15}
+const PORTRAIT_DIST := {"aruun": 3.4, "cigarra": 2.7, "bramvex": 3.4, "scarlith": 4.2, "mollusk": 3.9, "zephyr": 3.2, "nyxaris": 3.2, "pharilux": 3.3}
+const PORTRAIT_LIFT := {"aruun": 0.2, "cigarra": 0.1, "bramvex": 0.0, "scarlith": 0.3, "mollusk": 0.05, "zephyr": 0.1, "nyxaris": -0.1, "pharilux": -0.15}
 func _portrait(ids, out: String) -> void:
 	vp.size = Vector2i(256, 256)
 	no_shadow = true

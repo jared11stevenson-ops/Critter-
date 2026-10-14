@@ -84,7 +84,28 @@ def pharilux_part(c, info):
         return "leg_f" if y < 0 else "leg_b"
     return "torso"
 
+def nyxaris_part(c, info):
+    """Nyxaris (faces +x already; right = -y; feet z=0, height ~0.98). Crab-spider: face+antennae+front crest = head, front feathery pincers = arms, side legs by side, rear abdomen + rear crystals = extra (sways), thorax = torso."""
+    x, y, z = c
+    if info["zmax"] < 0.045:
+        return "drop"
+    if (x > -0.05 and z >= 0.60) or (x > 0.20 and 0.40 <= z < 0.60 and abs(y) < 0.12):
+        return "head"                                   # face (mandibles, fur), antenna arcs with the pink bulbs, front crystal crest
+    if x < -0.12:
+        return "extra"
+    if x > 0.10 and abs(y) > 0.10 and 0.10 < z < 0.58:
+        return "arm_f" if y < 0 else "arm_b"
+    if z < 0.34 and abs(y) > 0.08:
+        return "leg_f" if y < 0 else "leg_b"
+    return "torso"
+
 CONFIGS = {
+    "nyxaris": dict(src="/tmp/cu/nx/plain.glb", rot_z=0.0, scale=3.0, x0=0.0, y0=0.0, tex_size=4096, part=nyxaris_part, min_faces=0, bake_normals=True,
+                    pivots={"torso": (0.0, 0.0, 0.40), "head": (0.30, 0.0, 0.58), "arm_f": (0.20, -0.12, 0.42), "arm_b": (0.20, 0.12, 0.42),
+                            "leg_f": (0.0, -0.15, 0.32), "leg_b": (0.0, 0.15, 0.32), "weapon": (0.3, 0.0, 0.4), "extra": (-0.12, 0.0, 0.45)},
+                    targets={"torso": 3600, "head": 7600, "arm_f": 1900, "arm_b": 1900, "leg_f": 2400, "leg_b": 2400, "weapon": -1, "extra": 2800},
+                    sockets={"head": ("head", (0.15, 0.0, 0.05)), "hand": ("arm_f", (0.1, 0.0, -0.2)), "weapon_base": ("arm_f", (0.1, 0.0, -0.2)), "weapon_tip": ("arm_f", (0.3, 0.0, -0.2))},
+                    meta={"textured": True, "face_off": True, "swarm_off": True, "tex_gain": 1.0, "outline_px": 1.3, "normal_map": True}),
     "pharilux": dict(src="/tmp/cu/ph/plain.glb", rot_z=90.0, scale=3.6, x0=0.0, y0=0.0, tex_size=4096, part=pharilux_part, min_faces=0,
                     pivots={"torso": (0.0, 0.0, 0.42), "head": (0.05, 0.0, 0.72), "arm_f": (0.0, -0.16, 0.66), "arm_b": (0.0, 0.16, 0.66),
                             "leg_f": (0.0, -0.08, 0.42), "leg_b": (0.0, 0.08, 0.42), "weapon": (0.05, -0.25, 0.35), "extra": (-0.08, 0.0, 0.62)},
