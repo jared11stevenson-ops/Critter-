@@ -1,0 +1,180 @@
+"""Bramvex skinned build from the standing T-pose Tripo model (/tmp/cu/br2/plain.glb, decoded with gltf-transform copy).
+Stages (python3 bramvex_skin.py STAGE):  prep  -> decimate the 1.9M-tri mesh to ~55k tris and save /tmp/rg/br2_low.blend
+                                          rig   -> armature + region weights, renders rest + test poses to /tmp/rg/p2_*.png
+                                          final -> rig + normal bake from the full mesh + skinned GLB to v2/art/models/bramvex_skin.glb
+Frame (model units, feet z=0, height 0.98): faces +x, left = +y.  Game scale S=3.4."""
+import bpy, bmesh, math, sys, os, json
+import numpy as np
+from mathutils import Vector, Euler, Quaternion
+STAGE = sys.argv[sys.argv.index("--") + 1] if "--" in sys.argv else sys.argv[-1]
+S = 3.4
+SRC = "/tmp/cu/br2/plain.glb"; LOW = "/tmp/rg/br2_low.blend"; TRIS = 55000
+# bones: name -> (head, tail, parent) in model units (x fwd, y left, z up). Measured from the mesh (see design/v2/anatomy/bramvex.md).
+def mir(n, h, t, p):
+    return {n + "_L": ((h[0], h[1], h[2]), (t[0], t[1], t[2]), (p + "_L") if p.endswith(("up", "lo", "hand", "th", "sh", "ft", "wing", "wing2", "shoulder")) else p),
+            n + "_R": ((h[0], -h[1], h[2]), (t[0], -t[1], t[2]), (p + "_R") if p.endswith(("up", "lo", "hand", "th", "sh", "ft", "wing", "wing2", "shoulder")) else p)}
+B = {"hips": ((0.02, 0, 0.50), (0.02, 0, 0.58), None), "spine": ((0.02, 0, 0.58), (0.015, 0, 0.66), "hips"), "chest": ((0.015, 0, 0.66), (0.015, 0, 0.74), "spine"),
+     "neck": ((0.015, 0, 0.74), (0.04, 0, 0.80), "chest"), "head": ((0.04, 0, 0.80), (0.04, 0, 0.90), "neck")}
+for d in (mir("shoulder", (0.01, 0.04, 0.68), (0.01, 0.09, 0.68), "chest"), mir("arm_up", (0.01, 0.09, 0.68), (0.02, 0.20, 0.68), "shoulder"),
+          mir("arm_lo", (0.02, 0.20, 0.68), (0.03, 0.31, 0.67), "arm_up"), mir("hand", (0.03, 0.31, 0.67), (0.04, 0.36, 0.66), "arm_lo"),
+          mir("th", (0.02, 0.055, 0.50), (0.02, 0.06, 0.30), "hips"), mir("sh", (0.02, 0.06, 0.30), (0.0, 0.085, 0.13), "th"),
+          mir("ft", (0.0, 0.085, 0.13), (0.07, 0.10, 0.02), "sh"),
+          mir("wing", (-0.05, 0.05, 0.71), (-0.09, 0.16, 0.58), "chest"), mir("wing2", (-0.09, 0.16, 0.58), (-0.10, 0.27, 0.46), "wing")):
+    B.update(d)
+
+def load_src():
+    bpy.ops.wm.read_factory_settings(use_empty=True)
+    bpy.ops.import_scene.gltf(filepath=SRC)
+    ob = [o for o in bpy.data.objects if o.type == "MESH"][0]
+    ob.data.transform(ob.matrix_world); ob.matrix_world = ob.matrix_world.Identity(4)
+    ob.data.transform(__import__("mathutils").Matrix.Translation((0, 0, 0.49)))       # feet to z=0
+    ob.data.transform(__import__("mathutils").Matrix.Scale(S, 4))
+    ob.name = "body"
+    return ob
+
+if STAGE == "prep":
+    ob = load_src()
+    t0 = len(ob.data.polygons)
+    mod = ob.modifiers.new("d", "DECIMATE"); mod.decimate_type = "COLLAPSE"; mod.ratio = TRIS / max(t0, 1); mod.use_collapse_triangulate = True
+    bpy.context.view_layer.objects.active = ob
+    bpy.ops.object.modifier_apply(modifier="d")
+    print("tris", t0, "->", len(ob.data.polygons))
+    bpy.ops.wm.save_as_mainfile(filepath=LOW)
+    sys.exit(0)
+
+def load_src_into_scene():
+    before = set(bpy.data.objects.keys())
+    bpy.ops.import_scene.gltf(filepath=SRC)
+    ob = [o for o in bpy.data.objects if o.type == "MESH" and o.name not in before][0]
+    ob.data.transform(ob.matrix_world); ob.matrix_world = ob.matrix_world.Identity(4)
+    ob.data.transform(__import__("mathutils").Matrix.Translation((0, 0, 0.49)))
+    ob.data.transform(__import__("mathutils").Matrix.Scale(S, 4))
+    ob.name = "body_hi"
+    return ob
+
+def build_rig(body):
+    arm = bpy.data.objects.new("rig", bpy.data.armatures.new("rig")); bpy.context.scene.collection.objects.link(arm)
+    bpy.context.view_layer.objects.active = arm; bpy.ops.object.mode_set(mode="EDIT")
+    E = arm.data.edit_bones
+    for n, (h, t, p) in B.items():
+        b = E.new(n); b.head = Vector(h) * S; b.tail = Vector(t) * S
+        if p: b.parent = E[p]
+    bpy.ops.object.mode_set(mode="OBJECT")
+    # weights: region rules first (head / wings / loose cloth / arms), then inverse-distance to bone segments
+    n = len(body.data.vertices); co = np.empty(n * 3, dtype=np.float32); body.data.vertices.foreach_get("co", co); V = co.reshape(-1, 3) / S
+    seg = {k: (np.array(h), np.array(t)) for k, (h, t, p) in B.items()}
+    def dist(P, a, b):
+        ab = b - a; t = np.clip(((P - a) @ ab) / (ab @ ab), 0, 1); return np.linalg.norm(P - (a + t[:, None] * ab), axis=1)
+    names = list(B.keys())
+    D = np.stack([dist(V, *seg[k]) for k in names], axis=1)                    # (n, bones)
+    W = np.zeros((n, len(names)), dtype=np.float32)
+    ix = {k: i for i, k in enumerate(names)}
+    P = 6.0
+    for i in range(n):
+        x, y, z = V[i]
+        side = "_L" if y >= 0 else "_R"
+        d = D[i]
+        if z > 0.76:                                                           # head, cap, antennae, bridge to neck
+            w = {"head": 1.0} if z > 0.79 else {"neck": 0.5, "head": 0.5}
+        elif x < -0.062 and abs(y) > 0.025 and 0.34 < z < 0.80:                # folded bat wings behind the shoulders
+            w = {"wing" + side: 1.0} if abs(y) < 0.14 else {"wing2" + side: 1.0}
+        elif abs(y) > 0.115 and 0.52 < z < 0.80:                               # arms (T-pose), banners hanging from the forearm follow the forearm
+            u = abs(y)
+            w = {"arm_up" + side: 1.0} if u < 0.20 else ({"arm_lo" + side: 1.0} if u < 0.31 else {"hand" + side: 1.0})
+        else:
+            cand = np.argsort(d)[:4]
+            raw = {names[c]: 1.0 / (d[c] + 0.012) ** P for c in cand if d[c] < d[cand[0]] + 0.04}
+            if d[cand[0]] > 0.075 and z < 0.52 and (z > 0.30 or abs(y) < 0.045):  # loose skirt / the central banner far from the legs: pelvis only (never toe claws or ankle thorns)
+                f = float(np.clip((0.50 - z) / 0.30, 0.0, 0.7))             # lower cloth follows the average of both thighs, so it never smears when the legs fold
+                raw = {"hips": 1.0 - f, "th_L": f * 0.5, "th_R": f * 0.5}
+            tot = sum(raw.values()); w = {k: v / tot for k, v in raw.items()}
+        for k, v in w.items():
+            W[i, ix[k]] = v
+    for k in names:
+        body.vertex_groups.new(name=k)
+    for j, k in enumerate(names):
+        idx = np.nonzero(W[:, j] > 0.02)[0]
+        for i in idx:
+            body.vertex_groups[k].add([int(i)], float(W[i, j]), "REPLACE")
+    body.parent = arm
+    m = body.modifiers.new("a", "ARMATURE"); m.object = arm
+    return arm
+
+# poses: bone -> list of (global axis, degrees). x = forward axis, y = left axis, z = up. Pitch (bend forward/back) is about y, roll (lean sideways) about x, yaw about z.
+POSES = {"rest": {},
+         "walk": {"th_L": [("y", -35)], "sh_L": [("y", 30)], "th_R": [("y", 25)], "sh_R": [("y", -10)], "arm_up_L": [("z", 20)], "arm_up_R": [("z", -20)], "spine": [("z", 8)]},
+         "strike": {"spine": [("z", 25)], "chest": [("z", 15)], "arm_up_R": [("x", 70), ("z", 20)], "arm_lo_R": [("x", 40)], "arm_up_L": [("z", -40)], "wing_L": [("x", -20)], "wing_R": [("x", 20)]},
+         "crouch": {"th_L": [("y", -60)], "sh_L": [("y", 100)], "th_R": [("y", -60)], "sh_R": [("y", 100)], "spine": [("y", 25)], "chest": [("y", 15)], "neck": [("y", -25)]},
+         "wingflare": {"wing_L": [("x", -60)], "wing_R": [("x", 60)], "wing2_L": [("x", -40)], "wing2_R": [("x", 40)], "arm_up_L": [("x", -30)], "arm_up_R": [("x", 30)]}}
+
+def render_poses(arm, prefix):
+    sc = bpy.context.scene
+    sc.render.engine = "CYCLES"; sc.cycles.samples = 6; sc.cycles.device = "CPU"; sc.render.resolution_x = 800; sc.render.resolution_y = 800
+    w = bpy.data.worlds.new("w"); sc.world = w; w.use_nodes = True; w.node_tree.nodes["Background"].inputs[0].default_value = (0.8, 0.8, 0.85, 1); w.node_tree.nodes["Background"].inputs[1].default_value = 1.6
+    cam = bpy.data.objects.new("c", bpy.data.cameras.new("c")); sc.collection.objects.link(cam); sc.camera = cam
+    cam.data.type = "ORTHO"; cam.data.ortho_scale = 3.9
+    bpy.context.view_layer.objects.active = arm; bpy.ops.object.mode_set(mode="POSE")
+    for pn, rots in POSES.items():
+        for pb in arm.pose.bones:
+            pb.rotation_mode = "QUATERNION"; pb.rotation_quaternion = Quaternion()
+        for bn, steps in rots.items():
+            pb = arm.pose.bones[bn]
+            q = Quaternion()
+            for ax, deg in steps:
+                gv = Vector({"x": (1, 0, 0), "y": (0, 1, 0), "z": (0, 0, 1)}[ax])
+                lv = pb.bone.matrix_local.to_3x3().inverted() @ gv
+                q = Quaternion(lv.normalized(), math.radians(deg)) @ q
+            pb.rotation_mode = "QUATERNION"; pb.rotation_quaternion = q
+        bpy.context.view_layer.update()
+        for vn, (loc, rot) in {"f": ((10, 0, 1.65), (90, 0, 90)), "s": ((0, -10, 1.65), (90, 0, 0))}.items():
+            cam.location = loc; cam.rotation_euler = [math.radians(a) for a in rot]
+            sc.render.filepath = f"/tmp/rg/{prefix}_{pn}_{vn}.png"; bpy.ops.render.render(write_still=True)
+    bpy.ops.object.mode_set(mode="OBJECT")
+
+if STAGE == "rig":
+    bpy.ops.wm.open_mainfile(filepath=LOW)
+    body = bpy.data.objects["body"]
+    arm = build_rig(body)
+    render_poses(arm, "p2")
+    sys.exit(0)
+
+if STAGE == "final":
+    OUT = "/home/user/critter/v2/art/models"
+    bpy.ops.wm.open_mainfile(filepath=LOW)
+    body = bpy.data.objects["body"]
+    arm = build_rig(body)
+    render_poses(arm, "p5")
+    # high-poly source for the normal bake (the full-detail mesh, same transform)
+    for o in list(bpy.data.objects):
+        o.select_set(False)
+    hi = load_src_into_scene()
+    mat = body.data.materials[0]
+    tex = None
+    for n in mat.node_tree.nodes:
+        if n.type == "TEX_IMAGE" and n.image:
+            tex = n.image
+    print("colour texture", tex.name if tex else None, tex.size[:] if tex else None)
+    if tex.size[0] != 4096:
+        tex.scale(4096, 4096)
+    nrm = bpy.data.images.new("bramvex_normal", 4096, 4096, alpha=False); nrm.generated_color = (0.5, 0.5, 1.0, 1.0); nrm.colorspace_settings.name = "Non-Color"
+    bm_ = bpy.data.materials.new("bake"); bm_.use_nodes = True
+    tn = bm_.node_tree.nodes.new("ShaderNodeTexImage"); tn.image = nrm; bm_.node_tree.nodes.active = tn
+    body.data.materials.clear(); body.data.materials.append(bm_)
+    sc = bpy.context.scene; sc.render.engine = "CYCLES"; sc.cycles.device = "CPU"; sc.cycles.samples = 1
+    bpy.ops.object.select_all(action="DESELECT"); hi.select_set(True); body.select_set(True); bpy.context.view_layer.objects.active = body
+    # bake in the REST pose (the armature is at rest after render_poses sets the last pose; reset it)
+    for pb in arm.pose.bones:
+        pb.rotation_mode = "QUATERNION"; pb.rotation_quaternion = Quaternion()
+    bpy.context.view_layer.update()
+    bpy.ops.object.bake(type="NORMAL", use_selected_to_active=True, cage_extrusion=0.03, max_ray_distance=0.08, normal_space="TANGENT", margin=10, use_clear=False)
+    print("baked")
+    bpy.data.objects.remove(hi)
+    body.data.materials.clear(); body.data.materials.append(mat)
+    nn = mat.node_tree.nodes.new("ShaderNodeTexImage"); nn.image = nrm
+    nm = mat.node_tree.nodes.new("ShaderNodeNormalMap")
+    bsdf = [n for n in mat.node_tree.nodes if n.type == "BSDF_PRINCIPLED"][0]
+    mat.node_tree.links.new(nn.outputs["Color"], nm.inputs["Color"]); mat.node_tree.links.new(nm.outputs["Normal"], bsdf.inputs["Normal"])
+    bpy.ops.object.select_all(action="SELECT")
+    bpy.ops.export_scene.gltf(filepath=os.path.join(OUT, "bramvex_skin.glb"), export_format="GLB", use_selection=True, export_yup=True, export_apply=False,
+                              export_materials="EXPORT", export_image_format="JPEG", export_jpeg_quality=90, export_tangents=True, export_skins=True, export_cameras=False, export_lights=False)
+    print("done", os.path.getsize(os.path.join(OUT, "bramvex_skin.glb")))
