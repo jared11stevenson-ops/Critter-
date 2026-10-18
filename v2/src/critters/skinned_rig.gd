@@ -25,6 +25,7 @@ var _t_walk := 0.0
 var _flinch := 0.0
 var _flinch_v := 0.0
 var _springs: SpringBoneSimulator3D
+var _ankle_rest := {}              # side -> ankle height in the rest pose (the ground line for planted feet)
 var _prev_action := ""
 var _prev_move := ""
 
@@ -102,6 +103,11 @@ func setup(critter_id_in: String) -> void:
 		club.add_child(tip)
 		_sockets["weapon_tip"] = tip
 	_add_springs()
+	skeleton.reset_bone_poses()
+	skeleton.force_update_all_bone_transforms()
+	for side in ["L", "R"]:
+		if _bones.has("ft_" + side):
+			_ankle_rest[side] = skeleton.get_bone_global_pose(_bones["ft_" + side]).origin.y
 	fx = FxCtl.new(self, mat, palette["accent"] if (palette["accent"] as Color).get_luminance() > 0.35 else palette["glow"], palette["glow"])
 	_cur_bones = Pose.compile(Pose.IDLE)
 	_from_bones = _cur_bones.duplicate()
@@ -197,6 +203,8 @@ func apply_fighter_state(fs: Dictionary, dt: float) -> void:
 	_flinch += _flinch_v * dt
 	var flinch_pose := {"spine": Vector3(0, -_flinch * 38.0, 0), "chest": Vector3(0, -_flinch * 26.0, 0), "neck": Vector3(0, _flinch * 20.0, 0)}
 	bones = Pose.add(bones, flinch_pose)
+	if action not in ["ko", "knockdown"] and not _ankle_rest.is_empty():
+		bones = _plant_feet(bones, root)
 	_cur_bones = bones
 	_cur_root = root
 	_apply_bones(bones)
@@ -210,6 +218,43 @@ func apply_fighter_state(fs: Dictionary, dt: float) -> void:
 
 func _kick(amount: float) -> void:
 	_flinch_v -= amount * 14.0
+
+## Foot planting: both ankles are held on the ground line. For each leg a small Newton solve on the knee (then the thigh) removes any lift or sinking the
+## authored pose or the body's root offset would cause, so feet never float after a strike and never sink into the floor.
+func _ankle_y(side: String, bones: Dictionary, root: Vector3) -> float:
+	_apply_bones(bones)
+	skeleton.force_update_all_bone_transforms()
+	return skeleton.get_bone_global_pose(_bones["ft_" + side]).origin.y + root.y
+
+func _plant_feet(bones: Dictionary, root: Vector3) -> Dictionary:
+	var out := bones.duplicate()
+	for side in ["L", "R"]:
+		var th: String = "th_" + side
+		var sh: String = "sh_" + side
+		var target: float = float(_ankle_rest[side])
+		for it in 3:
+			var err: float = _ankle_y(side, out, root) - target
+			if absf(err) < 0.02:
+				break
+			var key: String = sh
+			var v: Vector3 = out.get(key, Vector3.ZERO)
+			var probe: Dictionary = out.duplicate()
+			probe[key] = v + Vector3(0, 4.0, 0)
+			var slope: float = (_ankle_y(side, probe, root) - target - err) / 4.0        # metres per degree of extra knee bend
+			if absf(slope) < 0.0005:
+				key = th
+				v = out.get(key, Vector3.ZERO)
+				probe = out.duplicate()
+				probe[key] = v + Vector3(0, 4.0, 0)
+				slope = (_ankle_y(side, probe, root) - target - err) / 4.0
+				if absf(slope) < 0.0005:
+					break
+			var step: float = clampf(-err / slope, -25.0, 25.0)
+			var nv: Vector3 = v + Vector3(0, step, 0)
+			if key == sh:
+				nv.y = clampf(nv.y, 0.0, 130.0)                                    # a knee only bends one way
+			out[key] = nv
+	return out
 
 ## Rotations (roll/pitch/yaw degrees about the T-pose rest frame, Blender axes) -> bone pose rotations.
 func _apply_bones(bones: Dictionary) -> void:
