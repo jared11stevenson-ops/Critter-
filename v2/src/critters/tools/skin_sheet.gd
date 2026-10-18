@@ -6,7 +6,9 @@ const STATES := [
 	["idle", "idle", 0, ""], ["walk", "walk", 0, ""], ["guard", "guard", 6, ""],
 	["light ant", "strike_light", 14, "m"], ["light hit", "strike_light", 17, "m"], ["light rec", "strike_light", 24, "m"],
 	["heavy ant", "strike_heavy", 28, "h"], ["heavy hit", "strike_heavy", 33, "h"], ["heavy rec", "strike_heavy", 48, "h"],
-	["dodge", "dodge", 6, ""], ["hit", "hit", 3, ""], ["stagger", "stagger", 10, ""]]
+	["dodge", "dodge", 6, ""], ["hit", "hit", 3, ""], ["stagger", "stagger", 10, ""],
+	["ghost ant", "ability1", 4, "m"], ["ghost hold", "ability1", 8, "m"], ["ghost rec", "ability1", 20, "m"],
+	["prep ant", "ability2", 10, "h"], ["prep hit", "ability2", 32, "h"], ["prep rec", "ability2", 46, "h"]]
 
 var _live: SkinnedRig
 var _live_action := ""
@@ -28,7 +30,7 @@ func _ready() -> void:
 	var cam := Camera3D.new()
 	add_child(cam)
 	cam.fov = 38.0
-	cam.position = Vector3(0, 3.3, 15.5)
+	cam.position = Vector3(0, 1.8, 20.0)
 	cam.current = true
 	var sun := DirectionalLight3D.new()
 	sun.rotation_degrees = Vector3(-35, -25, 0)
@@ -64,7 +66,7 @@ func _ready() -> void:
 		add_child(rig)
 		rig.setup(id)
 		rig.three_quarter = 0.0
-		rig.position = Vector3(-6.6 + float(i % 6) * 2.6, 3.6 if i < 6 else 0.0, 0)
+		rig.position = Vector3(-6.6 + float(i % 6) * 2.6, 5.4 - 3.6 * float(i / 6), 0)
 		if only >= 0 or rest_only:
 			rig.position = Vector3.ZERO
 		rig.rotation_degrees.y = 0.0 if OS.get_cmdline_user_args().has("--side") else 90.0     # --side: profile view facing right (+x); default: facing the camera
