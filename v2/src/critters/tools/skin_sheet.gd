@@ -8,6 +8,21 @@ const STATES := [
 	["heavy ant", "strike_heavy", 28, "h"], ["heavy hit", "strike_heavy", 33, "h"], ["heavy rec", "strike_heavy", 48, "h"],
 	["dodge", "dodge", 6, ""], ["hit", "hit", 3, ""], ["stagger", "stagger", 10, ""]]
 
+var _live: SkinnedRig
+var _live_action := ""
+var _live_frame := 0
+
+func _process(_dt: float) -> void:        # --live=<action>: plays the action in real time so spring bones (cloth, wings) really move
+	if _live == null:
+		return
+	_live_frame += 1
+	var span := 60
+	var f := _live_frame % span
+	var fs := {"action": _live_action if f < 40 else "idle", "action_frame": f, "move_id": "", "facing": 1.0, "speed": 1.0, "vitality_ratio": 1.0, "phase": Vector3i(16, 4, 14)}
+	if _live_action == "strike_heavy":
+		fs["phase"] = Vector3i(30, 6, 20)
+	_live.apply_fighter_state(fs, 1.0 / 60.0)
+
 func _ready() -> void:
 	var id := "bramvex"
 	var cam := Camera3D.new()
@@ -51,6 +66,10 @@ func _ready() -> void:
 			rig.position = Vector3.ZERO
 		rig.rotation_degrees.y = 0.0 if OS.get_cmdline_user_args().has("--side") else 90.0     # --side: profile view facing right (+x); default: facing the camera
 		var fs := {"action": st[1], "action_frame": st[2], "move_id": "", "facing": 1.0, "speed": 1.0, "vitality_ratio": 1.0}
+		for a in OS.get_cmdline_user_args():
+			if a.begins_with("--live="):
+				_live = rig
+				_live_action = a.substr(7)
 		if st[3] == "m":
 			fs["phase"] = Vector3i(16, 4, 14)
 		elif st[3] == "h":

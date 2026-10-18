@@ -24,6 +24,7 @@ var _from_root := Vector3.ZERO
 var _t_walk := 0.0
 var _flinch := 0.0
 var _flinch_v := 0.0
+var _springs: SpringBoneSimulator3D
 var _prev_action := ""
 var _prev_move := ""
 
@@ -100,10 +101,40 @@ func setup(critter_id_in: String) -> void:
 		tip.position = Vector3(2.05, 0, 0)
 		club.add_child(tip)
 		_sockets["weapon_tip"] = tip
+	_add_springs()
 	fx = FxCtl.new(self, mat, palette["accent"] if (palette["accent"] as Color).get_luminance() > 0.35 else palette["glow"], palette["glow"])
 	_cur_bones = Pose.compile(Pose.IDLE)
 	_from_bones = _cur_bones.duplicate()
 	_apply_bones(_cur_bones)
+
+## Follow-through: banner, back shreds and wings are driven by Godot's SpringBoneSimulator3D on top of the pose (cloth lags and swings on every lunge).
+## chain = [root bone, end bone, stiffness, drag, gravity]; values are tuned by eye (lower stiffness = floppier).
+const SPRINGS := {
+	"bramvex": [["cf1", "cf3", 0.28, 0.30, 0.9], ["cb1", "cb3", 0.34, 0.30, 0.8], ["wing_L", "wing2_L", 0.55, 0.35, 0.3], ["wing_R", "wing2_R", 0.55, 0.35, 0.3]],
+}
+
+func _add_springs() -> void:
+	var chains: Array = SPRINGS.get(critter_id, [])
+	if chains.is_empty():
+		return
+	var sp := SpringBoneSimulator3D.new()
+	skeleton.add_child(sp)
+	sp.set_setting_count(chains.size())
+	for i in chains.size():
+		var c: Array = chains[i]
+		if not (_bones.has(c[0]) and _bones.has(c[1])):
+			continue
+		sp.set_root_bone_name(i, c[0])
+		sp.set_end_bone_name(i, c[1])
+		sp.set_extend_end_bone(i, true)
+		sp.set_end_bone_direction(i, SpringBoneSimulator3D.BONE_DIRECTION_FROM_PARENT)
+		sp.set_end_bone_length(i, 0.35)
+		sp.set_stiffness(i, c[2])
+		sp.set_drag(i, c[3])
+		sp.set_gravity(i, c[4])
+		sp.set_gravity_direction(i, Vector3(0, -1, 0))
+		sp.set_radius(i, 0.03)
+	_springs = sp
 
 func _find(n: Node, type: String) -> Node:
 	if n.get_class() == type:
