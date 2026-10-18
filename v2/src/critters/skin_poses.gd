@@ -12,7 +12,7 @@ const IDLE := {
 	"hips": Vector3(0, 4, 0), "spine": Vector3(0, 9, 0), "chest": Vector3(0, 7, 0), "neck": Vector3(0, -6, 0), "head": Vector3(0, -9, 0),
 	"arm_up_L": Vector3(-74, -6, 0), "arm_lo_L": Vector3(0, 0, -16),
 	"arm_up_R": Vector3(68, -24, 0), "arm_lo_R": Vector3(0, 0, 38),
-	"th_L": Vector3(0, -8, 0), "sh_L": Vector3(0, 12, 0), "th_R": Vector3(0, 10, 0), "sh_R": Vector3(0, 16, 0),
+	"th_L": Vector3(0, -3, 0), "sh_L": Vector3(0, 10, 0), "th_R": Vector3(0, 4, 0), "sh_R": Vector3(0, 12, 0),
 }
 
 ## Attack styles: [anticipation, impact, recovery] partial poses merged over IDLE.

@@ -49,7 +49,7 @@ func _ready() -> void:
 		rig.position = Vector3(-6.6 + float(i % 6) * 2.6, 3.6 if i < 6 else 0.0, 0)
 		if only >= 0 or rest_only:
 			rig.position = Vector3.ZERO
-		rig.rotation_degrees.y = 90.0 - 0.0           # facing right (+x) in the sheet: the camera looks along -z
+		rig.rotation_degrees.y = 0.0 if OS.get_cmdline_user_args().has("--side") else 90.0     # --side: profile view facing right (+x); default: facing the camera
 		var fs := {"action": st[1], "action_frame": st[2], "move_id": "", "facing": 1.0, "speed": 1.0, "vitality_ratio": 1.0}
 		if st[3] == "m":
 			fs["phase"] = Vector3i(16, 4, 14)

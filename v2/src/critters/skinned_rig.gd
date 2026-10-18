@@ -11,6 +11,7 @@ class_name SkinnedRig extends CritterRig
 
 const SKIN_PATH := "res://art/models/%s_skin.glb"
 const Pose := preload("res://src/critters/skin_poses.gd")
+const Props := preload("res://src/critters/skin_props.gd")
 
 var skeleton: Skeleton3D
 var _mesh: MeshInstance3D
@@ -84,6 +85,21 @@ func setup(critter_id_in: String) -> void:
 	_sockets["hand"] = _attach("grip_R", Vector3.ZERO)
 	_sockets["weapon_base"] = _sockets["hand"]
 	_sockets["weapon_tip"] = _attach("grip_R", Vector3(1.6, -0.9, 0.0))
+	if critter_id == "bramvex":                                   # he holds Diplomacy in his right hand
+		var ba := BoneAttachment3D.new()
+		ba.bone_name = "grip_R"
+		skeleton.add_child(ba)
+		var club := MeshInstance3D.new()
+		club.mesh = Props.club()
+		club.material_override = Toon.character(palette["glow"], palette["ink"])
+		(club.material_override as ShaderMaterial).next_pass.set_shader_parameter("px_width", outline)
+		club.rotation_degrees = Vector3(0, 0, -28)                # pointing forward and down from the fist
+		ba.add_child(club)
+		_sockets["weapon_base"] = club
+		var tip := Marker3D.new()
+		tip.position = Vector3(2.05, 0, 0)
+		club.add_child(tip)
+		_sockets["weapon_tip"] = tip
 	fx = FxCtl.new(self, mat, palette["accent"] if (palette["accent"] as Color).get_luminance() > 0.35 else palette["glow"], palette["glow"])
 	_cur_bones = Pose.compile(Pose.IDLE)
 	_from_bones = _cur_bones.duplicate()
