@@ -32,6 +32,11 @@ for col, cx in (("cf", 0.06), ("cb", -0.05)):
     B[col + "1"] = ((cx, 0, 0.50), (cx, 0, 0.36), "hips")
     B[col + "2"] = ((cx, 0, 0.36), (cx, 0, 0.20), col + "1")
     B[col + "3"] = ((cx, 0, 0.20), (cx, 0, 0.03), col + "2")
+for a in (1, -1):                                  # antennae tips above the cap: three short bones per side, sprung in Godot
+    sd = "_L" if a > 0 else "_R"
+    pts = [(0.038, 0.058, 0.925), (0.037, 0.068, 0.945), (0.036, 0.072, 0.965), (0.035, 0.074, 0.99)]
+    for k in range(3):
+        B["ant%d%s" % (k + 1, sd)] = ((pts[k][0], a * pts[k][1], pts[k][2]), (pts[k + 1][0], a * pts[k + 1][1], pts[k + 1][2]), "head" if k == 0 else "ant%d%s" % (k, sd))
 B["grip_L"] = ((0.035, 0.335, 0.665), (0.10, 0.335, 0.665), "hand_L")
 B["grip_R"] = ((0.035, -0.335, 0.665), (0.10, -0.335, 0.665), "hand_R")
 
@@ -89,6 +94,11 @@ def build_rig(body):
         d = D[i]
         if z > 0.76:                                                           # head, cap, antennae, bridge to neck
             w = {"head": 1.0} if z > 0.79 else {"neck": 0.5, "head": 0.5}
+            if z > 0.935 and 0.035 < abs(y) < 0.09:                            # antennae: the chain of its side, tapering in from the head
+                ca = ["ant%d%s" % (k, side) for k in (1, 2, 3)]
+                raw = {k: 1.0 / (d[ix[k]] + 0.008) ** 4 for k in ca}
+                raw["head"] = 1.0 / (d[ix["head"]] + 0.008) ** 4 * (0.15 if z > 0.95 else 1.0)
+                tot = sum(raw.values()); w = {k: v / tot for k, v in raw.items()}
         elif x < -0.062 and abs(y) > 0.025 and 0.34 < z < 0.80:                # folded bat wings behind the shoulders
             w = {"wing" + side: 1.0} if abs(y) < 0.14 else {"wing2" + side: 1.0}
         elif abs(y) > 0.115 and 0.52 < z < 0.80:                               # arms (T-pose), banners hanging from the forearm follow the forearm
@@ -97,7 +107,7 @@ def build_rig(body):
         else:
             dg = d.copy()
             for k2 in names:
-                if k2.startswith(("cf", "cb", "grip")):
+                if k2.startswith(("cf", "cb", "grip", "ant")):
                     dg[ix[k2]] = 9.0                                           # cloth chains and grips only get weights from their own explicit rules (otherwise toe claws near the centre line stick to the cloth)
             cand = np.argsort(dg)[:4]
             raw = {names[c]: 1.0 / (dg[c] + 0.012) ** P for c in cand if dg[c] < dg[cand[0]] + 0.04}
