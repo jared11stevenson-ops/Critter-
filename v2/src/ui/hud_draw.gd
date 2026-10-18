@@ -184,7 +184,7 @@ func _draw_world(i: int, st: Dictionary) -> void:
 	var c2 := _project(c3)
 	if c2.x < -9000:
 		return
-	var edge := _project(c3 + bout.cam.global_transform.basis.x * 0.75)
+	var edge := _project(c3 + bout.cam.global_transform.basis.x * 0.6)
 	var rad := clampf(c2.distance_to(edge), 22.0, 140.0)
 	var pr := float(f["poise"]) / maxf(1.0, float(f["poise_max"]))
 	var col := UiStyle.RUST.lerp(UiStyle.TEAL_LT, clampf(pr * 1.3 - 0.1, 0.0, 1.0))
@@ -192,9 +192,9 @@ func _draw_world(i: int, st: Dictionary) -> void:
 	if broken:
 		col = UiStyle.RUST.lerp(Color.WHITE, 0.5 + 0.5 * sin(_t * 30.0))
 	if f["alive"]:
-		_ink.ring(c2, rad + 5.0, Color(0.09, 0.07, 0.07, 0.4), true)
+		_ink.ring(c2, rad + 3.0, Color(0.09, 0.07, 0.07, 0.22), true)
 		if pr > 0.01:
-			draw_arc(c2, rad, -PI * 0.5, -PI * 0.5 + TAU * pr, 40, col, 6.0, true)
+			draw_arc(c2, rad, -PI * 0.5, -PI * 0.5 + TAU * pr, 40, col, 3.5, true)
 	if i != bout.player_idx and f["alive"] and (bout.player == null or bout.player.locked):
 		_draw_lock(c2, rad + 14.0)
 	if i != bout.player_idx or bout.player_idx < 0:

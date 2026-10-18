@@ -8,7 +8,7 @@ const BASE_DIST := 14.0
 const HEIGHT := 6.0
 const LOOK_HEIGHT := 1.2
 const FOV_V := 40.0
-const FIT := 0.66                 # fighters must stay inside this fraction of the half-width
+const FIT := 0.78                 # fighters must stay inside this fraction of the half-width
 
 var yaw := 0.0                    # smoothed yaw of the player->target axis
 var focus := Vector3(0, LOOK_HEIGHT, 0)
