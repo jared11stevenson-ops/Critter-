@@ -8,7 +8,12 @@ import numpy as np
 from mathutils import Vector, Euler, Quaternion
 STAGE = sys.argv[sys.argv.index("--") + 1] if "--" in sys.argv else sys.argv[-1]
 S = 3.4
-SRC = "/tmp/cu/br2/plain.glb"; LOW = "/tmp/rg/br2_low.blend"; TRIS = 55000
+REPO_SRC = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "source_art", "bramvex_standing.glb")
+SRC = "/tmp/cu/br2/plain.glb"
+if not os.path.exists(SRC):                      # fresh container: decode the meshopt-compressed source once
+    os.makedirs(os.path.dirname(SRC), exist_ok=True)
+    os.system('cd %s && cp "%s" src.glb && npx --yes @gltf-transform/cli copy src.glb plain.glb' % (os.path.dirname(SRC), REPO_SRC))
+LOW = "/tmp/rg/br2_low.blend"; TRIS = 55000
 # bones: name -> (head, tail, parent) in model units (x fwd, y left, z up). Measured from the mesh (see design/v2/anatomy/bramvex.md).
 def mir(n, h, t, p):
     return {n + "_L": ((h[0], h[1], h[2]), (t[0], t[1], t[2]), (p + "_L") if p.endswith(("up", "lo", "hand", "th", "sh", "ft", "wing", "wing2", "shoulder")) else p),
@@ -21,6 +26,14 @@ for d in (mir("shoulder", (0.01, 0.04, 0.68), (0.01, 0.09, 0.68), "chest"), mir(
           mir("ft", (0.0, 0.085, 0.13), (0.07, 0.10, 0.02), "sh"),
           mir("wing", (-0.05, 0.05, 0.71), (-0.09, 0.16, 0.58), "chest"), mir("wing2", (-0.09, 0.16, 0.58), (-0.10, 0.27, 0.46), "wing")):
     B.update(d)
+
+# cloth chains hanging from the pelvis (front banner / back shreds) and club grips on the hands; Godot drives the chains with spring bones
+for col, cx in (("cf", 0.06), ("cb", -0.05)):
+    B[col + "1"] = ((cx, 0, 0.50), (cx, 0, 0.36), "hips")
+    B[col + "2"] = ((cx, 0, 0.36), (cx, 0, 0.20), col + "1")
+    B[col + "3"] = ((cx, 0, 0.20), (cx, 0, 0.03), col + "2")
+B["grip_L"] = ((0.035, 0.335, 0.665), (0.10, 0.335, 0.665), "hand_L")
+B["grip_R"] = ((0.035, -0.335, 0.665), (0.10, -0.335, 0.665), "hand_R")
 
 def load_src():
     bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -84,8 +97,15 @@ def build_rig(body):
         else:
             cand = np.argsort(d)[:4]
             raw = {names[c]: 1.0 / (d[c] + 0.012) ** P for c in cand if d[c] < d[cand[0]] + 0.04}
-            if d[cand[0]] > 0.075 and z < 0.52 and (z > 0.30 or abs(y) < 0.045):  # loose skirt / the central banner far from the legs: pelvis only (never toe claws or ankle thorns)
-                f = float(np.clip((0.50 - z) / 0.30, 0.0, 0.7))             # lower cloth follows the average of both thighs, so it never smears when the legs fold
+            dleg = min(d[ix[k]] for k in ("th_L", "th_R", "sh_L", "sh_R", "ft_L", "ft_R"))
+            if abs(y) < 0.02 and z < 0.50 and dleg > 0.03:                      # central banner strip / back shreds only: the cloth chain of its side (never leg skin, toe claws or ankle thorns)
+                col = "cf" if x > 0.02 else "cb"
+                cb = [col + "1", col + "2", col + "3"]
+                raw = {k: 1.0 / (d[ix[k]] + 0.01) ** 4 for k in cb}
+                if z > 0.44:
+                    raw["hips"] = 1.0 / (d[ix["hips"]] + 0.01) ** 4
+            elif d[cand[0]] > 0.075 and z < 0.52 and z > 0.30:                  # skirt panels beside the legs: pelvis and thighs
+                f = float(np.clip((0.50 - z) / 0.30, 0.0, 0.7))
                 raw = {"hips": 1.0 - f, "th_L": f * 0.5, "th_R": f * 0.5}
             tot = sum(raw.values()); w = {k: v / tot for k, v in raw.items()}
         for k, v in w.items():
