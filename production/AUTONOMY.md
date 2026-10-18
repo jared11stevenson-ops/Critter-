@@ -42,4 +42,4 @@ Each critter needs a creator-supplied STANDING T-pose Tripo GLB (arms out, legs 
 - [ ] Mollusk (same four steps; snail body, hardest)
 
 ## Log (newest last; one line per run)
-- 2026-10-18 Lead session: skinned Bramvex v2 built (23 bones + cloth chains cf1-3/cb1-3 + grips). Not yet in the game.
+- 2026-10-18 Lead session: skinned Bramvex v4 built (35 bones incl. cloth chains cf1-3/cb1-3 and grip_L/R); legs/feet/arms/wings clean in walk/strike/crouch tests; known issue: central red banner and skirt streak in deep leg folds (fix with spring bones in B3). Not yet in the game. Schedule created: two hourly routines (:07 and :37 UTC) each doing one step; stops when runs_left hits 0.

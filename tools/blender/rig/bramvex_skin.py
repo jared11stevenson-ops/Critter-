@@ -95,8 +95,12 @@ def build_rig(body):
             u = abs(y)
             w = {"arm_up" + side: 1.0} if u < 0.20 else ({"arm_lo" + side: 1.0} if u < 0.31 else {"hand" + side: 1.0})
         else:
-            cand = np.argsort(d)[:4]
-            raw = {names[c]: 1.0 / (d[c] + 0.012) ** P for c in cand if d[c] < d[cand[0]] + 0.04}
+            dg = d.copy()
+            for k2 in names:
+                if k2.startswith(("cf", "cb", "grip")):
+                    dg[ix[k2]] = 9.0                                           # cloth chains and grips only get weights from their own explicit rules (otherwise toe claws near the centre line stick to the cloth)
+            cand = np.argsort(dg)[:4]
+            raw = {names[c]: 1.0 / (dg[c] + 0.012) ** P for c in cand if dg[c] < dg[cand[0]] + 0.04}
             dleg = min(d[ix[k]] for k in ("th_L", "th_R", "sh_L", "sh_R", "ft_L", "ft_R"))
             if abs(y) < 0.02 and z < 0.50 and dleg > 0.03:                      # central banner strip / back shreds only: the cloth chain of its side (never leg skin, toe claws or ankle thorns)
                 col = "cf" if x > 0.02 else "cb"
@@ -104,7 +108,7 @@ def build_rig(body):
                 raw = {k: 1.0 / (d[ix[k]] + 0.01) ** 4 for k in cb}
                 if z > 0.44:
                     raw["hips"] = 1.0 / (d[ix["hips"]] + 0.01) ** 4
-            elif d[cand[0]] > 0.075 and z < 0.52 and z > 0.30:                  # skirt panels beside the legs: pelvis and thighs
+            elif dg[cand[0]] > 0.075 and z < 0.52 and z > 0.30:                  # skirt panels beside the legs: pelvis and thighs
                 f = float(np.clip((0.50 - z) / 0.30, 0.0, 0.7))
                 raw = {"hips": 1.0 - f, "th_L": f * 0.5, "th_R": f * 0.5}
             tot = sum(raw.values()); w = {k: v / tot for k, v in raw.items()}
