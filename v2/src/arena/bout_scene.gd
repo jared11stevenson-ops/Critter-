@@ -74,7 +74,8 @@ func start(config: BoutConfig) -> void:
 		var holder := Node3D.new()
 		holder.name = "Fighter%d" % i
 		add_child(holder)
-		var rig := CritterRig.new()
+		var rid: String = cfg.a_id if i == 0 else cfg.b_id
+		var rig: CritterRig = SkinnedRig.new() if SkinnedRig.available(rid) else CritterRig.new()   # skinned skeleton when the critter has one
 		holder.add_child(rig)
 		rig.setup(cfg.a_id if i == 0 else cfg.b_id)
 		if Settings.shadows_enabled():

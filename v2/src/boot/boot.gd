@@ -52,6 +52,8 @@ func _ready() -> void:
 		"select": go_select()
 		"opponent": go_opponent()
 		"bout": go_bout()
+		"skinsheet":
+			add_child(load("res://src/critters/tools/skin_sheet.gd").new())     # QA: contact sheet of a skinned critter's key poses
 		"settings":
 			go_title()
 			add_child(SettingsPanel.new())
