@@ -222,7 +222,7 @@ func apply_fighter_state(fs: Dictionary, dt: float) -> void:
 	var flinch_pose := {"spine": Vector3(0, -_flinch * 38.0, 0), "chest": Vector3(0, -_flinch * 26.0, 0), "neck": Vector3(0, _flinch * 20.0, 0)}
 	bones = Pose.add(bones, flinch_pose)
 	if action not in ["ko", "knockdown"] and not _ankle_rest.is_empty():
-		bones = _plant_feet(bones, root)
+		bones = _plant_feet(bones, root, action == "walk")
 	_cur_bones = bones
 	_cur_root = root
 	_apply_bones(bones)
@@ -244,7 +244,8 @@ func _ankle_y(side: String, bones: Dictionary, root: Vector3) -> float:
 	skeleton.force_update_all_bone_transforms()
 	return skeleton.get_bone_global_pose(_bones["ft_" + side]).origin.y + root.y
 
-func _plant_feet(bones: Dictionary, root: Vector3) -> Dictionary:
+## floor_only (walking): a foot may rise (the swing leg lifts) but never sink below the ground line.
+func _plant_feet(bones: Dictionary, root: Vector3, floor_only := false) -> Dictionary:
 	var out := bones.duplicate()
 	for side in ["L", "R"]:
 		var th: String = "th_" + side
@@ -252,7 +253,7 @@ func _plant_feet(bones: Dictionary, root: Vector3) -> Dictionary:
 		var target: float = float(_ankle_rest[side])
 		for it in 3:
 			var err: float = _ankle_y(side, out, root) - target
-			if absf(err) < 0.02:
+			if absf(err) < 0.02 or (floor_only and err > 0.0):
 				break
 			var key: String = sh
 			var v: Vector3 = out.get(key, Vector3.ZERO)

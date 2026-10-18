@@ -201,7 +201,7 @@ static func _walk(idle: Dictionary, ph: float, spd: float, fwd: float) -> Dictio
 	var back := smoothstep(0.1, 0.5, -fwd)
 	var s := sin(ph)
 	var c := cos(ph)
-	var stride := (30.0 + 5.0 * run) * amp * (1.0 - 0.45 * back)
+	var stride := (27.0 + 2.0 * run) * amp * (1.0 - 0.45 * back)
 	var p := idle.duplicate()
 	p["root"] = Vector3(0.03 * amp * (1.0 - back), -0.05 - 0.035 * absf(c) * amp - 0.03 * run, 0)
 	p["hips"] = (p["hips"] as Vector3) + Vector3(0, 2.0 * run, 8.0 * s * amp)
@@ -212,9 +212,9 @@ static func _walk(idle: Dictionary, ph: float, spd: float, fwd: float) -> Dictio
 	var swing_l := maxf(0.0, -c)
 	var swing_r := maxf(0.0, c)
 	p["th_L"] = Vector3(0, -6.0 - stride * s, 0)
-	p["sh_L"] = Vector3(0, 12.0 + (26.0 + 18.0 * run) * swing_l * amp, 0)
+	p["sh_L"] = Vector3(0, 12.0 + (46.0 + 20.0 * run) * swing_l * amp, 0)
 	p["th_R"] = Vector3(0, 8.0 + stride * s, 0)
-	p["sh_R"] = Vector3(0, 14.0 + (26.0 + 18.0 * run) * swing_r * amp, 0)
+	p["sh_R"] = Vector3(0, 14.0 + (46.0 + 20.0 * run) * swing_r * amp, 0)
 	# arms: the free hand counter-swings (pumps in a run), the club arm carries low and steady, raised into a guard when backing off
 	var al := p["arm_up_L"] as Vector3
 	p["arm_up_L"] = Vector3(al.x, al.y + (14.0 + 22.0 * run) * s * amp, al.z)
