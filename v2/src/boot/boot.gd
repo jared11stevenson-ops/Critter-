@@ -83,7 +83,7 @@ func go_title() -> void:
 	t.training_pressed.connect(func(): training = true; go_select())
 	screen = t
 
-## Practice only offers critters you own (living on your shelf); with no career yet that is the tutorial critter.
+## Practice offers every critter as a sparring partner (owned_species is still used where only your own critters apply).
 func owned_species() -> Array:
 	var out: Array = []
 	if Career.has_save() and GameSave.roster != null:
@@ -97,7 +97,7 @@ func owned_species() -> Array:
 func go_select() -> void:
 	_clear()
 	var s := SelectScreen.new()
-	s.owned = owned_species()
+	s.owned = Habitat.TOWN_ORDER
 	add_child(s)
 	s.setup("player", player_id)
 	s.back_pressed.connect(go_title)
@@ -107,7 +107,7 @@ func go_select() -> void:
 func go_opponent() -> void:
 	_clear()
 	var s := SelectScreen.new()
-	s.owned = owned_species()
+	s.owned = Habitat.TOWN_ORDER
 	s.profile = profile
 	s.arena_id = arena_id
 	s.training = training
@@ -214,7 +214,7 @@ func _retire(sh: ShelfScreen, uid: String) -> void:
 	sh.refresh(uid)
 
 func _launch_training(uid: String) -> void:
-	CareerPanels.practice(screen, owned_species(), func(opp: String, profile_id: String):
+	CareerPanels.practice(screen, Habitat.TOWN_ORDER, func(opp: String, profile_id: String):
 		career_ctx = {"kind": "training", "uid": uid, "opp_species": opp, "profile": profile_id}
 		go_career_bout(true))
 

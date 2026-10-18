@@ -376,11 +376,11 @@ static func _habitat_block(box: VBoxContainer, species: String) -> void:
 		row.add_child(b)
 
 
-## Practice: nobody dies, nothing counts. Pick a sparring partner from the critters you own and how hard it plays.
+## Practice: nobody dies, nothing counts. Pick any sparring partner and how hard it plays.
 static func practice(parent: Control, owned: Array, on_go: Callable) -> void:
 	var v := _panel(parent, 760)
 	v.add_child(UiStyle.label("PRACTICE", 38, UiStyle.INK, 0))
-	_txt(v, "Nobody dies and nothing counts. Spar against any critter you own.", 20, UiStyle.TEAL)
+	_txt(v, "Nobody dies and nothing counts. Spar against any critter in the game.", 20, UiStyle.TEAL)
 	var chosen := {"opp": str(owned[0]), "profile": "standard"}
 	var og := HFlowContainer.new()
 	og.add_theme_constant_override("h_separation", 6)
