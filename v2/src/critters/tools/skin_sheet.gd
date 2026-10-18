@@ -41,6 +41,9 @@ func _ready() -> void:
 	e.ambient_light_color = Color(0.7, 0.7, 0.75)
 	env.environment = e
 	add_child(env)
+	if OS.get_cmdline_user_args().has("--gait"):
+		_gait_sheet(cam)
+		return
 	var only := -1
 	var rest_only := false
 	for a in OS.get_cmdline_user_args():
@@ -81,3 +84,21 @@ func _ready() -> void:
 		rig.set_meta("label", st[0])
 		if rest_only:
 			rig._apply_bones({})
+
+## --gait: walk / run / backpedal at three phases each (side view), to review the gait cycle.
+func _gait_sheet(cam: Camera3D) -> void:
+	cam.fov = 34.0
+	cam.position = Vector3(0, 2.2, 19.0)
+	var rows := [["walk", 0.8, 1.0], ["run", 1.2, 1.0], ["back", 0.6, -1.0]]
+	for r in rows.size():
+		for k in 4:
+			var rig := SkinnedRig.new()
+			add_child(rig)
+			rig.setup("bramvex")
+			rig.three_quarter = 0.0
+			rig.position = Vector3(-5.6 + float(k) * 3.7, 5.2 - float(r) * 3.3, 0)
+			rig.rotation_degrees.y = 0.0
+			var fs := {"action": "walk", "action_frame": 0, "move_id": "", "facing": 1.0, "speed": rows[r][1], "fwd": rows[r][2], "vitality_ratio": 1.0}
+			for n in 8:
+				rig._t_walk = float(k) * PI / 2.0
+				rig.apply_fighter_state(fs, 0.0)

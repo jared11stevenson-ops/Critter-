@@ -256,6 +256,10 @@ func _sync(dt: float, alpha: float) -> void:
 			"vitality_ratio": float(f["vitality"]) / maxv, "facing": 1.0, "stun": f["stun"],
 			"rage": clampf(float(f["rage"]) / maxf(1.0, float(sim.fighters[i].T["rage_max"])), 0.0, 1.0)
 		}
+		var vel: Vector2 = f.get("velocity", Vector2.ZERO)                  # gait: how fast, and forwards or backwards relative to the facing
+		var wsp := maxf(0.5, float(sim.fighters[i].T["walk_speed"]))
+		fs["speed"] = vel.length() / wsp
+		fs["fwd"] = vel.dot(fv) / wsp
 		var rmax := float(sim.fighters[i].T["plate_pool"])
 		if rmax > 0.0:
 			var total := ceili(rmax / float(sim.R["plate_size"]))

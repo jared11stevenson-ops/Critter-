@@ -131,11 +131,11 @@ static func _result(p: Dictionary) -> Dictionary:
 	return {"bones": compile(p), "root": root_of(p)}
 
 ## action: sim action name, frame: frames into the action, tm: Vector3i(startup, active, recovery), walk_t: walk phase, t: seconds.
-static func evaluate(action: String, frame: int, tm: Vector3i, walk_t: float, t: float, vit: float) -> Dictionary:
+static func evaluate(action: String, frame: int, tm: Vector3i, walk_t: float, t: float, vit: float, spd := 1.0, fwd := 1.0) -> Dictionary:
 	var idle := _idle(t, vit)
 	match action:
 		"walk":
-			return _result(_walk(idle, walk_t))
+			return _result(_walk(idle, walk_t, spd, fwd))
 		"strike_light", "strike_heavy", "grab", "ability1", "ability2", "laststand":
 			var key := action if STYLES.has(action) else "ability"
 			if action == "laststand":
@@ -171,19 +171,39 @@ static func _idle(t: float, vit: float) -> Dictionary:
 	p["wing_R"] = Vector3(-4.0 - 2.0 * sin(t * 1.3 + 1.0), 0, 0)
 	return p
 
-static func _walk(idle: Dictionary, ph: float) -> Dictionary:
+## Gait: a deliberate STALK at walking speed (long stride led by the hips, knees lifted, torso nearly still, club carried low), leaning into a RUN as
+## speed approaches its maximum, and a guarded BACKPEDAL (short stride, upper body upright, club raised) when moving against the facing direction.
+## spd = speed / walk speed (0..1.25), fwd = velocity along the facing / walk speed (negative = backwards).
+static func _walk(idle: Dictionary, ph: float, spd: float, fwd: float) -> Dictionary:
+	var amp := clampf(spd, 0.45, 1.25)
+	var run := smoothstep(0.85, 1.2, spd)
+	var back := smoothstep(0.1, 0.5, -fwd)
 	var s := sin(ph)
 	var c := cos(ph)
+	var stride := (30.0 + 5.0 * run) * amp * (1.0 - 0.45 * back)
 	var p := idle.duplicate()
-	p["root"] = Vector3(0.0, -0.06 - 0.035 * absf(c), 0)
-	p["hips"] = (p["hips"] as Vector3) + Vector3(0, 0, 7.0 * s)
-	p["spine"] = (p["spine"] as Vector3) + Vector3(0, 0, -6.0 * s)
-	p["chest"] = (p["chest"] as Vector3) + Vector3(0, 0, -4.0 * s)
-	p["th_L"] = Vector3(0, -10.0 - 34.0 * s, 0)
-	p["sh_L"] = Vector3(0, 14.0 + 26.0 * maxf(0.0, c * -1.0 * signf(s) * 0.0 + (-c)), 0)
-	p["th_R"] = Vector3(0, 12.0 + 34.0 * s, 0)
-	p["sh_R"] = Vector3(0, 16.0 + 26.0 * maxf(0.0, c), 0)
-	p["arm_up_L"] = (p["arm_up_L"] as Vector3) + Vector3(0, 12.0 * s, 0)
+	p["root"] = Vector3(0.03 * amp * (1.0 - back), -0.05 - 0.035 * absf(c) * amp - 0.03 * run, 0)
+	p["hips"] = (p["hips"] as Vector3) + Vector3(0, 2.0 * run, 8.0 * s * amp)
+	p["spine"] = (p["spine"] as Vector3) + Vector3(0, 5.0 * run * (1.0 - back) - 5.0 * back, -7.0 * s * amp)
+	p["chest"] = (p["chest"] as Vector3) + Vector3(0, 3.0 * run * (1.0 - back), -5.0 * s * amp)
+	p["head"] = (p["head"] as Vector3) + Vector3(0, -4.0 * run, 0)
+	# legs: opposite phases; the knee lifts on the swing leg (max(0, cos) style), the stance leg stays straight
+	var swing_l := maxf(0.0, -c)
+	var swing_r := maxf(0.0, c)
+	p["th_L"] = Vector3(0, -6.0 - stride * s, 0)
+	p["sh_L"] = Vector3(0, 12.0 + (26.0 + 18.0 * run) * swing_l * amp, 0)
+	p["th_R"] = Vector3(0, 8.0 + stride * s, 0)
+	p["sh_R"] = Vector3(0, 14.0 + (26.0 + 18.0 * run) * swing_r * amp, 0)
+	# arms: the free hand counter-swings (pumps in a run), the club arm carries low and steady, raised into a guard when backing off
+	var al := p["arm_up_L"] as Vector3
+	p["arm_up_L"] = Vector3(al.x, al.y + (14.0 + 22.0 * run) * s * amp, al.z)
+	p["arm_lo_L"] = (p["arm_lo_L"] as Vector3) + Vector3(0, 0, -20.0 * run)
+	var ar := p["arm_up_R"] as Vector3
+	p["arm_up_R"] = Vector3(ar.x, ar.y - 6.0 * s * amp + 10.0 * back, ar.z)
+	p["arm_lo_R"] = (p["arm_lo_R"] as Vector3) + Vector3(0, 0, 20.0 * back)
+	for wn in ["wing_L", "wing_R"]:
+		var wv := p.get(wn, Vector3.ZERO) as Vector3
+		p[wn] = wv + Vector3((14.0 * run + 10.0 * back) * (1.0 if wn == "wing_L" else -1.0), 0, 0)    # wings lift a little with effort
 	return p
 
 static func _attack(idle: Dictionary, st: Array, frame: int, tm: Vector3i) -> Dictionary:
