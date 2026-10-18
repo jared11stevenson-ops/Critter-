@@ -29,8 +29,23 @@ var _ankle_rest := {}              # side -> ankle height in the rest pose (the 
 var _prev_action := ""
 var _prev_move := ""
 
+static var _usable: Dictionary = {}
+
+## True only when the skinned model really loads and holds a Skeleton3D and a mesh (a failed import on a device must fall back to the part rig, not leave an invisible fighter).
 static func available(id: String) -> bool:
-	return ResourceLoader.exists(SKIN_PATH % id)
+	if _usable.has(id):
+		return _usable[id]
+	var ok := false
+	if ResourceLoader.exists(SKIN_PATH % id):
+		var ps := load(SKIN_PATH % id) as PackedScene
+		if ps != null:
+			var root := ps.instantiate()
+			ok = _find(root, "Skeleton3D") != null and _find(root, "MeshInstance3D") != null
+			root.free()
+	if not ok:
+		push_warning("SkinnedRig: no usable skinned model for %s, using the part rig" % id)
+	_usable[id] = ok
+	return ok
 
 func enable_shadows() -> void:
 	if _mesh != null:
@@ -48,6 +63,9 @@ func setup(critter_id_in: String) -> void:
 	_body.add_child(root)
 	skeleton = _find(root, "Skeleton3D") as Skeleton3D
 	_mesh = _find(root, "MeshInstance3D") as MeshInstance3D
+	if _mesh != null:
+		_mesh.extra_cull_margin = 3.0     # a skinned mesh is culled by its rest-pose bounds; posed limbs and the club must never pop out of view
+		_mesh.ignore_occlusion_culling = true
 	assert(skeleton != null and _mesh != null, "skinned model needs a Skeleton3D and a mesh")
 	for i in skeleton.get_bone_count():
 		var bn := skeleton.get_bone_name(i)
@@ -142,7 +160,7 @@ func _add_springs() -> void:
 		sp.set_radius(i, 0.03)
 	_springs = sp
 
-func _find(n: Node, type: String) -> Node:
+static func _find(n: Node, type: String) -> Node:
 	if n.get_class() == type:
 		return n
 	for c in n.get_children():
