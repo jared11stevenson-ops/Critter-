@@ -50,6 +50,14 @@ func _init() -> void:
 			var ev := _evaluate(c, seeds)
 			scored.append([float(ev["fitness"]), c, ev])
 		scored.sort_custom(func(x, y): return x[0] > y[0])
+		# successive halving: the 3 best of the cheap pass are re-measured on fresh seeds with 3x the bouts (selection on noise was the failure of run 1)
+		var seeds2 := _seeds(seed_value * 1000 + g * 131 + 555, 6)
+		var finals: Array = []
+		for k in mini(3, scored.size()):
+			var ev2 := _evaluate(scored[k][1], seeds2)
+			finals.append([float(ev2["fitness"]), scored[k][1], ev2])
+		finals.sort_custom(func(x, y): return x[0] > y[0])
+		scored = finals
 		parent = scored[0][1]
 		sigma = maxf(0.04, sigma * 0.9)
 		if scored[0][0] > best_fit:
@@ -57,7 +65,7 @@ func _init() -> void:
 			best = parent
 		_log("gen %d: best fitness %.3f  wr %.2f  closeness %.2f  stall %.2f  budget %.2f  genes %s" % [g, scored[0][0], scored[0][2]["wr"], scored[0][2]["close"], scored[0][2]["stall"], scored[0][2]["budget"], _fmt(scored[0][1])])
 	# holdout: fresh seeds, original vs best
-	var hold := _seeds(900000 + seed_value, 4)
+	var hold := _seeds(900000 + seed_value, 8)
 	var e0 := _evaluate(_ones(), hold)
 	var e1 := _evaluate(best, hold)
 	_report(best, e0, e1)
@@ -160,7 +168,7 @@ func _report(best: Dictionary, e0: Dictionary, e1: Dictionary) -> void:
 	md += "| evolved | %.1f%% | %.2f | %.1f%% | %d | %.2f |\n\n" % [100.0 * float(e1["wr"]), float(e1["close"]), 100.0 * float(e1["stall"]), int(e1["ticks"]), float(e1["budget"])]
 	md += "Evolution log:\n\n```\n" + "\n".join(log_lines) + "\n```\n"
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://tools/out/lab"))
-	var f := FileAccess.open("res://tools/out/lab/evolve_%s_%s.md" % [cid, mid], FileAccess.WRITE)
+	var f := FileAccess.open("res://tools/out/lab/evolve_%s_%s_s%d.md" % [cid, mid, seed_value], FileAccess.WRITE)
 	f.store_string(md)
 	f.close()
 	print(md)
