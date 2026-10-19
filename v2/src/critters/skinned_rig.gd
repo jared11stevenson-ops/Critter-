@@ -28,6 +28,7 @@ var _springs: SpringBoneSimulator3D
 var _ankle_rest := {}              # side -> ankle height in the rest pose (the ground line for planted feet)
 var _prev_action := ""
 var _prev_move := ""
+var _look := 0.0                  # smoothed head look-at yaw (degrees, positive = left)
 
 static var _usable: Dictionary = {}
 
@@ -229,6 +230,10 @@ func apply_fighter_state(fs: Dictionary, dt: float) -> void:
 	_flinch += _flinch_v * dt
 	var flinch_pose := {"spine": Vector3(0, -_flinch * 38.0, 0), "chest": Vector3(0, -_flinch * 26.0, 0), "neck": Vector3(0, _flinch * 20.0, 0)}
 	bones = Pose.add(bones, flinch_pose)
+	var look_t := clampf(float(fs.get("look", 0.0)), -70.0, 70.0) if action not in ["ko", "knockdown", "stagger"] else 0.0
+	_look += (look_t - _look) * (1.0 - exp(-9.0 * maxf(dt, 1.0 / 60.0)))
+	var ly := clampf(_look, -45.0, 45.0)
+	bones = Pose.add(bones, {"neck": Vector3(0, 0, 0.35 * ly), "head": Vector3(0, 0, 0.55 * ly)})     # yaw about the up axis: positive turns left
 	if action not in ["ko", "knockdown"] and not _ankle_rest.is_empty():
 		bones = _plant_feet(bones, root, action == "walk")
 	_cur_bones = bones

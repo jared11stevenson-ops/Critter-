@@ -48,5 +48,17 @@ func run() -> Array:
 		fails.append("skinned_rig: anticipation must shift the weight BACK of the stance")
 	if (hit["root"] as Vector3).x <= (idle["root"] as Vector3).x + 0.2:
 		fails.append("skinned_rig: the impact must lunge forward")
+	# head look-at plumbing: a positive look angle adds head yaw (the pose convention is "yaw positive turns left"), a negative one subtracts it
+	var yaws: Array = []
+	for lk in [-40.0, 0.0, 40.0]:
+		var rg := SkinnedRig.new()
+		rg.setup("bramvex")
+		var fl := {"action": "idle", "action_frame": 0, "move_id": "", "facing": 1.0, "speed": 0.0, "vitality_ratio": 1.0, "look": lk}
+		for k in 60:
+			rg.apply_fighter_state(fl, 1.0 / 60.0)
+		yaws.append((rg._cur_bones["head"] as Vector3).z)
+		rg.free()
+	if not (float(yaws[0]) < float(yaws[1]) - 10.0 and float(yaws[2]) > float(yaws[1]) + 10.0):
+		fails.append("skinned_rig: head look-at yaw must follow the look angle (%s)" % [yaws])
 	rig.free()
 	return fails

@@ -204,7 +204,7 @@ if STAGE == "diag":
     n0 = np.array([v.co[:] for v in body.data.vertices]) / S
     T = np.array([p.vertices[:] for p in body.data.polygons])
     bpy.context.view_layer.objects.active = arm; bpy.ops.object.mode_set(mode="POSE")
-    for bn, steps in {"arm_up_L": [("x", -74)], "arm_up_R": [("x", 74)], "arm_lo_L": [("z", -16)], "arm_lo_R": [("z", 38)]}.items():
+    for bn, steps in {"arm_up_L": [("x", -74)], "arm_up_R": [("x", 74)], "arm_lo_L": [("z", -16)], "arm_lo_R": [("z", 38)], "wing_L": [("x", 34)], "wing_R": [("x", -34)], "wing2_L": [("x", 20)], "wing2_R": [("x", -20)], "spine": [("y", 14)]}.items():
         pb = arm.pose.bones[bn]; q = Quaternion()
         for ax, deg in steps:
             gv = Vector({"x": (1, 0, 0), "y": (0, 1, 0), "z": (0, 0, 1)}[ax])
