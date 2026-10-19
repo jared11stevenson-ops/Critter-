@@ -111,16 +111,14 @@ def build_rig(body):
         x, y, z = V[i]
         side = "_L" if y >= 0 else "_R"
         d = D[i]
-        if z > 0.76:                                                           # head, cap, antennae, bridge to neck
+        if z > 0.76 and not (abs(y) > 0.10 and z < 0.92):                      # head, cap, antennae, bridge to neck (shoulder fur out to the sides belongs to the shoulders)
             w = {"head": 1.0} if z > 0.79 else {"neck": 0.5, "head": 0.5}
             if z > 0.935 and 0.035 < abs(y) < 0.09:                            # antennae: the chain of its side, tapering in from the head
                 ca = ["ant%d%s" % (k, side) for k in (1, 2, 3)]
                 raw = {k: 1.0 / (d[ix[k]] + 0.008) ** 4 for k in ca}
                 raw["head"] = 1.0 / (d[ix["head"]] + 0.008) ** 4 * (0.15 if z > 0.95 else 1.0)
                 tot = sum(raw.values()); w = {k: v / tot for k, v in raw.items()}
-        elif x < -0.062 and abs(y) > 0.025 and 0.34 < z < 0.80:                # folded bat wings behind the shoulders
-            w = {"wing" + side: 1.0} if abs(y) < 0.14 else {"wing2" + side: 1.0}
-        elif abs(y) > 0.085 and 0.52 < z < 0.80:                               # arms (T-pose), banners hanging from the forearm follow the forearm; a soft band blends them into the body so no triangle is stretched across the chest
+        elif abs(y) > 0.085 and 0.52 < z < (0.92 if abs(y) > 0.10 else 0.80):                               # arms (T-pose), banners hanging from the forearm follow the forearm; a soft band blends them into the body so no triangle is stretched across the chest
             u = abs(y)
             aw = {"arm_up" + side: 1.0} if u < 0.20 else ({"arm_lo" + side: 1.0} if u < 0.31 else {"hand" + side: 1.0})
             t = float(np.clip((u - 0.085) / 0.08, 0.0, 1.0)); t = t * t * (3 - 2 * t)
@@ -132,6 +130,23 @@ def build_rig(body):
                 w[k] = w.get(k, 0.0) + t * v
         else:
             w = generic_w(i, x, y, z, d)
+        if abs(y) > 0.10 and 0.80 < z < 0.92:                                   # shoulder fur rises into the cap brim: ease from the arm weights up to the head so nothing spans both
+            h = float(np.clip((z - 0.80) / 0.10, 0.0, 1.0)); h = h * h * (3 - 2 * h)
+            w2 = {}
+            for k, v in w.items():
+                w2[k] = w2.get(k, 0.0) + (1 - h) * v
+            w2["head"] = w2.get("head", 0.0) + h
+            w = w2
+        if (z <= 0.76 or abs(y) > 0.10) and abs(y) > 0.025 and 0.34 < z < 0.80 and x < -0.045:     # folded bat wings behind the shoulders, eased into whatever sits next to them (arm / body) so no triangle spans two rigid parts
+            wf = float(np.clip((-0.045 - x) / 0.035, 0.0, 1.0)); wf = wf * wf * (3 - 2 * wf)
+            t2 = float(np.clip((abs(y) - 0.115) / 0.05, 0.0, 1.0)); t2 = t2 * t2 * (3 - 2 * t2)
+            ww = {"wing" + side: 1.0 - t2, "wing2" + side: t2}
+            mixed = {}
+            for k, v in w.items():
+                mixed[k] = mixed.get(k, 0.0) + (1 - wf) * v
+            for k, v in ww.items():
+                mixed[k] = mixed.get(k, 0.0) + wf * v
+            w = mixed
         for k, v in w.items():
             W[i, ix[k]] = v
     for k in names:
@@ -175,6 +190,37 @@ def render_poses(arm, prefix):
             sc.render.filepath = f"/tmp/rg/{prefix}_{pn}_{vn}.png"; bpy.ops.render.render(write_still=True)
     bpy.ops.object.mode_set(mode="OBJECT")
 
+
+if STAGE == "diag":
+    bpy.ops.wm.open_mainfile(filepath=LOW)
+    body = bpy.data.objects["body"]
+    arm = build_rig(body)
+    n0 = np.array([v.co[:] for v in body.data.vertices]) / S
+    T = np.array([p.vertices[:] for p in body.data.polygons])
+    bpy.context.view_layer.objects.active = arm; bpy.ops.object.mode_set(mode="POSE")
+    for bn, steps in {"arm_up_L": [("x", -74)], "arm_up_R": [("x", 74)], "arm_lo_L": [("z", -16)], "arm_lo_R": [("z", 38)]}.items():
+        pb = arm.pose.bones[bn]; q = Quaternion()
+        for ax, deg in steps:
+            gv = Vector({"x": (1, 0, 0), "y": (0, 1, 0), "z": (0, 0, 1)}[ax])
+            lv = pb.bone.matrix_local.to_3x3().inverted() @ gv
+            q = Quaternion(lv.normalized(), math.radians(deg)) @ q
+        pb.rotation_mode = "QUATERNION"; pb.rotation_quaternion = q
+    bpy.context.view_layer.update()
+    dg = bpy.context.evaluated_depsgraph_get(); ev = body.evaluated_get(dg)
+    n1 = np.array([v.co[:] for v in ev.data.vertices]) / S
+    def el(V):
+        return np.stack([np.linalg.norm(V[T[:, 0]] - V[T[:, 1]], axis=1), np.linalg.norm(V[T[:, 1]] - V[T[:, 2]], axis=1), np.linalg.norm(V[T[:, 2]] - V[T[:, 0]], axis=1)], 1).max(1)
+    e0, e1 = el(n0), el(n1)
+    bad = np.where((e1 > 0.06) & (e1 > 2.5 * e0))[0]
+    print("STRETCHED", len(bad))
+    vg = {g.index: g.name for g in body.vertex_groups}
+    for i in bad[:60]:
+        ws = []
+        for vi in T[i]:
+            top = sorted(body.data.vertices[vi].groups, key=lambda g: -g.weight)[:2]
+            ws.append("/".join("%s:%.2f" % (vg[g.group], g.weight) for g in top))
+        print(round(e0[i], 3), "->", round(e1[i], 3), n0[T[i]].mean(0).round(2), ws)
+    sys.exit(0)
 if STAGE == "rig":
     bpy.ops.wm.open_mainfile(filepath=LOW)
     body = bpy.data.objects["body"]
