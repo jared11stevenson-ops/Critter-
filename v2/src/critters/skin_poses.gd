@@ -120,6 +120,11 @@ const DODGE_SIDE := {   # a sidestep to his left: torso leans away from the blow
 	"wing_L": Vector3(30, 0, 0), "wing_R": Vector3(-8, 0, 0),
 	"th_L": Vector3(26, -10, 0), "sh_L": Vector3(0, 28, 0), "th_R": Vector3(-8, 8, 0), "sh_R": Vector3(0, 56, 0),
 }
+const SALUTE := {   # the stare-down before a bout: the club held upright before the face like a sergeant's salute, head level, wings tucked
+	"root": Vector3(0.0, -0.02, 0), "spine": Vector3(0, 5, 0), "chest": Vector3(0, 3, 0), "head": Vector3(0, -2, 0),
+	"arm_up_R": Vector3(40, -78, 0), "arm_lo_R": Vector3(0, 0, 112), "arm_up_L": Vector3(-76, -10, 0), "arm_lo_L": Vector3(0, 0, -14),
+	"th_L": Vector3(0, -2, 0), "sh_L": Vector3(0, 6, 0), "th_R": Vector3(0, 6, 0), "sh_R": Vector3(0, 8, 0),
+}
 const WIN := {   # victory: the club hoisted overhead in one fist, wings spread wide, chin up
 	"root": Vector3(0.0, 0.0, 0), "spine": Vector3(0, 0, 0), "chest": Vector3(0, -4, 0), "head": Vector3(0, 8, 0),
 	"arm_up_R": Vector3(-30, -26, 0), "arm_lo_R": Vector3(0, 0, 70), "arm_up_L": Vector3(-82, 10, 0), "arm_lo_L": Vector3(0, 0, -12),
@@ -203,9 +208,14 @@ static func _result(p: Dictionary) -> Dictionary:
 
 ## action: sim action name, frame: frames into the action, tm: Vector3i(startup, active, recovery), walk_t: walk phase, t: seconds.
 ## side: velocity to the critter's left in walk-speed units (negative = right); won: the bout is over and this fighter stands.
-static func evaluate(action: String, frame: int, tm: Vector3i, walk_t: float, t: float, vit: float, spd := 1.0, fwd := 1.0, side := 0.0, won := false) -> Dictionary:
+static func evaluate(action: String, frame: int, tm: Vector3i, walk_t: float, t: float, vit: float, spd := 1.0, fwd := 1.0, side := 0.0, mood := "") -> Dictionary:
 	var idle := _idle(t, vit)
-	if won and action in ["idle", "walk", "guard"]:
+	if mood == "intro" and action in ["idle", "walk", "guard"]:
+		var ip := _lerp_pose(idle, _full(SALUTE), 1.0)
+		ip["wing_L"] = Vector3(10.0 + 2.0 * sin(t * 1.2), 0, 0)
+		ip["wing_R"] = Vector3(-10.0 - 2.0 * sin(t * 1.2 + 0.7), 0, 0)
+		return _result(ip)
+	if mood == "won" and action in ["idle", "walk", "guard"]:
 		var wp := _lerp_pose(idle, _full(WIN), 1.0)
 		wp["wing_L"] = (wp["wing_L"] as Vector3) + Vector3(3.0 * sin(t * 1.6), 0, 0)
 		wp["wing_R"] = (wp["wing_R"] as Vector3) - Vector3(3.0 * sin(t * 1.6 + 0.8), 0, 0)
@@ -236,9 +246,11 @@ static func evaluate(action: String, frame: int, tm: Vector3i, walk_t: float, t:
 			var back := _lerp_pose(tgt, idle, _out((float(frame) - float(d)) / maxf(1.0, float(tm.z)), 1.8) if frame > d else 0.0)
 			return _result(_lerp_pose(idle, back, _out(u * 3.0, 2.0)))
 		"hit", "clash":
-			return _result(_lerp_pose(_full(HIT), idle, _out(float(frame) / maxf(10.0, float(tm.y + tm.z)), 2.0)))
+			var hp := _lerp_pose(_full(HIT), idle, _out(float(frame) / maxf(10.0, float(tm.y + tm.z)), 2.0))
+			return _result(_lean(hp, side, 1.0 - clampf(float(frame) / 14.0, 0.0, 1.0)))
 		"stagger":
-			return _result(_lerp_pose(idle, _full(STAGGER), _out(float(frame + 1) / 6.0, 2.0)))
+			var sp2 := _lerp_pose(idle, _full(STAGGER), _out(float(frame + 1) / 6.0, 2.0))
+			return _result(_lean(sp2, side, 0.7))
 		"ko", "knockdown":
 			var u2 := clampf(float(frame) / maxf(1.0, float(tm.x + tm.y) * 0.6), 0.0, 1.0)
 			var p := _lerp_pose(_full(STAGGER), _full(KO), _out(u2, 3.0))
@@ -266,6 +278,19 @@ static func _idle(t: float, vit: float) -> Dictionary:
 ## Gait: a deliberate STALK at walking speed (long stride led by the hips, knees lifted, torso nearly still, club carried low), leaning into a RUN as
 ## speed approaches its maximum, and a guarded BACKPEDAL (short stride, upper body upright, club raised) when moving against the facing direction.
 ## spd = speed / walk speed (0..1.25), fwd = velocity along the facing / walk speed (negative = backwards).
+## Sideways reaction to a blow: the torso rolls and the head snaps away from the side he is knocked toward (side = velocity to his left, walk-speed units).
+static func _lean(p: Dictionary, side: float, amount: float) -> Dictionary:
+	var k := clampf(side, -1.2, 1.2) * amount
+	if absf(k) < 0.02:
+		return p
+	var out := p.duplicate()
+	out["spine"] = (out["spine"] as Vector3) + Vector3(20.0 * k, 0, 6.0 * k)
+	out["chest"] = (out["chest"] as Vector3) + Vector3(14.0 * k, 0, 4.0 * k)
+	out["head"] = (out["head"] as Vector3) + Vector3(-12.0 * k, 0, -16.0 * k)
+	out["arm_up_L"] = (out["arm_up_L"] as Vector3) + Vector3(-10.0 * k, 0, 0)
+	out["arm_up_R"] = (out["arm_up_R"] as Vector3) + Vector3(-10.0 * k, 0, 0)
+	return out
+
 ## Left/right mirror of a pose: swaps the L/R bones, flips roll and yaw, keeps pitch; the root's forward offset stays.
 static func _mirror(p: Dictionary) -> Dictionary:
 	var out := {}

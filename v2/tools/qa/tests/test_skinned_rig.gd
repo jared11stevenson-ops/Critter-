@@ -37,7 +37,10 @@ func run() -> Array:
 					var v2: Vector3 = pr["bones"][bn2]
 					if not (is_finite(v2.x) and is_finite(v2.y) and is_finite(v2.z)):
 						fails.append("skinned_rig: non-finite %s pose in %s" % [bn2, a2])
-	var win: Dictionary = SkinnedRig.Pose.evaluate("idle", 0, Vector3i(1, 1, 1), 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, true)
+	var win: Dictionary = SkinnedRig.Pose.evaluate("idle", 0, Vector3i(1, 1, 1), 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, "won")
+	var salute: Dictionary = SkinnedRig.Pose.evaluate("idle", 0, Vector3i(1, 1, 1), 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, "intro")
+	if (salute["bones"]["arm_up_R"] as Vector3).is_equal_approx((SkinnedRig.Pose.evaluate("idle", 0, Vector3i(1, 1, 1), 0.0, 0.0, 1.0)["bones"]["arm_up_R"] as Vector3)):
+		fails.append("skinned_rig: the intro salute must differ from idle")
 	var calm: Dictionary = SkinnedRig.Pose.evaluate("idle", 0, Vector3i(1, 1, 1), 0.0, 0.0, 1.0)
 	if (win["bones"]["arm_up_R"] as Vector3).is_equal_approx(calm["bones"]["arm_up_R"] as Vector3):
 		fails.append("skinned_rig: the victory pose must differ from idle")

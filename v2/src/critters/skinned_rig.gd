@@ -200,8 +200,8 @@ func apply_fighter_state(fs: Dictionary, dt: float) -> void:
 	_vit = float(fs.get("vitality_ratio", 1.0))
 	if fs.has("facing") and float(fs["facing"]) != 0.0:
 		_facing = signf(float(fs["facing"]))
-	var won := bool(fs.get("won", false))
-	var key := action + ("*" if won else "")
+	var mood := str(fs.get("mood", "won" if bool(fs.get("won", false)) else ""))
+	var key := action + "*" + mood
 	if key != _prev_action or move_id != _prev_move:
 		_from_bones = _cur_bones.duplicate()
 		_from_root = _cur_root
@@ -216,7 +216,7 @@ func apply_fighter_state(fs: Dictionary, dt: float) -> void:
 	var spd := absf(float(fs.get("speed", 1.0 if action == "walk" else 0.0)))
 	if action == "walk":
 		_t_walk += dt * Pose.WALK_RATE * clampf(spd, 0.5, 1.6)
-	var tgt: Dictionary = Pose.evaluate(action, frame, _timing, _t_walk, _time, _vit, spd, float(fs.get("fwd", 1.0)), float(fs.get("side", 0.0)), won)
+	var tgt: Dictionary = Pose.evaluate(action, frame, _timing, _t_walk, _time, _vit, spd, float(fs.get("fwd", 1.0)), float(fs.get("side", 0.0)), mood)
 	var bones: Dictionary = tgt["bones"]
 	var root: Vector3 = tgt["root"]
 	if _blend_f < _blend_n:

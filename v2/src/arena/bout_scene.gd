@@ -267,6 +267,8 @@ func _sync(dt: float, alpha: float) -> void:
 			var ff := to_foe.x * cos(_yaw[i]) - to_foe.y * sin(_yaw[i])
 			fs["look"] = rad_to_deg(atan2(lf, ff))
 		fs["side"] = (vel.x * -sin(_yaw[i]) + vel.y * -cos(_yaw[i])) / wsp         # to the critter's rig-left (local -Z): strafes and sidesteps
+		if phase == "intro":
+			fs["mood"] = "intro"
 		if is_over() and int(_result.get("loser", -1)) >= 0 and i != int(_result.get("loser", -1)) and f["alive"]:
 			fs["won"] = true
 		var rmax := float(sim.fighters[i].T["plate_pool"])
