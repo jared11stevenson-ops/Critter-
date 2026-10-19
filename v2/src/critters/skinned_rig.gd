@@ -228,7 +228,13 @@ func apply_fighter_state(fs: Dictionary, dt: float) -> void:
 	# flinch spring (hit reactions kick the whole body back and let it recover) + shake
 	_flinch_v += (-_flinch * 220.0 - _flinch_v * 16.0) * dt
 	_flinch += _flinch_v * dt
-	var flinch_pose := {"spine": Vector3(0, -_flinch * 38.0, 0), "chest": Vector3(0, -_flinch * 26.0, 0), "neck": Vector3(0, _flinch * 20.0, 0)}
+	var fk := 3.2 if action in ["guard", "parry"] else 1.0                  # a blocked blow is small in the sim but must read: the whole guard shudders, arms driven back, wings snapping out
+	var flinch_pose := {"spine": Vector3(0, -_flinch * 38.0 * fk, 0), "chest": Vector3(0, -_flinch * 26.0 * fk, 0), "neck": Vector3(0, _flinch * 20.0 * fk, 0)}
+	if fk > 1.0:
+		flinch_pose["arm_up_R"] = Vector3(0, _flinch * 34.0, 0)
+		flinch_pose["arm_up_L"] = Vector3(0, _flinch * 28.0, 0)
+		flinch_pose["wing_L"] = Vector3(_flinch * 70.0, 0, 0)
+		flinch_pose["wing_R"] = Vector3(-_flinch * 70.0, 0, 0)
 	bones = Pose.add(bones, flinch_pose)
 	var look_t := clampf(float(fs.get("look", 0.0)), -70.0, 70.0) if action not in ["ko", "knockdown", "stagger"] else 0.0
 	_look += (look_t - _look) * (1.0 - exp(-9.0 * maxf(dt, 1.0 / 60.0)))

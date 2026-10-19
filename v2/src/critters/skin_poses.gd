@@ -271,8 +271,15 @@ static func _idle(t: float, vit: float) -> Dictionary:
 	p["chest"] = (p["chest"] as Vector3) + Vector3(0, 1.0 * br, 0)
 	p["head"] = (p["head"] as Vector3) + Vector3(0, -0.8 * br, 1.5 * sin(t * 0.7))
 	p["arm_up_L"] = (p["arm_up_L"] as Vector3) + Vector3(0.8 * br, 0, 0)
-	p["wing_L"] = Vector3(4.0 + 2.0 * sin(t * 1.3), 0, 0)
-	p["wing_R"] = Vector3(-4.0 - 2.0 * sin(t * 1.3 + 1.0), 0, 0)
+	p["wing_L"] = Vector3(4.0 + 2.0 * sin(t * 1.3) + 9.0 * pow(maxf(0.0, sin(t * 0.83)), 12.0), 0, 0)         # an occasional single-wing twitch
+	p["wing_R"] = Vector3(-4.0 - 2.0 * sin(t * 1.3 + 1.0) - 7.0 * pow(maxf(0.0, sin(t * 0.61 + 2.0)), 14.0), 0, 0)
+	var shift := sin(t * 0.43)                                                                 # slow weight shift from foot to foot, the hips and torso counter-rolling
+	p["hips"] = (p["hips"] as Vector3) + Vector3(1.8 * shift, 0, 0)
+	p["spine"] = (p["spine"] as Vector3) + Vector3(-1.2 * shift, 0, 0.8 * sin(t * 0.29))
+	p["th_L"] = (p["th_L"] as Vector3) + Vector3(2.0 * shift, 0, 0)
+	p["th_R"] = (p["th_R"] as Vector3) + Vector3(2.0 * shift, 0, 0)
+	var glance := smoothstep(0.55, 0.95, sin(t * 0.21 + 1.0))                                  # now and then the head tracks something off to one side, then returns
+	p["head"] = (p["head"] as Vector3) + Vector3(0, 0, 14.0 * glance * sin(t * 0.37))
 	return p
 
 ## Gait: a deliberate STALK at walking speed (long stride led by the hips, knees lifted, torso nearly still, club carried low), leaning into a RUN as
