@@ -32,6 +32,17 @@ func _process(_dt: float) -> void:        # --live=<action>: plays the action in
 	if _live_action == "strike_heavy":
 		fs["phase"] = Vector3i(30, 6, 20)
 	_live.apply_fighter_state(fs, 1.0 / 60.0)
+	for a in OS.get_cmdline_user_args():        # --pin=N --pinshot=path: save the viewport right after rendered frame N of the live action (frame-exact capture, wall-clock independent)
+		if a.begins_with("--pin=") and _live_frame == int(a.substr(6)):
+			_pin_shot()
+
+func _pin_shot() -> void:
+	await RenderingServer.frame_post_draw
+	for a in OS.get_cmdline_user_args():
+		if a.begins_with("--pinshot="):
+			get_viewport().get_texture().get_image().save_png(a.substr(10))
+			print("SHOT ", a.substr(10))
+	get_tree().quit()
 
 func _ready() -> void:
 	var id := "bramvex"

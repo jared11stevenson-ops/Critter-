@@ -386,8 +386,9 @@ static func _attack(idle: Dictionary, st: Array, frame: int, tm: Vector3i) -> Di
 	var s := maxi(1, tm.x)
 	var a := maxi(1, tm.y)
 	var r := maxi(1, tm.z)
-	if frame < s:                                   # anticipation: slow in, hold, a tremble of held strength just before the strike
-		var u := float(frame) / float(s)
+	var lead := mini(4 if s >= 20 else 3, maxi(0, s - 4))             # the swing itself starts a few frames before the impact, so the club travels an arc instead of jumping
+	if frame < s - lead:                            # anticipation: slow in, hold, a tremble of held strength just before the strike
+		var u := float(frame) / float(s - lead)
 		var w := u * u * (3.0 - 2.0 * u)
 		w = pow(w, 1.35)
 		var p := _lerp_pose(idle, ant, w)
@@ -395,9 +396,9 @@ static func _attack(idle: Dictionary, st: Array, frame: int, tm: Vector3i) -> Di
 			var tr := (u - 0.7) / 0.3
 			p["spine"] = (p["spine"] as Vector3) + Vector3(0, 0, sin(float(frame) * 2.3) * 1.6 * tr)
 		return p
-	if frame < s + a:                               # impact: snap through the pose with overshoot
-		var u2 := float(frame - s) / float(a)
-		return _lerp_pose(ant, hit, _out_back(clampf(u2 * 2.0, 0.0, 1.0)))
+	if frame < s + a:                               # swing + impact: snap through the pose with overshoot
+		var u2 := float(frame - (s - lead)) / (float(lead) + float(a) * 0.5)
+		return _lerp_pose(ant, hit, _out_back(pow(clampf(u2, 0.0, 1.0), 1.35)))
 	var u3 := float(frame - s - a) / float(r)       # recovery: settle out of the lunge, then return to stance
 	if u3 < 0.6:
 		return _lerp_pose(hit, rec, _out(u3 / 0.6, 2.2))

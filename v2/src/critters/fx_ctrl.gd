@@ -21,6 +21,7 @@ var spark: MeshInstance3D
 var spark_mat: ShaderMaterial
 var trail: Array = []            # [ [tip, base], ... ] in rig space, newest last
 var smear_on := false
+var _skips := 0
 var smear_alpha := 0.0
 var spark_t := 1.0
 var spark_active := false
@@ -63,13 +64,22 @@ func _init(r: Node3D, character_mat: ShaderMaterial, accent: Color, glow: Color)
 
 func start_smear() -> void:
 	smear_on = true
+	trail.clear()
 
 func stop_smear() -> void:
 	smear_on = false
 
 func sample(tip_world: Vector3, base_world: Vector3) -> void:
 	if smear_on:
-		trail.append([rig.to_local(tip_world), rig.to_local(base_world)])
+		var tl := rig.to_local(tip_world)
+		var bl := rig.to_local(base_world)
+		if trail.size() > 0 and (tl.distance_to(bl) > 5.0 or tl.distance_to(trail[trail.size() - 1][0]) > 3.0):
+			_skips += 1                  # a socket that was not placed yet reads far away: skip it (the ribbon would shoot across the screen), but accept a lasting jump
+			if _skips < 3:
+				return
+			trail.clear()
+		_skips = 0
+		trail.append([tl, bl])
 		if trail.size() > trail_len:
 			trail.pop_front()
 	elif trail.size() > 0:
