@@ -270,6 +270,9 @@ if STAGE == "final":
     nm = mat.node_tree.nodes.new("ShaderNodeNormalMap")
     bsdf = [n for n in mat.node_tree.nodes if n.type == "BSDF_PRINCIPLED"][0]
     mat.node_tree.links.new(nn.outputs["Color"], nm.inputs["Color"]); mat.node_tree.links.new(nm.outputs["Normal"], bsdf.inputs["Normal"])
+    for lk in list(mat.node_tree.links):                                       # the game's toon shader reads only colour + normal: drop the unused 4096 ORM texture from the export (2.2 MB file, ~20 MB of VRAM on a phone)
+        if lk.to_socket.name in ("Metallic", "Roughness"):
+            mat.node_tree.links.remove(lk)
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.export_scene.gltf(filepath=os.path.join(OUT, "bramvex_skin.glb"), export_format="GLB", use_selection=True, export_yup=True, export_apply=False,
                               export_materials="EXPORT", export_image_format="JPEG", export_jpeg_quality=90, export_tangents=True, export_skins=True, export_cameras=False, export_lights=False)
