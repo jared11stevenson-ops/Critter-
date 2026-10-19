@@ -15,7 +15,7 @@ const STATES := [
 	["dodge R", "dodge", 6, "", {"speed": 1.0, "fwd": 0.0, "side": -1.0}], ["win", "idle", 0, "", {"won": true}],
 	["stand ant", "laststand", 6, "h"], ["stand hit", "laststand", 40, "h"], ["stand rec", "laststand", 64, "h"],
 	["down", "knockdown", 14, "k"], ["up 1", "knockdown", 44, "k"], ["up 2", "knockdown", 58, "k"],
-	["salute", "idle", 0, "", {"mood": "intro"}], ["look +40", "idle", 0, "", {"look": 40.0}], ["look -40", "idle", 0, "", {"look": -40.0}],
+	["guardbreak", "stagger", 12, "", {"stun_kind": "guardbreak"}], ["parried", "stagger", 12, "", {"stun_kind": "parried"}], ["salute", "idle", 0, "", {"mood": "intro"}], ["look +40", "idle", 0, "", {"look": 40.0}], ["look -40", "idle", 0, "", {"look": -40.0}],
 	["detain ant", "ability3", 8, "m"], ["detain hit", "ability3", 18, "m"], ["detain rec", "ability3", 34, "m"]]
 
 var _live: SkinnedRig

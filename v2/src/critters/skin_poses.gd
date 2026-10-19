@@ -120,6 +120,18 @@ const DODGE_SIDE := {   # a sidestep to his left: torso leans away from the blow
 	"wing_L": Vector3(30, 0, 0), "wing_R": Vector3(-8, 0, 0),
 	"th_L": Vector3(26, -10, 0), "sh_L": Vector3(0, 28, 0), "th_R": Vector3(-8, 8, 0), "sh_R": Vector3(0, 56, 0),
 }
+const GUARDBREAK := {   # the guard is smashed open: both arms flung wide, the club knocked out of line, torso rocked back and the wings thrown open
+	"root": Vector3(-0.22, -0.14, 0), "spine": Vector3(0, -14, 0), "chest": Vector3(0, -18, 0), "head": Vector3(0, 12, 0),
+	"arm_up_R": Vector3(30, -20, 0), "arm_lo_R": Vector3(0, 0, 22), "arm_up_L": Vector3(-34, 24, 0), "arm_lo_L": Vector3(0, 0, -20),
+	"wing_L": Vector3(64, 0, 0), "wing_R": Vector3(-64, 0, 0), "wing2_L": Vector3(34, 0, 0), "wing2_R": Vector3(-34, 0, 0),
+	"th_L": Vector3(0, -22, 0), "sh_L": Vector3(0, 40, 0), "th_R": Vector3(0, 8, 0), "sh_R": Vector3(0, 30, 0),
+}
+const PARRIED := {   # his own swing is turned aside: the club arm thrown up and across, the body dragged round after it
+	"root": Vector3(0.1, -0.1, 0), "spine": Vector3(0, 6, 26), "chest": Vector3(0, 4, 18), "head": Vector3(0, -8, 10),
+	"arm_up_R": Vector3(-30, -86, 0), "arm_lo_R": Vector3(0, 0, 14), "arm_up_L": Vector3(-60, -40, 0), "arm_lo_L": Vector3(0, 0, -30),
+	"wing_L": Vector3(30, 0, 0), "wing_R": Vector3(-30, 0, 0),
+	"th_L": Vector3(0, -30, 0), "sh_L": Vector3(0, 24, 0), "th_R": Vector3(0, 18, 0), "sh_R": Vector3(0, 30, 0),
+}
 const SALUTE := {   # the stare-down before a bout: the club held upright before the face like a sergeant's salute, head level, wings tucked
 	"root": Vector3(0.0, -0.02, 0), "spine": Vector3(0, 5, 0), "chest": Vector3(0, 3, 0), "head": Vector3(0, -2, 0),
 	"arm_up_R": Vector3(40, -78, 0), "arm_lo_R": Vector3(0, 0, 112), "arm_up_L": Vector3(-76, -10, 0), "arm_lo_L": Vector3(0, 0, -14),
@@ -249,7 +261,12 @@ static func evaluate(action: String, frame: int, tm: Vector3i, walk_t: float, t:
 			var hp := _lerp_pose(_full(HIT), idle, _out(float(frame) / maxf(10.0, float(tm.y + tm.z)), 2.0))
 			return _result(_lean(hp, side, 1.0 - clampf(float(frame) / 14.0, 0.0, 1.0)))
 		"stagger":
-			var sp2 := _lerp_pose(idle, _full(STAGGER), _out(float(frame + 1) / 6.0, 2.0))
+			var base_st := _full(STAGGER)
+			if mood.ends_with("|guardbreak"):
+				base_st = _full(GUARDBREAK)
+			elif mood.ends_with("|parried"):
+				base_st = _full(PARRIED)
+			var sp2 := _lerp_pose(idle, base_st, _out(float(frame + 1) / 6.0, 2.0))
 			return _result(_lean(sp2, side, 0.7))
 		"ko", "knockdown":
 			var u2 := clampf(float(frame) / maxf(1.0, float(tm.x + tm.y) * 0.6), 0.0, 1.0)

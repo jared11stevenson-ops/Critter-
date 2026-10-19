@@ -216,7 +216,7 @@ func apply_fighter_state(fs: Dictionary, dt: float) -> void:
 	var spd := absf(float(fs.get("speed", 1.0 if action == "walk" else 0.0)))
 	if action == "walk":
 		_t_walk += dt * Pose.WALK_RATE * clampf(spd, 0.5, 1.6)
-	var tgt: Dictionary = Pose.evaluate(action, frame, _timing, _t_walk, _time, _vit, spd, float(fs.get("fwd", 1.0)), float(fs.get("side", 0.0)), mood)
+	var tgt: Dictionary = Pose.evaluate(action, frame, _timing, _t_walk, _time, _vit, spd, float(fs.get("fwd", 1.0)), float(fs.get("side", 0.0)), mood + ("|" + str(fs.get("stun_kind", "")) if action == "stagger" else ""))
 	var bones: Dictionary = tgt["bones"]
 	var root: Vector3 = tgt["root"]
 	if _blend_f < _blend_n:
