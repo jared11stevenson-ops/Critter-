@@ -28,6 +28,15 @@ var _springs: SpringBoneSimulator3D
 var _ankle_rest := {}              # side -> ankle height in the rest pose (the ground line for planted feet)
 var _prev_action := ""
 var _prev_move := ""
+## Follow-through: the keyed pose is a TARGET and these bones chase it with an under-damped spring (exact solution, stable at any dt), so limbs lag the torso, overshoot
+## and settle instead of tracking the key poses rigidly. bone -> [omega rad/s, damping ratio]. Strikes stiffen the springs around the impact so the snap keeps its timing.
+const FOLLOW := {
+	"chest": [20.0, 0.72], "spine": [24.0, 0.8], "neck": [17.0, 0.6], "head": [15.0, 0.52],
+	"arm_up_R": [21.0, 0.58], "arm_lo_R": [19.0, 0.52], "arm_up_L": [22.0, 0.6], "arm_lo_L": [20.0, 0.55],
+	"hand_R": [18.0, 0.5], "hand_L": [18.0, 0.5], "wing_L": [26.0, 0.5], "wing_R": [26.0, 0.5], "wing2_L": [22.0, 0.45], "wing2_R": [22.0, 0.45],
+}
+var _fx: Dictionary = {}                # bone -> Vector3 follow-through position
+var _fv: Dictionary = {}                # bone -> Vector3 follow-through velocity
 var _look := 0.0                  # smoothed head look-at yaw (degrees, positive = left)
 
 static var _usable: Dictionary = {}
@@ -240,6 +249,7 @@ func apply_fighter_state(fs: Dictionary, dt: float) -> void:
 	_look += (look_t - _look) * (1.0 - exp(-9.0 * maxf(dt, 1.0 / 60.0)))
 	var ly := clampf(_look, -45.0, 45.0)
 	bones = Pose.add(bones, {"neck": Vector3(0, 0, 0.35 * ly), "head": Vector3(0, 0, 0.55 * ly)})     # yaw about the up axis: positive turns left
+	bones = _follow(bones, action, frame, dt)
 	if action not in ["ko", "knockdown"] and not _ankle_rest.is_empty():
 		bones = _plant_feet(bones, root, action == "walk")
 	_cur_bones = bones
@@ -255,6 +265,43 @@ func apply_fighter_state(fs: Dictionary, dt: float) -> void:
 
 func _kick(amount: float) -> void:
 	_flinch_v -= amount * 14.0
+
+## One under-damped spring step per follow-through bone (exact solution, so any dt is stable). Around a strike's impact the springs are stiffened so the hit lands on time.
+func _follow(bones: Dictionary, action: String, frame: int, dt: float) -> Dictionary:
+	if dt <= 0.0:
+		return bones
+	var stiff := 1.0
+	if action in ["strike_light", "strike_heavy", "grab", "ability1", "ability2", "ability3", "laststand", "parry"]:
+		var st := _timing.x
+		var act := _timing.y
+		if frame >= st - 4 and frame <= st + act + 2:
+			stiff = 2.8
+	var snap := action in ["ko", "knockdown", "dodge"] or _blend_f < 2     # no lag through a collapse, a dodge, or the first frames of a state change
+	var out := bones.duplicate()
+	for bn in FOLLOW:
+		if not bones.has(bn):
+			continue
+		var goal: Vector3 = bones[bn]
+		if snap or not _fx.has(bn):
+			_fx[bn] = goal
+			_fv[bn] = Vector3.ZERO
+			continue
+		var cfg: Array = FOLLOW[bn]
+		var w: float = float(cfg[0]) * stiff
+		var z: float = clampf(float(cfg[1]) * (1.0 if stiff == 1.0 else 1.25), 0.2, 0.98)
+		var y: Vector3 = (_fx[bn] as Vector3) - goal
+		var v: Vector3 = _fv[bn]
+		var wd := w * sqrt(1.0 - z * z)
+		var e := exp(-z * w * dt)
+		var cs := cos(wd * dt)
+		var sn := sin(wd * dt)
+		var b: Vector3 = (v + z * w * y) / wd
+		var ny: Vector3 = e * (y * cs + b * sn)
+		var nv: Vector3 = e * ((b * wd - z * w * y) * cs + (-y * wd - z * w * b) * sn)
+		_fx[bn] = goal + ny
+		_fv[bn] = nv
+		out[bn] = goal + ny
+	return out
 
 ## Foot planting: both ankles are held on the ground line. For each leg a small Newton solve on the knee (then the thigh) removes any lift or sinking the
 ## authored pose or the body's root offset would cause, so feet never float after a strike and never sink into the floor.

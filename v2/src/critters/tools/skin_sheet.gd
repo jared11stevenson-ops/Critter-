@@ -54,6 +54,10 @@ func _ready() -> void:
 	if OS.get_cmdline_user_args().has("--gait"):
 		_gait_sheet(cam)
 		return
+	for a in OS.get_cmdline_user_args():
+		if a.begins_with("--strip="):
+			_strip_sheet(cam, a.substr(8))
+			return
 	var only := -1
 	var rest_only := false
 	var from_i := -1
@@ -102,7 +106,7 @@ func _ready() -> void:
 			fs["phase"] = Vector3i(30, 6, 20)
 		elif st[3] == "k":
 			fs["phase"] = Vector3i(6, 30, 24)
-		for k in 6:
+		for k in 60:
 			rig.apply_fighter_state(fs, 1.0 / 60.0)
 			if st[1] == "walk":
 				fs["action_frame"] = k
@@ -127,3 +131,32 @@ func _gait_sheet(cam: Camera3D) -> void:
 			for n in 8:
 				rig._t_walk = float(k) * PI / 2.0
 				rig.apply_fighter_state(fs, 0.0)
+
+
+## --strip=<action>[:startup:active:recovery]: the action played in real time (springs included), one figure per sampled frame, to review the motion as a strip.
+func _strip_sheet(cam: Camera3D, spec: String) -> void:
+	var parts := spec.split(":")
+	var action := parts[0]
+	var ph := Vector3i(30, 6, 20)
+	if parts.size() >= 4:
+		ph = Vector3i(int(parts[1]), int(parts[2]), int(parts[3]))
+	cam.fov = 30.0
+	cam.position = Vector3(0, 1.4, 24.0)
+	var total := ph.x + ph.y + ph.z
+	var samples := []
+	for i in 12:
+		samples.append(int(round(float(total) * float(i) / 11.0)))
+	for i in samples.size():
+		var rig := SkinnedRig.new()
+		add_child(rig)
+		rig.setup("bramvex")
+		rig.three_quarter = 0.0
+		rig.position = Vector3(-14.0 + float(i % 6) * 5.6, 3.6 - 6.2 * float(i / 6), 0)
+		rig.rotation_degrees.y = 0.0
+		var fs := {"action": "idle", "action_frame": 0, "move_id": "", "facing": 1.0, "speed": 0.0, "vitality_ratio": 1.0, "phase": ph}
+		for k in 30:
+			rig.apply_fighter_state(fs, 1.0 / 60.0)
+		fs["action"] = action
+		for f in range(0, samples[i] + 1):
+			fs["action_frame"] = f
+			rig.apply_fighter_state(fs, 1.0 / 60.0)
