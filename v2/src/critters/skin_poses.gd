@@ -66,6 +66,26 @@ const STYLES := {
 		{"root": Vector3(0.24, -0.36, 0), "spine": Vector3(0, 30, 4), "chest": Vector3(0, 22, 2),
 			"arm_up_R": Vector3(56, -38, 0), "arm_lo_R": Vector3(0, 0, 28), "arm_up_L": Vector3(-68, -52, 0), "arm_lo_L": Vector3(0, 0, -14),
 			"th_L": Vector3(0, -34, 0), "sh_L": Vector3(0, 46, 0), "th_R": Vector3(0, 24, 0), "sh_R": Vector3(0, 30, 0)}],
+	"laststand": [   # Last Stand: crouches into himself, then arches and roars, wings thrown wide, the club driven skyward
+		{"root": Vector3(-0.15, -0.34, 0), "spine": Vector3(0, 28, 0), "chest": Vector3(0, 20, 0), "head": Vector3(0, -22, 0),
+			"arm_up_R": Vector3(80, -50, 0), "arm_lo_R": Vector3(0, 0, 100), "arm_up_L": Vector3(-84, -40, 0), "arm_lo_L": Vector3(0, 0, -80),
+			"wing_L": Vector3(-8, 0, 0), "wing_R": Vector3(8, 0, 0), "th_L": Vector3(0, -30, 0), "sh_L": Vector3(0, 66, 0), "th_R": Vector3(0, 6, 0), "sh_R": Vector3(0, 60, 0)},
+		{"root": Vector3(0.0, 0.06, 0), "spine": Vector3(0, -18, 0), "chest": Vector3(0, -16, 0), "head": Vector3(0, 16, 0),
+			"arm_up_R": Vector3(-20, -30, 0), "arm_lo_R": Vector3(0, 0, 40), "arm_up_L": Vector3(-30, 10, 0), "arm_lo_L": Vector3(0, 0, -20),
+			"wing_L": Vector3(72, 0, 0), "wing_R": Vector3(-72, 0, 0), "wing2_L": Vector3(40, 0, 0), "wing2_R": Vector3(-40, 0, 0),
+			"th_L": Vector3(10, -6, 0), "sh_L": Vector3(0, 8, 0), "th_R": Vector3(-10, 6, 0), "sh_R": Vector3(0, 8, 0)},
+		{"root": Vector3(0.0, -0.1, 0), "spine": Vector3(0, 6, 0), "chest": Vector3(0, 4, 0),
+			"arm_up_R": Vector3(60, -30, 0), "arm_lo_R": Vector3(0, 0, 40), "arm_up_L": Vector3(-70, -20, 0), "arm_lo_L": Vector3(0, 0, -24),
+			"wing_L": Vector3(34, 0, 0), "wing_R": Vector3(-34, 0, 0)}],
+	"ability3": [   # Detain: the thorned left arm whips out and hooks the target, then drags it in; the club stays cocked on the shoulder
+		{"root": Vector3(-0.2, -0.16, 0), "spine": Vector3(0, 6, 22), "chest": Vector3(0, 4, 16), "hips": Vector3(0, 2, 14),
+			"arm_up_L": Vector3(-40, 44, 0), "arm_lo_L": Vector3(0, 0, -76), "arm_up_R": Vector3(-20, -8, 0), "arm_lo_R": Vector3(0, 0, 108),
+			"wing_L": Vector3(34, 0, 0), "wing_R": Vector3(-34, 0, 0), "th_L": Vector3(0, -12, 0), "sh_L": Vector3(0, 26, 0), "th_R": Vector3(0, 22, 0), "sh_R": Vector3(0, 30, 0)},
+		{"root": Vector3(0.62, -0.14, 0), "spine": Vector3(0, 24, -20), "chest": Vector3(0, 18, -14), "hips": Vector3(0, 6, -12), "head": Vector3(0, -20, 0),
+			"arm_up_L": Vector3(-76, -84, 0), "arm_lo_L": Vector3(0, 0, -4), "arm_up_R": Vector3(-20, -8, 0), "arm_lo_R": Vector3(0, 0, 108),
+			"wing_L": Vector3(40, 0, 0), "wing_R": Vector3(-40, 0, 0), "th_L": Vector3(0, -46, 0), "sh_L": Vector3(0, 14, 0), "th_R": Vector3(0, 30, 0), "sh_R": Vector3(0, 8, 0)},
+		{"root": Vector3(0.2, -0.1, 0), "spine": Vector3(0, 12, -8), "chest": Vector3(0, 8, -6),
+			"arm_up_L": Vector3(-60, -40, 0), "arm_lo_L": Vector3(0, 0, -50), "arm_up_R": Vector3(-24, -10, 0), "arm_lo_R": Vector3(0, 0, 104)}],
 	"ability": [   # club braced on the shoulder, the left hand flicks / commands
 		{"root": Vector3(-0.08, -0.1, 0), "spine": Vector3(0, 2, 10), "chest": Vector3(0, 0, 8),
 			"arm_up_R": Vector3(-20, -8, 0), "arm_lo_R": Vector3(0, 0, 112), "arm_up_L": Vector3(-24, -20, 0), "arm_lo_L": Vector3(0, 0, -36),
@@ -87,6 +107,24 @@ const PARRY := {   # a short sweep of the club across the body: the guard snaps 
 	"arm_up_R": Vector3(70, -78, 0), "arm_lo_R": Vector3(0, 0, 34), "arm_up_L": Vector3(-70, -20, 0), "arm_lo_L": Vector3(0, 0, -30),
 	"wing_L": Vector3(60, 0, 0), "wing_R": Vector3(-60, 0, 0), "wing2_L": Vector3(30, 0, 0), "wing2_R": Vector3(-30, 0, 0),
 	"th_L": Vector3(0, -24, 0), "sh_L": Vector3(0, 30, 0), "th_R": Vector3(0, 16, 0), "sh_R": Vector3(0, 30, 0),
+}
+const DODGE_FWD := {   # a low dive through the opponent's reach: head down, club trailing, wings pinned
+	"root": Vector3(0.55, -0.42, 0), "spine": Vector3(0, 42, 0), "chest": Vector3(0, 30, 0), "head": Vector3(0, -18, 0),
+	"arm_up_L": Vector3(-60, 40, 0), "arm_lo_L": Vector3(0, 0, -10), "arm_up_R": Vector3(70, 30, 0), "arm_lo_R": Vector3(0, 0, 20),
+	"wing_L": Vector3(-14, 0, 0), "wing_R": Vector3(14, 0, 0),
+	"th_L": Vector3(0, -44, 0), "sh_L": Vector3(0, 54, 0), "th_R": Vector3(0, 28, 0), "sh_R": Vector3(0, 24, 0),
+}
+const DODGE_SIDE := {   # a sidestep to his left: torso leans away from the blow, the leading leg reaches out, the trailing knee folds; mirrored for the right
+	"root": Vector3(0.0, -0.22, 0), "spine": Vector3(-24, 14, 8), "chest": Vector3(-16, 10, 6), "head": Vector3(10, -12, 0),
+	"arm_up_L": Vector3(-86, -10, 0), "arm_lo_L": Vector3(0, 0, -10), "arm_up_R": Vector3(80, -30, 0), "arm_lo_R": Vector3(0, 0, 40),
+	"wing_L": Vector3(30, 0, 0), "wing_R": Vector3(-8, 0, 0),
+	"th_L": Vector3(26, -10, 0), "sh_L": Vector3(0, 28, 0), "th_R": Vector3(-8, 8, 0), "sh_R": Vector3(0, 56, 0),
+}
+const WIN := {   # victory: the club hoisted overhead in one fist, wings spread wide, chin up
+	"root": Vector3(0.0, 0.0, 0), "spine": Vector3(0, 0, 0), "chest": Vector3(0, -4, 0), "head": Vector3(0, 8, 0),
+	"arm_up_R": Vector3(-30, -26, 0), "arm_lo_R": Vector3(0, 0, 70), "arm_up_L": Vector3(-82, 10, 0), "arm_lo_L": Vector3(0, 0, -12),
+	"wing_L": Vector3(50, 0, 0), "wing_R": Vector3(-50, 0, 0), "wing2_L": Vector3(28, 0, 0), "wing2_R": Vector3(-28, 0, 0),
+	"th_L": Vector3(6, -4, 0), "sh_L": Vector3(0, 6, 0), "th_R": Vector3(-6, 4, 0), "sh_R": Vector3(0, 8, 0),
 }
 const DODGE := {   # a fold: collapse into a thin rod and slide, wings snapped shut
 	"root": Vector3(-0.6, -0.16, 0), "spine": Vector3(0, 24, 0), "chest": Vector3(0, 16, 0), "head": Vector3(0, -14, 0),
@@ -158,15 +196,19 @@ static func _result(p: Dictionary) -> Dictionary:
 	return {"bones": compile(p), "root": root_of(p)}
 
 ## action: sim action name, frame: frames into the action, tm: Vector3i(startup, active, recovery), walk_t: walk phase, t: seconds.
-static func evaluate(action: String, frame: int, tm: Vector3i, walk_t: float, t: float, vit: float, spd := 1.0, fwd := 1.0) -> Dictionary:
+## side: velocity to the critter's left in walk-speed units (negative = right); won: the bout is over and this fighter stands.
+static func evaluate(action: String, frame: int, tm: Vector3i, walk_t: float, t: float, vit: float, spd := 1.0, fwd := 1.0, side := 0.0, won := false) -> Dictionary:
 	var idle := _idle(t, vit)
+	if won and action in ["idle", "walk", "guard"]:
+		var wp := _lerp_pose(idle, _full(WIN), 1.0)
+		wp["wing_L"] = (wp["wing_L"] as Vector3) + Vector3(3.0 * sin(t * 1.6), 0, 0)
+		wp["wing_R"] = (wp["wing_R"] as Vector3) - Vector3(3.0 * sin(t * 1.6 + 0.8), 0, 0)
+		return _result(wp)
 	match action:
 		"walk":
-			return _result(_walk(idle, walk_t, spd, fwd))
-		"strike_light", "strike_heavy", "grab", "ability1", "ability2", "laststand":
+			return _result(_walk(idle, walk_t, spd, fwd, side))
+		"strike_light", "strike_heavy", "grab", "ability1", "ability2", "ability3", "laststand":
 			var key := action if STYLES.has(action) else "ability"
-			if action == "laststand":
-				key = "ability"
 			return _result(_attack(idle, STYLES[key], frame, tm))
 		"guard":
 			return _result(_lerp_pose(idle, _full(GUARD), _out(float(frame + 1) / 4.0, 2.0)))
@@ -176,7 +218,16 @@ static func evaluate(action: String, frame: int, tm: Vector3i, walk_t: float, t:
 		"dodge":
 			var d := maxi(1, tm.x + tm.y)
 			var u := clampf(float(frame) / float(d), 0.0, 1.0)
-			var back := _lerp_pose(_full(DODGE), idle, _out((float(frame) - float(d)) / maxf(1.0, float(tm.z)), 1.8) if frame > d else 0.0)
+			var tgt := _full(DODGE)                          # backwards fold by default
+			var dv := Vector2(fwd, side)
+			if dv.length() > 0.25:
+				var n := dv.normalized()
+				var wf := maxf(n.x, 0.0)
+				var wb := maxf(-n.x, 0.0)
+				tgt = _lerp_pose(_full(DODGE), _full(DODGE_FWD), wf / maxf(wf + wb, 0.001))
+				var sp := _full(DODGE_SIDE) if side >= 0.0 else _mirror(_full(DODGE_SIDE))
+				tgt = _lerp_pose(tgt, sp, smoothstep(0.2, 0.9, absf(n.y)))
+			var back := _lerp_pose(tgt, idle, _out((float(frame) - float(d)) / maxf(1.0, float(tm.z)), 1.8) if frame > d else 0.0)
 			return _result(_lerp_pose(idle, back, _out(u * 3.0, 2.0)))
 		"hit", "clash":
 			return _result(_lerp_pose(_full(HIT), idle, _out(float(frame) / maxf(10.0, float(tm.y + tm.z)), 2.0)))
@@ -204,7 +255,23 @@ static func _idle(t: float, vit: float) -> Dictionary:
 ## Gait: a deliberate STALK at walking speed (long stride led by the hips, knees lifted, torso nearly still, club carried low), leaning into a RUN as
 ## speed approaches its maximum, and a guarded BACKPEDAL (short stride, upper body upright, club raised) when moving against the facing direction.
 ## spd = speed / walk speed (0..1.25), fwd = velocity along the facing / walk speed (negative = backwards).
-static func _walk(idle: Dictionary, ph: float, spd: float, fwd: float) -> Dictionary:
+## Left/right mirror of a pose: swaps the L/R bones, flips roll and yaw, keeps pitch; the root's forward offset stays.
+static func _mirror(p: Dictionary) -> Dictionary:
+	var out := {}
+	for k in p:
+		var v := p[k] as Vector3
+		if k == "root":
+			out[k] = v
+			continue
+		var nk: String = k
+		if k.ends_with("_L"):
+			nk = k.trim_suffix("_L") + "_R"
+		elif k.ends_with("_R"):
+			nk = k.trim_suffix("_R") + "_L"
+		out[nk] = Vector3(-v.x, v.y, -v.z)
+	return out
+
+static func _walk(idle: Dictionary, ph: float, spd: float, fwd: float, side := 0.0) -> Dictionary:
 	var amp := clampf(spd, 0.45, 1.25)
 	var run := smoothstep(0.85, 1.2, spd)
 	var back := smoothstep(0.1, 0.5, -fwd)
@@ -234,6 +301,22 @@ static func _walk(idle: Dictionary, ph: float, spd: float, fwd: float) -> Dictio
 	for wn in ["wing_L", "wing_R"]:
 		var wv := p.get(wn, Vector3.ZERO) as Vector3
 		p[wn] = wv + Vector3((14.0 * run + 10.0 * back) * (1.0 if wn == "wing_L" else -1.0), 0, 0)    # wings lift a little with effort
+	# strafe: squared up and low, the club hand high in a guard, legs stepping sideways (the leading leg reaches out, the trailing leg crosses behind)
+	var sk := smoothstep(0.25, 0.65, absf(side) / maxf(spd, 0.01)) * smoothstep(0.15, 0.4, spd)
+	if sk > 0.01:
+		var sg := signf(side)
+		var lead := 0.5 + 0.5 * s
+		var strafe := _full(GUARD)
+		strafe["root"] = Vector3(0.0, -0.16 - 0.03 * absf(c), 0)
+		strafe["hips"] = Vector3(0, 4, 0)
+		strafe["spine"] = Vector3(-5.0 * sg * s, 10, 0)
+		var lead_leg := "th_L" if sg > 0.0 else "th_R"
+		var trail_leg := "th_R" if sg > 0.0 else "th_L"
+		strafe[lead_leg] = Vector3(sg * (10.0 + 16.0 * lead), -6, 0)
+		strafe[trail_leg] = Vector3(-sg * (4.0 + 6.0 * (1.0 - lead)), 10, 0)
+		strafe["sh_L"] = Vector3(0, 26.0 + 18.0 * maxf(0.0, -c), 0)
+		strafe["sh_R"] = Vector3(0, 26.0 + 18.0 * maxf(0.0, c), 0)
+		p = _lerp_pose(p, strafe, sk)
 	return p
 
 static func _attack(idle: Dictionary, st: Array, frame: int, tm: Vector3i) -> Dictionary:

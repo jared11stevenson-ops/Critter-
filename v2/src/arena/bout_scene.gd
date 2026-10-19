@@ -261,6 +261,9 @@ func _sync(dt: float, alpha: float) -> void:
 		var wsp := maxf(0.5, float(sim.fighters[i].T["walk_speed"]))
 		fs["speed"] = vel.length() / wsp
 		fs["fwd"] = vel.dot(fv) / wsp
+		fs["side"] = (vel.x * -sin(_yaw[i]) + vel.y * -cos(_yaw[i])) / wsp         # to the critter's rig-left (local -Z): strafes and sidesteps
+		if is_over() and int(_result.get("loser", -1)) >= 0 and i != int(_result.get("loser", -1)) and f["alive"]:
+			fs["won"] = true
 		var rmax := float(sim.fighters[i].T["plate_pool"])
 		if rmax > 0.0:
 			var total := ceili(rmax / float(sim.R["plate_size"]))

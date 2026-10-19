@@ -9,7 +9,12 @@ const STATES := [
 	["dodge", "dodge", 6, ""], ["hit", "hit", 3, ""], ["stagger", "stagger", 10, ""],
 	["ghost ant", "ability1", 4, "m"], ["ghost hold", "ability1", 8, "m"], ["ghost rec", "ability1", 20, "m"],
 	["prep ant", "ability2", 10, "h"], ["prep hit", "ability2", 32, "h"], ["prep rec", "ability2", 46, "h"],
-	["parry 1", "parry", 1, ""], ["parry 5", "parry", 5, ""], ["parry 16", "parry", 16, ""]]
+	["parry 1", "parry", 1, ""], ["parry 5", "parry", 5, ""], ["parry 16", "parry", 16, ""],
+	["strafe L", "walk", 0, "", {"speed": 1.0, "fwd": 0.0, "side": 1.0}], ["strafe R", "walk", 0, "", {"speed": 1.0, "fwd": 0.0, "side": -1.0}],
+	["dodge fwd", "dodge", 6, "", {"speed": 1.0, "fwd": 1.0, "side": 0.0}], ["dodge L", "dodge", 6, "", {"speed": 1.0, "fwd": 0.0, "side": 1.0}],
+	["dodge R", "dodge", 6, "", {"speed": 1.0, "fwd": 0.0, "side": -1.0}], ["win", "idle", 0, "", {"won": true}],
+	["stand ant", "laststand", 6, "h"], ["stand hit", "laststand", 30, "h"], ["stand rec", "laststand", 50, "h"],
+	["detain ant", "ability3", 8, "m"], ["detain hit", "ability3", 18, "m"], ["detain rec", "ability3", 34, "m"]]
 
 var _live: SkinnedRig
 var _live_action := ""
@@ -31,7 +36,7 @@ func _ready() -> void:
 	var cam := Camera3D.new()
 	add_child(cam)
 	cam.fov = 38.0
-	cam.position = Vector3(0, 1.8, 20.0)
+	cam.position = Vector3(0, 1.0, 26.0)
 	cam.current = true
 	var sun := DirectionalLight3D.new()
 	sun.rotation_degrees = Vector3(-35, -25, 0)
@@ -67,11 +72,13 @@ func _ready() -> void:
 		add_child(rig)
 		rig.setup(id)
 		rig.three_quarter = 0.0
-		rig.position = Vector3(-6.6 + float(i % 6) * 2.6, 5.4 - 3.6 * float(i / 6), 0)
+		rig.position = Vector3(-6.6 + float(i % 6) * 2.6, 7.2 - 3.4 * float(i / 6), 0)
 		if only >= 0 or rest_only:
 			rig.position = Vector3.ZERO
 		rig.rotation_degrees.y = 0.0 if OS.get_cmdline_user_args().has("--side") else 90.0     # --side: profile view facing right (+x); default: facing the camera
 		var fs := {"action": st[1], "action_frame": st[2], "move_id": "", "facing": 1.0, "speed": 1.0, "vitality_ratio": 1.0}
+		if st.size() > 4:
+			fs.merge(st[4], true)
 		for a in OS.get_cmdline_user_args():
 			if a.begins_with("--live="):
 				_live = rig
