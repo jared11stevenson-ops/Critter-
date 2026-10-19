@@ -143,6 +143,8 @@ func setup(critter_id_in: String) -> void:
 		if _bones.has("ft_" + side):
 			_ankle_rest[side] = skeleton.get_bone_global_pose(_bones["ft_" + side]).origin.y
 	fx = FxCtl.new(self, mat, palette["accent"] if (palette["accent"] as Color).get_luminance() > 0.35 else palette["glow"], palette["glow"])
+	fx.trail_len = 15
+	fx.smear_width = minf(0.9, fx.smear_width * 1.7)
 	_cur_bones = Pose.compile(Pose.IDLE)
 	_from_bones = _cur_bones.duplicate()
 	_apply_bones(_cur_bones)

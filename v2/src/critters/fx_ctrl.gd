@@ -14,6 +14,8 @@ const IMPACT_FRAMES := 2
 var rig: Node3D
 var mat: ShaderMaterial          # character material (toon + outline)
 var smear: MeshInstance3D
+var trail_len := TRAIL_LEN         # a rig with a long, heavy weapon keeps a longer, wider ribbon (set by the rig)
+var smear_width := SMEAR_WIDTH
 var smear_mat: ShaderMaterial
 var spark: MeshInstance3D
 var spark_mat: ShaderMaterial
@@ -68,7 +70,7 @@ func stop_smear() -> void:
 func sample(tip_world: Vector3, base_world: Vector3) -> void:
 	if smear_on:
 		trail.append([rig.to_local(tip_world), rig.to_local(base_world)])
-		if trail.size() > TRAIL_LEN:
+		if trail.size() > trail_len:
 			trail.pop_front()
 	elif trail.size() > 0:
 		trail.pop_front()
@@ -86,7 +88,7 @@ func sample(tip_world: Vector3, base_world: Vector3) -> void:
 	for i in range(n):
 		var tip: Vector3 = trail[i][0]
 		var bs: Vector3 = trail[i][1]
-		var inner: Vector3 = tip.lerp(bs, SMEAR_WIDTH)
+		var inner: Vector3 = tip.lerp(bs, smear_width)
 		vs.append(tip); uv.append(Vector2(float(i) / (n - 1), 1.0))
 		vs.append(inner); uv.append(Vector2(float(i) / (n - 1), 0.0))
 		if i > 0:
