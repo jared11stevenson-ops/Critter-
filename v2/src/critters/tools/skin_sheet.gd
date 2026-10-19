@@ -13,7 +13,7 @@ const STATES := [
 	["strafe L", "walk", 0, "", {"speed": 1.0, "fwd": 0.0, "side": 1.0}], ["strafe R", "walk", 0, "", {"speed": 1.0, "fwd": 0.0, "side": -1.0}],
 	["dodge fwd", "dodge", 6, "", {"speed": 1.0, "fwd": 1.0, "side": 0.0}], ["dodge L", "dodge", 6, "", {"speed": 1.0, "fwd": 0.0, "side": 1.0}],
 	["dodge R", "dodge", 6, "", {"speed": 1.0, "fwd": 0.0, "side": -1.0}], ["win", "idle", 0, "", {"won": true}],
-	["stand ant", "laststand", 6, "h"], ["stand hit", "laststand", 30, "h"], ["stand rec", "laststand", 50, "h"],
+	["stand ant", "laststand", 6, "h"], ["stand hit", "laststand", 40, "h"], ["stand rec", "laststand", 64, "h"],
 	["down", "knockdown", 14, "k"], ["up 1", "knockdown", 44, "k"], ["up 2", "knockdown", 58, "k"],
 	["detain ant", "ability3", 8, "m"], ["detain hit", "ability3", 18, "m"], ["detain rec", "ability3", 34, "m"]]
 

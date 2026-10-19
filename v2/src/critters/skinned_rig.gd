@@ -140,7 +140,7 @@ func setup(critter_id_in: String) -> void:
 ## Follow-through: banner, back shreds and wings are driven by Godot's SpringBoneSimulator3D on top of the pose (cloth lags and swings on every lunge).
 ## chain = [root bone, end bone, stiffness, drag, gravity]; values are tuned by eye (lower stiffness = floppier).
 const SPRINGS := {
-	"bramvex": [["cf1", "cf3", 0.28, 0.30, 0.9], ["cb1", "cb3", 0.34, 0.30, 0.8], ["wing_L", "wing2_L", 0.55, 0.35, 0.3], ["wing_R", "wing2_R", 0.55, 0.35, 0.3], ["ant1_L", "ant3_L", 0.18, 0.25, 0.5], ["ant1_R", "ant3_R", 0.18, 0.25, 0.5]],
+	"bramvex": [["cf1", "cf3", 0.28, 0.30, 0.9], ["cb1", "cb3", 0.34, 0.30, 0.8], ["wing_L", "wing2_L", 0.55, 0.35, 0.3], ["wing_R", "wing2_R", 0.55, 0.35, 0.3], ["ant1_L", "ant3_L", 0.12, 0.18, 0.6], ["ant1_R", "ant3_R", 0.12, 0.18, 0.6]],
 }
 
 func _add_springs() -> void:
