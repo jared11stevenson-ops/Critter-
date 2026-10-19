@@ -82,6 +82,12 @@ const GUARD := {
 	"wing_L": Vector3(52, 0, 0), "wing_R": Vector3(-52, 0, 0), "wing2_L": Vector3(26, 0, 0), "wing2_R": Vector3(-26, 0, 0),
 	"th_L": Vector3(0, -22, 0), "sh_L": Vector3(0, 32, 0), "th_R": Vector3(0, 14, 0), "sh_R": Vector3(0, 28, 0),
 }
+const PARRY := {   # a short sweep of the club across the body: the guard snaps open to knock the blow aside, wings flare for balance
+	"root": Vector3(0.12, -0.14, 0), "spine": Vector3(0, 10, -22), "chest": Vector3(0, 8, -16), "hips": Vector3(0, 2, -10), "head": Vector3(0, -12, 6),
+	"arm_up_R": Vector3(70, -78, 0), "arm_lo_R": Vector3(0, 0, 34), "arm_up_L": Vector3(-70, -20, 0), "arm_lo_L": Vector3(0, 0, -30),
+	"wing_L": Vector3(60, 0, 0), "wing_R": Vector3(-60, 0, 0), "wing2_L": Vector3(30, 0, 0), "wing2_R": Vector3(-30, 0, 0),
+	"th_L": Vector3(0, -24, 0), "sh_L": Vector3(0, 30, 0), "th_R": Vector3(0, 16, 0), "sh_R": Vector3(0, 30, 0),
+}
 const DODGE := {   # a fold: collapse into a thin rod and slide, wings snapped shut
 	"root": Vector3(-0.6, -0.16, 0), "spine": Vector3(0, 24, 0), "chest": Vector3(0, 16, 0), "head": Vector3(0, -14, 0),
 	"arm_up_L": Vector3(-86, -4, 0), "arm_lo_L": Vector3(0, 0, -8), "arm_up_R": Vector3(84, -10, 0), "arm_lo_R": Vector3(0, 0, 14),
@@ -162,8 +168,11 @@ static func evaluate(action: String, frame: int, tm: Vector3i, walk_t: float, t:
 			if action == "laststand":
 				key = "ability"
 			return _result(_attack(idle, STYLES[key], frame, tm))
-		"guard", "parry":
+		"guard":
 			return _result(_lerp_pose(idle, _full(GUARD), _out(float(frame + 1) / 4.0, 2.0)))
+		"parry":
+			var snap := _lerp_pose(_full(GUARD), _full(PARRY), _out(float(frame + 1) / 3.0, 3.0))
+			return _result(_lerp_pose(snap, _full(GUARD), smoothstep(8.0, 20.0, float(frame))))
 		"dodge":
 			var d := maxi(1, tm.x + tm.y)
 			var u := clampf(float(frame) / float(d), 0.0, 1.0)

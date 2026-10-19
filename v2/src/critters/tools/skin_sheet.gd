@@ -8,7 +8,8 @@ const STATES := [
 	["heavy ant", "strike_heavy", 28, "h"], ["heavy hit", "strike_heavy", 33, "h"], ["heavy rec", "strike_heavy", 48, "h"],
 	["dodge", "dodge", 6, ""], ["hit", "hit", 3, ""], ["stagger", "stagger", 10, ""],
 	["ghost ant", "ability1", 4, "m"], ["ghost hold", "ability1", 8, "m"], ["ghost rec", "ability1", 20, "m"],
-	["prep ant", "ability2", 10, "h"], ["prep hit", "ability2", 32, "h"], ["prep rec", "ability2", 46, "h"]]
+	["prep ant", "ability2", 10, "h"], ["prep hit", "ability2", 32, "h"], ["prep rec", "ability2", 46, "h"],
+	["parry 1", "parry", 1, ""], ["parry 5", "parry", 5, ""], ["parry 16", "parry", 16, ""]]
 
 var _live: SkinnedRig
 var _live_action := ""
