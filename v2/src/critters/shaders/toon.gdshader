@@ -45,7 +45,10 @@ void fragment() {
 	if (tier > crack_level + 0.5) { discard; }
 	vec3 base = use_tex > 0.5 ? clamp(texture(albedo_tex, v_uv).rgb * tex_gain, 0.0, 1.0) : v_col;
 	if (use_nrm > 0.5) {
-		NORMAL_MAP = texture(normal_tex, v_uv).rgb;
+		vec3 nm = texture(normal_tex, v_uv).rgb;
+		vec3 tn = nm * 2.0 - 1.0;
+		float bad = max(smoothstep(0.62, 0.92, length(tn.xy)), 1.0 - smoothstep(0.05, 0.35, tn.z));    // failed bake texels (extreme tilt / back-facing) would light as black wedges: fade them to the flat surface
+		NORMAL_MAP = mix(nm, vec3(0.5, 0.5, 1.0), bad);
 		NORMAL_MAP_DEPTH = 1.0;
 	}
 	// Cel shading is computed in light(); here we only set albedo, rim and emission.
