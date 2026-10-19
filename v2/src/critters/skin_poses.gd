@@ -142,6 +142,12 @@ const STAGGER := {
 	"arm_up_R": Vector3(86, -14, 0), "arm_lo_R": Vector3(0, 0, 6), "arm_up_L": Vector3(-70, -18, 0), "arm_lo_L": Vector3(0, 0, -30),
 	"th_L": Vector3(0, -30, 0), "sh_L": Vector3(0, 52, 0), "th_R": Vector3(0, -14, 0), "sh_R": Vector3(0, 46, 0),
 }
+const GETUP := {   # half-way up from a knockdown: on hands and one knee, club planted like a crutch, head still down
+	"root": Vector3(-0.35, -0.72, 0), "hips": Vector3(0, -34, 0), "spine": Vector3(0, 44, 0), "chest": Vector3(0, 22, 0), "head": Vector3(0, -18, 0),
+	"arm_up_L": Vector3(-62, -66, 0), "arm_lo_L": Vector3(0, 0, -8), "arm_up_R": Vector3(60, -62, 0), "arm_lo_R": Vector3(0, 0, 12),
+	"wing_L": Vector3(30, 0, 0), "wing_R": Vector3(-30, 0, 0),
+	"th_L": Vector3(0, -58, 0), "sh_L": Vector3(0, 100, 0), "th_R": Vector3(0, 10, 0), "sh_R": Vector3(0, 70, 0),
+}
 const KO := {
 	"root": Vector3(-0.9, -1.35, 0), "hips": Vector3(0, -84, 0), "spine": Vector3(0, -10, 0), "head": Vector3(0, 12, 0),
 	"arm_up_L": Vector3(-30, 10, 0), "arm_up_R": Vector3(30, 10, 0), "wing_L": Vector3(34, 0, 0), "wing_R": Vector3(-34, 0, 0),
@@ -237,7 +243,12 @@ static func evaluate(action: String, frame: int, tm: Vector3i, walk_t: float, t:
 			var u2 := clampf(float(frame) / maxf(1.0, float(tm.x + tm.y) * 0.6), 0.0, 1.0)
 			var p := _lerp_pose(_full(STAGGER), _full(KO), _out(u2, 3.0))
 			if action == "knockdown" and frame > tm.x + tm.y:
-				p = _lerp_pose(_full(KO), idle, _out(float(frame - tm.x - tm.y) / maxf(1.0, float(tm.z)), 2.0))
+				var g := clampf(float(frame - tm.x - tm.y) / maxf(1.0, float(tm.z)), 0.0, 1.0)        # get-up: roll onto hands and a knee, then stand tall with a shudder of the wings
+				if g < 0.55:
+					p = _lerp_pose(_full(KO), _full(GETUP), _out(g / 0.55, 2.0))
+				else:
+					p = _lerp_pose(_full(GETUP), idle, smoothstep(0.0, 1.0, (g - 0.55) / 0.45))
+					p["wing_L"] = (p["wing_L"] as Vector3) + Vector3(10.0 * sin(g * 40.0) * (1.0 - g), 0, 0)
 			return _result(p)
 	return _result(idle)
 
