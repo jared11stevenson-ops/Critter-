@@ -143,15 +143,13 @@ func _strip_sheet(cam: Camera3D, spec: String) -> void:
 	cam.fov = 30.0
 	cam.position = Vector3(0, 1.4, 24.0)
 	var total := ph.x + ph.y + ph.z
-	var samples := []
-	for i in 12:
-		samples.append(int(round(float(total) * float(i) / 11.0)))
+	var samples := [0, int(ph.x * 0.4), int(ph.x * 0.7), ph.x - 2, ph.x, ph.x + 1, ph.x + 2, ph.x + ph.y, ph.x + ph.y + 3, ph.x + ph.y + 7, ph.x + ph.y + 11, total]     # dense around the impact, where the move is won or lost
 	for i in samples.size():
 		var rig := SkinnedRig.new()
 		add_child(rig)
 		rig.setup("bramvex")
 		rig.three_quarter = 0.0
-		rig.position = Vector3(-14.0 + float(i % 6) * 5.6, 3.6 - 6.2 * float(i / 6), 0)
+		rig.position = Vector3(-10.5 + float(i % 6) * 4.2, 3.6 - 6.2 * float(i / 6), 0)
 		rig.rotation_degrees.y = 0.0
 		var fs := {"action": "idle", "action_frame": 0, "move_id": "", "facing": 1.0, "speed": 0.0, "vitality_ratio": 1.0, "phase": ph}
 		for k in 30:

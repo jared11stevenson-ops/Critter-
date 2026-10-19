@@ -274,21 +274,25 @@ func _follow(bones: Dictionary, action: String, frame: int, dt: float) -> Dictio
 	if action in ["strike_light", "strike_heavy", "grab", "ability1", "ability2", "ability3", "laststand", "parry"]:
 		var st := _timing.x
 		var act := _timing.y
-		if frame >= st - 4 and frame <= st + act + 2:
-			stiff = 2.8
+		if frame >= st - 5 and frame <= st + act + 3:
+			stiff = 5.0
 	var snap := action in ["ko", "knockdown", "dodge"] or _blend_f < 2     # no lag through a collapse, a dodge, or the first frames of a state change
 	var out := bones.duplicate()
 	for bn in FOLLOW:
 		if not bones.has(bn):
 			continue
 		var goal: Vector3 = bones[bn]
+		if stiff > 1.0 and bn.begins_with("arm_"):
+			_fx[bn] = goal                       # the weapon arms are never late into the strike itself; the lag comes back in the recovery as follow-through
+			_fv[bn] = Vector3.ZERO
+			continue
 		if snap or not _fx.has(bn):
 			_fx[bn] = goal
 			_fv[bn] = Vector3.ZERO
 			continue
 		var cfg: Array = FOLLOW[bn]
 		var w: float = float(cfg[0]) * stiff
-		var z: float = clampf(float(cfg[1]) * (1.0 if stiff == 1.0 else 1.25), 0.2, 0.98)
+		var z: float = float(cfg[1]) if stiff == 1.0 else 0.9
 		var y: Vector3 = (_fx[bn] as Vector3) - goal
 		var v: Vector3 = _fv[bn]
 		var wd := w * sqrt(1.0 - z * z)

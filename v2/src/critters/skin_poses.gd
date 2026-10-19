@@ -19,10 +19,10 @@ const IDLE := {
 const STYLES := {
 	"strike_light": [   # a short committed thrust of the club; the left hand points down the line of the thrust
 		{"root": Vector3(-0.16, -0.08, 0), "spine": Vector3(0, -2, -14), "chest": Vector3(0, -4, -10), "hips": Vector3(0, 2, -12),
-			"arm_up_R": Vector3(74, 26, 0), "arm_lo_R": Vector3(0, 0, 74), "arm_up_L": Vector3(-62, -30, 0), "arm_lo_L": Vector3(0, 0, -34),
+			"arm_up_R": Vector3(66, 44, 0), "arm_lo_R": Vector3(0, 0, 104), "arm_up_L": Vector3(-62, -30, 0), "arm_lo_L": Vector3(0, 0, -34),
 			"th_L": Vector3(0, -16, 0), "sh_L": Vector3(0, 12, 0), "th_R": Vector3(0, 22, 0), "sh_R": Vector3(0, 30, 0), "head": Vector3(0, -10, 6)},
 		{"root": Vector3(0.58, -0.10, 0), "spine": Vector3(0, 18, 16), "chest": Vector3(0, 14, 10), "hips": Vector3(0, 6, 14),
-			"arm_up_R": Vector3(80, -60, 0), "arm_lo_R": Vector3(0, 0, 6), "arm_up_L": Vector3(-82, -56, 0), "arm_lo_L": Vector3(0, 0, -4),
+			"arm_up_R": Vector3(82, -74, 0), "arm_lo_R": Vector3(0, 34, 0), "arm_up_L": Vector3(-82, -56, 0), "arm_lo_L": Vector3(0, 0, -4),
 			"th_L": Vector3(0, -42, 0), "sh_L": Vector3(0, 10, 0), "th_R": Vector3(0, 30, 0), "sh_R": Vector3(0, 6, 0), "head": Vector3(0, -16, -4)},
 		{"root": Vector3(0.30, -0.06, 0), "spine": Vector3(0, 14, 4), "chest": Vector3(0, 10, 2),
 			"arm_up_R": Vector3(76, -40, 0), "arm_lo_R": Vector3(0, 0, 26), "arm_up_L": Vector3(-76, -26, 0), "arm_lo_L": Vector3(0, 0, -16),
