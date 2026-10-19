@@ -6,7 +6,7 @@ class_name BoutCamera extends Camera3D
 const SHOULDER_DEG := 38.0        # yaw offset of the camera from the player->target axis
 const BASE_DIST := 10.0
 const HEIGHT := 4.4
-const LOOK_HEIGHT := 1.2
+const LOOK_HEIGHT := 1.6
 const FOV_V := 40.0
 const FIT := 0.78                 # fighters must stay inside this fraction of the half-width
 
