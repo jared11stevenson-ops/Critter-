@@ -53,7 +53,7 @@ def load_src():
 if STAGE == "prep":
     ob = load_src()
     t0 = len(ob.data.polygons)
-    mod = ob.modifiers.new("d", "DECIMATE"); mod.decimate_type = "COLLAPSE"; mod.ratio = TRIS / max(t0, 1); mod.use_collapse_triangulate = True
+    mod = ob.modifiers.new("d", "DECIMATE"); mod.decimate_type = "COLLAPSE"; mod.ratio = TRIS / max(t0, 1); mod.use_collapse_triangulate = True; mod.delimit = {"UV"}      # never collapse across UV seams: bridging triangles there sample the black gutter between texture islands (the dark shards)
     bpy.context.view_layer.objects.active = ob
     bpy.ops.object.modifier_apply(modifier="d")
     print("tris", t0, "->", len(ob.data.polygons))
@@ -214,7 +214,7 @@ if STAGE == "diag":
     bad = np.where((e1 > 0.06) & (e1 > 2.5 * e0))[0]
     print("STRETCHED", len(bad))
     vg = {g.index: g.name for g in body.vertex_groups}
-    for i in bad[:60]:
+    for i in bad[:200]:
         ws = []
         for vi in T[i]:
             top = sorted(body.data.vertices[vi].groups, key=lambda g: -g.weight)[:2]
