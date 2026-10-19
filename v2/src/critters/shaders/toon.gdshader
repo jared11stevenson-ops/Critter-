@@ -19,9 +19,9 @@ uniform float crack_level = 0.0;                              // 0..3 shell-plat
 uniform vec3 crack_col = vec3(1.0, 0.35, 0.15);
 uniform float silhouette : hint_range(0.0, 1.0) = 0.0;     // flat black (silhouette gate / lookdev)
 
-uniform sampler2D albedo_tex : source_color, filter_linear_mipmap, repeat_disable;   // generated (Tripo) models are textured: UV0 samples this
+uniform sampler2D albedo_tex : source_color, filter_linear_mipmap_anisotropic, repeat_disable;   // generated (Tripo) models are textured: UV0 samples this
 uniform float use_tex : hint_range(0.0, 1.0) = 0.0;
-uniform sampler2D normal_tex : hint_normal, filter_linear_mipmap, repeat_disable;   // baked high->low normal atlas (generated models)
+uniform sampler2D normal_tex : hint_normal, filter_linear_mipmap_anisotropic, repeat_disable;   // baked high->low normal atlas (generated models)
 uniform float use_nrm : hint_range(0.0, 1.0) = 0.0;
 uniform float tex_soft : hint_range(0.0, 1.0) = 0.0;
 uniform float tex_gain : hint_range(0.5, 2.5) = 1.35;

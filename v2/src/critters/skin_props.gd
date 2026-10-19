@@ -7,8 +7,8 @@ static func club(length := 2.3, handle_r := 0.055, head_r := 0.20) -> ArrayMesh:
 	var cols := PackedColorArray()
 	var norms := PackedVector3Array()
 	var idx := PackedInt32Array()
-	var seg := 10
-	var rings := 26
+	var seg := 16
+	var rings := 56
 	var wood := Color(0.20, 0.125, 0.08)
 	var dark := Color(0.09, 0.06, 0.045)
 	var wrap := Color(0.40, 0.12, 0.10)             # the sergeant's red insignia cloth wrapped on the grip
@@ -17,14 +17,16 @@ static func club(length := 2.3, handle_r := 0.055, head_r := 0.20) -> ArrayMesh:
 		var t := float(r) / float(rings)
 		var rad := _radius(t, handle_r, head_r)
 		var c := wood.lerp(dark, smoothstep(0.55, 0.9, t) * 0.5)
-		if t > 0.08 and t < 0.24 and (r % 2 == 0):
+		if t > 0.08 and t < 0.26 and (r % 3 != 2):
 			c = wrap
 		for s in seg:
 			var a := TAU * float(s) / float(seg)
 			var n := Vector3(0, cos(a), sin(a))
-			verts.append(Vector3(back + t * length, 0, 0) + n * rad)
+			var grain := 0.80 + 0.30 * (0.5 + 0.5 * sin(a * 3.0 + t * 38.0)) * (0.5 + 0.5 * sin(t * 90.0 + float(s) * 1.7))     # wood grain streaks crossed by growth rings
+			var scorch := smoothstep(0.80, 0.97, t) * 0.55                                          # the striking face is charred
+			verts.append(Vector3(back + t * length, 0, 0) + n * rad * (1.0 + 0.025 * sin(a * 5.0 + t * 24.0)))     # gnarled, not a lathe-turned cylinder
 			norms.append(n)
-			cols.append(c)
+			cols.append((c * grain).lerp(Color(0.05, 0.04, 0.035), scorch))
 	for r in rings:
 		for s in seg:
 			var a0 := r * seg + s
