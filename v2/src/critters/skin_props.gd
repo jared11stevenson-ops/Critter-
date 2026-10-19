@@ -6,6 +6,7 @@ static func club(length := 2.3, handle_r := 0.055, head_r := 0.20) -> ArrayMesh:
 	var verts := PackedVector3Array()
 	var cols := PackedColorArray()
 	var norms := PackedVector3Array()
+	var uvs := PackedVector2Array()
 	var idx := PackedInt32Array()
 	var seg := 16
 	var rings := 56
@@ -26,6 +27,7 @@ static func club(length := 2.3, handle_r := 0.055, head_r := 0.20) -> ArrayMesh:
 			var scorch := smoothstep(0.80, 0.97, t) * 0.55                                          # the striking face is charred
 			verts.append(Vector3(back + t * length, 0, 0) + n * rad * (1.0 + 0.025 * sin(a * 5.0 + t * 24.0)))     # gnarled, not a lathe-turned cylinder
 			norms.append(n)
+			uvs.append(Vector2(float(s) / float(seg), t))
 			cols.append((c * grain).lerp(Color(0.05, 0.04, 0.035), scorch))
 	for r in rings:
 		for s in seg:
@@ -34,7 +36,7 @@ static func club(length := 2.3, handle_r := 0.055, head_r := 0.20) -> ArrayMesh:
 			idx.append_array([a0, a0 + seg, a1, a1, a0 + seg, a1 + seg])        # clockwise = front face in Godot
 	# end cap (head)
 	var cap := verts.size()
-	verts.append(Vector3(back + length, 0, 0)); norms.append(Vector3.RIGHT); cols.append(dark)
+	verts.append(Vector3(back + length, 0, 0)); norms.append(Vector3.RIGHT); cols.append(dark); uvs.append(Vector2(0.5, 1.0))
 	for s in seg:
 		idx.append_array([(rings) * seg + s, (rings) * seg + (s + 1) % seg, cap])
 	# thorns: cones in a spiral on the head
@@ -53,8 +55,9 @@ static func club(length := 2.3, handle_r := 0.055, head_r := 0.20) -> ArrayMesh:
 			var ang := TAU * float(k) / 4.0
 			verts.append(base + perp * cos(ang) + perp2 * sin(ang))
 			norms.append((perp * cos(ang) + perp2 * sin(ang)).normalized())
+			uvs.append(Vector2(0.3 + 0.1 * float(k), t2))
 			cols.append(Color(0.14, 0.09, 0.07))
-		verts.append(tip); norms.append(dir); cols.append(Color(0.1, 0.07, 0.06))
+		verts.append(tip); norms.append(dir); cols.append(Color(0.1, 0.07, 0.06)); uvs.append(Vector2(0.5, t2))
 		for k in 4:
 			idx.append_array([b0 + (k + 1) % 4, b0 + k, b0 + 4])
 	var arrays := []
@@ -62,6 +65,7 @@ static func club(length := 2.3, handle_r := 0.055, head_r := 0.20) -> ArrayMesh:
 	arrays[Mesh.ARRAY_VERTEX] = verts
 	arrays[Mesh.ARRAY_NORMAL] = norms
 	arrays[Mesh.ARRAY_COLOR] = cols
+	arrays[Mesh.ARRAY_TEX_UV] = uvs
 	arrays[Mesh.ARRAY_INDEX] = idx
 	var m := ArrayMesh.new()
 	m.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)

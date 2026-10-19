@@ -111,8 +111,14 @@ func setup(critter_id_in: String) -> void:
 		skeleton.add_child(ba)
 		var club := MeshInstance3D.new()
 		club.mesh = Props.club()
-		club.material_override = Toon.character(palette["glow"], palette["ink"])
-		(club.material_override as ShaderMaterial).next_pass.set_shader_parameter("px_width", outline)
+		var cm := Toon.character(palette["glow"], palette["ink"])
+		club.material_override = cm
+		cm.set_shader_parameter("albedo_tex", load("res://art/props/club_albedo.png"))     # hand-generated wood grain / cloth wrap / char (tools/gen/gen_club_tex.py)
+		cm.set_shader_parameter("use_tex", 1.0)
+		cm.set_shader_parameter("tex_gain", 1.0)
+		if int(Settings.get_value("quality")) >= 1:
+			cm.set_shader_parameter("normal_tex", load("res://art/props/club_normal.png"))
+		cm.next_pass.set_shader_parameter("px_width", outline)
 		club.rotation_degrees = Vector3(0, 0, -28)                # pointing forward and down from the fist
 		ba.add_child(club)
 		_sockets["weapon_base"] = club
