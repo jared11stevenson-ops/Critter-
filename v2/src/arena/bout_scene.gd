@@ -68,6 +68,7 @@ func start(config: BoutConfig) -> void:
 	if cfg.timeout_ticks > 0:
 		sim.R = sim.R.duplicate()
 		sim.R["timeout_ticks"] = cfg.timeout_ticks
+	get_viewport().msaa_3d = Settings.msaa_mode() as Viewport.MSAA
 	get_viewport().scaling_3d_scale = Settings.render_scale()       # quality Low/Medium/High (HUD stays full resolution)
 	ArenaBuilder.build(self, arena_def, Settings.shadows_enabled())
 	for i in 2:
@@ -387,5 +388,6 @@ func chest(i: int, h := 1.2) -> Vector3:
 func _exit_tree() -> void:
 	if is_inside_tree():
 		get_viewport().scaling_3d_scale = 1.0
+		get_viewport().msaa_3d = Viewport.MSAA_DISABLED
 	if is_instance_valid(Perf):
 		Perf.context = "menu"

@@ -11,7 +11,7 @@ func run() -> Array:
 	QaCheck.is_true(fails, s.set_value("quality", 2), "set quality")
 	QaCheck.eq(fails, s.quality_name(), "High", "quality name")
 	s.set_value("quality", 99)
-	QaCheck.eq(fails, s.get_value("quality"), 2, "quality clamped to max")
+	QaCheck.eq(fails, s.get_value("quality"), 3, "quality clamped to max (Ultra)")
 	QaCheck.is_true(fails, not s.set_value("quality", "high"), "string quality rejected")
 	QaCheck.is_true(fails, not s.set_value("fps_cap", 45), "invalid fps cap rejected")
 	QaCheck.is_true(fails, s.set_value("fps_cap", 30), "valid fps cap")

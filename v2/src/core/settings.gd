@@ -4,11 +4,11 @@ extends Node
 ## `load("res://src/core/settings.gd").new()` then set `path` to a temp file.
 
 const VERSION := 1
-const QUALITY_NAMES := ["Low", "Medium", "High"]
+const QUALITY_NAMES := ["Low", "Medium", "High", "Ultra"]
 const FPS_CAPS := [30, 60, 90, 120]
 
 const DEFAULTS := {
-	"quality": 2,               # 0 Low, 1 Medium, 2 High
+	"quality": 2,               # 0 Low, 1 Medium, 2 High (native resolution), 3 Ultra (1.5x supersampled + 4x MSAA)
 	"fps_cap": 60,              # one of FPS_CAPS
 	"left_handed": false,       # mirrors touch layout
 	"assist_wide_parry": false, # wider parry window (non-Blood tiers only)
@@ -84,7 +84,12 @@ func tell_slow_factor(stakes: int) -> float:
 
 ## 3D render scale / shadows suggestions for the quality level (consumed by arena code).
 func render_scale() -> float:
-	return [0.6, 0.8, 1.0][int(get_value("quality"))]
+	return [0.6, 0.8, 1.0, 1.5][int(get_value("quality"))]
+
+
+## 3D MSAA for the quality level (Viewport.MSAA_* values: 0 off, 1 2x, 2 4x).
+func msaa_mode() -> int:
+	return [0, 1, 1, 2][int(get_value("quality"))]
 
 
 func shadows_enabled() -> bool:

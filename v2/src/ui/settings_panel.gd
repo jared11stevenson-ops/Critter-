@@ -33,7 +33,7 @@ func _ready() -> void:
 	v.add_child(UiStyle.segment_row("CONTROLS", [["A", "A: Buttons"], ["B", "B: Gestures"]], str(UiPrefs.get_pref("layout")), func(k): UiPrefs.set_pref("layout", k), 190, 190))
 	v.add_child(UiStyle.segment_row("TOUCH UI", [["auto", "Auto"], ["on", "Always on"], ["off", "Off"]], str(UiPrefs.get_pref("touch")), func(k): UiPrefs.set_pref("touch", k), 190, 190))
 	v.add_child(UiStyle.segment_row("HANDED", [["r", "Right"], ["l", "Left"]], "l" if Settings.get_value("left_handed") else "r", func(k): Settings.set_value("left_handed", k == "l"); Settings.save(), 190, 190))
-	v.add_child(UiStyle.segment_row("QUALITY", [["0", "Low"], ["1", "Medium"], ["2", "High"]], str(Settings.get_value("quality")), func(k): Settings.set_value("quality", int(k)); Settings.save(), 190, 190))
+	v.add_child(UiStyle.segment_row("QUALITY", [["0", "Low"], ["1", "Medium"], ["2", "High"], ["3", "Ultra"]], str(Settings.get_value("quality")), func(k): Settings.set_value("quality", int(k)); Settings.save(), 190, 190))
 	var mv := float(Settings.get_value("music_volume"))
 	var mk := "0" if mv < 0.05 else ("1" if mv < 0.4 else ("2" if mv < 0.65 else "3"))
 	v.add_child(UiStyle.segment_row("MUSIC", [["0", "Off"], ["1", "Low"], ["2", "Medium"], ["3", "High"]], mk, func(k): Settings.set_value("music_volume", [0.0, 0.25, 0.5, 0.8][int(k)]); Settings.save(); Music.refresh(), 130, 190))
