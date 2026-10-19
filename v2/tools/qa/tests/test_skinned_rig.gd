@@ -47,6 +47,10 @@ func run() -> Array:
 	var idle: Dictionary = SkinnedRig.Pose.evaluate("idle", 0, Vector3i(1, 1, 1), 0.0, 0.0, 1.0)
 	var ant: Dictionary = SkinnedRig.Pose.evaluate("strike_light", 12, Vector3i(16, 4, 14), 0.0, 0.0, 1.0)
 	var hit: Dictionary = SkinnedRig.Pose.evaluate("strike_light", 18, Vector3i(16, 4, 14), 0.0, 0.0, 1.0)
+	var soft: Dictionary = SkinnedRig.Pose.evaluate("hit", 2, Vector3i(1, 4, 12), 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, "", 0.7)
+	var hard: Dictionary = SkinnedRig.Pose.evaluate("hit", 2, Vector3i(1, 4, 12), 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, "", 1.5)
+	if (soft["bones"]["spine"] as Vector3).distance_to(idle["bones"]["spine"] as Vector3) >= (hard["bones"]["spine"] as Vector3).distance_to(idle["bones"]["spine"] as Vector3):
+		fails.append("skinned_rig: a heavier hit must throw the body further than a light one")
 	if (ant["root"] as Vector3).x >= (idle["root"] as Vector3).x:
 		fails.append("skinned_rig: anticipation must shift the weight BACK of the stance")
 	if (hit["root"] as Vector3).x <= (idle["root"] as Vector3).x + 0.2:

@@ -13,6 +13,7 @@ const SKIN_PATH := "res://art/models/%s_skin.glb"
 const Pose := preload("res://src/critters/skin_poses.gd")
 const Props := preload("res://src/critters/skin_props.gd")
 
+var _hit_sev := 1.0                # how hard the latest hit landed (from the stun frames), scales the hit reaction
 var skeleton: Skeleton3D
 var _mesh: MeshInstance3D
 var _bones: Dictionary = {}        # name -> index
@@ -220,6 +221,8 @@ func apply_fighter_state(fs: Dictionary, dt: float) -> void:
 		_blend_n = int(BLEND_FRAMES.get(action, BLEND_DEFAULT))
 		_prev_action = key
 		_prev_move = move_id
+	if action in ["hit", "clash"] and (_action != action) :
+		_hit_sev = clampf(float(fs.get("stun", 18)) / 18.0, 0.65, 1.6)         # latched at the moment of impact: how hard the blow landed
 	_action = action
 	_move_id = move_id
 	_action_frame = frame
@@ -227,7 +230,7 @@ func apply_fighter_state(fs: Dictionary, dt: float) -> void:
 	var spd := absf(float(fs.get("speed", 1.0 if action == "walk" else 0.0)))
 	if action == "walk":
 		_t_walk += dt * Pose.WALK_RATE * clampf(spd, 0.5, 1.6)
-	var tgt: Dictionary = Pose.evaluate(action, frame, _timing, _t_walk, _time, _vit, spd, float(fs.get("fwd", 1.0)), float(fs.get("side", 0.0)), mood + ("|" + str(fs.get("stun_kind", "")) if action == "stagger" else ""))
+	var tgt: Dictionary = Pose.evaluate(action, frame, _timing, _t_walk, _time, _vit, spd, float(fs.get("fwd", 1.0)), float(fs.get("side", 0.0)), mood + ("|" + str(fs.get("stun_kind", "")) if action == "stagger" else ""), _hit_sev)
 	var bones: Dictionary = tgt["bones"]
 	var root: Vector3 = tgt["root"]
 	if _blend_f < _blend_n:

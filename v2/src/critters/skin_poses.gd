@@ -220,7 +220,7 @@ static func _result(p: Dictionary) -> Dictionary:
 
 ## action: sim action name, frame: frames into the action, tm: Vector3i(startup, active, recovery), walk_t: walk phase, t: seconds.
 ## side: velocity to the critter's left in walk-speed units (negative = right); won: the bout is over and this fighter stands.
-static func evaluate(action: String, frame: int, tm: Vector3i, walk_t: float, t: float, vit: float, spd := 1.0, fwd := 1.0, side := 0.0, mood := "") -> Dictionary:
+static func evaluate(action: String, frame: int, tm: Vector3i, walk_t: float, t: float, vit: float, spd := 1.0, fwd := 1.0, side := 0.0, mood := "", sev := 1.0) -> Dictionary:
 	var idle := _idle(t, vit)
 	if mood == "intro" and action in ["idle", "walk", "guard"]:
 		var ip := _lerp_pose(idle, _full(SALUTE), 1.0)
@@ -258,7 +258,7 @@ static func evaluate(action: String, frame: int, tm: Vector3i, walk_t: float, t:
 			var back := _lerp_pose(tgt, idle, _out((float(frame) - float(d)) / maxf(1.0, float(tm.z)), 1.8) if frame > d else 0.0)
 			return _result(_lerp_pose(idle, back, _out(u * 3.0, 2.0)))
 		"hit", "clash":
-			var hp := _lerp_pose(_full(HIT), idle, _out(float(frame) / maxf(10.0, float(tm.y + tm.z)), 2.0))
+			var hp := _lerp_pose(_lerp_pose(idle, _full(HIT), sev), idle, _out(float(frame) / maxf(10.0, float(tm.y + tm.z)) / maxf(0.7, sev * 0.8 + 0.2), 2.0))     # sev: a heavy hit throws the body further and takes longer to settle
 			return _result(_lean(hp, side, 1.0 - clampf(float(frame) / 14.0, 0.0, 1.0)))
 		"stagger":
 			var base_st := _full(STAGGER)
