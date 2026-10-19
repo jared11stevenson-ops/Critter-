@@ -55,7 +55,13 @@ func _ready() -> void:
 		return
 	var only := -1
 	var rest_only := false
+	var from_i := -1
+	var count_i := 18
 	for a in OS.get_cmdline_user_args():
+		if a.begins_with("--from="):
+			from_i = int(a.substr(7))
+		if a.begins_with("--count="):
+			count_i = int(a.substr(8))
 		if a.begins_with("--only="):
 			only = int(a.substr(7))
 		if a == "--rest":
@@ -68,12 +74,17 @@ func _ready() -> void:
 			continue
 		if rest_only and i != 0:
 			continue
+		if from_i >= 0 and (i < from_i or i >= from_i + count_i):
+			continue
 		var st: Array = STATES[i]
 		var rig := SkinnedRig.new()
 		add_child(rig)
 		rig.setup(id)
 		rig.three_quarter = 0.0
 		rig.position = Vector3(-6.6 + float(i % 6) * 2.6, 7.2 - 3.4 * float(i / 6), 0)
+		if from_i >= 0:
+			var j := i - from_i
+			rig.position = Vector3(-9.0 + float(j % 4) * 6.0, 4.6 - 4.6 * float(j / 4), 0)
 		if only >= 0 or rest_only:
 			rig.position = Vector3.ZERO
 		rig.rotation_degrees.y = 0.0 if OS.get_cmdline_user_args().has("--side") else 90.0     # --side: profile view facing right (+x); default: facing the camera
