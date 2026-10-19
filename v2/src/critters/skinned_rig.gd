@@ -255,6 +255,7 @@ func apply_fighter_state(fs: Dictionary, dt: float) -> void:
 	_cur_bones = bones
 	_cur_root = root
 	_apply_bones(bones)
+	_update_club_smear(action, frame)
 	var jitter := Vector3.ZERO
 	if _shake_f > 0:
 		_shake_f -= 1
@@ -262,6 +263,21 @@ func apply_fighter_state(fs: Dictionary, dt: float) -> void:
 	_body.position = root + jitter
 	_update_facing(dt)
 	fx.update(dt)
+
+## The swing smear: a ribbon along the club (grip to tip) sampled over the recent frames, shown from just before the impact until a few frames after it.
+func _update_club_smear(action: String, frame: int) -> void:
+	if not is_inside_tree() or not _sockets.has("weapon_tip"):
+		return
+	var want := false
+	if action in ["strike_light", "strike_heavy", "ability2"]:
+		want = frame >= _timing.x - 3 and frame < _timing.x + _timing.y + 4
+	if want and not _smear_active:
+		fx.start_smear()
+	elif not want and _smear_active:
+		fx.stop_smear()
+	_smear_active = want
+	var base_s: Node3D = socket("weapon_base") if _sockets.has("weapon_base") else socket("hand")
+	fx.sample(socket("weapon_tip").global_position, base_s.global_position)
 
 func _kick(amount: float) -> void:
 	_flinch_v -= amount * 14.0
