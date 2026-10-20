@@ -237,7 +237,7 @@ static func evaluate(action: String, frame: int, tm: Vector3i, walk_t: float, t:
 			return _result(_walk(idle, walk_t, spd, fwd, side))
 		"strike_light", "strike_heavy", "grab", "ability1", "ability2", "ability3", "laststand":
 			var key := action if STYLES.has(action) else "ability"
-			return _result(_attack(idle, STYLES[key], frame, tm))
+			return _result(_overlap(idle, STYLES[key], frame, tm))
 		"guard":
 			return _result(_lerp_pose(idle, _full(GUARD), _out(float(frame + 1) / 4.0, 2.0)))
 		"parry":
@@ -378,6 +378,28 @@ static func _walk(idle: Dictionary, ph: float, spd: float, fwd: float, side := 0
 		strafe["sh_R"] = Vector3(0, 26.0 + 18.0 * maxf(0.0, c), 0)
 		p = _lerp_pose(p, strafe, sk)
 	return p
+
+## Overlapping action: the body does not move as one block. The hips and legs drive the move first, then the spine, then the chest, the arms arrive on the beat of the impact,
+## and the head and wings trail behind. Each group samples the same attack curve at a different time (lead > 0 = earlier in the move, lead < 0 = late).
+const OVERLAP := [
+	[4, ["hips", "th_L", "th_R", "sh_L", "sh_R", "root"]],
+	[3, ["spine"]],
+	[2, ["chest"]],
+	[-2, ["neck"]],
+	[-3, ["head", "wing_L", "wing_R", "wing2_L", "wing2_R"]],
+]
+
+static func _overlap(idle: Dictionary, st: Array, frame: int, tm: Vector3i) -> Dictionary:
+	var out := _attack(idle, st, frame, tm)
+	for g in OVERLAP:
+		var lead: int = g[0]
+		var pg := _attack(idle, st, maxi(0, frame + lead), tm)
+		for bn in g[1]:
+			if bn == "root":
+				out["root"] = root_of(pg)
+			elif pg.has(bn):
+				out[bn] = pg[bn]
+	return out
 
 static func _attack(idle: Dictionary, st: Array, frame: int, tm: Vector3i) -> Dictionary:
 	var ant := _full(st[0])

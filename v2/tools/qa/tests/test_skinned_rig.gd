@@ -45,7 +45,7 @@ func run() -> Array:
 	if (win["bones"]["arm_up_R"] as Vector3).is_equal_approx(calm["bones"]["arm_up_R"] as Vector3):
 		fails.append("skinned_rig: the victory pose must differ from idle")
 	var idle: Dictionary = SkinnedRig.Pose.evaluate("idle", 0, Vector3i(1, 1, 1), 0.0, 0.0, 1.0)
-	var ant: Dictionary = SkinnedRig.Pose.evaluate("strike_light", 12, Vector3i(16, 4, 14), 0.0, 0.0, 1.0)
+	var ant: Dictionary = SkinnedRig.Pose.evaluate("strike_light", 7, Vector3i(16, 4, 14), 0.0, 0.0, 1.0)
 	var hit: Dictionary = SkinnedRig.Pose.evaluate("strike_light", 18, Vector3i(16, 4, 14), 0.0, 0.0, 1.0)
 	var soft: Dictionary = SkinnedRig.Pose.evaluate("hit", 2, Vector3i(1, 4, 12), 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, "", 0.7)
 	var hard: Dictionary = SkinnedRig.Pose.evaluate("hit", 2, Vector3i(1, 4, 12), 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, "", 1.5)
