@@ -255,6 +255,7 @@ func _sync(dt: float, alpha: float) -> void:
 		var fs := {
 			"action": f["action"], "action_frame": int(f["action_frame"]) + _extra_af[i], "move_id": f["move_id"],
 			"vitality_ratio": float(f["vitality"]) / maxv, "facing": 1.0, "stun": f["stun"],
+			"frame_alpha": 1.0 if sim.hitstop > 0 else alpha,
 			"rage": clampf(float(f["rage"]) / maxf(1.0, float(sim.fighters[i].T["rage_max"])), 0.0, 1.0)
 		}
 		var vel: Vector2 = f.get("velocity", Vector2.ZERO)                  # gait: how fast, and forwards or backwards relative to the facing

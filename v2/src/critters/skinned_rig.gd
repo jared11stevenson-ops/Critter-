@@ -13,6 +13,9 @@ const SKIN_PATH := "res://art/models/%s_skin.glb"
 const Pose := preload("res://src/critters/skin_poses.gd")
 const Props := preload("res://src/critters/skin_props.gd")
 
+var _in_spd := 0.0
+var _in_fwd := 1.0
+var _in_side := 0.0
 var _hit_sev := 1.0                # how hard the latest hit landed (from the stun frames), scales the hit reaction
 var skeleton: Skeleton3D
 var _mesh: MeshInstance3D
@@ -227,10 +230,23 @@ func apply_fighter_state(fs: Dictionary, dt: float) -> void:
 	_move_id = move_id
 	_action_frame = frame
 	_timing = Timing.resolve(critter_id, action, move_id, fs)
-	var spd := absf(float(fs.get("speed", 1.0 if action == "walk" else 0.0)))
+	var k_in := 1.0 - exp(-12.0 * maxf(dt, 1.0 / 60.0))                  # gait inputs come from stepped sim velocity: low-pass them so stalk/run/strafe blend instead of popping
+	_in_spd += (absf(float(fs.get("speed", 1.0 if action == "walk" else 0.0))) - _in_spd) * k_in
+	_in_fwd += (float(fs.get("fwd", 1.0)) - _in_fwd) * k_in
+	_in_side += (float(fs.get("side", 0.0)) - _in_side) * k_in
+	var spd := _in_spd
+	if action == "dodge":                                                   # a dodge reads its direction from the very first frame, no smoothing lag
+		_in_spd = absf(float(fs.get("speed", 1.0)))
+		_in_fwd = float(fs.get("fwd", 1.0))
+		_in_side = float(fs.get("side", 0.0))
+		spd = _in_spd
 	if action == "walk":
 		_t_walk += dt * Pose.WALK_RATE * clampf(spd, 0.5, 1.6)
-	var tgt: Dictionary = Pose.evaluate(action, frame, _timing, _t_walk, _time, _vit, spd, float(fs.get("fwd", 1.0)), float(fs.get("side", 0.0)), mood + ("|" + str(fs.get("stun_kind", "")) if action == "stagger" else ""), _hit_sev)
+	var tgt: Dictionary = Pose.evaluate(action, frame, _timing, _t_walk, _time, _vit, spd, _in_fwd, _in_side, mood + ("|" + str(fs.get("stun_kind", "")) if action == "stagger" else ""), _hit_sev)
+	var fa := float(fs.get("frame_alpha", 1.0))
+	if fa < 0.98 and frame > 0 and action not in ["idle", "walk"]:     # the sim ticks at 60 Hz but the screen may not: ease between the previous and the current tick's pose so the motion is continuous, not stepped
+		var prev: Dictionary = Pose.evaluate(action, frame - 1, _timing, _t_walk, _time, _vit, spd, _in_fwd, _in_side, mood + ("|" + str(fs.get("stun_kind", "")) if action == "stagger" else ""), _hit_sev)
+		tgt = {"bones": Pose.mix(prev["bones"], tgt["bones"], fa), "root": (prev["root"] as Vector3).lerp(tgt["root"], fa)}
 	var bones: Dictionary = tgt["bones"]
 	var root: Vector3 = tgt["root"]
 	if _blend_f < _blend_n:
